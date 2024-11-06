@@ -6,7 +6,7 @@
 | Tao       | CHAU                | XXXXXXXXX |
 | Juliette  | Cornu-Besser        | XXXXXXXXX |
 | Quentin   | Bernard Bouissières | XXXXXXXXX |
-| Jonas     | Schellekens         | XXXXXXXXX |
+| Jonas     | Schellekens         | 000590985 |
 | Ethan     | Van Ruyskenvelde    | 000589640 |
 | Lucas     | Verbeiren           | 000591223 | 
 | Ernest    | Malysz              | XXXXXXXXX |
