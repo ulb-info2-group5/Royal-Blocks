@@ -3,12 +3,12 @@
 ## Membres du groupe
 | Prénom    | Nom                 | Matricule |
 | --------- | ------------------- | --------- |
-| Lucas     | Verbeiren           | 000591223 | 
-| Ethan     | Van Ruyskenvelde    | 000589640 |
-| Jonas     | Schellekens         | XXXXXXXXX |
 | Tao       | CHAU                | XXXXXXXXX |
 | Juliette  | Cornu-Besser        | XXXXXXXXX |
 | Quentin   | Bernard Bouissières | XXXXXXXXX |
+| Jonas     | Schellekens         | XXXXXXXXX |
+| Ethan     | Van Ruyskenvelde    | 000589640 |
+| Lucas     | Verbeiren           | 000591223 | 
 | Ernest    | Malysz              | XXXXXXXXX |
 | Rafaou    | Gajewicz            | XXXXXXXXX |
 
