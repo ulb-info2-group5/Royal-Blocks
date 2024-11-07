@@ -3,13 +3,13 @@
 ## Membres du groupe
 | Prénom    | Nom                 | Matricule |
 | --------- | ------------------- | --------- |
-| Tao       | CHAU                | XXXXXXXXX |
-| Juliette  | Cornu-Besser        | XXXXXXXXX |
-| Quentin   | Bernard Bouissières | XXXXXXXXX |
+| Tao       | CHAU                | 000567638 |
+| Juliette  | Cornu-Besser        | 000581723 |
+| Quentin   | Bernard Bouissières | 000572078 |
 | Jonas     | Schellekens         | 000590985 |
 | Ethan     | Van Ruyskenvelde    | 000589640 |
 | Lucas     | Verbeiren           | 000591223 | 
-| Ernest    | Malysz              | XXXXXXXXX |
+| Ernest    | Malysz              | 000514682 |
 | Rafaou    | Gajewicz            | XXXXXXXXX |
 
 
