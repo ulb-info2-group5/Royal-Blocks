@@ -10,7 +10,7 @@
 | Ethan     | Van Ruyskenvelde    | 000589640 |
 | Lucas     | Verbeiren           | 000591223 | 
 | Ernest    | Malysz              | 000514682 |
-| Rafaou    | Gajewicz            | XXXXXXXXX |
+| Rafaou    | Gajewicz            | 000569354 |
 
 
 Ajoutez ici tout ce qu’il faut savoir pour pouvoir compiler et lancer votre programme, ainsi que les prénoms, noms et matricules des membres du groupe
