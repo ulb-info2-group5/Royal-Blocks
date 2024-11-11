@@ -30,12 +30,12 @@ rectangle "Menu Principal" as main_menu {
     '### Ranking
     usecase "Regarder Classement" as view_ranking
 
-    (play_game) <. (invite_friend): extends
-    (choose_gamemode) <. (play_game): includes
-    (manage_friendlist) <. (add_friend): extends
-    (manage_friendlist) <. (remove_friend): extends
-    (manage_profile) <. (change_password): extends
-    (manage_profile) <. (change_nickname): extends
+    (play_game) <-. (invite_friend): extends
+    (play_game) .-> (choose_gamemode): includes
+    (manage_friendlist) <-. (add_friend): extends
+    (manage_friendlist) <-. (remove_friend): extends
+    (manage_profile) <-. (change_password): extends
+    (manage_profile) <-. (change_nickname): extends
 }
 
 ' This should be a logical XOR
