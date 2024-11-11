@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{graphicx} %for inserting image
+
+\title{Software Requirements Document : Tetris Royal}
+\author{Tao Chau\\
+		Juliete Cornu-Besser\\
+		Quentin Bernard Bouissières\\
+		Jonas Schellekens\\
+		Ethan Van Ruyskenvelde\\
+		Lucas Verbeiren\\
+		Ernerst Malysz\\
+		Rafaou Gajewicz}
+
+\date{ 13 décembre 2024}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+\subsection{But du projet}
+
+\quad L'objectif de ce projet est d'implémenter une application jeu avec une option multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques avec une possibilité au joeur de les tourner et les déplacer, qui "tombent d'en haut" de la grille. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille; son score dépendra du temps et des lignes supprimées.  %j'aime absolument pas cette formulation
+\\ \\
+\quad Dans cette application, quatre modes sont proposés au joueur. Il existe la version \textit{Endless} avec un seul joueur où le but est de savoir placer des pièces sur la grille le plus longtemps possible. Selon les combinaisons des pièces qui se suppriment, les points attribués seront différemment. 
+% je n'aime pas cette formulation
+Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus a toutes ses lignes poussées vers le haut d'une ligne ou plus pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous.  La version \textit{Classic} et celle \textit{Duel} comprennent des parties de trois à neuf et deux joueurs respectivement. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent du haut de la grille; celui qui complète une ligne ou plusieurs lignes en même temps, il peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. Le dernier mode, \textit{ Royal Competition}, comprend des malus et des bonus. 
+\subsection{Glossaire}
+
+\subsection{Historique}
+
+\section{Besoins utilisateurs}
+
+\subsection{Écran d'accueil}
+
+\subsubsection{Inscription}
+
+\subsubsection{Connexion}
+
+\subsection{Menu Principal}
+
+\subsubsection{Lancer une partie}
+
+\subsubsection{Amis}
+
+\subsubsection{Chat hors partie}
+
+\subsubsection{Affichage du classement}
+
+\subsection{Lancement d'une partie}
+
+\subsubsection{Créer une partie}
+
+\subsubsection{Rejoindre une partie}
+
+\subsection{En partie classique}
+
+\subsection{En partie Duel}
+
+\subsection{En partie Endless}
+
+\section{Besoin système : Fonctionnels}
+
+\subsection{Connexion}
+
+\subsection{Gestion des comptes}
+
+\subsubsection{Création d'un compte}
+
+\subsubsection{Suppression d'un compte}
+
+\subsection{Consulter le classement}
+
+\subsection{Gestion de la partie}
+
+\subsection{Gestion des amis}
+
+\subsubsection{Gestion du chat}
+
+\subsection{Fin de la partie}
+
+\subsubsection{Fin de la partie normale}
+
+\subsubsection{Fin de la partie Duo}
+
+\subsubsection{Fin de la partie Endless}
+
+\section{Besoins non fonctionnels}
+
+\subsection{Besoins système}
+
+\subsubsection{Réseau}
+
+\subsubsection{Système d'exploitation}
+
+\subsubsection{Accessibilité}
+
+\subsubsection{Performances}
+
+\subsubsection{Capacité}
+
+\subsubsection{Sécurité}
+
+\subsubsection{Robustesse}
+
+\subsection{Besoins utilisateur}
+
+\section{Architecture du système}
+
+\subsection{Architecture du serveur}
+
+\subsection{Architecture du jeu}
+
+\subsection{Architecture du client}
+
+\section{Fonctionnement du système}
+
+\subsection{Création d'un compte}
+
+\subsection{Connexion}
+
+\subsection{Envoie d'une requête}
+
+\subsection{Traitement de la requête}
+
+\subsection{Lancement d'une partie}
+
+\subsection{Rejoindre une partie} 
+
+\end{document}
