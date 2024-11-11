@@ -14,9 +14,10 @@ rectangle "Partie" as game {
     '### Game Actions
     usecase "déplacer la pièce" as move_piece
     usecase "tourner la pièce" as rotate_piece
+
     'TODO: penalty might be a bad name
     'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    usecase "envoyer n-1 malus" as throw_penalty
+    ' usecase "envoyer n-1 malus" as throw_penalty
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "déplacer latéralement" as lateral_movement
@@ -30,11 +31,11 @@ rectangle "Partie" as game {
 player -- move_piece
 player -- pause_menu
 
-(move_piece) <. (lateral_movement): extends
-(move_piece) <. (increase_descent): extends
-(move_piece) <. (rotate_piece): extends
+(move_piece) <-. (lateral_movement): extends
+(move_piece) <-. (increase_descent): extends
+(move_piece) <-. (rotate_piece): extends
 
-(pause_menu) <. (resume_game): extends
-(pause_menu) <. (quit_game): extends
+(pause_menu) <-. (resume_game): extends
+(pause_menu) <-. (quit_game): extends
 
 @enduml

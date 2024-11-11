@@ -23,12 +23,12 @@ rectangle "Partie" as game {
 player -- move_piece
 player -- pause_menu
 
-(move_piece) <. (lateral_movement): extends
-(move_piece) <. (increase_descent): extends
-(move_piece) <. (rotate_piece): extends
+(move_piece) <-. (lateral_movement): extends
+(move_piece) <-. (increase_descent): extends
+(move_piece) <-. (rotate_piece): extends
 
-(pause_menu) <. (resume_game): extends
-(pause_menu) <. (quit_game): extends
+(pause_menu) <-. (resume_game): extends
+(pause_menu) <-. (quit_game): extends
 
 
 @enduml
