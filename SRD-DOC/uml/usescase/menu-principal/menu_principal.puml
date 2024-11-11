@@ -38,9 +38,9 @@ rectangle "Menu Principal" as main_menu {
     (manage_profile) <-. (change_nickname): extends
 }
 
-' This should be a logical XOR
-invite_friend --> invite_friend_as_player : else if "Invite as Player"
-invite_friend --> invite_friend_as_viewer : if "Invite as Viewer"
+'TODO: This should be a logical XOR
+invite_friend -- invite_friend_as_player : else if "Invite as Player"
+invite_friend -- invite_friend_as_viewer : if "Invite as Viewer"
 
 user -- play_game
 user -- join_friend_game
