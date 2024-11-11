@@ -8,7 +8,7 @@ rectangle connexion as connection {
      usecase "Créer un compte" as create_account
      usecase "S'authentifier" as authentify
 
-      (authentify) <. (signin): includes
+      (signin) .-> (authentify): <<include>>
 }
 
 user -- signin
