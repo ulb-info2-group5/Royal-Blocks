@@ -1,0 +1,55 @@
+@startuml
+
+'common usecase for manage_friendlist and send_message
+
+left to right direction
+actor "utilisateur" as user
+
+rectangle "Menu Principal" as main_menu {
+    '### Game
+    usecase "Jouer une partie" as play_game
+    usecase "Rejoindre partie (invitation)" as join_friend_game
+    usecase "Inviter un ami" as invite_friend
+    'Game options
+    usecase "Choisir mode de jeu" as choose_gamemode
+
+    '### Social
+    usecase "Gérer son profil" as manage_profile
+    usecase "Gérer la liste d'amis" as manage_friendlist
+    usecase "Envoyer un mesage à un ami" as chat_with_friend
+    'Manage profile options
+    usecase "Modifier son mot-de-passe" as change_password
+    usecase "Modifier son pseudo" as change_nickname
+    'Manage friend list options
+    usecase "Ajouter un ami" as add_friend
+    usecase "Supprimer un ami" as remove_friend
+    'Invite Friend Options
+    usecase "Inviter un ami en tant que joueur" as invite_friend_as_player
+    usecase "Inviter un ami en tant qu'observateur" as invite_friend_as_viewer
+
+    '### Ranking
+    usecase "Regarder Classement" as view_ranking
+
+    (play_game) <. (invite_friend): extends
+    (choose_gamemode) <. (play_game): includes
+    (manage_friendlist) <. (add_friend): extends
+    (manage_friendlist) <. (remove_friend): extends
+    (manage_profile) <. (change_password): extends
+    (manage_profile) <. (change_nickname): extends
+}
+
+' This should be a logical XOR
+invite_friend --> invite_friend_as_player : else if "Invite as Player"
+invite_friend --> invite_friend_as_viewer : if "Invite as Viewer"
+
+user -- play_game
+user -- join_friend_game
+
+user -- manage_profile
+user -- manage_friendlist
+user -- chat_with_friend
+
+user -- view_ranking
+
+
+@enduml
