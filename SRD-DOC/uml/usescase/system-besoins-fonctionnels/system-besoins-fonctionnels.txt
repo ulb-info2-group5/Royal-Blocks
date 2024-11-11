@@ -1,0 +1,25 @@
+@startuml
+
+left to right direction
+actor "utilisateur" as user
+
+cloud "Server d'Authentification" as check_auth_server
+
+rectangle "Connexion" as connection {
+    usecase "Se connecter" as signin
+    usecase "Créer un compte" as create_account
+    usecase "S'authentifier" as authentify
+
+    usecase "Verifier l'authentification" as check_auth
+}
+
+user -- signin
+user -- create_account
+check_auth -- check_auth_server
+
+(connection) --[hidden]> (check_auth_server)
+(authentify) <. (signin): <<includes>>
+(check_auth) <. (create_account): <<includes>>
+(check_auth) <. (authentify): <<includes>>
+ 
+@enduml
