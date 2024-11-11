@@ -1,0 +1,17 @@
+@startuml
+
+left to right direction
+actor "Utilisateur" as user
+
+rectangle connexion as connection { 
+     usecase "Se connecter" as signin
+     usecase "Créer un compte" as create_account
+     usecase "S'authentifier" as authentify
+
+      (authentify) <. (signin): includes
+}
+
+user -- signin
+user -- create_account
+
+@enduml
