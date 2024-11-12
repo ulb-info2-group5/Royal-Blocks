@@ -31,6 +31,7 @@
 \quad Dans cette application, quatre modes sont proposés au joueur. Il existe la version \textit{Endless} avec un seul joueur où le but est de savoir placer des pièces sur la grille le plus longtemps possible. Selon les combinaisons des pièces qui se suppriment, les points attribués seront différemment. 
 % je n'aime pas cette formulation
 Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus a toutes ses lignes poussées vers le haut d'une ligne ou plus pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous.  La version \textit{Classic} et celle \textit{Duel} comprennent des parties de trois à neuf et deux joueurs respectivement. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent du haut de la grille; celui qui complète une ligne ou plusieurs lignes en même temps, il peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. Le dernier mode, \textit{ Royal Competition}, comprend des malus et des bonus. 
+
 \subsection{Glossaire}
 
 \subsection{Historique}
@@ -39,18 +40,14 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsection{Écran d'accueil}
 
-\subsubsection{Inscription}
-
-\subsubsection{Connexion}
-
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{./uml/usescase/connexion/connexion.png}
-    \caption{Diagramme Use Case du Menu Principal}
-    \label{fig:main-menu}
+    	\includegraphics[width=0.9\textwidth]{./uml/usescase/connexion/connexion.png}
+    	\caption{Diagramme Use Case du Menu Principal}
+    	\label{fig:main-menu}
 \end{figure}
 
-\subsection*{Se connecter}
+\subsubsection*{Connexion}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Se connecter
@@ -60,7 +57,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Mauvais identifiant ou mot de passe, échec de la connexion réseau.
 \end{itemize}
 
-\subsection*{Créer un compte}
+\subsubsection*{Créer un compte}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Créer un compte
@@ -70,7 +67,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'utilisateur existe déjà, erreurs de validation de données.
 \end{itemize}
 
-\subsection*{S'authentifier}
+\subsubsection*{S'authentifier}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: S'authentifier
@@ -85,9 +82,10 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{./uml/usescase/menu-principal/menu_principal.png}
-    \caption{Diagramme Use Case du Menu Principal}
-    \label{fig:main-menu}
+    	\includegraphics[width=1.3\textwidth]{./uml/usescase/menu-principal/menu_principal.png}
+    	\caption{Diagramme Use Case du Menu Principal}
+    	\label{fig:main-menu}
+    	
 \end{figure}
 
 \subsubsection*{Jouer une partie}
@@ -100,7 +98,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Problème de connexion ou erreurs de lancement.
 \end{itemize}
 
-\subsubsection*{Rejoindre partie (invitation)}
+\subsubsection*{Rejoindre une partie (invitation)}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Rejoindre partie (invitation)
@@ -230,19 +228,9 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Classement indisponible.
 \end{itemize}
 
-\subsubsection{Lancer une partie}
+\subsection{Différents modes de jeux}
 
-\subsubsection{Amis}
-
-\subsubsection{Chat hors partie}
-
-\subsubsection{Affichage du classement}
-
-\subsection{Lancement d'une partie}
-
-\subsubsection{Créer une partie}
-
-\subsubsection{Rejoindre une partie}
+\subsubsection*{en mode Endless}
 
 \begin{figure}
     \centering
@@ -260,7 +248,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}
 \end{itemize}
 
-\subsubsection{En partie Duel}
+\subsubsection*{En partie Duel}
 
 \begin{figure}
     \centering
