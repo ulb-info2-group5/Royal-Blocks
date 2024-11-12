@@ -1,6 +1,5 @@
 \documentclass{article}
 \usepackage{graphicx} %for inserting image
-\usepackage{svg} %for inserting svg 
 
 \title{Software Requirements Document : Tetris Royal}
 \author{Tao Chau\\
@@ -44,11 +43,11 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsubsection{Connexion}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includesvg[width=0.9\textwidth]{SRD-DOC/uml/usescase/connexion/connexion}
+    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/connexion/connexion.png}
     \caption{Diagramme Use Case du Menu Principal}
-    %\label{fig:main-menu}
+    \label{fig:main-menu}
 \end{figure}
 
 \subsection*{Se connecter}
@@ -245,7 +244,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsubsection{Rejoindre une partie}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/en-jeu/endless.png}
     \caption{Diagramme Use Case en mode Classique}
