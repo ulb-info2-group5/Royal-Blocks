@@ -1,22 +1,26 @@
-@startuml
+@startuml menu_principal
 
 'common usecase for manage_friendlist and send_message
 
 left to right direction
-actor "utilisateur" as user
+actor Utilisateur as user
 
 rectangle "Menu Principal" as main_menu {
     '### Game
     usecase "Jouer une partie" as play_game
-    usecase "Rejoindre partie (invitation)" as join_friend_game
+    usecase "Rejoindre partie sur invitation" as join_friend_game
     usecase "Inviter un ami" as invite_friend
     'Game options
-    usecase "Choisir mode de jeu" as choose_gamemode
+    usecase "Choisir un mode de jeu" as choose_gamemode
 
     '### Social
     usecase "Gérer son profil" as manage_profile
     usecase "Gérer la liste d'amis" as manage_friendlist
     usecase "Envoyer un mesage à un ami" as chat_with_friend
+    usecase "Choisir l'ami a qui envoyer un message" as choose_friend_to_chat
+
+    usecase "Choisir un ou des ami(es)" as choose_friend
+
     'Manage profile options
     usecase "Modifier son mot-de-passe" as change_password
     usecase "Modifier son pseudo" as change_nickname
@@ -29,18 +33,23 @@ rectangle "Menu Principal" as main_menu {
 
     '### Ranking
     usecase "Regarder Classement" as view_ranking
-
-    (play_game) <-. (invite_friend): extends
-    (play_game) .-> (choose_gamemode): includes
-    (manage_friendlist) <-. (add_friend): extends
-    (manage_friendlist) <-. (remove_friend): extends
-    (manage_profile) <-. (change_password): extends
-    (manage_profile) <-. (change_nickname): extends
 }
 
+(play_game) <-. (invite_friend): <<extend>>
+(play_game) .-> (choose_gamemode): <<include>>
+(manage_friendlist) <-. (add_friend): <<extend>>
+(manage_friendlist) <-. (remove_friend): <<extend>>
+(manage_profile) <-. (change_password): <<extend>>
+(manage_profile) <-. (change_nickname): <<extend>>
+
 'TODO: This should be a logical XOR
-invite_friend -- invite_friend_as_player : else if "Invite as Player"
-invite_friend -- invite_friend_as_viewer : if "Invite as Viewer"
+(invite_friend) <-. (invite_friend_as_player) : <<extend>>
+(invite_friend) <-. (invite_friend_as_viewer) : <<extend>>
+
+(chat_with_friend) .-> (choose_friend_to_chat): <<include>>
+
+(invite_friend_as_player) .-> (choose_friend): <<include>>
+(invite_friend_as_viewer) .-> (choose_friend): <<include>>
 
 user -- play_game
 user -- join_friend_game
