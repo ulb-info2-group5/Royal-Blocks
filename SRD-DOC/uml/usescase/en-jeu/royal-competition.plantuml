@@ -1,0 +1,57 @@
+@startuml royal-competition
+
+'Royal-Competitive Mode'
+' NOTE: We could add "pause", "resume" & "stop game" in game menu
+
+left to right direction
+actor Joueur as player
+
+rectangle "Partie Compétition Royale" as game {
+    '### Social
+    ' NOTE: we don't have to implement this but it would be a cool feature
+    ' usecase "discuter" as chat
+
+    '### Game Actions
+    usecase "Déplacer la pièce" as move_piece
+    usecase "Tourner la pièce" as rotate_piece
+    'TODO: penalty might be a bad name
+    'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
+    ' usecase "envoyer n-1 malus" as throw_penalty
+
+    'TODO: throw_penalty or get shield if a certain quantity of energy is reached
+    usecase "Envoyer un malus" as throw_penalty
+    usecase "S'octroyer un bonus" as get_bonus
+
+    'TODO: To check if it's good so
+    usecase "Choisir la cible du malus" as choose_target
+
+    'TODO: faut il choisir le bonus ? (aléatoire ou pas)
+
+    '### move piece subcases NOTE: is "extends" the right keyword for this
+    usecase "Déplacer latéralement" as lateral_movement
+    usecase "Accélérer la descente" as increase_descent
+    usecase "Déplacer vers la droite" as move_right
+    usecase "Déplacer vers la gauche" as move_left
+
+    usecase "Menu pause" as pause_menu
+    usecase "Reprendre la partie" as resume_game
+    usecase "Quitter la partie" as quit_game
+}
+
+player -- move_piece
+player -- pause_menu
+player -- throw_penalty
+player -- get_bonus
+
+(move_piece) <-. (lateral_movement): <<extend>>
+(move_piece) <-. (increase_descent): <<extend>>
+(move_piece) <-. (rotate_piece): <<extend>>
+(lateral_movement) <-. (move_right): <<extend>>
+(lateral_movement) <-. (move_left): <<extend>>
+
+(pause_menu) <-. (resume_game): <<extend>>
+(pause_menu) <-. (quit_game): <<extend>>
+
+(throw_penalty) <-. (choose_target): <<extend>>
+
+@enduml
