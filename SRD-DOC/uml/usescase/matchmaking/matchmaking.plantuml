@@ -1,7 +1,7 @@
-@startuml
+@startuml atchmaking
 
 left to right direction
-actor "utilisateur" as user
+actor Utilisateur as user
 
 '#TODO: should we add join as viewer in matchmaking
 together {
@@ -20,7 +20,6 @@ together {
     }
 }
 
-(matchmaking) -[hidden]> (server)
 play_game .-> start_game: <<include>>
 start_game .left-> select_gamemode: <<include>>
 start_game <-left. create_queue: <<extend>>
