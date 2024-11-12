@@ -1,10 +1,10 @@
-@startuml
+@startuml system-besoins-fonctionnels
 
 left to right direction
-actor "utilisateur" as user
+actor Utilisateur as user
 
 together {
-    cloud "Server d'Authentification" as check_auth_server
+    cloud "Serveur d'Authentification" as check_auth_server
 
     rectangle "Connexion" as connection {
         usecase "Se connecter" as signin
@@ -19,9 +19,8 @@ user -- signin
 user -- create_account
 check_auth -- check_auth_server
 
-(connection) -[hidden]> (check_auth_server)
-(signin) .-> (authentify): <<includes>>
-(create_account) .-> (check_auth): <<includes>>
-(authentify) .-> (check_auth): <<includes>>
+(signin) .-> (authentify): <<include>>
+(create_account) .-> (check_auth): <<include>>
+(authentify) .-> (check_auth): <<include>>
  
 @enduml
