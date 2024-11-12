@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{graphicx} %for inserting image
+\usepackage{svg}
 
 \title{Software Requirements Document : Tetris Royal}
 \author{Tao Chau\\
@@ -31,6 +32,7 @@
 \quad Dans cette application, quatre modes sont proposés au joueur. Il existe la version \textit{Endless} avec un seul joueur où le but est de savoir placer des pièces sur la grille le plus longtemps possible. Selon les combinaisons des pièces qui se suppriment, les points attribués seront différemment. 
 % je n'aime pas cette formulation
 Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus a toutes ses lignes poussées vers le haut d'une ligne ou plus pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous.  La version \textit{Classic} et celle \textit{Duel} comprennent des parties de trois à neuf et deux joueurs respectivement. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent du haut de la grille; celui qui complète une ligne ou plusieurs lignes en même temps, il peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. Le dernier mode, \textit{ Royal Competition}, comprend des malus et des bonus. 
+
 \subsection{Glossaire}
 
 \subsection{Historique}
@@ -43,11 +45,11 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsubsection{Connexion}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/connexion/connexion.png}
+    \includesvg{./uml/usescase/connexion/connexion.svg}
     \caption{Diagramme Use Case du Menu Principal}
-    \label{fig:main-menu}
+    %\label{fig:main-menu}
 \end{figure}
 
 \subsection*{Se connecter}
@@ -60,7 +62,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Mauvais identifiant ou mot de passe, échec de la connexion réseau.
 \end{itemize}
 
-\subsection*{Créer un compte}
+\subsection{Créer un compte}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Créer un compte
@@ -70,7 +72,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'utilisateur existe déjà, erreurs de validation de données.
 \end{itemize}
 
-\subsection*{S'authentifier}
+\subsection{S'authentifier}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: S'authentifier
@@ -83,14 +85,14 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsection{Menu Principal}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/menu-principal/menu_principal.png}
+    \includegraphics[width=0.9\textwidth]{uml/usecase/menu-principal/menu_principal.png}
     \caption{Diagramme Use Case du Menu Principal}
     \label{fig:main-menu}
 \end{figure}
 
-\subsubsection*{Jouer une partie}
+\subsubsection{Jouer une partie}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Jouer une partie
@@ -100,7 +102,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Problème de connexion ou erreurs de lancement.
 \end{itemize}
 
-\subsubsection*{Rejoindre partie (invitation)}
+\subsubsection{Rejoindre partie (invitation)}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Rejoindre partie (invitation)
@@ -110,7 +112,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Invitation expirée, partie pleine.
 \end{itemize}
 
-\subsubsection*{Inviter un ami}
+\subsubsection{Inviter un ami}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami
@@ -120,7 +122,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'ami est indisponible ou n'accepte pas l'invitation.
 \end{itemize}
 
-\subsubsection*{Choisir mode de jeu}
+\subsubsection{Choisir mode de jeu}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Choisir mode de jeu
@@ -130,7 +132,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Mode de jeu non disponible.
 \end{itemize}
 
-\subsubsection*{Gérer son profil}
+\subsubsection{Gérer son profil}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Gérer son profil
@@ -140,7 +142,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Échec de la mise à jour des informations.
 \end{itemize}
 
-\subsubsection*{Gérer la liste d'amis}
+\subsubsection{Gérer la liste d'amis}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Gérer la liste d'amis
@@ -150,7 +152,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Problèmes de synchronisation, ami introuvable.
 \end{itemize}
 
-\subsubsection*{Envoyer un message à un ami}
+\subsubsection{Envoyer un message à un ami}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Envoyer un message à un ami
@@ -160,7 +162,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Ami déconnecté ou problème de réseau.
 \end{itemize}
 
-\subsubsection*{Modifier son mot-de-passe}
+\subsubsection{Modifier son mot-de-passe}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Modifier son mot-de-passe
@@ -170,7 +172,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Mot de passe actuel incorrect, validation échouée.
 \end{itemize}
 
-\subsubsection*{Modifier son pseudo}
+\subsubsection{Modifier son pseudo}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Modifier son pseudo
@@ -180,7 +182,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Pseudo déjà pris, validation échouée.
 \end{itemize}
 
-\subsubsection*{Ajouter un ami}
+\subsubsection{Ajouter un ami}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Ajouter un ami
@@ -190,7 +192,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Ami déjà présent dans la liste, utilisateur introuvable.
 \end{itemize}
 
-\subsubsection*{Supprimer un ami}
+\subsubsection{Supprimer un ami}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Supprimer un ami
@@ -200,7 +202,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'ami n'est plus dans la liste ou une erreur de suppression.
 \end{itemize}
 
-\subsubsection*{Inviter un ami en tant que joueur}
+\subsubsection{Inviter un ami en tant que joueur}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami en tant que joueur
@@ -210,7 +212,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'ami n'est pas disponible, invitation rejetée.
 \end{itemize}
 
-\subsubsection*{Inviter un ami en tant qu'observateur}
+\subsubsection{Inviter un ami en tant qu'observateur}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami en tant qu'observateur
@@ -220,7 +222,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: L'ami est indisponible, invitation rejetée.
 \end{itemize}
 
-\subsubsection*{Regarder Classement}
+\subsubsection{Regarder Classement}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Regarder Classement
@@ -244,9 +246,9 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsubsection{Rejoindre une partie}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/en-jeu/endless.png}
+    \includegraphics[width=0.9\textwidth]{uml/usecase/en-jeu/endless.png}
     \caption{Diagramme Use Case en mode Classique}
     \label{fig:Classique}
 \end{figure}
@@ -262,14 +264,14 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsubsection{En partie Duel}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/en-jeu/dual-normal.png}
+    \includegraphics[width=0.9\textwidth]{uml/usecase/en-jeu/dual-normal.png}
     \caption{Diagramme Use Case en mode Duel}
     \label{fig:Duel}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce}
+\subsubsection{Déplacer la pièce}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Déplacer la pièce
@@ -279,7 +281,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Limite du plateau atteinte, collision avec d'autres pièces.
 \end{itemize}
 
-\subsubsection*{Tourner la pièce}
+\subsubsection{Tourner la pièce}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Tourner la pièce
@@ -289,7 +291,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: La rotation amène la pièce en dehors des limites.
 \end{itemize}
 
-\subsubsection*{Envoyer n-1 malus}
+\subsubsection{Envoyer n-1 malus}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Envoyer n-1 malus
@@ -299,7 +301,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Échec de l’envoi du malus, conditions de malus non remplies.
 \end{itemize}
 
-\subsubsection*{Menu pause}
+\subsubsection{Menu pause}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Menu pause
@@ -309,7 +311,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Aucun.
 \end{itemize}
 
-\subsubsection*{Reprendre la partie}
+\subsubsection{Reprendre la partie}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Reprendre la partie
@@ -319,7 +321,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Aucun.
 \end{itemize}
 
-\subsubsection*{Quitter la partie}
+\subsubsection{Quitter la partie}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Quitter la partie
@@ -331,17 +333,17 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
 
 \subsection{En partie Endless}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{SRD-DOC/uml/usecase/en-jeu/endless.png}
+    \includegraphics[width=0.9\textwidth]{uml/usecase/en-jeu/endless.png}
     \caption{Diagramme Use Case en mode Endless}
     \label{fig:Endless}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique à Duel)
-\subsubsection*{Tourner la pièce} (identique à Duel)
+\subsubsection{Déplacer la pièce} (identique à Duel)
+\subsubsection{Tourner la pièce} (identique à Duel)
 
-\subsubsection*{Déplacer latéralement}
+\subsubsection{Déplacer latéralement}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Déplacer latéralement
@@ -351,7 +353,7 @@ Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être i
     \item \textbf{Cas exceptionnels}: Collision avec d'autres pièces, limite du plateau.
 \end{itemize}
 
-\subsubsection*{Accélérer la descente}
+\subsubsection{Accélérer la descente}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Accélérer la descente
