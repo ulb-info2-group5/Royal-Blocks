@@ -1,17 +1,18 @@
-@startuml
+@startuml connexion
 
 left to right direction
-actor "Utilisateur" as user
 
-rectangle connexion as connection { 
+actor Utilisateur as user
+
+rectangle connexion {
      usecase "Se connecter" as signin
      usecase "Créer un compte" as create_account
      usecase "S'authentifier" as authentify
-
-      (signin) .-> (authentify): <<include>>
 }
 
 user -- signin
 user -- create_account
+(signin) .-> (authentify): <<include>>
+
 
 @enduml
