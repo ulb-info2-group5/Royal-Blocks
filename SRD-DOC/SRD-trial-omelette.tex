@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{graphicx} %for inserting image
+\setlength{\parindent}{20pt}
 
 \title{Software Requirements Document : Tetris Royal}
 \author{Tao Chau\\
@@ -26,13 +27,41 @@
 
 \subsection{But du projet}
 
-\quad L'objectif de ce projet est d'implémenter une application jeu avec une option multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques avec une possibilité au joeur de les tourner et les déplacer, qui "tombent d'en haut" de la grille. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille; son score dépendra du temps et des lignes supprimées.  %j'aime absolument pas cette formulation
-\\ \\
-\quad Dans cette application, quatre modes sont proposés au joueur. Il existe la version \textit{Endless} avec un seul joueur où le but est de savoir placer des pièces sur la grille le plus longtemps possible. Selon les combinaisons des pièces qui se suppriment, les points attribués seront différemment. 
-% je n'aime pas cette formulation
-Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus a toutes ses lignes poussées vers le haut d'une ligne ou plus pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous.  La version \textit{Classic} et celle \textit{Duel} comprennent des parties de trois à neuf et deux joueurs respectivement. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent du haut de la grille; celui qui complète une ligne ou plusieurs lignes en même temps, il peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. Le dernier mode, \textit{ Royal Competition}, comprend des malus et des bonus. 
+\quad L'objectif de ce projet est d'implémenter une application jeu avec une option multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques qui peuvent être tournés et déplacés avant leur place finale. Les pièces tombent d'en haut de la grille et plus la partie avance, plus elles tombent rapidement. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille; son score dépendra du temps et des lignes supprimées.  
+
+\paragraph*{}
+
+Dans cette application, quatre modes sont proposés au joueur. Il existe la version \textit{Endless} avec un seul joueur où le but est de savoir placer des pièces sur la grille le plus longtemps possible. Selon les combinaisons des pièces qui se suppriment, les points attribués seront différemment.
+ 
+\paragraph*{}
+
+Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimés par les combinaisons.  
+
+\paragraph*{}
+
+La version \textit{Classic} et celle \textit{Duel} comprennent des parties de trois à neuf et deux joueurs respectivement. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent du haut de la grille; celui qui complète une ligne ou plusieurs lignes en même temps, il peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. 
+
+\paragraph*{}
+
+Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplie selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut soit envoyer des malus à un adversaire ou soit s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action de quelqu'un.
+
+\paragraph*{}
+
+En dehors des parties de jeux, le joueur peut se connecter ou créer un compte pour le \textit{Tetris Royal}. Cela le permet de gérer sa liste d'amis et de discuter avec via une messagerie intégrée dans l'application. Il peut également consulter le classement des autres joueurs dans le mode \textit{Endless}. Dernièrement, il peut créer ou rejoindre une partie dans un mode multijoueur sélectionné. Les participants peuvent être invités en mode observateur ou en mode joueur.
+
 
 \subsection{Glossaire}
+
+%il faudra les mettre en ordre alphabétique svp
+
+\begin{itemize}
+	\item \textbf{tetriminos}
+	\item \textbf{malus}
+	\item \textbf{bonus}
+	% \item \textbf{tetriminos}
+	% \item \textbf{tetriminos}
+\end{itemize}
+
 
 \subsection{Historique}
 
