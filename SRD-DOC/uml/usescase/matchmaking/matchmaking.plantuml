@@ -1,4 +1,4 @@
-@startuml atchmaking
+@startuml matchmaking
 
 left to right direction
 actor Utilisateur as user
