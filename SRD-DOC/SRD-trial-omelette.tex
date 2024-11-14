@@ -55,7 +55,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \begin{itemize}
 	\item \textbf{bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes comme réduire un tetramino en bloc de 1 x 1 , ou réduire son temps de chute. 
-	\item \textbf{malus} : Pénalité infligée à un jouer par un de ses adversaires. Le mallus se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
+	\item \textbf{malus} : Pénalité infligée à un joueur par un de ses adversaires. Le malus se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
 	\item \textbf{tetriminos} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différnetes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
 	
 \end{itemize}
@@ -66,7 +66,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \subsection{Écran d'accueil}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
     	\includegraphics[width=0.9\textwidth]{./uml/usescase/connexion/connexion.png}
     	\caption{Diagramme Use Case du Menu Principal}
@@ -106,9 +106,9 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \subsection{Menu Principal}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
-    	\includegraphics[width=1.3\textwidth]{./uml/usescase/menu-principal/menu_principal.png}
+    	\includegraphics[width=1.5\textwidth]{./uml/usescase/menu-principal/menu_principal.png}
     	\caption{Diagramme Use Case du Menu Principal}
     	\label{fig:main-menu}
     	
@@ -124,23 +124,23 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Cas exceptionnels}: Problème de connexion ou erreurs de lancement.
 \end{itemize}
 
-\subsubsection*{Rejoindre une partie (invitation)}
+\subsubsection*{Rejoindre une partie existante}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
-    \item \textbf{Use case}: Rejoindre partie (invitation)
-    \item \textbf{Description}: Permet à l'utilisateur de rejoindre une partie sur invitation d'un ami.
+    \item \textbf{Use case}: Rejoindre partie existante
+    \item \textbf{Description}: Permet à l'utilisateur de rejoindre une partie existante sur invitation d'un ami.
     \item \textbf{Précondition}: L'utilisateur a reçu une invitation.
     \item \textbf{Postcondition}: L'utilisateur rejoint la partie.
-    \item \textbf{Cas exceptionnels}: Invitation expirée, partie pleine.
+    \item \textbf{Cas exceptionnels}: Invitation expirée ou la partie a atteint le nombre maximum de personnes.
 \end{itemize}
 
 \subsubsection*{Inviter un ami}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami
-    \item \textbf{Description}: Permet à l'utilisateur d'inviter un ami à une partie.
+    \item \textbf{Description}: Permet à l'utilisateur d'inviter un de ses amis présents dans sa liste à une partie.
     \item \textbf{Précondition}: L'ami est connecté.
-    \item \textbf{Postcondition}: Invitation envoyée à l'ami.
+    \item \textbf{Postcondition}: L'invitation est envoyée à l'ami.
     \item \textbf{Cas exceptionnels}: L'ami est indisponible ou n'accepte pas l'invitation.
 \end{itemize}
 
@@ -149,9 +149,9 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Choisir mode de jeu
     \item \textbf{Description}: Permet à l'utilisateur de choisir le mode de jeu.
-    \item \textbf{Précondition}: Une partie est sur le point de commencer.
+    \item \textbf{Précondition}: L'utilisateur veut créer une partie de jeu.
     \item \textbf{Postcondition}: Le mode de jeu est défini pour la partie.
-    \item \textbf{Cas exceptionnels}: Mode de jeu non disponible.
+    \item \textbf{Cas exceptionnels}: Aucun.
 \end{itemize}
 
 \subsubsection*{Gérer son profil}
@@ -201,7 +201,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Description}: Permet à l'utilisateur de changer son pseudo.
     \item \textbf{Précondition}: L'utilisateur est authentifié.
     \item \textbf{Postcondition}: Le pseudo est modifié avec succès.
-    \item \textbf{Cas exceptionnels}: Pseudo déjà pris, validation échouée.
+    \item \textbf{Cas exceptionnels}: Le pseudo est déjà pris, le changement de pseudo est invalidé.
 \end{itemize}
 
 \subsubsection*{Ajouter un ami}
@@ -209,9 +209,9 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Ajouter un ami
     \item \textbf{Description}: Permet à l'utilisateur d'ajouter un autre utilisateur à sa liste d'amis.
-    \item \textbf{Précondition}: L'autre utilisateur existe et est accessible.
-    \item \textbf{Postcondition}: L'utilisateur est ajouté en tant qu'ami.
-    \item \textbf{Cas exceptionnels}: Ami déjà présent dans la liste, utilisateur introuvable.
+    \item \textbf{Précondition}: Le potentiel nouveau ami existe et est accessible.
+    \item \textbf{Postcondition}: L'utilisateur est ajouté en tant qu'ami dans sa nouvelle liste.
+    \item \textbf{Cas exceptionnels}: Ami déjà présent dans la liste ou utilisateur introuvable.
 \end{itemize}
 
 \subsubsection*{Supprimer un ami}
@@ -221,27 +221,27 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Description}: Permet à l'utilisateur de retirer un ami de sa liste.
     \item \textbf{Précondition}: L'ami existe dans la liste d'amis.
     \item \textbf{Postcondition}: L'ami est supprimé de la liste.
-    \item \textbf{Cas exceptionnels}: L'ami n'est plus dans la liste ou une erreur de suppression.
+    \item \textbf{Cas exceptionnels}: L'utilisateur à supprimer n'est pas dans la liste d'amis.
 \end{itemize}
 
 \subsubsection*{Inviter un ami en tant que joueur}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami en tant que joueur
-    \item \textbf{Description}: Permet à l'utilisateur d'inviter un ami pour participer à une partie.
+    \item \textbf{Description}: L'utilisateur a créé une partie et invite un joueur dans sa liste d'amis dans la partie.
     \item \textbf{Précondition}: L'ami est connecté.
     \item \textbf{Postcondition}: Invitation envoyée pour jouer.
-    \item \textbf{Cas exceptionnels}: L'ami n'est pas disponible, invitation rejetée.
+    \item \textbf{Cas exceptionnels}: L'ami n'est pas disponible et l'invitation est rejetée.
 \end{itemize}
 
 \subsubsection*{Inviter un ami en tant qu'observateur}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Inviter un ami en tant qu'observateur
-    \item \textbf{Description}: Permet à l'utilisateur d'inviter un ami pour observer une partie.
+    \item \textbf{Description}: L'utilisateur a créé une partie et invite un ami de sa liste d'amis à la partie en tant qu'observateur.
     \item \textbf{Précondition}: L'ami est connecté.
     \item \textbf{Postcondition}: Invitation envoyée pour observer.
-    \item \textbf{Cas exceptionnels}: L'ami est indisponible, invitation rejetée.
+    \item \textbf{Cas exceptionnels}: L'ami est indisponible et l'invitation est rejetée.
 \end{itemize}
 
 \subsubsection*{Regarder Classement}
@@ -251,36 +251,18 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Description}: Permet à l'utilisateur de consulter les classements.
     \item \textbf{Précondition}: L'utilisateur est connecté.
     \item \textbf{Postcondition}: Le classement est affiché.
-    \item \textbf{Cas exceptionnels}: Classement indisponible.
+    \item \textbf{Cas exceptionnels}: Classement indisponible, problèmes de connexion.
 \end{itemize}
 
 \subsection{Différents modes de jeux}
 
 \subsubsection{En mode Endless}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
     \includegraphics[width=0.9\textwidth]{./uml/usescase/en-jeu/endless.png}
     \caption{Diagramme Use Case en mode Classique}
     \label{fig:Classique}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{Acteur}
-    \item \textbf{Use case}
-    \item \textbf{Description}
-    \item \textbf{Précondition}
-    \item \textbf{Postcondition}
-    \item \textbf{Cas exceptionnels}
-\end{itemize}
-
-\subsubsection{En mode Duel}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{./uml/usescase/en-jeu/dual.png}
-    \caption{Diagramme Use Case en mode Duel}
-    \label{fig:Duel}
 \end{figure}
 
 \subsubsection*{Déplacer la pièce}
@@ -302,6 +284,49 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Postcondition}: La pièce est tournée en conséquence.
     \item \textbf{Cas exceptionnels}: La rotation amène la pièce en dehors des limites.
 \end{itemize}
+
+\subsubsection*{Menu pause}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Menu pause
+    \item \textbf{Description}: Permet au joueur d'ouvrir le menu de pause.
+    \item \textbf{Précondition}: La partie est en cours.
+    \item \textbf{Postcondition}: La partie est en pause.
+    \item \textbf{Cas exceptionnels}: Aucun.
+\end{itemize}
+
+\subsubsection*{Reprendre la partie}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Reprendre la partie
+    \item \textbf{Description}: Permet de reprendre la partie après une pause.
+    \item \textbf{Précondition}: La partie est en pause.
+    \item \textbf{Postcondition}: La partie reprend là où elle s'était arrêtée.
+    \item \textbf{Cas exceptionnels}: Aucun.
+\end{itemize}
+
+\subsubsection*{Quitter la partie}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Quitter la partie
+    \item \textbf{Description}: Permet au joueur de quitter la partie en cours.
+    \item \textbf{Précondition}: La partie est en cours.
+    \item \textbf{Postcondition}: Le joueur quitte la partie et retourne au menu principal.
+    \item \textbf{Cas exceptionnels}: Aucun.
+\end{itemize}
+
+\subsubsection{En mode Duel}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{./uml/usescase/en-jeu/dual.png}
+    \caption{Diagramme Use Case en mode Duel}
+    \label{fig:Duel}
+\end{figure}
+
+\subsubsection*{Déplacer la pièce} (identique au mode Endless)
+
+\subsubsection*{Tourner la pièce} (identique au mode Endless)
 
 \subsubsection*{Envoyer n-1 malus}
 \begin{itemize}
@@ -345,7 +370,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \subsubsection{En mode Normal}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
     \includegraphics[width=0.9\textwidth]{./uml/usescase/en-jeu/endless.png}
     \caption{Diagramme Use Case en mode Endless}
@@ -355,25 +380,9 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 \subsubsection*{Déplacer la pièce} (identique à Duel)
 \subsubsection*{Tourner la pièce} (identique à Duel)
 
-\subsubsection*{Déplacer latéralement}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Déplacer latéralement
-    \item \textbf{Description}: Permet au joueur de déplacer la pièce à gauche ou à droite.
-    \item \textbf{Précondition}: La pièce est en mouvement.
-    \item \textbf{Postcondition}: La pièce est déplacée dans la direction choisie.
-    \item \textbf{Cas exceptionnels}: Collision avec d'autres pièces, limite du plateau.
-\end{itemize}
+\subsubsection*{Déplacer latéralement} (identique au mode Endless)
 
-\subsubsection*{Accélérer la descente}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Accélérer la descente
-    \item \textbf{Description}: Permet au joueur d'accélérer la descente de la pièce.
-    \item \textbf{Précondition}: Une pièce est en mouvement.
-    \item \textbf{Postcondition}: La pièce descend plus rapidement.
-    \item \textbf{Cas exceptionnels}: La pièce atteint le bas du plateau plus rapidement que prévu.
-\end{itemize}
+\subsubsection*{Accélérer la descente} (identique au mode Endless)
 
 \subsubsection*{Menu pause} (identique à Duel)
 \subsubsection*{Reprendre la partie} (identique à Duel)
@@ -381,16 +390,20 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \subsubsection{En mode Royal Competition}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
     \includegraphics[width=0.9\textwidth]{./uml/usescase/en-jeu/royal-competition.png}
     \caption{Diagramme Use Case en mode Royal Competition}
     \label{fig:Royal-Competition}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique à Duel)
-\subsubsection*{Tourner la pièce} (identique à Duel)
-\subsubsection*{Envoyer n-1 malus} (identique à Duel)
+\subsubsection*{Déplacer la pièce} (identique au mode Endless)
+\subsubsection*{Tourner la pièce} (identique au mode Endless)
+\subsubsection*{Déplacer latéralement} (identique à Endless)
+\subsubsection*{Accélérer la descente} (identique à Endless)
+
+\subsubsection*{Envoyer n-1 malus} 
+à modifier 
 
 \subsubsection*{Discuter}
 \begin{itemize}
@@ -402,8 +415,6 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \item \textbf{Cas exceptionnels}: Connexion interrompue, messages non envoyés.
 \end{itemize}
 
-\subsubsection*{Déplacer latéralement} (identique à Endless)
-\subsubsection*{Accélérer la descente} (identique à Endless)
 \subsubsection*{Menu pause} (identique à Duel)
 \subsubsection*{Reprendre la partie} (identique à Duel)
 \subsubsection*{Quitter la partie} (identique à Duel)
