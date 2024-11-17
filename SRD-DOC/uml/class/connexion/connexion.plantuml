@@ -1,0 +1,63 @@
+@startuml Connexion
+
+' TODO: This diagram is not finshed yet and will be subject to modifications
+'
+' Credential contains: username & password
+
+class RegisterManager <<Client>> {
+    - credentials : Credentials
+    - registerUI : RegisterUI
+    - get_username() : string
+    - get_password() : string
+    - already_registered() : bool
+    + run() : void
+}
+
+class RegisterUI {
+    - username_input : string
+    - password_input : string
+    + RegisterUI()
+    + Display() : void
+    + ErrorDisplay() : void
+    + get_username() : string
+    + get_password() : string
+    + set_username(username: string) : void
+    + set_password(password: string) : void
+}
+
+class LoginManager <<Client>> {
+    - loginUI : LoginUI 
+    - credentials : Credentials
+    'username lets us initialize the username field in the loginUI
+    'to avoid asking it a second time (first time in the register side)
+    'if not empty, it will call set_username on the loginUI
+    + LoginManager(username="") : string 
+    + tryLogin() : bool
+}
+
+class LoginUI {
+    - username_input : string
+    - password_input : string
+    + LoginUI()
+    + Display() : void
+    + ErrorDisplay() : void
+    + get_username() : string
+    + get_password() : string
+    + set_username(username: string) : void
+    + set_password(password: string) : void
+}
+
+class AccountServer <<Server>> {
+    - accountsDatabase : Database
+    + CreateAccount(credentials: Credentials) : bool
+    + AccountAlreadyExists(credentials: Credentials) : bool
+}
+
+
+RegisterManager  -  LoginManager : starts >
+RegisterManager "1" --- "1" RegisterUI : gets credentials >
+LoginManager "1" --- "1" LoginUI : gets credentials >
+RegisterManager --- AccountServer : send/receive info
+LoginManager --- AccountServer : send/receive info
+
+@enduml

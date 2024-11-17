@@ -1,0 +1,78 @@
+@startuml Game
+
+class Coordinate {
+    + x: int
+    + y: int
+}
+
+enum TetraminoShape {
+    I
+    O
+    T
+    S
+    Z
+    L
+    J
+}
+
+enum Direction {
+    left
+    right
+    down
+}
+
+abstract class Tetramino {
+    - width : int
+    - height : int
+    'TODO: color ?
+    - body : vector<Coordinate>
+
+    ' coordinate of the center's for all 4 rotation states
+    - centers : Coordinate[4]
+
+    # Tetramino(initializer_list<Coordinate> coordinates)
+
+    ' factory
+    + {static} makeTetramino(shape : TetraminoShape)
+
+    + getWidt() : int
+    + getHeigt() : int
+    + getBody() : int
+
+    + tryMove(direction : Direction)
+    + tryRotate()
+}
+
+class TetraminoI extends Tetramino { 
+    +TetraminoI()
+}
+
+class TetraminoO extends Tetramino { 
+    +TetraminoO()
+}
+
+class TetraminoT extends Tetramino { 
+    +TetraminoT()
+}
+
+class TetraminoS extends Tetramino { 
+    +TetraminoS()
+}
+
+class TetraminoZ extends Tetramino { 
+    +TetraminoZ()
+}
+
+class TetraminoL extends Tetramino { 
+    +TetraminoL()
+}
+
+class TetraminoJ extends Tetramino { 
+    +TetraminoZ()
+}
+
+Tetramino .-> Coordinate : uses
+Tetramino .-> TetraminoShape : uses
+Tetramino .-> Direction : uses
+ 
+@enduml
