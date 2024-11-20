@@ -1,5 +1,42 @@
 @startuml Game
 
+
+class GameEngine{
+    
+}
+
+class Player {
+    -isPlaying : bool
+    +isPlaying() : bool
+    
+}
+
+
+abstract class AbstractTetramino {
+    - width : int
+    - height : int
+    'TODO: color ?
+    - body : vector<Coordinate>
+
+    ' coordinate of the center's for all 4 rotation states
+    - centers : vector<Coordinate>
+    - rotationState : RotationState
+
+    # Tetramino(initializer_list<Coordinate> coordinates)
+
+    ' factory
+    + {static} factory(shape : TetraminoShape)
+
+    + getWidth() : int 
+    + getHeight() : int
+    + getBody() : int
+
+    + tryMove(direction : Direction)
+    + tryRotate()
+}
+
+
+
 class Coordinate {
     + x: int
     + y: int
@@ -21,58 +58,62 @@ enum Direction {
     down
 }
 
-abstract class Tetramino {
-    - width : int
-    - height : int
-    'TODO: color ?
-    - body : vector<Coordinate>
 
-    ' coordinate of the center's for all 4 rotation states
-    - centers : Coordinate[4]
 
-    # Tetramino(initializer_list<Coordinate> coordinates)
+class RotationState{
+    - state : int 
+    + operator() ++
+    + getState() 
 
-    ' factory
-    + {static} makeTetramino(shape : TetraminoShape)
-
-    + getWidt() : int
-    + getHeigt() : int
-    + getBody() : int
-
-    + tryMove(direction : Direction)
-    + tryRotate()
 }
 
-class TetraminoI extends Tetramino { 
+enum Color {
+
+}
+
+class Board {
+    -grid : array[20][10] 
+}
+
+
+
+class TetraminoI extends AbstractTetramino { 
     +TetraminoI()
 }
 
-class TetraminoO extends Tetramino { 
+class TetraminoO extends AbstractTetramino { 
+    'overriding'
+    tryRotate()
     +TetraminoO()
+
 }
 
-class TetraminoT extends Tetramino { 
+class TetraminoT extends AbstractTetramino { 
     +TetraminoT()
 }
 
-class TetraminoS extends Tetramino { 
+class TetraminoS extends AbstractTetramino { 
     +TetraminoS()
 }
 
-class TetraminoZ extends Tetramino { 
+class TetraminoZ extends AbstractTetramino { 
     +TetraminoZ()
 }
 
-class TetraminoL extends Tetramino { 
+class TetraminoL extends AbstractTetramino { 
     +TetraminoL()
 }
 
-class TetraminoJ extends Tetramino { 
+class TetraminoJ extends AbstractTetramino { 
     +TetraminoZ()
 }
 
-Tetramino .-> Coordinate : uses
-Tetramino .-> TetraminoShape : uses
-Tetramino .-> Direction : uses
+AbstarctPiece --|> AbstractTetramino
+AbstractTetramino *-- Coordinate : uses
+AbstractTetramino - "1"RotationState
+AbstractTetramino.-> TetraminoShape : uses
+AbstractTetramino .-> Direction : uses
+
+
  
 @enduml
