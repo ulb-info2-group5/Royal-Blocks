@@ -90,6 +90,8 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     	\caption{Diagramme Use Case du Menude Connexion}
     	\label{fig:main-menu}
 \end{figure}
+Le premier écran que l'utilisateur accède est un moyen de se connecter à la plateforme de jeu via un compte. Le moyen de s'authentifier est avec un compte existant et le mot de passe associé valide. Si l'utilisateur ne possède pas de compte existant, il peut se créer un nouveau compte avec un pseudo non existant sur la plateforme.
+
 
 \subsubsection*{Connexion}
 \begin{itemize}
@@ -132,6 +134,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     \label{fig:main-menu}
 \end{figure}
 
+Une fois l'authentification validée, l'écran du menu principal est accessible. L'utilisateur peut lancer à une partie, gérer son profil, communiquer avec ses amis par la messagerie interne, gérer sa liste d'amis et regarder le classement général du jeu.
 
 \subsubsection*{Jouer une partie}
 \begin{itemize}
@@ -449,9 +452,15 @@ Le jeu doit proposer une interface graphique facile à utiliser et assez jolie. 
 
 \subsection{Connexion}
 
+\quad Quand l'utilisateur ouvre l'application, il doit avoir un compte valide pour s'authentifier. Il doit fournir des informations sur le nom du compte et le mot de passe.\\
+Ses entrées sur les deux champs sont envoyées au serveur de l'application. Les données sont vérifiées en recherchant sur la base de données un profil correspondant. Si un compte est trouvé avec le mot de passe correctement entré, le serveur connecte l'utilisateur au compte associé. Mais s'il ne trouve pas dans la base de données, l'utilisateur est notifié d'un message d'erreur du serveur.
+
 \subsection{Gestion des comptes}
 
 \subsubsection{Création d'un compte}
+
+Quand un utilisateur crée un compte, il doit fournir un nom de compte et un mot de passe. Chacune de ces entrées saisies a une taille minimale, maximale et une restriction sur les caractères autorisées. Le nom utilisé doit être unique pour chaque compte.\\
+Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le même nom. 
 
 \subsubsection{Suppression d'un compte}
 
