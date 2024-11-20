@@ -56,7 +56,7 @@ La version \textit{Classic} et la version \textit{Duel} comprennent respectiveme
 
 \paragraph*{}
 
-Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplie selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut soit envoyer des malus à un adversaire ou soit s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
+Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplie selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des malus à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
 
 \paragraph*{}
 
@@ -445,9 +445,6 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \newpage
 
-\section{Besoin utilisateur : Non fonctionnels}
-Le jeu doit proposer une interface graphique facile à utiliser et assez jolie. Le lancement des parties locales et en ligne doit être assez rapide.
-
 \section{Besoin système : Fonctionnels}
 
 \subsection{Connexion}
@@ -464,11 +461,19 @@ Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le m�
 
 \subsubsection{Suppression d'un compte}
 
+L'option de suppression du compte doit être possible sur le système. Quand l'utilisateur fait une telle demande en confirmant avec son mot de passe associé, le programme client questionne une dernière fois avant d'envoyer la requête au serveur. Le serveur supprime l'entrée sur la base de données du compte en quetion et l'utilisateur est déconnecté de la session.
+
 \subsection{Consulter le classement}
+
+Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut consulter le classement général des joueurs de la plateforme pour le mode de jeu \textit{Endless}. Le serveur l'actualise à chaque fin de partie et l'envoie à chaque requête d'utilisateur concernant le classement.
 
 \subsection{Gestion de la partie}
 
+De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées en requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroite de la grille, envoyer un malus à un adversaire, etc). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
+
 \subsection{Gestion des amis}
+
+Quand un utilisateur veut rajouter un autre utilisateur existant sur la plateforme à sa liste d'amis, le programme client enverra une requête .
 
 \subsubsection{Gestion du chat}
 
@@ -480,31 +485,57 @@ Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le m�
 
 \subsubsection{Fin de la partie Endless}
 
+
 \section{Besoins système : Non fonctionnels}
 
+\subsection{Besoins utilisateur}
+Le jeu doit proposer une interface graphique facile à utiliser et assez jolie. Le lancement des parties locales et en ligne doit être assez rapide.
 
-\subsection{Réseau}
+\subsection{Besoins système}
+
+\subsubsection{Réseau}
 Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
 
-\subsection{Système d'exploitation}
+\subsubsection{Système d'exploitation}
 Le jeu doit pouvoir être lancé sur le système d'exploitation Linux.
 
-\subsection{Accessibilité}
+\subsubsection{Accessibilité}
 Le serveur doit être en ligne pour pouvoir se connecter et accéder au jeu.
 
-\subsection{Performances}
+\subsubsection{Performances}
 Les temps de rafraîchissement et les temps de réponses seront en millisecondes.
 
-\subsection{Capacité}
+\subsubsection{Capacité}
 Le jeu pourra lancer une partie jusqu'à neuf joueurs pour le mode classique et acceptera aussi des spectateurs pour voir la partie en cours. L'espace de stockage sera quelques Megabytes.
 
-\subsection{Sécurité}
+\subsubsection{Sécurité}
 Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un pseudo et un mot de passe.
+
+\subsubsection{Robustesse}
 
 \newpage
 
-\section{Architecture et fonctionnement du système}
+\section{Architecture du système}
 
-\subsection{Connexion et inscription}
+\subsection{Architecture du serveur}
+
+\subsection{Architecture du jeu}
+
+\subsection{Architecture du client}
+
+\section{Fonctionnement du système}
+
+\subsection{Création d'un compte}
+
+\subsection{Connexion}
+
+\subsection{Envoi d'une requête}
+
+\subsection{Traitement d'une requête}
+
+\subsection{Lancement d'une partie}
+
+\subsection{Rejoindre un Lobby}
+
 
 \end{document}
