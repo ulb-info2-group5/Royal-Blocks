@@ -461,7 +461,7 @@ Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le m�
 
 \subsubsection{Suppression d'un compte}
 
-L'option de suppression du compte doit être possible sur le système. Quand l'utilisateur fait une telle demande en confirmant avec son mot de passe associé, le programme client questionne une dernière fois avant d'envoyer la requête au serveur. Le serveur supprime l'entrée sur la base de données du compte en quetion et l'utilisateur est déconnecté de la session.
+L'option de suppression du compte doit être possible sur le système. Quand l'utilisateur fait une telle demande en confirmant avec son mot de passe associé, le programme client questionne une dernière fois avant d'envoyer la requête au serveur. Le serveur supprime l'entrée sur la base de données du compte en question et l'utilisateur est déconnecté de la session.
 
 \subsection{Consulter le classement}
 
@@ -469,32 +469,38 @@ Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut cons
 
 \subsection{Gestion de la partie}
 
-De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées en requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroite de la grille, envoyer un malus à un adversaire, etc). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
+De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées sous formes de requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroit de la grille, envoyer un malus à un adversaire, etc). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
 
 \subsection{Gestion des amis}
 
-Quand un utilisateur veut rajouter un autre utilisateur existant sur la plateforme à sa liste d'amis, le programme client enverra une requête .
+Quand un utilisateur veut rajouter un autre utilisateur existant sur la plateforme à sa liste d'amis, le programme client enverra une requête au serveur. Si cette entrée saisie se trouve sur la base de données de l'application, le serveur enverra une requête au programme client de l'autre utilisateur. Ce dernier recevra une requête d'une demande d'ami qu'il pourra accepter ou non.
 
 \subsubsection{Gestion du chat}
 
+L'utilisateur peut utiliser la messagerie interne de l'application quand il possède au minimum un ami dans sa liste. Quand un message est envoyé de l'utilisateur, il est envoyé sous forme de requête utilisateur au serveur. Le ou les destinataires du message sont transmis au programme client de ces derniers. L'opération s'effectue sous conditio d'avoir une connexion stable au serveur.
+
 \subsection{Fin de la partie}
 
-\subsubsection{Fin de la partie normale}
+\subsubsection{Fin de la partie \textit{Endless}}
 
-\subsubsection{Fin de la partie Duo}
+Lorsque le joueur ne peut plus placer un \textit{tetriminos} sur sa grille, la partie se termine. Le programme client envoie une requête avec le score de l'utilisateur au serveur. La partie est enregistrée sur la base de données et est mise sur le classement des joueurs de l'application. 
 
-\subsubsection{Fin de la partie Endless}
+\subsubsection{Fin de la partie \textit{Multijoueurs}}
 
+Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour ou se sont déconnectés.
 
 \section{Besoins système : Non fonctionnels}
 
 \subsection{Besoins utilisateur}
-Le jeu doit proposer une interface graphique facile à utiliser et assez jolie. Le lancement des parties locales et en ligne doit être assez rapide.
+
+L'application doit proposer une interface graphique intuitive à utiliser pour l'utilisateur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu. De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu.
 
 \subsection{Besoins système}
 
 \subsubsection{Réseau}
-Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
+
+%Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
+Lorsque l'utilisateur est authentifié, il doit être connecté au serveur afin de jouer sur le réseau.
 
 \subsubsection{Système d'exploitation}
 Le jeu doit pouvoir être lancé sur le système d'exploitation Linux.
