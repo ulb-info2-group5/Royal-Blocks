@@ -40,7 +40,7 @@
 
 \subsection{But du projet}
 
-\quad Ce projet a pour objectif de concevoir une application de jeu intégrant diverses fonctionnalités multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale du jeu \textit{Tetris}. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques qui peuvent être tournés et déplacés avant leur place finale. Les pièces tombent depuis le haut de la grille et plus la partie avance, plus elles tombent rapidement. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille car il y a des \textit{tetriminos} sur toute la hauteur de la grille. Son score dépendra du temps de la partie et des lignes supprimées.  
+\quad Ce projet a pour objectif de concevoir une application de jeu intégrant diverses fonctionnalités multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale du jeu \textit{Tetris}. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques qui peuvent être tournées et déplacées avant leur place finale. Les pièces tombent depuis le haut de la grille et plus la partie avance, plus elles tombent rapidement. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille car il y a des \textit{tetriminos} sur toute la hauteur de la grille. Son score dépendra du temps de la partie et des lignes supprimées.  
 
 \paragraph*{}
 
@@ -487,37 +487,54 @@ Lorsque le joueur ne peut plus placer un \textit{tetriminos} sur sa grille, la p
 
 \subsubsection{Fin de la partie \textit{Multijoueurs}}
 
-Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour ou se sont déconnectés.
+Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est'un pseudo et un mot de passe. celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour ou se sont déconnectés.
 
 \section{Besoins système : Non fonctionnels}
-
-\subsection{Besoins utilisateur}
-
-L'application doit proposer une interface graphique intuitive à utiliser pour l'utilisateur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu. De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu.
 
 \subsection{Besoins système}
 
 \subsubsection{Réseau}
 
 %Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
-Lorsque l'utilisateur est authentifié, il doit être connecté au serveur afin de jouer sur le réseau.
+
+L'application demande une connexion internet avec le protocole TCP/IP pour être connecté au serveur. Cela permet d'établir une communication entre le client et le serveur. Ce n'est pas requis quand ces deux entités se trouvent sur la même machine; ce n'est pas attendu dans le cadre d'utilisation de l'application.
 
 \subsubsection{Système d'exploitation}
-Le jeu doit pouvoir être lancé sur le système d'exploitation Linux.
+
+Les machines du client et du serveur doivent pouvoir s'exécuter sur un système d'exploitation \texttt{Linux}.
 
 \subsubsection{Accessibilité}
-Le serveur doit être en ligne pour pouvoir se connecter et accéder au jeu.
+
+Le client doit être connecté à une connexion internet pour accéder au serveur. Sur l'aspect de jouer avec l'application, son utilisation est gratuite pour tout utilisateur authentifié à un compte. S'il n'en possède pas un existant, il peut facilement s'en créer un. 
 
 \subsubsection{Performances}
-Les temps de rafraîchissement et les temps de réponses seront en millisecondes.
+
+%Les temps de rafraîchissement et les temps de réponses seront en millisecondes.
+
+Afin de minimiser le nombre de requêtes du client au serveur, des conditions seront vérifiées par le client avant d'envoyer ces dernières au serveur. \\
+
+\textit{Exemple} : l'utilisateur a bien fait au minimum deux combinaisons de lignes avant de pouvoir envoyer un ou plusieurs malus à un de ses adversaires.
 
 \subsubsection{Capacité}
-Le jeu pourra lancer une partie jusqu'à neuf joueurs pour le mode classique et acceptera aussi des spectateurs pour voir la partie en cours. L'espace de stockage sera quelques Megabytes.
+
+%Le jeu pourra lancer une partie jusqu'à neuf joueurs pour le mode classique et acceptera aussi des spectateurs pour voir la partie en cours. L'espace de stockage sera quelques Megabytes.
+
+Plusieurs parties de maximum neuf joueurs peuvent se tenir en même temps sur le serveur. De plus, l'espace de stockage pour chaque partie doit être au maximum de quelques mégaoctets.
 
 \subsubsection{Sécurité}
-Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un pseudo et un mot de passe.
+
+%Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un pseudo et un mot de passe.
+
+Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom de compte et de son mot de passe associé. Notamment, le serveur devra vérifier que toutes les règles du jeu seront appliquées correctement durant la partie afin qu'aucun utilisateur puisse tricher. 
 
 \subsubsection{Robustesse}
+
+S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la partie ou du serveur, le jeu doit pouvoir continuer fluidement sans interruption. Celui qui vient de quitter se retrouve perdant de la partie à la bonne position du classement de la partie.
+
+\subsection{Besoins utilisateur}
+
+L'application doit proposer une interface graphique intuitive à utiliser pour l'utilisateur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu.\\
+ De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu. Le temps de rafraichissement de l'interface du client doit se faire dans l'odre du dixième de seconde.
 
 \newpage
 
