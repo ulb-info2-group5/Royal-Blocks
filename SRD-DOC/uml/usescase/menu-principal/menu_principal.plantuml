@@ -44,9 +44,9 @@ rectangle "Menu Principal" as main_menu {
 
 'TODO: This should be a logical XOR
 (invite_friend) <-. (invite_friend_as_player) : <<extend>>
-(invite_friend_as_player) . (invite_friend_as_viewer) : {xor}
-(invite_friend) <-. (invite_friend_as_viewer) : <<extend>>
 
+(invite_friend) <-. (invite_friend_as_viewer) : <<extend>>
+(invite_friend_as_player) .  (invite_friend_as_viewer) : {xor}
 (chat_with_friend) .-> (choose_friend_to_chat): <<include>>
 
 (invite_friend_as_player) .-> (choose_friend): <<include>>
