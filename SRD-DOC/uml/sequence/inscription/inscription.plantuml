@@ -1,0 +1,47 @@
+@startuml 
+
+skinparam style strictuml
+
+actor Actor
+participant RegisterUI
+participant RegisterManager
+participant AccountServer
+participant LoginManager
+activate Actor
+activate RegisterManager
+
+Actor -> RegisterUI : registerRequest()
+activate RegisterUI
+RegisterUI <- RegisterManager : getCredentials(name, password)
+RegisterUI -->> RegisterManager : sendCredentials
+RegisterManager -> RegisterManager : checkCrentialsValidity(name, password)
+alt invalidCredentials
+RegisterManager -->> RegisterUI : invalidCreadnetials
+RegisterUI -> RegisterUI : displayError()
+else else
+alt already_registered
+RegisterManager -> LoginManager : <<start>>  LoginManager(username)
+activate LoginManager
+RegisterManager -> 
+deactivate LoginManager
+else 
+RegisterManager -> AccountServer : attemptCreateAccount()
+activate AccountServer
+alt Creation failed
+AccountServer -->> RegisterManager : creationFailed
+RegisterUI -> RegisterUI : displayError()
+else else 
+AccountServer -->> RegisterManager : creationSucceed
+RegisterManager -->> RegisterUI : <<destroy>>
+deactivate RegisterUI
+
+RegisterManager -> LoginManager : <<start>>
+activate LoginManager
+deactivate RegisterManager
+
+end
+deactivate LoginManager
+deactivate AccountServer 
+end
+ 
+@enduml
