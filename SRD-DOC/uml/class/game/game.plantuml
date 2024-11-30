@@ -6,28 +6,28 @@ class GameEngine{
 }
 
 class Player {
-    -isPlaying : bool
+    -isPlaying_ : bool
     +isPlaying() : bool
     
 }
 
 
 abstract class AbstractTetramino {
-    - width : int
-    - height : int
+    - width_ : int
+    - height_ : int
     'TODO: color ?
-    - body : vector<Coordinate>
+    - body_ : vector<Coordinate>
 
     ' coordinate of the center's for all 4 rotation states
-    - centers : vector<Coordinate>
-    - rotationState : RotationState
+    - centers_ : vector<Coordinate>
+    - rotationState_ : RotationState
 
     # Tetramino(initializer_list<Coordinate> coordinates)
 
     ' factory
     + {static} factory(shape : TetraminoShape)
 
-    + getWidth() : int 
+    + getWidth() : int  
     + getHeight() : int
     + getBody() : int
 
@@ -61,7 +61,7 @@ enum Direction {
 
 
 class RotationState{
-    - state : int 
+    - state_ : int 
     + operator() ++
     + getState() 
 
@@ -72,7 +72,7 @@ enum Color {
 }
 
 class Board {
-    -grid : array[20][10] 
+    -grid_ : array[20][10] 
 }
 
 
