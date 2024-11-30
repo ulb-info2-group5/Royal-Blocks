@@ -48,7 +48,7 @@ Dans cette application, quatre modes sont proposés au joueur. Il existe la vers
  
 \paragraph*{}
 
-Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimés par les combinaisons.  
+Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimées par les combinaisons.  
 
 \paragraph*{}
 
@@ -56,7 +56,7 @@ La version \textit{Classic} et la version \textit{Duel} comprennent respectiveme
 
 \paragraph*{}
 
-Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplie selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des malus à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
+Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplit selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des malus à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
 
 \paragraph*{}
 
@@ -68,9 +68,9 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 
 \begin{itemize}
-	\item \textbf{Bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes comme réduire un tetramino en bloc de 1 x 1 , ou réduire son temps de chute. 
+	\item \textbf{Bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes comme réduire un tetromino en bloc de 1 x 1 , ou réduire son temps de chute. 
 	\item \textbf{Malus} : Pénalité infligée à un joueur par un de ses adversaires. Le malus se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
-	\item \textbf{Tetriminos} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
+	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
         \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
         \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
 	
@@ -87,7 +87,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 \begin{figure}[!h]
     \centering
     	\includegraphics[width=0.9\textwidth]{uml/usescase/connexion/connexion.png}
-    	\caption{Diagramme Use Case du Menude Connexion}
+    	\caption{Diagramme Use Case du Menu de Connexion}
     	\label{fig:main-menu}
 \end{figure}
 Le premier écran que l'utilisateur accède est un moyen de se connecter à la plateforme de jeu via un compte. Le moyen de s'authentifier est avec un compte existant et le mot de passe associé valide. Si l'utilisateur ne possède pas de compte existant, il peut se créer un nouveau compte avec un pseudo non existant sur la plateforme.
@@ -456,7 +456,7 @@ Ses entrées sur les deux champs sont envoyées au serveur de l'application. Les
 
 \subsubsection{Création d'un compte}
 
-Quand un utilisateur crée un compte, il doit fournir un nom de compte et un mot de passe. Chacune de ces entrées saisies a une taille minimale, maximale et une restriction sur les caractères autorisées. Le nom utilisé doit être unique pour chaque compte.\\
+Quand un utilisateur crée un compte, il doit fournir un nom de compte et un mot de passe. Chaque entrée saisie a une taille minimale, maximale et une restriction sur les caractères autorisés. Le nom utilisé doit être unique pour chaque compte.\\
 Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le même nom. 
 
 \subsubsection{Suppression d'un compte}
@@ -469,25 +469,25 @@ Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut cons
 
 \subsection{Gestion de la partie}
 
-De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées sous formes de requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroit de la grille, envoyer un malus à un adversaire, etc). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
+De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées sous forme de requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroit de la grille, envoyer un malus à un adversaire, etc.). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
 
 \subsection{Gestion des amis}
 
-Quand un utilisateur veut rajouter un autre utilisateur existant sur la plateforme à sa liste d'amis, le programme client enverra une requête au serveur. Si cette entrée saisie se trouve sur la base de données de l'application, le serveur enverra une requête au programme client de l'autre utilisateur. Ce dernier recevra une requête d'une demande d'ami qu'il pourra accepter ou non.
+Quand un utilisateur veut rajouter un autre utilisateur existant sur la plateforme à sa liste d'amis, le programme client enverra une requête au serveur. Si cette entrée saisie se trouve dans la base de données de l'application, le serveur enverra une requête au programme client de l'autre utilisateur. Ce dernier recevra une requête d'une demande d'ami qu'il pourra accepter ou non.
 
 \subsubsection{Gestion du chat}
 
-L'utilisateur peut utiliser la messagerie interne de l'application quand il possède au minimum un ami dans sa liste. Quand un message est envoyé de l'utilisateur, il est envoyé sous forme de requête utilisateur au serveur. Le ou les destinataires du message sont transmis au programme client de ces derniers. L'opération s'effectue sous conditio d'avoir une connexion stable au serveur.
+L'utilisateur peut utiliser la messagerie interne de l'application quand il possède au minimum un ami dans sa liste. Quand un message est envoyé de l'utilisateur, il est envoyé sous forme de requête utilisateur au serveur. Le ou les destinataires du message sont transmis au programme client de ces derniers. L'opération s'effectue sous condition d'avoir une connexion stable au serveur.
 
 \subsection{Fin de la partie}
 
 \subsubsection{Fin de la partie \textit{Endless}}
 
-Lorsque le joueur ne peut plus placer un \textit{tetriminos} sur sa grille, la partie se termine. Le programme client envoie une requête avec le score de l'utilisateur au serveur. La partie est enregistrée sur la base de données et est mise sur le classement des joueurs de l'application. 
+Lorsque le joueur ne peut plus placer un \textit{tetromino} sur sa grille, la partie se termine. Le programme client envoie une requête avec le score de l'utilisateur au serveur. La partie est enregistrée dans la base de données et est mise dans le classement des joueurs de l'application. 
 
 \subsubsection{Fin de la partie \textit{Multijoueurs}}
 
-Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est'un pseudo et un mot de passe. celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour ou se sont déconnectés.
+Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour en déposer un.
 
 \section{Besoins système : Non fonctionnels}
 
@@ -497,7 +497,7 @@ Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est'un pseud
 
 %Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
 
-L'application demande une connexion internet avec le protocole TCP/IP pour être connecté au serveur. Cela permet d'établir une communication entre le client et le serveur. Ce n'est pas requis quand ces deux entités se trouvent sur la même machine; ce n'est pas attendu dans le cadre d'utilisation de l'application.
+L'application demande une connexion internet avec le protocole TCP/IP pour être connectée au serveur. Cela permet d'établir une communication entre le client et le serveur. Ce n'est pas requis quand ces deux entités se trouvent sur la même machine; ce n'est pas attendu dans le cadre d'utilisation de l'application.
 
 \subsubsection{Système d'exploitation}
 
@@ -525,7 +525,7 @@ Plusieurs parties de maximum neuf joueurs peuvent se tenir en même temps sur le
 
 %Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un pseudo et un mot de passe.
 
-Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom de compte et de son mot de passe associé. Notamment, le serveur devra vérifier que toutes les règles du jeu seront appliquées correctement durant la partie afin qu'aucun utilisateur puisse tricher. 
+Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom d'utilisateur et de son mot de passe associé. Notamment, le serveur devra vérifier que toutes les règles du jeu seront appliquées correctement durant la partie afin qu'aucun utilisateur ne puisse tricher. 
 
 \subsubsection{Robustesse}
 
@@ -534,7 +534,7 @@ S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la p
 \subsection{Besoins utilisateur}
 
 L'application doit proposer une interface graphique intuitive à utiliser pour l'utilisateur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu.\\
- De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu. Le temps de rafraichissement de l'interface du client doit se faire dans l'odre du dixième de seconde.
+ De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu. Le temps de rafraîchissement de l'interface du client doit se faire dans l'ordre du dixième de seconde.
 
 \newpage
 
