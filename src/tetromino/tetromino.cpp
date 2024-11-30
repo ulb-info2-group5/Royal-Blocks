@@ -27,6 +27,10 @@ Tetromino::Tetromino(const Tetromino &other) = default;
 
 Tetromino::Tetromino(Tetromino &&other) = default;
 
+// #### Destructor ####
+
+Tetromino::~Tetromino() = default;
+
 // #### Assignment Operators  ####
 
 Tetromino &Tetromino::operator=(const Tetromino &other) = default;
@@ -74,6 +78,10 @@ std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
 int Tetromino::getWidth() const noexcept { return width_; }
 
 int Tetromino::getHeight() const noexcept { return height_; }
+
+const Coordinate &Tetromino::getAnchorPoint() const noexcept {
+    return anchorPoint_;
+}
 
 const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
     return body_;

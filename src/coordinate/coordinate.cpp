@@ -8,6 +8,10 @@ Coordinate::Coordinate(const Coordinate &other) = default;
 
 Coordinate::Coordinate(Coordinate &&other) = default;
 
+// #### Destructors  ####
+
+Coordinate::~Coordinate() = default;
+
 // #### Assignment Operators  ####
 
 Coordinate &Coordinate::operator=(const Coordinate &other) = default;
@@ -58,4 +62,10 @@ Coordinate &Coordinate::operator-=(const Coordinate &other) {
 
 Coordinate Coordinate::operator-() const {
     return Coordinate{-getRow(), -getCol()};
+}
+
+// #### Friend functions ####
+std::ostream &operator<<(std::ostream &os, const Coordinate &coord) {
+    os << "(" << coord.getRow() << ", " << coord.getCol() << ")";
+    return os;
 }

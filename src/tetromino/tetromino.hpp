@@ -33,6 +33,10 @@ class Tetromino {
     Tetromino &operator=(Tetromino &&other);
 
   public:
+    // #### Destructor ####
+
+    virtual ~Tetromino();
+
     // #### Factory ####
 
     static std::unique_ptr<Tetromino> makeTetromino(TetrominoShape shape,
@@ -43,6 +47,8 @@ class Tetromino {
     virtual int getWidth() const noexcept;
 
     virtual int getHeight() const noexcept;
+
+    virtual const Coordinate &getAnchorPoint() const noexcept;
 
     virtual const std::vector<Coordinate> &getBody() const noexcept;
 

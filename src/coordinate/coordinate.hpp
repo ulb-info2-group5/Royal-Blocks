@@ -1,6 +1,8 @@
 #ifndef COORDINATE_HPP
 #define COORDINATE_HPP
 
+#include <iostream>
+
 class Coordinate {
   private:
     int col_;
@@ -15,41 +17,47 @@ class Coordinate {
 
     Coordinate(Coordinate &&other);
 
+    // #### Destructor ####
+
+    virtual ~Coordinate();
+
     // #### Assignment Operators  ####
 
-    Coordinate &operator=(const Coordinate &other);
+    virtual Coordinate &operator=(const Coordinate &other);
 
-    Coordinate &operator=(Coordinate &&other);
+    virtual Coordinate &operator=(Coordinate &&other);
 
     // #### Getters ####
 
-    int getRow() const noexcept;
+    virtual int getRow() const noexcept;
 
-    int getCol() const noexcept;
+    virtual int getCol() const noexcept;
 
     // #### Setters ####
 
-    void setRow(int row);
+    virtual void setRow(int row);
 
-    void setCol(int col);
+    virtual void setCol(int col);
 
-    void moveRow(int row);
+    virtual void moveRow(int row);
 
-    void moveCol(int col);
+    virtual void moveCol(int col);
 
     // #### Operators ####
 
-    bool operator==(const Coordinate &other) const;
+    virtual bool operator==(const Coordinate &other) const;
 
-    Coordinate operator+(const Coordinate &other) const;
+    virtual Coordinate operator+(const Coordinate &other) const;
 
-    Coordinate &operator+=(const Coordinate &other);
+    virtual Coordinate &operator+=(const Coordinate &other);
 
-    Coordinate operator-(const Coordinate &other) const;
+    virtual Coordinate operator-(const Coordinate &other) const;
 
-    Coordinate &operator-=(const Coordinate &other);
+    virtual Coordinate &operator-=(const Coordinate &other);
 
-    Coordinate operator-() const;
+    virtual Coordinate operator-() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord);
 };
 
 #endif
