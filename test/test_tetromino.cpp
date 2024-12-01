@@ -11,12 +11,17 @@
 #include <memory>
 #include <vector>
 
+// NOTE: Haven't written tests for rotate() yet since we don't want to have to
+// write them again when we will switch to Super Rotation System algorithm
+
 void TetrominoTest::setUp() {
     for (int i = 0;
          static_cast<TetrominoShape>(i) < TetrominoShape::NUM_TETROMINOSHAPE;
          i++) {
         tetrominos.emplace_back(Tetromino::makeTetromino(
-            static_cast<TetrominoShape>(i), Coordinate(i, i)));
+            static_cast<TetrominoShape>(i),
+            Coordinate(i, i))); // Coordinate(i, i) to check that the
+                                // translation in constructor is working
     }
 }
 
@@ -26,7 +31,7 @@ void TetrominoTest::tearDown() {
     }
 }
 
-void TetrominoTest::gettersTest() {
+void TetrominoTest::shapeTest() {
     for (const auto &tetromino : tetrominos) {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z):
@@ -81,4 +86,63 @@ void TetrominoTest::gettersTest() {
             break;
         }
     }
+}
+
+void TetrominoTest::getWidthAndHeightTest() {
+    for (const auto &tetromino : tetrominos) {
+        switch (tetromino->getShape()) {
+        case (TetrominoShape::Z):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::L):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::O):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::S):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::I):
+            CPPUNIT_ASSERT_EQUAL(1, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(4, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::J):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            break;
+
+        case (TetrominoShape::T):
+            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void TetrominoTest::moveTest() {
+    CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), tetrominos[0]->getAnchorPoint());
+
+    tetrominos[0]->move(Direction::down);
+
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
+
+    tetrominos[0]->move(Direction::right);
+
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 1), tetrominos[0]->getAnchorPoint());
+
+    tetrominos[0]->move(Direction::left);
+
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
 }

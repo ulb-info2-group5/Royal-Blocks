@@ -33,7 +33,7 @@ TetrominoShape TetrominoO::getShape() const noexcept {
     return TetrominoShape::O;
 }
 
-void TetrominoO::tryRotate() {} // O shape doesn't need to rotate
+void TetrominoO::rotate() {} // O shape doesn't need to rotate
 
 // #### S Shape ####
 TetrominoS::TetrominoS(Coordinate &&anchorPoint)

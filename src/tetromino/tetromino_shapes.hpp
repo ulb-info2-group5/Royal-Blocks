@@ -32,7 +32,7 @@ class TetrominoL : public Tetromino {
 class TetrominoO : public Tetromino {
   public:
     TetrominoO(Coordinate &&anchorPoint);
-    void tryRotate() override; // O shape doesn't need to rotate
+    void rotate() override; // O shape doesn't need to rotate
     virtual TetrominoShape getShape() const noexcept override;
 };
 

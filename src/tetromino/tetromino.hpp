@@ -56,9 +56,9 @@ class Tetromino {
 
     // #### Tetromino Actions ####
 
-    virtual void tryRotate();
+    virtual void rotate();
 
-    virtual void tryMove(Direction direction);
+    virtual void move(Direction direction);
 
     // #### Output Stream ####
 

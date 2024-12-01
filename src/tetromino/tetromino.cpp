@@ -17,18 +17,19 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body)
             "All Tetrominos must be composed of 4 blocks");
     }
 
-    int minCol = std::numeric_limits<int>::max();
-    int minRow = std::numeric_limits<int>::max();
+    Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
+                                  std::numeric_limits<int>::max()};
 
-    // Find top-left corner of smallest rectangle around Tetromino
+    // Find top-left corner of smallest rectangle containing the Tetromino
     for (const Coordinate &coord : body_) {
-        minRow = std::min(coord.getRow(), minRow);
-        minCol = std::min(coord.getCol(), minCol);
+        boundingBoxTopLeft.setRow(
+            std::min(coord.getRow(), boundingBoxTopLeft.getRow()));
+        boundingBoxTopLeft.setCol(
+            std::min(coord.getCol(), boundingBoxTopLeft.getCol()));
     }
 
-    // Translate all blocks to align with (0, 0)
     for (Coordinate &coord : body_) {
-        coord -= Coordinate{minRow, minCol};
+        coord -= boundingBoxTopLeft;
     }
 
     for (const Coordinate &coord : body_) {
@@ -107,45 +108,39 @@ const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
 
 // #### Tetromino Actions ####
 
-void Tetromino::tryRotate() {
-    // TODO: this function should call checkInBoard (not written yet) method
-    // with the just moved Tetromino, and then only if checkInBoard returned
-    // true: apply/validate the move on the self
-
-    int minCol = std::numeric_limits<int>::max();
-    int minRow = std::numeric_limits<int>::max();
+void Tetromino::rotate() {
+    Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
+                                  std::numeric_limits<int>::max()};
 
     Coordinate center{height_ / 2, width_ / 2};
 
+    // Find top-left corner of smallest rectangle containing the Tetromino
     for (Coordinate &coord : body_) {
         coord.rotateClockwiseAround(center);
 
-        minRow = std::min(coord.getRow(), minRow);
-        minCol = std::min(coord.getCol(), minCol);
+        boundingBoxTopLeft.setRow(
+            std::min(coord.getRow(), boundingBoxTopLeft.getRow()));
+        boundingBoxTopLeft.setCol(
+            std::min(coord.getCol(), boundingBoxTopLeft.getCol()));
     }
 
-    // Translate the rotated shape to align with top-left corner
     for (Coordinate &coord : body_) {
-        coord.setRow(coord.getRow() - minRow);
-        coord.setCol(coord.getCol() - minCol);
+        coord -= boundingBoxTopLeft;
     }
 
     std::swap(height_, width_);
 }
 
-void Tetromino::tryMove(Direction direction) {
-    // TODO: this function should call checkInBoard (not written yet) method
-    // with the just moved Tetromino, and then only if checkInBoard returned
-    // true: apply/validate the move on the self
+void Tetromino::move(Direction direction) {
     switch (direction) {
     case Direction::down:
-        anchorPoint_.setRow(anchorPoint_.getRow() - 1);
+        anchorPoint_.moveRow(1);
         break;
     case Direction::left:
-        anchorPoint_.setCol(anchorPoint_.getCol() - 1);
+        anchorPoint_.moveCol(-1);
         break;
     case Direction::right:
-        anchorPoint_.setCol(anchorPoint_.getCol() + 1);
+        anchorPoint_.moveCol(+1);
         break;
     }
 }

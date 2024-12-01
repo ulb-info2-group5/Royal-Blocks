@@ -7,7 +7,9 @@
 
 class TetrominoTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(TetrominoTest);
-    CPPUNIT_TEST(gettersTest);
+    CPPUNIT_TEST(shapeTest);
+    CPPUNIT_TEST(getWidthAndHeightTest);
+    CPPUNIT_TEST(moveTest);
     CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -16,7 +18,9 @@ class TetrominoTest : public CppUnit::TestFixture {
     void tearDown() override;
 
   protected:
-    void gettersTest();
+    void shapeTest();
+    void getWidthAndHeightTest();
+    void moveTest();
 
   private:
     std::vector<std::unique_ptr<Tetromino>> tetrominos;
