@@ -12,13 +12,13 @@ enum class Direction { left, right, down };
 
 class Tetromino {
   private:
-    int width_;
-    int height_;
+    int width_ = 0;
+    int height_ = 0;
     Coordinate anchorPoint_;
     std::vector<Coordinate> body_;
 
   protected:
-    // #### Constructors ####
+    // #### Constructor ####
 
     Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body);
 
@@ -48,6 +48,8 @@ class Tetromino {
 
     virtual int getHeight() const noexcept;
 
+    virtual TetrominoShape getShape() const noexcept = 0;
+
     virtual const Coordinate &getAnchorPoint() const noexcept;
 
     virtual const std::vector<Coordinate> &getBody() const noexcept;
@@ -58,9 +60,10 @@ class Tetromino {
 
     virtual void tryMove(Direction direction);
 
-    // #### Debug ####
+    // #### Output Stream ####
 
-    virtual void debugPrint() const;
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const Tetromino &tetromino);
 };
 
 #endif

@@ -16,12 +16,12 @@ class CoordinateTest : public CppUnit::TestFixture {
 
     CPPUNIT_TEST(equalityOperatorsTest);
 
-    CPPUNIT_TEST(moveRowAndColTest);
-
     CPPUNIT_TEST(additionTest);
     CPPUNIT_TEST(subtractionTest);
     CPPUNIT_TEST(compoundAdditionTest);
     CPPUNIT_TEST(compoundSubtractionTest);
+
+    CPPUNIT_TEST(moveRowAndColTest);
 
     CPPUNIT_TEST(outputStreamOperatorTest);
 
@@ -39,13 +39,13 @@ class CoordinateTest : public CppUnit::TestFixture {
 
     void equalityOperatorsTest();
 
-    void moveRowAndColTest();
-
     // arithmetic
     void additionTest();
     void subtractionTest();
     void compoundAdditionTest();
     void compoundSubtractionTest();
+
+    void moveRowAndColTest();
 
     void outputStreamOperatorTest();
 

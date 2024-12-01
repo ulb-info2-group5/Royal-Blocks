@@ -72,6 +72,31 @@ Coordinate Coordinate::operator-() const {
     return Coordinate{-getRow(), -getCol()};
 }
 
+// #### Rotation #####
+
+const Coordinate &
+Coordinate::rotateClockwiseAround(const Coordinate &rotationCenter) {
+    // Translate the coordinate by the ((rotationCenter)->(0,0))) vector
+    int translatedRow = row_ - rotationCenter.getRow();
+    int translatedCol = col_ - rotationCenter.getCol();
+
+    // Matrix coordinate system to cartesian (flip the y/row axis)
+    translatedRow = -translatedRow;
+
+    // Perform the 90-degree clockwise rotation
+    int rotatedRow = -translatedCol;
+    int rotatedCol = translatedRow;
+
+    // Go back to matrix coordinate system
+    rotatedRow = -rotatedRow;
+
+    // Translate back to the original coordinate space
+    row_ = rotatedRow + rotationCenter.getRow();
+    col_ = rotatedCol + rotationCenter.getCol();
+
+    return *this;
+}
+
 // #### Output Stream ####
 
 std::ostream &operator<<(std::ostream &os, const Coordinate &coord) {

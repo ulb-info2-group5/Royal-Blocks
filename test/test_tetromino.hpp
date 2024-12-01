@@ -7,7 +7,7 @@
 
 class TetrominoTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(TetrominoTest);
-    CPPUNIT_TEST(tetrominoCreationTest);
+    CPPUNIT_TEST(gettersTest);
     CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -16,10 +16,10 @@ class TetrominoTest : public CppUnit::TestFixture {
     void tearDown() override;
 
   protected:
-    void tetrominoCreationTest();
+    void gettersTest();
 
   private:
-    std::unique_ptr<Tetromino> tetromino_;
+    std::vector<std::unique_ptr<Tetromino>> tetrominos;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TetrominoTest);

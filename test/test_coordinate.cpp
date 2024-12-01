@@ -41,22 +41,6 @@ void CoordinateTest::equalityOperatorsTest() {
     CPPUNIT_ASSERT(!(*coord1 == *coord2));
 }
 
-void CoordinateTest::moveRowAndColTest() {
-    // moving coord1 (row)
-    coord1->moveRow(3);
-    CPPUNIT_ASSERT_EQUAL(Coordinate(4, 2), *coord1);
-
-    coord1->moveRow(-2);
-    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 2), *coord1);
-
-    // moving coord2 (col)
-    coord2->moveCol(5);
-    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 8), *coord2);
-
-    coord2->moveCol(-3);
-    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 5), *coord2);
-}
-
 void CoordinateTest::additionTest() {
     Coordinate result = *coord1 + *coord2;
     CPPUNIT_ASSERT_EQUAL(Coordinate(3, 5), result);
@@ -75,6 +59,22 @@ void CoordinateTest::compoundAdditionTest() {
 void CoordinateTest::compoundSubtractionTest() {
     *coord3 -= *coord2;
     CPPUNIT_ASSERT_EQUAL(Coordinate(0, 3), *coord3);
+}
+
+void CoordinateTest::moveRowAndColTest() {
+    // moving coord1 (row)
+    coord1->moveRow(3);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(4, 2), *coord1);
+
+    coord1->moveRow(-2);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 2), *coord1);
+
+    // moving coord2 (col)
+    coord2->moveCol(5);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 8), *coord2);
+
+    coord2->moveCol(-3);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 5), *coord2);
 }
 
 void CoordinateTest::outputStreamOperatorTest() {

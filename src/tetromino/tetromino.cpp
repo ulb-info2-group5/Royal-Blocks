@@ -7,7 +7,7 @@
 #include <memory>
 #include <stdexcept>
 
-// #### Constructors ####
+// #### Constructor ####
 
 Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body)
     : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)} {
@@ -17,9 +17,23 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body)
             "All Tetrominos must be composed of 4 blocks");
     }
 
+    int minCol = std::numeric_limits<int>::max();
+    int minRow = std::numeric_limits<int>::max();
+
+    // Find top-left corner of smallest rectangle around Tetromino
     for (const Coordinate &coord : body_) {
-        width_ = std::max(width_, coord.getCol());
-        height_ = std::max(height_, coord.getRow());
+        minRow = std::min(coord.getRow(), minRow);
+        minCol = std::min(coord.getCol(), minCol);
+    }
+
+    // Translate all blocks to align with (0, 0)
+    for (Coordinate &coord : body_) {
+        coord -= Coordinate{minRow, minCol};
+    }
+
+    for (const Coordinate &coord : body_) {
+        width_ = std::max(width_, coord.getCol() + 1);
+        height_ = std::max(height_, coord.getRow() + 1);
     }
 }
 
@@ -41,6 +55,11 @@ Tetromino &Tetromino::operator=(Tetromino &&other) = default;
 
 std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
                                                     Coordinate &&anchorPoint) {
+    if (shape == TetrominoShape::NUM_TETROMINOSHAPE) {
+        throw std::runtime_error(
+            "shape must be different from NUM_TETROMINOSHAPE");
+    }
+
     std::unique_ptr<Tetromino> ret;
 
     switch (shape) {
@@ -57,7 +76,7 @@ std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
         ret = std::make_unique<TetrominoS>(std::move(anchorPoint));
         break;
     case (TetrominoShape::I):
-        ret = std::make_unique<TetrominoT>(std::move(anchorPoint));
+        ret = std::make_unique<TetrominoI>(std::move(anchorPoint));
         break;
     case (TetrominoShape::J):
         ret = std::make_unique<TetrominoJ>(std::move(anchorPoint));
@@ -66,7 +85,6 @@ std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
         ret = std::make_unique<TetrominoT>(std::move(anchorPoint));
         break;
     default:
-        std::cerr << "Unknown TetrominoShape" << std::endl;
         break;
     }
 
@@ -100,27 +118,7 @@ void Tetromino::tryRotate() {
     Coordinate center{height_ / 2, width_ / 2};
 
     for (Coordinate &coord : body_) {
-        // Translate the coordinate by the ((rotation center)->(0,0))) vector
-        Coordinate translatedCoordinate{
-            coord.getRow() - center.getRow(),
-            coord.getCol() - center.getCol(),
-        };
-
-        // Matrix coordinate system to cartesian (flip the y/row axis)
-        translatedCoordinate.setRow(-1 * translatedCoordinate.getRow());
-
-        // 90-degree clockwise rotation
-        Coordinate rotatedCoordinate{-translatedCoordinate.getCol(),
-                                     translatedCoordinate.getRow()};
-
-        // Go back to matrix coordinate system
-        rotatedCoordinate.setRow(-1 * rotatedCoordinate.getRow());
-
-        // Translate back to the original coordinate space
-        rotatedCoordinate += center;
-
-        // Update current coordinate to the rotated one
-        coord = rotatedCoordinate;
+        coord.rotateClockwiseAround(center);
 
         minRow = std::min(coord.getRow(), minRow);
         minCol = std::min(coord.getCol(), minCol);
@@ -152,12 +150,13 @@ void Tetromino::tryMove(Direction direction) {
     }
 }
 
-// #### Debug ####
+// #### Output Stream ####
 
-void Tetromino::debugPrint() const {
-    std::cout << "{ ";
-    for (const Coordinate &c : body_) {
-        std::cout << "(" << c.getRow() << ", " << c.getCol() << ") ";
+std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) {
+    os << "anchor: " << tetromino.getAnchorPoint() << " body: {";
+    for (const auto &coord : tetromino.getBody()) {
+        std::cout << coord;
     }
-    std::cout << "}" << std::endl;
+    std::cout << "}";
+    return os;
 }

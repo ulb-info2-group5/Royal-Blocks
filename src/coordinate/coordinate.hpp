@@ -62,6 +62,11 @@ class Coordinate {
     virtual Coordinate &operator-=(const Coordinate &other);
     virtual Coordinate operator-() const;
 
+    // #### Rotation #####
+
+    virtual const Coordinate &
+    rotateClockwiseAround(const Coordinate &rotationCenter);
+
     // #### Output Stream ####
 
     friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord);
