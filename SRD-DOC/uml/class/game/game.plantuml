@@ -1,5 +1,10 @@
 @startuml Game
 
+!include Tetrominoes.plantuml!0
+
+' skinparam class { 
+'     BackgroundColor AliceBlue
+' }
 
 class GameEngine{
     
@@ -10,110 +15,6 @@ class Player {
     +isPlaying() : bool
     
 }
-
-
-abstract class AbstractTetramino {
-    - width_ : int
-    - height_ : int
-    'TODO: color ?
-    - body_ : vector<Coordinate>
-
-    ' coordinate of the center's for all 4 rotation states
-    - centers_ : vector<Coordinate>
-    - rotationState_ : RotationState
-
-    # Tetramino(initializer_list<Coordinate> coordinates)
-
-    ' factory
-    + {static} factory(shape : TetraminoShape)
-
-    + getWidth() : int  
-    + getHeight() : int
-    + getBody() : int
-
-    + tryMove(direction : Direction)
-    + tryRotate()
-}
-
-
-
-class Coordinate {
-    + x: int
-    + y: int
-}
-
-enum TetraminoShape {
-    I
-    O
-    T
-    S
-    Z
-    L
-    J
-}
-
-enum Direction {
-    left
-    right
-    down
-}
-
-
-
-class RotationState{
-    - state_ : int 
-    + operator() ++
-    + getState() 
-
-}
-
-enum Color {
-
-}
-
-class Board {
-    -grid_ : array[20][10] 
-}
-
-
-
-class TetraminoI extends AbstractTetramino { 
-    +TetraminoI()
-}
-
-class TetraminoO extends AbstractTetramino { 
-    'overriding'
-    tryRotate()
-    +TetraminoO()
-
-}
-
-class TetraminoT extends AbstractTetramino { 
-    +TetraminoT()
-}
-
-class TetraminoS extends AbstractTetramino { 
-    +TetraminoS()
-}
-
-class TetraminoZ extends AbstractTetramino { 
-    +TetraminoZ()
-}
-
-class TetraminoL extends AbstractTetramino { 
-    +TetraminoL()
-}
-
-class TetraminoJ extends AbstractTetramino { 
-    +TetraminoZ()
-}
-
-AbstarctPiece --|> AbstractTetramino
-AbstractTetramino *-- Coordinate : uses
-AbstractTetramino - "1"RotationState
-AbstractTetramino.-> TetraminoShape : uses
-AbstractTetramino .-> Direction : uses
-
 
  
 @enduml

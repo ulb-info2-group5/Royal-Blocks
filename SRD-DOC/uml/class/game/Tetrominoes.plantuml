@@ -1,0 +1,119 @@
+@startuml (id=Tetromino)
+
+' skinparam class {
+'     BackgroundColor AntiqueWhite
+' }
+
+abstract class AbstractTetramino {
+    - width_ : int
+    - height_ : int
+    - color_ : unsigned int
+    - body_ : vector<Coordinate>
+    - anchorPoint_ : Coordinate
+    ' coordinate of the center's for all 4 rotation states
+    - centers_ : vector<Coordinate>
+    - rotationState_ : RotationState
+
+    # Tetramino(initializer_list<Coordinate> coordinates)
+
+    + getWidth() : int  
+    + getHeight() : int
+    + getBody() : vector<Coordinate>
+    + getColor(): unsigned int
+
+
+    ' factory
+    + {static} makeTetromino(shape : TetraminoShape, anchorPoint : Coordinate)
+
+    + tryMove(direction : Direction)
+    + tryRotate()
+}
+
+
+
+class Coordinate {
+    - col_: int
+    - row_: int
+
+    + getRow() : int 
+    + getCol() : int
+
+    + setCol(int col)
+    + setRow(int row)
+    + moveCol(int col)
+    + moveRow (int row)
+}
+
+enum TetraminoShape {
+    I
+    O
+    T
+    S
+    Z
+    L
+    J
+}
+
+enum Direction {
+    left
+    right
+    down
+}
+
+
+
+class RotationState{
+    - state_ : int 
+    + operator() ++
+    + getState() 
+
+}
+
+enum Color {
+
+}
+
+class Board {
+    -grid_ : array[20][10] 
+}
+
+
+
+class TetraminoI extends AbstractTetramino { 
+    +TetraminoI()
+}
+
+class TetraminoO extends AbstractTetramino { 
+    'overriding'
+    tryRotate()
+    +TetraminoO()
+
+}
+
+class TetraminoT extends AbstractTetramino { 
+    +TetraminoT()
+}
+
+class TetraminoS extends AbstractTetramino { 
+    +TetraminoS()
+}
+
+class TetraminoZ extends AbstractTetramino { 
+    +TetraminoZ()
+}
+
+class TetraminoL extends AbstractTetramino { 
+    +TetraminoL()
+}
+
+class TetraminoJ extends AbstractTetramino { 
+    +TetraminoZ()
+}
+
+AbstactPiece --|> AbstractTetramino
+AbstractTetramino *-- Coordinate : uses
+AbstractTetramino - "1"RotationState
+AbstractTetramino.-> TetraminoShape : uses
+AbstractTetramino .-> Direction : uses
+
+@enduml
