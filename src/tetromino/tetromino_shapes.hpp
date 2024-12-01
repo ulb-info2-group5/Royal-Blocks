@@ -15,6 +15,7 @@ enum class TetrominoShape {
 };
 
 // #### Z Shape ####
+
 class TetrominoZ : public Tetromino {
   public:
     TetrominoZ(Coordinate &&anchorPoint);
@@ -22,6 +23,7 @@ class TetrominoZ : public Tetromino {
 };
 
 // #### L Shape ####
+
 class TetrominoL : public Tetromino {
   public:
     TetrominoL(Coordinate &&anchorPoint);
@@ -29,6 +31,7 @@ class TetrominoL : public Tetromino {
 };
 
 // #### O Shape ####
+
 class TetrominoO : public Tetromino {
   public:
     TetrominoO(Coordinate &&anchorPoint);
@@ -37,6 +40,7 @@ class TetrominoO : public Tetromino {
 };
 
 // #### S Shape ####
+
 class TetrominoS : public Tetromino {
   public:
     TetrominoS(Coordinate &&anchorPoint);
@@ -44,6 +48,7 @@ class TetrominoS : public Tetromino {
 };
 
 // #### I Shape ####
+
 class TetrominoI : public Tetromino {
   public:
     TetrominoI(Coordinate &&anchorPoint);
@@ -51,6 +56,7 @@ class TetrominoI : public Tetromino {
 };
 
 // #### J Shape ####
+
 class TetrominoJ : public Tetromino {
   public:
     TetrominoJ(Coordinate &&anchorPoint);
@@ -58,6 +64,7 @@ class TetrominoJ : public Tetromino {
 };
 
 // #### T Shape ####
+
 class TetrominoT : public Tetromino {
   public:
     TetrominoT(Coordinate &&anchorPoint);
