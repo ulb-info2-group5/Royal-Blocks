@@ -5,11 +5,13 @@
 
 class Coordinate {
   private:
-    int col_;
-    int row_;
+    int col_ = 0;
+    int row_ = 0;
 
   public:
     // #### Constructors  ####
+
+    Coordinate();
 
     Coordinate(int row, int col);
 
@@ -43,9 +45,13 @@ class Coordinate {
 
     virtual void moveCol(int col);
 
-    // #### Operators ####
+    // #### Comparison Operators ####
 
     virtual bool operator==(const Coordinate &other) const;
+
+    virtual bool operator!=(const Coordinate &other) const;
+
+    // #### Arithmetic Operators ####
 
     virtual Coordinate operator+(const Coordinate &other) const;
 
@@ -54,8 +60,9 @@ class Coordinate {
     virtual Coordinate operator-(const Coordinate &other) const;
 
     virtual Coordinate &operator-=(const Coordinate &other);
-
     virtual Coordinate operator-() const;
+
+    // #### Output Stream ####
 
     friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord);
 };

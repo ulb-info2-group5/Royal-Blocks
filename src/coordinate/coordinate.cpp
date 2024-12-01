@@ -2,6 +2,8 @@
 
 // #### Constructors  ####
 
+Coordinate::Coordinate() = default;
+
 Coordinate::Coordinate(int row, int col) : row_{row}, col_{col} {}
 
 Coordinate::Coordinate(const Coordinate &other) = default;
@@ -34,11 +36,17 @@ void Coordinate::moveRow(int row) { setRow(getRow() + row); }
 
 void Coordinate::moveCol(int col) { setCol(getCol() + col); }
 
-// #### Operators ####
+// #### Comparison Operators ####
 
 bool Coordinate::operator==(const Coordinate &other) const {
     return getRow() == other.getRow() and getCol() == other.getCol();
 }
+
+bool Coordinate::operator!=(const Coordinate &other) const {
+    return !(getRow() == other.getRow() and getCol() == other.getCol());
+}
+
+// #### Arithmetic Operators ####
 
 Coordinate Coordinate::operator+(const Coordinate &other) const {
     return Coordinate{getRow(), getCol()} += other;
@@ -64,7 +72,8 @@ Coordinate Coordinate::operator-() const {
     return Coordinate{-getRow(), -getCol()};
 }
 
-// #### Friend functions ####
+// #### Output Stream ####
+
 std::ostream &operator<<(std::ostream &os, const Coordinate &coord) {
     os << "(" << coord.getRow() << ", " << coord.getCol() << ")";
     return os;
