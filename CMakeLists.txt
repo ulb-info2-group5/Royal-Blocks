@@ -25,5 +25,6 @@ if(TEST_SOURCES)
     target_link_libraries(${PROJECT_NAME}_tests PRIVATE ${PROJECT_NAME} cppunit)
 
     include(CTest)
+    add_test(coordinate ${PROJECT_NAME}_tests)
     add_test(tetromino ${PROJECT_NAME}_tests)
 endif()
