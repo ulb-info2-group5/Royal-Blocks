@@ -12,33 +12,39 @@ activate RegisterManager
 
 Actor -> RegisterUI : registerRequest()
 activate RegisterUI
-RegisterUI <- RegisterManager : getCredentials(name, password)
-RegisterUI -->> RegisterManager : sendCredentials
-RegisterManager -> RegisterManager : checkCrentialsValidity(name, password)
-alt invalidCredentials
-RegisterManager -->> RegisterUI : invalidCreadnetials
-RegisterUI -> RegisterUI : displayError()
-else else
-alt already_registered
-RegisterManager -> LoginManager : <<start>>  LoginManager(username)
-activate LoginManager
-RegisterManager -> 
-deactivate LoginManager
-else 
-RegisterManager -> AccountServer : attemptCreateAccount()
-activate AccountServer
-alt Creation failed
-AccountServer -->> RegisterManager : creationFailed
-RegisterUI -> RegisterUI : displayError()
-else else 
-AccountServer -->> RegisterManager : creationSucceed
-RegisterManager -->> RegisterUI : <<destroy>>
-deactivate RegisterUI
+RegisterUI -> RegisterManager : tryRegister(username, password)
 
-RegisterManager -> LoginManager : <<start>>
+RegisterManager -> RegisterManager : checkCrentialsValidity(username, password)
+alt invalidCredentials
+    RegisterManager -->> RegisterUI : invalidCreadnetials
+    RegisterUI -> RegisterUI : displayError()
+else else
+    alt already_registered
+        RegisterManager --> RegisterUI : <<destroy>
+        deactivate RegisterUI
+        RegisterManager -> LoginManager : <<start>>  LoginManager(username)
+        activate LoginManager
+        
+        deactivate LoginManager
+         
+    else else
+        activate RegisterUI 
+        RegisterManager -> AccountServer : CreateAccount(username, password)
+       
+
+        activate AccountServer
+    alt Creation failed
+        AccountServer -->> RegisterManager : creationFailed
+        RegisterUI -> RegisterUI : displayError()
+    else else 
+        AccountServer -->> RegisterManager : creationSucceed
+        RegisterManager -->> RegisterUI : <<destroy>>
+        deactivate RegisterUI
+
+RegisterManager -> LoginManager : <<start>> LoginManager()
 activate LoginManager
 deactivate RegisterManager
-
+end
 end
 deactivate LoginManager
 deactivate AccountServer 

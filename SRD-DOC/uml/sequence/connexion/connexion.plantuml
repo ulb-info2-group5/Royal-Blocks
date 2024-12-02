@@ -1,0 +1,38 @@
+@startuml
+
+skinparam style strictuml
+actor Actor
+participant LoginUI
+participant LoginManager
+participant AcountServer
+participant MainUIManager
+
+activate Actor 
+Actor -> LoginUI : loginRequest(username, password)
+activate LoginUI
+LoginUI ->LoginManager : tryLogin(username, password)
+activate LoginManager 
+LoginManager -> LoginManager : checkCrentialsValidity()
+alt InvalidUsername
+    LoginManager --> LoginUI : invalidUsername 
+    LoginUI -> LoginUI : displayError()
+else else
+    LoginManager -> AcountServer : checkCredentials(username, password)
+    activate AcountServer
+    alt InvalidCredentials 
+        AcountServer --> LoginManager : InvalidCredentials
+        LoginManager --> LoginUI : InvalidCredentials
+        LoginUI -> LoginUI : displayError()
+
+    else
+        AcountServer --> LoginManager : validCrendials
+        deactivate AcountServer
+        LoginManager --> LoginUI : <<destroy>>
+        LoginManager -> MainUIManager : << create>>
+        activate MainUIManager
+        deactivate MainUIManager
+
+    end   
+end 
+
+@enduml

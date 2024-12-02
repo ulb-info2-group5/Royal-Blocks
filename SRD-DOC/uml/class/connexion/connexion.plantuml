@@ -10,6 +10,7 @@ class RegisterManager <<Client>> {
     - _getUsername() : string
     - _getPassword() : string
     - _alreadyRegistered() : bool
+    + tryRegister( username:string , password:string) : bool
     + run() : void
 }
 
