@@ -1,5 +1,6 @@
 #include "tetromino.hpp"
 
+#include "../coordinate/coordinate.hpp"
 #include "tetromino_shapes.hpp"
 
 #include <iostream>
@@ -7,35 +8,37 @@
 #include <memory>
 #include <stdexcept>
 
+// #### Kick Data Constants ####
+// TODO: define the kick data's
+const std::vector<std::vector<Coordinate>> Tetromino::O_KICK_DATA = {{{0, 0}}};
+const std::vector<std::vector<Coordinate>> Tetromino::I_KICK_DATA = {{{0, 0}}};
+const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_KICK_DATA = {
+    {{0, 0}}};
+
 // #### Constructor ####
 
-Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body)
-    : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)} {
+Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
+                     const std::vector<std::vector<Coordinate>> &kickData)
+    : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)},
+      kickData_(kickData) {
 
     if (body_.size() != 4) {
         throw std::invalid_argument(
             "All Tetrominos must be composed of 4 blocks");
     }
 
-    Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
-                                  std::numeric_limits<int>::max()};
-
-    // Find top-left corner of smallest rectangle containing the Tetromino
-    for (const Coordinate &coord : body_) {
-        boundingBoxTopLeft.setRow(
-            std::min(coord.getRow(), boundingBoxTopLeft.getRow()));
-        boundingBoxTopLeft.setCol(
-            std::min(coord.getCol(), boundingBoxTopLeft.getCol()));
-    }
-
-    for (Coordinate &coord : body_) {
-        coord -= boundingBoxTopLeft;
-    }
+    int minRow, minCol = std::numeric_limits<int>::max();
+    int maxRow, maxCol = std::numeric_limits<int>::min();
 
     for (const Coordinate &coord : body_) {
-        width_ = std::max(width_, coord.getCol() + 1);
-        height_ = std::max(height_, coord.getRow() + 1);
+        minRow = std::min(minRow, coord.getRow());
+        minCol = std::min(minCol, coord.getCol());
+        maxRow = std::max(maxRow, coord.getRow());
+        maxCol = std::max(maxCol, coord.getCol());
     }
+
+    height_ = maxRow - minRow + 1;
+    width_ = maxCol - minCol + 1;
 }
 
 Tetromino::Tetromino(const Tetromino &other) = default;
@@ -48,9 +51,8 @@ Tetromino::~Tetromino() = default;
 
 // #### Assignment Operators  ####
 
-Tetromino &Tetromino::operator=(const Tetromino &other) = default;
-
-Tetromino &Tetromino::operator=(Tetromino &&other) = default;
+// Tetromino &Tetromino::operator=(const Tetromino &other) = default;
+// Tetromino &Tetromino::operator=(Tetromino &&other) = default;
 
 // #### Factory ####
 
@@ -106,26 +108,26 @@ const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
     return body_;
 }
 
+std::unique_ptr<Tetromino>
+Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
+    // copy *this into a unique ptr
+    // get the kickdatas for old and current rotationIndexes
+    // calculate the kickdata for oldRotationIndex to current rotationIndex
+    // apply it to the copy
+    // retun the copy
+}
+
 // #### Tetromino Actions ####
 
-void Tetromino::rotate() {
+void Tetromino::rotate(bool rotateClockwise) {
+    rotationIdx_ += (rotateClockwise) ? 1 : -1;
     Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
                                   std::numeric_limits<int>::max()};
 
-    Coordinate center{height_ / 2, width_ / 2};
-
-    // Find top-left corner of smallest rectangle containing the Tetromino
-    for (Coordinate &coord : body_) {
-        coord.rotateClockwiseAround(center);
-
-        boundingBoxTopLeft.setRow(
-            std::min(coord.getRow(), boundingBoxTopLeft.getRow()));
-        boundingBoxTopLeft.setCol(
-            std::min(coord.getCol(), boundingBoxTopLeft.getCol()));
-    }
+    Coordinate center{0, 0}; // convention that rotation center is always (0,0)
 
     for (Coordinate &coord : body_) {
-        coord -= boundingBoxTopLeft;
+        coord.rotateAround(center, rotateClockwise);
     }
 
     std::swap(height_, width_);

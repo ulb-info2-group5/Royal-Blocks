@@ -19,6 +19,8 @@ class Coordinate {
 
     Coordinate(Coordinate &&other);
 
+    static Coordinate fromCartesian(int x, int y);
+
     // #### Destructor ####
 
     virtual ~Coordinate();
@@ -64,8 +66,8 @@ class Coordinate {
 
     // #### Rotation #####
 
-    virtual const Coordinate &
-    rotateClockwiseAround(const Coordinate &rotationCenter);
+    virtual const Coordinate &rotateAround(const Coordinate &rotationCenter,
+                                           bool rotateClockwise);
 
     // #### Output Stream ####
 

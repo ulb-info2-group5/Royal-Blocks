@@ -2,7 +2,9 @@
 #define TETROMINO_HPP
 
 #include "../coordinate/coordinate.hpp"
+#include "rotation_index/rotation_index.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -17,10 +19,22 @@ class Tetromino {
     Coordinate anchorPoint_;
     std::vector<Coordinate> body_;
 
+    // SRS-related
+    RotationIndex rotationIdx_;
+    RotationIndex oldRotationIdx_;
+    const std::vector<std::vector<Coordinate>> &kickData_;
+
   protected:
+    // #### Kick Data Constants ####
+
+    static const std::vector<std::vector<Coordinate>> O_KICK_DATA;
+    static const std::vector<std::vector<Coordinate>> I_KICK_DATA;
+    static const std::vector<std::vector<Coordinate>> ZLSJT_KICK_DATA;
+
     // #### Constructor ####
 
-    Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body);
+    Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
+              const std::vector<std::vector<Coordinate>> &kickData);
 
     Tetromino(const Tetromino &other);
 
@@ -28,9 +42,8 @@ class Tetromino {
 
     // #### Assignment Operators  ####
 
-    Tetromino &operator=(const Tetromino &other);
-
-    Tetromino &operator=(Tetromino &&other);
+    // Tetromino &operator=(const Tetromino &other);
+    // Tetromino &operator=(Tetromino &&other);
 
   public:
     // #### Destructor ####
@@ -54,9 +67,13 @@ class Tetromino {
 
     virtual const std::vector<Coordinate> &getBody() const noexcept;
 
+    // TODO: define this method
+    virtual std::unique_ptr<Tetromino>
+    getNthKick(uint8_t kickIndex) const noexcept;
+
     // #### Tetromino Actions ####
 
-    virtual void rotate();
+    virtual void rotate(bool rotateClockwise);
 
     virtual void move(Direction direction);
 

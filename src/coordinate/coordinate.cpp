@@ -10,6 +10,8 @@ Coordinate::Coordinate(const Coordinate &other) = default;
 
 Coordinate::Coordinate(Coordinate &&other) = default;
 
+Coordinate Coordinate::fromCartesian(int x, int y) { return Coordinate{-y, x}; }
+
 // #### Destructors  ####
 
 Coordinate::~Coordinate() = default;
@@ -74,25 +76,24 @@ Coordinate Coordinate::operator-() const {
 
 // #### Rotation #####
 
-const Coordinate &
-Coordinate::rotateClockwiseAround(const Coordinate &rotationCenter) {
-    // Translate the coordinate by the ((rotationCenter)->(0,0))) vector
-    int translatedRow = row_ - rotationCenter.getRow();
-    int translatedCol = col_ - rotationCenter.getCol();
+const Coordinate &Coordinate::rotateAround(const Coordinate &rotationCenter,
+                                           bool rotateClockwise) {
+    // Translate the coordinate relative to the rotation center
+    int relativeRow = getRow() - rotationCenter.getRow();
+    int relativeCol = getCol() - rotationCenter.getCol();
 
     // Matrix coordinate system to cartesian (flip the y/row axis)
-    translatedRow = -translatedRow;
+    relativeRow = -relativeRow;
 
-    // Perform the 90-degree clockwise rotation
-    int rotatedRow = -translatedCol;
-    int rotatedCol = translatedRow;
+    int rotatedRow = rotateClockwise ? relativeCol : -relativeCol;
+    int rotatedCol = rotateClockwise ? -relativeRow : relativeRow;
 
-    // Go back to matrix coordinate system
+    // Convert back to matrix coordinate system
     rotatedRow = -rotatedRow;
 
     // Translate back to the original coordinate space
-    row_ = rotatedRow + rotationCenter.getRow();
-    col_ = rotatedCol + rotationCenter.getCol();
+    setRow(rotatedRow + rotationCenter.getRow());
+    setCol(rotatedCol + rotationCenter.getCol());
 
     return *this;
 }
