@@ -16,6 +16,7 @@ class Tetromino {
   private:
     int width_ = 0;
     int height_ = 0;
+    TetrominoShape shape_;
     Coordinate anchorPoint_;
     std::vector<Coordinate> body_;
 
@@ -34,9 +35,8 @@ class Tetromino {
     // #### Constructor ####
 
     Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-              const std::vector<std::vector<Coordinate>> &kickData);
-
-    Tetromino(const Tetromino &other);
+              const std::vector<std::vector<Coordinate>> &kickData,
+              TetrominoShape shape);
 
     Tetromino(Tetromino &&other);
 
@@ -46,6 +46,9 @@ class Tetromino {
     // Tetromino &operator=(Tetromino &&other);
 
   public:
+    // #### Constructor ####
+    Tetromino(const Tetromino &other);
+
     // #### Destructor ####
 
     virtual ~Tetromino();
@@ -61,7 +64,7 @@ class Tetromino {
 
     virtual int getHeight() const noexcept;
 
-    virtual TetrominoShape getShape() const noexcept = 0;
+    virtual TetrominoShape getShape() const noexcept;
 
     virtual const Coordinate &getAnchorPoint() const noexcept;
 

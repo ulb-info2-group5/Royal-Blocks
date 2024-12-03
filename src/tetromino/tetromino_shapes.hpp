@@ -19,7 +19,6 @@ enum class TetrominoShape {
 class TetrominoZ : public Tetromino {
   public:
     TetrominoZ(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept;
 };
 
 // #### L Shape ####
@@ -27,7 +26,6 @@ class TetrominoZ : public Tetromino {
 class TetrominoL : public Tetromino {
   public:
     TetrominoL(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept;
 };
 
 // #### O Shape ####
@@ -35,7 +33,6 @@ class TetrominoL : public Tetromino {
 class TetrominoO : public Tetromino {
   public:
     TetrominoO(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept override;
 };
 
 // #### S Shape ####
@@ -43,7 +40,6 @@ class TetrominoO : public Tetromino {
 class TetrominoS : public Tetromino {
   public:
     TetrominoS(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept override;
 };
 
 // #### I Shape ####
@@ -51,7 +47,6 @@ class TetrominoS : public Tetromino {
 class TetrominoI : public Tetromino {
   public:
     TetrominoI(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept override;
 };
 
 // #### J Shape ####
@@ -59,7 +54,6 @@ class TetrominoI : public Tetromino {
 class TetrominoJ : public Tetromino {
   public:
     TetrominoJ(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept override;
 };
 
 // #### T Shape ####
@@ -67,7 +61,6 @@ class TetrominoJ : public Tetromino {
 class TetrominoT : public Tetromino {
   public:
     TetrominoT(Coordinate &&anchorPoint);
-    virtual TetrominoShape getShape() const noexcept override;
 };
 
 #endif

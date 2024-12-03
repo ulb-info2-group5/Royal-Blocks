@@ -18,9 +18,10 @@ const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_KICK_DATA = {
 // #### Constructor ####
 
 Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-                     const std::vector<std::vector<Coordinate>> &kickData)
+                     const std::vector<std::vector<Coordinate>> &kickData,
+                     TetrominoShape shape)
     : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)},
-      kickData_(kickData) {
+      kickData_(kickData), shape_(shape) {
 
     if (body_.size() != 4) {
         throw std::invalid_argument(
@@ -100,6 +101,8 @@ int Tetromino::getWidth() const noexcept { return width_; }
 
 int Tetromino::getHeight() const noexcept { return height_; }
 
+TetrominoShape Tetromino::getShape() const noexcept { return shape_; }
+
 const Coordinate &Tetromino::getAnchorPoint() const noexcept {
     return anchorPoint_;
 }
@@ -115,6 +118,18 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
     // calculate the kickdata for oldRotationIndex to current rotationIndex
     // apply it to the copy
     // retun the copy
+
+    std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
+
+    Coordinate offsetVal1 = kickData_[oldRotationIdx_.getIndex()][kickIndex];
+    Coordinate offsetVal2 = kickData_[rotationIdx_.getIndex()][kickIndex];
+
+    // apply kick on the copy
+    Coordinate kick = (offsetVal1 - offsetVal2);
+
+    copy->anchorPoint_ += kick;
+
+    return copy;
 }
 
 // #### Tetromino Actions ####

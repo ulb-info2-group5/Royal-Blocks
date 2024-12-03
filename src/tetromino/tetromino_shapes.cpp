@@ -9,11 +9,7 @@ TetrominoZ::TetrominoZ(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{-1, 0},
                                         Coordinate{-1, -1}, Coordinate{0, 1}},
-                Tetromino::ZLSJT_KICK_DATA) {}
-
-TetrominoShape TetrominoZ::getShape() const noexcept {
-    return TetrominoShape::Z;
-}
+                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::Z) {}
 
 // #### L Shape ####
 
@@ -21,11 +17,7 @@ TetrominoL::TetrominoL(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
                                         Coordinate{0, 1}, Coordinate{1, 1}},
-                Tetromino::ZLSJT_KICK_DATA) {}
-
-TetrominoShape TetrominoL::getShape() const noexcept {
-    return TetrominoShape::L;
-}
+                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::L) {}
 
 // #### O Shape ####
 
@@ -33,11 +25,7 @@ TetrominoO::TetrominoO(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, 1},
                                         Coordinate{1, 0}, Coordinate{1, 1}},
-                Tetromino::O_KICK_DATA) {}
-
-TetrominoShape TetrominoO::getShape() const noexcept {
-    return TetrominoShape::O;
-}
+                Tetromino::O_KICK_DATA, TetrominoShape::O) {}
 
 // #### S Shape ####
 
@@ -45,11 +33,7 @@ TetrominoS::TetrominoS(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
                                         Coordinate{1, 0}, Coordinate{1, 1}},
-                Tetromino::ZLSJT_KICK_DATA) {}
-
-TetrominoShape TetrominoS::getShape() const noexcept {
-    return TetrominoShape::S;
-}
+                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::S) {}
 
 // #### I Shape ####
 
@@ -57,11 +41,7 @@ TetrominoI::TetrominoI(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, -1}, Coordinate{0, 0},
                                         Coordinate{0, 1}, Coordinate{0, 2}},
-                Tetromino::I_KICK_DATA) {}
-
-TetrominoShape TetrominoI::getShape() const noexcept {
-    return TetrominoShape::I;
-}
+                Tetromino::I_KICK_DATA, TetrominoShape::I) {}
 
 // #### J Shape ####
 
@@ -69,11 +49,7 @@ TetrominoJ::TetrominoJ(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
                                         Coordinate{-1, -1}, Coordinate{0, 1}},
-                Tetromino::ZLSJT_KICK_DATA) {}
-
-TetrominoShape TetrominoJ::getShape() const noexcept {
-    return TetrominoShape::J;
-}
+                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::J) {}
 
 // #### T Shape ####
 
@@ -81,8 +57,4 @@ TetrominoT::TetrominoT(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
                                         Coordinate{1, 0}, Coordinate{0, 1}},
-                Tetromino::ZLSJT_KICK_DATA) {}
-
-TetrominoShape TetrominoT::getShape() const noexcept {
-    return TetrominoShape::T;
-}
+                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::T) {}
