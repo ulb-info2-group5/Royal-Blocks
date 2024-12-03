@@ -36,15 +36,15 @@ void TetrominoTest::shapeTest() {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, 1},
-                                         Coordinate{1, 1}, Coordinate{1, 2}}),
+                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{-1, 0},
+                                         Coordinate{-1, -1}, Coordinate{0, 1}}),
                 tetromino->getBody());
             break;
 
         case (TetrominoShape::L):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate(0, 2), Coordinate(1, 2),
-                                         Coordinate(1, 1), Coordinate(1, 0)}),
+                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
+                                         Coordinate{0, 1}, Coordinate{1, 1}}),
                 tetromino->getBody());
             break;
 
@@ -57,29 +57,29 @@ void TetrominoTest::shapeTest() {
 
         case (TetrominoShape::S):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate{0, 1}, Coordinate{0, 2},
+                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
                                          Coordinate{1, 0}, Coordinate{1, 1}}),
                 tetromino->getBody());
             break;
 
         case (TetrominoShape::I):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate(0, 0), Coordinate(0, 1),
-                                         Coordinate(0, 2), Coordinate(0, 3)}),
+                (std::vector<Coordinate>{Coordinate{0, -1}, Coordinate{0, 0},
+                                         Coordinate{0, 1}, Coordinate{0, 2}}),
                 tetromino->getBody());
             break;
 
         case (TetrominoShape::J):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{1, 0},
-                                         Coordinate{1, 1}, Coordinate{1, 2}}),
+                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
+                                         Coordinate{-1, -1}, Coordinate{0, 1}}),
                 tetromino->getBody());
             break;
 
         case (TetrominoShape::T):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, 1},
-                                         Coordinate{0, 2}, Coordinate{1, 1}}),
+                (std::vector<Coordinate>{Coordinate{0, 0}, Coordinate{0, -1},
+                                         Coordinate{1, 0}, Coordinate{0, 1}}),
                 tetromino->getBody());
             break;
         default:

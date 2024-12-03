@@ -28,8 +28,10 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
             "All Tetrominos must be composed of 4 blocks");
     }
 
-    int minRow, minCol = std::numeric_limits<int>::max();
-    int maxRow, maxCol = std::numeric_limits<int>::min();
+    int minRow = std::numeric_limits<int>::max();
+    int maxRow = std::numeric_limits<int>::min();
+    int minCol = std::numeric_limits<int>::max();
+    int maxCol = std::numeric_limits<int>::min();
 
     for (const Coordinate &coord : body_) {
         minRow = std::min(minRow, coord.getRow());
