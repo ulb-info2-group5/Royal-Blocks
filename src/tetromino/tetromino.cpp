@@ -120,6 +120,7 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
 // #### Tetromino Actions ####
 
 void Tetromino::rotate(bool rotateClockwise) {
+    oldRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
     Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
                                   std::numeric_limits<int>::max()};
