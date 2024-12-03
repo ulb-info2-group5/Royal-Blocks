@@ -77,6 +77,26 @@ void CoordinateTest::moveRowAndColTest() {
     CPPUNIT_ASSERT_EQUAL(Coordinate(2, 5), *coord2);
 }
 
+void CoordinateTest::rotateAroundTest() {
+    coord2->rotateAround(*coord3, true);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(-1, 6), *coord2);
+    coord2->rotateAround(*coord3, true);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 9), *coord2);
+    coord2->rotateAround(*coord3, true);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(5, 6), *coord2);
+    coord2->rotateAround(*coord3, true);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(2, 3), *coord2);
+
+    coord1->rotateAround(*coord3, false);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(6, 5), *coord1);
+    coord1->rotateAround(*coord3, false);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(3, 10), *coord1);
+    coord1->rotateAround(*coord3, false);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(-2, 7), *coord1);
+    coord1->rotateAround(*coord3, false);
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 2), *coord1);
+}
+
 void CoordinateTest::outputStreamOperatorTest() {
     std::ostringstream oss;
     oss << *coord1;

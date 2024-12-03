@@ -139,8 +139,6 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
 void Tetromino::rotate(bool rotateClockwise) {
     oldRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
-    Coordinate boundingBoxTopLeft{std::numeric_limits<int>::max(),
-                                  std::numeric_limits<int>::max()};
 
     Coordinate center{0, 0}; // convention that rotation center is always (0,0)
 
@@ -170,7 +168,7 @@ void Tetromino::move(Direction direction) {
 std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) {
     os << "anchor: " << tetromino.getAnchorPoint() << " body: {";
     for (const auto &coord : tetromino.getBody()) {
-        std::cout << coord;
+        std::cout << coord << " ";
     }
     std::cout << "}";
     return os;

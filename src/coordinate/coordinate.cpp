@@ -85,8 +85,8 @@ const Coordinate &Coordinate::rotateAround(const Coordinate &rotationCenter,
     // Matrix coordinate system to cartesian (flip the y/row axis)
     relativeRow = -relativeRow;
 
-    int rotatedRow = rotateClockwise ? relativeCol : -relativeCol;
-    int rotatedCol = rotateClockwise ? -relativeRow : relativeRow;
+    int rotatedRow = rotateClockwise ? -relativeCol : relativeCol;
+    int rotatedCol = rotateClockwise ? relativeRow : -relativeRow;
 
     // Convert back to matrix coordinate system
     rotatedRow = -rotatedRow;

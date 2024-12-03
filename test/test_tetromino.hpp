@@ -10,6 +10,8 @@ class TetrominoTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(shapeTest);
     CPPUNIT_TEST(getWidthAndHeightTest);
     CPPUNIT_TEST(moveTest);
+    CPPUNIT_TEST(rotateTest);
+    // CPPUNIT_TEST(kicksTest);
     CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -21,6 +23,7 @@ class TetrominoTest : public CppUnit::TestFixture {
     void shapeTest();
     void getWidthAndHeightTest();
     void moveTest();
+    void rotateTest();
 
   private:
     std::vector<std::unique_ptr<Tetromino>> tetrominos;

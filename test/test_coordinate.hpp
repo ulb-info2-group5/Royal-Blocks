@@ -22,6 +22,7 @@ class CoordinateTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(compoundSubtractionTest);
 
     CPPUNIT_TEST(moveRowAndColTest);
+    CPPUNIT_TEST(rotateAroundTest);
 
     CPPUNIT_TEST(outputStreamOperatorTest);
 
@@ -46,6 +47,8 @@ class CoordinateTest : public CppUnit::TestFixture {
     void compoundSubtractionTest();
 
     void moveRowAndColTest();
+
+    void rotateAroundTest();
 
     void outputStreamOperatorTest();
 
