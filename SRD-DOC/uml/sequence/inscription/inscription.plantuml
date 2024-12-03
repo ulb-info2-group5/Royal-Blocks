@@ -20,9 +20,9 @@ alt invalidCredentials
     RegisterUI -> RegisterUI : displayError()
 else else
     alt already_registered
-        RegisterManager --> RegisterUI : <<destroy>
+        RegisterManager --> RegisterUI : <<destroy>>
         deactivate RegisterUI
-        RegisterManager -> LoginManager : <<start>>  LoginManager(username)
+        RegisterManager -> LoginManager : <<start>>  LoginManager(username, password)
         activate LoginManager
         
         deactivate LoginManager

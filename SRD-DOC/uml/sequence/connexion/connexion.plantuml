@@ -6,13 +6,14 @@ participant LoginUI
 participant LoginManager
 participant AcountServer
 participant MainUIManager
+participant RegisterManager
 
 activate Actor 
 Actor -> LoginUI : loginRequest(username, password)
 activate LoginUI
 LoginUI ->LoginManager : tryLogin(username, password)
 activate LoginManager 
-LoginManager -> LoginManager : checkCrentialsValidity()
+LoginManager -> LoginManager : checkCredentialsValidity()
 alt InvalidUsername
     LoginManager --> LoginUI : invalidUsername 
     LoginUI -> LoginUI : displayError()
@@ -23,6 +24,9 @@ else else
         AcountServer --> LoginManager : InvalidCredentials
         LoginManager --> LoginUI : InvalidCredentials
         LoginUI -> LoginUI : displayError()
+        LoginManager -> RegisterManager : <<start>> RegisterManager\n(username, password)
+        activate RegisterManager
+        deactivate RegisterManager
 
     else
         AcountServer --> LoginManager : validCrendials
