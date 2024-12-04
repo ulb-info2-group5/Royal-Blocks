@@ -6,6 +6,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{geometry}  
+\usepackage{array}
+\renewcommand{\arraystretch}{1.5} % Augmente l'espacement entre les lignes
+\usepackage{multirow} % Pour aligner correctement les colonnes si besoin
 
 
 \begin{document}
@@ -77,6 +80,22 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 \end{itemize}
 
 \subsection{Historique}
+
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|>{\centering\arraybackslash}m{2cm}|>{\centering\arraybackslash}m{6cm}|>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{2cm}|}
+        \hline
+        \textbf{Numéro de version} & \textbf{Nom} & \textbf{Modifications} & \textbf{Date} \\
+        \hline
+        0.1 & Quentin Bernard Bouissières / Jonas Schellekens / Ethan Van Ruyskenvelde / Lucas Verbeiren & Besoins utilisateurs fonctionnels & 20/11/2024 \\ \hline
+        0.2 & Juliette Cornu-Besser / Jonas Schellekens & Introduction + Glossaire + commentaires Besoin utilisateur & 25/11/2024 \\ \hline
+        0.3 & Ethan Van Ruyskenvelde & Ajout Besoins système non fonctionnels & 28/11/2024 \\ \hline
+        0.4 & Quentin Bernard Bouissières / Lucas Verbeiren & Diagrammes de classe Game et Connexion & 01/12/2024 \\ \hline
+        0.5 & Quentin Bernard Bouissières & Diagrammes de séquence Connexion et Inscription & 30/11/2024 \\ \hline
+    \end{tabular}
+\end{table}
+
 
 \newpage
 
@@ -529,7 +548,7 @@ Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom d'ut
 
 \subsubsection{Robustesse}
 
-S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la partie ou du serveur, le jeu doit pouvoir continuer fluidement sans interruption. Celui qui vient de quitter se retrouve perdant de la partie à la bonne position du classement de la partie.
+S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la partie ou du serveur, le jeu doit pouvoir continuer fluidement sans interruption. Celui qui vient de quitter se retrouve perdant de la partie à la bonne position dans le classement de la partie.
 
 \subsection{Besoins utilisateur}
 
@@ -544,7 +563,7 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 \begin{figure}[!h]
     \centering
     \includegraphics[width=1\textwidth]{uml/class/connexion/Connexion.png}
-    \caption{Connextion et Création d'un compte}
+    \caption{Connexion et Création d'un compte}
     \label{fig:Royal-Competition}
 \end{figure}
 
