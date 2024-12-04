@@ -1,8 +1,11 @@
 #include "tetromino.hpp"
 
 #include "../coordinate/coordinate.hpp"
+#include "rotation_index/rotation_index.hpp"
 #include "tetromino_shapes.hpp"
 
+#include <algorithm>
+#include <cstdint>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -11,7 +14,11 @@
 // #### Kick Data Constants ####
 // TODO: define the kick data's
 const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
-    {{0, 0}}};
+    {{0, 0}},
+    {{1, 0}},
+    {{1, -1}},
+    {{0, -1}},
+};
 const std::vector<std::vector<Coordinate>> Tetromino::I_OFFSET_DATA = {
     {{0, 0}}};
 const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_OFFSET_DATA = {
@@ -115,11 +122,19 @@ const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
     return body_;
 }
 
+const RotationIndex &Tetromino::getRotationIndex() const noexcept {
+    return rotationIdx_;
+}
+
+const RotationIndex &Tetromino::getPrevRotationIndex() const noexcept {
+    return prevRotationIdx_;
+}
+
 std::unique_ptr<Tetromino>
 Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
     std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
 
-    Coordinate offsetVal1 = offsetData_[oldRotationIdx_][kickIndex];
+    Coordinate offsetVal1 = offsetData_[prevRotationIdx_][kickIndex];
     Coordinate offsetVal2 = offsetData_[rotationIdx_][kickIndex];
 
     // Compute kick with offset data
@@ -131,10 +146,16 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
     return copy;
 }
 
+// #### Setters ####
+
+void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
+    anchorPoint_ = anchorPoint;
+}
+
 // #### Tetromino Actions ####
 
 void Tetromino::rotate(bool rotateClockwise) {
-    oldRotationIdx_ = rotationIdx_;
+    prevRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
 
     Coordinate center{0, 0}; // convention that rotation center is always (0,0)
@@ -158,6 +179,18 @@ void Tetromino::move(Direction direction) {
         anchorPoint_.moveCol(+1);
         break;
     }
+}
+
+// #### Comparisons Operator ####
+
+bool Tetromino::operator==(const Tetromino &other) const {
+    return (
+        std::equal(getBody().begin(), getBody().end(), other.getBody().begin())
+        and getAnchorPoint() == other.getAnchorPoint()
+        and getRotationIndex() == other.getRotationIndex()
+        and getPrevRotationIndex() == other.getPrevRotationIndex()
+        and getWidth() == other.getWidth() and getHeight() == other.getHeight()
+        and getShape() == other.getShape());
 }
 
 // #### Output Stream ####

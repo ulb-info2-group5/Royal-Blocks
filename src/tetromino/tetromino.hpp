@@ -22,7 +22,7 @@ class Tetromino {
 
     // SRS-related
     RotationIndex rotationIdx_;
-    RotationIndex oldRotationIdx_;
+    RotationIndex prevRotationIdx_;
     const std::vector<std::vector<Coordinate>> &offsetData_;
 
   protected:
@@ -70,15 +70,26 @@ class Tetromino {
 
     virtual const std::vector<Coordinate> &getBody() const noexcept;
 
+    virtual const RotationIndex &getRotationIndex() const noexcept;
+
+    virtual const RotationIndex &getPrevRotationIndex() const noexcept;
+
     // TODO: define this method
     virtual std::unique_ptr<Tetromino>
     getNthKick(uint8_t kickIndex) const noexcept;
+
+    // #### Setters ####
+
+    virtual void setAnchorPoint(const Coordinate &anchorPoint);
 
     // #### Tetromino Actions ####
 
     virtual void rotate(bool rotateClockwise);
 
     virtual void move(Direction direction);
+
+    // #### Comparisons Operator ####
+    virtual bool operator==(const Tetromino &other) const;
 
     // #### Output Stream ####
 

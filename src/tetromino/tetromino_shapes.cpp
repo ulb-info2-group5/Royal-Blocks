@@ -8,46 +8,46 @@
 TetrominoZ::TetrominoZ(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{{0, 0}, {-1, 0}, {-1, -1}, {0, 1}},
-                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::Z) {}
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::Z) {}
 
 // #### L Shape ####
 
 TetrominoL::TetrominoL(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
-                std::vector<Coordinate>{{0, 0}, {0, -1}, {0, 1}, {1, 1}},
-                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::L) {}
+                std::vector<Coordinate>{{0, 0}, {0, -1}, {0, 1}, {-1, 1}},
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::L) {}
 
 // #### O Shape ####
 
 TetrominoO::TetrominoO(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
-                std::vector<Coordinate>{{0, 0}, {0, 1}, {1, 0}, {1, 1}},
-                Tetromino::O_KICK_DATA, TetrominoShape::O) {}
+                std::vector<Coordinate>{{0, 0}, {0, 1}, {-1, 0}, {-1, 1}},
+                Tetromino::O_OFFSET_DATA, TetrominoShape::O) {}
 
 // #### S Shape ####
 
 TetrominoS::TetrominoS(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
-                std::vector<Coordinate>{{0, 0}, {0, -1}, {1, 0}, {1, 1}},
-                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::S) {}
+                std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, 0}, {-1, 1}},
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::S) {}
 
 // #### I Shape ####
 
 TetrominoI::TetrominoI(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{{0, -1}, {0, 0}, {0, 1}, {0, 2}},
-                Tetromino::I_KICK_DATA, TetrominoShape::I) {}
+                Tetromino::I_OFFSET_DATA, TetrominoShape::I) {}
 
 // #### J Shape ####
 
 TetrominoJ::TetrominoJ(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, -1}, {0, 1}},
-                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::J) {}
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::J) {}
 
 // #### T Shape ####
 
 TetrominoT::TetrominoT(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, 0}, {0, 1}},
-                Tetromino::ZLSJT_KICK_DATA, TetrominoShape::T) {}
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::T) {}
