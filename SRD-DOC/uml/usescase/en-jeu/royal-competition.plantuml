@@ -14,18 +14,16 @@ rectangle "Partie Compétition Royale" as game {
     '### Game Actions
     usecase "Déplacer la pièce" as move_piece
     usecase "Tourner la pièce" as rotate_piece
-    'TODO: penalty might be a bad name
-    'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    ' usecase "envoyer n-1 malus" as throw_penalty
 
     'TODO: throw_penalty or get shield if a certain quantity of energy is reached
+    usecase "Consommer sa barre d'énergie" as use_energy
+    
     usecase "Envoyer un malus" as throw_penalty
-    usecase "S'octroyer un bonus" as get_bonus
-
-    'TODO: To check if it's good so
+    usecase "Choisir un des malus à envoyer" as choose_penalty
     usecase "Choisir la cible du malus" as choose_target
 
-    'TODO: faut il choisir le bonus ? (aléatoire ou pas)
+    usecase "S'octroyer un bonus" as get_bonus
+    usecase "Choisir un des bonus à appliquer" as choose_bonus
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "Déplacer latéralement" as lateral_movement
@@ -40,9 +38,8 @@ rectangle "Partie Compétition Royale" as game {
 
 player -- move_piece
 player -- pause_menu
-player -- throw_penalty
-player -- get_bonus
-
+player -- use_energy
+ 
 (move_piece) <-. (lateral_movement): <<extend>>
 (move_piece) <-. (increase_descent): <<extend>>
 (move_piece) <-. (rotate_piece): <<extend>>
@@ -52,6 +49,11 @@ player -- get_bonus
 (pause_menu) <-. (resume_game): <<extend>>
 (pause_menu) <-. (quit_game): <<extend>>
 
+(use_energy) <-. (throw_penalty): <<extend>>
+(throw_penalty) <-. (choose_penalty): <<extend>> 
 (throw_penalty) <-. (choose_target): <<extend>>
+
+(use_energy) <-. (get_bonus): <<extend>>
+(get_bonus) <-. (choose_bonus): <<extend>>
 
 @enduml

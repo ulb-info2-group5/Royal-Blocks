@@ -175,16 +175,6 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Cas exceptionnels}: Invitation expirée ou la partie a atteint le nombre maximum de personnes.
 \end{itemize}
 
-\subsubsection*{Inviter un ami}
-\begin{itemize}
-    \item \textbf{Acteur}: Utilisateur
-    \item \textbf{Use case}: Inviter un ami
-    \item \textbf{Description}: Permet à l'utilisateur d'inviter un de ses amis présents dans sa liste à une partie.
-    \item \textbf{Précondition}: L'ami est connecté.
-    \item \textbf{Postcondition}: L'invitation est envoyée à l'ami.
-    \item \textbf{Cas exceptionnels}: L'ami est indisponible ou n'accepte pas l'invitation.
-\end{itemize}
-
 \subsubsection*{Choisir mode de jeu}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
@@ -193,6 +183,16 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Précondition}: L'utilisateur veut créer une partie de jeu.
     \item \textbf{Postcondition}: Le mode de jeu est défini pour la partie.
     \item \textbf{Cas exceptionnels}: Aucun.
+\end{itemize}
+
+\subsubsection*{Inviter un ami}
+\begin{itemize}
+    \item \textbf{Acteur}: Utilisateur
+    \item \textbf{Use case}: Inviter un ami
+    \item \textbf{Description}: Permet à l'utilisateur d'inviter un de ses amis présents dans sa liste à une partie.
+    \item \textbf{Précondition}: L'ami est connecté.
+    \item \textbf{Postcondition}: L'invitation est envoyée à l'ami.
+    \item \textbf{Cas exceptionnels}: L'ami est indisponible ou décline l'invitation.
 \end{itemize}
 
 \subsubsection*{Gérer son profil}

@@ -17,7 +17,7 @@ rectangle "Partie Duel" as game {
 
     'TODO: penalty might be a bad name
     'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    ' usecase "envoyer n-1 malus" as throw_penalty
+    usecase "envoyer n malus" as throw_penalty
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "Déplacer latéralement" as lateral_movement
@@ -33,7 +33,7 @@ rectangle "Partie Duel" as game {
 
 player -- move_piece
 player -- pause_menu
-
+player -- throw_penalty
 (move_piece) <-. (lateral_movement): <<extend>>
 (move_piece) <-. (increase_descent): <<extend>>
 (move_piece) <-. (rotate_piece): <<extend>>
