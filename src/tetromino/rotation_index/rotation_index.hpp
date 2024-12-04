@@ -10,7 +10,7 @@ class RotationIndex {
   public:
     RotationIndex() = default;
     void operator+=(int8_t rotationToAdd);
-    int8_t getIndex() const noexcept;
+    operator int8_t() const;
 };
 
 #endif

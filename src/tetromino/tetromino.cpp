@@ -10,18 +10,20 @@
 
 // #### Kick Data Constants ####
 // TODO: define the kick data's
-const std::vector<std::vector<Coordinate>> Tetromino::O_KICK_DATA = {{{0, 0}}};
-const std::vector<std::vector<Coordinate>> Tetromino::I_KICK_DATA = {{{0, 0}}};
-const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_KICK_DATA = {
+const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
+    {{0, 0}}};
+const std::vector<std::vector<Coordinate>> Tetromino::I_OFFSET_DATA = {
+    {{0, 0}}};
+const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_OFFSET_DATA = {
     {{0, 0}}};
 
 // #### Constructor ####
 
 Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-                     const std::vector<std::vector<Coordinate>> &kickData,
+                     const std::vector<std::vector<Coordinate>> &offsetData,
                      TetrominoShape shape)
     : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)},
-      kickData_(kickData), shape_(shape) {
+      offsetData_(offsetData), shape_(shape) {
 
     if (body_.size() != 4) {
         throw std::invalid_argument(
@@ -115,20 +117,15 @@ const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
 
 std::unique_ptr<Tetromino>
 Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
-    // copy *this into a unique ptr
-    // get the kickdatas for old and current rotationIndexes
-    // calculate the kickdata for oldRotationIndex to current rotationIndex
-    // apply it to the copy
-    // retun the copy
-
     std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
 
-    Coordinate offsetVal1 = kickData_[oldRotationIdx_.getIndex()][kickIndex];
-    Coordinate offsetVal2 = kickData_[rotationIdx_.getIndex()][kickIndex];
+    Coordinate offsetVal1 = offsetData_[oldRotationIdx_][kickIndex];
+    Coordinate offsetVal2 = offsetData_[rotationIdx_][kickIndex];
 
-    // apply kick on the copy
+    // Compute kick with offset data
     Coordinate kick = (offsetVal1 - offsetVal2);
 
+    // Apply kick
     copy->anchorPoint_ += kick;
 
     return copy;

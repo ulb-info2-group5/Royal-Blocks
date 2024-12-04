@@ -23,14 +23,14 @@ class Tetromino {
     // SRS-related
     RotationIndex rotationIdx_;
     RotationIndex oldRotationIdx_;
-    const std::vector<std::vector<Coordinate>> &kickData_;
+    const std::vector<std::vector<Coordinate>> &offsetData_;
 
   protected:
     // #### Kick Data Constants ####
 
-    static const std::vector<std::vector<Coordinate>> O_KICK_DATA;
-    static const std::vector<std::vector<Coordinate>> I_KICK_DATA;
-    static const std::vector<std::vector<Coordinate>> ZLSJT_KICK_DATA;
+    static const std::vector<std::vector<Coordinate>> O_OFFSET_DATA;
+    static const std::vector<std::vector<Coordinate>> I_OFFSET_DATA;
+    static const std::vector<std::vector<Coordinate>> ZLSJT_OFFSET_DATA;
 
     // #### Constructor ####
 
