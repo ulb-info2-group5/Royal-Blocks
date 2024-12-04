@@ -12,7 +12,6 @@
 #include <stdexcept>
 
 // #### Kick Data Constants ####
-// TODO: define the kick data's
 const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
     {{0, 0}},
     {{1, 0}},
@@ -20,9 +19,18 @@ const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
     {{0, -1}},
 };
 const std::vector<std::vector<Coordinate>> Tetromino::I_OFFSET_DATA = {
-    {{0, 0}}};
+    {{0, 0}, {0, -1}, {0, 2}, {0, -1}, {0, 2}},
+    {{0, -1}, {0, 0}, {0, 0}, {-1, 0}, {2, 0}},
+    {{-1, -1}, {-1, 1}, {-1, -2}, {0, 1}, {0, -2}},
+    {{-1, 0}, {-1, 0}, {-1, 0}, {1, 0}, {-2, 0}},
+};
+
 const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_OFFSET_DATA = {
-    {{0, 0}}};
+    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0, 0}, {0, 1}, {1, 1}, {-2, 0}, {-2, 1}},
+    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    {{0, 0}, {0, -1}, {1, -1}, {-2, 0}, {-2, -1}},
+};
 
 // #### Constructor ####
 

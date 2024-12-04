@@ -8,8 +8,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <cstddef>
-#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -200,60 +198,157 @@ void TetrominoTest::rotateTest() {
 void TetrominoTest::kicksTetrominoOTest() {
     std::unique_ptr<Tetromino> expectedTetromino;
     for (auto &tetromino : tetrominos) {
-        switch (tetromino->getShape())
-        case TetrominoShape::O: {
-            // ### testing RotationIndex = 1
-            // setup Expected
-            expectedTetromino =
-                Tetromino::makeTetromino(TetrominoShape::O, {1, 2});
-            rotateTetrominoNTimes(expectedTetromino, true, 1);
-
-            // setup Tested Tetromino
-            tetromino->rotate(true);
-            tetromino = tetromino->getNthKick(0);
-
-            CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
-
-            // ### testing RotationIndex = 2
-            // setup Expected
-            expectedTetromino =
-                Tetromino::makeTetromino(TetrominoShape::O, {1, 3});
-            rotateTetrominoNTimes(expectedTetromino, true, 2);
-
-            // setup Tested Tetromino
-            tetromino->rotate(true);
-            tetromino = tetromino->getNthKick(0);
-
-            CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
-
-            // ### testing RotationIndex = 3
-            // setup Expected
-            expectedTetromino =
-                Tetromino::makeTetromino(TetrominoShape::O, {2, 3});
-            rotateTetrominoNTimes(expectedTetromino, true, 3);
-
-            // setup Tested Tetromino
-            tetromino->rotate(true);
-            tetromino = tetromino->getNthKick(0);
-
-            CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
-
-            // ### testing RotationIndex = 4
-            // setup Expected
-            expectedTetromino =
-                Tetromino::makeTetromino(TetrominoShape::O, {2, 2});
-            rotateTetrominoNTimes(expectedTetromino, true, 4);
-
-            // setup Tested Tetromino
-            tetromino->rotate(true);
-            tetromino = tetromino->getNthKick(0);
-
-            CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
-
-            break;
-
-        default:
-            break;
+        if (!(TetrominoShape::O == tetromino->getShape())) {
+            continue;
         }
+
+        // ### testing RotationIndex = 1
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::O, {1, 2});
+        rotateTetrominoNTimes(expectedTetromino, true, 1);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 2
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::O, {1, 3});
+        rotateTetrominoNTimes(expectedTetromino, true, 2);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 3
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::O, {2, 3});
+        rotateTetrominoNTimes(expectedTetromino, true, 3);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 4
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::O, {2, 2});
+        rotateTetrominoNTimes(expectedTetromino, true, 4);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        break;
+    }
+}
+
+void TetrominoTest::kicksTetrominoITest() {
+    std::unique_ptr<Tetromino> expectedTetromino;
+    for (auto &tetromino : tetrominos) {
+        if (!(TetrominoShape::I == tetromino->getShape())) {
+            continue;
+        }
+
+        // ### testing RotationIndex = 1
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {4, 5});
+        rotateTetrominoNTimes(expectedTetromino, true, 1);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 2
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {5, 5});
+        rotateTetrominoNTimes(expectedTetromino, true, 2);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 3
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {5, 4});
+        rotateTetrominoNTimes(expectedTetromino, true, 3);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 4
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {4, 4});
+        rotateTetrominoNTimes(expectedTetromino, true, 4);
+
+        // setup Tested Tetromino
+        tetromino->rotate(true);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+    }
+}
+
+void TetrominoTest::kicksTetrominoLTest() {
+
+    std::unique_ptr<Tetromino> expectedTetromino;
+    for (auto &tetromino : tetrominos) {
+        if (!(TetrominoShape::L == tetromino->getShape())) {
+            continue;
+        }
+
+        // ### testing RotationIndex = 1
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+        rotateTetrominoNTimes(expectedTetromino, false, 1);
+        // setup Tested Tetromino
+        tetromino->rotate(false);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 2
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+        rotateTetrominoNTimes(expectedTetromino, false, 2);
+        // setup Tested Tetromino
+        tetromino->rotate(false);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 3
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+        rotateTetrominoNTimes(expectedTetromino, false, 3);
+        // setup Tested Tetromino
+        tetromino->rotate(false);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
+
+        // ### testing RotationIndex = 4
+        // setup Expected
+        expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+        rotateTetrominoNTimes(expectedTetromino, false, 4);
+        // setup Tested Tetromino
+        tetromino->rotate(false);
+        tetromino = tetromino->getNthKick(0);
+
+        CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
     }
 }
