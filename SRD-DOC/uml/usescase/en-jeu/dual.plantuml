@@ -12,12 +12,12 @@ rectangle "Partie Duel" as game {
     ' usecase "discuter" as chat
 
     '### Game Actions
-    usecase "Déplacer la pièce" as move_piece
-    usecase "Tourner la pièce" as rotate_piece
+    usecase "Déplacer un Tetromino" as move_piece
+    usecase "Tourner le Tetromino" as rotate_piece
 
     'TODO: penalty might be a bad name
     'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    usecase "envoyer n malus" as throw_penalty
+    usecase "envoyer n penalties" as throw_penalty
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "Déplacer latéralement" as lateral_movement

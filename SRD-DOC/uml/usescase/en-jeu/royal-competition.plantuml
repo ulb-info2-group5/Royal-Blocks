@@ -12,15 +12,15 @@ rectangle "Partie Compétition Royale" as game {
     ' usecase "discuter" as chat
 
     '### Game Actions
-    usecase "Déplacer la pièce" as move_piece
-    usecase "Tourner la pièce" as rotate_piece
+    usecase "Déplacer le Tetromino" as move_piece
+    usecase "Tourner le Tetromino" as rotate_piece
 
     'TODO: throw_penalty or get shield if a certain quantity of energy is reached
     usecase "Consommer sa barre d'énergie" as use_energy
     
-    usecase "Envoyer un malus" as throw_penalty
-    usecase "Choisir un des malus à envoyer" as choose_penalty
-    usecase "Choisir la cible du malus" as choose_target
+    usecase "Envoyer un penalty" as throw_penalty
+    usecase "Choisir un des penalties à envoyer" as choose_penalty
+    usecase "Choisir la cible du penalty" as choose_target
 
     usecase "S'octroyer un bonus" as get_bonus
     usecase "Choisir un des bonus à appliquer" as choose_bonus

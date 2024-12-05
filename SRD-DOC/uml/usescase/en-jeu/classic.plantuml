@@ -12,16 +12,16 @@ rectangle "Partie Classique" as game {
     ' usecase "discuter" as chat
 
     '### Game Actions
-    usecase "Déplacer la pièce" as move_piece
-    usecase "Tourner la pièce" as rotate_piece
-    usecase "Changer la cible des malus" as change_malus_target
+    usecase "Déplacer un Tetromino" as move_piece
+    usecase "Tourner le Tetromino" as rotate_piece
+    usecase "Changer la cible des penalties" as change_malus_target
 
     '### Option for malus
-    usecase "Choisir la cible des malus" as choose_malus_target
+    usecase "Choisir la cible des penalties" as choose_malus_target
 
     'TODO: penalty might be a bad name
     'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    usecase "envoyer n malus" as throw_penalty
+    usecase "envoyer un penalty" as throw_penalty
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "Déplacer latéralement" as lateral_movement
