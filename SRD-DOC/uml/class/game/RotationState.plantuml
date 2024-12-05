@@ -1,0 +1,9 @@
+@startuml (id=RotationState)
+
+class RotationIndex {
+    - index_ : int8_t
+
+    + operator() ++
+    + operator() +=
+}
+@enduml

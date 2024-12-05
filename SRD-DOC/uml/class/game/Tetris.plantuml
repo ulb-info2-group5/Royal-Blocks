@@ -1,0 +1,10 @@
+@startuml (id=Tetris)
+
+class Tetris {
+    - board_ : Board
+    - activeTetromino_ : std::unique_ptr<Tetromino>
+
+    + tryRotateActive( rotateClockwise : bool, shouldOffset : bool) : void
+    + tryMoveActive( direction : Direction) : void 
+}
+@enduml
