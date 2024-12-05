@@ -126,7 +126,7 @@ Le premier écran que l'utilisateur accède est un moyen de se connecter à la p
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
     \item \textbf{Use case}: Créer un compte
-    \item \textbf{Description}: Permet à un utilisateur de s’inscrire et de créer un compte.
+    \item \textbf{Description}: Permet à un utilisateur de s’inscrire et de se créer un compte.
     \item \textbf{Précondition}: L’utilisateur n’a pas encore de compte.
     \item \textbf{Postcondition}: Un nouveau compte est créé et l'utilisateur est authentifié.
     \item \textbf{Cas exceptionnels}: L'utilisateur existe déjà, erreurs de validation de données.
@@ -371,13 +371,13 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \subsubsection*{Tourner la pièce} (identique au mode Endless)
 
-\subsubsection*{Envoyer n-1 malus}
+\subsubsection*{Envoyer n malus}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Envoyer n-1 malus
-    \item \textbf{Description}: Envoie une ligne de malus à l'adversaire.
-    \item \textbf{Précondition}: Le joueur a complété un nombre spécifique de lignes.
-    \item \textbf{Postcondition}: L'adversaire reçoit le malus.
+    \item \textbf{Use case}: Envoyer n malus
+    \item \textbf{Description}: Envoie une ou plusieurs de malus à l'adversaire.
+    \item \textbf{Précondition}: Le joueur a complété au moins deux lignes dans sa grille.
+    \item \textbf{Postcondition}: L'adversaire reçoit un ou plusieurs malus.
     \item \textbf{Cas exceptionnels}: Échec de l’envoi du malus, conditions de malus non remplies.
 \end{itemize}
 
@@ -420,16 +420,36 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \label{fig:Endless}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique à Duel)
-\subsubsection*{Tourner la pièce} (identique à Duel)
-
+\subsubsection*{Déplacer la pièce} (identique au mode Endless)
+\subsubsection*{Tourner la pièce} (identique au mode Endless)
+\subsubsection*{Accélérer la descente} (identique au mode Endless)
 \subsubsection*{Déplacer latéralement} (identique au mode Endless)
 
-\subsubsection*{Accélérer la descente} (identique au mode Endless)
+\subsubsection*{Changer la cible des malus}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Changer la cible des malus
+    \item \textbf{Description}: Permet au joueur changer l'adversaire recevant le malus
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un ou plusieurs malus.
+    \item \textbf{Postcondition}: Le joueur a sélectionné une nouvelle cible pour envoyer ses malus.
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
+\end{itemize}
 
-\subsubsection*{Menu pause} (identique à Duel)
-\subsubsection*{Reprendre la partie} (identique à Duel)
-\subsubsection*{Quitter la partie} (identique à Duel)
+\subsubsection*{Choisir la cible des malus}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Choisir la cible des malus
+    \item \textbf{Description}: Le joueur choisit parmis ses adversaires sa nouvelle cible pour les malus.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un malus.
+    \item \textbf{Postcondition}: Le joueur change la cible pour ses malus et envoie à un adversaire nouvellement désigné.
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
+\end{itemize}
+
+\subsubsection*{Envoyer n malus} (identique au mode Duel)
+
+\subsubsection*{Menu pause} (identique au mode Duel)
+\subsubsection*{Reprendre la partie} (identique au mode Duel)
+\subsubsection*{Quitter la partie} (identique au mode Duel)
 
 \subsubsection{En mode Royal Competition}
 
@@ -442,25 +462,65 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \subsubsection*{Déplacer la pièce} (identique au mode Endless)
 \subsubsection*{Tourner la pièce} (identique au mode Endless)
-\subsubsection*{Déplacer latéralement} (identique à Endless)
-\subsubsection*{Accélérer la descente} (identique à Endless)
+\subsubsection*{Déplacer latéralement} (identique au mode Endless)
+\subsubsection*{Accélérer la descente} (identique au mode Endless)
 
-\subsubsection*{Envoyer n-1 malus} 
-à modifier 
-
-\subsubsection*{Discuter}
+\subsubsection*{Consommer sa barre d'énergie}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Discuter
-    \item \textbf{Description}: Permet aux joueurs de discuter entre eux pendant la partie.
-    \item \textbf{Précondition}: Une partie multijoueur est en cours.
-    \item \textbf{Postcondition}: Message envoyé à l'adversaire.
-    \item \textbf{Cas exceptionnels}: Connexion interrompue, messages non envoyés.
+    \item \textbf{Use case}: Consommer sa barre d'énergie
+    \item \textbf{Description}: Le joueur a accumulé assez d'énergie dans sa barre avec des lignes complétées dans sa grille;
+    \item \textbf{Précondition}: La partie est en cours et le joueur a accumulé assez de lignes complétées.
+    \item \textbf{Postcondition}: Le joueur consomme sa barre d'énergie parmis les différents actions proposées.
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
-\subsubsection*{Menu pause} (identique à Duel)
-\subsubsection*{Reprendre la partie} (identique à Duel)
-\subsubsection*{Quitter la partie} (identique à Duel)
+\subsubsection*{S'octroyer un bonus}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: S'octroyer un bonus
+    \item \textbf{Description}: Le joueur applique un bonus sur son jeu.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut consommer sa barre d'énergie.
+    \item \textbf{Postcondition}: Le joueur reçoit le bonus applicable durant un temps donné. 
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
+\end{itemize}
+
+\subsubsection*{Envoyer un malus}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: Envoyer un malus
+    \item \textbf{Description}: Le joueur envoie un malus à l'adversaire choisi.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un malus à un adversaire.
+    \item \textbf{Postcondition}: Le joueur envoie le malus à l'adversaire choisi.
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie. 
+\end{itemize}
+
+\subsubsection*{Choisir un des malus à envoyer}
+\begin{itemize}
+    \item \textbf{Acteur}: Joueur
+    \item \textbf{Use case}: choisir un des malus à envoyer
+    \item \textbf{Description}: Le joueur a plusieurs options de malus à envoyer à l'adversaire choisi.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut consommer sa barre d'énergie.
+    \item \textbf{Postcondition}: Le joueur envoie un des malus proposés à l'adversaire visé.
+    \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
+\end{itemize}
+
+\subsubsection*{Choisir la cible du malus} (identique au mode Classique)
+
+
+%\subsubsection*{Discuter}
+%\begin{itemize}
+%   \item \textbf{Acteur}: Joueur
+%    \item \textbf{Use case}: Discuter
+%    \item \textbf{Description}: Permet aux joueurs de discuter entre eux pendant la partie.
+%    \item \textbf{Précondition}: Une partie multijoueur est en cours.
+%    \item \textbf{Postcondition}: Message envoyé à l'adversaire.
+%    \item \textbf{Cas exceptionnels}: Connexion interrompue, messages non envoyés.
+%\end{itemize}
+
+\subsubsection*{Menu pause} (identique au mode Duel)
+\subsubsection*{Reprendre la partie} (identique au mode Duel)
+\subsubsection*{Quitter la partie} (identique au mode Duel)
 
 \newpage
 
