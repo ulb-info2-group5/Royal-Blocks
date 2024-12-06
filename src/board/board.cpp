@@ -4,6 +4,7 @@
 #include "../tetromino/tetromino.hpp"
 
 // #### Internal helper ####
+
 GridCell &Board::at(size_t rowIdx, size_t colIdx) {
     return grid_[rowIdx][colIdx];
 }

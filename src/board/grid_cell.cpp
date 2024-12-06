@@ -17,6 +17,6 @@ void GridCell::setColorId(unsigned colorIndex) {
 }
 
 void GridCell::setEmpty() {
-    isEmpty_ = false;
+    isEmpty_ = true;
     colorId_.reset();
 };
