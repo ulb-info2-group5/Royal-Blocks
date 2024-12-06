@@ -2,12 +2,13 @@
 #define EVENTTYPE_HPP
 
 enum class EventType {
+    clockTick,
+    bigDrop,
+    moveDown,
     moveLeft,
     moveRight,
-    moveDown,
     rotateClockwise,
     rotateCounterClockwise,
-    clockTick
 };
 
 #endif

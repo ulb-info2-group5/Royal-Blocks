@@ -32,12 +32,13 @@ class Tetris {
      */
     virtual void tryMoveActive(Direction direction);
 
-    // #### Manage Preview Tetromino ####
-
     /**
-     * @brief Updates the preview Tetromino's horizontal component.
+     * @brief Makes the active Tetromino go down until it stands above an
+     * non-empty cell in the grid or the bottom of the grid.
      */
-    virtual void updatePreviewHorizontal();
+    virtual void bigDrop();
+
+    // #### Manage Preview Tetromino ####
 
     /**
      * @brief Updates the preview Tetromino's vertical component.
@@ -100,7 +101,7 @@ class Tetris {
     virtual size_t getTetrominoesQueueSize() const;
 
     /**
-     * @brief Checks whether the cell at rowIdx, colIdx is empty
+     * @brief Checks whether the cell at rowIdx, colIdx is empty.
      */
     virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 };

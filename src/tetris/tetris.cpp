@@ -32,19 +32,18 @@ void Tetris::tryRotateActive(bool rotateClockwise) {
 }
 
 void Tetris::tryMoveActive(Direction direction) {
-    activeTetromino_->move(direction);
-    if (!board_.checkInGrid(*activeTetromino_)) {
-        activeTetromino_->move(direction, true); // reverse
+    if (checkCanDrop()) {
+        activeTetromino_->move(direction);
+    }
+}
+
+void Tetris::bigDrop() {
+    while (checkCanDrop()) {
+        activeTetromino_->move(Direction::down);
     }
 }
 
 // #### Manage Preview Tetromino ####
-
-// NOTE: this supposes that the horizontal component of the active Tetromino is
-// always right, which should be assured by tryMoveActive and tryRotateActive
-void Tetris::updatePreviewHorizontal() {
-    previewTetromino_->setAnchorPoint(activeTetromino_->getAnchorPoint());
-}
 
 // TODO: this is wrong if preview is outside of the grid, it will loop forever
 // because of the first while condition
@@ -61,6 +60,7 @@ void Tetris::updatePreviewVertical() {
 
 bool Tetris::checkCanDrop() const {
     Coordinate anchorPoint = activeTetromino_->getAnchorPoint();
+
     anchorPoint.moveRow(1);
 
     Coordinate absoluteCoordinate;
@@ -90,11 +90,17 @@ void Tetris::fillTetrominoesQueue() {
 
     std::array<std::unique_ptr<Tetromino>, numShapes> tetrominos;
 
-    // TODO: Check for anchor point Coordinate
     for (size_t i = 0; i < numShapes; i++) {
-        tetrominos[i] =
-            Tetromino::makeTetromino(static_cast<TetrominoShape>(i),
-                                     Coordinate(board_.getWidth() / 2, 0));
+        // I and T tetrominoes should have their anchorPoint  one row above the
+        // others when spawned
+        int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
+                        or static_cast<TetrominoShape>(i) == TetrominoShape::T)
+                           ? 0
+                           : 1;
+
+        tetrominos[i] = Tetromino::makeTetromino(
+            static_cast<TetrominoShape>(i),
+            Coordinate(board_.getWidth() / 2 - 1, spawnRow));
     }
 
     std::random_device rd;
@@ -116,6 +122,8 @@ void Tetris::fetchNewTetromino() {
 
     previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
     // TODO: update preview's position
+
+    isAlive_ = board_.checkInGrid(*activeTetromino_);
 }
 
 // #### Constructor ####
@@ -165,22 +173,32 @@ void Tetris::run() {
             std::cout << "clockTick" << std::endl;
             // tryMoveActive(Direction::down);
             break;
+
+        case EventType::bigDrop:
+            std::cout << "bigDrop" << std::endl;
+            // bigDrop();
+            break;
+
         case EventType::moveDown:
             std::cout << "moveDown" << std::endl;
             // tryMoveActive(Direction::down);
             break;
+
         case EventType::moveLeft:
             std::cout << "moveLeft" << std::endl;
             // tryMoveActive(Direction::left);
             break;
+
         case EventType::moveRight:
             std::cout << "moveRight" << std::endl;
             // tryMoveActive(Direction::right);
             break;
+
         case EventType::rotateClockwise:
             std::cout << "rotateClockwise" << std::endl;
             // tryRotateActive(true);
             break;
+
         case EventType::rotateCounterClockwise:
             std::cout << "rotateCounterClockwise" << std::endl;
             // tryRotateActive(false);
