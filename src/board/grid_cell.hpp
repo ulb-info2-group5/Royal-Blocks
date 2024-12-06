@@ -5,8 +5,8 @@
 
 class GridCell {
   private:
-    bool isEmpty_;
-    std::optional<unsigned> colorId_; // there shoudln't be any color when empty
+    bool isEmpty_ = true;
+    std::optional<unsigned> colorId_ = std::nullopt;
 
   public:
     virtual bool isEmpty() const;
