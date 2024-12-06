@@ -35,15 +35,10 @@ class Tetromino {
     // #### Constructor ####
 
     Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-              const std::vector<std::vector<Coordinate>> &kickData,
+              const std::vector<std::vector<Coordinate>> &offsetData,
               TetrominoShape shape);
 
     Tetromino(Tetromino &&other);
-
-    // #### Assignment Operators  ####
-
-    // Tetromino &operator=(const Tetromino &other);
-    // Tetromino &operator=(Tetromino &&other);
 
   public:
     // #### Constructor ####
@@ -74,9 +69,12 @@ class Tetromino {
 
     virtual const RotationIndex &getPrevRotationIndex() const noexcept;
 
-    // TODO: define this method
+    virtual uint8_t getNumOfTests() const noexcept;
+
     virtual std::unique_ptr<Tetromino>
     getNthKick(uint8_t kickIndex) const noexcept;
+
+    virtual unsigned getColorId() const noexcept;
 
     // #### Setters ####
 
@@ -86,7 +84,7 @@ class Tetromino {
 
     virtual void rotate(bool rotateClockwise);
 
-    virtual void move(Direction direction);
+    virtual void move(Direction direction, bool reverse = false);
 
     // #### Comparisons Operator ####
     virtual bool operator==(const Tetromino &other) const;

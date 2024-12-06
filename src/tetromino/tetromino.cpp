@@ -11,7 +11,8 @@
 #include <memory>
 #include <stdexcept>
 
-// #### Kick Data Constants ####
+// #### Offset Data Constants (SRS) ####
+
 const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
     {{0, 0}},
     {{1, 0}},
@@ -68,11 +69,6 @@ Tetromino::Tetromino(Tetromino &&other) = default;
 // #### Destructor ####
 
 Tetromino::~Tetromino() = default;
-
-// #### Assignment Operators  ####
-
-// Tetromino &Tetromino::operator=(const Tetromino &other) = default;
-// Tetromino &Tetromino::operator=(Tetromino &&other) = default;
 
 // #### Factory ####
 
@@ -154,6 +150,14 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
     return copy;
 }
 
+uint8_t Tetromino::getNumOfTests() const noexcept {
+    return static_cast<uint8_t>(offsetData_[0].size());
+}
+
+unsigned Tetromino::getColorId() const noexcept {
+    return static_cast<unsigned>(getShape());
+}
+
 // #### Setters ####
 
 void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
@@ -166,7 +170,7 @@ void Tetromino::rotate(bool rotateClockwise) {
     prevRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
 
-    Coordinate center{0, 0}; // convention that rotation center is always (0,0)
+    Coordinate center{0, 0}; // convention : rotation center is always (0,0)
 
     for (Coordinate &coord : body_) {
         coord.rotateAround(center, rotateClockwise);
@@ -175,16 +179,16 @@ void Tetromino::rotate(bool rotateClockwise) {
     std::swap(height_, width_);
 }
 
-void Tetromino::move(Direction direction) {
+void Tetromino::move(Direction direction, bool reverse) {
     switch (direction) {
     case Direction::down:
-        anchorPoint_.moveRow(1);
+        anchorPoint_.moveRow(reverse ? -1 : +1);
         break;
     case Direction::left:
-        anchorPoint_.moveCol(-1);
+        anchorPoint_.moveCol(reverse ? +1 : -1);
         break;
     case Direction::right:
-        anchorPoint_.moveCol(+1);
+        anchorPoint_.moveCol(reverse ? -1 : +1);
         break;
     }
 }

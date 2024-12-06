@@ -4,7 +4,7 @@
 #include "tetromino.hpp"
 
 enum class TetrominoShape {
-    Z,
+    Z = 0,
     L,
     O,
     S,
