@@ -9,8 +9,8 @@
 #include <pthread.h>
 #include <thread>
 
-void Tetris::tryRotateActive(bool rotateClowise) {
-    activeTetromino_->rotate(rotateClowise);
+void Tetris::tryRotateActive(bool rotateClockwise) {
+    activeTetromino_->rotate(rotateClockwise);
 
     uint8_t testIdx;
     bool isValid = false;
@@ -21,7 +21,7 @@ void Tetris::tryRotateActive(bool rotateClowise) {
     }
 
     if (!isValid) {
-        activeTetromino_->rotate(!rotateClowise);
+        activeTetromino_->rotate(!rotateClockwise);
     }
 }
 
