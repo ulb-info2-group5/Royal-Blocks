@@ -37,7 +37,7 @@ class Board {
     /**
      * @brief Sets each cell on the rowIndex-th row to empty state.
      */
-    virtual void emptyRow(int rowIdx);
+    virtual void emptyRow(size_t rowIdx);
 
     /**
      * @brief Makes every non-empty cell drop down until it stands above

@@ -22,7 +22,7 @@ bool Board::checkFullRow(size_t rowIdx) {
     return true;
 }
 
-void Board::emptyRow(int rowIdx) {
+void Board::emptyRow(size_t rowIdx) {
     for (GridCell &gridCell : getRow(rowIdx)) {
         gridCell.setEmpty();
     }
