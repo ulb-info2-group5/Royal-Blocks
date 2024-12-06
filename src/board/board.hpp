@@ -5,6 +5,7 @@
 #include "grid_cell.hpp"
 #include <array>
 #include <cstddef>
+#include <memory>
 
 // TODO: check checkInGrid again
 // bool checkInGrid(const Tetromino &tetromino);
@@ -60,7 +61,7 @@ class Board {
      * @brief Returns a const reference to the GridCell instance at
      * (rowIdx, colIdx) in the grid.
      */
-    const GridCell &get(size_t rowIdx, size_t colIdx);
+    const GridCell &get(size_t rowIdx, size_t colIdx) const;
 
     /**
      * @brief Returns the width of the grid.
@@ -76,9 +77,12 @@ class Board {
 
     // NOTE: Previously know as freezeTetromino
     /**
-     * @brief Places the tetromino in the grid.
+     * @brief Places the given tetromino in the grid.
+     *
+     * @note The Tetromino will no longer be accessible after this function,
+     * ensuring it cannot be moved after being placed in the grid.
      */
-    virtual void placeTetromino(const Tetromino &tetromino);
+    virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
 
     // #### Checks ####
     // NOTE: Haven't changed anything in terms of logic.

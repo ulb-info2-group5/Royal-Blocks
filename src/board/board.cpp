@@ -2,6 +2,7 @@
 
 #include "../coordinate/coordinate.hpp"
 #include "../tetromino/tetromino.hpp"
+#include <memory>
 
 // #### Internal helper ####
 
@@ -29,7 +30,7 @@ void Board::emptyRow(size_t rowIdx) {
 }
 
 void Board::gravity() {
-    
+
     for (size_t colIdx = 0; colIdx < width_; colIdx++) {
         size_t writeRowIdx = height_ - 1;
 
@@ -57,7 +58,9 @@ void Board::update() {
 
 // #### Getters ####
 
-const GridCell &Board::get(size_t row, size_t col) { return at(row, col); }
+const GridCell &Board::get(size_t rowIdx, size_t colIdx) const {
+    return grid_[rowIdx][colIdx];
+}
 
 size_t Board::getWidth() { return width_; }
 
@@ -65,12 +68,12 @@ size_t Board::getHeight() { return height_; }
 
 // #### Board Actions ####
 
-void Board::placeTetromino(const Tetromino &tetromino) {
-    const Coordinate anchor = tetromino.getAnchorPoint();
-    for (const Coordinate &relativeCoord : tetromino.getBody()) {
+void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
+    const Coordinate anchor = tetromino->getAnchorPoint();
+    for (const Coordinate &relativeCoord : tetromino->getBody()) {
         Coordinate absoluteCoord = anchor + relativeCoord;
         at(absoluteCoord.getRow(), absoluteCoord.getCol())
-            .setColorId(tetromino.getColorId());
+            .setColorId(tetromino->getColorId());
     }
 
     update();

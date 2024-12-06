@@ -97,7 +97,12 @@ class Tetris {
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
      */
-    virtual size_t getTetrominoesQueueSize();
+    virtual size_t getTetrominoesQueueSize() const;
+
+    /**
+     * @brief Checks whether the cell at rowIdx, colIdx is empty
+     */
+    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 };
 
 #endif

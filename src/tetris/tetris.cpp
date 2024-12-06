@@ -60,15 +60,25 @@ void Tetris::updatePreviewVertical() {
 // #### Placing and Dropping in Grid ####
 
 bool Tetris::checkCanDrop() const {
-    return (activeTetromino_->getAnchorPoint()
-            != previewTetromino_->getAnchorPoint());
+    Coordinate anchorPoint = activeTetromino_->getAnchorPoint();
+    anchorPoint.moveRow(1);
+
+    Coordinate absoluteCoordinate;
+    for (const auto &relativeCoordinate : activeTetromino_->getBody()) {
+        absoluteCoordinate = anchorPoint + relativeCoordinate;
+        if (!checkEmptyCell(absoluteCoordinate.getRow(),
+                            absoluteCoordinate.getCol()))
+            return false;
+    }
+
+    return true;
 }
 
 void Tetris::placeActive() {
     isAlive_ = board_.checkInGrid(*activeTetromino_);
 
     if (isAlive_) {
-        board_.placeTetromino(*activeTetromino_);
+        board_.placeTetromino(std::move(activeTetromino_));
     }
 }
 
@@ -189,4 +199,10 @@ void Tetris::run() {
 
 // #### Getters ####
 
-size_t Tetris::getTetrominoesQueueSize() { return tetrominoesQueue_.size(); }
+size_t Tetris::getTetrominoesQueueSize() const {
+    return tetrominoesQueue_.size();
+}
+
+bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
+    return board_.get(rowIdx, colIdx).isEmpty();
+}
