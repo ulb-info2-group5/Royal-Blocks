@@ -1,7 +1,7 @@
 #include "grid_cell.hpp"
 #include <stdexcept>
 
-bool GridCell::isEmpty() const { return isEmpty_ == 0; }
+bool GridCell::isEmpty() const { return isEmpty_; }
 
 unsigned GridCell::getColorId() const {
     if (isEmpty()) {

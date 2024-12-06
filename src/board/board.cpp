@@ -9,8 +9,8 @@ GridCell &Board::at(size_t rowIdx, size_t colIdx) {
     return grid_[rowIdx][colIdx];
 }
 
-std::array<GridCell, Board::width_> &Board::getRow(size_t row) {
-    return grid_[row];
+std::array<GridCell, Board::width_> &Board::getRow(size_t rowIdx) {
+    return grid_[rowIdx];
 }
 
 bool Board::checkFullRow(size_t rowIdx) {
@@ -29,6 +29,7 @@ void Board::emptyRow(size_t rowIdx) {
 }
 
 void Board::gravity() {
+    
     for (size_t colIdx = 0; colIdx < width_; colIdx++) {
         size_t writeRowIdx = height_ - 1;
 
