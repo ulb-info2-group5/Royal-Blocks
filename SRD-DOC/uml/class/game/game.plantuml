@@ -2,19 +2,29 @@
 
 !include Tetrominoes.plantuml!0
 
+!include Tetris.plantuml!0
+
+!include Board.plantuml!0
+
+!include Coordinate.plantuml!0
+
+!include RotationState.plantuml!0
+
 ' skinparam class { 
 '     BackgroundColor AliceBlue
 ' }
 
-class GameEngine{
+' class GameEngine{
     
-}
+' }
 
-class Player {
-    -isPlaying_ : bool
-    +isPlaying() : bool
+' class Player {
+'     -isPlaying_ : bool
+'     +isPlaying() : bool
     
-}
+' }
 
- 
+AbstractTetromino *-- Coordinate : uses
+AbstractTetromino - "1"RotationState
+
 @enduml
