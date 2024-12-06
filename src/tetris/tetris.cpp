@@ -96,14 +96,21 @@ void Tetris::fillTetrominoesQueue() {
     }
 }
 
+void Tetris::fetchNewTetromino() {
+    if (tetrominoesQueue_.empty()) {
+        fillTetrominoesQueue();
+    }
+
+    activeTetromino_ = std::move(tetrominoesQueue_.front());
+    tetrominoesQueue_.pop();
+
+    previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
+    // TODO: update preview's position
+}
+
 // #### Constructor ####
 
-Tetris::Tetris() {
-    fillTetrominoesQueue();
-
-    // TODO: write and call here a method that sets first of the queue as active
-    // Tetromino and sets up its preview
-}
+Tetris::Tetris() { fetchNewTetromino(); }
 
 // #### Event Queue API ####
 
