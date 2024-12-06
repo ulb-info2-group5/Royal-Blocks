@@ -5,9 +5,15 @@
 #include "../tetromino/tetromino_shapes.hpp"
 #include "event.hpp"
 
+#include <algorithm>
 #include <cstdlib>
+#include <iostream>
+#include <memory>
 #include <pthread.h>
+#include <random>
 #include <thread>
+
+// #### Tetromino Actions ####
 
 void Tetris::tryRotateActive(bool rotateClockwise) {
     activeTetromino_->rotate(rotateClockwise);
@@ -32,6 +38,8 @@ void Tetris::tryMoveActive(Direction direction) {
     }
 }
 
+// #### Manage Preview Tetromino ####
+
 // NOTE: this supposes that the horizontal component of the active Tetromino is
 // always right, which should be assured by tryMoveActive and tryRotateActive
 void Tetris::updatePreviewHorizontal() {
@@ -49,6 +57,8 @@ void Tetris::updatePreviewVertical() {
     }
 }
 
+// #### Placing and Dropping in Grid ####
+
 bool Tetris::checkCanDrop() const {
     return (activeTetromino_->getAnchorPoint()
             != previewTetromino_->getAnchorPoint());
@@ -60,6 +70,39 @@ void Tetris::placeActive() {
     if (isAlive_) {
         board_.placeTetromino(*activeTetromino_);
     }
+}
+
+// #### Tetromino Queue ####
+
+void Tetris::fillTetrominoesQueue() {
+    constexpr size_t numShapes =
+        static_cast<size_t>(TetrominoShape::NUM_TETROMINOSHAPE);
+
+    std::array<std::unique_ptr<Tetromino>, numShapes> tetrominos;
+
+    // TODO: Check for anchor point Coordinate
+    for (size_t i = 0; i < numShapes; i++) {
+        tetrominos[i] =
+            Tetromino::makeTetromino(static_cast<TetrominoShape>(i),
+                                     Coordinate(board_.getWidth() / 2, 0));
+    }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(tetrominos.begin(), tetrominos.end(), g);
+
+    for (auto &tetromino : tetrominos) {
+        tetrominoesQueue_.push(std::move(tetromino));
+    }
+}
+
+// #### Constructor ####
+
+Tetris::Tetris() {
+    fillTetrominoesQueue();
+
+    // TODO: write and call here a method that sets first of the queue as active
+    // Tetromino and sets up its preview
 }
 
 // #### Event Queue API ####
@@ -137,12 +180,6 @@ void Tetris::run() {
     }
 }
 
-void Tetris::enqueueRandomTetromino() {
-    TetrominoShape newTetrominoShape = static_cast<TetrominoShape>(
-        std::rand() % static_cast<int>(TetrominoShape::NUM_TETROMINOSHAPE));
+// #### Getters ####
 
-    tetrominoQueue_.push(Tetromino::makeTetromino(
-        newTetrominoShape,
-        Coordinate(0, board_.getWidth()
-                          / 2))); // TODO: check the anchorPoint parameter
-}
+size_t Tetris::getTetrominoesQueueSize() { return tetrominoesQueue_.size(); }

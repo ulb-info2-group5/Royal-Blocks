@@ -15,10 +15,12 @@ class Tetris {
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
     std::queue<EventType> eventQueue_;
-    std::queue<std::unique_ptr<Tetromino>> tetrominoQueue_;
+    std::queue<std::unique_ptr<Tetromino>> tetrominoesQueue_;
     pthread_mutex_t queueMutex_ = PTHREAD_MUTEX_INITIALIZER;
 
   private:
+    // #### Tetromino Actions ####
+
     // TODO: direction in the docstring might not be the best word for this.
     /**
      * @brief Attempts to rotate the active Tetromino in right direction.
@@ -30,6 +32,8 @@ class Tetris {
      */
     virtual void tryMoveActive(Direction direction);
 
+    // #### Manage Preview Tetromino ####
+
     /**
      * @brief Updates the preview Tetromino's horizontal component.
      */
@@ -39,6 +43,8 @@ class Tetris {
      * @brief Updates the preview Tetromino's vertical component.
      */
     virtual void updatePreviewVertical();
+
+    // #### Placing and Dropping in Grid ####
 
     /**
      * @brief Checks whether the active tetromino can be droppped.
@@ -51,12 +57,18 @@ class Tetris {
      */
     virtual void placeActive();
 
+    // #### Tetrominoes Queue ####
+
     /**
-     * @brief Enqueues a new random tetromino in the tetromino queue.
+     * @brief Enqueues 7 new randomly shuffled Tetrominoes.
      */
-    virtual void enqueueRandomTetromino();
+    virtual void fillTetrominoesQueue();
 
   public:
+    // #### Constructor ####
+
+    Tetris();
+
     // #### Event Queue API ####
 
     /**
@@ -70,6 +82,13 @@ class Tetris {
      * @brief Handles each event from the event-queue.
      */
     virtual void run();
+
+    // #### Getters ####
+
+    /**
+     * @brief Returns how many Tetrominoes are waiting in the queue.
+     */
+    virtual size_t getTetrominoesQueueSize();
 };
 
 #endif
