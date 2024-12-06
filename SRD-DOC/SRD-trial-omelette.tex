@@ -72,7 +72,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \begin{itemize}
 	\item \textbf{Bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes comme réduire un tetromino en bloc de 1 x 1 , ou réduire son temps de chute. 
-	\item \textbf{Malus} : Pénalité infligée à un joueur par un de ses adversaires. Le malus se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
+	\item \textbf{Penalty} : Pénalité infligée à un joueur par un de ses adversaires. Le penalty se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
 	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
         \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
         \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
@@ -153,7 +153,7 @@ Le premier écran que l'utilisateur accède est un moyen de se connecter à la p
     \label{fig:main-menu}
 \end{figure}
 
-Une fois l'authentification validée, l'écran du menu principal est accessible. L'utilisateur peut lancer à une partie, gérer son profil, communiquer avec ses amis par la messagerie interne, gérer sa liste d'amis et regarder le classement général du jeu.
+Une fois l'authentification validée, l'écran du menu principal est accessible. L'utilisateur peut lancer une partie, gérer son profil, communiquer avec ses amis par la messagerie interne, gérer sa liste d'amis et regarder le classement général du jeu.
 
 \subsubsection*{Jouer une partie}
 \begin{itemize}
@@ -308,24 +308,24 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \label{fig:Classique}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce}
+\subsubsection*{Déplacer le Tetromino}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Déplacer la pièce
-    \item \textbf{Description}: Permet au joueur de déplacer une pièce sur le plateau.
-    \item \textbf{Précondition}: Une partie est en cours et le joueur contrôle une pièce.
-    \item \textbf{Postcondition}: La pièce est déplacée dans une direction choisie.
-    \item \textbf{Cas exceptionnels}: Limite du plateau atteinte, collision avec d'autres pièces.
+    \item \textbf{Use case}: Déplacer un Tetromino
+    \item \textbf{Description}: Permet au joueur de déplacer un Tetromino sur le plateau.
+    \item \textbf{Précondition}: Une partie est en cours et le joueur contrôle un Tetromino.
+    \item \textbf{Postcondition}: Le Tetromino est déplacée dans une direction choisie.
+    \item \textbf{Cas exceptionnels}: Limite du plateau atteinte, collision avec d'autres Tetromino.
 \end{itemize}
 
-\subsubsection*{Tourner la pièce}
+\subsubsection*{Tourner le Tetromino}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Tourner la pièce
-    \item \textbf{Description}: Permet au joueur de tourner la pièce dans une direction donnée.
-    \item \textbf{Précondition}: Une partie est en cours et une pièce est active.
-    \item \textbf{Postcondition}: La pièce est tournée en conséquence.
-    \item \textbf{Cas exceptionnels}: La rotation amène la pièce en dehors des limites.
+    \item \textbf{Use case}: Tourner le Tetromino
+    \item \textbf{Description}: Permet au joueur de tourner le Tetromino dans une direction donnée.
+    \item \textbf{Précondition}: Une partie est en cours et un Tetromino est actif.
+    \item \textbf{Postcondition}: Le Tetromino est tournée en conséquence.
+    \item \textbf{Cas exceptionnels}: La rotation amène le Tetromino en dehors des limites.
 \end{itemize}
 
 \subsubsection*{Menu pause}
@@ -367,18 +367,18 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \label{fig:Duel}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique au mode Endless)
+\subsubsection*{Déplacer le Tetromino} (identique au mode Endless)
 
-\subsubsection*{Tourner la pièce} (identique au mode Endless)
+\subsubsection*{Tourner le Tetromino} (identique au mode Endless)
 
-\subsubsection*{Envoyer n malus}
+\subsubsection*{Envoyer n penalties}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Envoyer n malus
-    \item \textbf{Description}: Envoie une ou plusieurs de malus à l'adversaire.
+    \item \textbf{Use case}: Envoyer n penalties
+    \item \textbf{Description}: Envoie un ou plusieurs penalties à l'adversaire.
     \item \textbf{Précondition}: Le joueur a complété au moins deux lignes dans sa grille.
-    \item \textbf{Postcondition}: L'adversaire reçoit un ou plusieurs malus.
-    \item \textbf{Cas exceptionnels}: Échec de l’envoi du malus, conditions de malus non remplies.
+    \item \textbf{Postcondition}: L'adversaire reçoit un ou plusieurs penalties.
+    \item \textbf{Cas exceptionnels}: Échec de l’envoi du penalty, conditions du penalty non remplies.
 \end{itemize}
 
 \subsubsection*{Menu pause}
@@ -420,32 +420,32 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \label{fig:Endless}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique au mode Endless)
-\subsubsection*{Tourner la pièce} (identique au mode Endless)
+\subsubsection*{Déplacer le Tetromino} (identique au mode Endless)
+\subsubsection*{Tourner le Tetromino} (identique au mode Endless)
 \subsubsection*{Accélérer la descente} (identique au mode Endless)
 \subsubsection*{Déplacer latéralement} (identique au mode Endless)
 
-\subsubsection*{Changer la cible des malus}
+\subsubsection*{Changer la cible des penalties}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Changer la cible des malus
-    \item \textbf{Description}: Permet au joueur changer l'adversaire recevant le malus
-    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un ou plusieurs malus.
-    \item \textbf{Postcondition}: Le joueur a sélectionné une nouvelle cible pour envoyer ses malus.
+    \item \textbf{Use case}: Changer la cible des penalties
+    \item \textbf{Description}: Permet au joueur changer l'adversaire recevant le penalty
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un ou plusieurs penalties.
+    \item \textbf{Postcondition}: Le joueur a sélectionné une nouvelle cible pour envoyer ses penalties.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
-\subsubsection*{Choisir la cible des malus}
+\subsubsection*{Choisir la cible des penalties}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Choisir la cible des malus
-    \item \textbf{Description}: Le joueur choisit parmis ses adversaires sa nouvelle cible pour les malus.
-    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un malus.
-    \item \textbf{Postcondition}: Le joueur change la cible pour ses malus et envoie à un adversaire nouvellement désigné.
+    \item \textbf{Use case}: Choisir la cible des penalties
+    \item \textbf{Description}: Le joueur choisit parmis ses adversaires sa nouvelle cible pour les penalties.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un penalty.
+    \item \textbf{Postcondition}: Le joueur change de cible, et envoie un ou plusieurs penalties à l’adversaire nouvellement désigné.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
-\subsubsection*{Envoyer n malus} (identique au mode Duel)
+\subsubsection*{Envoyer n penalties} (identique au mode Duel)
 
 \subsubsection*{Menu pause} (identique au mode Duel)
 \subsubsection*{Reprendre la partie} (identique au mode Duel)
@@ -460,8 +460,8 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \label{fig:Royal-Competition}
 \end{figure}
 
-\subsubsection*{Déplacer la pièce} (identique au mode Endless)
-\subsubsection*{Tourner la pièce} (identique au mode Endless)
+\subsubsection*{Déplacer le Tetromino} (identique au mode Endless)
+\subsubsection*{Tourner le Tetromino} (identique au mode Endless)
 \subsubsection*{Déplacer latéralement} (identique au mode Endless)
 \subsubsection*{Accélérer la descente} (identique au mode Endless)
 
@@ -485,27 +485,27 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
-\subsubsection*{Envoyer un malus}
+\subsubsection*{Envoyer un penalty}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Envoyer un malus
-    \item \textbf{Description}: Le joueur envoie un malus à l'adversaire choisi.
-    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un malus à un adversaire.
-    \item \textbf{Postcondition}: Le joueur envoie le malus à l'adversaire choisi.
+    \item \textbf{Use case}: Envoyer un penalty
+    \item \textbf{Description}: Le joueur envoie un penalty à l'adversaire choisi.
+    \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un penalty à un adversaire.
+    \item \textbf{Postcondition}: Le joueur envoie le penalty à l'adversaire choisi.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie. 
 \end{itemize}
 
-\subsubsection*{Choisir un des malus à envoyer}
+\subsubsection*{Choisir un des penalties à envoyer}
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: choisir un des malus à envoyer
-    \item \textbf{Description}: Le joueur a plusieurs options de malus à envoyer à l'adversaire choisi.
+    \item \textbf{Use case}: choisir un des penalties à envoyer
+    \item \textbf{Description}: Le joueur a plusieurs options de penalties à envoyer à l'adversaire choisi.
     \item \textbf{Précondition}: La partie est en cours et le joueur peut consommer sa barre d'énergie.
-    \item \textbf{Postcondition}: Le joueur envoie un des malus proposés à l'adversaire visé.
+    \item \textbf{Postcondition}: Le joueur envoie un des penalties proposés à l'adversaire visé.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
-\subsubsection*{Choisir la cible du malus} (identique au mode Classique)
+\subsubsection*{Choisir la cible du penalties} (identique au mode Classique)
 
 
 %\subsubsection*{Discuter}
