@@ -1,5 +1,5 @@
 @startuml (id = Event)
-class EventType {
+enum EventType {
 
 }
 @enduml

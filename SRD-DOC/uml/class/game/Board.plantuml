@@ -3,6 +3,7 @@
 class Board {
     - width_ : static constexpr size_t
     - height_ : static constexpr size_t
+    - grid_ : array<array<Gridcell, width_> , height_
 
     - getRow( rowIdx : size_t ) : std::array<GridCell, width_>
 

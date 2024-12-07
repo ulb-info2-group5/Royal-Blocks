@@ -1,4 +1,6 @@
-@startuml Game
+@startuml (id = Game)
+
+skinparam linetype ortho
 
 !include Board.plantuml!0
 
@@ -30,7 +32,15 @@
     
 ' }
 
-' AbstractTetromino *-- Coordinate : uses
-' AbstractTetromino - "1"RotationState
+Tetromino *--"4" Coordinate
+Tetromino - "1" RotationState
+Tetromino "1" *- "1" RotationIndex
+
+
+Board *--"width_* height_" GridCell
+Board <- Tetromino
+
+Tetris "1" <--"1" Board
+Tetris "1" <-- "1..*" Tetromino
 
 @enduml

@@ -13,8 +13,8 @@ abstract class Tetromino {
     - body_ : vector<Coordinate>
 
     '----SRS----'
-    -rotationIdx_ : RotationIdx
-    -prevRotationIdx : RotationIdx
+    -rotationIdx_ : RotationIdex
+    -prevRotationIdx : RotationIndex
     -offsetData_ : const <vector<vector<Coordinate>>&
 
     '----kick data----'
@@ -67,14 +67,13 @@ enum TetrominoShape {
     J
     T
     NUM_TETROMINOSHAPE
-
 }
 
-enum Direction {
-    left
-    right
-    down
-}
+' enum Direction {
+'     left
+'     right
+'     down
+' }
 
 
 enum Color {
@@ -84,8 +83,7 @@ enum Color {
 
 class TetrominoI extends Tetromino {
 
-    ' <<move >> is just to clarify that it's a move constructor'
-    +<<move>>TetrominoI(anchorPoint : Coordinate&& )
+    +TetrominoI(anchorPoint : Coordinate&& )
 }
 class TetrominoO extends Tetromino {
 
