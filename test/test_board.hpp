@@ -16,6 +16,7 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(checkFullColTest);
     CPPUNIT_TEST(emptyRowTest);
     CPPUNIT_TEST(emptyColTest);
+    CPPUNIT_TEST(gravityTest);
     CPPUNIT_TEST_SUITE_END();
 
   private:
@@ -31,10 +32,10 @@ class BoardTest : public CppUnit::TestFixture {
     void checkFullColTest();
     void emptyRowTest();
     void emptyColTest();
+    void gravityTest();
 
   private:
     Board board;
-    std::unique_ptr<Tetromino> tetromino;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BoardTest);

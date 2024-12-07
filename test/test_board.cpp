@@ -4,6 +4,7 @@
 #include "../src/tetromino/tetromino_shapes.hpp"
 
 #include <cppunit/TestAssert.h>
+#include <memory>
 
 void BoardTest::constructorTest() {
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), board.getHeight());
@@ -17,7 +18,7 @@ void BoardTest::constructorTest() {
 }
 
 void BoardTest::placeTetrominoTest() {
-    tetromino = Tetromino::makeTetromino(
+    std::unique_ptr<Tetromino> tetromino = Tetromino::makeTetromino(
         TetrominoShape::L,
         Coordinate{static_cast<int>(board.getHeight() - 1), 1});
 
@@ -86,4 +87,26 @@ void BoardTest::emptyColTest() {
     fillCol(fullColIdx);
     board.emptyCol(fullColIdx);
     CPPUNIT_ASSERT(!board.checkFullCol(fullColIdx));
+}
+
+void BoardTest::gravityTest() {
+    constexpr unsigned colorId = 0;
+
+    board.at(0, 0).setColorId(colorId);
+    board.at(2, 0).setColorId(colorId);
+    board.at(3, 0).setColorId(colorId);
+    board.at(1, 1).setColorId(colorId);
+
+    board.gravity();
+
+    for (size_t rowIdx = 0; rowIdx < board.getHeight(); rowIdx++) {
+        for (size_t colIdx = 0; colIdx < board.getWidth(); colIdx++) {
+            if ((colIdx == 0 and rowIdx >= board.getHeight() - 3)
+                or (colIdx == 1 and rowIdx == board.getHeight() - 1)) {
+                CPPUNIT_ASSERT(!board.get(rowIdx, colIdx).isEmpty());
+            } else {
+                CPPUNIT_ASSERT(board.get(rowIdx, colIdx).isEmpty());
+            }
+        }
+    }
 }

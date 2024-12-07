@@ -20,13 +20,6 @@ class Board {
      */
     virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
 
-    /**
-     * @brief Makes every non-empty cell drop down until it stands
-     * either above another non-empty cell or at the bottom row of the
-     * grid.
-     */
-    virtual void gravity();
-
   public:
     // #### SHOULE BE PRIVATE ####
     // NOTE: this should be private but we need it for unit-tests
@@ -56,6 +49,13 @@ class Board {
      * @brief Sets each cell on the colIdx-th column to empty state.
      */
     virtual void emptyCol(size_t colIdx);
+
+    /**
+     * @brief Makes every non-empty cell drop down until it stands
+     * either above another non-empty cell or at the bottom row of the
+     * grid.
+     */
+    virtual void gravity();
 
     // #### Getters ####
 
