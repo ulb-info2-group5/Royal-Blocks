@@ -201,7 +201,7 @@ void TetrominoTest::rotateTest() {
     }
 }
 
-void TetrominoTest::kicksTetrominoOTest() {
+void TetrominoTest::offset1TetrominoOTest() {
     std::unique_ptr<Tetromino> expectedTetromino;
     for (auto &tetromino : tetrominos) {
         if (!(TetrominoShape::O == tetromino->getShape())) {
@@ -256,7 +256,7 @@ void TetrominoTest::kicksTetrominoOTest() {
     }
 }
 
-void TetrominoTest::kicksTetrominoITest() {
+void TetrominoTest::offset1TetrominoITest() {
     std::unique_ptr<Tetromino> expectedTetromino;
     for (auto &tetromino : tetrominos) {
         if (!(TetrominoShape::I == tetromino->getShape())) {
@@ -309,7 +309,7 @@ void TetrominoTest::kicksTetrominoITest() {
     }
 }
 
-void TetrominoTest::kicksTetrominoLTest() {
+void TetrominoTest::offset1TetrominoLTest() {
 
     std::unique_ptr<Tetromino> expectedTetromino;
     for (auto &tetromino : tetrominos) {
@@ -357,4 +357,89 @@ void TetrominoTest::kicksTetrominoLTest() {
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
     }
+}
+
+void TetrominoTest::variousOffsetsTetrominoLTest() {
+    // ### testing offsetIndex = 2 and clockwise rotation
+    std::unique_ptr<Tetromino> tetrominoL =
+        Tetromino::makeTetromino(TetrominoShape::L, {1, 1}); // setup Expected
+    std::unique_ptr<Tetromino> expectedTetromino =
+        Tetromino::makeTetromino(TetrominoShape::L, {1, 0});
+    rotateTetrominoNTimes(expectedTetromino, true, 1);
+    tetrominoL->rotate(true);
+    tetrominoL = tetrominoL->getNthOffset(2);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoL);
+
+    // ### testing offsetIndex = 3 and counter-clockwise rotation
+    tetrominoL = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {0, 2});
+    rotateTetrominoNTimes(expectedTetromino, false, 1);
+    tetrominoL->rotate(false);
+    tetrominoL = tetrominoL->getNthOffset(3);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoL);
+
+    // ### testing offsetIndex = 5 and clockwise rotation
+    tetrominoL = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {3, 0});
+    rotateTetrominoNTimes(expectedTetromino, true, 1);
+    tetrominoL->rotate(true);
+    tetrominoL = tetrominoL->getNthOffset(5);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoL);
+
+    // ### testing offsetIndex = 4 then offsetIndex = 3 and clockwise rotation
+    tetrominoL = Tetromino::makeTetromino(TetrominoShape::L, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::L, {4, 2});
+    rotateTetrominoNTimes(expectedTetromino, true, 2);
+    tetrominoL->rotate(true);
+    tetrominoL = tetrominoL->getNthOffset(4);
+    tetrominoL->rotate(true);
+    tetrominoL = tetrominoL->getNthOffset(3);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoL);
+}
+
+void TetrominoTest::variousOffsetsTetrominoITest() {
+    // ### testing offsetIndex = 1 and clockwise rotation
+    std::unique_ptr<Tetromino> tetrominoI =
+        Tetromino::makeTetromino(TetrominoShape::I, {1, 1});
+    std::unique_ptr<Tetromino> expectedTetromino =
+        Tetromino::makeTetromino(TetrominoShape::I, {1, 2});
+    rotateTetrominoNTimes(expectedTetromino, true, 1);
+    tetrominoI->rotate(true);
+    tetrominoI = tetrominoI->getNthOffset(1);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoI);
+
+    // ### testing offsetIndex = 2 and counter-clockwise rotation
+    tetrominoI = Tetromino::makeTetromino(TetrominoShape::I, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {2, 0});
+    rotateTetrominoNTimes(expectedTetromino, false, 1);
+    tetrominoI->rotate(false);
+    tetrominoI = tetrominoI->getNthOffset(2);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoI);
+
+    // ### testing offsetIndex = 4 and clockwise rotation
+    tetrominoI = Tetromino::makeTetromino(TetrominoShape::I, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {2, 0});
+    rotateTetrominoNTimes(expectedTetromino, true, 1);
+    tetrominoI->rotate(true);
+    tetrominoI = tetrominoI->getNthOffset(4);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoI);
+
+    // ### testing offsetIndex = 5 and counter-clockwise rotation
+    tetrominoI = Tetromino::makeTetromino(TetrominoShape::I, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {3, 3});
+    rotateTetrominoNTimes(expectedTetromino, false, 1);
+    tetrominoI->rotate(false);
+    tetrominoI = tetrominoI->getNthOffset(5);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoI);
+
+    // ### testing offsetIndex = 4 then offsetIndex = 2 and counter-clockwise
+    // rotation
+    tetrominoI = Tetromino::makeTetromino(TetrominoShape::I, {1, 1});
+    expectedTetromino = Tetromino::makeTetromino(TetrominoShape::I, {0, -1});
+    rotateTetrominoNTimes(expectedTetromino, false, 2);
+    tetrominoI->rotate(false);
+    tetrominoI = tetrominoI->getNthOffset(4);
+    tetrominoI->rotate(false);
+    tetrominoI = tetrominoI->getNthOffset(2);
+    CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetrominoI);
 }
