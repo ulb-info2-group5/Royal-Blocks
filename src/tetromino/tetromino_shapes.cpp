@@ -56,3 +56,36 @@ TetrominoT::TetrominoT(Coordinate &&anchorPoint)
         rotate(true);
     }
 }
+
+std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
+    switch (shape) {
+    case TetrominoShape::Z:
+        os << "Z";
+        break;
+    case TetrominoShape::L:
+        os << "L";
+        break;
+    case TetrominoShape::O:
+        os << "O";
+        break;
+    case TetrominoShape::S:
+        os << "S";
+        break;
+    case TetrominoShape::I:
+        os << "I";
+        break;
+    case TetrominoShape::J:
+        os << "J";
+        break;
+    case TetrominoShape::T:
+        os << "T";
+        break;
+    case TetrominoShape::NumTetrominoShape:
+        os << "NumTetrominoShape";
+        break;
+    default:
+        os << "Unknown";
+        break;
+    }
+    return os;
+}

@@ -63,4 +63,6 @@ class TetrominoT : public Tetromino {
     TetrominoT(Coordinate &&anchorPoint);
 };
 
+std::ostream &operator<<(std::ostream &os, TetrominoShape shape);
+
 #endif

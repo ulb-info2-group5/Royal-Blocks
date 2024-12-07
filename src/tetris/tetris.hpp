@@ -101,6 +101,11 @@ class Tetris {
     // #### Getters ####
 
     /**
+     *
+     */
+    virtual bool getIsAlive() const;
+
+    /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
      */
     virtual size_t getTetrominoesQueueSize() const;

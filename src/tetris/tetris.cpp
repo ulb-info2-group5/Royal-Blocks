@@ -66,8 +66,13 @@ bool Tetris::checkCanDrop() const {
     Coordinate absoluteCoordinate;
     for (const auto &relativeCoordinate : activeTetromino_->getBody()) {
         absoluteCoordinate = anchorPoint + relativeCoordinate;
-        if (!checkEmptyCell(absoluteCoordinate.getRow(),
-                            absoluteCoordinate.getCol()))
+
+        if (absoluteCoordinate.getCol() < 0
+            or absoluteCoordinate.getCol() >= board_.getWidth()
+            or absoluteCoordinate.getRow() < 0
+            or absoluteCoordinate.getRow() >= board_.getHeight()
+            or !checkEmptyCell(absoluteCoordinate.getRow(),
+                               absoluteCoordinate.getCol()))
             return false;
     }
 
@@ -91,16 +96,14 @@ void Tetris::fillTetrominoesQueue() {
     std::array<std::unique_ptr<Tetromino>, numShapes> tetrominos;
 
     for (size_t i = 0; i < numShapes; i++) {
-        // I and T tetrominoes should have their anchorPoint  one row above the
-        // others when spawned
-        int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
-                        or static_cast<TetrominoShape>(i) == TetrominoShape::T)
-                           ? 0
-                           : 1;
+        // I tetromino should have its anchorPoint one row above compared to
+        // the others when spawned
+        int spawnRow =
+            (static_cast<TetrominoShape>(i) == TetrominoShape::I) ? 0 : 1;
 
         tetrominos[i] = Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
-            Coordinate(board_.getWidth() / 2 - 1, spawnRow));
+            Coordinate(spawnRow, board_.getWidth() / 2 - 1));
     }
 
     std::random_device rd;
@@ -124,14 +127,16 @@ void Tetris::fetchNewTetromino() {
     // TODO: update preview's position
 
     isAlive_ = board_.checkInGrid(*activeTetromino_);
+    std::cout << "isAlive is now " << std::endl;
 }
 
 // #### Constructor ####
 
-Tetris::Tetris() { fetchNewTetromino(); }
+Tetris::Tetris() = default;
 
 // #### Event Queue API ####
 
+// TODO: rename this
 void Tetris::addQueueEvent(EventType event) {
     std::cout << "addEvent: waiting for lock" << std::endl;
     pthread_mutex_lock(&queueMutex_);
@@ -163,7 +168,16 @@ EventType Tetris::getNextEvent() {
 
 void Tetris::run() {
     EventType event;
+
+    fetchNewTetromino();
+    std::cout << "shape: " << activeTetromino_->getShape() << std::endl;
+
     while (isAlive_) {
+        event = getNextEvent();
+
+        std::cout << "active anchor: " << activeTetromino_->getAnchorPoint()
+                  << std::endl;
+
         switch (event) {
 
         case EventType::None:
@@ -172,37 +186,37 @@ void Tetris::run() {
 
         case EventType::ClockTick:
             std::cout << "ClockTick" << std::endl;
-            // tryMoveActive(Direction::Down);
+            tryMoveActive(Direction::Down);
             break;
 
         case EventType::BigDrop:
             std::cout << "BigDrop" << std::endl;
-            // bigDrop();
+            bigDrop();
             break;
 
         case EventType::MoveDown:
             std::cout << "MoveDown" << std::endl;
-            // tryMoveActive(Direction::Down);
+            tryMoveActive(Direction::Down);
             break;
 
         case EventType::MoveLeft:
             std::cout << "MoveLeft" << std::endl;
-            // tryMoveActive(Direction::Left);
+            tryMoveActive(Direction::Left);
             break;
 
         case EventType::MoveRight:
             std::cout << "MoveRight" << std::endl;
-            // tryMoveActive(Direction::Right);
+            tryMoveActive(Direction::Right);
             break;
 
         case EventType::RotateClockwise:
             std::cout << "RotateClockwise" << std::endl;
-            // tryRotateActive(true);
+            tryRotateActive(true);
             break;
 
         case EventType::RotateCounterClockwise:
             std::cout << "RotateCounterClockwise" << std::endl;
-            // tryRotateActive(false);
+            tryRotateActive(false);
             break;
         }
 
@@ -210,17 +224,21 @@ void Tetris::run() {
         // (check if should place active Tetromino,
         // check for full rows etc)
         board_.update();
-        bigDrop();
 
         if (!checkCanDrop()) {
-            board_.placeTetromino(std::move(activeTetromino_));
+            placeActive();
+            fetchNewTetromino();
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
+
+    std::cout << "game done" << std::endl;
 }
 
 // #### Getters ####
+
+bool Tetris::getIsAlive() const { return isAlive_; }
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoesQueue_.size();
