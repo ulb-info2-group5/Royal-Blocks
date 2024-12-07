@@ -9,8 +9,10 @@
 #include <pthread.h>
 #include <queue>
 
+class TetrisTest;
+
 class Tetris {
-    bool isAlive_ = true; // TODO: make a constructor and move this there
+    bool isAlive_ = true;
     Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
@@ -76,7 +78,6 @@ class Tetris {
      */
     virtual void setIsAlive(bool isAlive);
 
-  public:
     /**
      * @brief Fetches the next tetromino from the queue and sets it as the
      * active tetromino.
@@ -86,6 +87,17 @@ class Tetris {
      */
     virtual void fetchNewTetromino();
 
+    /**
+     * @brief Checks whether the cell at rowIdx, colIdx is empty.
+     */
+    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
+
+    /**
+     * @brief Returns how many Tetrominoes are waiting in the queue.
+     */
+    virtual size_t getTetrominoesQueueSize() const;
+
+  public:
     // #### Constructor ####
 
     Tetris();
@@ -107,19 +119,12 @@ class Tetris {
     // #### Getters ####
 
     /**
-     *
+     * @brief Thread-safe way of getting the isAlive.
+     * @return  False if the game is over, true otherwise.
      */
     virtual bool getIsAlive();
 
-    /**
-     * @brief Returns how many Tetrominoes are waiting in the queue.
-     */
-    virtual size_t getTetrominoesQueueSize() const;
-
-    /**
-     * @brief Checks whether the cell at rowIdx, colIdx is empty.
-     */
-    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
+    friend TetrisTest;
 };
 
 #endif

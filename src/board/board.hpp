@@ -8,6 +8,8 @@
 #include <cstddef>
 #include <memory>
 
+class BoardTest;
+
 class Board {
   private:
     static constexpr size_t width_ = 10;
@@ -20,10 +22,6 @@ class Board {
      * @brief Returns a reference to the rowIdx-th row in the grid.
      */
     virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
-
-  public:
-    // #### SHOULE BE PRIVATE ####
-    // NOTE: this should be private but we need it for unit-tests
 
     /**
      * @brief Returns a reference to the GridCell instance at the (row, col)
@@ -60,6 +58,7 @@ class Board {
      */
     virtual void gravity();
 
+  public:
     // #### Getters ####
 
     /**
@@ -89,6 +88,7 @@ class Board {
     virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
 
     // #### Checks ####
+
     /**
      * @brief Checks whether the specified Tetromino can fit within the
      * current grid position.
@@ -97,13 +97,16 @@ class Board {
 
     // TODO: decide if it removes full columns
     /**
-     * @brief Clears full rows (and full columns ?).
+     * @brief Clears full rows, returns the number of rows emptied.
      */
     virtual BoardUpdate update();
 
     // #### DEBUG #####
+
     // TODO: remove this method for release
     void debugPrint();
+
+    friend BoardTest;
 };
 
 #endif

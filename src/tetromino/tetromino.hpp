@@ -8,6 +8,8 @@
 #include <memory>
 #include <vector>
 
+class TetrominoTest;
+
 enum class TetrominoShape;
 
 enum class Direction { Left, Right, Down };
@@ -42,6 +44,7 @@ class Tetromino {
 
   public:
     // #### Constructor ####
+
     Tetromino(const Tetromino &other);
 
     // #### Destructor ####
@@ -93,6 +96,8 @@ class Tetromino {
 
     friend std::ostream &operator<<(std::ostream &os,
                                     const Tetromino &tetromino);
+
+    friend TetrominoTest;
 };
 
 #endif

@@ -9,4 +9,7 @@ if(TEST_SOURCES)
 
     add_test(coordinate ${PROJECT_NAME}_tests)
     add_test(tetromino ${PROJECT_NAME}_tests)
+    add_test(tetromino ${PROJECT_NAME}_tests)
+    add_test(board ${PROJECT_NAME}_tests)
+    add_test(tetris ${PROJECT_NAME}_tests)
 endif()

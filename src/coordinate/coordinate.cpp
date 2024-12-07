@@ -10,8 +10,6 @@ Coordinate::Coordinate(const Coordinate &other) = default;
 
 Coordinate::Coordinate(Coordinate &&other) = default;
 
-Coordinate Coordinate::fromCartesian(int x, int y) { return Coordinate{-y, x}; }
-
 // #### Destructors  ####
 
 Coordinate::~Coordinate() = default;

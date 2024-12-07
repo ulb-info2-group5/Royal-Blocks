@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+class CoordinateTest;
+
 class Coordinate {
   private:
     int col_ = 0;
@@ -18,8 +20,6 @@ class Coordinate {
     Coordinate(const Coordinate &other);
 
     Coordinate(Coordinate &&other);
-
-    static Coordinate fromCartesian(int x, int y);
 
     // #### Destructor ####
 
@@ -72,6 +72,8 @@ class Coordinate {
     // #### Output Stream ####
 
     friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord);
+
+    friend CoordinateTest;
 };
 
 #endif

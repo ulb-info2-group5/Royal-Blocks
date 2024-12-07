@@ -1,10 +1,7 @@
 #include "../src/board/board.hpp"
 
-#include "../src/tetromino/tetromino.hpp"
-
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <memory>
 
 // TODO: test checkInGrid
 
