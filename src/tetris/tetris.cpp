@@ -81,9 +81,9 @@ bool Tetris::checkCanDrop() const {
 }
 
 void Tetris::placeActive() {
-    isAlive_ = board_.checkInGrid(*activeTetromino_);
+    setIsAlive(board_.checkInGrid(*activeTetromino_));
 
-    if (isAlive_) {
+    if (getIsAlive()) {
         board_.placeTetromino(std::move(activeTetromino_));
     }
 }
@@ -127,7 +127,7 @@ void Tetris::fetchNewTetromino() {
     previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
     // TODO: update preview's position
 
-    isAlive_ = board_.checkInGrid(*activeTetromino_);
+    setIsAlive(board_.checkInGrid(*activeTetromino_));
     std::cout << "isAlive is now " << std::endl;
 }
 
@@ -239,7 +239,18 @@ void Tetris::run() {
 
 // #### Getters ####
 
-bool Tetris::getIsAlive() const { return isAlive_; }
+bool Tetris::getIsAlive() {
+    pthread_mutex_lock(&isAliveMutex_);
+    bool isAlive = isAlive_;
+    pthread_mutex_unlock(&isAliveMutex_);
+    return isAlive;
+}
+
+void Tetris::setIsAlive(bool isAlive) {
+    pthread_mutex_lock(&queueMutex_);
+    bool isAlive_ = isAlive;
+    pthread_mutex_unlock(&queueMutex_);
+}
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoesQueue_.size();

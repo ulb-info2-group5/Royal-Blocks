@@ -17,6 +17,7 @@ class Tetris {
     std::queue<EventType> eventQueue_;
     std::queue<std::unique_ptr<Tetromino>> tetrominoesQueue_;
     pthread_mutex_t queueMutex_ = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_t isAliveMutex_ = PTHREAD_MUTEX_INITIALIZER;
 
   private:
     // #### Tetromino Actions ####
@@ -75,9 +76,14 @@ class Tetris {
     virtual void fetchNewTetromino();
 
     /**
-     * @brief Fetches the next event from the event-queue
+     * @brief Fetches the next event from the event-queue.
      */
     virtual EventType getNextEvent();
+
+    /**
+     * @brief Thread-safe way of setting the isAlive member.
+     */
+    virtual void setIsAlive(bool isAlive);
 
   public:
     // #### Constructor ####
@@ -103,7 +109,7 @@ class Tetris {
     /**
      *
      */
-    virtual bool getIsAlive() const;
+    virtual bool getIsAlive();
 
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
