@@ -4,26 +4,52 @@
 '     BackgroundColor AntiqueWhite
 ' }
 
+'is the Tetromino class still an abstract class ?'
 abstract class AbstractTetromino {
     - width_ : int
     - height_ : int
-    - color_ : unsigned int
-    - body_ : vector<Coordinate>
+    - shape_ : TetraminoShape
     - anchorPoint_ : Coordinate
-    'coordinate of the center's for all 4 rotation states
-    - centers_ : vector<Coordinate>
-    - rotationState_ : RotationState
+    - body_ : vector<Coordinate>
+    '----SRS----'
+    -rotationIdx_ : RotationIdx_
+    -prevRotationIdx : RotationIdx_
+    -offsetData_ : const <vector<vector<Coordinate>>&
+    
+    '----kick data----'
+    # {static} O_OFFSET_DATA : const vector<vector<Coordinate>>
+    # {static} I_OFFSET_DATA : const vector<vector<Coordinate>>
+    # {static} ZLSJT_OFFSET_DATA : const vector<vector<Coordinate>>
+    '----Constructor----'
+    # Tetromino(anchorPoint : Coordinate&&, body : vector<Coordinate>&&, offsetData : vector<vector<Coordinate>>&, shape : TetrominoShape )
+    #Tetromino(other : Tetromino&&)
+    + Tetromino(other : const Tetromino&)
+    '----Destructor----'
+    + <<virtual>> ~Tetromino()
+    '----Factory----'
+    + {static} makeTetromino(shape : TetrominoShape, anchorPoint : Coordinate&&) : unique_ptr<Tetromino>
+    '----Getters----'
+    + <<virtual>> getWidth() : int  
+    + <<virtual>> getHeight() : int
+    + <<virtual>> getShape() : TetrominoShape
+    + <<virtual>> getAnchorPoint() : Coordinate&
+    + <<virtual>> getBody() : vector<Coordinate>>&
+    + <<virtual>> getRotationIndex() : RotationIndex&
+    + <<virtual>> getPrevRotationIndex() : RotationIndex&
+    '+ <<virtual>> getNumOfTests() : uint8_t'
+    + <<virtual>> getNthKick(kickIndex : uint8_t) : unique_ptr<Tetromino>
+    + <<virtual>> getColorId() : unsigned
+    '----Setters----'
+    + <<virtual>> setAnchorPoint(anchorPoint : const Coordinate&)
+    '----Action----'
+    + <<virtual>> rotate(rotateClockwise : bool) 
+    + <<virtual>> move(direction : Direction, reverse : bool = false)
+    '----Comparisions----'
+    + <<virtual>> operator==(other : const Tetromino&) : bool
+    '----Output----'
+ 
 
-    # TetrOmino(initializer_list<Coordinate> coordinates)
 
-    + getWidth() : int  
-    + getHeight() : int
-    + getBody() : vector<Coordinate>
-    + getColor(): unsigned int
-    + getAnchorPoint(): Coordinate
-
-    'factory
-    + {static} makeTetromino(shape : TetraminoShape, anchorPoint : Coordinate)
 
     + tryMove(direction : Direction)
     + tryRotate()
@@ -31,13 +57,15 @@ abstract class AbstractTetromino {
 
 
 enum TetrominoShape {
-    I
-    O
-    T
-    S
-    Z
+    Z 
     L
+    O
+    S
+    I
     J
+    T
+    NUM_TETROMINOSHAPE
+
 }
 
 enum Direction {
@@ -53,38 +81,34 @@ enum Color {
 
 
 class TetrominoI extends AbstractTetromino { 
-    +TetrominoI()
+    ' <<move >> is just to clarify that it's a move constructor'
+    +<<move>>TetrominoI(anchorPoint : Coordinate&& ) 
 }
-
 class TetrominoO extends AbstractTetromino { 
-    'overriding'
-    tryRotate()
-    +TetrominoO()
+    +TetrominoO(anchorPoint : Coordinate&& )
 
 }
-
 class TetrominoT extends AbstractTetromino { 
-    +TetrominoT()
+    +TetrominoT(anchorPoint : Coordinate&&)
 }
 
 class TetrominoS extends AbstractTetromino { 
-    +TetrominoS()
+    +TetrominoS(anchorPoint : Coordinate&& )
 }
 
 class TetrominoZ extends AbstractTetromino { 
-    +TetrominoZ()
+    +TetrominoZ(anchorPoint : Coordinate&&)
 }
 
 class TetrominoL extends AbstractTetromino { 
-    +TetrominoL()
+    +TetrominoL(anchorPoint : Coordinate&&)
 }
 
 class TetrominoJ extends AbstractTetromino { 
-    +TetrominoZ()
+    +TetrominoZ(anchorPoint : Coordinate&&)
 }
 
-AbstactPiece --|> AbstractTetromino
-AbstractTetromino.-> TetrominoShape : uses
-AbstractTetromino .-> Direction : uses
+' AbstractTetromino.-> TetrominoShape : uses
+' AbstractTetromino .-> Direction : uses
 
 @enduml

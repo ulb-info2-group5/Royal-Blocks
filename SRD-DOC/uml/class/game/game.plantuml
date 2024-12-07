@@ -24,7 +24,7 @@
     
 ' }
 
-AbstractTetromino *-- Coordinate : uses
-AbstractTetromino - "1"RotationState
+' AbstractTetromino *-- Coordinate : uses
+' AbstractTetromino - "1"RotationState
 
 @enduml
