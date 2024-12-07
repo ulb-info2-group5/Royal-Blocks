@@ -11,7 +11,11 @@
 #include <memory>
 #include <stdexcept>
 
-// #### Offset Data Constants (SRS) ####
+/*--------------------------------------------------
+                    PROTECTED
+--------------------------------------------------*/
+
+// #### SRS Offsets Data Constants ####
 
 const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
     {{0, 0}},
@@ -62,9 +66,13 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
     width_ = maxCol - minCol + 1;
 }
 
-Tetromino::Tetromino(const Tetromino &other) = default;
+/*--------------------------------------------------
+                     PUBLIC
+--------------------------------------------------*/
 
-Tetromino::Tetromino(Tetromino &&other) = default;
+// #### Copy Constructor ####
+
+Tetromino::Tetromino(const Tetromino &other) = default;
 
 // #### Destructor ####
 
@@ -112,9 +120,9 @@ std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
 
 // #### Getters ####
 
-int Tetromino::getWidth() const noexcept { return width_; }
+size_t Tetromino::getWidth() const noexcept { return width_; }
 
-int Tetromino::getHeight() const noexcept { return height_; }
+size_t Tetromino::getHeight() const noexcept { return height_; }
 
 TetrominoShape Tetromino::getShape() const noexcept { return shape_; }
 
@@ -126,12 +134,20 @@ const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
     return body_;
 }
 
+unsigned Tetromino::getColorId() const noexcept {
+    return static_cast<unsigned>(getShape());
+}
+
 const RotationIndex &Tetromino::getRotationIndex() const noexcept {
     return rotationIdx_;
 }
 
 const RotationIndex &Tetromino::getPrevRotationIndex() const noexcept {
     return prevRotationIdx_;
+}
+
+uint8_t Tetromino::getNumOfTests() const noexcept {
+    return static_cast<uint8_t>(offsetData_[0].size());
 }
 
 std::unique_ptr<Tetromino>
@@ -150,14 +166,6 @@ Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
     return copy;
 }
 
-uint8_t Tetromino::getNumOfTests() const noexcept {
-    return static_cast<uint8_t>(offsetData_[0].size());
-}
-
-unsigned Tetromino::getColorId() const noexcept {
-    return static_cast<unsigned>(getShape());
-}
-
 // #### Setters ####
 
 void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
@@ -165,19 +173,6 @@ void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
 }
 
 // #### Tetromino Actions ####
-
-void Tetromino::rotate(bool rotateClockwise) {
-    prevRotationIdx_ = rotationIdx_;
-    rotationIdx_ += (rotateClockwise) ? 1 : -1;
-
-    Coordinate center{0, 0}; // convention : rotation center is always (0,0)
-
-    for (Coordinate &coord : body_) {
-        coord.rotateAround(center, rotateClockwise);
-    }
-
-    std::swap(height_, width_);
-}
 
 void Tetromino::move(Direction direction, bool reverse) {
     switch (direction) {
@@ -191,6 +186,19 @@ void Tetromino::move(Direction direction, bool reverse) {
         anchorPoint_.moveCol(reverse ? -1 : +1);
         break;
     }
+}
+
+void Tetromino::rotate(bool rotateClockwise) {
+    prevRotationIdx_ = rotationIdx_;
+    rotationIdx_ += (rotateClockwise) ? 1 : -1;
+
+    Coordinate center{0, 0}; // Convention : rotation center is always (0,0)
+
+    for (Coordinate &coord : body_) {
+        coord.rotateAround(center, rotateClockwise);
+    }
+
+    std::swap(height_, width_);
 }
 
 // #### Comparisons Operator ####

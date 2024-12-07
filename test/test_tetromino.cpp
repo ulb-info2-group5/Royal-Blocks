@@ -85,38 +85,45 @@ void TetrominoTest::getWidthAndHeightTest() {
     for (const auto &tetromino : tetrominos) {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), tetromino->getWidth());
             break;
 
         case (TetrominoShape::L):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), tetromino->getWidth());
             break;
 
         case (TetrominoShape::O):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), tetromino->getWidth());
             break;
 
         case (TetrominoShape::S):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), tetromino->getWidth());
             break;
 
         case (TetrominoShape::I):
-            CPPUNIT_ASSERT_EQUAL(1, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(4, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), tetromino->getWidth());
             break;
 
         case (TetrominoShape::J):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), tetromino->getWidth());
             break;
 
         case (TetrominoShape::T):
-            CPPUNIT_ASSERT_EQUAL(2, tetromino->getHeight());
-            CPPUNIT_ASSERT_EQUAL(3, tetromino->getWidth());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                                 tetromino->getHeight());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), tetromino->getWidth());
             break;
         default:
             break;
