@@ -6,6 +6,7 @@
 #include "event.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -138,13 +139,9 @@ Tetris::Tetris() = default;
 
 // TODO: rename this
 void Tetris::addQueueEvent(EventType event) {
-    std::cout << "addEvent: waiting for lock" << std::endl;
     pthread_mutex_lock(&queueMutex_);
-    std::cout << "addEvent: locking" << std::endl;
     eventQueue_.push(event);
-    std::cout << "adding event" << std::endl;
     pthread_mutex_unlock(&queueMutex_);
-    std::cout << "addEvent: unlocked" << std::endl;
 }
 
 EventType Tetris::getNextEvent() {
@@ -167,6 +164,8 @@ EventType Tetris::getNextEvent() {
 // #### Tetris Loop ####
 
 void Tetris::run() {
+    // TODO: use an actual sleep that keeps constant sleep time like in the game
+    // clock
     EventType event;
 
     fetchNewTetromino();
@@ -181,41 +180,41 @@ void Tetris::run() {
         switch (event) {
 
         case EventType::None:
-            std::cout << "None" << std::endl;
+            // std::cout << "None" << std::endl;
             break;
 
         case EventType::ClockTick:
-            std::cout << "ClockTick" << std::endl;
+            // std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
             break;
 
         case EventType::BigDrop:
-            std::cout << "BigDrop" << std::endl;
+            // std::cout << "BigDrop" << std::endl;
             bigDrop();
             break;
 
         case EventType::MoveDown:
-            std::cout << "MoveDown" << std::endl;
+            // std::cout << "MoveDown" << std::endl;
             tryMoveActive(Direction::Down);
             break;
 
         case EventType::MoveLeft:
-            std::cout << "MoveLeft" << std::endl;
+            // std::cout << "MoveLeft" << std::endl;
             tryMoveActive(Direction::Left);
             break;
 
         case EventType::MoveRight:
-            std::cout << "MoveRight" << std::endl;
+            // std::cout << "MoveRight" << std::endl;
             tryMoveActive(Direction::Right);
             break;
 
         case EventType::RotateClockwise:
-            std::cout << "RotateClockwise" << std::endl;
+            // std::cout << "RotateClockwise" << std::endl;
             tryRotateActive(true);
             break;
 
         case EventType::RotateCounterClockwise:
-            std::cout << "RotateCounterClockwise" << std::endl;
+            // std::cout << "RotateCounterClockwise" << std::endl;
             tryRotateActive(false);
             break;
         }
@@ -226,11 +225,13 @@ void Tetris::run() {
         board_.update();
 
         if (!checkCanDrop()) {
+            std::cout << "placing at " << activeTetromino_->getAnchorPoint()
+                      << std::endl;
             placeActive();
             fetchNewTetromino();
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     std::cout << "game done" << std::endl;
