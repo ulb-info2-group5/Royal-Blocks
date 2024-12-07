@@ -138,7 +138,7 @@ Tetris::Tetris() = default;
 // #### Event Queue API ####
 
 // TODO: rename this
-void Tetris::addQueueEvent(EventType event) {
+void Tetris::addEvent(EventType event) {
     pthread_mutex_lock(&queueMutex_);
     eventQueue_.push(event);
     pthread_mutex_unlock(&queueMutex_);

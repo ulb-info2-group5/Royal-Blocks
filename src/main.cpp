@@ -15,7 +15,7 @@ void *clockRoutine(void *arg) {
     while (tetris->getIsAlive()) {
         std::chrono::time_point start = std::chrono::steady_clock::now();
 
-        tetris->addQueueEvent(EventType::MoveDown);
+        tetris->addEvent(EventType::MoveDown);
 
         std::chrono::time_point end = std::chrono::steady_clock::now();
         std::chrono::duration delta =
@@ -42,10 +42,10 @@ void *inputHandlerRoutine(void *arg) {
         case '\n': // TODO: remove this when switching to ncurses
             break;
         case 'h':
-            tetris->addQueueEvent(EventType::MoveLeft);
+            tetris->addEvent(EventType::MoveLeft);
             break;
         case 'l':
-            tetris->addQueueEvent(EventType::MoveRight);
+            tetris->addEvent(EventType::MoveRight);
             break;
         default:
             std::cout << "neither h nor l" << std::endl;

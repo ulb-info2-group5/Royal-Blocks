@@ -95,7 +95,7 @@ class Tetris {
     /**
      * @brief Adds the event to the event-queue.
      */
-    virtual void addQueueEvent(EventType event);
+    virtual void addEvent(EventType event);
 
     // #### Tetris Loop ####
 
