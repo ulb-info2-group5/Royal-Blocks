@@ -1,7 +1,8 @@
 #include "grid_cell.hpp"
+#include <optional>
 #include <stdexcept>
 
-bool GridCell::isEmpty() const { return isEmpty_; }
+bool GridCell::isEmpty() const { return !(colorId_.has_value()); }
 
 unsigned GridCell::getColorId() const {
     if (isEmpty()) {
@@ -11,12 +12,6 @@ unsigned GridCell::getColorId() const {
     return colorId_.value();
 }
 
-void GridCell::setColorId(unsigned colorIndex) {
-    isEmpty_ = false;
-    colorId_ = colorIndex;
-}
+void GridCell::setColorId(unsigned colorIndex) { colorId_ = colorIndex; }
 
-void GridCell::setEmpty() {
-    isEmpty_ = true;
-    colorId_.reset();
-};
+void GridCell::setEmpty() { colorId_.reset(); };
