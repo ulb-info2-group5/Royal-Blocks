@@ -1,3 +1,25 @@
 @startuml (id=Board)
 
-@enduml
+class Board {
+    - width_ : static constexpr size_t
+    - height_ : static constexpr size_t
+
+    - getRow( rowIdx : size_t ) : std::array<GridCell, width_>
+
+    - at(rowIdx : size_t , colIdx : size_t ) : GridCell 
+    - checkFullRow(rowIdx : size_t ) : const bool
+    - emptyRow( rowIdx : size_t ) : void
+    
+    '- checkFullCol( colIdx : size_t ) : const bool
+    '- emptyCol( colIdx : size_t  ) : void
+    '- gravity() : void
+
+    + &get( rowIdx : size_t, colIdx : size_t ) : const GridCell
+    + getWidth() : const size_t
+    + getHeight() : const size_t 
+
+    + placeTetromino (tetromino : unique_ptr<Tetromino> ) : void
+    + checkInGrid( tetromino : Tetromino ) : const bool
+
+    + update() : BoardUpdate
+}

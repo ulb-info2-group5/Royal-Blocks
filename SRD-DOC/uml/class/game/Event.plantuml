@@ -1,0 +1,5 @@
+@startuml (id = Event)
+class EventType {
+
+}
+@enduml

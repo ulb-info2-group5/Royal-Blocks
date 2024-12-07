@@ -1,63 +1,65 @@
 @startuml (id=Tetromino)
 
 ' skinparam class {
-'     BackgroundColor AntiqueWhite
-' }
+    '     BackgroundColor AntiqueWhite
+    '}
 
-'is the Tetromino class still an abstract class ?'
-abstract class AbstractTetromino {
-    - width_ : int
-    - height_ : int
+
+abstract class Tetromino {
+    - width_ : size_t
+    - height_ : size_t
     - shape_ : TetraminoShape
     - anchorPoint_ : Coordinate
     - body_ : vector<Coordinate>
+
     '----SRS----'
-    -rotationIdx_ : RotationIdx_
-    -prevRotationIdx : RotationIdx_
+    -rotationIdx_ : RotationIdx
+    -prevRotationIdx : RotationIdx
     -offsetData_ : const <vector<vector<Coordinate>>&
-    
+
     '----kick data----'
     # {static} O_OFFSET_DATA : const vector<vector<Coordinate>>
     # {static} I_OFFSET_DATA : const vector<vector<Coordinate>>
     # {static} ZLSJT_OFFSET_DATA : const vector<vector<Coordinate>>
+
     '----Constructor----'
     # Tetromino(anchorPoint : Coordinate&&, body : vector<Coordinate>&&, offsetData : vector<vector<Coordinate>>&, shape : TetrominoShape )
-    #Tetromino(other : Tetromino&&)
+    # Tetromino(other : Tetromino&&)
     + Tetromino(other : const Tetromino&)
+
     '----Destructor----'
-    + <<virtual>> ~Tetromino()
+    + ~Tetromino()
+
     '----Factory----'
     + {static} makeTetromino(shape : TetrominoShape, anchorPoint : Coordinate&&) : unique_ptr<Tetromino>
+
     '----Getters----'
-    + <<virtual>> getWidth() : int  
-    + <<virtual>> getHeight() : int
-    + <<virtual>> getShape() : TetrominoShape
-    + <<virtual>> getAnchorPoint() : Coordinate&
-    + <<virtual>> getBody() : vector<Coordinate>>&
-    + <<virtual>> getRotationIndex() : RotationIndex&
-    + <<virtual>> getPrevRotationIndex() : RotationIndex&
-    '+ <<virtual>> getNumOfTests() : uint8_t'
-    + <<virtual>> getNthKick(kickIndex : uint8_t) : unique_ptr<Tetromino>
-    + <<virtual>> getColorId() : unsigned
+    + getWidth() : const int
+    + getHeight() : const int
+    + getShape() : TetrominoShape
+    + getAnchorPoint() : const Coordinate&
+    + getBody() : const vector<Coordinate>>&
+    + getRotationIndex() : const RotationIndex&
+    + getPrevRotationIndex() : const RotationIndex&
+    '+ getNumOfTests() : uint8_t'
+    + getNthKick(kickIndex : uint8_t) : const unique_ptr<Tetromino>
+    + getColorId() : const unsigned
+
     '----Setters----'
-    + <<virtual>> setAnchorPoint(anchorPoint : const Coordinate&)
+    + setAnchorPoint(anchorPoint : const Coordinate&)
+
     '----Action----'
-    + <<virtual>> rotate(rotateClockwise : bool) 
-    + <<virtual>> move(direction : Direction, reverse : bool = false)
-    '----Comparisions----'
-    + <<virtual>> operator==(other : const Tetromino&) : bool
-    '----Output----'
- 
+    + rotate(rotateClockwise : bool)
+    + move(direction : Direction, reverse : bool = false)
 
-
-
-    + tryMove(direction : Direction)
-    + tryRotate()
+    '----Comparisons----'
+    + operator==(other : const Tetromino&) : bool
+    
 }
 
 
 enum TetrominoShape {
-    Z 
+    Z
     L
     O
     S
@@ -80,35 +82,42 @@ enum Color {
 }
 
 
-class TetrominoI extends AbstractTetromino { 
+class TetrominoI extends Tetromino {
+
     ' <<move >> is just to clarify that it's a move constructor'
-    +<<move>>TetrominoI(anchorPoint : Coordinate&& ) 
+    +<<move>>TetrominoI(anchorPoint : Coordinate&& )
 }
-class TetrominoO extends AbstractTetromino { 
+class TetrominoO extends Tetromino {
+
     +TetrominoO(anchorPoint : Coordinate&& )
 
 }
-class TetrominoT extends AbstractTetromino { 
+class TetrominoT extends Tetromino {
+
     +TetrominoT(anchorPoint : Coordinate&&)
 }
 
-class TetrominoS extends AbstractTetromino { 
+class TetrominoS extends Tetromino {
+
     +TetrominoS(anchorPoint : Coordinate&& )
 }
 
-class TetrominoZ extends AbstractTetromino { 
+class TetrominoZ extends Tetromino {
+
     +TetrominoZ(anchorPoint : Coordinate&&)
 }
 
-class TetrominoL extends AbstractTetromino { 
+class TetrominoL extends Tetromino {
+
     +TetrominoL(anchorPoint : Coordinate&&)
 }
 
-class TetrominoJ extends AbstractTetromino { 
+class TetrominoJ extends Tetromino {
+
     +TetrominoZ(anchorPoint : Coordinate&&)
 }
 
-' AbstractTetromino.-> TetrominoShape : uses
-' AbstractTetromino .-> Direction : uses
+' Tetromino.-> TetrominoShape : uses
+' Tetromino .-> Direction : uses
 
 @enduml

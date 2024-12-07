@@ -1,14 +1,20 @@
 @startuml Game
 
-!include Tetrominoes.plantuml!0
-
-!include Tetris.plantuml!0
-
 !include Board.plantuml!0
+
+!include BoardUpdate.plantuml!0
 
 !include Coordinate.plantuml!0
 
+!include Event.plantuml!0
+
+!include GridCell.plantuml!0
+
 !include RotationState.plantuml!0
+
+!include Tetris.plantuml!0
+
+!include Tetrominoes.plantuml!0
 
 ' skinparam class { 
 '     BackgroundColor AliceBlue

@@ -1,0 +1,14 @@
+@startuml (id = BoardUpdate )
+
+class BoardUpdate {
+    - numDestroyedRows : size_t
+    - numDestroyedCols : size_t
+
+    + getNumDestroyedRows() : size_t 
+    + getNumDestroyedRowsNumDestroyedColumns() : size_t
+
+    + incrementDestroyedRows() 
+    + incrementDestroyedCols()
+}
+
+@enduml
