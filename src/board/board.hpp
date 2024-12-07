@@ -16,15 +16,26 @@ class Board {
     // #### Internal helper ####
 
     /**
+     * @brief Returns a reference to the rowIdx-th row in the grid.
+     */
+    virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
+
+    /**
+     * @brief Makes every non-empty cell drop down until it stands
+     * either above another non-empty cell or at the bottom row of the
+     * grid.
+     */
+    virtual void gravity();
+
+  public:
+    // #### SHOULE BE PRIVATE ####
+    // NOTE: this should be private but we need it for unit-tests
+
+    /**
      * @brief Returns a reference to the GridCell instance at the (row, col)
      * position in the grid.
      */
     virtual GridCell &at(size_t rowIdx, size_t colIdx);
-
-    /**
-     * @brief Returns a reference to the rowIdx-th row in the grid.
-     */
-    virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
 
     /**
      * @brief Checks whether the rowIndex-th row is full.
@@ -46,14 +57,6 @@ class Board {
      */
     virtual void emptyCol(size_t colIdx);
 
-    /**
-     * @brief Makes every non-empty cell drop down until it stands
-     * either above another non-empty cell or at the bottom row of the
-     * grid.
-     */
-    virtual void gravity();
-
-  public:
     // #### Getters ####
 
     /**

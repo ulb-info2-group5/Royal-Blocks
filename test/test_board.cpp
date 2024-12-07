@@ -36,3 +36,54 @@ void BoardTest::placeTetrominoTest() {
         }
     }
 }
+
+void BoardTest::fillRow(size_t fullRowIdx) {
+    constexpr unsigned colorId = 0;
+
+    for (size_t colIdx = 0; colIdx < board.getWidth(); colIdx++) {
+        board.at(fullRowIdx, colIdx).setColorId(colorId);
+    }
+}
+
+void BoardTest::fillCol(size_t fullColIdx) {
+    constexpr unsigned colorId = 0;
+
+    // make the 0-th column non-empty
+    for (size_t rowIdx = 0; rowIdx < board.getHeight(); rowIdx++) {
+        board.at(rowIdx, fullColIdx).setColorId(colorId);
+    }
+}
+
+void BoardTest::checkFullRowTest() {
+    size_t fullRowIdx = board.getHeight() - 1;
+    fillRow(fullRowIdx);
+
+    for (size_t rowIdx = 0; rowIdx < board.getHeight(); rowIdx++) {
+        bool rowIsFull = board.checkFullRow(rowIdx);
+        CPPUNIT_ASSERT((fullRowIdx == rowIdx) ? rowIsFull : !rowIsFull);
+    }
+}
+
+void BoardTest::checkFullColTest() {
+    const unsigned fullColIdx = 0;
+    fillCol(fullColIdx);
+
+    for (size_t colIdx = 0; colIdx < board.getWidth(); colIdx++) {
+        bool colIsFull = board.checkFullCol(colIdx);
+        CPPUNIT_ASSERT((fullColIdx == colIdx) ? colIsFull : !colIsFull);
+    }
+}
+
+void BoardTest::emptyRowTest() {
+    const unsigned fullRowIdx = 0;
+    fillCol(fullRowIdx);
+    board.emptyRow(fullRowIdx);
+    CPPUNIT_ASSERT(!board.checkFullRow(fullRowIdx));
+}
+
+void BoardTest::emptyColTest() {
+    const unsigned fullColIdx = 0;
+    fillCol(fullColIdx);
+    board.emptyCol(fullColIdx);
+    CPPUNIT_ASSERT(!board.checkFullCol(fullColIdx));
+}
