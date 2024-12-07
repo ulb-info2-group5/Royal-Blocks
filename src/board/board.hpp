@@ -13,7 +13,6 @@ class Board {
     static constexpr size_t height_ = 20;
     std::array<std::array<GridCell, width_>, height_> grid_;
 
-  private:
     // #### Internal helper ####
 
     /**
@@ -95,6 +94,10 @@ class Board {
      * non-empty cell drop down.
      */
     virtual void update();
+
+    // #### DEBUG #####
+    // TODO: remove this method for release
+    void debugPrint();
 };
 
 #endif
