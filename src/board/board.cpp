@@ -71,13 +71,6 @@ BoardUpdate Board::update() {
         }
     }
 
-    for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
-        if (checkFullCol(colIdx)) {
-            emptyCol(colIdx);
-            boardUpdate.incrementDestroyedCols();
-        }
-    }
-
     return boardUpdate;
 }
 

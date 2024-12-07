@@ -7,12 +7,11 @@
 
 class TetrisTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(TetrisTest);
-    CPPUNIT_TEST(constructorTest);
+    CPPUNIT_TEST(fetchNewTetrominoTest);
     CPPUNIT_TEST_SUITE_END();
 
   protected:
-    // TODO: Find a better name for this
-    void constructorTest();
+    void fetchNewTetrominoTest();
 
   private:
     constexpr static size_t tetrominoShapesNum =

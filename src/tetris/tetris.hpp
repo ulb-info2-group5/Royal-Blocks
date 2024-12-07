@@ -67,15 +67,6 @@ class Tetris {
     virtual void fillTetrominoesQueue();
 
     /**
-     * @brief Fetches the next tetromino from the queue and sets it as the
-     * active tetromino.
-     *
-     * If there are no tetrominoes left in the queue, the queue is re-filled
-     * with new tetrominoes.
-     */
-    virtual void fetchNewTetromino();
-
-    /**
      * @brief Fetches the next event from the event-queue.
      */
     virtual EventType getNextEvent();
@@ -86,6 +77,15 @@ class Tetris {
     virtual void setIsAlive(bool isAlive);
 
   public:
+    /**
+     * @brief Fetches the next tetromino from the queue and sets it as the
+     * active tetromino.
+     *
+     * If there are no tetrominoes left in the queue, the queue is re-filled
+     * with new tetrominoes.
+     */
+    virtual void fetchNewTetromino();
+
     // #### Constructor ####
 
     Tetris();

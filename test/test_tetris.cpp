@@ -2,7 +2,8 @@
 
 #include <cppunit/TestAssert.h>
 
-void TetrisTest::constructorTest() {
+void TetrisTest::fetchNewTetrominoTest() {
+    tetris.fetchNewTetromino();
     CPPUNIT_ASSERT_EQUAL(tetrominoShapesNum - 1,
                          tetris.getTetrominoesQueueSize());
 }

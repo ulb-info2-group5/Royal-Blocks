@@ -1,6 +1,7 @@
 #include "tetris.hpp"
 
 #include "../board/board.hpp"
+#include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 #include "event.hpp"
@@ -33,8 +34,10 @@ void Tetris::tryRotateActive(bool rotateClockwise) {
 }
 
 void Tetris::tryMoveActive(Direction direction) {
-    if (checkCanDrop()) {
-        activeTetromino_->move(direction);
+    activeTetromino_->move(direction);
+
+    if (!board_.checkInGrid(*activeTetromino_)) {
+        activeTetromino_->move(direction, true);
     }
 }
 
@@ -46,8 +49,8 @@ void Tetris::bigDrop() {
 
 // #### Manage Preview Tetromino ####
 
-// TODO: this is wrong if preview is outside of the grid, it will loop forever
-// because of the first while condition
+// TODO: this is wrong if preview is outside of the grid, it will loop
+// forever because of the first while condition
 void Tetris::updatePreviewVertical() {
     while (!board_.checkInGrid(*previewTetromino_)) {
         previewTetromino_->move(Direction::Down, true); // go up
@@ -128,7 +131,6 @@ void Tetris::fetchNewTetromino() {
     // TODO: update preview's position
 
     setIsAlive(board_.checkInGrid(*activeTetromino_));
-    std::cout << "isAlive is now " << std::endl;
 }
 
 // #### Constructor ####
@@ -137,7 +139,6 @@ Tetris::Tetris() = default;
 
 // #### Event Queue API ####
 
-// TODO: rename this
 void Tetris::addEvent(EventType event) {
     pthread_mutex_lock(&queueMutex_);
     eventQueue_.push(event);
@@ -164,77 +165,76 @@ EventType Tetris::getNextEvent() {
 // #### Tetris Loop ####
 
 void Tetris::run() {
-    // TODO: use an actual sleep that keeps constant sleep time like in the game
-    // clock
+    // TODO: use an actual sleep that keeps constant sleep time like in the
+    // game clock
     EventType event;
 
     fetchNewTetromino();
-    std::cout << "shape: " << activeTetromino_->getShape() << std::endl;
 
-    while (isAlive_) {
+    constexpr float frequency = 6;
+    constexpr std::chrono::duration period =
+        std::chrono::seconds(1) / frequency;
+
+    while (getIsAlive()) {
+        std::chrono::time_point start = std::chrono::steady_clock::now();
+
         event = getNextEvent();
 
         std::cout << "active anchor: " << activeTetromino_->getAnchorPoint()
                   << std::endl;
 
         switch (event) {
-
         case EventType::None:
-            // std::cout << "None" << std::endl;
             break;
 
-        case EventType::ClockTick:
-            // std::cout << "ClockTick" << std::endl;
+        case EventType::ClockTick: {
+            std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
+            BoardUpdate boardUpdate = board_.update();
+            if (!checkCanDrop()) {
+                std::cout << "placing at " << activeTetromino_->getAnchorPoint()
+                          << std::endl;
+                placeActive();
+                fetchNewTetromino();
+            }
             break;
+        }
 
         case EventType::BigDrop:
-            // std::cout << "BigDrop" << std::endl;
             bigDrop();
             break;
 
         case EventType::MoveDown:
-            // std::cout << "MoveDown" << std::endl;
             tryMoveActive(Direction::Down);
             break;
 
         case EventType::MoveLeft:
-            // std::cout << "MoveLeft" << std::endl;
             tryMoveActive(Direction::Left);
             break;
 
         case EventType::MoveRight:
-            // std::cout << "MoveRight" << std::endl;
             tryMoveActive(Direction::Right);
             break;
 
         case EventType::RotateClockwise:
-            // std::cout << "RotateClockwise" << std::endl;
             tryRotateActive(true);
             break;
 
         case EventType::RotateCounterClockwise:
-            // std::cout << "RotateCounterClockwise" << std::endl;
             tryRotateActive(false);
             break;
         }
 
-        // Do all the updates on the game here
-        // (check if should place active Tetromino,
-        // check for full rows etc)
-        board_.update();
+        std::chrono::time_point end = std::chrono::steady_clock::now();
+        std::chrono::duration delta =
+            std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-        if (!checkCanDrop()) {
-            std::cout << "placing at " << activeTetromino_->getAnchorPoint()
-                      << std::endl;
-            placeActive();
-            fetchNewTetromino();
+        if (delta < period) {
+            std::this_thread::sleep_for(period - delta);
         }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    std::cout << "game done" << std::endl;
+    std::cout << "Game Over" << std::endl;
 }
 
 // #### Getters ####

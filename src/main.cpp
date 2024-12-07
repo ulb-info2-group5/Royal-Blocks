@@ -9,8 +9,9 @@
 void *clockRoutine(void *arg) {
     Tetris *tetris = static_cast<Tetris *>(arg);
 
-    float frequency = 2;
-    std::chrono::duration period = std::chrono::seconds(1) / frequency;
+    constexpr float frequency = 1;
+    constexpr std::chrono::duration period =
+        std::chrono::seconds(1) / frequency;
 
     while (tetris->getIsAlive()) {
         std::chrono::time_point start = std::chrono::steady_clock::now();
@@ -34,18 +35,29 @@ void *inputHandlerRoutine(void *arg) {
 
     char key;
 
-    // TODO: add thread-safety for this
     while (tetris->getIsAlive()) {
         key = getchar();
 
         switch (key) {
         case '\n': // TODO: remove this when switching to ncurses
             break;
-        case 'h':
+        case 'h': // left
             tetris->addEvent(EventType::MoveLeft);
             break;
-        case 'l':
+        case 'l': // right
             tetris->addEvent(EventType::MoveRight);
+            break;
+        case 'j': // down
+            tetris->addEvent(EventType::MoveDown);
+            break;
+        case 'J': // big drop
+            tetris->addEvent(EventType::BigDrop);
+            break;
+        case 'g': // rotate clockwise
+            tetris->addEvent(EventType::RotateClockwise);
+            break;
+        case 'f': // rotate counter-clockwise
+            tetris->addEvent(EventType::RotateCounterClockwise);
             break;
         default:
             std::cout << "neither h nor l" << std::endl;
@@ -58,8 +70,6 @@ void *inputHandlerRoutine(void *arg) {
 
 int main() {
     Tetris tetris;
-
-    std::cout << tetris.getIsAlive() << std::endl;
 
     pthread_t inputHandler, clockHandler;
     pthread_create(&inputHandler, nullptr, inputHandlerRoutine,
