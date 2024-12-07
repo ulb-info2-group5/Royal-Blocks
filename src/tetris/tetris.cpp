@@ -209,6 +209,12 @@ void Tetris::run() {
         // Do all the updates on the game here
         // (check if should place active Tetromino,
         // check for full rows etc)
+        board_.update();
+        bigDrop();
+
+        if (!checkCanDrop()) {
+            board_.placeTetromino(std::move(activeTetromino_));
+        }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }

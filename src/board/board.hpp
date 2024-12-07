@@ -2,6 +2,7 @@
 #define BOARD_HPP
 
 #include "../tetromino/tetromino.hpp"
+#include "board_update.hpp"
 #include "grid_cell.hpp"
 #include <array>
 #include <cstddef>
@@ -50,6 +51,8 @@ class Board {
      */
     virtual void emptyCol(size_t colIdx);
 
+    // NOTE: this is not required, but could be something to toggle,
+    // e.g. for an easy mode.
     /**
      * @brief Makes every non-empty cell drop down until it stands
      * either above another non-empty cell or at the bottom row of the
@@ -92,11 +95,11 @@ class Board {
      */
     bool checkInGrid(Tetromino &tetromino) const;
 
+    // TODO: decide if it removes full columns
     /**
-     * @brief Clears full rows and full columns and makes every levitating
-     * non-empty cell drop down.
+     * @brief Clears full rows (and full columns ?).
      */
-    virtual void update();
+    virtual BoardUpdate update();
 
     // #### DEBUG #####
     // TODO: remove this method for release

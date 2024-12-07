@@ -2,6 +2,7 @@
 
 #include "../coordinate/coordinate.hpp"
 #include "../tetromino/tetromino.hpp"
+#include "board_update.hpp"
 #include <memory>
 
 // #### Internal helper ####
@@ -60,20 +61,24 @@ void Board::gravity() {
     }
 }
 
-void Board::update() {
+BoardUpdate Board::update() {
+    BoardUpdate boardUpdate;
+
     for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {
         if (checkFullRow(rowIdx)) {
             emptyRow(rowIdx);
+            boardUpdate.incrementDestroyedRows();
         }
     }
 
     for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
         if (checkFullCol(colIdx)) {
             emptyCol(colIdx);
+            boardUpdate.incrementDestroyedCols();
         }
     }
 
-    gravity();
+    return boardUpdate;
 }
 
 // #### Getters ####
