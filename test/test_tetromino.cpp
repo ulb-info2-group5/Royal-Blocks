@@ -72,7 +72,7 @@ void TetrominoTest::shapeTest() {
 
         case (TetrominoShape::T):
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, 0}, {0, 1}}),
+                (std::vector<Coordinate>{{0, 0}, {0, 1}, {1, 0}, {0, -1}}),
                 tetromino->getBody());
             break;
         default:
@@ -169,22 +169,22 @@ void TetrominoTest::rotateTest() {
         case (TetrominoShape::T): // counter-clockwise T rotations
             tetromino->rotate(false);
             CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{{0, 0}, {1, 0}, {0, -1}, {-1, 0}}),
-                tetromino->getBody());
-
-            tetromino->rotate(false);
-            CPPUNIT_ASSERT_EQUAL(
-                (std::vector<Coordinate>{{0, 0}, {0, 1}, {1, 0}, {0, -1}}),
-                tetromino->getBody());
-
-            tetromino->rotate(false);
-            CPPUNIT_ASSERT_EQUAL(
                 (std::vector<Coordinate>{{0, 0}, {-1, 0}, {0, 1}, {1, 0}}),
                 tetromino->getBody());
 
             tetromino->rotate(false);
             CPPUNIT_ASSERT_EQUAL(
                 (std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, 0}, {0, 1}}),
+                tetromino->getBody());
+
+            tetromino->rotate(false);
+            CPPUNIT_ASSERT_EQUAL(
+                (std::vector<Coordinate>{{0, 0}, {1, 0}, {0, -1}, {-1, 0}}),
+                tetromino->getBody());
+
+            tetromino->rotate(false);
+            CPPUNIT_ASSERT_EQUAL(
+                (std::vector<Coordinate>{{0, 0}, {0, 1}, {1, 0}, {0, -1}}),
                 tetromino->getBody());
 
             break;

@@ -50,4 +50,9 @@ TetrominoJ::TetrominoJ(Coordinate &&anchorPoint)
 TetrominoT::TetrominoT(Coordinate &&anchorPoint)
     : Tetromino(std::move(anchorPoint),
                 std::vector<Coordinate>{{0, 0}, {0, -1}, {-1, 0}, {0, 1}},
-                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::T) {}
+                Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::T) {
+    // This tetromino should spawn in an upside down T shape
+    for (size_t i = 0; i < 2; i++) {
+        rotate(true);
+    }
+}
