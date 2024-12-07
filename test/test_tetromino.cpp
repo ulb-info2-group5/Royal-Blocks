@@ -16,7 +16,7 @@
 
 void TetrominoTest::setUp() {
     for (int i = 0;
-         static_cast<TetrominoShape>(i) < TetrominoShape::NUM_TETROMINOSHAPE;
+         static_cast<TetrominoShape>(i) < TetrominoShape::NumTetrominoShape;
          i++) {
         tetrominos.emplace_back(Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
@@ -127,15 +127,15 @@ void TetrominoTest::getWidthAndHeightTest() {
 void TetrominoTest::moveTest() {
     CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), tetrominos[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::down);
+    tetrominos[0]->move(Direction::Down);
 
     CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::right);
+    tetrominos[0]->move(Direction::Right);
 
     CPPUNIT_ASSERT_EQUAL(Coordinate(1, 1), tetrominos[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::left);
+    tetrominos[0]->move(Direction::Left);
 
     CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
 }

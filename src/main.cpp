@@ -13,10 +13,10 @@ void *inputHandlerRoutine(void *arg) {
 
         switch (key) {
         case 'h':
-            tetris->addQueueEvent(EventType::moveLeft);
+            tetris->addQueueEvent(EventType::MoveLeft);
             break;
         case 'l':
-            tetris->addQueueEvent(EventType::moveRight);
+            tetris->addQueueEvent(EventType::MoveRight);
             break;
         default:
             std::cout << "neither h nor l" << std::endl;

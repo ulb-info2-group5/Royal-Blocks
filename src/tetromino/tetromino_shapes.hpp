@@ -11,7 +11,7 @@ enum class TetrominoShape {
     I,
     J,
     T,
-    NUM_TETROMINOSHAPE,
+    NumTetrominoShape,
 };
 
 // #### Z Shape ####

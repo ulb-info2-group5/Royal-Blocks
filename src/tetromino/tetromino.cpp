@@ -74,9 +74,9 @@ Tetromino::~Tetromino() = default;
 
 std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
                                                     Coordinate &&anchorPoint) {
-    if (shape == TetrominoShape::NUM_TETROMINOSHAPE) {
+    if (shape == TetrominoShape::NumTetrominoShape) {
         throw std::runtime_error(
-            "shape must be different from NUM_TETROMINOSHAPE");
+            "shape must be different from NumTetrominoShape");
     }
 
     std::unique_ptr<Tetromino> ret;
@@ -181,13 +181,13 @@ void Tetromino::rotate(bool rotateClockwise) {
 
 void Tetromino::move(Direction direction, bool reverse) {
     switch (direction) {
-    case Direction::down:
+    case Direction::Down:
         anchorPoint_.moveRow(reverse ? -1 : +1);
         break;
-    case Direction::left:
+    case Direction::Left:
         anchorPoint_.moveCol(reverse ? +1 : -1);
         break;
-    case Direction::right:
+    case Direction::Right:
         anchorPoint_.moveCol(reverse ? -1 : +1);
         break;
     }

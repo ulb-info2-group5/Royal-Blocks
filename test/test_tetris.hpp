@@ -16,7 +16,7 @@ class TetrisTest : public CppUnit::TestFixture {
 
   private:
     constexpr static size_t tetrominoShapesNum =
-        static_cast<size_t>(TetrominoShape::NUM_TETROMINOSHAPE);
+        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
 
     Tetris tetris;
 };

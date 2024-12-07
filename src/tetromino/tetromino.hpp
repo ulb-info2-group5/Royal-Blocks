@@ -10,7 +10,7 @@
 
 enum class TetrominoShape;
 
-enum class Direction { left, right, down };
+enum class Direction { Left, Right, Down };
 
 class Tetromino {
   private:

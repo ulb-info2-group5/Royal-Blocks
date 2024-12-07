@@ -39,7 +39,7 @@ void Tetris::tryMoveActive(Direction direction) {
 
 void Tetris::bigDrop() {
     while (checkCanDrop()) {
-        activeTetromino_->move(Direction::down);
+        activeTetromino_->move(Direction::Down);
     }
 }
 
@@ -49,10 +49,10 @@ void Tetris::bigDrop() {
 // because of the first while condition
 void Tetris::updatePreviewVertical() {
     while (!board_.checkInGrid(*previewTetromino_)) {
-        previewTetromino_->move(Direction::down, true); // go up
+        previewTetromino_->move(Direction::Down, true); // go up
     }
     while (board_.checkInGrid(*previewTetromino_)) {
-        previewTetromino_->move(Direction::down); // go down
+        previewTetromino_->move(Direction::Down); // go down
     }
 }
 
@@ -86,7 +86,7 @@ void Tetris::placeActive() {
 
 void Tetris::fillTetrominoesQueue() {
     constexpr size_t numShapes =
-        static_cast<size_t>(TetrominoShape::NUM_TETROMINOSHAPE);
+        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
 
     std::array<std::unique_ptr<Tetromino>, numShapes> tetrominos;
 
@@ -142,65 +142,66 @@ void Tetris::addQueueEvent(EventType event) {
     std::cout << "addEvent: unlocked" << std::endl;
 }
 
+EventType Tetris::getNextEvent() {
+    EventType event;
+
+    pthread_mutex_lock(&queueMutex_);
+
+    if (!eventQueue_.empty()) {
+        event = eventQueue_.front();
+        eventQueue_.pop();
+    } else {
+        event = EventType::None;
+    }
+
+    pthread_mutex_unlock(&queueMutex_);
+
+    return event;
+}
+
 // #### Tetris Loop ####
 
 void Tetris::run() {
-    // TODO: this should be while not quitting the game
     EventType event;
-    bool queueIsEmpty = false;
     while (isAlive_) {
-        // std::cout << "run: waiting for lock" << std::endl;
-        pthread_mutex_lock(&queueMutex_);
-        // std::cout << "run: locked" << std::endl;
-
-        queueIsEmpty = eventQueue_.empty();
-
-        if (!queueIsEmpty) {
-            event = eventQueue_.front();
-            eventQueue_.pop();
-        }
-
-        pthread_mutex_unlock(&queueMutex_);
-        std::cout << "run: unlocked" << std::endl;
-
-        if (queueIsEmpty) {
-            std::cout << "run: queue was empty, continueing" << std::endl;
-            continue;
-        }
-
         switch (event) {
-        case EventType::clockTick:
-            std::cout << "clockTick" << std::endl;
-            // tryMoveActive(Direction::down);
+
+        case EventType::None:
+            std::cout << "None" << std::endl;
             break;
 
-        case EventType::bigDrop:
-            std::cout << "bigDrop" << std::endl;
+        case EventType::ClockTick:
+            std::cout << "ClockTick" << std::endl;
+            // tryMoveActive(Direction::Down);
+            break;
+
+        case EventType::BigDrop:
+            std::cout << "BigDrop" << std::endl;
             // bigDrop();
             break;
 
-        case EventType::moveDown:
-            std::cout << "moveDown" << std::endl;
-            // tryMoveActive(Direction::down);
+        case EventType::MoveDown:
+            std::cout << "MoveDown" << std::endl;
+            // tryMoveActive(Direction::Down);
             break;
 
-        case EventType::moveLeft:
-            std::cout << "moveLeft" << std::endl;
-            // tryMoveActive(Direction::left);
+        case EventType::MoveLeft:
+            std::cout << "MoveLeft" << std::endl;
+            // tryMoveActive(Direction::Left);
             break;
 
-        case EventType::moveRight:
-            std::cout << "moveRight" << std::endl;
-            // tryMoveActive(Direction::right);
+        case EventType::MoveRight:
+            std::cout << "MoveRight" << std::endl;
+            // tryMoveActive(Direction::Right);
             break;
 
-        case EventType::rotateClockwise:
-            std::cout << "rotateClockwise" << std::endl;
+        case EventType::RotateClockwise:
+            std::cout << "RotateClockwise" << std::endl;
             // tryRotateActive(true);
             break;
 
-        case EventType::rotateCounterClockwise:
-            std::cout << "rotateCounterClockwise" << std::endl;
+        case EventType::RotateCounterClockwise:
+            std::cout << "RotateCounterClockwise" << std::endl;
             // tryRotateActive(false);
             break;
         }
@@ -209,8 +210,6 @@ void Tetris::run() {
         // (check if should place active Tetromino,
         // check for full rows etc)
 
-        // TODO: this can get skipped by the continue, we should probably avoid
-        // this because it uses cpu for nothing
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

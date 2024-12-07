@@ -74,6 +74,11 @@ class Tetris {
      */
     virtual void fetchNewTetromino();
 
+    /**
+     * @brief Fetches the next event from the event-queue
+     */
+    virtual EventType getNextEvent();
+
   public:
     // #### Constructor ####
 
