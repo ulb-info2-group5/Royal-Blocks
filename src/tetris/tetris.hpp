@@ -10,7 +10,7 @@
 #include <queue>
 
 class Tetris {
-    bool isAlive_;
+    bool isAlive_ = true; // TODO: make a constructor and move this there
     Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;

@@ -148,7 +148,7 @@ void Tetris::run() {
     // TODO: this should be while not quitting the game
     EventType event;
     bool queueIsEmpty = false;
-    while (true) {
+    while (isAlive_) {
         // std::cout << "run: waiting for lock" << std::endl;
         pthread_mutex_lock(&queueMutex_);
         // std::cout << "run: locked" << std::endl;
