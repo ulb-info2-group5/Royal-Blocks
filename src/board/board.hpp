@@ -7,9 +7,6 @@
 #include <cstddef>
 #include <memory>
 
-// TODO: check checkInGrid again
-// bool checkInGrid(const Tetromino &tetromino);
-
 class Board {
   private:
     static constexpr size_t width_ = 10;
@@ -33,7 +30,12 @@ class Board {
     /**
      * @brief Checks whether the rowIndex-th row is full.
      */
-    virtual bool checkFullRow(size_t rowIdx);
+    virtual bool checkFullRow(size_t rowIdx) const;
+
+    /**
+     * @brief Checks whether the colIndex-th column is full.
+     */
+    virtual bool checkFullCol(size_t colIdx) const;
 
     /**
      * @brief Sets each cell on the rowIndex-th row to empty state.
@@ -41,18 +43,16 @@ class Board {
     virtual void emptyRow(size_t rowIdx);
 
     /**
-     * @brief Makes every non-empty cell drop down until it stands above
-     * another cell which isn't or it stands on the bottom row of the grid.
+     * @brief Sets each cell on the colIdx-th column to empty state.
+     */
+    virtual void emptyCol(size_t colIdx);
+
+    /**
+     * @brief Makes every non-empty cell drop down until it stands
+     * either above another non-empty cell or at the bottom row of the
+     * grid.
      */
     virtual void gravity();
-
-    // TODO: previously know as checkFullRow but it was doing more than
-    // checking a row (deleting rows) -> renamed it
-    /**
-     * @brief Clears full rows and makes every levitating non-empty cell drop
-     * down.
-     */
-    virtual void update();
 
   public:
     // #### Getters ####
@@ -66,16 +66,15 @@ class Board {
     /**
      * @brief Returns the width of the grid.
      */
-    size_t getWidth();
+    size_t getWidth() const;
 
     /**
      * @brief Returns the height of the grid.
      */
-    size_t getHeight();
+    size_t getHeight() const;
 
     // #### Board Actions ####
 
-    // NOTE: Previously know as freezeTetromino
     /**
      * @brief Places the given tetromino in the grid.
      *
@@ -85,21 +84,17 @@ class Board {
     virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
 
     // #### Checks ####
-    // NOTE: Haven't changed anything in terms of logic.
     /**
      * @brief Checks whether the specified Tetromino can fit within the
      * current grid position.
      */
-    bool checkInGrid(Tetromino &tetromino);
+    bool checkInGrid(Tetromino &tetromino) const;
 
-    // #### Should not be here ####
-
-    // NOTE: This should be handled by either Tetris or PlayerState and
-    // using an actual Queue of Penalties (will need to write Penatly
-    // class and its derivatives first)
-    //
-    // int queuePenalty(Penalty &penalty);
-    // int executePenalty(Penalty &penalty);
+    /**
+     * @brief Clears full rows and full columns and makes every levitating
+     * non-empty cell drop down.
+     */
+    virtual void update();
 };
 
 #endif

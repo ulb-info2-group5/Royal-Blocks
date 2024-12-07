@@ -14,8 +14,17 @@ std::array<GridCell, Board::width_> &Board::getRow(size_t rowIdx) {
     return grid_[rowIdx];
 }
 
-bool Board::checkFullRow(size_t rowIdx) {
-    for (size_t colIdx = 0; colIdx < width_; colIdx++) {
+bool Board::checkFullRow(size_t rowIdx) const {
+    for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
+        if (get(rowIdx, colIdx).isEmpty()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Board::checkFullCol(size_t colIdx) const {
+    for (size_t rowIdx = 0; rowIdx < width_; rowIdx++) {
         if (get(rowIdx, colIdx).isEmpty()) {
             return false;
         }
@@ -29,12 +38,17 @@ void Board::emptyRow(size_t rowIdx) {
     }
 }
 
+void Board::emptyCol(size_t colIdx) {
+    for (size_t rowIdx = 0; rowIdx < width_; rowIdx++) {
+        at(rowIdx, colIdx).setEmpty();
+    }
+}
+
 void Board::gravity() {
-
     for (size_t colIdx = 0; colIdx < width_; colIdx++) {
-        size_t writeRowIdx = height_ - 1;
+        size_t writeRowIdx = getHeight() - 1;
 
-        for (size_t rowIdx = height_ - 1; rowIdx >= 0; rowIdx--) {
+        for (size_t rowIdx = getHeight() - 1; rowIdx >= 0; rowIdx--) {
             if (!get(rowIdx, colIdx).isEmpty()) {
                 at(writeRowIdx, colIdx) = get(rowIdx, colIdx);
                 at(rowIdx, colIdx).setEmpty();
@@ -47,9 +61,15 @@ void Board::gravity() {
 }
 
 void Board::update() {
-    for (size_t rowIdx = 0; rowIdx < height_ - 1; rowIdx++) {
+    for (size_t rowIdx = 0; rowIdx < getHeight() - 1; rowIdx++) {
         if (checkFullRow(rowIdx)) {
             emptyRow(rowIdx);
+        }
+    }
+
+    for (size_t colIdx = 0; colIdx < getWidth() - 1; colIdx++) {
+        if (checkFullCol(colIdx)) {
+            emptyCol(colIdx);
         }
     }
 
@@ -62,9 +82,9 @@ const GridCell &Board::get(size_t rowIdx, size_t colIdx) const {
     return grid_[rowIdx][colIdx];
 }
 
-size_t Board::getWidth() { return width_; }
+size_t Board::getWidth() const { return width_; }
 
-size_t Board::getHeight() { return height_; }
+size_t Board::getHeight() const { return height_; }
 
 // #### Board Actions ####
 
@@ -79,12 +99,13 @@ void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
     update();
 }
 
-bool Board::checkInGrid(Tetromino &tetromino) {
+bool Board::checkInGrid(Tetromino &tetromino) const {
     Coordinate anchor = tetromino.getAnchorPoint();
     for (const Coordinate &relativeCoord : tetromino.getBody()) {
         Coordinate absoluteCoord = relativeCoord + anchor;
-        if (absoluteCoord.getCol() < 0 || absoluteCoord.getCol() >= width_
-            || absoluteCoord.getRow() < 0 || absoluteCoord.getRow() >= height_
+        if (absoluteCoord.getCol() < 0 || absoluteCoord.getCol() >= getWidth()
+            || absoluteCoord.getRow() < 0
+            || absoluteCoord.getRow() >= getHeight()
             || !get(absoluteCoord.getRow(), absoluteCoord.getCol()).isEmpty()) {
             return false;
         }
