@@ -47,7 +47,7 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
 
     if (body_.size() != 4) {
         throw std::invalid_argument(
-            "All Tetrominos must be composed of 4 blocks");
+            "All Tetrominoes must be composed of 4 blocks");
     }
 
     int minRow = std::numeric_limits<int>::max();

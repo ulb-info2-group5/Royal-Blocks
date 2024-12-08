@@ -17,7 +17,7 @@ void TetrominoTest::setUp() {
     for (int i = 0;
          static_cast<TetrominoShape>(i) < TetrominoShape::NumTetrominoShape;
          i++) {
-        tetrominos.emplace_back(Tetromino::makeTetromino(
+        tetrominoes.emplace_back(Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
             Coordinate(i, i))); // Coordinate(i, i) to check that the
                                 // translation in constructor is working
@@ -25,13 +25,13 @@ void TetrominoTest::setUp() {
 }
 
 void TetrominoTest::tearDown() {
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         tetromino.reset();
     }
 }
 
 void TetrominoTest::shapeTest() {
-    for (const auto &tetromino : tetrominos) {
+    for (const auto &tetromino : tetrominoes) {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z):
             CPPUNIT_ASSERT_EQUAL(
@@ -81,7 +81,7 @@ void TetrominoTest::shapeTest() {
 }
 
 void TetrominoTest::getWidthAndHeightTest() {
-    for (const auto &tetromino : tetrominos) {
+    for (const auto &tetromino : tetrominoes) {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z):
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
@@ -131,23 +131,23 @@ void TetrominoTest::getWidthAndHeightTest() {
 }
 
 void TetrominoTest::moveTest() {
-    CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), tetrominos[0]->getAnchorPoint());
+    CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), tetrominoes[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::Down);
+    tetrominoes[0]->move(Direction::Down);
 
-    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominoes[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::Right);
+    tetrominoes[0]->move(Direction::Right);
 
-    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 1), tetrominos[0]->getAnchorPoint());
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 1), tetrominoes[0]->getAnchorPoint());
 
-    tetrominos[0]->move(Direction::Left);
+    tetrominoes[0]->move(Direction::Left);
 
-    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominos[0]->getAnchorPoint());
+    CPPUNIT_ASSERT_EQUAL(Coordinate(1, 0), tetrominoes[0]->getAnchorPoint());
 }
 
 void TetrominoTest::rotateTest() {
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         switch (tetromino->getShape()) {
         case (TetrominoShape::Z): // clockwise Z rotations
             tetromino->rotate(true);
@@ -203,7 +203,7 @@ void TetrominoTest::rotateTest() {
 
 void TetrominoTest::offset1TetrominoOTest() {
     std::unique_ptr<Tetromino> expectedTetromino;
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         if (!(TetrominoShape::O == tetromino->getShape())) {
             continue;
         }
@@ -258,7 +258,7 @@ void TetrominoTest::offset1TetrominoOTest() {
 
 void TetrominoTest::offset1TetrominoITest() {
     std::unique_ptr<Tetromino> expectedTetromino;
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         if (!(TetrominoShape::I == tetromino->getShape())) {
             continue;
         }
@@ -312,7 +312,7 @@ void TetrominoTest::offset1TetrominoITest() {
 void TetrominoTest::offset1TetrominoLTest() {
 
     std::unique_ptr<Tetromino> expectedTetromino;
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         if (!(TetrominoShape::L == tetromino->getShape())) {
             continue;
         }

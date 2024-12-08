@@ -35,7 +35,7 @@ class TetrominoTest : public CppUnit::TestFixture {
     void variousOffsetsTetrominoITest();
 
   private:
-    std::vector<std::unique_ptr<Tetromino>> tetrominos;
+    std::vector<std::unique_ptr<Tetromino>> tetrominoes;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TetrominoTest);

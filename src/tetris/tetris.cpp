@@ -97,7 +97,7 @@ void Tetris::fillTetrominoesQueue() {
     constexpr size_t numShapes =
         static_cast<size_t>(TetrominoShape::NumTetrominoShape);
 
-    std::array<std::unique_ptr<Tetromino>, numShapes> tetrominos;
+    std::array<std::unique_ptr<Tetromino>, numShapes> tetrominoes;
 
     for (size_t i = 0; i < numShapes; i++) {
         // I tetromino should have its anchorPoint one row above compared to
@@ -105,16 +105,16 @@ void Tetris::fillTetrominoesQueue() {
         int spawnRow =
             (static_cast<TetrominoShape>(i) == TetrominoShape::I) ? 0 : 1;
 
-        tetrominos[i] = Tetromino::makeTetromino(
+        tetrominoes[i] = Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
             Coordinate(spawnRow, board_.getWidth() / 2 - 1));
     }
 
     std::random_device rd;
     std::mt19937 g(rd());
-    std::shuffle(tetrominos.begin(), tetrominos.end(), g);
+    std::shuffle(tetrominoes.begin(), tetrominoes.end(), g);
 
-    for (auto &tetromino : tetrominos) {
+    for (auto &tetromino : tetrominoes) {
         tetrominoesQueue_.push(std::move(tetromino));
     }
 }
