@@ -21,7 +21,7 @@ class GridCell final {
      *
      * @return Boolean.
      */
-    virtual bool isEmpty() const;
+    virtual bool isEmpty() const noexcept;
 
     /**
      * @brief Gets the ColorId of the cell.
@@ -35,12 +35,12 @@ class GridCell final {
      *
      * @param colorId The new ColorId.
      */
-    virtual void setColorId(unsigned colorId);
+    virtual void setColorId(unsigned colorId) noexcept;
 
     /**
      * @brief Clears the cell's ColorId.
      */
-    virtual void setEmpty();
+    virtual void setEmpty() noexcept;
 };
 
 #endif

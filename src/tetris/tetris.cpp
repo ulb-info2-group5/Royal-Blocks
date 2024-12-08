@@ -104,7 +104,7 @@ void Tetris::fillTetrominoesQueue() {
         int spawnRow =
             (static_cast<TetrominoShape>(i) == TetrominoShape::I) ? 0 : 1;
 
-        tetrominoes[i] = Tetromino::makeTetromino(
+        tetrominoes.at(i) = Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
             Coordinate(spawnRow, board_.getWidth() / 2 - 1));
     }

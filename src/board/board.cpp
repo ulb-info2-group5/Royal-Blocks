@@ -4,6 +4,7 @@
 #include "../tetromino/tetromino.hpp"
 #include "board_update.hpp"
 #include <memory>
+#include <stdexcept>
 
 /*--------------------------------------------------
                     PRIVATE
@@ -75,13 +76,18 @@ const GridCell &Board::get(size_t rowIdx, size_t colIdx) const {
     return grid_.at(rowIdx).at(colIdx);
 }
 
-size_t Board::getWidth() const { return width_; }
+size_t Board::getWidth() const noexcept { return width_; }
 
-size_t Board::getHeight() const { return height_; }
+size_t Board::getHeight() const noexcept { return height_; }
 
 // #### Board Actions ####
 
 void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
+    if (!checkInGrid(*tetromino)) {
+        throw std::runtime_error(
+            "The given tetromino does not fit in the grid.");
+    }
+
     const Coordinate anchor = tetromino->getAnchorPoint();
 
     for (const Coordinate &relativeCoord : tetromino->getBody()) {

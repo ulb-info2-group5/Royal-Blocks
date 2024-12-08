@@ -2,7 +2,7 @@
 #include <optional>
 #include <stdexcept>
 
-bool GridCell::isEmpty() const { return !(colorId_.has_value()); }
+bool GridCell::isEmpty() const noexcept { return !(colorId_.has_value()); }
 
 unsigned GridCell::getColorId() const {
     if (isEmpty()) {
@@ -12,6 +12,8 @@ unsigned GridCell::getColorId() const {
     return colorId_.value();
 }
 
-void GridCell::setColorId(unsigned colorIndex) { colorId_ = colorIndex; }
+void GridCell::setColorId(unsigned colorIndex) noexcept {
+    colorId_ = colorIndex;
+}
 
-void GridCell::setEmpty() { colorId_.reset(); };
+void GridCell::setEmpty() noexcept { colorId_.reset(); };

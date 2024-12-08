@@ -147,15 +147,15 @@ const RotationIndex &Tetromino::getPrevRotationIndex() const noexcept {
 }
 
 uint8_t Tetromino::getNumOfTests() const noexcept {
-    return static_cast<uint8_t>(offsetData_[0].size());
+    return static_cast<uint8_t>(offsetData_.at(0).size());
 }
 
-std::unique_ptr<Tetromino>
-Tetromino::getNthOffset(uint8_t offsetIndex) const noexcept {
+std::unique_ptr<Tetromino> Tetromino::getNthOffset(uint8_t offsetIndex) const {
     std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
 
-    Coordinate offsetVal1 = offsetData_[prevRotationIdx_][offsetIndex - 1];
-    Coordinate offsetVal2 = offsetData_[rotationIdx_][offsetIndex - 1];
+    Coordinate offsetVal1 =
+        offsetData_.at(prevRotationIdx_).at(offsetIndex - 1);
+    Coordinate offsetVal2 = offsetData_.at(rotationIdx_).at(offsetIndex - 1);
 
     // Compute offset with offset data
     Coordinate offset = (offsetVal1 - offsetVal2);

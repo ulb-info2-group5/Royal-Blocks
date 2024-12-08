@@ -179,8 +179,7 @@ class Tetromino {
      * @return A unique pointer to the newly created Tetromino, adjusted
      *         by the specified offset.
      */
-    virtual std::unique_ptr<Tetromino>
-    getNthOffset(uint8_t offsetIndex) const noexcept;
+    virtual std::unique_ptr<Tetromino> getNthOffset(uint8_t offsetIndex) const;
 
     // #### Setters ####
 

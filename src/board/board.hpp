@@ -114,14 +114,14 @@ class Board final {
      *
      * @return The width of the grid.
      */
-    size_t getWidth() const;
+    size_t getWidth() const noexcept;
 
     /**
      * @brief Returns the height of the grid.
      *
      * @return The height of the grid.
      */
-    size_t getHeight() const;
+    size_t getHeight() const noexcept;
 
     // #### Board Actions ####
 
