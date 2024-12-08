@@ -618,6 +618,7 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 \newpage
 
 \section{Architecture du système}
+
 \subsubsection{Connexion et Création d'un compte}
 
 \begin{figure}[!h]
@@ -630,6 +631,9 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 \subsection{Architecture du serveur}
 
 \subsection{Architecture du jeu}
+
+Au lancement d'une partie sur l'application, chaque Joueur possède un objet de la classe Tetris. Dans la Board et la \textit{queue-list} de Tetrominoes, attributs de Tetris, le Joueur placera les formes sur la Board. En reprenant l'algorithme pré-existant dans d'autres implémentations du jeu \textit{Tetris}, le Tetromino effectue une rotation similaire au fonctionnement de \textit{Super Rotation System}. À chaque action de Joueur envoyé pour changer la position du Tetromino, Tetris calcule la nouvelle position selon celle renvoyée par Tetromino et puis vérifie la validité de cette position dans la Board. 
+
 
 \subsection{Architecture du client}
 
