@@ -14,7 +14,7 @@ Coordinate::Coordinate(const Coordinate &other) = default;
 
 Coordinate::Coordinate(Coordinate &&other) = default;
 
-// #### Destructors  ####
+// #### Destructor  ####
 
 Coordinate::~Coordinate() = default;
 

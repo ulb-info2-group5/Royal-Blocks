@@ -4,6 +4,8 @@
 #include <optional>
 
 /**
+ * @class GridCell
+ *
  * @brief Represents a cell on the Tetris board, which can be in one of two
  * states:
  *  1. Holds a color, and therefore is not empty.

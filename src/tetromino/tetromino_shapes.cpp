@@ -3,6 +3,49 @@
 #include "../coordinate/coordinate.hpp"
 #include "tetromino.hpp"
 
+/*--------------------------------------------------
+             TetrominoShapes
+--------------------------------------------------*/
+
+// #### Output Stream ####
+
+std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
+    switch (shape) {
+    case TetrominoShape::Z:
+        os << "Z";
+        break;
+    case TetrominoShape::L:
+        os << "L";
+        break;
+    case TetrominoShape::O:
+        os << "O";
+        break;
+    case TetrominoShape::S:
+        os << "S";
+        break;
+    case TetrominoShape::I:
+        os << "I";
+        break;
+    case TetrominoShape::J:
+        os << "J";
+        break;
+    case TetrominoShape::T:
+        os << "T";
+        break;
+    case TetrominoShape::NumTetrominoShape:
+        os << "NumTetrominoShape";
+        break;
+    default:
+        os << "Unknown";
+        break;
+    }
+    return os;
+}
+
+/*--------------------------------------------------
+             Tetromino's Derivatives
+--------------------------------------------------*/
+
 // #### Z Shape ####
 
 TetrominoZ::TetrominoZ(Coordinate &&anchorPoint)
@@ -55,37 +98,4 @@ TetrominoT::TetrominoT(Coordinate &&anchorPoint)
     for (size_t i = 0; i < 2; i++) {
         rotate(true);
     }
-}
-
-std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
-    switch (shape) {
-    case TetrominoShape::Z:
-        os << "Z";
-        break;
-    case TetrominoShape::L:
-        os << "L";
-        break;
-    case TetrominoShape::O:
-        os << "O";
-        break;
-    case TetrominoShape::S:
-        os << "S";
-        break;
-    case TetrominoShape::I:
-        os << "I";
-        break;
-    case TetrominoShape::J:
-        os << "J";
-        break;
-    case TetrominoShape::T:
-        os << "T";
-        break;
-    case TetrominoShape::NumTetrominoShape:
-        os << "NumTetrominoShape";
-        break;
-    default:
-        os << "Unknown";
-        break;
-    }
-    return os;
 }

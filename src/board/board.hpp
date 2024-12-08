@@ -11,6 +11,8 @@
 class BoardTest;
 
 /**
+ * @class Board
+ *
  * @brief Represents a Tetris game board with a width and height. The
  * board contains a grid of GridCell objects.
  *

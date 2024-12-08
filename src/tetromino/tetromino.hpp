@@ -8,24 +8,21 @@
 #include <memory>
 #include <vector>
 
-class TetrominoTest;
-
 enum class TetrominoShape;
 
-enum class Direction { Left, Right, Down };
-
-enum class TetrominoShape {
-    Z = 0,
-    L,
-    O,
-    S,
-    I,
-    J,
-    T,
-    NumTetrominoShape,
-};
+class TetrominoTest;
 
 /**
+ * @enum Direction
+ *
+ * @brief The three directions in which a Tetromino can be moved: left, right,
+ * down.
+ */
+enum class Direction { Left, Right, Down };
+
+/**
+ * @class Tetromino
+ *
  * @brief This class represents an abstract Tetromino (piece in Tetris), it
  * supports two rotation algorithms:
  *  - Very basic rotation algorithm which just rotate each tile around the
@@ -241,6 +238,8 @@ class Tetromino {
      */
     friend std::ostream &operator<<(std::ostream &os,
                                     const Tetromino &tetromino);
+
+    // #### Test Fixture Class ####
 
     friend TetrominoTest;
 };

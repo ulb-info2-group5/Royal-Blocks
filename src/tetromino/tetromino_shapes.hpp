@@ -1,57 +1,159 @@
-#ifndef TETROMINO_SHAPE_HPP
-#define TETROMINO_SHAPE_HPP
+#ifndef TETROMINO_SHAPES_HPP
+#define TETROMINO_SHAPES_HPP
 
 #include "tetromino.hpp"
 
+#include <iostream>
+
+/**
+ * @file tetromino_shapes.hpp
+ *
+ * @brief Contains all derivatives of the Tetromino abstract class, one for each
+ * shape, as well as the TetrominoShape enum class to be passed to the Tetromino
+ * factory.
+ */
+
+/*--------------------------------------------------
+             TetrominoShapes
+--------------------------------------------------*/
+
+/**
+ * @enum TetrominoShape
+ *
+ * @brief All possible shapes a tetromino can have.
+ *
+ * @note NumTetrominoShape is not an actual Shape, it is just there to avoid
+ * having to hardcode the number of shapes in other parts of the code.
+ */
+enum class TetrominoShape {
+    Z = 0,
+    L,
+    O,
+    S,
+    I,
+    J,
+    T,
+    NumTetrominoShape,
+};
+
+// #### OUTPUT STREAM ####
+
+/**
+ * @brief Outputs a TetrominoShape to the given stream.
+ *
+ * @param os The output stream.
+ * @param shape The TetrominoShape to output.
+ * @return The output stream.
+ */
+std::ostream &operator<<(std::ostream &os, TetrominoShape shape);
+
+/*--------------------------------------------------
+             Tetromino's Derivatives
+--------------------------------------------------*/
+
 // #### Z Shape ####
 
+/**
+ * @class TetrominoZ
+ */
 class TetrominoZ : public Tetromino {
   public:
+    /**
+     * @brief TetrominoZ constructor.
+     *
+     * @param anchorPoint The TetrominoZ's anchor-point.
+     */
     TetrominoZ(Coordinate &&anchorPoint);
 };
 
 // #### L Shape ####
 
+/**
+ * @class TetrominoL
+ */
 class TetrominoL : public Tetromino {
   public:
+    /**
+     * @brief TetrominoL constructor.
+     *
+     * @param anchorPoint The TetrominoL's anchor-point.
+     */
     TetrominoL(Coordinate &&anchorPoint);
 };
 
 // #### O Shape ####
 
+/**
+ * @class TetrominoO
+ */
 class TetrominoO : public Tetromino {
   public:
+    /**
+     * @brief TetrominoO constructor.
+     *
+     * @param anchorPoint The TetrominoO's anchor-point.
+     */
     TetrominoO(Coordinate &&anchorPoint);
 };
 
 // #### S Shape ####
 
+/**
+ * @class TetrominoS
+ */
 class TetrominoS : public Tetromino {
   public:
+    /**
+     * @brief TetrominoS constructor.
+     *
+     * @param anchorPoint The TetrominoS's anchor-point.
+     */
     TetrominoS(Coordinate &&anchorPoint);
 };
 
 // #### I Shape ####
 
+/**
+ * @class TetrominoI
+ */
 class TetrominoI : public Tetromino {
   public:
+    /**
+     * @brief TetrominoI constructor.
+     *
+     * @param anchorPoint The TetrominoI's anchor-point.
+     */
     TetrominoI(Coordinate &&anchorPoint);
 };
 
 // #### J Shape ####
 
+/**
+ * @class TetrominoJ
+ */
 class TetrominoJ : public Tetromino {
   public:
+    /**
+     * @brief TetrominoJ constructor.
+     *
+     * @param anchorPoint The TetrominoJ's anchor-point.
+     */
     TetrominoJ(Coordinate &&anchorPoint);
 };
 
 // #### T Shape ####
 
+/**
+ * @class TetrominoT
+ */
 class TetrominoT : public Tetromino {
+    /**
+     * @brief TetrominoT constructor.
+     *
+     * @param anchorPoint The TetrominoT's anchor-point.
+     */
   public:
     TetrominoT(Coordinate &&anchorPoint);
 };
-
-std::ostream &operator<<(std::ostream &os, TetrominoShape shape);
 
 #endif

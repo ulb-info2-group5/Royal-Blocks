@@ -1,4 +1,4 @@
-#include "tetris/event.hpp"
+#include "tetris/event_type.hpp"
 #include "tetris/tetris.hpp"
 #include <chrono>
 #include <cstdio>

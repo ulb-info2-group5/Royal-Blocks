@@ -3,13 +3,13 @@
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "event.hpp"
+#include "../tetromino/tetromino_shapes.hpp"
+#include "event_type.hpp"
 
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
-#include <memory>
 #include <pthread.h>
 #include <random>
 #include <thread>
@@ -46,7 +46,7 @@ void Tetris::bigDrop() {
     }
 }
 
-// #### Manage Preview Tetromino ####
+// #### Manage Preview-Tetromino ####
 
 // TODO: this is wrong if preview is outside of the grid, it will loop
 // forever because of the first while condition
@@ -132,17 +132,7 @@ void Tetris::fetchNewTetromino() {
     setIsAlive(board_.checkInGrid(*activeTetromino_));
 }
 
-// #### Constructor ####
-
-Tetris::Tetris() = default;
-
-// #### Event Queue API ####
-
-void Tetris::addEvent(EventType event) {
-    pthread_mutex_lock(&queueMutex_);
-    eventQueue_.push(event);
-    pthread_mutex_unlock(&queueMutex_);
-}
+// #### Event Queue Internals ####
 
 EventType Tetris::getNextEvent() {
     EventType event;
@@ -160,12 +150,37 @@ EventType Tetris::getNextEvent() {
 
     return event;
 }
+//
+
+// #### IsAlive Flag Internals ####
+
+void Tetris::setIsAlive(bool isAlive) {
+    pthread_mutex_lock(&queueMutex_);
+    bool isAlive_ = isAlive;
+    pthread_mutex_unlock(&queueMutex_);
+}
+
+// #### Grid Checks ####
+
+bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
+    return board_.get(rowIdx, colIdx).isEmpty();
+}
+
+// #### Constructor ####
+
+Tetris::Tetris() = default;
+
+// #### Event Queue API ####
+
+void Tetris::addEvent(EventType event) {
+    pthread_mutex_lock(&queueMutex_);
+    eventQueue_.push(event);
+    pthread_mutex_unlock(&queueMutex_);
+}
 
 // #### Tetris Loop ####
 
 void Tetris::run() {
-    // TODO: use an actual sleep that keeps constant sleep time like in the
-    // game clock
     EventType event;
 
     fetchNewTetromino();
@@ -245,16 +260,6 @@ bool Tetris::getIsAlive() {
     return isAlive;
 }
 
-void Tetris::setIsAlive(bool isAlive) {
-    pthread_mutex_lock(&queueMutex_);
-    bool isAlive_ = isAlive;
-    pthread_mutex_unlock(&queueMutex_);
-}
-
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoesQueue_.size();
-}
-
-bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
-    return board_.get(rowIdx, colIdx).isEmpty();
 }

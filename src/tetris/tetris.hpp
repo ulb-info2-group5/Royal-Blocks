@@ -3,7 +3,7 @@
 
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "event.hpp"
+#include "event_type.hpp"
 
 #include <memory>
 #include <pthread.h>
@@ -11,6 +11,14 @@
 
 class TetrisTest;
 
+/**
+ * @class Tetris
+ * @brief Represents a Tetris game, composed of a Board and a Tetromino object.
+ *
+ * The Tetris class handles the game state, including the active Tetromino and
+ * events like rotation, movement, and clockTick, making the Tetromino drop
+ * one block down. Events are managed through an event-queue API.
+ */
 class Tetris {
     bool isAlive_ = true;
     Board board_;
@@ -24,24 +32,28 @@ class Tetris {
   private:
     // #### Tetromino Actions ####
 
-    // TODO: direction in the docstring might not be the best word for this.
     /**
-     * @brief Attempts to rotate the active Tetromino in right direction.
+     * @brief Rotates the active Tetromino if possible.
+     *
+     * @param rotateClockwise True to rotate clockwise, false for
+     * counter-clockwise.
      */
-    virtual void tryRotateActive(bool rotateClowise);
+    virtual void tryRotateActive(bool rotateClockwise);
 
     /**
-     * @brief Attempts to move the active Tetromino in the given direction.
+     * @brief Moves the active Tetromino in the given direction if possible.
+     *
+     * @param direction The direction to move the Tetromino.
      */
     virtual void tryMoveActive(Direction direction);
 
     /**
-     * @brief Makes the active Tetromino go down until it stands above an
-     * non-empty cell in the grid or the bottom of the grid.
+     * @brief Drops the active Tetromino until it hits the bottom or an occupied
+     * cell.
      */
     virtual void bigDrop();
 
-    // #### Manage Preview Tetromino ####
+    // #### Manage Preview-Tetromino ####
 
     /**
      * @brief Updates the preview Tetromino's vertical component.
@@ -56,8 +68,8 @@ class Tetris {
     virtual bool checkCanDrop() const;
 
     /**
-     * @brief Places the active tetromino where it currently is and sets
-     * isAlive to false if it was placed outside of the grid.
+     * @brief Places the active tetromino where it currently is in the grid and
+     * sets the isAlive flag to false if it was placed outside of the grid.
      */
     virtual void placeActive();
 
@@ -69,16 +81,6 @@ class Tetris {
     virtual void fillTetrominoesQueue();
 
     /**
-     * @brief Fetches the next event from the event-queue.
-     */
-    virtual EventType getNextEvent();
-
-    /**
-     * @brief Thread-safe way of setting the isAlive member.
-     */
-    virtual void setIsAlive(bool isAlive);
-
-    /**
      * @brief Fetches the next tetromino from the queue and sets it as the
      * active tetromino.
      *
@@ -87,15 +89,33 @@ class Tetris {
      */
     virtual void fetchNewTetromino();
 
-    /**
-     * @brief Checks whether the cell at rowIdx, colIdx is empty.
-     */
-    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
+    // #### Event Queue Internals ####
 
     /**
-     * @brief Returns how many Tetrominoes are waiting in the queue.
+     * @brief Fetches the next event from the event-queue.
+     *
+     * @return The next event to handle.
      */
-    virtual size_t getTetrominoesQueueSize() const;
+    virtual EventType getNextEvent();
+
+    // #### IsAlive Flag Internals ####
+
+    /**
+     * @brief Thread-safe way of setting the isAlive member.
+     *
+     * @param isAlive The new isAlive value.
+     */
+    virtual void setIsAlive(bool isAlive);
+
+    // #### Grid Checks ####
+
+    /**
+     * @brief Checks whether the cell at rowIdx, colIdx is empty.
+     *
+     * @param rowIdx The row index.
+     * @param colIdx The col index.
+     */
+    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 
   public:
     // #### Constructor ####
@@ -106,6 +126,8 @@ class Tetris {
 
     /**
      * @brief Adds the event to the event-queue.
+     *
+     * @param event The event to add to the queue.
      */
     virtual void addEvent(EventType event);
 
@@ -120,9 +142,19 @@ class Tetris {
 
     /**
      * @brief Thread-safe way of getting the isAlive.
+     *
      * @return  False if the game is over, true otherwise.
      */
     virtual bool getIsAlive();
+
+    /**
+     * @brief Returns how many Tetrominoes are waiting in the queue.
+     *
+     * @return The size of the queue.
+     */
+    virtual size_t getTetrominoesQueueSize() const;
+
+    // #### Test Fixture Class ####
 
     friend TetrisTest;
 };

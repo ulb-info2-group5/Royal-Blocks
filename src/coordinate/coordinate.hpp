@@ -6,6 +6,8 @@
 class CoordinateTest;
 
 /**
+ * @class Coordinate
+ *
  * @brief Represents a coordinate with row and column indices in a matrix.
  */
 class Coordinate {
@@ -199,6 +201,8 @@ class Coordinate {
      * @return A reference to the output stream.
      */
     friend std::ostream &operator<<(std::ostream &os, const Coordinate &coord);
+
+    // #### Test Fixture Class ####
 
     friend CoordinateTest;
 };
