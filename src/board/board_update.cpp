@@ -2,10 +2,12 @@
 
 #include <cstddef>
 
-size_t BoardUpdate::getNumDestroyedRows() { return numDestroyedRows; }
+BoardUpdate::BoardUpdate() : numClearedRows_{0}, numClearedCols_{0} {}
 
-size_t BoardUpdate::getNumDestroyedColumns() { return numDestroyedCols; }
+size_t BoardUpdate::getNumClearedRows() { return numClearedRows_; }
 
-void BoardUpdate::incrementDestroyedRows() { numDestroyedRows++; }
+size_t BoardUpdate::getNumClearedColumns() { return numClearedCols_; }
 
-void BoardUpdate::incrementDestroyedCols() { numDestroyedCols++; }
+void BoardUpdate::incrementClearedRows() { numClearedRows_++; }
+
+void BoardUpdate::incrementClearedCols() { numClearedCols_++; }

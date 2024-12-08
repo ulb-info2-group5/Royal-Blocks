@@ -3,6 +3,12 @@
 
 #include <optional>
 
+/**
+ * @brief Represents a cell on the Tetris board, which can be in one of two
+ * states:
+ *  1. Holds a color, and therefore is not empty.
+ *  2. Is empty and therefore has no color assigned.
+ */
 class GridCell {
   private:
     std::optional<unsigned> colorId_;

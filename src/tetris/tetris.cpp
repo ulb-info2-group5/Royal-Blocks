@@ -3,7 +3,6 @@
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "../tetromino/tetromino_shapes.hpp"
 #include "event.hpp"
 
 #include <algorithm>

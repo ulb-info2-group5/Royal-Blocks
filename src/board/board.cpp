@@ -5,7 +5,11 @@
 #include "board_update.hpp"
 #include <memory>
 
-// #### Internal helper ####
+/*--------------------------------------------------
+                    PRIVATE
+--------------------------------------------------*/
+
+// #### Helpers ####
 
 GridCell &Board::at(size_t rowIdx, size_t colIdx) {
     return grid_.at(rowIdx).at(colIdx);
@@ -61,18 +65,9 @@ void Board::gravity() {
     }
 }
 
-BoardUpdate Board::update() {
-    BoardUpdate boardUpdate;
-
-    for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {
-        if (checkFullRow(rowIdx)) {
-            emptyRow(rowIdx);
-            boardUpdate.incrementDestroyedRows();
-        }
-    }
-
-    return boardUpdate;
-}
+/*--------------------------------------------------
+                    PUBLIC
+--------------------------------------------------*/
 
 // #### Getters ####
 
@@ -111,6 +106,23 @@ bool Board::checkInGrid(Tetromino &tetromino) const {
     }
     return true;
 }
+
+// #### Update Board State ####
+
+BoardUpdate Board::update() {
+    BoardUpdate boardUpdate;
+
+    for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {
+        if (checkFullRow(rowIdx)) {
+            emptyRow(rowIdx);
+            boardUpdate.incrementClearedRows();
+        }
+    }
+
+    return boardUpdate;
+}
+
+// #### DEBUG #####
 
 void Board::debugPrint() {
     for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {

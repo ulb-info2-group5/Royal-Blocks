@@ -10,6 +10,14 @@
 
 class BoardTest;
 
+/**
+ * @brief Represents a Tetris game board with a width and height. The
+ * board contains a grid of GridCell objects.
+ *
+ * @note The board interacts with Tetrominoes only to check if they fit and to
+ * place them. It does not store Tetrominoes but updates its GridCell objects
+ * based on the Tetromino's shape, position, and color.
+ */
 class Board {
   private:
     static constexpr size_t width_ = 10;
@@ -19,38 +27,64 @@ class Board {
     // #### Internal helper ####
 
     /**
-     * @brief Returns a reference to the rowIdx-th row in the grid.
-     */
-    virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
-
-    /**
      * @brief Returns a reference to the GridCell instance at the (row, col)
      * position in the grid.
+     *
+     * @param rowIdx The row index.
+     * @param colIdx The column index.
+     *
+     * @return A reference to the Gridcell located at (rowIdx, colIdx) in the
+     * board.
      */
     virtual GridCell &at(size_t rowIdx, size_t colIdx);
 
     /**
+     * @brief Returns a reference to the rowIdx-th row in the grid.
+     *
+     * @param rowIdx The row index.
+     *
+     * @return A reference to the Array of GridCells corresponding to the row.
+     */
+    virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
+
+    /**
      * @brief Checks whether the rowIndex-th row is full.
+     *
+     * @param rowIdx The row index.
+     *
+     * @return True if the rowIdx-th row is full, meaning has no empty GridCell;
+     * otherwise, false.
      */
     virtual bool checkFullRow(size_t rowIdx) const;
 
     /**
      * @brief Checks whether the colIndex-th column is full.
+     *
+     * @param colIdx The column index.
+     *
+     * @return True if the colIdx-th col is full, meaning has no empty GridCell;
+     * otherwise, false.
      */
     virtual bool checkFullCol(size_t colIdx) const;
 
     /**
      * @brief Sets each cell on the rowIndex-th row to empty state.
+     *
+     * @param rowIdx The row index.
      */
     virtual void emptyRow(size_t rowIdx);
 
+    // NOTE: this is not required, but could be something to toggle,
+    // e.g. for an "easy" mode or a temporary Bonus.
     /**
      * @brief Sets each cell on the colIdx-th column to empty state.
+     *
+     * @param colIdx The column index.
      */
     virtual void emptyCol(size_t colIdx);
 
     // NOTE: this is not required, but could be something to toggle,
-    // e.g. for an easy mode.
+    // e.g. for an "easy" mode or a temporary Bonus.
     /**
      * @brief Makes every non-empty cell drop down until it stands
      * either above another non-empty cell or at the bottom row of the
@@ -64,16 +98,26 @@ class Board {
     /**
      * @brief Returns a const reference to the GridCell instance at
      * (rowIdx, colIdx) in the grid.
+     *
+     * @param rowIdx The row index.
+     * @param colIdx The column index.
+     *
+     * @return A const reference to the Gridcell located at (rowIdx, colIdx) in
+     * the board.
      */
     const GridCell &get(size_t rowIdx, size_t colIdx) const;
 
     /**
      * @brief Returns the width of the grid.
+     *
+     * @return The width of the grid.
      */
     size_t getWidth() const;
 
     /**
      * @brief Returns the height of the grid.
+     *
+     * @return The height of the grid.
      */
     size_t getHeight() const;
 
@@ -82,29 +126,39 @@ class Board {
     /**
      * @brief Places the given tetromino in the grid.
      *
+     * @param tetromino A unique pointer to the tetromino to be placed.
+     *
      * @note The Tetromino will no longer be accessible after this function,
      * ensuring it cannot be moved after being placed in the grid.
      */
     virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
 
-    // #### Checks ####
-
     /**
-     * @brief Checks whether the specified Tetromino can fit within the
-     * current grid position.
+     * @brief Checks whether the specified Tetromino can fit in the grid given
+     * its anchor-point and body.
+     *
+     * @param tetromino A reference to the Tetromino be checked.
+     *
+     * @return True if the given Tetromino fits; otherwise, false.
      */
     bool checkInGrid(Tetromino &tetromino) const;
 
-    // TODO: decide if it removes full columns
+    // #### Update Board State ####
+
+    // TODO: Come up with a better name than BoardUpdate.
     /**
-     * @brief Clears full rows, returns the number of rows emptied.
+     * @brief Clears/Empties full rows, returns a BoardUpdate object.
+     *
+     * @return A BoardUpdate object.
      */
     virtual BoardUpdate update();
 
     // #### DEBUG #####
 
-    // TODO: remove this method for release
+    // TODO: Remove this method for release.
     void debugPrint();
+
+    // #### Test Fixture Class ####
 
     friend BoardTest;
 };
