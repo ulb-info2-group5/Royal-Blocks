@@ -14,9 +14,9 @@ Actor -> RegisterUI : registerRequest()
 activate RegisterUI
 RegisterUI -> RegisterManager : tryRegister(username, password)
 
-RegisterManager -> RegisterManager : checkCrentialsValidity(username, password)
+RegisterManager -> RegisterManager : checkCredentialsValidity(username, password)
 alt invalidCredentials
-    RegisterManager -->> RegisterUI : invalidCreadnetials
+    RegisterManager -->> RegisterUI : invalidCredentials
     RegisterUI -> RegisterUI : displayError()
 else else
     alt already_registered

@@ -43,7 +43,7 @@ Tetromino - "1" RotationState
 
 Board *--"width_* height_" GridCell
 
-'there's not a clear enough link between Bord and Tetromino '
+'there's not a clear enough link between Board and Tetromino '
 ' Board <- Tetromino
 
 Tetris ->"1" Board

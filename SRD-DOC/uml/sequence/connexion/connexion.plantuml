@@ -33,7 +33,7 @@ else else
         LoginManager --> LoginUI : InvalidCredentials
         LoginUI -> LoginUI : displayError()
     else else 
-        AcountServer --> LoginManager : validCrendials
+        AcountServer --> LoginManager : validCredendials
         deactivate AcountServer
         LoginManager --> LoginUI : <<destroy>>
         LoginManager -> MainUIManager : << create>>
