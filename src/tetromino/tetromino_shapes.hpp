@@ -3,17 +3,6 @@
 
 #include "tetromino.hpp"
 
-enum class TetrominoShape {
-    Z = 0,
-    L,
-    O,
-    S,
-    I,
-    J,
-    T,
-    NumTetrominoShape,
-};
-
 // #### Z Shape ####
 
 class TetrominoZ : public Tetromino {

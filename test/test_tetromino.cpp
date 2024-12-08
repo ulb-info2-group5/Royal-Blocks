@@ -1,7 +1,6 @@
 #include "test_tetromino.hpp"
 
 #include "../src/tetromino/tetromino.hpp"
-#include "../src/tetromino/tetromino_shapes.hpp"
 #include "utils.hpp"
 
 #include <cppunit/TestAssert.h>
@@ -216,7 +215,7 @@ void TetrominoTest::kicksTetrominoOTest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -227,7 +226,7 @@ void TetrominoTest::kicksTetrominoOTest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -238,7 +237,7 @@ void TetrominoTest::kicksTetrominoOTest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -249,7 +248,7 @@ void TetrominoTest::kicksTetrominoOTest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -271,7 +270,7 @@ void TetrominoTest::kicksTetrominoITest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -282,7 +281,7 @@ void TetrominoTest::kicksTetrominoITest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -293,7 +292,7 @@ void TetrominoTest::kicksTetrominoITest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -304,7 +303,7 @@ void TetrominoTest::kicksTetrominoITest() {
 
         // setup Tested Tetromino
         tetromino->rotate(true);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
     }
@@ -324,7 +323,7 @@ void TetrominoTest::kicksTetrominoLTest() {
         rotateTetrominoNTimes(expectedTetromino, false, 1);
         // setup Tested Tetromino
         tetromino->rotate(false);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -334,7 +333,7 @@ void TetrominoTest::kicksTetrominoLTest() {
         rotateTetrominoNTimes(expectedTetromino, false, 2);
         // setup Tested Tetromino
         tetromino->rotate(false);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -344,7 +343,7 @@ void TetrominoTest::kicksTetrominoLTest() {
         rotateTetrominoNTimes(expectedTetromino, false, 3);
         // setup Tested Tetromino
         tetromino->rotate(false);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
 
@@ -354,7 +353,7 @@ void TetrominoTest::kicksTetrominoLTest() {
         rotateTetrominoNTimes(expectedTetromino, false, 4);
         // setup Tested Tetromino
         tetromino->rotate(false);
-        tetromino = tetromino->getNthKick(0);
+        tetromino = tetromino->getNthOffset(1);
 
         CPPUNIT_ASSERT_EQUAL(*expectedTetromino, *tetromino);
     }

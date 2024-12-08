@@ -22,9 +22,9 @@ void Tetris::tryRotateActive(bool rotateClockwise) {
 
     uint8_t testIdx;
     bool isValid = false;
-    for (testIdx = 0; testIdx < activeTetromino_->getNumOfTests() and !isValid;
+    for (testIdx = 1; testIdx <= activeTetromino_->getNumOfTests() and !isValid;
          testIdx++) {
-        activeTetromino_ = activeTetromino_->getNthKick(testIdx);
+        activeTetromino_ = activeTetromino_->getNthOffset(testIdx);
         isValid = board_.checkInGrid(*activeTetromino_);
     }
 

@@ -151,17 +151,17 @@ uint8_t Tetromino::getNumOfTests() const noexcept {
 }
 
 std::unique_ptr<Tetromino>
-Tetromino::getNthKick(uint8_t kickIndex) const noexcept {
+Tetromino::getNthOffset(uint8_t offsetIndex) const noexcept {
     std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
 
-    Coordinate offsetVal1 = offsetData_[prevRotationIdx_][kickIndex];
-    Coordinate offsetVal2 = offsetData_[rotationIdx_][kickIndex];
+    Coordinate offsetVal1 = offsetData_[prevRotationIdx_][offsetIndex - 1];
+    Coordinate offsetVal2 = offsetData_[rotationIdx_][offsetIndex - 1];
 
-    // Compute kick with offset data
-    Coordinate kick = (offsetVal1 - offsetVal2);
+    // Compute offset with offset data
+    Coordinate offset = (offsetVal1 - offsetVal2);
 
-    // Apply kick
-    copy->anchorPoint_ += kick;
+    // Apply offset
+    copy->anchorPoint_ += offset;
 
     return copy;
 }
@@ -201,7 +201,7 @@ void Tetromino::rotate(bool rotateClockwise) {
     std::swap(height_, width_);
 }
 
-// #### Comparisons Operator ####
+// #### Comparisons Operators ####
 
 bool Tetromino::operator==(const Tetromino &other) const {
     return (
@@ -211,6 +211,10 @@ bool Tetromino::operator==(const Tetromino &other) const {
         and getPrevRotationIndex() == other.getPrevRotationIndex()
         and getWidth() == other.getWidth() and getHeight() == other.getHeight()
         and getShape() == other.getShape());
+}
+
+bool Tetromino::operator!=(const Tetromino &other) const {
+    return !(operator==(other));
 }
 
 // #### Output Stream ####

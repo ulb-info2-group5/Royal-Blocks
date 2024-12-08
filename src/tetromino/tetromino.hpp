@@ -14,6 +14,17 @@ enum class TetrominoShape;
 
 enum class Direction { Left, Right, Down };
 
+enum class TetrominoShape {
+    Z = 0,
+    L,
+    O,
+    S,
+    I,
+    J,
+    T,
+    NumTetrominoShape,
+};
+
 /**
  * @brief This class represents an abstract Tetromino (piece in Tetris), it
  * supports two rotation algorithms:
@@ -160,17 +171,19 @@ class Tetromino {
      */
     virtual uint8_t getNumOfTests() const noexcept;
 
-    // TODO: start indexing at 1 to follow the SRS documentations.
     /**
-     * @brief Returns a unique pointer to a new Tetromino corresponding to
-     * *this at its kickIndex-th kick (Using SRS).
+     * @brief Creates and returns a unique pointer to a new Tetromino,
+     * offset by the specified offsetIndex index using SRS (Super Rotation
+     * System).
      *
-     * @param KickIndex the kick-index.
+     * @param offsetIndex The offset index (starting from 1).
+     *                    Determines the offset to apply to the Tetromino.
      *
-     * @return A unique pointer to the newly created Tetromino.
+     * @return A unique pointer to the newly created Tetromino, adjusted
+     *         by the specified offset.
      */
     virtual std::unique_ptr<Tetromino>
-    getNthKick(uint8_t kickIndex) const noexcept;
+    getNthOffset(uint8_t offsetIndex) const noexcept;
 
     // #### Setters ####
 
@@ -199,7 +212,7 @@ class Tetromino {
      */
     virtual void rotate(bool rotateClockwise);
 
-    // #### Comparisons Operator ####
+    // #### Comparisons Operators ####
 
     /**
      * @brief Compares two Tetromino objects.
@@ -208,6 +221,14 @@ class Tetromino {
      * @return True if the two Tetrominoes are equal; otherwise, false.
      */
     virtual bool operator==(const Tetromino &other) const;
+
+    /**
+     * @brief Compares two Tetromino objects.
+     *
+     * @param other The Tetromino to compare with.
+     * @return True if the two Tetrominoes are different; otherwise, false.
+     */
+    virtual bool operator!=(const Tetromino &other) const;
 
     // #### Output Stream ####
 
