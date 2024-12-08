@@ -9,14 +9,14 @@
 void *clockRoutine(void *arg) {
     Tetris *tetris = static_cast<Tetris *>(arg);
 
-    constexpr float frequency = 1;
+    constexpr float frequency = 6;
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 
     while (tetris->getIsAlive()) {
         std::chrono::time_point start = std::chrono::steady_clock::now();
 
-        tetris->addEvent(EventType::MoveDown);
+        tetris->addEvent(EventType::ClockTick);
 
         std::chrono::time_point end = std::chrono::steady_clock::now();
         std::chrono::duration delta =

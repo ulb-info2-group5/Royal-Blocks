@@ -83,10 +83,11 @@ size_t Board::getHeight() const noexcept { return height_; }
 // #### Board Actions ####
 
 void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
-    if (!checkInGrid(*tetromino)) {
-        throw std::runtime_error(
-            "The given tetromino does not fit in the grid.");
-    }
+    // TODO: Decide whether to keep this or not.
+    // if (!checkInGrid(*tetromino)) {
+    //     throw std::runtime_error(
+    //         "The given tetromino does not fit in the grid.");
+    // }
 
     const Coordinate anchor = tetromino->getAnchorPoint();
 

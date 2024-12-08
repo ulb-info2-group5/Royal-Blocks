@@ -83,8 +83,6 @@ bool Tetris::checkCanDrop() const {
 }
 
 void Tetris::placeActive() {
-    setIsAlive(board_.checkInGrid(*activeTetromino_));
-
     if (getIsAlive()) {
         board_.placeTetromino(std::move(activeTetromino_));
     }
@@ -129,7 +127,10 @@ void Tetris::fetchNewTetromino() {
     previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
     // TODO: update preview's position
 
-    setIsAlive(board_.checkInGrid(*activeTetromino_));
+    bool checkInGrid = board_.checkInGrid(*activeTetromino_);
+    std::cout << "just before setIsAlive" << checkInGrid << std::endl;
+    setIsAlive(checkInGrid);
+    std::cout << "just after setIsAlive " << getIsAlive() << std::endl;
 }
 
 // #### Event Queue Internals ####
@@ -155,9 +156,9 @@ EventType Tetris::getNextEvent() {
 // #### IsAlive Flag Internals ####
 
 void Tetris::setIsAlive(bool isAlive) {
-    pthread_mutex_lock(&queueMutex_);
-    bool isAlive_ = isAlive;
-    pthread_mutex_unlock(&queueMutex_);
+    pthread_mutex_lock(&isAliveMutex_);
+    isAlive_ = isAlive;
+    pthread_mutex_unlock(&isAliveMutex_);
 }
 
 // #### Grid Checks ####
@@ -190,6 +191,10 @@ void Tetris::run() {
         std::chrono::seconds(1) / frequency;
 
     while (getIsAlive()) {
+        std::cout << "isAlive = " << getIsAlive() << std::endl;
+        std::cout << "active : " << activeTetromino_->getShape() << std::endl;
+        board_.debugPrint();
+
         std::chrono::time_point start = std::chrono::steady_clock::now();
 
         event = getNextEvent();
