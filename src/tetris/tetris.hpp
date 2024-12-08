@@ -19,7 +19,7 @@ class TetrisTest;
  * events like rotation, movement, and clockTick, making the Tetromino drop
  * one block down. Events are managed through an event-queue API.
  */
-class Tetris {
+class Tetris final {
     bool isAlive_ = true;
     Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;

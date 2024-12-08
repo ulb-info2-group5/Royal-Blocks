@@ -56,7 +56,7 @@ std::ostream &operator<<(std::ostream &os, TetrominoShape shape);
 /**
  * @class TetrominoZ
  */
-class TetrominoZ : public Tetromino {
+class TetrominoZ final : public Tetromino {
   public:
     /**
      * @brief TetrominoZ constructor.
@@ -71,7 +71,7 @@ class TetrominoZ : public Tetromino {
 /**
  * @class TetrominoL
  */
-class TetrominoL : public Tetromino {
+class TetrominoL final : public Tetromino {
   public:
     /**
      * @brief TetrominoL constructor.
@@ -86,7 +86,7 @@ class TetrominoL : public Tetromino {
 /**
  * @class TetrominoO
  */
-class TetrominoO : public Tetromino {
+class TetrominoO final : public Tetromino {
   public:
     /**
      * @brief TetrominoO constructor.
@@ -101,7 +101,7 @@ class TetrominoO : public Tetromino {
 /**
  * @class TetrominoS
  */
-class TetrominoS : public Tetromino {
+class TetrominoS final : public Tetromino {
   public:
     /**
      * @brief TetrominoS constructor.
@@ -116,7 +116,7 @@ class TetrominoS : public Tetromino {
 /**
  * @class TetrominoI
  */
-class TetrominoI : public Tetromino {
+class TetrominoI final : public Tetromino {
   public:
     /**
      * @brief TetrominoI constructor.
@@ -131,7 +131,7 @@ class TetrominoI : public Tetromino {
 /**
  * @class TetrominoJ
  */
-class TetrominoJ : public Tetromino {
+class TetrominoJ final : public Tetromino {
   public:
     /**
      * @brief TetrominoJ constructor.
@@ -146,7 +146,7 @@ class TetrominoJ : public Tetromino {
 /**
  * @class TetrominoT
  */
-class TetrominoT : public Tetromino {
+class TetrominoT final : public Tetromino {
     /**
      * @brief TetrominoT constructor.
      *

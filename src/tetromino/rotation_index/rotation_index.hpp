@@ -1,5 +1,5 @@
-#ifndef ROTATION_INDEX_CPP
-#define ROTATION_INDEX_CPP
+#ifndef ROTATION_INDEX_HPP
+#define ROTATION_INDEX_HPP
 
 #include <cstdint>
 
@@ -8,7 +8,7 @@
  * @brief Represents a rotation index for objects that can be rotated in
  * 90-degree increments, e.g. Tetrominoes.
  */
-class RotationIndex {
+class RotationIndex final {
   private:
     int8_t index_;
 

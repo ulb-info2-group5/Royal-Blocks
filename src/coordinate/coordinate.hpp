@@ -10,7 +10,7 @@ class CoordinateTest;
  *
  * @brief Represents a coordinate with row and column indices in a matrix.
  */
-class Coordinate {
+class Coordinate final {
   private:
     int col_;
     int row_;
