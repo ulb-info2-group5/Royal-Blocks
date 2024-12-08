@@ -85,6 +85,14 @@ class Board final {
      */
     virtual void emptyCol(size_t colIdx);
 
+    /**
+     * @brief Moves all rows above the specified row down by one position.
+     * Used to fill gaps after clearing a specific row.
+     *
+     * @param rowIdx The index of the row above which all rows are shifted down.
+     */
+    virtual void dropRowsAbove(size_t rowIdx);
+
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
     /**

@@ -9,7 +9,7 @@
 void *clockRoutine(void *arg) {
     Tetris *tetris = static_cast<Tetris *>(arg);
 
-    constexpr float frequency = 6;
+    constexpr float frequency = 1;
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 

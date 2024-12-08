@@ -110,3 +110,15 @@ void BoardTest::gravityTest() {
         }
     }
 }
+
+void BoardTest::dropRowsAboveTest() {
+    const size_t lastRowIdx = board.getHeight() - 1;
+    const size_t secondLastRowIdx = board.getHeight() - 2;
+
+    fillRow(secondLastRowIdx);
+
+    board.dropRowsAbove(lastRowIdx);
+
+    CPPUNIT_ASSERT(board.checkFullRow(lastRowIdx));
+    CPPUNIT_ASSERT(!board.checkFullRow(secondLastRowIdx));
+}

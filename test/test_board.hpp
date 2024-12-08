@@ -14,6 +14,7 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(emptyRowTest);
     CPPUNIT_TEST(emptyColTest);
     CPPUNIT_TEST(gravityTest);
+    CPPUNIT_TEST(dropRowsAboveTest);
     CPPUNIT_TEST_SUITE_END();
 
   private:
@@ -30,6 +31,7 @@ class BoardTest : public CppUnit::TestFixture {
     void emptyRowTest();
     void emptyColTest();
     void gravityTest();
+    void dropRowsAboveTest();
 
   private:
     Board board;

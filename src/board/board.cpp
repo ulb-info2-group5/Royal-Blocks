@@ -49,6 +49,15 @@ void Board::emptyCol(size_t colIdx) {
     }
 }
 
+void Board::dropRowsAbove(size_t rowIdx) {
+    for (size_t i = rowIdx; i > 0; i--) {
+        getRow(i) = getRow(i - 1);
+    }
+
+    // Empty to row
+    emptyRow(0);
+}
+
 void Board::gravity() {
     for (int colIdx = 0; colIdx < getWidth(); colIdx++) {
         int writeRowIdx = getHeight() - 1;
@@ -122,6 +131,7 @@ BoardUpdate Board::update() {
         if (checkFullRow(rowIdx)) {
             emptyRow(rowIdx);
             boardUpdate.incrementClearedRows();
+            dropRowsAbove(rowIdx);
         }
     }
 
