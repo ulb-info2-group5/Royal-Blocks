@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <pthread.h>
 #include <random>
 #include <thread>
@@ -19,12 +20,19 @@
 void Tetris::tryRotateActive(bool rotateClockwise) {
     activeTetromino_->rotate(rotateClockwise);
 
-    uint8_t testIdx;
+    std::unique_ptr<Tetromino> testTetromino;
+
     bool isValid = false;
-    for (testIdx = 1; testIdx <= activeTetromino_->getNumOfTests() and !isValid;
-         testIdx++) {
-        activeTetromino_ = activeTetromino_->getNthOffset(testIdx);
-        isValid = board_.checkInGrid(*activeTetromino_);
+
+    for (size_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
+         ++testIdx) {
+        testTetromino = activeTetromino_->getNthOffset(testIdx);
+
+        if (board_.checkInGrid(*testTetromino)) {
+            activeTetromino_ = std::move(testTetromino);
+            isValid = true;
+            break;
+        }
     }
 
     if (!isValid) {
