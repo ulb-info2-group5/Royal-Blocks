@@ -6,29 +6,33 @@ participant LoginUI
 participant LoginManager
 participant AcountServer
 participant MainUIManager
-participant RegisterManager
+
+'participant RegisterManager
+
+
+'checkCredentialsValidity() : verify the validity of the characters in the username
+'checkCredentials() : verify if the credentials exists in AcountServer
+'InvalidCredentials : the creadentials do not exists in AcountServer or bad password for an existing account
+
 
 activate Actor 
 Actor -> LoginUI : loginRequest(username, password)
 activate LoginUI
 LoginUI ->LoginManager : tryLogin(username, password)
 activate LoginManager 
+                    
 LoginManager -> LoginManager : checkCredentialsValidity()
-alt InvalidUsername
+alt invalidUsername
     LoginManager --> LoginUI : invalidUsername 
     LoginUI -> LoginUI : displayError()
-else else
+else else 
     LoginManager -> AcountServer : checkCredentials(username, password)
     activate AcountServer
     alt InvalidCredentials 
         AcountServer --> LoginManager : InvalidCredentials
         LoginManager --> LoginUI : InvalidCredentials
         LoginUI -> LoginUI : displayError()
-        LoginManager -> RegisterManager : <<start>> RegisterManager\n(username, password)
-        activate RegisterManager
-        deactivate RegisterManager
-
-    else
+    else else 
         AcountServer --> LoginManager : validCrendials
         deactivate AcountServer
         LoginManager --> LoginUI : <<destroy>>
@@ -37,6 +41,6 @@ else else
         deactivate MainUIManager
 
     end   
-end 
+end
 
 @enduml
