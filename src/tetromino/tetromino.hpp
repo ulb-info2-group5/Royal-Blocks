@@ -15,8 +15,8 @@ enum class TetrominoShape;
 enum class Direction { Left, Right, Down };
 
 /**
- * This class represents an abstract Tetromino (piece in Tetris), it supports
- * two rotation algorithms:
+ * @brief This class represents an abstract Tetromino (piece in Tetris), it
+ * supports two rotation algorithms:
  *  - Very basic rotation algorithm which just rotate each tile around the
  *      predefined center of rotation
  *  - SRS | Super Rotation System SRS, cf. https://tetris.fandom.com/wiki/SRS
@@ -32,6 +32,7 @@ class Tetromino {
     std::vector<Coordinate> body_;
 
     // #### SRS-related ####
+
     RotationIndex rotationIdx_;
     RotationIndex prevRotationIdx_;
     const std::vector<std::vector<Coordinate>> &offsetData_;

@@ -1,8 +1,12 @@
 #include "coordinate.hpp"
 
+/*--------------------------------------------------
+                    PUBLIC
+--------------------------------------------------*/
+
 // #### Constructors  ####
 
-Coordinate::Coordinate() = default;
+Coordinate::Coordinate() : row_{0}, col_{0} {}
 
 Coordinate::Coordinate(int row, int col) : row_{row}, col_{col} {}
 
@@ -43,7 +47,7 @@ bool Coordinate::operator==(const Coordinate &other) const {
 }
 
 bool Coordinate::operator!=(const Coordinate &other) const {
-    return !(getRow() == other.getRow() and getCol() == other.getCol());
+    return !(operator==(other));
 }
 
 // #### Arithmetic Operators ####
