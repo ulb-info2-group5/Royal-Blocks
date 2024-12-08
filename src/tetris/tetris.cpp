@@ -83,6 +83,8 @@ bool Tetris::checkCanDrop() const {
 }
 
 void Tetris::placeActive() {
+    setIsAlive(board_.checkInGrid(*activeTetromino_));
+
     if (getIsAlive()) {
         board_.placeTetromino(std::move(activeTetromino_));
     }
@@ -126,11 +128,6 @@ void Tetris::fetchNewTetromino() {
 
     previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
     // TODO: update preview's position
-
-    bool checkInGrid = board_.checkInGrid(*activeTetromino_);
-    std::cout << "just before setIsAlive" << checkInGrid << std::endl;
-    setIsAlive(checkInGrid);
-    std::cout << "just after setIsAlive " << getIsAlive() << std::endl;
 }
 
 // #### Event Queue Internals ####

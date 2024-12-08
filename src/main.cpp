@@ -36,6 +36,9 @@ void *inputHandlerRoutine(void *arg) {
     char key;
 
     while (tetris->getIsAlive()) {
+        // This makes the routine take one more character even
+        // when the game is finshed, will be solved when using
+        // ncurses
         key = getchar();
 
         switch (key) {

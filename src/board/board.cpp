@@ -4,7 +4,6 @@
 #include "../tetromino/tetromino.hpp"
 #include "board_update.hpp"
 #include <memory>
-#include <stdexcept>
 
 /*--------------------------------------------------
                     PRIVATE
