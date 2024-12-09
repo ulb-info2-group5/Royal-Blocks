@@ -74,6 +74,21 @@ void draw_active(Tetromino* activeTetromino){
 	refresh();
 }
 
+void print_debug(char* str, uint32_t gridWidth){
+
+	uint32_t i=0;
+	uint32_t messageWidth = 16;
+
+	while(str[i]!=0x00){
+		
+		if(str[i] != '\n') mvaddch(1 + (i/messageWidth), ((gridWidth + 2) * 2) + (i%messageWidth), str[i]);
+		else i+=messageWidth - (i%messageWidth) - 1;
+		i++;
+	}
+
+	refresh();
+}
+
 
 void define_pairs(){
 	

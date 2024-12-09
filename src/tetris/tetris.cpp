@@ -204,6 +204,7 @@ void Tetris::run() {
 		draw_grid(height, width);
 		draw_cells(&board_);
 		draw_active(activeTetromino_.get());
+		print_debug("uwu :3 aur aur\n test line2\n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", width);
 
         // std::cout << "isAlive = " << getIsAlive() << std::endl;
         // std::cout << "active : " << activeTetromino_->getShape() << std::endl;
