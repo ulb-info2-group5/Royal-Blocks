@@ -63,8 +63,38 @@ void *inputHandlerRoutine(void *arg) {
         case 'f': // rotate counter-clockwise
             tetris->addEvent(EventType::RotateCounterClockwise);
             break;
+		case ' ': // rotate counter-clockwise
+            tetris->addEvent(EventType::RotateCounterClockwise);
+            break;
 		case 'q':
 			tetris->addEvent(EventType::Quit);
+
+		case 0x1b:	//special case like arrows
+			getchar();	// '['
+	        key = getchar();
+			switch(key){
+
+				case 'A':	//up
+					tetris->addEvent(EventType::BigDrop);
+					break;
+				case 'B':	//down
+					tetris->addEvent(EventType::MoveDown);
+					break;
+				case 'C':	//right
+					tetris->addEvent(EventType::MoveRight);
+					break;
+				case 'D':	//left
+					tetris->addEvent(EventType::MoveLeft);
+					break;
+
+
+				default:
+					break;
+					
+				break;
+			}
+
+
         default:
             // std::cout << "neither h nor l" << std::endl;
             break;
