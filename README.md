@@ -1,5 +1,6 @@
 # Tetris Royale
 
+
 ## Membres du groupe
 | Prénom    | Nom                 | Matricule |
 | --------- | ------------------- | --------- |
@@ -12,7 +13,42 @@
 | Ernest    | Malysz              | 000514682 |
 | Rafaou    | Gajewicz            | 000569354 |
 
+## Build le projet
+### Dépendances
+Pour que le projet puisse fonctionner, vous aurez besoin des libraires suivantes (les commandes suivantes fonctionnent pour Debian) :
 
-Ajoutez ici tout ce qu’il faut savoir pour pouvoir compiler et lancer votre programme, ainsi que les prénoms, noms et matricules des membres du groupe
+- **Make**  
+  `sudo apt install make`
+- **CMake**  
+  `sudo apt install cmake`
+- **CppUnit**  
+  `sudo apt install libcppunit-dev`
+- **Ncurses**  
+  `sudo apt install libncurses5-dev libncursesw5-dev`
 
-Ceci est un fichier Markdown. Suivez donc la [syntaxe appropriée](https://docs.gitlab.com/ee/user/markdown.html).
+
+### Compilation
+Pour compiler le projet, vous devez d'abord configurer `cmake` soit en mode RELEASE:
+```
+cmake -S . -B build/
+```
+Soit en mode DEBUG:
+```
+cmake -S . -B build/ -D CMAKE_BUILD_TYPE=debug
+```
+
+Puis, vous devez compiler le projet en faisant:
+```
+make -C build/
+```
+
+
+## Exécution du jeu
+Pour lancer le jeu Tetris, vous devez vous trouver dans la racine projet et faire:
+```
+./build/tetris
+```
+Sinon, vous devez vous rendre manuellement dans le dossier `build` et faire:
+```
+./tetris
+```
