@@ -110,8 +110,10 @@ void Tetris::fillTetrominoesQueue() {
     for (size_t i = 0; i < numShapes; i++) {
         // I tetromino should have its anchorPoint one row above compared to
         // the others when spawned
-        int spawnRow =
-            (static_cast<TetrominoShape>(i) == TetrominoShape::I) ? 0 : 1;
+        int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
+                        or static_cast<TetrominoShape>(i) == TetrominoShape::T)
+                           ? 0
+                           : 1;
 
         tetrominoes.at(i) = Tetromino::makeTetromino(
             static_cast<TetrominoShape>(i),
@@ -215,32 +217,33 @@ void Tetris::run() {
             break;
 
         case EventType::ClockTick: {
-			if(newTetrasFirstTick_) newTetrasFirstTick_ = false;
+            if (newTetrasFirstTick_) newTetrasFirstTick_ = false;
             // std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
             BoardUpdate boardUpdate = board_.update();
 
             if (!checkCanDrop()) {
-				if(!inGracePeriod_) inGracePeriod_ = true;
-				else{
-					// std::cout << "placing at " << activeTetromino_->getAnchorPoint()
-					//           << std::endl;
-					placeActive();
-					fetchNewTetromino();
-					newTetrasFirstTick_ = true;
-				}
+                if (!inGracePeriod_) inGracePeriod_ = true;
+                else {
+                    // std::cout << "placing at " <<
+                    // activeTetromino_->getAnchorPoint()
+                    //           << std::endl;
+                    placeActive();
+                    fetchNewTetromino();
+                    newTetrasFirstTick_ = true;
+                }
+            } else {
+                if (inGracePeriod_) inGracePeriod_ = false;
             }
-			else{
-				if(inGracePeriod_) inGracePeriod_ = false;
-			}
             break;
         }
 
         case EventType::BigDrop:
             bigDrop();
 
-			//! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER GAME EXPERIENCE
-			addEvent(EventType::ClockTick);
+            //! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER
+            //! GAME EXPERIENCE
+            addEvent(EventType::ClockTick);
 
             break;
 
