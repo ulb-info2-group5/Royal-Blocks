@@ -21,9 +21,9 @@ class TetrisTest;
  */
 class Tetris final {
     bool isAlive_ = true;
-	bool inGracePeriod_ = false;
-    bool newTetrasFirstTick_ = true;	//could also be a uint32_t tickCount
-	Board board_;
+    bool inGracePeriod_ = false;
+    bool newTetrasFirstTick_ = true; // could also be a uint32_t tickCount
+    Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
     std::queue<EventType> eventQueue_;
@@ -100,15 +100,6 @@ class Tetris final {
      */
     virtual EventType getNextEvent();
 
-    // #### IsAlive Flag Internals ####
-
-    /**
-     * @brief Thread-safe way of setting the isAlive member.
-     *
-     * @param isAlive The new isAlive value.
-     */
-    virtual void setIsAlive(bool isAlive);
-
     // #### Grid Checks ####
 
     /**
@@ -139,6 +130,15 @@ class Tetris final {
      * @brief Handles each event from the event-queue.
      */
     virtual void run();
+
+    // #### IsAlive Flag Setter ####
+
+    /**
+     * @brief Thread-safe way of setting the isAlive member.
+     *
+     * @param isAlive The new isAlive value.
+     */
+    virtual void setIsAlive(bool isAlive);
 
     // #### Getters ####
 
