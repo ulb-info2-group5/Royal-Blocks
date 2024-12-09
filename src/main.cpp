@@ -1,5 +1,6 @@
 #include "tetris/event_type.hpp"
 #include "tetris/tetris.hpp"
+#include "../include/grid/print_grid.hpp"
 #include <chrono>
 #include <cstdio>
 #include <iostream>
@@ -62,8 +63,10 @@ void *inputHandlerRoutine(void *arg) {
         case 'f': // rotate counter-clockwise
             tetris->addEvent(EventType::RotateCounterClockwise);
             break;
+		case 'q':
+			tetris->addEvent(EventType::Quit);
         default:
-            std::cout << "neither h nor l" << std::endl;
+            // std::cout << "neither h nor l" << std::endl;
             break;
         }
     }
@@ -79,6 +82,8 @@ int main() {
                    static_cast<void *>(&tetris));
     pthread_create(&clockHandler, nullptr, clockRoutine,
                    static_cast<void *>(&tetris));
+
+	ncurses_init();
 
     tetris.run();
 

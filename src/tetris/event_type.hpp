@@ -19,6 +19,7 @@ enum class EventType {
     ClockTick,
     RotateClockwise,
     RotateCounterClockwise,
+	Quit,
 };
 
 #endif
