@@ -1,0 +1,28 @@
+@startuml GameLoop
+
+skinparam style strictuml
+
+actor Player as user
+participant "Game UI" as UI
+participant "gameManager" as Logic
+participant "gameState" as State
+participant "Server" as Server
+
+activate user
+activate UI
+activate Logic
+activate State
+activate Server
+
+loop While game is running
+    user -> UI : provideInput()
+    UI -> Logic : processInput(input)
+    Logic -> State : updateBoardState()
+    State -> Server : syncWithServer()
+    Server -->> State : returnUpdates()
+    State -->> Logic : applyServerChanges()
+    Logic -->> UI : updatedState
+    UI -->> user : renderFrame()
+end
+
+@enduml
