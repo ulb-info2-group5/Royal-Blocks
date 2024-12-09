@@ -42,7 +42,7 @@ abstract class Tetromino {
     + getRotationIndex() : const RotationIndex&
     + getPrevRotationIndex() : const RotationIndex&
     '+ getNumOfTests() : uint8_t'
-    + getNthKick(kickIndex : uint8_t) : const unique_ptr<Tetromino>
+    + getNthOffset(kickIndex : uint8_t) : const unique_ptr<Tetromino>
     + getColorId() : const unsigned
 
     '----Setters----'

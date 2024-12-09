@@ -5,21 +5,21 @@ skinparam class {
     BackgroundColor AliceBlue
 }
 
-!include Board.plantuml!0
+!include BoardClass.plantuml!0
 
-!include BoardUpdate.plantuml!0
+!include BoardUpdateClass.plantuml!0
 
-!include Coordinate.plantuml!0
+!include CoordinateClass.plantuml!0
 
-!include Event.plantuml!0
+!include EventClass.plantuml!0
 
-!include GridCell.plantuml!0
+!include GridCellClass.plantuml!0
 
-!include RotationState.plantuml!0
+!include RotationStateClass.plantuml!0
 
-!include Tetris.plantuml!0
+!include TetrisClass.plantuml!0
 
-!include Tetrominoes.plantuml!0
+!include TetrominoesClass.plantuml!0
 
 ' class GameEngine{
     
