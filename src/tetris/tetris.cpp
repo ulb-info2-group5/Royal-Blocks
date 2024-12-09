@@ -201,10 +201,10 @@ void Tetris::run() {
 
     while (getIsAlive()) {
 
-		draw_grid(height, width);
-		draw_cells(&board_);
-		draw_active(activeTetromino_.get());
-		print_debug("uwu :3 aur aur\n test line2\n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", width);
+		// draw_grid(height, width);
+		// draw_cells(&board_);
+		// draw_active(activeTetromino_.get());
+		// print_debug("uwu :3 aur aur\n test line2\n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", width);
 
         // std::cout << "isAlive = " << getIsAlive() << std::endl;
         // std::cout << "active : " << activeTetromino_->getShape() << std::endl;
@@ -258,10 +258,10 @@ void Tetris::run() {
             tryRotateActive(false);
             break;
 
-		case EventType::Quit:
-			ncurses_quit();
-			exit(0);	//! VERY NOT GOOD but temporary <3
-			break;
+		// case EventType::Quit:
+		// 	ncurses_quit();
+		// 	exit(0);	//! VERY NOT GOOD but temporary <3
+		// 	break;
         }
 
         std::chrono::time_point end = std::chrono::steady_clock::now();
@@ -272,7 +272,7 @@ void Tetris::run() {
             std::this_thread::sleep_for(period - delta);
         }
     }
-	ncurses_quit();
+	// ncurses_quit();
     std::cout << "Game Over" << std::endl;
 }
 

@@ -83,7 +83,7 @@ int main() {
     pthread_create(&clockHandler, nullptr, clockRoutine,
                    static_cast<void *>(&tetris));
 
-	ncurses_init();
+	// ncurses_init();
 
     tetris.run();
 
