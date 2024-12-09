@@ -1,0 +1,12 @@
+@startuml (id = GridCell )
+
+class GridCell {
+    - colorId_ : optional<unsigned>
+
+    + isEmpty() : const bool
+    + getColorId() : const unsigned
+    + setColorId( colorId : unsigned ) : void
+    + setEmpty() : void 
+    
+}
+@enduml
