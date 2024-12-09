@@ -220,13 +220,17 @@ void Tetris::run() {
             BoardUpdate boardUpdate = board_.update();
 
             if (!checkCanDrop()) {
-                // std::cout << "placing at " <<
-                // activeTetromino_->getAnchorPoint()
-                //           << std::endl;
-                placeActive();
-
-                fetchNewTetromino();
+				if(!inGracePeriod_) inGracePeriod_ = true;
+				else{
+					// std::cout << "placing at " << activeTetromino_->getAnchorPoint()
+					//           << std::endl;
+					placeActive();
+					fetchNewTetromino();
+				}
             }
+			else{
+				if(inGracePeriod_) inGracePeriod_ = false;
+			}
             break;
         }
 

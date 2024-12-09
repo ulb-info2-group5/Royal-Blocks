@@ -21,6 +21,7 @@ class TetrisTest;
  */
 class Tetris final {
     bool isAlive_ = true;
+	bool inGracePeriod_ = false;
     Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
