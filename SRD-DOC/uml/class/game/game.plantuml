@@ -1,6 +1,9 @@
 @startuml Game
 
 skinparam linetype ortho
+skinparam class {
+    BackgroundColor AliceBlue
+}
 
 !include Board.plantuml!0
 
@@ -17,10 +20,6 @@ skinparam linetype ortho
 !include Tetris.plantuml!0
 
 !include Tetrominoes.plantuml!0
-
-' skinparam class { 
-'     BackgroundColor AliceBlue
-' }
 
 ' class GameEngine{
     
