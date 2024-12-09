@@ -215,6 +215,7 @@ void Tetris::run() {
             break;
 
         case EventType::ClockTick: {
+			if(newTetrasFirstTick_) newTetrasFirstTick_ = false;
             // std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
             BoardUpdate boardUpdate = board_.update();
@@ -226,6 +227,7 @@ void Tetris::run() {
 					//           << std::endl;
 					placeActive();
 					fetchNewTetromino();
+					newTetrasFirstTick_ = true;
 				}
             }
 			else{
@@ -236,6 +238,10 @@ void Tetris::run() {
 
         case EventType::BigDrop:
             bigDrop();
+
+			//! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER GAME EXPERIENCE
+			addEvent(EventType::ClockTick);
+
             break;
 
         case EventType::MoveDown:

@@ -22,7 +22,8 @@ class TetrisTest;
 class Tetris final {
     bool isAlive_ = true;
 	bool inGracePeriod_ = false;
-    Board board_;
+    bool newTetrasFirstTick_ = true;	//could also be a uint32_t tickCount
+	Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
     std::queue<EventType> eventQueue_;
