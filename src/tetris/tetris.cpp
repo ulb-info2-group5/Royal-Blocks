@@ -1,10 +1,10 @@
 #include "tetris.hpp"
 
+#include "../../include/grid/print_grid.hpp"
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
-#include "../../include/grid/print_grid.hpp"
 #include "event_type.hpp"
 
 #include <algorithm>
@@ -196,26 +196,19 @@ void Tetris::run() {
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 
-	uint32_t height = board_.getHeight();
-	uint32_t width = board_.getWidth();
+    size_t height = board_.getHeight();
+    size_t width = board_.getWidth();
 
     while (getIsAlive()) {
 
-		draw_grid(height, width);
-		draw_cells(&board_);
-		draw_active(activeTetromino_.get());
-		print_debug("uwu :3 aur aur\n test line2\n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", width);
-
         // std::cout << "isAlive = " << getIsAlive() << std::endl;
-        // std::cout << "active : " << activeTetromino_->getShape() << std::endl;
-        // board_.debugPrint();
-
-        std::chrono::time_point start = std::chrono::steady_clock::now();
+        // std::cout << "active : " << activeTetromino_->getShape() <<
+        // std::endl; board_.debugPrint();
 
         event = getNextEvent();
 
         // std::cout << "active anchor: " << activeTetromino_->getAnchorPoint()
-                //   << std::endl;
+        //   << std::endl;
 
         switch (event) {
         case EventType::None:
@@ -225,10 +218,13 @@ void Tetris::run() {
             // std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
             BoardUpdate boardUpdate = board_.update();
+
             if (!checkCanDrop()) {
-                // std::cout << "placing at " << activeTetromino_->getAnchorPoint()
+                // std::cout << "placing at " <<
+                // activeTetromino_->getAnchorPoint()
                 //           << std::endl;
                 placeActive();
+
                 fetchNewTetromino();
             }
             break;
@@ -258,21 +254,22 @@ void Tetris::run() {
             tryRotateActive(false);
             break;
 
-		case EventType::Quit:
-			ncurses_quit();
-			exit(0);	//! VERY NOT GOOD but temporary <3
-			break;
+        case EventType::Quit:
+            ncurses_quit();
+            exit(0); //! VERY NOT GOOD but temporary <3
+            break;
         }
 
-        std::chrono::time_point end = std::chrono::steady_clock::now();
-        std::chrono::duration delta =
-            std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-        if (delta < period) {
-            std::this_thread::sleep_for(period - delta);
+        if (event != EventType::None) {
+            draw_grid(height, width);
+            draw_cells(&board_);
+            draw_active(activeTetromino_.get());
+            print_debug("uwu :3 aur aur\n test line2\n "
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                        width);
         }
     }
-	ncurses_quit();
+    ncurses_quit();
     std::cout << "Game Over" << std::endl;
 }
 

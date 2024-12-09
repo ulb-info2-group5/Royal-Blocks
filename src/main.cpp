@@ -1,9 +1,8 @@
+#include "../include/grid/print_grid.hpp"
 #include "tetris/event_type.hpp"
 #include "tetris/tetris.hpp"
-#include "../include/grid/print_grid.hpp"
 #include <chrono>
 #include <cstdio>
-#include <iostream>
 #include <pthread.h>
 #include <thread>
 
@@ -63,38 +62,34 @@ void *inputHandlerRoutine(void *arg) {
         case 'f': // rotate counter-clockwise
             tetris->addEvent(EventType::RotateCounterClockwise);
             break;
-		case ' ': // rotate counter-clockwise
+        case ' ': // rotate counter-clockwise
             tetris->addEvent(EventType::RotateCounterClockwise);
             break;
-		case 'q':
-			tetris->addEvent(EventType::Quit);
+        case 'q':
+            tetris->addEvent(EventType::Quit);
+        case 0x1b:     // special case like arrows
+            getchar(); // '['
+            key = getchar();
+            switch (key) {
 
-		case 0x1b:	//special case like arrows
-			getchar();	// '['
-	        key = getchar();
-			switch(key){
+            case 'A': // up
+                tetris->addEvent(EventType::BigDrop);
+                break;
+            case 'B': // down
+                tetris->addEvent(EventType::MoveDown);
+                break;
+            case 'C': // right
+                tetris->addEvent(EventType::MoveRight);
+                break;
+            case 'D': // left
+                tetris->addEvent(EventType::MoveLeft);
+                break;
 
-				case 'A':	//up
-					tetris->addEvent(EventType::BigDrop);
-					break;
-				case 'B':	//down
-					tetris->addEvent(EventType::MoveDown);
-					break;
-				case 'C':	//right
-					tetris->addEvent(EventType::MoveRight);
-					break;
-				case 'D':	//left
-					tetris->addEvent(EventType::MoveLeft);
-					break;
+            default:
+                break;
 
-
-				default:
-					break;
-					
-				break;
-			}
-
-
+                break;
+            }
         default:
             // std::cout << "neither h nor l" << std::endl;
             break;
@@ -113,7 +108,8 @@ int main() {
     pthread_create(&clockHandler, nullptr, clockRoutine,
                    static_cast<void *>(&tetris));
 
-	ncurses_init();
+    ncurses_init();
+    fflush(stdout);
 
     tetris.run();
 
