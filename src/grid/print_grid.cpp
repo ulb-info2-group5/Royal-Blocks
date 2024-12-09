@@ -11,6 +11,8 @@
 
 void draw_grid(int rows, int cols) {
 
+	clear();
+
 	for(uint32_t y=0; y<rows; y++){
 		mvaddch(y+1, 0, '|');
 		mvaddch(y+1, 2*(cols+1)-1, '|');
@@ -48,6 +50,27 @@ void draw_cells(Board* board){
 			}
 		}
 	}
+	refresh();
+}
+
+
+
+void draw_active(Tetromino* activeTetromino){
+
+	
+    const Coordinate anchor = activeTetromino->getAnchorPoint();
+
+	for (const Coordinate &relativeCoord : activeTetromino->getBody()) {
+        Coordinate absoluteCoord = anchor + relativeCoord;
+        uint32_t x = absoluteCoord.getCol();
+        uint32_t y = absoluteCoord.getRow();
+		mvaddch(y+1, (2*x)+1, ' ' | COLOR_PAIR(activeTetromino->getColorId()+2));
+		mvaddch(y+1, (2*x)+2, ' ' | COLOR_PAIR(activeTetromino->getColorId()+2));
+		
+		// at(absoluteCoord.getRow(), absoluteCoord.getCol())
+        //     .setColorId(tetromino->getColorId());
+    }
+
 	refresh();
 }
 

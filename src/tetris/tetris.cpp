@@ -192,7 +192,7 @@ void Tetris::run() {
 
     fetchNewTetromino();
 
-    constexpr float frequency = 6;
+    constexpr float frequency = 60;
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 
@@ -203,6 +203,7 @@ void Tetris::run() {
 
 		draw_grid(height, width);
 		draw_cells(&board_);
+		draw_active(activeTetromino_.get());
 
         // std::cout << "isAlive = " << getIsAlive() << std::endl;
         // std::cout << "active : " << activeTetromino_->getShape() << std::endl;
