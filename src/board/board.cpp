@@ -104,8 +104,6 @@ void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
         at(absoluteCoord.getRow(), absoluteCoord.getCol())
             .setColorId(tetromino->getColorId());
     }
-
-    update();
 }
 
 bool Board::checkInGrid(Tetromino &tetromino) const {

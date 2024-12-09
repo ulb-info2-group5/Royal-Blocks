@@ -220,7 +220,6 @@ void Tetris::run() {
             if (newTetrasFirstTick_) newTetrasFirstTick_ = false;
             // std::cout << "ClockTick" << std::endl;
             tryMoveActive(Direction::Down);
-            BoardUpdate boardUpdate = board_.update();
 
             if (!checkCanDrop()) {
                 if (!inGracePeriod_) inGracePeriod_ = true;
@@ -229,6 +228,7 @@ void Tetris::run() {
                     // activeTetromino_->getAnchorPoint()
                     //           << std::endl;
                     placeActive();
+                    BoardUpdate boardUpdate = board_.update();
                     fetchNewTetromino();
                     newTetrasFirstTick_ = true;
                 }
