@@ -111,6 +111,7 @@ int ncurses_init(){
     start_color();
 	
 	define_pairs();
+	return 0;
 }
 
 void ncurses_quit(){
