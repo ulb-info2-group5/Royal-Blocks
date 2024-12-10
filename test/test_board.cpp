@@ -122,3 +122,20 @@ void BoardTest::dropRowsAboveTest() {
     CPPUNIT_ASSERT(board.checkFullRow(lastRowIdx));
     CPPUNIT_ASSERT(!board.checkFullRow(secondLastRowIdx));
 }
+
+void BoardTest::checkInGridTest() {
+    std::unique_ptr<Tetromino> tetrominoL = Tetromino::makeTetromino( 
+        TetrominoShape::L,
+        Coordinate{static_cast<int>(board.getHeight() -1), -1});
+
+    std::unique_ptr<Tetromino> tetrominoO = Tetromino::makeTetromino(
+        TetrominoShape::O,
+        Coordinate{static_cast<int>(board.getHeight() -1), 
+                   static_cast<int>(board.getWidth() - 2)});
+
+    fillCol(board.getWidth() -1);
+    
+    CPPUNIT_ASSERT(!(board.checkInGrid(*tetrominoO)));
+    CPPUNIT_ASSERT(board.checkInGrid(*tetrominoL));
+}
+

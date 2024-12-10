@@ -32,6 +32,7 @@ class BoardTest : public CppUnit::TestFixture {
     void emptyColTest();
     void gravityTest();
     void dropRowsAboveTest();
+    void checkInGridTest();
 
   private:
     Board board;
