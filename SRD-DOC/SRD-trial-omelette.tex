@@ -109,7 +109,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
     	\caption{Diagramme Use Case du Menu de Connexion}
     	\label{fig:main-menu}
 \end{figure}
-Le premier écran que l'utilisateur accède est un moyen de se connecter à la plateforme de jeu via un compte. Le moyen de s'authentifier est avec un compte existant et le mot de passe associé valide. Si l'utilisateur ne possède pas de compte existant, il peut se créer un nouveau compte avec un pseudo non existant sur la plateforme.
+Le premier écran auquel l'utilisateur accède est un moyen de se connecter à la plateforme de jeu via un compte. Le moyen de s'authentifier est avec un compte existant et le mot de passe associé valide. Si l'utilisateur ne possède pas de compte existant, il peut en créer un nouveau avec un pseudo non existant sur la plateforme.
 
 
 \subsubsection*{Connexion}
@@ -429,7 +429,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Changer la cible des penalties
-    \item \textbf{Description}: Permet au joueur changer l'adversaire recevant le penalty
+    \item \textbf{Description}: Permet au joueur de changer l'adversaire recevant le penalty
     \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un ou plusieurs penalties.
     \item \textbf{Postcondition}: Le joueur a sélectionné une nouvelle cible pour envoyer ses penalties.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
@@ -441,7 +441,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Use case}: Choisir la cible des penalties
     \item \textbf{Description}: Le joueur choisit parmis ses adversaires sa nouvelle cible pour les penalties.
     \item \textbf{Précondition}: La partie est en cours et le joueur peut envoyer un penalty.
-    \item \textbf{Postcondition}: Le joueur change de cible, et envoie un ou plusieurs penalties à l’adversaire nouvellement désigné.
+    \item \textbf{Postcondition}: Le joueur change de cible et envoie un ou plusieurs penalties à l’adversaire nouvellement désigné.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
 \end{itemize}
 
@@ -528,8 +528,8 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \subsection{Connexion}
 
-\quad Quand l'utilisateur ouvre l'application, il doit avoir un compte valide pour s'authentifier. Il doit fournir des informations sur le nom du compte et le mot de passe.\\
-Ses entrées sur les deux champs sont envoyées au serveur de l'application. Les données sont vérifiées en recherchant sur la base de données un profil correspondant. Si un compte est trouvé avec le mot de passe correctement entré, le serveur connecte l'utilisateur au compte associé. Mais s'il ne trouve pas dans la base de données, l'utilisateur est notifié d'un message d'erreur du serveur.
+\quad Quand l'utilisateur ouvre l'application, il doit avoir un compte valide pour s'authentifier. Il doit fournir le nom du compte et le mot de passe.\\
+Ses entrées sur les deux champs sont envoyées au serveur de l'application. Les données sont vérifiées en recherchant dans la base de données un profil correspondant. Si un compte est trouvé avec le mot de passe correctement entré, le serveur connecte l'utilisateur au compte associé. Mais s'il ne trouve pas dans la base de données, l'utilisateur est notifié d'un message d'erreur du serveur.
 
 \subsection{Gestion des comptes}
 
@@ -540,7 +540,7 @@ Le serveur vérifie qu'il n'existe pas déjà une autre entrée possédant le m�
 
 \subsubsection{Suppression d'un compte}
 
-L'option de suppression du compte doit être possible sur le système. Quand l'utilisateur fait une telle demande en confirmant avec son mot de passe associé, le programme client questionne une dernière fois avant d'envoyer la requête au serveur. Le serveur supprime l'entrée sur la base de données du compte en question et l'utilisateur est déconnecté de la session.
+L'option de suppression du compte doit être possible sur le système. Quand l'utilisateur fait une telle demande en confirmant avec son mot de passe associé, le programme client le questionne une dernière fois avant d'envoyer la requête au serveur. Le serveur supprime l'entrée sur la base de données du compte en question et l'utilisateur est déconnecté de la session.
 
 \subsection{Consulter le classement}
 
@@ -576,7 +576,7 @@ Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qu
 
 %Le jeu doit se jouer en réseau car il a besoin de se connecter au serveur.
 
-L'application demande une connexion internet avec le protocole TCP/IP pour être connectée au serveur. Cela permet d'établir une communication entre le client et le serveur. Ce n'est pas requis quand ces deux entités se trouvent sur la même machine; ce n'est pas attendu dans le cadre d'utilisation de l'application.
+L'application demande une connexion internet avec le protocole TCP/IP pour connecter le client au serveur. Ce n'est pas requis quand les deux se trouvent sur la même machine; cela n'est pas attendu dans le cadre d'utilisation de l'application.
 
 \subsubsection{Système d'exploitation}
 
@@ -584,7 +584,7 @@ Les machines du client et du serveur doivent pouvoir s'exécuter sur un système
 
 \subsubsection{Accessibilité}
 
-Le client doit être connecté à une connexion internet pour accéder au serveur. Sur l'aspect de jouer avec l'application, son utilisation est gratuite pour tout utilisateur authentifié à un compte. S'il n'en possède pas un existant, il peut facilement s'en créer un. 
+Le client doit être connecté à internet pour accéder au serveur. Son utilisation est gratuite pour tout utilisateur qui s'authentifie à un compte valable. S'il n'en possède pas un existant, il peut facilement s'en créer un. 
 
 \subsubsection{Performances}
 
@@ -604,15 +604,15 @@ Plusieurs parties de maximum neuf joueurs peuvent se tenir en même temps sur le
 
 %Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un pseudo et un mot de passe.
 
-Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom d'utilisateur et de son mot de passe associé. Notamment, le serveur devra vérifier que toutes les règles du jeu seront appliquées correctement durant la partie afin qu'aucun utilisateur ne puisse tricher. 
+Pour accéder au jeu, l'utilisateur devra s'authentifier à l'aide d'un nom d'utilisateur et de son mot de passe associé. Notamment, le serveur devra vérifier que toutes les règles du jeu soient appliquées correctement durant la partie afin qu'aucun utilisateur ne puisse tricher. 
 
 \subsubsection{Robustesse}
 
-S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la partie ou du serveur, le jeu doit pouvoir continuer fluidement sans interruption. Celui qui vient de quitter se retrouve perdant de la partie à la bonne position dans le classement de la partie.
+S'il reste au moins trois joueurs et que l'un d'entre eux se déconnecte de la partie ou du serveur, le jeu doit pouvoir continuer fluidement sans interruption. Celui qui vient de quitter la partie se retrouve perdant et est placé à la bonne position du classement de cette dernière.
 
 \subsection{Besoins utilisateur}
 
-L'application doit proposer une interface graphique intuitive à utiliser pour l'utilisateur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu.\\
+L'application doit proposer une interface graphique intuitive à utiliser pour le joueur. Cela comprend un choix d'apparence attrayante en gardant une orientation d'une implémentation d'un jeu.\\
  De plus, pour permettre une meilleure expérience de l'application à l'utilisateur, le lancement d'une partie locale ou avec une connexion au serveur doit être fluide et stable. La même chose est attendue durant tout le jeu. Le temps de rafraîchissement de l'interface du client doit se faire dans l'ordre du dixième de seconde.
 
 \newpage
@@ -632,7 +632,7 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 
 \subsection{Architecture du jeu}
 
-Au lancement d'une partie sur l'application, chaque Joueur possède un objet de la classe Tetris. Dans la Board et la \textit{queue-list} de Tetrominoes, attributs de Tetris, le Joueur placera les formes sur la Board. En reprenant l'algorithme pré-existant dans d'autres implémentations du jeu \textit{Tetris}, le Tetromino effectue une rotation similaire au fonctionnement de \textit{Super Rotation System}. À chaque action de Joueur envoyé pour changer la position du Tetromino, Tetris calcule la nouvelle position selon celle renvoyée par Tetromino et puis vérifie la validité de cette position dans la Board. 
+Au lancement d'une partie sur l'application, chaque joueur possède un objet de la classe Tetris. Dans la Board et la \textit{queue-list} de tetrominoes, attributs de Tetris, le joueur placera les formes sur la Board. En reprenant l'algorithme pré-existant dans d'autres implémentations du jeu \textit{Tetris}, le tetromino effectue une rotation similaire au fonctionnement de \textit{Super Rotation System}. À chaque action du joueur envoyé pour changer la position du tetromino, Tetris calcule la nouvelle position selon celle renvoyée par tetromino et puis vérifie la validité de cette position dans la Board. 
 
 \newpage
 
