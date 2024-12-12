@@ -13,7 +13,8 @@ class TetrisTest;
 
 /**
  * @class Tetris
- * @brief Represents a Tetris game, composed of a Board and a Tetromino object.
+ * @brief Represents a Tetris game, composed essentially of a Board and a
+ * Tetromino object.
  *
  * The Tetris class handles the game state, including the active Tetromino and
  * events like rotation, movement, and clockTick, making the Tetromino drop
@@ -22,7 +23,7 @@ class TetrisTest;
 class Tetris final {
     bool isAlive_ = true;
     bool inGracePeriod_ = false;
-    bool newTetrasFirstTick_ = true; // could also be a uint32_t tickCount
+    bool newTetrominosFirstTick_ = true; // could also be a uint32_t tickCount
     Board board_;
     std::unique_ptr<Tetromino> activeTetromino_;
     std::unique_ptr<Tetromino> previewTetromino_;
@@ -113,7 +114,17 @@ class Tetris final {
   public:
     // #### Constructor ####
 
+    /**
+     * @brief Tetris default constructor.
+     */
     Tetris();
+
+    // #### Destructor ####
+
+    /**
+     * @brief Tetris destructor.
+     */
+    virtual ~Tetris();
 
     // #### Event Queue API ####
 
@@ -145,7 +156,7 @@ class Tetris final {
     /**
      * @brief Thread-safe way of getting the isAlive.
      *
-     * @return  False if the game is over, true otherwise.
+     * @return False if the game is over; otherwise, true.
      */
     virtual bool getIsAlive();
 

@@ -4,7 +4,7 @@
                     PUBLIC
 --------------------------------------------------*/
 
-// #### Constructors  ####
+// #### Constructor  ####
 
 Coordinate::Coordinate() : row_{0}, col_{0} {}
 
@@ -87,6 +87,7 @@ const Coordinate &Coordinate::rotateAround(const Coordinate &rotationCenter,
     // Matrix coordinate system to cartesian (flip the y/row axis)
     relativeRow = -relativeRow;
 
+    // Actual rotation
     int rotatedRow = rotateClockwise ? -relativeCol : relativeCol;
     int rotatedCol = rotateClockwise ? relativeRow : -relativeRow;
 

@@ -2,11 +2,19 @@
 
 #include <cstddef>
 
+/*--------------------------------------------------
+                    PUBLIC
+--------------------------------------------------*/
+
 BoardUpdate::BoardUpdate() : numClearedRows_{0}, numClearedCols_{0} {}
 
-size_t BoardUpdate::getNumClearedRows() { return numClearedRows_; }
+size_t BoardUpdate::getNumClearedRows() const noexcept {
+    return numClearedRows_;
+}
 
-size_t BoardUpdate::getNumClearedColumns() { return numClearedCols_; }
+size_t BoardUpdate::getNumClearedColumns() const noexcept {
+    return numClearedCols_;
+}
 
 void BoardUpdate::incrementClearedRows() { numClearedRows_++; }
 

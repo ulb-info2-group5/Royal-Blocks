@@ -16,7 +16,7 @@ class BoardUpdate final {
 
   public:
     /**
-     * BoardUpdate constructor
+     * @brief BoardUpdate constructor
      */
     BoardUpdate();
 
@@ -25,24 +25,24 @@ class BoardUpdate final {
      *
      * @return Number of rows cleared in this board update.
      */
-    size_t getNumClearedRows();
+    virtual size_t getNumClearedRows() const noexcept;
 
     /**
      * @brief Returns the number of columns cleared in this board update.
      *
      * @return Number of columns cleared in this board update.
      */
-    size_t getNumClearedColumns();
+    virtual size_t getNumClearedColumns() const noexcept;
 
     /**
      * @brief Increments the number of rows cleared in this board update.
      */
-    void incrementClearedRows();
+    virtual void incrementClearedRows();
 
     /**
      * @brief Returns the number of columns cleared in this board update.
      */
-    void incrementClearedCols();
+    virtual void incrementClearedCols();
 };
 
 #endif

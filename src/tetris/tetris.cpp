@@ -14,7 +14,10 @@
 #include <memory>
 #include <pthread.h>
 #include <random>
-#include <thread>
+
+/*--------------------------------------------------
+                     PRIVATE
+--------------------------------------------------*/
 
 // #### Tetromino Actions ####
 
@@ -99,7 +102,7 @@ void Tetris::placeActive() {
     }
 }
 
-// #### Tetromino Queue ####
+// #### Tetrominoes Queue ####
 
 void Tetris::fillTetrominoesQueue() {
     constexpr size_t numShapes =
@@ -159,15 +162,6 @@ EventType Tetris::getNextEvent() {
 
     return event;
 }
-//
-
-// #### IsAlive Flag Internals ####
-
-void Tetris::setIsAlive(bool isAlive) {
-    pthread_mutex_lock(&isAliveMutex_);
-    isAlive_ = isAlive;
-    pthread_mutex_unlock(&isAliveMutex_);
-}
 
 // #### Grid Checks ####
 
@@ -175,9 +169,17 @@ bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
     return board_.get(rowIdx, colIdx).isEmpty();
 }
 
+/*--------------------------------------------------
+                     PUBLIC
+--------------------------------------------------*/
+
 // #### Constructor ####
 
 Tetris::Tetris() = default;
+
+// #### Destructor ####
+
+Tetris::~Tetris() = default;
 
 // #### Event Queue API ####
 
@@ -203,34 +205,23 @@ void Tetris::run() {
 
     while (getIsAlive()) {
 
-        // std::cout << "isAlive = " << getIsAlive() << std::endl;
-        // std::cout << "active : " << activeTetromino_->getShape() <<
-        // std::endl; board_.debugPrint();
-
         event = getNextEvent();
-
-        // std::cout << "active anchor: " << activeTetromino_->getAnchorPoint()
-        //   << std::endl;
 
         switch (event) {
         case EventType::None:
             break;
 
         case EventType::ClockTick: {
-            if (newTetrasFirstTick_) newTetrasFirstTick_ = false;
-            // std::cout << "ClockTick" << std::endl;
+            if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
             tryMoveActive(Direction::Down);
 
             if (!checkCanDrop()) {
                 if (!inGracePeriod_) inGracePeriod_ = true;
                 else {
-                    // std::cout << "placing at " <<
-                    // activeTetromino_->getAnchorPoint()
-                    //           << std::endl;
                     placeActive();
                     BoardUpdate boardUpdate = board_.update();
                     fetchNewTetromino();
-                    newTetrasFirstTick_ = true;
+                    newTetrominosFirstTick_ = true;
                 }
             } else {
                 if (inGracePeriod_) inGracePeriod_ = false;
@@ -284,6 +275,14 @@ void Tetris::run() {
     }
     ncurses_quit();
     std::cout << "Game Over" << std::endl;
+}
+
+// #### IsAlive Flag Internals ####
+
+void Tetris::setIsAlive(bool isAlive) {
+    pthread_mutex_lock(&isAliveMutex_);
+    isAlive_ = isAlive;
+    pthread_mutex_unlock(&isAliveMutex_);
 }
 
 // #### Getters ####

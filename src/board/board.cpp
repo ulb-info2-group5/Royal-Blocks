@@ -19,6 +19,14 @@ std::array<GridCell, Board::width_> &Board::getRow(size_t rowIdx) {
     return grid_.at(rowIdx);
 }
 
+void Board::dropRowsAbove(size_t rowIdx) {
+    for (size_t i = rowIdx; i > 0; i--) {
+        getRow(i) = getRow(i - 1);
+    }
+
+    emptyRow(0);
+}
+
 bool Board::checkFullRow(size_t rowIdx) const {
     for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
         if (get(rowIdx, colIdx).isEmpty()) {
@@ -47,15 +55,6 @@ void Board::emptyCol(size_t colIdx) {
     for (size_t rowIdx = 0; rowIdx < getWidth(); rowIdx++) {
         at(rowIdx, colIdx).setEmpty();
     }
-}
-
-void Board::dropRowsAbove(size_t rowIdx) {
-    for (size_t i = rowIdx; i > 0; i--) {
-        getRow(i) = getRow(i - 1);
-    }
-
-    // Empty to row
-    emptyRow(0);
 }
 
 void Board::gravity() {
@@ -91,12 +90,6 @@ size_t Board::getHeight() const noexcept { return height_; }
 // #### Board Actions ####
 
 void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
-    // TODO: Decide whether to keep this or not.
-    // if (!checkInGrid(*tetromino)) {
-    //     throw std::runtime_error(
-    //         "The given tetromino does not fit in the grid.");
-    // }
-
     const Coordinate anchor = tetromino->getAnchorPoint();
 
     for (const Coordinate &relativeCoord : tetromino->getBody()) {
@@ -134,15 +127,4 @@ BoardUpdate Board::update() {
     }
 
     return boardUpdate;
-}
-
-// #### DEBUG #####
-
-void Board::debugPrint() {
-    for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {
-        for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
-            std::cout << grid_.at(rowIdx).at(colIdx).isEmpty() << " ";
-        }
-        std::cout << std::endl;
-    }
 }

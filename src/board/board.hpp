@@ -50,12 +50,20 @@ class Board final {
     virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
 
     /**
+     * @brief Moves all rows above the specified row down by one position.
+     * Used to fill gaps after clearing a specific row.
+     *
+     * @param rowIdx The index of the row above which all rows are shifted down.
+     */
+    virtual void dropRowsAbove(size_t rowIdx);
+
+    /**
      * @brief Checks whether the rowIndex-th row is full.
      *
      * @param rowIdx The row index.
      *
-     * @return True if the rowIdx-th row is full, meaning has no empty GridCell;
-     * otherwise, false.
+     * @return True if the rowIdx-th row is full, meaning it has no empty
+     * GridCell; otherwise, false.
      */
     virtual bool checkFullRow(size_t rowIdx) const;
 
@@ -64,8 +72,8 @@ class Board final {
      *
      * @param colIdx The column index.
      *
-     * @return True if the colIdx-th col is full, meaning has no empty GridCell;
-     * otherwise, false.
+     * @return True if the colIdx-th col is full, meaning it has no empty
+     * GridCell; otherwise, false.
      */
     virtual bool checkFullCol(size_t colIdx) const;
 
@@ -84,14 +92,6 @@ class Board final {
      * @param colIdx The column index.
      */
     virtual void emptyCol(size_t colIdx);
-
-    /**
-     * @brief Moves all rows above the specified row down by one position.
-     * Used to fill gaps after clearing a specific row.
-     *
-     * @param rowIdx The index of the row above which all rows are shifted down.
-     */
-    virtual void dropRowsAbove(size_t rowIdx);
 
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
@@ -122,14 +122,14 @@ class Board final {
      *
      * @return The width of the grid.
      */
-    size_t getWidth() const noexcept;
+    virtual size_t getWidth() const noexcept;
 
     /**
      * @brief Returns the height of the grid.
      *
      * @return The height of the grid.
      */
-    size_t getHeight() const noexcept;
+    virtual size_t getHeight() const noexcept;
 
     // #### Board Actions ####
 
@@ -138,8 +138,8 @@ class Board final {
      *
      * @param tetromino A unique pointer to the tetromino to be placed.
      *
-     * @note The Tetromino will no longer be accessible after this function,
-     * ensuring it cannot be moved after being placed in the grid.
+     * @note The Tetromino will no longer be accessible after this function gets
+     * called, ensuring it cannot be moved after being placed in the grid.
      */
     virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
 
@@ -151,22 +151,18 @@ class Board final {
      *
      * @return True if the given Tetromino fits; otherwise, false.
      */
-    bool checkInGrid(Tetromino &tetromino) const;
+    virtual bool checkInGrid(Tetromino &tetromino) const;
 
     // #### Update Board State ####
 
     // TODO: Come up with a better name than BoardUpdate.
     /**
-     * @brief Clears/Empties full rows, returns a BoardUpdate object.
+     * @brief Clears/Empties full rows, makes rows above the cleared row drop
+     * one row down and returns a BoardUpdate object.
      *
      * @return A BoardUpdate object.
      */
     virtual BoardUpdate update();
-
-    // #### DEBUG #####
-
-    // TODO: Remove this method for release.
-    void debugPrint();
 
     // #### Test Fixture Class ####
 

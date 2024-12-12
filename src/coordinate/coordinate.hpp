@@ -16,7 +16,7 @@ class Coordinate final {
     int row_;
 
   public:
-    // #### Constructors  ####
+    // #### Constructor ####
 
     /**
      * @brief Coordinate's default constructor, initalizes row and column
