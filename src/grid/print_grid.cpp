@@ -102,6 +102,20 @@ void print_debug(char *str, uint32_t gridWidth) {
     // refresh();
 }
 
+
+void print_score(size_t score, uint32_t gridWidth){
+	
+	size_t current = score;
+	uint32_t lineWidth = 16;	//in case you get like 10e16< score
+	uint32_t i = 0;
+
+	while((score!=0) || (i==0)){
+		mvaddch(1 + (i / lineWidth) + 1, ((gridWidth + 2) * 2) + (i % lineWidth), '0'+(score%10));
+		score/=10;
+		i++;
+	}
+}
+
 void ncurses_refresh(){		//not the prettiest but tetris.cpp won't need ncurses.h
 	refresh();
 }
