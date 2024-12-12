@@ -101,6 +101,11 @@ class Tetris final {
      */
     virtual EventType getNextEvent();
 
+    /**
+     * @brief Handles the next event in the event-queue.
+     */
+    virtual void handleNextEvent();
+
     // #### Grid Checks ####
 
     /**

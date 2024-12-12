@@ -163,6 +163,77 @@ EventType Tetris::getNextEvent() {
     return event;
 }
 
+void Tetris::handleNextEvent() {
+
+    EventType event = getNextEvent();
+
+    switch (event) {
+    case EventType::None:
+        break;
+
+    case EventType::ClockTick: {
+        if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
+        tryMoveActive(Direction::Down);
+
+        if (!checkCanDrop()) {
+            if (!inGracePeriod_) inGracePeriod_ = true;
+            else {
+                placeActive();
+                BoardUpdate boardUpdate = board_.update();
+                fetchNewTetromino();
+                newTetrominosFirstTick_ = true;
+            }
+        } else {
+            if (inGracePeriod_) inGracePeriod_ = false;
+        }
+        break;
+    }
+
+    case EventType::BigDrop:
+        bigDrop();
+
+        //! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER
+        //! GAME EXPERIENCE
+        addEvent(EventType::ClockTick);
+
+        break;
+
+    case EventType::MoveDown:
+        tryMoveActive(Direction::Down);
+        break;
+
+    case EventType::MoveLeft:
+        tryMoveActive(Direction::Left);
+        break;
+
+    case EventType::MoveRight:
+        tryMoveActive(Direction::Right);
+        break;
+
+    case EventType::RotateClockwise:
+        tryRotateActive(true);
+        break;
+
+    case EventType::RotateCounterClockwise:
+        tryRotateActive(false);
+        break;
+
+    case EventType::Quit:
+        ncurses_quit();
+        exit(0); //! VERY NOT GOOD but temporary <3
+        break;
+    }
+
+    if (event != EventType::None) {
+        draw_grid(board_.getHeight(), board_.getWidth());
+        draw_cells(&board_);
+        draw_active(activeTetromino_.get());
+        print_debug("uwu :3 aur aur\n test line2\n "
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    board_.getWidth());
+    }
+}
+
 // #### Grid Checks ####
 
 bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
@@ -200,78 +271,8 @@ void Tetris::run() {
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 
-    size_t height = board_.getHeight();
-    size_t width = board_.getWidth();
-
     while (getIsAlive()) {
-
-        event = getNextEvent();
-
-        switch (event) {
-        case EventType::None:
-            break;
-
-        case EventType::ClockTick: {
-            if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
-            tryMoveActive(Direction::Down);
-
-            if (!checkCanDrop()) {
-                if (!inGracePeriod_) inGracePeriod_ = true;
-                else {
-                    placeActive();
-                    BoardUpdate boardUpdate = board_.update();
-                    fetchNewTetromino();
-                    newTetrominosFirstTick_ = true;
-                }
-            } else {
-                if (inGracePeriod_) inGracePeriod_ = false;
-            }
-            break;
-        }
-
-        case EventType::BigDrop:
-            bigDrop();
-
-            //! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER
-            //! GAME EXPERIENCE
-            addEvent(EventType::ClockTick);
-
-            break;
-
-        case EventType::MoveDown:
-            tryMoveActive(Direction::Down);
-            break;
-
-        case EventType::MoveLeft:
-            tryMoveActive(Direction::Left);
-            break;
-
-        case EventType::MoveRight:
-            tryMoveActive(Direction::Right);
-            break;
-
-        case EventType::RotateClockwise:
-            tryRotateActive(true);
-            break;
-
-        case EventType::RotateCounterClockwise:
-            tryRotateActive(false);
-            break;
-
-        case EventType::Quit:
-            ncurses_quit();
-            exit(0); //! VERY NOT GOOD but temporary <3
-            break;
-        }
-
-        if (event != EventType::None) {
-            draw_grid(height, width);
-            draw_cells(&board_);
-            draw_active(activeTetromino_.get());
-            print_debug("uwu :3 aur aur\n test line2\n "
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                        width);
-        }
+        handleNextEvent();
     }
     ncurses_quit();
     std::cout << "Game Over" << std::endl;
