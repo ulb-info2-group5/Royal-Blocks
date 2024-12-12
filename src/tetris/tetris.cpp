@@ -222,7 +222,9 @@ void Tetris::handleNextEvent() {
 
         draw_grid(board_.getHeight(), board_.getWidth());
         draw_cells(&board_);
+		draw_preview(previewTetromino_.get());
         draw_active(activeTetromino_.get());
+		ncurses_refresh();
 
         // TODO: draw preview Tetromino here
 

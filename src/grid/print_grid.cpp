@@ -1,8 +1,6 @@
 
 #include <ncurses.h>
 
-// #include "../../include/board/grid_cell.hpp"
-// #include "../../include/board/board.hpp"
 #include "../board/board.hpp"
 #include "../board/grid_cell.hpp"
 
@@ -26,7 +24,7 @@ void draw_grid(int rows, int cols) {
     mvaddch((rows + 1), (cols * 2) + 1, '+');
     /*<3*/
 
-    refresh();
+    // refresh();
 }
 
 void draw_cells(Board *board) {
@@ -48,7 +46,7 @@ void draw_cells(Board *board) {
             }
         }
     }
-    refresh();
+    // refresh();
 }
 
 void draw_active(Tetromino *activeTetromino) {
@@ -63,12 +61,28 @@ void draw_active(Tetromino *activeTetromino) {
                 ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
         mvaddch(y + 1, (2 * x) + 2,
                 ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
-
-        // at(absoluteCoord.getRow(), absoluteCoord.getCol())
-        //     .setColorId(tetromino->getColorId());
     }
 
-    refresh();
+    // refresh();
+}
+
+void draw_preview(Tetromino *previewTetromino) {	//same code as draw_active for now but future iterations might deffer
+
+	const Coordinate anchor = previewTetromino->getAnchorPoint();
+
+    for (const Coordinate &relativeCoord : previewTetromino->getBody()) {
+        Coordinate absoluteCoord = anchor + relativeCoord;
+        uint32_t x = absoluteCoord.getCol();
+        uint32_t y = absoluteCoord.getRow();
+        mvaddch(y + 1, (2 * x) + 1,
+                ' ' | COLOR_PAIR(9));	//preview color : see define_pairs()
+        mvaddch(y + 1, (2 * x) + 2,
+                ' ' | COLOR_PAIR(9));
+
+    }
+
+    // refresh();
+
 }
 
 void print_debug(char *str, uint32_t gridWidth) {
@@ -85,7 +99,11 @@ void print_debug(char *str, uint32_t gridWidth) {
         i++;
     }
 
-    refresh();
+    // refresh();
+}
+
+void ncurses_refresh(){		//not the prettiest but tetris.cpp won't need ncurses.h
+	refresh();
 }
 
 void define_pairs() {
@@ -97,6 +115,8 @@ void define_pairs() {
         init_pair(i + 1, COLOR_WHITE,
                   colors[i]); // init_pair indexing seems to start at 1
     }
+
+	init_pair(9, COLOR_WHITE, 236);	//grey for the preview tetromino
     /*<3*/
 }
 
