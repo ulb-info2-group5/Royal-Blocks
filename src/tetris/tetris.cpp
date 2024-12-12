@@ -171,7 +171,7 @@ void Tetris::handleNextEvent() {
             if (!inGracePeriod_) inGracePeriod_ = true;
             else {
                 placeActive();
-                BoardUpdate boardUpdate = board_.update();
+                score_ += board_.update().getNumClearedRows();
                 fetchNewTetromino();
                 newTetrominosFirstTick_ = true;
             }
@@ -292,6 +292,8 @@ bool Tetris::getIsAlive() {
     pthread_mutex_unlock(&isAliveMutex_);
     return isAlive;
 }
+
+size_t Tetris::getCurrentScore() { return score_; }
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoesQueue_.size();
