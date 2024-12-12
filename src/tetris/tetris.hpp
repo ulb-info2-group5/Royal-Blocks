@@ -59,20 +59,23 @@ class Tetris final {
     // #### Manage Preview-Tetromino ####
 
     /**
-     * @brief Updates the preview Tetromino's vertical component.
+     * @brief Updates the preview-Tetromino's vertical component.
      */
     virtual void updatePreviewVertical();
 
     // #### Placing and Dropping in Grid ####
 
     /**
-     * @brief Checks whether the active tetromino can be droppped.
+     * @brief Checks whether the given tetromino can be droppped.
+     *
+     * @param tetromino The tetromino to be checked.
      */
-    virtual bool checkCanDrop() const;
+    virtual bool checkCanDrop(const Tetromino &tetromino) const;
 
     /**
-     * @brief Places the active tetromino where it currently is in the grid and
-     * sets the isAlive flag to false if it was placed outside of the grid.
+     * @brief Places the active tetromino where it currently is in the grid
+     * and sets the isAlive flag to false if it was placed outside of the
+     * grid.
      */
     virtual void placeActive();
 

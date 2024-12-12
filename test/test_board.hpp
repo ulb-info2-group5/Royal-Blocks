@@ -3,8 +3,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-// TODO: test checkInGrid
-
 class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(BoardTest);
     CPPUNIT_TEST(constructorTest);
@@ -23,7 +21,6 @@ class BoardTest : public CppUnit::TestFixture {
     void fillCol(size_t fullColIdx);
 
   protected:
-    // TODO: Find a better name for this
     void constructorTest();
     void placeTetrominoTest();
     void checkFullRowTest();

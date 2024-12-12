@@ -53,33 +53,28 @@ void Tetris::tryMoveActive(Direction direction) {
 }
 
 void Tetris::bigDrop() {
-    while (checkCanDrop()) {
+    while (checkCanDrop(*activeTetromino_)) {
         activeTetromino_->move(Direction::Down);
     }
 }
 
 // #### Manage Preview-Tetromino ####
 
-// TODO: this is wrong if preview is outside of the grid, it will loop
-// forever because of the first while condition
 void Tetris::updatePreviewVertical() {
-    while (!board_.checkInGrid(*previewTetromino_)) {
-        previewTetromino_->move(Direction::Down, true); // go up
-    }
-    while (board_.checkInGrid(*previewTetromino_)) {
+    while (checkCanDrop(*previewTetromino_)) {
         previewTetromino_->move(Direction::Down); // go down
     }
 }
 
 // #### Placing and Dropping in Grid ####
 
-bool Tetris::checkCanDrop() const {
-    Coordinate anchorPoint = activeTetromino_->getAnchorPoint();
+bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
+    Coordinate anchorPoint = tetromino.getAnchorPoint();
 
     anchorPoint.moveRow(1);
 
     Coordinate absoluteCoordinate;
-    for (const auto &relativeCoordinate : activeTetromino_->getBody()) {
+    for (const auto &relativeCoordinate : tetromino.getBody()) {
         absoluteCoordinate = anchorPoint + relativeCoordinate;
 
         if (absoluteCoordinate.getCol() < 0
@@ -139,9 +134,6 @@ void Tetris::fetchNewTetromino() {
 
     activeTetromino_ = std::move(tetrominoesQueue_.front());
     tetrominoesQueue_.pop();
-
-    previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
-    // TODO: update preview's position
 }
 
 // #### Event Queue Internals ####
@@ -175,7 +167,7 @@ void Tetris::handleNextEvent() {
         if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
         tryMoveActive(Direction::Down);
 
-        if (!checkCanDrop()) {
+        if (!checkCanDrop(*activeTetromino_)) {
             if (!inGracePeriod_) inGracePeriod_ = true;
             else {
                 placeActive();
@@ -225,9 +217,15 @@ void Tetris::handleNextEvent() {
     }
 
     if (event != EventType::None) {
+        previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
+        updatePreviewVertical();
+
         draw_grid(board_.getHeight(), board_.getWidth());
         draw_cells(&board_);
         draw_active(activeTetromino_.get());
+
+        // TODO: draw preview Tetromino here
+
         print_debug("uwu :3 aur aur\n test line2\n "
                     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                     board_.getWidth());

@@ -155,7 +155,6 @@ class Board final {
 
     // #### Update Board State ####
 
-    // TODO: Come up with a better name than BoardUpdate.
     /**
      * @brief Clears/Empties full rows, makes rows above the cleared row drop
      * one row down and returns a BoardUpdate object.

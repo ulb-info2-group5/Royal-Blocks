@@ -21,7 +21,6 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec) {
     return os;
 }
 
-// TODO: should this be in the actual Tetris class code?
 void rotateTetrominoNTimes(std::unique_ptr<Tetromino> &tetromino,
                            bool rotateClockwise, int n);
 
