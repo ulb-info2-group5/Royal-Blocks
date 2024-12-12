@@ -36,14 +36,9 @@ void *inputHandlerRoutine(void *arg) {
     char key;
 
     while (tetris->getIsAlive()) {
-        // This makes the routine take one more character even
-        // when the game is finshed, will be solved when using
-        // ncurses
         key = getchar();
 
         switch (key) {
-        case '\n': // TODO: remove this when switching to ncurses
-            break;
         case 'h': // left
             tetris->addEvent(EventType::MoveLeft);
             break;
@@ -53,7 +48,7 @@ void *inputHandlerRoutine(void *arg) {
         case 'j': // down
             tetris->addEvent(EventType::MoveDown);
             break;
-        case 'J': // big drop
+        case 'G': // big drop
             tetris->addEvent(EventType::BigDrop);
             break;
         case 'g': // rotate clockwise
@@ -90,9 +85,6 @@ void *inputHandlerRoutine(void *arg) {
 
                 break;
             }
-        default:
-            // std::cout << "neither h nor l" << std::endl;
-            break;
         }
     }
 
