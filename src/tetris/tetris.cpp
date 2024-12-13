@@ -1,8 +1,8 @@
 #include "tetris.hpp"
 
-#include "../../include/grid/print_grid.hpp"
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
+#include "../grid/print_grid.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 #include "event_type.hpp"

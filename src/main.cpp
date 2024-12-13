@@ -1,4 +1,4 @@
-#include "../include/grid/print_grid.hpp"
+#include "grid/print_grid.hpp"
 #include "tetris/event_type.hpp"
 #include "tetris/tetris.hpp"
 #include <chrono>
