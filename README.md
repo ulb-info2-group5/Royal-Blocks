@@ -17,7 +17,7 @@
 
 ### Dépendances
 
-Le projet nécessite l'installation des programmes et bibliothèques suivantes
+Le projet nécessite l'installation des programmes et bibliothèques suivants
 (les commandes fonctionnent pour Debian) :
 
 - **Make**  
@@ -43,8 +43,37 @@ make -C build debug
 
 ## Exécution du jeu
 
+**Pour afficher correctement le jeu Tetris avec la bibliothèque Ncurses dans
+votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
+à `xterm-256color`**.
+
+### Lancer le programme
+
 Pour lancer Tetris, exécutez :
 
 ```sh
 ./build/tetris
 ```
+
+### Les différentes commandes de déplacement
+
+Voici une liste des différentes touches pour déplacer et tourner les pièces du
+Tetris :
+
+- **Rotation sens horlorique**  
+  `g` ou `espace`
+
+- **Rotation sens anti-horlogique**  
+  `f`
+
+- **Déplacement vers la gauche**  
+  `h` ou `←`
+
+- **Déplacement vers la droite**  
+  `l` ou `→`
+
+- **Descendre plus rapidement**  
+  `j` ou `↓`
+
+- **Placer le tetromino en bas**  
+  `G` ou `↑`
