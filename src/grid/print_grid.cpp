@@ -102,23 +102,15 @@ void print_debug(char *str, uint32_t gridWidth) {
 }
 
 void print_score(size_t score, uint32_t gridWidth) {
-    std::string scoreStr = std::to_string(score);
-    size_t lineWidth = 16;
-
-    for (size_t i = 0; i < scoreStr.size(); i++) {
-        mvaddch(2 + (i / lineWidth), ((gridWidth + 2) * 2) + (i % lineWidth),
-                scoreStr[i]);
+    uint32_t current = score;
+    uint32_t i = 0;
+    uint32_t lineWidth = 11; // log_10(2**32) < 10 so 11 is plenty enough
+    while (((current != 0) && i < lineWidth) || (i == 0)) {
+        mvaddch(2, ((gridWidth + 2) * 2) + lineWidth - 1 - (i % lineWidth),
+                '0' + (current % 10));
+        current /= 10;
+        i++;
     }
-
-	
-	// uint32_t current = score;
-	// uint32_t i = 0;
-	// uint32_t lineWidth = 11;	//log_10(2**32) < 10 so 11 is plenty enough
-	// while( ((current!=0) && i<lineWidth) || (i==0)){
-	// 	mvaddch(2, ((gridWidth + 2) * 2) + lineWidth - 1 - (i%lineWidth), '0' + (current%10));
-	// 	current/=10;
-	// 	i++;
-	// }
 }
 
 void ncurses_refresh() { // not the prettiest but tetris.cpp won't need
