@@ -58,7 +58,7 @@ void *inputHandlerRoutine(void *arg) {
             tetris->addEvent(EventType::RotateCounterClockwise);
             break;
         case ' ': // rotate counter-clockwise
-            tetris->addEvent(EventType::RotateCounterClockwise);
+            tetris->addEvent(EventType::RotateClockwise);
             break;
         case 'q':
             tetris->addEvent(EventType::Quit);
