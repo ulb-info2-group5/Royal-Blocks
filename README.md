@@ -28,18 +28,13 @@ Pour que le projet puisse fonctionner, vous aurez besoin des libraires suivantes
 
 
 ### Compilation
-Pour compiler le projet, vous devez d'abord configurer `cmake` soit en mode RELEASE:
+Pour compiler le projet, vous avez le choix entre le mode RELEASE:
 ```
-cmake -S . -B build/
+make
 ```
-Soit en mode DEBUG:
+et le mode DEBUG:
 ```
-cmake -S . -B build/ -D CMAKE_BUILD_TYPE=debug
-```
-
-Puis, vous devez compiler le projet en faisant:
-```
-make -C build/
+make debug
 ```
 
 
