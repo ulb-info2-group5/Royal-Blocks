@@ -1,5 +1,5 @@
-
 #include <ncurses.h>
+#include <string>
 
 #include "../board/board.hpp"
 #include "../board/grid_cell.hpp"
@@ -66,23 +66,22 @@ void draw_active(Tetromino *activeTetromino) {
     // refresh();
 }
 
-void draw_preview(Tetromino *previewTetromino) {	//same code as draw_active for now but future iterations might deffer
+void draw_preview(
+    Tetromino *previewTetromino) { // same code as draw_active for now but
+                                   // future iterations might deffer
 
-	const Coordinate anchor = previewTetromino->getAnchorPoint();
+    const Coordinate anchor = previewTetromino->getAnchorPoint();
 
     for (const Coordinate &relativeCoord : previewTetromino->getBody()) {
         Coordinate absoluteCoord = anchor + relativeCoord;
         uint32_t x = absoluteCoord.getCol();
         uint32_t y = absoluteCoord.getRow();
         mvaddch(y + 1, (2 * x) + 1,
-                ' ' | COLOR_PAIR(9));	//preview color : see define_pairs()
-        mvaddch(y + 1, (2 * x) + 2,
-                ' ' | COLOR_PAIR(9));
-
+                ' ' | COLOR_PAIR(9)); // preview color : see define_pairs()
+        mvaddch(y + 1, (2 * x) + 2, ' ' | COLOR_PAIR(9));
     }
 
     // refresh();
-
 }
 
 void print_debug(char *str, uint32_t gridWidth) {
@@ -102,22 +101,19 @@ void print_debug(char *str, uint32_t gridWidth) {
     // refresh();
 }
 
+void print_score(size_t score, uint32_t gridWidth) {
+    std::string scoreStr = std::to_string(score);
+    size_t lineWidth = 16;
 
-void print_score(size_t score, uint32_t gridWidth){
-	
-	size_t current = score;
-	uint32_t lineWidth = 16;	//in case you get like 10e16< score
-	uint32_t i = 0;
-
-	while((score!=0) || (i==0)){
-		mvaddch(1 + (i / lineWidth) + 1, ((gridWidth + 2) * 2) + (i % lineWidth), '0'+(score%10));
-		score/=10;
-		i++;
-	}
+    for (size_t i = 0; i < scoreStr.size(); i++) {
+        mvaddch(2 + (i / lineWidth), ((gridWidth + 2) * 2) + (i % lineWidth),
+                scoreStr[i]);
+    }
 }
 
-void ncurses_refresh(){		//not the prettiest but tetris.cpp won't need ncurses.h
-	refresh();
+void ncurses_refresh() { // not the prettiest but tetris.cpp won't need
+                         // ncurses.h
+    refresh();
 }
 
 void define_pairs() {
@@ -130,7 +126,7 @@ void define_pairs() {
                   colors[i]); // init_pair indexing seems to start at 1
     }
 
-	init_pair(9, COLOR_WHITE, 236);	//grey for the preview tetromino
+    init_pair(9, COLOR_WHITE, 236); // grey for the preview tetromino
     /*<3*/
 }
 

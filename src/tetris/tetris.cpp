@@ -222,17 +222,11 @@ void Tetris::handleNextEvent() {
 
         draw_grid(board_.getHeight(), board_.getWidth());
         draw_cells(&board_);
-		draw_preview(previewTetromino_.get());
+        draw_preview(previewTetromino_.get());
         draw_active(activeTetromino_.get());
-		print_debug("score :", board_.getWidth());
-		print_score(score_, board_.getWidth());
-		ncurses_refresh();
-
-        // TODO: draw preview Tetromino here
-
-        print_debug("uwu :3 aur aur\n test line2\n "
-                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                    board_.getWidth());
+        print_debug("score :", board_.getWidth());
+        print_score(score_, board_.getWidth());
+        ncurses_refresh();
     }
 }
 
