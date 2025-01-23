@@ -36,11 +36,11 @@ void draw_cells(Board *board) {
             gc = board->get(y, x);
             // printf("isEmpty ? : %1x\n", gc.isEmpty());
             if (!gc.isEmpty()) {
-                // mvaddch(x+1, y+1, ' ' | COLOR_PAIR(gc.getColorId()));
+                // mvaddch(x+1, y+1, ' ' | COLOR_PAIR(gc.getXorId()));
                 mvaddch(y + 1, (2 * x) + 1,
-                        ' ' | COLOR_PAIR(gc.getColorId() + 2));
+                        ' ' | COLOR_PAIR(gc.getXorId() + 2));
                 mvaddch(y + 1, (2 * x) + 2,
-                        ' ' | COLOR_PAIR(gc.getColorId() + 2));
+                        ' ' | COLOR_PAIR(gc.getXorId() + 2));
                 // mvaddch(y+1, (2*x)+1, ' ' | COLOR_PAIR(3));
                 // mvaddch(y+1, (2*x)+2, ' ' | COLOR_PAIR(3));
             }
@@ -51,16 +51,16 @@ void draw_cells(Board *board) {
 
 void draw_active(Tetromino *activeTetromino) {
 
-    const Coordinate anchor = activeTetromino->getAnchorPoint();
+    const Vec2 anchor = activeTetromino->getAnchorPoint();
 
-    for (const Coordinate &relativeCoord : activeTetromino->getBody()) {
-        Coordinate absoluteCoord = anchor + relativeCoord;
-        uint32_t x = absoluteCoord.getCol();
-        uint32_t y = absoluteCoord.getRow();
+    for (const Vec2 &relativeCoord : activeTetromino->getBody()) {
+        Vec2 absoluteCoord = anchor + relativeCoord;
+        uint32_t x = absoluteCoord.getX();
+        uint32_t y = absoluteCoord.getY();
         mvaddch(y + 1, (2 * x) + 1,
-                ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
+                ' ' | COLOR_PAIR(activeTetromino->getXorId() + 2));
         mvaddch(y + 1, (2 * x) + 2,
-                ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
+                ' ' | COLOR_PAIR(activeTetromino->getXorId() + 2));
     }
 
     // refresh();
@@ -70,12 +70,12 @@ void draw_preview(
     Tetromino *previewTetromino) { // same code as draw_active for now but
                                    // future iterations might deffer
 
-    const Coordinate anchor = previewTetromino->getAnchorPoint();
+    const Vec2 anchor = previewTetromino->getAnchorPoint();
 
-    for (const Coordinate &relativeCoord : previewTetromino->getBody()) {
-        Coordinate absoluteCoord = anchor + relativeCoord;
-        uint32_t x = absoluteCoord.getCol();
-        uint32_t y = absoluteCoord.getRow();
+    for (const Vec2 &relativeCoord : previewTetromino->getBody()) {
+        Vec2 absoluteCoord = anchor + relativeCoord;
+        uint32_t x = absoluteCoord.getX();
+        uint32_t y = absoluteCoord.getY();
         mvaddch(y + 1, (2 * x) + 1,
                 ' ' | COLOR_PAIR(9)); // preview color : see define_pairs()
         mvaddch(y + 1, (2 * x) + 2, ' ' | COLOR_PAIR(9));

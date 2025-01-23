@@ -8,7 +8,7 @@
 
 bool GridCell::isEmpty() const noexcept { return !(colorId_.has_value()); }
 
-unsigned GridCell::getColorId() const {
+unsigned GridCell::getXorId() const {
     if (isEmpty()) {
         throw std::runtime_error("Cell is empty, no color index");
     }

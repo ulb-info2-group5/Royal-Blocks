@@ -63,7 +63,7 @@ class TetrominoZ final : public Tetromino {
      *
      * @param anchorPoint The TetrominoZ's anchor-point.
      */
-    TetrominoZ(Coordinate &&anchorPoint);
+    TetrominoZ(Vec2 &&anchorPoint);
 };
 
 // #### L Shape ####
@@ -78,7 +78,7 @@ class TetrominoL final : public Tetromino {
      *
      * @param anchorPoint The TetrominoL's anchor-point.
      */
-    TetrominoL(Coordinate &&anchorPoint);
+    TetrominoL(Vec2 &&anchorPoint);
 };
 
 // #### O Shape ####
@@ -93,7 +93,7 @@ class TetrominoO final : public Tetromino {
      *
      * @param anchorPoint The TetrominoO's anchor-point.
      */
-    TetrominoO(Coordinate &&anchorPoint);
+    TetrominoO(Vec2 &&anchorPoint);
 };
 
 // #### S Shape ####
@@ -108,7 +108,7 @@ class TetrominoS final : public Tetromino {
      *
      * @param anchorPoint The TetrominoS's anchor-point.
      */
-    TetrominoS(Coordinate &&anchorPoint);
+    TetrominoS(Vec2 &&anchorPoint);
 };
 
 // #### I Shape ####
@@ -123,7 +123,7 @@ class TetrominoI final : public Tetromino {
      *
      * @param anchorPoint The TetrominoI's anchor-point.
      */
-    TetrominoI(Coordinate &&anchorPoint);
+    TetrominoI(Vec2 &&anchorPoint);
 };
 
 // #### J Shape ####
@@ -138,7 +138,7 @@ class TetrominoJ final : public Tetromino {
      *
      * @param anchorPoint The TetrominoJ's anchor-point.
      */
-    TetrominoJ(Coordinate &&anchorPoint);
+    TetrominoJ(Vec2 &&anchorPoint);
 };
 
 // #### T Shape ####
@@ -153,7 +153,7 @@ class TetrominoT final : public Tetromino {
      * @param anchorPoint The TetrominoT's anchor-point.
      */
   public:
-    TetrominoT(Coordinate &&anchorPoint);
+    TetrominoT(Vec2 &&anchorPoint);
 };
 
 #endif

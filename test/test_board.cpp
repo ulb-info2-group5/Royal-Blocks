@@ -1,7 +1,7 @@
 #include "test_board.hpp"
 
-#include "../src/coordinate/coordinate.hpp"
 #include "../src/tetromino/tetromino_shapes.hpp"
+#include "../src/vec2/vec2.hpp"
 
 #include <cppunit/TestAssert.h>
 #include <memory>
@@ -19,8 +19,7 @@ void BoardTest::constructorTest() {
 
 void BoardTest::placeTetrominoTest() {
     std::unique_ptr<Tetromino> tetromino = Tetromino::makeTetromino(
-        TetrominoShape::L,
-        Coordinate{static_cast<int>(board.getHeight() - 1), 1});
+        TetrominoShape::L, Vec2{static_cast<int>(board.getHeight() - 1), 1});
 
     board.placeTetromino(std::move(tetromino));
 
@@ -125,12 +124,11 @@ void BoardTest::dropRowsAboveTest() {
 
 void BoardTest::checkInGridTest() {
     std::unique_ptr<Tetromino> tetrominoL = Tetromino::makeTetromino(
-        TetrominoShape::L,
-        Coordinate{static_cast<int>(board.getHeight() - 1), -1});
+        TetrominoShape::L, Vec2{static_cast<int>(board.getHeight() - 1), -1});
 
     std::unique_ptr<Tetromino> tetrominoO = Tetromino::makeTetromino(
-        TetrominoShape::O, Coordinate{static_cast<int>(board.getHeight() - 1),
-                                      static_cast<int>(board.getWidth() - 2)});
+        TetrominoShape::O, Vec2{static_cast<int>(board.getHeight() - 1),
+                                static_cast<int>(board.getWidth() - 2)});
 
     fillCol(board.getWidth() - 1);
 

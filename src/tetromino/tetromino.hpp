@@ -1,7 +1,7 @@
 #ifndef TETROMINO_HPP
 #define TETROMINO_HPP
 
-#include "../coordinate/coordinate.hpp"
+#include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
 
 #include <cstdint>
@@ -36,21 +36,21 @@ class Tetromino {
     size_t width_ = 0;
     size_t height_ = 0;
     TetrominoShape shape_;
-    Coordinate anchorPoint_;
-    std::vector<Coordinate> body_;
+    Vec2 anchorPoint_;
+    std::vector<Vec2> body_;
 
     // #### SRS-related ####
 
     RotationIndex rotationIdx_;
     RotationIndex prevRotationIdx_;
-    const std::vector<std::vector<Coordinate>> &offsetData_;
+    const std::vector<std::vector<Vec2>> &offsetData_;
 
   protected:
     // #### SRS Offsets Data Constants ####
 
-    static const std::vector<std::vector<Coordinate>> O_OFFSET_DATA;
-    static const std::vector<std::vector<Coordinate>> I_OFFSET_DATA;
-    static const std::vector<std::vector<Coordinate>> ZLSJT_OFFSET_DATA;
+    static const std::vector<std::vector<Vec2>> O_OFFSET_DATA;
+    static const std::vector<std::vector<Vec2>> I_OFFSET_DATA;
+    static const std::vector<std::vector<Vec2>> ZLSJT_OFFSET_DATA;
 
     // #### Constructor ####
 
@@ -64,13 +64,13 @@ class Tetromino {
      * the Tetris grid.
      * @param body A vector of coordinates representing the positions of each
      * tile relative to the rotation center.
-     * @param offsetData A reference to a matrix of Coordinates being the
+     * @param offsetData A reference to a matrix of Vec2s being the
      * offset data used for implementing SRS on this shape of Tetromino,
      * i.e. ZLSJT_OFFSET_DATA.
      * @param shape The shape of the Tetromino.
      * */
-    Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-              const std::vector<std::vector<Coordinate>> &offsetData,
+    Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
+              const std::vector<std::vector<Vec2>> &offsetData,
               TetrominoShape shape);
 
   public:
@@ -100,7 +100,7 @@ class Tetromino {
      * @return A unique pointer to the newly created Tetromino object.
      */
     static std::unique_ptr<Tetromino> makeTetromino(TetrominoShape shape,
-                                                    Coordinate &&anchorPoint);
+                                                    Vec2 &&anchorPoint);
 
     // #### Getters ####
 
@@ -126,25 +126,25 @@ class Tetromino {
     virtual TetrominoShape getShape() const noexcept;
 
     /**
-     * @brief Returns the Tetromino's Coordinate.
+     * @brief Returns the Tetromino's Vec2.
      *
      * @return The anchor-point.
      */
-    virtual const Coordinate &getAnchorPoint() const noexcept;
+    virtual const Vec2 &getAnchorPoint() const noexcept;
 
     /**
      * @brief Returns the Tetromino's body.
      *
      * @return The body.
      */
-    virtual const std::vector<Coordinate> &getBody() const noexcept;
+    virtual const std::vector<Vec2> &getBody() const noexcept;
 
     /**
      * @brief Returns the Tetromino's colorId.
      *
      * @return The colorId.
      */
-    virtual unsigned getColorId() const noexcept;
+    virtual unsigned getXorId() const noexcept;
 
     /**
      * @brief Returns the Tetromino's rotation-index.
@@ -188,7 +188,7 @@ class Tetromino {
      *
      * @param anchorPoint The new anchor-point.
      */
-    virtual void setAnchorPoint(const Coordinate &anchorPoint);
+    virtual void setAnchorPoint(const Vec2 &anchorPoint);
 
     // #### Tetromino Actions ####
 

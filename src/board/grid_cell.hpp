@@ -28,7 +28,7 @@ class GridCell final {
      *
      * @return The colorId.
      */
-    virtual unsigned getColorId() const;
+    virtual unsigned getXorId() const;
 
     /**
      * @brief Sets the ColorId of the cell.

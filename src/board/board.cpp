@@ -1,7 +1,7 @@
 #include "board.hpp"
 
-#include "../coordinate/coordinate.hpp"
 #include "../tetromino/tetromino.hpp"
+#include "../vec2/vec2.hpp"
 #include "board_update.hpp"
 #include <memory>
 
@@ -15,13 +15,13 @@ GridCell &Board::at(size_t rowIdx, size_t colIdx) {
     return grid_.at(rowIdx).at(colIdx);
 }
 
-std::array<GridCell, Board::width_> &Board::getRow(size_t rowIdx) {
+std::array<GridCell, Board::width_> &Board::getY(size_t rowIdx) {
     return grid_.at(rowIdx);
 }
 
 void Board::dropRowsAbove(size_t rowIdx) {
     for (size_t i = rowIdx; i > 0; i--) {
-        getRow(i) = getRow(i - 1);
+        getY(i) = getY(i - 1);
     }
 
     emptyRow(0);
@@ -46,7 +46,7 @@ bool Board::checkFullCol(size_t colIdx) const {
 }
 
 void Board::emptyRow(size_t rowIdx) {
-    for (GridCell &gridCell : getRow(rowIdx)) {
+    for (GridCell &gridCell : getY(rowIdx)) {
         gridCell.setEmpty();
     }
 }
@@ -90,23 +90,22 @@ size_t Board::getHeight() const noexcept { return height_; }
 // #### Board Actions ####
 
 void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
-    const Coordinate anchor = tetromino->getAnchorPoint();
+    const Vec2 anchor = tetromino->getAnchorPoint();
 
-    for (const Coordinate &relativeCoord : tetromino->getBody()) {
-        Coordinate absoluteCoord = anchor + relativeCoord;
-        at(absoluteCoord.getRow(), absoluteCoord.getCol())
-            .setColorId(tetromino->getColorId());
+    for (const Vec2 &relativeCoord : tetromino->getBody()) {
+        Vec2 absoluteCoord = anchor + relativeCoord;
+        at(absoluteCoord.getY(), absoluteCoord.getX())
+            .setColorId(tetromino->getXorId());
     }
 }
 
 bool Board::checkInGrid(Tetromino &tetromino) const {
-    Coordinate anchor = tetromino.getAnchorPoint();
-    for (const Coordinate &relativeCoord : tetromino.getBody()) {
-        Coordinate absoluteCoord = relativeCoord + anchor;
-        if (absoluteCoord.getCol() < 0 || absoluteCoord.getCol() >= getWidth()
-            || absoluteCoord.getRow() < 0
-            || absoluteCoord.getRow() >= getHeight()
-            || !get(absoluteCoord.getRow(), absoluteCoord.getCol()).isEmpty()) {
+    Vec2 anchor = tetromino.getAnchorPoint();
+    for (const Vec2 &relativeCoord : tetromino.getBody()) {
+        Vec2 absoluteCoord = relativeCoord + anchor;
+        if (absoluteCoord.getX() < 0 || absoluteCoord.getX() >= getWidth()
+            || absoluteCoord.getY() < 0 || absoluteCoord.getY() >= getHeight()
+            || !get(absoluteCoord.getY(), absoluteCoord.getX()).isEmpty()) {
             return false;
         }
     }

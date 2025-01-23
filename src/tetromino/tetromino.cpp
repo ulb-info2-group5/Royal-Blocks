@@ -1,6 +1,6 @@
 #include "tetromino.hpp"
 
-#include "../coordinate/coordinate.hpp"
+#include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
 #include "tetromino_shapes.hpp"
 
@@ -17,20 +17,20 @@
 
 // #### SRS Offsets Data Constants ####
 
-const std::vector<std::vector<Coordinate>> Tetromino::O_OFFSET_DATA = {
+const std::vector<std::vector<Vec2>> Tetromino::O_OFFSET_DATA = {
     {{0, 0}},
     {{1, 0}},
     {{1, -1}},
     {{0, -1}},
 };
-const std::vector<std::vector<Coordinate>> Tetromino::I_OFFSET_DATA = {
+const std::vector<std::vector<Vec2>> Tetromino::I_OFFSET_DATA = {
     {{0, 0}, {0, -1}, {0, 2}, {0, -1}, {0, 2}},
     {{0, -1}, {0, 0}, {0, 0}, {-1, 0}, {2, 0}},
     {{-1, -1}, {-1, 1}, {-1, -2}, {0, 1}, {0, -2}},
     {{-1, 0}, {-1, 0}, {-1, 0}, {1, 0}, {-2, 0}},
 };
 
-const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_OFFSET_DATA = {
+const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
     {{0, 0}, {0, 1}, {1, 1}, {-2, 0}, {-2, 1}},
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -39,8 +39,8 @@ const std::vector<std::vector<Coordinate>> Tetromino::ZLSJT_OFFSET_DATA = {
 
 // #### Constructor ####
 
-Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
-                     const std::vector<std::vector<Coordinate>> &offsetData,
+Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
+                     const std::vector<std::vector<Vec2>> &offsetData,
                      TetrominoShape shape)
     : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)},
       offsetData_(offsetData), shape_(shape) {
@@ -55,11 +55,11 @@ Tetromino::Tetromino(Coordinate &&anchorPoint, std::vector<Coordinate> &&body,
     int minCol = std::numeric_limits<int>::max();
     int maxCol = std::numeric_limits<int>::min();
 
-    for (const Coordinate &coord : body_) {
-        minRow = std::min(minRow, coord.getRow());
-        minCol = std::min(minCol, coord.getCol());
-        maxRow = std::max(maxRow, coord.getRow());
-        maxCol = std::max(maxCol, coord.getCol());
+    for (const Vec2 &coord : body_) {
+        minRow = std::min(minRow, coord.getY());
+        minCol = std::min(minCol, coord.getX());
+        maxRow = std::max(maxRow, coord.getY());
+        maxCol = std::max(maxCol, coord.getX());
     }
 
     height_ = maxRow - minRow + 1;
@@ -81,7 +81,7 @@ Tetromino::~Tetromino() = default;
 // #### Factory ####
 
 std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
-                                                    Coordinate &&anchorPoint) {
+                                                    Vec2 &&anchorPoint) {
     if (shape == TetrominoShape::NumTetrominoShape) {
         throw std::runtime_error(
             "shape must be different from NumTetrominoShape");
@@ -126,15 +126,11 @@ size_t Tetromino::getHeight() const noexcept { return height_; }
 
 TetrominoShape Tetromino::getShape() const noexcept { return shape_; }
 
-const Coordinate &Tetromino::getAnchorPoint() const noexcept {
-    return anchorPoint_;
-}
+const Vec2 &Tetromino::getAnchorPoint() const noexcept { return anchorPoint_; }
 
-const std::vector<Coordinate> &Tetromino::getBody() const noexcept {
-    return body_;
-}
+const std::vector<Vec2> &Tetromino::getBody() const noexcept { return body_; }
 
-unsigned Tetromino::getColorId() const noexcept {
+unsigned Tetromino::getXorId() const noexcept {
     return static_cast<unsigned>(getShape());
 }
 
@@ -153,12 +149,11 @@ uint8_t Tetromino::getNumOfTests() const noexcept {
 std::unique_ptr<Tetromino> Tetromino::getNthOffset(uint8_t offsetIndex) const {
     std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
 
-    Coordinate offsetVal1 =
-        offsetData_.at(prevRotationIdx_).at(offsetIndex - 1);
-    Coordinate offsetVal2 = offsetData_.at(rotationIdx_).at(offsetIndex - 1);
+    Vec2 offsetVal1 = offsetData_.at(prevRotationIdx_).at(offsetIndex - 1);
+    Vec2 offsetVal2 = offsetData_.at(rotationIdx_).at(offsetIndex - 1);
 
     // Compute offset with offset data
-    Coordinate offset = (offsetVal1 - offsetVal2);
+    Vec2 offset = (offsetVal1 - offsetVal2);
 
     // Apply offset
     copy->anchorPoint_ += offset;
@@ -168,7 +163,7 @@ std::unique_ptr<Tetromino> Tetromino::getNthOffset(uint8_t offsetIndex) const {
 
 // #### Setters ####
 
-void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
+void Tetromino::setAnchorPoint(const Vec2 &anchorPoint) {
     anchorPoint_ = anchorPoint;
 }
 
@@ -177,13 +172,13 @@ void Tetromino::setAnchorPoint(const Coordinate &anchorPoint) {
 void Tetromino::move(Direction direction, bool reverse) {
     switch (direction) {
     case Direction::Down:
-        anchorPoint_.moveRow(reverse ? -1 : +1);
+        anchorPoint_.moveY(reverse ? -1 : +1);
         break;
     case Direction::Left:
-        anchorPoint_.moveCol(reverse ? +1 : -1);
+        anchorPoint_.moveX(reverse ? +1 : -1);
         break;
     case Direction::Right:
-        anchorPoint_.moveCol(reverse ? -1 : +1);
+        anchorPoint_.moveX(reverse ? -1 : +1);
         break;
     }
 }
@@ -192,9 +187,9 @@ void Tetromino::rotate(bool rotateClockwise) {
     prevRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
 
-    Coordinate center{0, 0}; // Convention : rotation center is always (0,0)
+    Vec2 center{0, 0}; // Convention : rotation center is always (0,0)
 
-    for (Coordinate &coord : body_) {
+    for (Vec2 &coord : body_) {
         coord.rotateAround(center, rotateClockwise);
     }
 

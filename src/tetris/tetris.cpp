@@ -69,20 +69,18 @@ void Tetris::updatePreviewVertical() {
 // #### Placing and Dropping in Grid ####
 
 bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
-    Coordinate anchorPoint = tetromino.getAnchorPoint();
+    Vec2 anchorPoint = tetromino.getAnchorPoint();
 
-    anchorPoint.moveRow(1);
+    anchorPoint.moveY(1);
 
-    Coordinate absoluteCoordinate;
-    for (const auto &relativeCoordinate : tetromino.getBody()) {
-        absoluteCoordinate = anchorPoint + relativeCoordinate;
+    Vec2 absoluteVec2;
+    for (const auto &relativeVec2 : tetromino.getBody()) {
+        absoluteVec2 = anchorPoint + relativeVec2;
 
-        if (absoluteCoordinate.getCol() < 0
-            or absoluteCoordinate.getCol() >= board_.getWidth()
-            or absoluteCoordinate.getRow() < 0
-            or absoluteCoordinate.getRow() >= board_.getHeight()
-            or !checkEmptyCell(absoluteCoordinate.getRow(),
-                               absoluteCoordinate.getCol()))
+        if (absoluteVec2.getX() < 0 or absoluteVec2.getX() >= board_.getWidth()
+            or absoluteVec2.getY() < 0
+            or absoluteVec2.getY() >= board_.getHeight()
+            or !checkEmptyCell(absoluteVec2.getY(), absoluteVec2.getX()))
             return false;
     }
 
@@ -113,9 +111,9 @@ void Tetris::fillTetrominoesQueue() {
                            ? 0
                            : 1;
 
-        tetrominoes.at(i) = Tetromino::makeTetromino(
-            static_cast<TetrominoShape>(i),
-            Coordinate(spawnRow, board_.getWidth() / 2 - 1));
+        tetrominoes.at(i) =
+            Tetromino::makeTetromino(static_cast<TetrominoShape>(i),
+                                     Vec2(spawnRow, board_.getWidth() / 2 - 1));
     }
 
     std::random_device rd;

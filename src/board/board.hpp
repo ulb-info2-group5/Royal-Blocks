@@ -47,7 +47,7 @@ class Board final {
      *
      * @return A reference to the Array of GridCells corresponding to the row.
      */
-    virtual std::array<GridCell, width_> &getRow(size_t rowIdx);
+    virtual std::array<GridCell, width_> &getY(size_t rowIdx);
 
     /**
      * @brief Moves all rows above the specified row down by one position.

@@ -18,9 +18,9 @@ void Vec2Test::assignmentOperatorsTest() {
     CPPUNIT_ASSERT_EQUAL(vec23.getX(), vec45.getX());
     CPPUNIT_ASSERT_EQUAL(vec23.getY(), vec45.getY());
 
-    vec12 = std::move(vec45);
-    CPPUNIT_ASSERT_EQUAL(4, vec12.getX());
-    CPPUNIT_ASSERT_EQUAL(5, vec12.getY());
+    vec12 = std::move(vec68);
+    CPPUNIT_ASSERT_EQUAL(6, vec12.getX());
+    CPPUNIT_ASSERT_EQUAL(8, vec12.getY());
 }
 
 void Vec2Test::gettersAndSettersTest() {
@@ -66,17 +66,18 @@ void Vec2Test::moveTest() {
     vec12.moveX(2);
     CPPUNIT_ASSERT_EQUAL(Vec2(3, 2), vec12);
 
+    vec23.moveY(2);
+    CPPUNIT_ASSERT_EQUAL(Vec2(2, 5), vec23);
+
     vec45.moveX(-2);
     CPPUNIT_ASSERT_EQUAL(Vec2(2, 5), vec45);
-
-    vec45.moveX(2);
-    CPPUNIT_ASSERT_EQUAL(Vec2(4, 7), vec45);
 
     vec68.moveY(-2);
     CPPUNIT_ASSERT_EQUAL(Vec2(6, 6), vec68);
 }
 
 void Vec2Test::rotateAroundTest() {
+    // clockwise
     vec45.rotateAround(vec68, true);
     CPPUNIT_ASSERT_EQUAL(Vec2(3, 10), vec45);
     vec45.rotateAround(vec68, true);
@@ -84,6 +85,16 @@ void Vec2Test::rotateAroundTest() {
     vec45.rotateAround(vec68, true);
     CPPUNIT_ASSERT_EQUAL(Vec2(9, 6), vec45);
     vec45.rotateAround(vec68, true);
+    CPPUNIT_ASSERT_EQUAL(Vec2(4, 5), vec45);
+
+    // counter-clockwise
+    vec45.rotateAround(vec68, false);
+    CPPUNIT_ASSERT_EQUAL(Vec2(9, 6), vec45);
+    vec45.rotateAround(vec68, false);
+    CPPUNIT_ASSERT_EQUAL(Vec2(8, 11), vec45);
+    vec45.rotateAround(vec68, false);
+    CPPUNIT_ASSERT_EQUAL(Vec2(3, 10), vec45);
+    vec45.rotateAround(vec68, false);
     CPPUNIT_ASSERT_EQUAL(Vec2(4, 5), vec45);
 }
 
