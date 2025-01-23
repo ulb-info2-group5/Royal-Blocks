@@ -26,9 +26,9 @@ class Tetris final {
     bool inGracePeriod_ = false;
     bool newTetrominosFirstTick_ = true; // could also be a uint32_t tickCount
     Board board_;
-    std::unique_ptr<Tetromino> activeTetromino_;
-    std::unique_ptr<Tetromino> previewTetromino_;
-    std::queue<std::unique_ptr<Tetromino>> tetrominoesQueue_;
+    TetrominoPtr activeTetromino_;
+    TetrominoPtr previewTetromino_;
+    std::queue<TetrominoPtr> tetrominoesQueue_;
     std::queue<EventType> eventQueue_;
     pthread_mutex_t queueMutex_ = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_t isAliveMutex_ = PTHREAD_MUTEX_INITIALIZER;

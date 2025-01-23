@@ -141,7 +141,7 @@ class Board final {
      * @note The Tetromino will no longer be accessible after this function gets
      * called, ensuring it cannot be moved after being placed in the grid.
      */
-    virtual void placeTetromino(std::unique_ptr<Tetromino> tetromino);
+    virtual void placeTetromino(TetrominoPtr tetromino);
 
     /**
      * @brief Checks whether the specified Tetromino can fit in the grid given

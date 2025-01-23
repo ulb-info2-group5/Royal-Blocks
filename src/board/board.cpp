@@ -89,7 +89,7 @@ size_t Board::getHeight() const noexcept { return height_; }
 
 // #### Board Actions ####
 
-void Board::placeTetromino(std::unique_ptr<Tetromino> tetromino) {
+void Board::placeTetromino(TetrominoPtr tetromino) {
     const Vec2 anchor = tetromino->getAnchorPoint();
 
     for (const Vec2 &relativeCoord : tetromino->getBody()) {

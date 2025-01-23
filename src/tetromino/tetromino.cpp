@@ -19,22 +19,22 @@
 
 const std::vector<std::vector<Vec2>> Tetromino::O_OFFSET_DATA = {
     {{0, 0}},
-    {{1, 0}},
-    {{1, -1}},
     {{0, -1}},
+    {{-1, -1}},
+    {{-1, 0}},
 };
 const std::vector<std::vector<Vec2>> Tetromino::I_OFFSET_DATA = {
-    {{0, 0}, {0, -1}, {0, 2}, {0, -1}, {0, 2}},
-    {{0, -1}, {0, 0}, {0, 0}, {-1, 0}, {2, 0}},
-    {{-1, -1}, {-1, 1}, {-1, -2}, {0, 1}, {0, -2}},
-    {{-1, 0}, {-1, 0}, {-1, 0}, {1, 0}, {-2, 0}},
+    {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},
+    {{-1, 0}, {0, 0}, {0, 0}, {0, 1}, {0, -2}},
+    {{-1, 1}, {1, 1}, {-2, 1}, {1, 0}, {-2, 0}},
+    {{0, 1}, {0, 1}, {0, 1}, {0, -1}, {0, 2}},
 };
 
 const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
-    {{0, 0}, {0, 1}, {1, 1}, {-2, 0}, {-2, 1}},
+    {{0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2}},
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
-    {{0, 0}, {0, -1}, {1, -1}, {-2, 0}, {-2, -1}},
+    {{0, 0}, {1, 0}, {-1, -1}, {0, 2}, {-1, 2}},
 };
 
 // #### Constructor ####
@@ -50,20 +50,20 @@ Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
             "All Tetrominoes must be composed of 4 blocks");
     }
 
-    int minRow = std::numeric_limits<int>::max();
-    int maxRow = std::numeric_limits<int>::min();
-    int minCol = std::numeric_limits<int>::max();
-    int maxCol = std::numeric_limits<int>::min();
+    int minY = std::numeric_limits<int>::max();
+    int maxY = std::numeric_limits<int>::min();
+    int minX = std::numeric_limits<int>::max();
+    int maxX = std::numeric_limits<int>::min();
 
     for (const Vec2 &coord : body_) {
-        minRow = std::min(minRow, coord.getY());
-        minCol = std::min(minCol, coord.getX());
-        maxRow = std::max(maxRow, coord.getY());
-        maxCol = std::max(maxCol, coord.getX());
+        minY = std::min(minY, coord.getY());
+        minX = std::min(minX, coord.getX());
+        maxY = std::max(maxY, coord.getY());
+        maxX = std::max(maxX, coord.getX());
     }
 
-    height_ = maxRow - minRow + 1;
-    width_ = maxCol - minCol + 1;
+    height_ = maxY - minY + 1;
+    width_ = maxX - minX + 1;
 }
 
 /*--------------------------------------------------
@@ -80,14 +80,14 @@ Tetromino::~Tetromino() = default;
 
 // #### Factory ####
 
-std::unique_ptr<Tetromino> Tetromino::makeTetromino(TetrominoShape shape,
-                                                    Vec2 &&anchorPoint) {
+TetrominoPtr Tetromino::makeTetromino(TetrominoShape shape,
+                                      Vec2 &&anchorPoint) {
     if (shape == TetrominoShape::NumTetrominoShape) {
         throw std::runtime_error(
             "shape must be different from NumTetrominoShape");
     }
 
-    std::unique_ptr<Tetromino> ret;
+    TetrominoPtr ret;
 
     switch (shape) {
     case (TetrominoShape::Z):
@@ -146,8 +146,8 @@ uint8_t Tetromino::getNumOfTests() const noexcept {
     return static_cast<uint8_t>(offsetData_.at(0).size());
 }
 
-std::unique_ptr<Tetromino> Tetromino::getNthOffset(uint8_t offsetIndex) const {
-    std::unique_ptr<Tetromino> copy = std::make_unique<Tetromino>(*this);
+TetrominoPtr Tetromino::getNthOffset(uint8_t offsetIndex) const {
+    TetrominoPtr copy = std::make_unique<Tetromino>(*this);
 
     Vec2 offsetVal1 = offsetData_.at(prevRotationIdx_).at(offsetIndex - 1);
     Vec2 offsetVal2 = offsetData_.at(rotationIdx_).at(offsetIndex - 1);
@@ -172,7 +172,7 @@ void Tetromino::setAnchorPoint(const Vec2 &anchorPoint) {
 void Tetromino::move(Direction direction, bool reverse) {
     switch (direction) {
     case Direction::Down:
-        anchorPoint_.moveY(reverse ? -1 : +1);
+        anchorPoint_.moveY(reverse ? +1 : -1);
         break;
     case Direction::Left:
         anchorPoint_.moveX(reverse ? +1 : -1);

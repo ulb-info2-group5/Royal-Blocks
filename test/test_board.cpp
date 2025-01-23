@@ -18,7 +18,7 @@ void BoardTest::constructorTest() {
 }
 
 void BoardTest::placeTetrominoTest() {
-    std::unique_ptr<Tetromino> tetromino = Tetromino::makeTetromino(
+    TetrominoPtr tetromino = Tetromino::makeTetromino(
         TetrominoShape::L, Vec2{static_cast<int>(board.getHeight() - 1), 1});
 
     board.placeTetromino(std::move(tetromino));
@@ -123,10 +123,10 @@ void BoardTest::dropRowsAboveTest() {
 }
 
 void BoardTest::checkInGridTest() {
-    std::unique_ptr<Tetromino> tetrominoL = Tetromino::makeTetromino(
+    TetrominoPtr tetrominoL = Tetromino::makeTetromino(
         TetrominoShape::L, Vec2{static_cast<int>(board.getHeight() - 1), -1});
 
-    std::unique_ptr<Tetromino> tetrominoO = Tetromino::makeTetromino(
+    TetrominoPtr tetrominoO = Tetromino::makeTetromino(
         TetrominoShape::O, Vec2{static_cast<int>(board.getHeight() - 1),
                                 static_cast<int>(board.getWidth() - 2)});
 

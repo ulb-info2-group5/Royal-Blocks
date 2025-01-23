@@ -3,8 +3,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <memory>
-
 class TetrominoTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(TetrominoTest);
     CPPUNIT_TEST(shapeTest);
@@ -35,7 +33,13 @@ class TetrominoTest : public CppUnit::TestFixture {
     void variousOffsetsTetrominoITest();
 
   private:
-    std::vector<std::unique_ptr<Tetromino>> tetrominoes;
+    TetrominoPtr pTetrominoZ;
+    TetrominoPtr pTetrominoL;
+    TetrominoPtr pTetrominoO;
+    TetrominoPtr pTetrominoS;
+    TetrominoPtr pTetrominoI;
+    TetrominoPtr pTetrominoJ;
+    TetrominoPtr pTetrominoT;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TetrominoTest);

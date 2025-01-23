@@ -9,8 +9,9 @@
 #include <vector>
 
 enum class TetrominoShape;
-
 class TetrominoTest;
+class Tetromino;
+using TetrominoPtr = std::unique_ptr<Tetromino>;
 
 /**
  * @enum Direction
@@ -66,7 +67,7 @@ class Tetromino {
      * tile relative to the rotation center.
      * @param offsetData A reference to a matrix of Vec2s being the
      * offset data used for implementing SRS on this shape of Tetromino,
-     * i.e. ZLSJT_OFFSET_DATA.
+     * e.g. ZLSJT_OFFSET_DATA.
      * @param shape The shape of the Tetromino.
      * */
     Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
@@ -99,8 +100,7 @@ class Tetromino {
      *
      * @return A unique pointer to the newly created Tetromino object.
      */
-    static std::unique_ptr<Tetromino> makeTetromino(TetrominoShape shape,
-                                                    Vec2 &&anchorPoint);
+    static TetrominoPtr makeTetromino(TetrominoShape shape, Vec2 &&anchorPoint);
 
     // #### Getters ####
 
@@ -109,56 +109,56 @@ class Tetromino {
      *
      * @return The width.
      */
-    virtual size_t getWidth() const noexcept;
+    size_t getWidth() const noexcept;
 
     /**
      * @brief Returns the Tetromino's height.
      *
      * @return The height.
      */
-    virtual size_t getHeight() const noexcept;
+    size_t getHeight() const noexcept;
 
     /**
      * @brief Returns the Tetromino's shape.
      *
      * @return The shape.
      */
-    virtual TetrominoShape getShape() const noexcept;
+    TetrominoShape getShape() const noexcept;
 
     /**
      * @brief Returns the Tetromino's Vec2.
      *
      * @return The anchor-point.
      */
-    virtual const Vec2 &getAnchorPoint() const noexcept;
+    const Vec2 &getAnchorPoint() const noexcept;
 
     /**
      * @brief Returns the Tetromino's body.
      *
      * @return The body.
      */
-    virtual const std::vector<Vec2> &getBody() const noexcept;
+    const std::vector<Vec2> &getBody() const noexcept;
 
     /**
      * @brief Returns the Tetromino's colorId.
      *
      * @return The colorId.
      */
-    virtual unsigned getXorId() const noexcept;
+    unsigned getXorId() const noexcept;
 
     /**
      * @brief Returns the Tetromino's rotation-index.
      *
      * @return The rotation-index.
      */
-    virtual const RotationIndex &getRotationIndex() const noexcept;
+    const RotationIndex &getRotationIndex() const noexcept;
 
     /**
      * @brief Returns the Tetromino's previous rotation index.
      *
      * @return The previous rotation-index.
      */
-    virtual const RotationIndex &getPrevRotationIndex() const noexcept;
+    const RotationIndex &getPrevRotationIndex() const noexcept;
 
     /**
      * @brief Returns the number of offset-tests that this Tetromino can do
@@ -166,7 +166,7 @@ class Tetromino {
      *
      * @return The number of tests as a uint8_t
      */
-    virtual uint8_t getNumOfTests() const noexcept;
+    uint8_t getNumOfTests() const noexcept;
 
     /**
      * @brief Creates and returns a unique pointer to a new Tetromino,
@@ -179,7 +179,7 @@ class Tetromino {
      * @return A unique pointer to the newly created Tetromino, adjusted
      *         by the specified offset.
      */
-    virtual std::unique_ptr<Tetromino> getNthOffset(uint8_t offsetIndex) const;
+    TetrominoPtr getNthOffset(uint8_t offsetIndex) const;
 
     // #### Setters ####
 
@@ -188,7 +188,7 @@ class Tetromino {
      *
      * @param anchorPoint The new anchor-point.
      */
-    virtual void setAnchorPoint(const Vec2 &anchorPoint);
+    void setAnchorPoint(const Vec2 &anchorPoint);
 
     // #### Tetromino Actions ####
 
@@ -198,7 +198,7 @@ class Tetromino {
      * @param direction The direction to move the Tetromino.
      * @param reverse If true, moves the Tetromino in the opposite direction.
      */
-    virtual void move(Direction direction, bool reverse = false);
+    void move(Direction direction, bool reverse = false);
 
     /**
      * @brief Rotates the Tetromino around it rotation-center (Without SRS).
@@ -206,7 +206,7 @@ class Tetromino {
      * @param rotateClockwise If true, rotates the Tetromino clockwise;
      * otherwise, rotates it counterclockwise.
      */
-    virtual void rotate(bool rotateClockwise);
+    void rotate(bool rotateClockwise);
 
     // #### Comparisons Operators ####
 
@@ -216,7 +216,7 @@ class Tetromino {
      * @param other The Tetromino to compare with.
      * @return True if the two Tetrominoes are equal; otherwise, false.
      */
-    virtual bool operator==(const Tetromino &other) const;
+    bool operator==(const Tetromino &other) const;
 
     /**
      * @brief Compares two Tetromino objects.
@@ -224,7 +224,7 @@ class Tetromino {
      * @param other The Tetromino to compare with.
      * @return True if the two Tetrominoes are different; otherwise, false.
      */
-    virtual bool operator!=(const Tetromino &other) const;
+    bool operator!=(const Tetromino &other) const;
 
     // #### Output Stream ####
 

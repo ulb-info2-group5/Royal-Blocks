@@ -24,7 +24,7 @@
 void Tetris::tryRotateActive(bool rotateClockwise) {
     activeTetromino_->rotate(rotateClockwise);
 
-    std::unique_ptr<Tetromino> testTetromino;
+    TetrominoPtr testTetromino;
 
     bool isValid = false;
 
@@ -101,7 +101,7 @@ void Tetris::fillTetrominoesQueue() {
     constexpr size_t numShapes =
         static_cast<size_t>(TetrominoShape::NumTetrominoShape);
 
-    std::array<std::unique_ptr<Tetromino>, numShapes> tetrominoes;
+    std::array<TetrominoPtr, numShapes> tetrominoes;
 
     for (size_t i = 0; i < numShapes; i++) {
         // I tetromino should have its anchorPoint one row above compared to
