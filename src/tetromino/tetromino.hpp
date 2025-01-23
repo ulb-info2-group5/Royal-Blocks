@@ -144,7 +144,7 @@ class Tetromino {
      *
      * @return The colorId.
      */
-    unsigned getXorId() const noexcept;
+    unsigned getColorId() const noexcept;
 
     /**
      * @brief Returns the Tetromino's rotation-index.

@@ -77,17 +77,30 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
     for (const auto &relativeVec2 : tetromino.getBody()) {
         absoluteVec2 = anchorPoint + relativeVec2;
 
+        // FIXME
+        using namespace std;
+        cout << "absoluteVec2: " << absoluteVec2 << endl;
+
         if (absoluteVec2.getX() < 0 or absoluteVec2.getX() >= board_.getWidth()
             or absoluteVec2.getY() < 0
             or absoluteVec2.getY() >= board_.getHeight()
-            or !checkEmptyCell(absoluteVec2.getY(), absoluteVec2.getX()))
+            or !checkEmptyCell(absoluteVec2.getX(), absoluteVec2.getY()))
             return false;
     }
+
+    // FIXME
+    using namespace std;
+    cout << endl;
 
     return true;
 }
 
 void Tetris::placeActive() {
+
+    // FIXME
+    using namespace std;
+    cout << "placing" << endl;
+
     setIsAlive(board_.checkInGrid(*activeTetromino_));
 
     if (getIsAlive()) {
@@ -108,12 +121,12 @@ void Tetris::fillTetrominoesQueue() {
         // the others when spawned
         int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
                         or static_cast<TetrominoShape>(i) == TetrominoShape::T)
-                           ? 0
-                           : 1;
+                           ? board_.getHeight() - 1
+                           : board_.getHeight() - 2;
 
         tetrominoes.at(i) =
             Tetromino::makeTetromino(static_cast<TetrominoShape>(i),
-                                     Vec2(spawnRow, board_.getWidth() / 2 - 1));
+                                     Vec2(board_.getWidth() / 2 - 1, spawnRow));
     }
 
     std::random_device rd;
@@ -165,7 +178,15 @@ void Tetris::handleNextEvent() {
         if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
         tryMoveActive(Direction::Down);
 
-        if (!checkCanDrop(*activeTetromino_)) {
+        using namespace std;
+        bool checkCanDropRes = checkCanDrop(*activeTetromino_);
+        cout << "checkCanDropRes: " << checkCanDropRes << endl;
+        cout << endl;
+
+        // FIXME
+
+        if (!checkCanDropRes) {
+
             if (!inGracePeriod_) inGracePeriod_ = true;
             else {
                 placeActive();
@@ -209,7 +230,11 @@ void Tetris::handleNextEvent() {
         break;
 
     case EventType::Quit:
+
+#if ENABLE_TUI
         ncurses_quit();
+#endif // ENABLE_TUI
+
         exit(0); //! VERY NOT GOOD but temporary <3
         break;
     }
@@ -218,13 +243,16 @@ void Tetris::handleNextEvent() {
         previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
         updatePreviewVertical();
 
+#if ENABLE_TUI
         draw_grid(board_.getHeight(), board_.getWidth());
-        draw_cells(&board_);
+        draw_cells(&board_); // BUG: this cause crash
+
         draw_preview(previewTetromino_.get());
         draw_active(activeTetromino_.get());
         print_debug("score :", board_.getWidth());
         print_score(score_, board_.getWidth());
         ncurses_refresh();
+#endif // ENABLE_TUI
     }
 }
 
@@ -256,18 +284,29 @@ void Tetris::addEvent(EventType event) {
 
 // #### Tetris Loop ####
 
+// FIXME
+#include <thread>
+
 void Tetris::run() {
     EventType event;
 
     fetchNewTetromino();
 
-    constexpr float frequency = 60;
+    // FIXME: Put back frequency to 60
+    constexpr float frequency = 2;
     constexpr std::chrono::duration period =
         std::chrono::seconds(1) / frequency;
 
     while (getIsAlive()) {
+        // FIXME
+        using namespace std;
+        cout << "current: " << activeTetromino_->getAnchorPoint() << endl;
+
         handleNextEvent();
+
+        std::this_thread::sleep_for(period);
     }
+
     ncurses_quit();
     std::cout << "Game Over" << std::endl;
 }

@@ -1,6 +1,7 @@
 #include "grid/print_grid.hpp"
 #include "tetris/event_type.hpp"
 #include "tetris/tetris.hpp"
+
 #include <chrono>
 #include <cstdio>
 #include <pthread.h>
@@ -100,8 +101,12 @@ int main() {
     pthread_create(&clockHandler, nullptr, clockRoutine,
                    static_cast<void *>(&tetris));
 
+#if ENABLE_TUI
+
     ncurses_init();
     fflush(stdout);
+
+#endif // ENABLE_TUI
 
     tetris.run();
 

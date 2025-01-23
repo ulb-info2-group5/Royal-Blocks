@@ -130,7 +130,7 @@ const Vec2 &Tetromino::getAnchorPoint() const noexcept { return anchorPoint_; }
 
 const std::vector<Vec2> &Tetromino::getBody() const noexcept { return body_; }
 
-unsigned Tetromino::getXorId() const noexcept {
+unsigned Tetromino::getColorId() const noexcept {
     return static_cast<unsigned>(getShape());
 }
 

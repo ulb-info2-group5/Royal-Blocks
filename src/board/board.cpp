@@ -3,6 +3,7 @@
 #include "../tetromino/tetromino.hpp"
 #include "../vec2/vec2.hpp"
 #include "board_update.hpp"
+
 #include <memory>
 
 /*--------------------------------------------------
@@ -11,63 +12,71 @@
 
 // #### Helpers ####
 
-GridCell &Board::at(size_t rowIdx, size_t colIdx) {
-    return grid_.at(rowIdx).at(colIdx);
+GridCell &Board::at(size_t xCoord, size_t yCoord) {
+    return grid_.at(height_ - 1 - yCoord).at(xCoord);
 }
 
-std::array<GridCell, Board::width_> &Board::getY(size_t rowIdx) {
-    return grid_.at(rowIdx);
+std::array<GridCell, Board::width_> &Board::getRow(size_t yCoord) {
+    return grid_.at(height_ - 1 - yCoord);
 }
 
-void Board::dropRowsAbove(size_t rowIdx) {
-    for (size_t i = rowIdx; i > 0; i--) {
-        getY(i) = getY(i - 1);
+const std::array<GridCell, Board::width_> &Board::getRow(size_t yCoord) const {
+    return grid_.at(yCoord);
+}
+
+void Board::dropRowsAbove(size_t yCoord) {
+    for (size_t i = yCoord; i > 0; i--) {
+        getRow(i) = getRow(i - 1);
     }
 
-    emptyRow(0);
+    emptyRow(height_ - 1);
 }
 
-bool Board::checkFullRow(size_t rowIdx) const {
-    for (size_t colIdx = 0; colIdx < getWidth(); colIdx++) {
-        if (get(rowIdx, colIdx).isEmpty()) {
+bool Board::checkFullRow(size_t yCoord) const {
+    for (const auto &cell : getRow(yCoord)) {
+        if (cell.isEmpty()) {
             return false;
         }
     }
+
     return true;
 }
 
-bool Board::checkFullCol(size_t colIdx) const {
-    for (size_t rowIdx = 0; rowIdx < width_; rowIdx++) {
-        if (get(rowIdx, colIdx).isEmpty()) {
+bool Board::checkFullCol(size_t xCoord) const {
+    for (size_t yCoord = height_ - 1; yCoord >= 0; yCoord--) {
+        if (get(yCoord, xCoord).isEmpty()) {
             return false;
         }
     }
+
     return true;
 }
 
-void Board::emptyRow(size_t rowIdx) {
-    for (GridCell &gridCell : getY(rowIdx)) {
+void Board::emptyRow(size_t yCoord) {
+    for (GridCell &gridCell : getRow(yCoord)) {
         gridCell.setEmpty();
     }
 }
 
-void Board::emptyCol(size_t colIdx) {
-    for (size_t rowIdx = 0; rowIdx < getWidth(); rowIdx++) {
-        at(rowIdx, colIdx).setEmpty();
+void Board::emptyCol(size_t xCoord) {
+    for (size_t yCoord = 0; yCoord < height_ - 1; yCoord++) {
+        at(yCoord, xCoord).setEmpty();
     }
 }
 
+// FIXME: fix this, broken since we changed the way from matrix to cartesian
+// indexing
 void Board::gravity() {
-    for (int colIdx = 0; colIdx < getWidth(); colIdx++) {
-        int writeRowIdx = getHeight() - 1;
+    for (int xCoord = 0; xCoord < getWidth(); xCoord++) {
+        int writeYCoord = getHeight() - 1;
 
-        for (int rowIdx = getHeight() - 1; rowIdx >= 0; rowIdx--) {
-            if (!get(rowIdx, colIdx).isEmpty()) {
-                if (rowIdx != writeRowIdx) {
-                    at(writeRowIdx, colIdx) = at(rowIdx, colIdx);
-                    at(rowIdx, colIdx).setEmpty();
+        for (int yCoord = getHeight() - 1; yCoord >= 0; yCoord--) {
+            if (!get(yCoord, xCoord).isEmpty()) {
+                if (yCoord != writeYCoord) {
+                    at(writeYCoord, xCoord) = at(yCoord, xCoord);
+                    at(yCoord, xCoord).setEmpty();
                 }
-                writeRowIdx--;
+                writeYCoord--;
             }
         }
     }
@@ -79,8 +88,8 @@ void Board::gravity() {
 
 // #### Getters ####
 
-const GridCell &Board::get(size_t rowIdx, size_t colIdx) const {
-    return grid_.at(rowIdx).at(colIdx);
+const GridCell &Board::get(size_t xCoord, size_t yCoord) const {
+    return grid_.at(height_ - 1 - yCoord).at(xCoord);
 }
 
 size_t Board::getWidth() const noexcept { return width_; }
@@ -90,12 +99,12 @@ size_t Board::getHeight() const noexcept { return height_; }
 // #### Board Actions ####
 
 void Board::placeTetromino(TetrominoPtr tetromino) {
-    const Vec2 anchor = tetromino->getAnchorPoint();
+    Vec2 anchor = tetromino->getAnchorPoint();
 
     for (const Vec2 &relativeCoord : tetromino->getBody()) {
         Vec2 absoluteCoord = anchor + relativeCoord;
-        at(absoluteCoord.getY(), absoluteCoord.getX())
-            .setColorId(tetromino->getXorId());
+        at(absoluteCoord.getX(), absoluteCoord.getY())
+            .setColorId(tetromino->getColorId());
     }
 }
 
@@ -105,10 +114,12 @@ bool Board::checkInGrid(Tetromino &tetromino) const {
         Vec2 absoluteCoord = relativeCoord + anchor;
         if (absoluteCoord.getX() < 0 || absoluteCoord.getX() >= getWidth()
             || absoluteCoord.getY() < 0 || absoluteCoord.getY() >= getHeight()
-            || !get(absoluteCoord.getY(), absoluteCoord.getX()).isEmpty()) {
+            || !get(absoluteCoord.getX(), absoluteCoord.getY()).isEmpty()) {
+
             return false;
         }
     }
+
     return true;
 }
 

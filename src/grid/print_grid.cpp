@@ -33,14 +33,14 @@ void draw_cells(Board *board) {
     GridCell gc;
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
-            gc = board->get(y, x);
+            gc = board->get(x, y);
             // printf("isEmpty ? : %1x\n", gc.isEmpty());
             if (!gc.isEmpty()) {
-                // mvaddch(x+1, y+1, ' ' | COLOR_PAIR(gc.getXorId()));
+                // mvaddch(x+1, y+1, ' ' | COLOR_PAIR(gc.getColorId()));
                 mvaddch(y + 1, (2 * x) + 1,
-                        ' ' | COLOR_PAIR(gc.getXorId() + 2));
+                        ' ' | COLOR_PAIR(gc.getColorId() + 2));
                 mvaddch(y + 1, (2 * x) + 2,
-                        ' ' | COLOR_PAIR(gc.getXorId() + 2));
+                        ' ' | COLOR_PAIR(gc.getColorId() + 2));
                 // mvaddch(y+1, (2*x)+1, ' ' | COLOR_PAIR(3));
                 // mvaddch(y+1, (2*x)+2, ' ' | COLOR_PAIR(3));
             }
@@ -58,9 +58,9 @@ void draw_active(Tetromino *activeTetromino) {
         uint32_t x = absoluteCoord.getX();
         uint32_t y = absoluteCoord.getY();
         mvaddch(y + 1, (2 * x) + 1,
-                ' ' | COLOR_PAIR(activeTetromino->getXorId() + 2));
+                ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
         mvaddch(y + 1, (2 * x) + 2,
-                ' ' | COLOR_PAIR(activeTetromino->getXorId() + 2));
+                ' ' | COLOR_PAIR(activeTetromino->getColorId() + 2));
     }
 
     // refresh();

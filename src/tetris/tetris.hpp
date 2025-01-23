@@ -5,7 +5,6 @@
 #include "../tetromino/tetromino.hpp"
 #include "event_type.hpp"
 
-#include <memory>
 #include <pthread.h>
 #include <queue>
 
