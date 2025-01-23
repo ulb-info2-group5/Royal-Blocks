@@ -1,14 +1,14 @@
-#ifndef TEST_COORDINATE_HPP
-#define TEST_COORDINATE_HPP
+#ifndef TEST_VEC2_HPP
+#define TEST_VEC2_HPP
 
-#include "../src/coordinate/coordinate.hpp"
+#include "./../src/vec2/vec2.hpp"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-class CoordinateTest : public CppUnit::TestFixture {
-    CPPUNIT_TEST_SUITE(CoordinateTest);
+class Vec2Test : public CppUnit::TestFixture {
+    CPPUNIT_TEST_SUITE(Vec2Test);
 
     CPPUNIT_TEST(assignmentOperatorsTest);
 
@@ -21,7 +21,7 @@ class CoordinateTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(compoundAdditionTest);
     CPPUNIT_TEST(compoundSubtractionTest);
 
-    CPPUNIT_TEST(moveRowAndColTest);
+    CPPUNIT_TEST(moveTest);
     CPPUNIT_TEST(rotateAroundTest);
 
     CPPUNIT_TEST(outputStreamOperatorTest);
@@ -46,16 +46,16 @@ class CoordinateTest : public CppUnit::TestFixture {
     void compoundAdditionTest();
     void compoundSubtractionTest();
 
-    void moveRowAndColTest();
+    void moveTest();
 
     void rotateAroundTest();
 
     void outputStreamOperatorTest();
 
   private:
-    Coordinate *coord1, *coord2, *coord3;
+    Vec2 vec12, vec23, vec45, vec68;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(CoordinateTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Vec2Test);
 
-#endif
+#endif // TEST_VEC2_HPP

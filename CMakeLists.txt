@@ -25,7 +25,7 @@ endif()
 # tetris_lib source files
 file(GLOB_RECURSE SOURCES_LIB
     src/board/*.cpp
-    src/coordinate/*.cpp
+    src/vec2/*.cpp
     src/tetris/*.cpp
     src/tetromino/*.cpp
     src/grid/*.cpp

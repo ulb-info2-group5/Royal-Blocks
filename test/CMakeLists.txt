@@ -7,6 +7,7 @@ if(TEST_SOURCES)
 
     target_link_libraries(${PROJECT_NAME}_tests PRIVATE ${PROJECT_NAME}_lib cppunit ncurses)
 
-    add_test(coordinate ${PROJECT_NAME}_tests)
+    add_test(vec2 ${PROJECT_NAME}_tests)
     add_test(tetromino ${PROJECT_NAME}_tests)
+    # TODO: add the other tests
 endif()
