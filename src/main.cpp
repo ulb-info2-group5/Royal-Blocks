@@ -101,12 +101,10 @@ int main() {
     pthread_create(&clockHandler, nullptr, clockRoutine,
                    static_cast<void *>(&tetris));
 
-#if ENABLE_TUI
-
+    // #if ENABLE_TUI
     ncurses_init();
     fflush(stdout);
-
-#endif // ENABLE_TUI
+    // #endif // ENABLE_TUI
 
     tetris.run();
 

@@ -8,7 +8,6 @@
 #include "event_type.hpp"
 
 #include <algorithm>
-#include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -71,7 +70,7 @@ void Tetris::updatePreviewVertical() {
 bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
     Vec2 anchorPoint = tetromino.getAnchorPoint();
 
-    anchorPoint.moveY(1);
+    anchorPoint.moveY(-1);
 
     Vec2 absoluteVec2;
     for (const auto &relativeVec2 : tetromino.getBody()) {
@@ -88,6 +87,8 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
 }
 
 void Tetris::placeActive() {
+    std::cout << "placeActive called" << std::endl;
+
     setIsAlive(board_.checkInGrid(*activeTetromino_));
 
     if (getIsAlive()) {
@@ -165,18 +166,15 @@ void Tetris::handleNextEvent() {
         if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
         tryMoveActive(Direction::Down);
 
-        using namespace std;
-        bool checkCanDropRes = checkCanDrop(*activeTetromino_);
-        cout << "checkCanDropRes: " << checkCanDropRes << endl;
-        cout << endl;
-
-        // FIXME
-
-        if (!checkCanDropRes) {
+        if (!checkCanDrop(*activeTetromino_)) {
+            // FIXME
+            // std::cout << "!checkCanDrop" << std::endl;
 
             if (!inGracePeriod_) inGracePeriod_ = true;
             else {
+
                 placeActive();
+
                 score_ += board_.update().getNumClearedRows();
                 fetchNewTetromino();
                 newTetrominosFirstTick_ = true;
@@ -218,9 +216,9 @@ void Tetris::handleNextEvent() {
 
     case EventType::Quit:
 
-#if ENABLE_TUI
+        // #if ENABLE_TUI
         ncurses_quit();
-#endif // ENABLE_TUI
+        // #endif // ENABLE_TUI
 
         exit(0); //! VERY NOT GOOD but temporary <3
         break;
@@ -230,8 +228,8 @@ void Tetris::handleNextEvent() {
         previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
         updatePreviewVertical();
 
-#if ENABLE_TUI
-        draw_grid(board_.getHeight(), board_.getWidth());
+        // #if ENABLE_TUI
+        draw_grid(board_.getWidth(), board_.getHeight());
         draw_cells(&board_); // BUG: this cause crash
 
         draw_preview(previewTetromino_.get());
@@ -239,7 +237,7 @@ void Tetris::handleNextEvent() {
         print_debug("score :", board_.getWidth());
         print_score(score_, board_.getWidth());
         ncurses_refresh();
-#endif // ENABLE_TUI
+        // #endif // ENABLE_TUI
     }
 }
 
@@ -271,27 +269,22 @@ void Tetris::addEvent(EventType event) {
 
 // #### Tetris Loop ####
 
-// FIXME
-#include <thread>
-
 void Tetris::run() {
     EventType event;
 
     fetchNewTetromino();
 
-    // FIXME: Put back frequency to 60
-    constexpr float frequency = 2;
-    constexpr std::chrono::duration period =
-        std::chrono::seconds(1) / frequency;
-
     while (getIsAlive()) {
-        // FIXME
-        using namespace std;
-        cout << "current: " << activeTetromino_->getAnchorPoint() << endl;
+
+        // TODO: remove this (debug)
+        // for (int y = 0; y < board_.getHeight(); y++) {
+        //     for (int x = 0; x < board_.getWidth(); x++) {
+        //         std::cout << ((board_.get(x, y).isEmpty()) ? "." : "#");
+        //     }
+        //     std::cout << std::endl;
+        // }
 
         handleNextEvent();
-
-        std::this_thread::sleep_for(period);
     }
 
     ncurses_quit();

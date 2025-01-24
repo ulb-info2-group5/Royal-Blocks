@@ -4,24 +4,24 @@
 #include "../board/board.hpp"
 #include "../board/grid_cell.hpp"
 
-void draw_grid(int rows, int cols) {
+void draw_grid(int width, int height) {
 
     clear();
 
-    for (uint32_t y = 0; y < rows; y++) {
+    for (uint32_t y = 0; y < height; y++) {
         mvaddch(y + 1, 0, '|');
-        mvaddch(y + 1, 2 * (cols + 1) - 1, '|');
+        mvaddch(y + 1, 2 * (width + 1) - 1, '|');
     }
-    for (uint32_t x = 0; x < 2 * cols; x++) {
+    for (uint32_t x = 0; x < 2 * width; x++) {
         mvaddch(0, x + 1, '-');
-        mvaddch(rows + 2 - 1, x + 1, '-');
+        mvaddch(height + 2 - 1, x + 1, '-');
     }
     /*<3*/
 
     mvaddch(0, 0, '+');
-    mvaddch(0, (cols * 2) + 1, '+');
-    mvaddch((rows + 1), 0, '+');
-    mvaddch((rows + 1), (cols * 2) + 1, '+');
+    mvaddch(0, (width * 2) + 1, '+');
+    mvaddch((height + 1), 0, '+');
+    mvaddch((height + 1), (width * 2) + 1, '+');
     /*<3*/
 
     // refresh();

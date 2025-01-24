@@ -8,10 +8,12 @@
 class TetrisTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(TetrisTest);
     CPPUNIT_TEST(fetchNewTetrominoTest);
+    CPPUNIT_TEST(checkCanDropTest);
     CPPUNIT_TEST_SUITE_END();
 
   protected:
     void fetchNewTetrominoTest();
+    void checkCanDropTest();
 
   private:
     constexpr static size_t tetrominoShapesNum =

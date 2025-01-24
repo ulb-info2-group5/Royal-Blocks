@@ -7,3 +7,6 @@ void TetrisTest::fetchNewTetrominoTest() {
     CPPUNIT_ASSERT_EQUAL(tetrominoShapesNum - 1,
                          tetris.getTetrominoesQueueSize());
 }
+
+// TODO:
+void TetrisTest::checkCanDropTest() {}
