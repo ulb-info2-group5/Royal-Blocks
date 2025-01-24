@@ -13,7 +13,7 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(emptyColTest);
     CPPUNIT_TEST(gravityTest);
     CPPUNIT_TEST(dropRowsAboveTest);
-    // missing test: checkInGridTest()
+    CPPUNIT_TEST(checkInGridTest);
     CPPUNIT_TEST_SUITE_END();
 
   private:

@@ -8,10 +8,6 @@
 #include <memory>
 #include <vector>
 
-// FIXME
-#include <iostream>
-using namespace std;
-
 // TODO: use int everywhere instead of size_t ?
 
 void BoardTest::constructorTest() {
@@ -137,15 +133,14 @@ void BoardTest::dropRowsAboveTest() {
 }
 
 void BoardTest::checkInGridTest() {
-    TetrominoPtr tetrominoL = Tetromino::makeTetromino(
-        TetrominoShape::L, Vec2{static_cast<int>(board.getHeight() - 1), -1});
+    TetrominoPtr tetrominoL =
+        Tetromino::makeTetromino(TetrominoShape::L, Vec2{2, 0});
 
-    TetrominoPtr tetrominoO = Tetromino::makeTetromino(
-        TetrominoShape::O, Vec2{static_cast<int>(board.getHeight() - 1),
-                                static_cast<int>(board.getWidth() - 2)});
+    TetrominoPtr tetrominoO =
+        Tetromino::makeTetromino(TetrominoShape::O, Vec2{0, 0});
 
-    fillCol(board.getWidth() - 1);
+    fillCol(0);
 
-    CPPUNIT_ASSERT(!(board.checkInGrid(*tetrominoO)));
     CPPUNIT_ASSERT(board.checkInGrid(*tetrominoL));
+    CPPUNIT_ASSERT(!(board.checkInGrid(*tetrominoO)));
 }
