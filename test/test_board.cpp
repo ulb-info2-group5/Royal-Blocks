@@ -61,26 +61,14 @@ void BoardTest::fillCol(size_t xColToFill) {
     }
 }
 
-// FIXME
-#include <iostream>
-using namespace std;
-
 void BoardTest::checkFullRowTest() {
     int bottomRowY = 0;
     fillRow(bottomRowY); // fill the bottom row
 
-    // FIXME
-    for (size_t x = 0; x < board.getWidth(); x++) {
-        for (size_t y = 0; y < board.getHeight(); y++) {
-            cout << ((board.at(x, y).isEmpty()) ? "." : "#") << " ";
-        }
-        cout << endl;
+    for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+        bool rowIsFull = board.checkFullRow(yRow);
+        CPPUNIT_ASSERT((bottomRowY == yRow) ? rowIsFull : !rowIsFull);
     }
-
-    // for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
-    //     bool rowIsFull = board.checkFullRow(yRow);
-    //     CPPUNIT_ASSERT((bottomRowY == yRow) ? rowIsFull : !rowIsFull);
-    // }
 }
 
 void BoardTest::checkFullColTest() {

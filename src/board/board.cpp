@@ -7,6 +7,10 @@
 #include <cstddef>
 #include <memory>
 
+// FIXME
+#include <iostream>
+using namespace std;
+
 /*--------------------------------------------------
                     PRIVATE
 --------------------------------------------------*/
