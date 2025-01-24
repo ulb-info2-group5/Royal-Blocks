@@ -63,7 +63,7 @@ void Board::emptyRow(int yRow) {
 
 void Board::emptyCol(int xCol) {
     for (int yRow = getHeight() - 1; yRow >= 0; yRow--) {
-        at(yRow, xCol).setEmpty();
+        at(xCol, yRow).setEmpty();
     }
 }
 

@@ -85,7 +85,8 @@ void BoardTest::checkFullColTest() {
 
 void BoardTest::emptyRowTest() {
     const unsigned fullRowIdx = 0;
-    fillCol(fullRowIdx);
+    fillRow(fullRowIdx);
+    CPPUNIT_ASSERT(board.checkFullRow(fullRowIdx));
     board.emptyRow(fullRowIdx);
     CPPUNIT_ASSERT(!board.checkFullRow(fullRowIdx));
 }
@@ -93,6 +94,7 @@ void BoardTest::emptyRowTest() {
 void BoardTest::emptyColTest() {
     const unsigned fullColIdx = 0;
     fillCol(fullColIdx);
+    CPPUNIT_ASSERT(board.checkFullCol(fullColIdx));
     board.emptyCol(fullColIdx);
     CPPUNIT_ASSERT(!board.checkFullCol(fullColIdx));
 }
