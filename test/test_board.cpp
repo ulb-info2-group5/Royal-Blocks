@@ -12,6 +12,8 @@
 #include <iostream>
 using namespace std;
 
+// TODO: use int everywhere instead of size_t ?
+
 void BoardTest::constructorTest() {
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), board.getHeight());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), board.getWidth());
@@ -48,7 +50,7 @@ void BoardTest::placeTetrominoTest() {
 void BoardTest::fillRow(size_t yRowToFill) {
     constexpr unsigned colorId = 0;
 
-    for (size_t xCoord = 0; xCoord < board.getWidth(); xCoord++) {
+    for (int xCoord = 0; xCoord < board.getWidth(); xCoord++) {
         board.at(xCoord, yRowToFill).setColorId(colorId);
     }
 }
@@ -56,8 +58,8 @@ void BoardTest::fillRow(size_t yRowToFill) {
 void BoardTest::fillCol(size_t xColToFill) {
     constexpr unsigned colorId = 0;
 
-    for (size_t yCoord = 0; yCoord < board.getHeight(); yCoord++) {
-        board.at(xColToFill, yCoord).setColorId(colorId);
+    for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+        board.at(xColToFill, yRow).setColorId(colorId);
     }
 }
 
@@ -72,12 +74,12 @@ void BoardTest::checkFullRowTest() {
 }
 
 void BoardTest::checkFullColTest() {
-    const unsigned fullColIdx = 0;
-    fillCol(fullColIdx);
+    int xFullCol = 0;
+    fillCol(xFullCol); // fill the first column
 
-    for (size_t colIdx = 0; colIdx < board.getWidth(); colIdx++) {
-        bool colIsFull = board.checkFullCol(colIdx);
-        CPPUNIT_ASSERT((fullColIdx == colIdx) ? colIsFull : !colIsFull);
+    for (size_t xCol = 0; xCol < board.getWidth(); xCol++) {
+        bool colIsFull = board.checkFullCol(xCol);
+        CPPUNIT_ASSERT((xFullCol == xCol) ? colIsFull : !colIsFull);
     }
 }
 

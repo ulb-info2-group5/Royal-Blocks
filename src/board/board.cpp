@@ -47,7 +47,7 @@ bool Board::checkFullRow(int yRow) const {
 
 bool Board::checkFullCol(int xCol) const {
     for (int yRow = getHeight() - 1; yRow >= 0; yRow--) {
-        if (get(yRow, xCol).isEmpty()) {
+        if (get(xCol, yRow).isEmpty()) {
             return false;
         }
     }

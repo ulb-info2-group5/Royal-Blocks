@@ -8,8 +8,8 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(constructorTest);
     CPPUNIT_TEST(placeTetrominoTest);
     CPPUNIT_TEST(checkFullRowTest);
+    CPPUNIT_TEST(checkFullColTest);
     // TODO: toggle those tests back
-    // CPPUNIT_TEST(checkFullColTest);
     // CPPUNIT_TEST(emptyRowTest);
     // CPPUNIT_TEST(emptyColTest);
     // CPPUNIT_TEST(gravityTest);
