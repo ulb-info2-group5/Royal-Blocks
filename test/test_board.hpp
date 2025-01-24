@@ -11,8 +11,8 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(checkFullColTest);
     CPPUNIT_TEST(emptyRowTest);
     CPPUNIT_TEST(emptyColTest);
+    CPPUNIT_TEST(gravityTest);
     // TODO: toggle those tests back
-    // CPPUNIT_TEST(gravityTest);
     // CPPUNIT_TEST(dropRowsAboveTest);
     CPPUNIT_TEST_SUITE_END();
 

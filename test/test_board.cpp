@@ -102,21 +102,24 @@ void BoardTest::emptyColTest() {
 void BoardTest::gravityTest() {
     constexpr unsigned colorId = 0;
 
-    board.at(0, 0).setColorId(colorId);
-    board.at(2, 0).setColorId(colorId);
-    board.at(3, 0).setColorId(colorId);
-    board.at(1, 1).setColorId(colorId);
+    std::vector<Vec2> cellsToBeFilled = {{0, 0}, {0, 1}, {1, 2}, {2, 1}};
+    std::vector<Vec2> expectedCellsAfterGravity = {
+        {0, 0}, {0, 1}, {1, 0}, {2, 0}};
+
+    // The cells we fill before applying gravity
+    for (const Vec2 &toFill : cellsToBeFilled) {
+        board.at(toFill.getX(), toFill.getY()).setColorId(colorId);
+    }
 
     board.gravity();
 
-    for (size_t rowIdx = 0; rowIdx < board.getHeight(); rowIdx++) {
-        for (size_t colIdx = 0; colIdx < board.getWidth(); colIdx++) {
-            if ((colIdx == 0 and rowIdx >= board.getHeight() - 3)
-                or (colIdx == 1 and rowIdx == board.getHeight() - 1)) {
-                CPPUNIT_ASSERT(!board.get(rowIdx, colIdx).isEmpty());
-            } else {
-                CPPUNIT_ASSERT(board.get(rowIdx, colIdx).isEmpty());
-            }
+    for (const Vec2 &coord : expectedCellsAfterGravity) {
+        if (std::find(expectedCellsAfterGravity.begin(),
+                      expectedCellsAfterGravity.end(), coord)
+            != expectedCellsAfterGravity.end()) {
+            CPPUNIT_ASSERT(!board.get(coord.getX(), coord.getY()).isEmpty());
+        } else {
+            CPPUNIT_ASSERT(board.get(coord.getX(), coord.getY()).isEmpty());
         }
     }
 }

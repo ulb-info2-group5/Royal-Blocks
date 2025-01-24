@@ -67,19 +67,18 @@ void Board::emptyCol(int xCol) {
     }
 }
 
-// FIXME: fix this, broken since we changed the way from matrix to cartesian
-// indexing
 void Board::gravity() {
-    for (int xCoord = 0; xCoord < getWidth(); xCoord++) {
-        int writeYCoord = getHeight() - 1;
+    for (int xCol = 0; xCol < getWidth(); xCol++) {
+        int writeY = 0;
 
-        for (int yCoord = getHeight() - 1; yCoord >= 0; yCoord--) {
-            if (!get(yCoord, xCoord).isEmpty()) {
-                if (yCoord != writeYCoord) {
-                    at(writeYCoord, xCoord) = at(yCoord, xCoord);
-                    at(yCoord, xCoord).setEmpty();
+        for (int yRow = 0; yRow < getHeight(); yRow++) {
+            cout << "xCol: " << xCol << " yRow: " << yRow << std::endl;
+            if (!get(xCol, yRow).isEmpty()) {
+                if (yRow != writeY) {
+                    at(xCol, writeY) = at(xCol, yRow);
+                    at(xCol, yRow).setEmpty();
                 }
-                writeYCoord--;
+                writeY++;
             }
         }
     }
