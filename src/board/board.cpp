@@ -4,6 +4,7 @@
 #include "../vec2/vec2.hpp"
 #include "board_update.hpp"
 
+#include <cstddef>
 #include <memory>
 
 /*--------------------------------------------------
@@ -12,28 +13,26 @@
 
 // #### Helpers ####
 
-GridCell &Board::at(size_t xCoord, size_t yCoord) {
-    return grid_.at(height_ - 1 - yCoord).at(xCoord);
+GridCell &Board::at(int xCol, int yRow) { return getRow(yRow).at(xCol); }
+
+std::array<GridCell, Board::width_> &Board::getRow(int yRow) {
+    return grid_.at(getHeight() - 1 - yRow);
 }
 
-std::array<GridCell, Board::width_> &Board::getRow(size_t yCoord) {
-    return grid_.at(height_ - 1 - yCoord);
+const std::array<GridCell, Board::width_> &Board::getRow(int yRow) const {
+    return grid_.at(getHeight() - 1 - yRow);
 }
 
-const std::array<GridCell, Board::width_> &Board::getRow(size_t yCoord) const {
-    return grid_.at(yCoord);
-}
-
-void Board::dropRowsAbove(size_t yCoord) {
-    for (size_t i = yCoord; i > 0; i--) {
-        getRow(i) = getRow(i - 1);
+void Board::dropRowsAbove(int yRow) {
+    for (int y = yRow; y < getHeight() - 1; y++) {
+        getRow(y) = getRow(y + 1);
     }
 
-    emptyRow(height_ - 1);
+    emptyRow(getHeight() - 1);
 }
 
-bool Board::checkFullRow(size_t yCoord) const {
-    for (const auto &cell : getRow(yCoord)) {
+bool Board::checkFullRow(int yRow) const {
+    for (const auto &cell : getRow(yRow)) {
         if (cell.isEmpty()) {
             return false;
         }
@@ -42,9 +41,9 @@ bool Board::checkFullRow(size_t yCoord) const {
     return true;
 }
 
-bool Board::checkFullCol(size_t xCoord) const {
-    for (size_t yCoord = height_ - 1; yCoord >= 0; yCoord--) {
-        if (get(yCoord, xCoord).isEmpty()) {
+bool Board::checkFullCol(int xCol) const {
+    for (int yRow = getHeight() - 1; yRow >= 0; yRow--) {
+        if (get(yRow, xCol).isEmpty()) {
             return false;
         }
     }
@@ -52,15 +51,15 @@ bool Board::checkFullCol(size_t xCoord) const {
     return true;
 }
 
-void Board::emptyRow(size_t yCoord) {
-    for (GridCell &gridCell : getRow(yCoord)) {
+void Board::emptyRow(int yRow) {
+    for (GridCell &gridCell : getRow(yRow)) {
         gridCell.setEmpty();
     }
 }
 
-void Board::emptyCol(size_t xCoord) {
-    for (size_t yCoord = 0; yCoord < height_ - 1; yCoord++) {
-        at(yCoord, xCoord).setEmpty();
+void Board::emptyCol(int xCol) {
+    for (int yRow = getHeight() - 1; yRow >= 0; yRow--) {
+        at(yRow, xCol).setEmpty();
     }
 }
 
@@ -88,8 +87,8 @@ void Board::gravity() {
 
 // #### Getters ####
 
-const GridCell &Board::get(size_t xCoord, size_t yCoord) const {
-    return grid_.at(height_ - 1 - yCoord).at(xCoord);
+const GridCell &Board::get(int xCol, int yRow) const {
+    return getRow(yRow).at(xCol);
 }
 
 size_t Board::getWidth() const noexcept { return width_; }
@@ -114,7 +113,7 @@ bool Board::checkInGrid(Tetromino &tetromino) const {
         Vec2 absoluteCoord = relativeCoord + anchor;
         if (absoluteCoord.getX() < 0 || absoluteCoord.getX() >= getWidth()
             || absoluteCoord.getY() < 0 || absoluteCoord.getY() >= getHeight()
-            || !get(absoluteCoord.getX(), absoluteCoord.getY()).isEmpty()) {
+            || !(get(absoluteCoord.getX(), absoluteCoord.getY()).isEmpty())) {
 
             return false;
         }
@@ -128,11 +127,11 @@ bool Board::checkInGrid(Tetromino &tetromino) const {
 BoardUpdate Board::update() {
     BoardUpdate boardUpdate;
 
-    for (size_t rowIdx = 0; rowIdx < getHeight(); rowIdx++) {
-        if (checkFullRow(rowIdx)) {
-            emptyRow(rowIdx);
+    for (int yRow = getHeight() - 1; yRow <= 0; yRow--) {
+        if (checkFullRow(yRow)) {
+            emptyRow(yRow);
             boardUpdate.incrementClearedRows();
-            dropRowsAbove(rowIdx);
+            dropRowsAbove(yRow);
         }
     }
 

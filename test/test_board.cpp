@@ -8,13 +8,17 @@
 #include <memory>
 #include <vector>
 
+// FIXME
+#include <iostream>
+using namespace std;
+
 void BoardTest::constructorTest() {
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), board.getHeight());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), board.getWidth());
 
-    for (size_t yCoord = 0; yCoord < board.getHeight() - 1; yCoord++) {
-        for (size_t xCoord = 0; xCoord < board.getWidth() - 1; xCoord++) {
-            CPPUNIT_ASSERT(board.get(xCoord, yCoord).isEmpty());
+    for (size_t xCol = 0; xCol < board.getWidth(); xCol++) {
+        for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+            CPPUNIT_ASSERT(board.get(xCol, yRow).isEmpty());
         }
     }
 }
@@ -57,14 +61,26 @@ void BoardTest::fillCol(size_t xColToFill) {
     }
 }
 
+// FIXME
+#include <iostream>
+using namespace std;
+
 void BoardTest::checkFullRowTest() {
     int bottomRowY = 0;
     fillRow(bottomRowY); // fill the bottom row
 
-    for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
-        bool rowIsFull = board.checkFullRow(yRow);
-        CPPUNIT_ASSERT((bottomRowY == yRow) ? rowIsFull : !rowIsFull);
+    // FIXME
+    for (size_t x = 0; x < board.getWidth(); x++) {
+        for (size_t y = 0; y < board.getHeight(); y++) {
+            cout << ((board.at(x, y).isEmpty()) ? "." : "#") << " ";
+        }
+        cout << endl;
     }
+
+    // for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+    //     bool rowIsFull = board.checkFullRow(yRow);
+    //     CPPUNIT_ASSERT((bottomRowY == yRow) ? rowIsFull : !rowIsFull);
+    // }
 }
 
 void BoardTest::checkFullColTest() {

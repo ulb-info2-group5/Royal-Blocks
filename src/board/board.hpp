@@ -31,71 +31,71 @@ class Board final {
      * @brief Returns a reference to the GridCell instance at the (x, y)
      * position in the grid.
      *
-     * @param xCoord The y coordinate.
-     * @param yCoord The x coordinate.
+     * @param xCol The x coordinate.
+     * @param yRow The y coordinate.
      *
      * @return A reference to the corresponding Gridcell in the
      * board.
      */
-    virtual GridCell &at(size_t xCoord, size_t yCoord);
+    virtual GridCell &at(int xCol, int yRow);
 
     /**
      * @brief Returns a reference to the row at the given vertical coordinate in
      * the grid.
      *
-     * @param y The row's y coordinate.
+     * @param yRow The row's y coordinate.
      *
      * @return A reference to the Array of GridCells corresponding to the row.
      */
-    virtual std::array<GridCell, width_> &getRow(size_t yCoord);
+    virtual std::array<GridCell, width_> &getRow(int yRow);
 
     /**
      * @brief Returns a const reference to the row at the given vertical
      * coordinate in the grid.
      *
-     * @param y The row's y coordinate.
+     * @param yRow The row's y coordinate.
      *
      * @return A const reference to the Array of GridCells corresponding to the
      * row.
      */
-    virtual const std::array<GridCell, width_> &getRow(size_t yCoord) const;
+    virtual const std::array<GridCell, width_> &getRow(int yRow) const;
 
     /**
      * @brief Moves all rows above the specified row down by one position.
      * Used to fill gaps after clearing a specific row.
      *
-     * @param yCoord The y-coordinate of the row above which all rows are
+     * @param yRow The y-coordinate of the row above which all rows are
      * shifted down.
      */
-    virtual void dropRowsAbove(size_t yCoord);
+    virtual void dropRowsAbove(int yRow);
 
     /**
      * @brief Checks whether the row at the given y-coordinate is full.
      *
-     * @param yCoord The row's y-coordinate.
+     * @param yRow The row's y-coordinate.
      *
      * @return True if the row is full, meaning it has no empty GridCell;
      * otherwise, false.
      */
-    virtual bool checkFullRow(size_t yCoord) const;
+    virtual bool checkFullRow(int yRow) const;
 
     /**
      * @brief Checks whether the column at the given x-coordinate is full.
      *
-     * @param xCoord The column's x-coordinate.
+     * @param xCol The column's x-coordinate.
      *
      * @return True if the col is full, meaning it has no empty GridCell;
      * otherwise, false.
      */
-    virtual bool checkFullCol(size_t xCoord) const;
+    virtual bool checkFullCol(int xCol) const;
 
     /**
      * @brief Sets each cell on the row at the given y-coordinate to empty
      * state.
      *
-     * @param yCoord The row's y-coordinate.
+     * @param yRow The row's y-coordinate.
      */
-    virtual void emptyRow(size_t yCoord);
+    virtual void emptyRow(int yRow);
 
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
@@ -103,9 +103,9 @@ class Board final {
      * @brief Sets each cell on the column at the given x-coordinate to empty
      * state.
      *
-     * @param xCoord The column's x-coordinate.
+     * @param xCol The column's x-coordinate.
      */
-    virtual void emptyCol(size_t xCoord);
+    virtual void emptyCol(int xCol);
 
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
@@ -121,15 +121,15 @@ class Board final {
 
     /**
      * @brief Returns a const reference to the GridCell instance at
-     * (yCoord, xCoord) in the grid.
+     * (xCol, yRow) in the grid.
      *
-     * @param yCoord The row index.
-     * @param xCoord The column index.
+     * @param xCol The column index.
+     * @param yRow The row index.
      *
-     * @return A const reference to the Gridcell located at (yCoord, xCoord) in
+     * @return A const reference to the Gridcell located at (xCol, yRow) in
      * the board.
      */
-    const GridCell &get(size_t yCoord, size_t xCoord) const;
+    const GridCell &get(int xCol, int yRow) const;
 
     /**
      * @brief Returns the width of the grid.
