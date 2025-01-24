@@ -77,10 +77,6 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
     for (const auto &relativeVec2 : tetromino.getBody()) {
         absoluteVec2 = anchorPoint + relativeVec2;
 
-        // FIXME
-        using namespace std;
-        cout << "absoluteVec2: " << absoluteVec2 << endl;
-
         if (absoluteVec2.getX() < 0 or absoluteVec2.getX() >= board_.getWidth()
             or absoluteVec2.getY() < 0
             or absoluteVec2.getY() >= board_.getHeight()
@@ -88,19 +84,10 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
             return false;
     }
 
-    // FIXME
-    using namespace std;
-    cout << endl;
-
     return true;
 }
 
 void Tetris::placeActive() {
-
-    // FIXME
-    using namespace std;
-    cout << "placing" << endl;
-
     setIsAlive(board_.checkInGrid(*activeTetromino_));
 
     if (getIsAlive()) {

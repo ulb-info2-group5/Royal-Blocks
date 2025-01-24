@@ -125,15 +125,15 @@ void BoardTest::gravityTest() {
 }
 
 void BoardTest::dropRowsAboveTest() {
-    const size_t lastRowIdx = board.getHeight() - 1;
-    const size_t secondLastRowIdx = board.getHeight() - 2;
+    const size_t yRow0 = 0;
+    const size_t yRow1 = 1;
 
-    fillRow(secondLastRowIdx);
+    fillRow(yRow1);
 
-    board.dropRowsAbove(lastRowIdx);
+    board.dropRowsAbove(yRow0);
 
-    CPPUNIT_ASSERT(board.checkFullRow(lastRowIdx));
-    CPPUNIT_ASSERT(!board.checkFullRow(secondLastRowIdx));
+    CPPUNIT_ASSERT(board.checkFullRow(yRow0));
+    CPPUNIT_ASSERT(!board.checkFullRow(yRow1));
 }
 
 void BoardTest::checkInGridTest() {

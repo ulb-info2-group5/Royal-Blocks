@@ -72,7 +72,6 @@ void Board::gravity() {
         int writeY = 0;
 
         for (int yRow = 0; yRow < getHeight(); yRow++) {
-            cout << "xCol: " << xCol << " yRow: " << yRow << std::endl;
             if (!get(xCol, yRow).isEmpty()) {
                 if (yRow != writeY) {
                     at(xCol, writeY) = at(xCol, yRow);
