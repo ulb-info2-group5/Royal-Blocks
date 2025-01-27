@@ -167,9 +167,6 @@ void Tetris::handleNextEvent() {
         tryMoveActive(Direction::Down);
 
         if (!checkCanDrop(*activeTetromino_)) {
-            // FIXME
-            // std::cout << "!checkCanDrop" << std::endl;
-
             if (!inGracePeriod_) inGracePeriod_ = true;
             else {
 
@@ -275,15 +272,6 @@ void Tetris::run() {
     fetchNewTetromino();
 
     while (getIsAlive()) {
-
-        // TODO: remove this (debug)
-        // for (int y = 0; y < board_.getHeight(); y++) {
-        //     for (int x = 0; x < board_.getWidth(); x++) {
-        //         std::cout << ((board_.get(x, y).isEmpty()) ? "." : "#");
-        //     }
-        //     std::cout << std::endl;
-        // }
-
         handleNextEvent();
     }
 

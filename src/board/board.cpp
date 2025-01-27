@@ -126,11 +126,7 @@ BoardUpdate Board::update() {
     BoardUpdate boardUpdate;
 
     for (int yRow = getHeight() - 1; yRow >= 0; yRow--) {
-        // FIXME
-        std::cout << "looping" << std::endl;
         if (checkFullRow(yRow)) {
-            // FIXME
-            std::cout << "fullRow detected" << std::endl;
             emptyRow(yRow);
             boardUpdate.incrementClearedRows();
             dropRowsAbove(yRow);
