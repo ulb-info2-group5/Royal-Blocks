@@ -16,31 +16,33 @@ class GridCell final {
     std::optional<unsigned> colorId_;
 
   public:
+    virtual ~GridCell();
+
     /**
      * @brief Checks if the cell is empty.
      *
      * @return Boolean.
      */
-    virtual bool isEmpty() const noexcept;
+    bool isEmpty() const noexcept;
 
     /**
      * @brief Gets the ColorId of the cell.
      *
      * @return The colorId.
      */
-    virtual unsigned getColorId() const;
+    unsigned getColorId() const;
 
     /**
      * @brief Sets the ColorId of the cell.
      *
      * @param colorId The new ColorId.
      */
-    virtual void setColorId(unsigned colorId) noexcept;
+    void setColorId(unsigned colorId) noexcept;
 
     /**
      * @brief Clears the cell's ColorId.
      */
-    virtual void setEmpty() noexcept;
+    void setEmpty() noexcept;
 };
 
 #endif

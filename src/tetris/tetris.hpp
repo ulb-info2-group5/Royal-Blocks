@@ -41,27 +41,27 @@ class Tetris final {
      * @param rotateClockwise True to rotate clockwise, false for
      * counter-clockwise.
      */
-    virtual void tryRotateActive(bool rotateClockwise);
+    void tryRotateActive(bool rotateClockwise);
 
     /**
      * @brief Moves the active Tetromino in the given direction if possible.
      *
      * @param direction The direction to move the Tetromino.
      */
-    virtual void tryMoveActive(Direction direction);
+    void tryMoveActive(Direction direction);
 
     /**
      * @brief Drops the active Tetromino until it hits the bottom or an occupied
      * cell.
      */
-    virtual void bigDrop();
+    void bigDrop();
 
     // #### Manage Preview-Tetromino ####
 
     /**
      * @brief Updates the preview-Tetromino's vertical component.
      */
-    virtual void updatePreviewVertical();
+    void updatePreviewVertical();
 
     // #### Placing and Dropping in Grid ####
 
@@ -70,21 +70,21 @@ class Tetris final {
      *
      * @param tetromino The tetromino to be checked.
      */
-    virtual bool checkCanDrop(const Tetromino &tetromino) const;
+    bool checkCanDrop(const Tetromino &tetromino) const;
 
     /**
      * @brief Places the active tetromino where it currently is in the grid
      * and sets the isAlive flag to false if it was placed outside of the
      * grid.
      */
-    virtual void placeActive();
+    void placeActive();
 
     // #### Tetrominoes Queue ####
 
     /**
      * @brief Enqueues 7 new randomly shuffled Tetrominoes.
      */
-    virtual void fillTetrominoesQueue();
+    void fillTetrominoesQueue();
 
     /**
      * @brief Fetches the next tetromino from the queue and sets it as the
@@ -93,7 +93,7 @@ class Tetris final {
      * If there are no tetrominoes left in the queue, the queue is re-filled
      * with new tetrominoes.
      */
-    virtual void fetchNewTetromino();
+    void fetchNewTetromino();
 
     // #### Event Queue Internals ####
 
@@ -102,12 +102,12 @@ class Tetris final {
      *
      * @return The next event to handle.
      */
-    virtual EventType getNextEvent();
+    EventType getNextEvent();
 
     /**
      * @brief Handles the next event in the event-queue.
      */
-    virtual void handleNextEvent();
+    void handleNextEvent();
 
     // #### Grid Checks ####
 
@@ -117,7 +117,7 @@ class Tetris final {
      * @param rowIdx The row index.
      * @param colIdx The col index.
      */
-    virtual bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
+    bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 
   public:
     // #### Constructor ####
@@ -141,14 +141,14 @@ class Tetris final {
      *
      * @param event The event to add to the queue.
      */
-    virtual void addEvent(EventType event);
+    void addEvent(EventType event);
 
     // #### Tetris Loop ####
 
     /**
      * @brief Handles each event from the event-queue.
      */
-    virtual void run();
+    void run();
 
     // #### IsAlive Flag Setter ####
 
@@ -157,7 +157,7 @@ class Tetris final {
      *
      * @param isAlive The new isAlive value.
      */
-    virtual void setIsAlive(bool isAlive);
+    void setIsAlive(bool isAlive);
 
     // #### Getters ####
 
@@ -166,21 +166,21 @@ class Tetris final {
      *
      * @return False if the game is over; otherwise, true.
      */
-    virtual bool getIsAlive();
+    bool getIsAlive();
 
     /**
      * @brief Returns the current score.
      *
      * @return The current score.
      */
-    virtual size_t getCurrentScore();
+    size_t getCurrentScore();
 
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
      *
      * @return The size of the queue.
      */
-    virtual size_t getTetrominoesQueueSize() const;
+    size_t getTetrominoesQueueSize() const;
 
     // #### Test Fixture Class ####
 

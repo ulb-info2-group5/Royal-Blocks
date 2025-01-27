@@ -37,7 +37,7 @@ class Board final {
      * @return A reference to the corresponding Gridcell in the
      * board.
      */
-    virtual GridCell &at(int xCol, int yRow);
+    GridCell &at(int xCol, int yRow);
 
     /**
      * @brief Returns a reference to the row at the given vertical coordinate in
@@ -47,7 +47,7 @@ class Board final {
      *
      * @return A reference to the Array of GridCells corresponding to the row.
      */
-    virtual std::array<GridCell, width_> &getRow(int yRow);
+    std::array<GridCell, width_> &getRow(int yRow);
 
     /**
      * @brief Returns a const reference to the row at the given vertical
@@ -58,7 +58,7 @@ class Board final {
      * @return A const reference to the Array of GridCells corresponding to the
      * row.
      */
-    virtual const std::array<GridCell, width_> &getRow(int yRow) const;
+    const std::array<GridCell, width_> &getRow(int yRow) const;
 
     /**
      * @brief Moves all rows above the specified row down by one position.
@@ -67,7 +67,7 @@ class Board final {
      * @param yRow The y-coordinate of the row above which all rows are
      * shifted down.
      */
-    virtual void dropRowsAbove(int yRow);
+    void dropRowsAbove(int yRow);
 
     /**
      * @brief Checks whether the row at the given y-coordinate is full.
@@ -77,7 +77,7 @@ class Board final {
      * @return True if the row is full, meaning it has no empty GridCell;
      * otherwise, false.
      */
-    virtual bool checkFullRow(int yRow) const;
+    bool checkFullRow(int yRow) const;
 
     /**
      * @brief Checks whether the column at the given x-coordinate is full.
@@ -87,7 +87,7 @@ class Board final {
      * @return True if the col is full, meaning it has no empty GridCell;
      * otherwise, false.
      */
-    virtual bool checkFullCol(int xCol) const;
+    bool checkFullCol(int xCol) const;
 
     /**
      * @brief Sets each cell on the row at the given y-coordinate to empty
@@ -95,7 +95,7 @@ class Board final {
      *
      * @param yRow The row's y-coordinate.
      */
-    virtual void emptyRow(int yRow);
+    void emptyRow(int yRow);
 
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
@@ -105,7 +105,7 @@ class Board final {
      *
      * @param xCol The column's x-coordinate.
      */
-    virtual void emptyCol(int xCol);
+    void emptyCol(int xCol);
 
     // NOTE: this is not required, but could be something to toggle,
     // e.g. for an "easy" mode or a temporary Bonus.
@@ -114,20 +114,24 @@ class Board final {
      * either above another non-empty cell or at the bottom row of the
      * grid.
      */
-    virtual void gravity();
+    void gravity();
 
   public:
+    // #### Destructor ####
+
+    virtual ~Board();
+
     // #### Getters ####
 
     /**
-     * @brief Returns a const reference to the GridCell instance at
-     * (xCol, yRow) in the grid.
+     * @brief Returns a const reference to the GridCell
+     * instance at (xCol, yRow) in the grid.
      *
      * @param xCol The column index.
      * @param yRow The row index.
      *
-     * @return A const reference to the Gridcell located at (xCol, yRow) in
-     * the board.
+     * @return A const reference to the Gridcell located at
+     * (xCol, yRow) in the board.
      */
     const GridCell &get(int xCol, int yRow) const;
 
@@ -136,14 +140,14 @@ class Board final {
      *
      * @return The width of the grid.
      */
-    virtual size_t getWidth() const noexcept;
+    size_t getWidth() const noexcept;
 
     /**
      * @brief Returns the height of the grid.
      *
      * @return The height of the grid.
      */
-    virtual size_t getHeight() const noexcept;
+    size_t getHeight() const noexcept;
 
     // #### Board Actions ####
 
@@ -155,7 +159,7 @@ class Board final {
      * @note The Tetromino will no longer be accessible after this function gets
      * called, ensuring it cannot be moved after being placed in the grid.
      */
-    virtual void placeTetromino(TetrominoPtr tetromino);
+    void placeTetromino(TetrominoPtr tetromino);
 
     /**
      * @brief Checks whether the specified Tetromino can fit in the grid given
@@ -165,7 +169,7 @@ class Board final {
      *
      * @return True if the given Tetromino fits; otherwise, false.
      */
-    virtual bool checkInGrid(Tetromino &tetromino) const;
+    bool checkInGrid(Tetromino &tetromino) const;
 
     // #### Update Board State ####
 
@@ -175,7 +179,7 @@ class Board final {
      *
      * @return A BoardUpdate object.
      */
-    virtual BoardUpdate update();
+    BoardUpdate update();
 
     // #### Test Fixture Class ####
 

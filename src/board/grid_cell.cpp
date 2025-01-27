@@ -6,6 +6,8 @@
                     PUBLIC
 --------------------------------------------------*/
 
+GridCell::~GridCell() = default;
+
 bool GridCell::isEmpty() const noexcept { return !(colorId_.has_value()); }
 
 unsigned GridCell::getColorId() const {

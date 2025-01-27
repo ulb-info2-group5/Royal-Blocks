@@ -8,6 +8,8 @@
 
 BoardUpdate::BoardUpdate() : numClearedRows_{0}, numClearedCols_{0} {}
 
+BoardUpdate::~BoardUpdate() = default;
+
 size_t BoardUpdate::getNumClearedRows() const noexcept {
     return numClearedRows_;
 }

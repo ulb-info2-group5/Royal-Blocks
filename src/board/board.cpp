@@ -83,6 +83,10 @@ void Board::gravity() {
                     PUBLIC
 --------------------------------------------------*/
 
+// #### Destructor ####
+
+Board::~Board() = default;
+
 // #### Getters ####
 
 const GridCell &Board::get(int xCol, int yRow) const {
