@@ -267,8 +267,6 @@ void Tetris::addEvent(EventType event) {
 // #### Tetris Loop ####
 
 void Tetris::run() {
-    EventType event;
-
     fetchNewTetromino();
 
     while (getIsAlive()) {
