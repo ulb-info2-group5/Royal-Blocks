@@ -24,7 +24,7 @@ const std::array<GridCell, Board::width_> &Board::getRow(int yRow) const {
 }
 
 void Board::dropRowsAbove(int yRow) {
-    for (int y = yRow; y < getHeight() - 1; y++) {
+    for (int y = yRow; y < static_cast<int>(getHeight()) - 1; y++) {
         getRow(y) = getRow(y + 1);
     }
 
@@ -64,10 +64,10 @@ void Board::emptyCol(int xCol) {
 }
 
 void Board::gravity() {
-    for (int xCol = 0; xCol < getWidth(); xCol++) {
+    for (int xCol = 0; xCol < static_cast<int>(getWidth()); xCol++) {
         int writeY = 0;
 
-        for (int yRow = 0; yRow < getHeight(); yRow++) {
+        for (int yRow = 0; yRow < static_cast<int>(getHeight()); yRow++) {
             if (!get(xCol, yRow).isEmpty()) {
                 if (yRow != writeY) {
                     at(xCol, writeY) = at(xCol, yRow);
@@ -109,8 +109,10 @@ bool Board::checkInGrid(Tetromino &tetromino) const {
     Vec2 anchor = tetromino.getAnchorPoint();
     for (const Vec2 &relativeCoord : tetromino.getBody()) {
         Vec2 absoluteCoord = relativeCoord + anchor;
-        if (absoluteCoord.getX() < 0 || absoluteCoord.getX() >= getWidth()
-            || absoluteCoord.getY() < 0 || absoluteCoord.getY() >= getHeight()
+        if (absoluteCoord.getX() < 0
+            || absoluteCoord.getX() >= static_cast<int>(getWidth())
+            || absoluteCoord.getY() < 0
+            || absoluteCoord.getY() >= static_cast<int>(getHeight())
             || !(get(absoluteCoord.getX(), absoluteCoord.getY()).isEmpty())) {
 
             return false;

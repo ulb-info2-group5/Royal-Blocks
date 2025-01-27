@@ -8,14 +8,12 @@
 #include <memory>
 #include <vector>
 
-// TODO: use int everywhere instead of size_t ?
-
 void BoardTest::constructorTest() {
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), board.getHeight());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), board.getWidth());
 
-    for (size_t xCol = 0; xCol < board.getWidth(); xCol++) {
-        for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+    for (int xCol = 0; xCol < static_cast<int>(board.getWidth()); xCol++) {
+        for (int yRow = 0; yRow < static_cast<int>(board.getHeight()); yRow++) {
             CPPUNIT_ASSERT(board.get(xCol, yRow).isEmpty());
         }
     }
@@ -30,40 +28,40 @@ void BoardTest::placeTetrominoTest() {
     std::vector<Vec2> expectedFilledCellsCoords = {
         {0, 0}, {1, 0}, {2, 0}, {2, 1}};
 
-    for (int yCoord = 0; yCoord < board.getHeight(); yCoord++) {
-        for (int xCoord = 0; xCoord < board.getWidth(); xCoord++) {
+    for (int yRow = 0; yRow < static_cast<int>(board.getHeight()); yRow++) {
+        for (int xCol = 0; xCol < static_cast<int>(board.getWidth()); xCol++) {
             if (std::find(expectedFilledCellsCoords.begin(),
-                          expectedFilledCellsCoords.end(), Vec2{xCoord, yCoord})
+                          expectedFilledCellsCoords.end(), Vec2{xCol, yRow})
                 != expectedFilledCellsCoords.end()) {
-                CPPUNIT_ASSERT(!board.get(xCoord, yCoord).isEmpty());
+                CPPUNIT_ASSERT(!board.get(xCol, yRow).isEmpty());
             } else {
-                CPPUNIT_ASSERT(board.get(xCoord, yCoord).isEmpty());
+                CPPUNIT_ASSERT(board.get(xCol, yRow).isEmpty());
             }
         }
     }
 }
 
-void BoardTest::fillRow(size_t yRowToFill) {
+void BoardTest::fillRow(int yRowToFill) {
     constexpr unsigned colorId = 0;
 
-    for (int xCoord = 0; xCoord < board.getWidth(); xCoord++) {
-        board.at(xCoord, yRowToFill).setColorId(colorId);
+    for (int xCol = 0; xCol < static_cast<int>(board.getWidth()); xCol++) {
+        board.at(xCol, yRowToFill).setColorId(colorId);
     }
 }
 
-void BoardTest::fillCol(size_t xColToFill) {
+void BoardTest::fillCol(int xColToFill) {
     constexpr unsigned colorId = 0;
 
-    for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+    for (int yRow = 0; yRow < static_cast<int>(board.getHeight()); yRow++) {
         board.at(xColToFill, yRow).setColorId(colorId);
     }
 }
 
 void BoardTest::checkFullRowTest() {
     int bottomRowY = 0;
-    fillRow(bottomRowY); // fill the bottom row
+    fillRow(bottomRowY);
 
-    for (size_t yRow = 0; yRow < board.getHeight(); yRow++) {
+    for (int yRow = 0; yRow < static_cast<int>(board.getHeight()); yRow++) {
         bool rowIsFull = board.checkFullRow(yRow);
         CPPUNIT_ASSERT((bottomRowY == yRow) ? rowIsFull : !rowIsFull);
     }
@@ -71,9 +69,9 @@ void BoardTest::checkFullRowTest() {
 
 void BoardTest::checkFullColTest() {
     int xFullCol = 0;
-    fillCol(xFullCol); // fill the first column
+    fillCol(xFullCol);
 
-    for (size_t xCol = 0; xCol < board.getWidth(); xCol++) {
+    for (int xCol = 0; xCol < static_cast<int>(board.getWidth()); xCol++) {
         bool colIsFull = board.checkFullCol(xCol);
         CPPUNIT_ASSERT((xFullCol == xCol) ? colIsFull : !colIsFull);
     }
@@ -121,8 +119,8 @@ void BoardTest::gravityTest() {
 }
 
 void BoardTest::dropRowsAboveTest() {
-    const size_t yRow0 = 0;
-    const size_t yRow1 = 1;
+    const int yRow0 = 0;
+    const int yRow1 = 1;
 
     fillRow(yRow1);
 

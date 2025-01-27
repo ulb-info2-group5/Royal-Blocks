@@ -18,8 +18,8 @@ class BoardTest : public CppUnit::TestFixture {
 
   private:
     // #### Helpers ####
-    void fillRow(size_t fullRowIdx);
-    void fillCol(size_t fullColIdx);
+    void fillRow(int fullRowIdx);
+    void fillCol(int fullColIdx);
 
   protected:
     void constructorTest();
