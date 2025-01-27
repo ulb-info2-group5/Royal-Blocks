@@ -120,19 +120,20 @@ class Tetris final {
     bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 
   public:
-    // #### Constructor ####
+    // #### Constructors ####
 
-    /**
-     * @brief Tetris default constructor.
-     */
-    Tetris();
+    Tetris() = default;
+    Tetris(const Tetris &) = delete;
+    Tetris(Tetris &&) = default;
+
+    // #### Assignment ####
+
+    Tetris &operator=(const Tetris &) = delete;
+    Tetris &operator=(Tetris &&) = default;
 
     // #### Destructor ####
 
-    /**
-     * @brief Tetris destructor.
-     */
-    virtual ~Tetris();
+    virtual ~Tetris() = default;
 
     // #### Event Queue API ####
 

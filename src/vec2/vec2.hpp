@@ -16,12 +16,7 @@ class Vec2 final {
     int y_;
 
   public:
-    // #### Constructor ####
-
-    /**
-     * @brief Default constructor, initalizes x and y to 0.
-     */
-    Vec2();
+    // #### Constructors ####
 
     /**
      * @brief Constructor.
@@ -29,46 +24,19 @@ class Vec2 final {
      * @param x The x component
      * @param y The y component
      */
-    Vec2(int x, int y);
+    Vec2(int x = 0, int y = 0);
 
-    /**
-     * @brief Copy constructor.
-     *
-     * @param other The other Vec2 object.
-     */
-    Vec2(const Vec2 &other);
+    Vec2(const Vec2 &) = default;
+    Vec2(Vec2 &&) = default;
 
-    /**
-     * @brief Move constructor.
-     *
-     * @param other The other Vec2 object r-value.
-     */
-    Vec2(Vec2 &&other);
+    // #### Assignment ####
+
+    Vec2 &operator=(const Vec2 &) = default;
+    Vec2 &operator=(Vec2 &&) = default;
 
     // #### Destructor ####
 
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Vec2();
-
-    // #### Assignment Operators  ####
-
-    /**
-     * @brief Assignment operator.
-     *
-     * @param other Another Vec2 to assign from.
-     * @return Reference to this Vec2.
-     */
-    Vec2 &operator=(const Vec2 &other);
-
-    /**
-     * @brief Move assignment operator.
-     *
-     * @param other Another Vec2 to assign from as an r-value.
-     * @return Reference to this Vec2.
-     */
-    Vec2 &operator=(Vec2 &&other);
+    virtual ~Vec2() = default;
 
     // #### Getters ####
 

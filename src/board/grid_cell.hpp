@@ -16,7 +16,22 @@ class GridCell final {
     std::optional<unsigned> colorId_;
 
   public:
+    // #### Constructors ####
+
+    GridCell() = default;
+    GridCell(const GridCell &) = default;
+    GridCell(GridCell &&) = default;
+
+    // #### Assignment ####
+
+    GridCell &operator=(const GridCell &) = default;
+    GridCell &operator=(GridCell &&) = default;
+
+    // #### Destructor ####
+
     virtual ~GridCell();
+
+    // #### Getters ####
 
     /**
      * @brief Checks if the cell is empty.
@@ -31,6 +46,8 @@ class GridCell final {
      * @return The colorId.
      */
     unsigned getColorId() const;
+
+    // #### Setters ####
 
     /**
      * @brief Sets the ColorId of the cell.

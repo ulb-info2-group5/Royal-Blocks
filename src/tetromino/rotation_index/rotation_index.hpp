@@ -13,7 +13,23 @@ class RotationIndex final {
     int8_t index_;
 
   public:
+    // #### Constructors ####
+
     RotationIndex(int8_t rotationIdx = 0);
+    RotationIndex(const RotationIndex &) = default;
+    RotationIndex(RotationIndex &&) = default;
+
+    // #### Assignment ####
+
+    RotationIndex &operator=(const RotationIndex &) = default;
+    RotationIndex &operator=(RotationIndex &&) = default;
+
+    // #### Destructor ####
+
+    virtual ~RotationIndex() = default;
+
+    // #### Operators ####
+
     void operator+=(int8_t rotationToAdd);
     operator int8_t() const;
 };

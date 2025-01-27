@@ -44,7 +44,7 @@ class Tetromino {
 
     RotationIndex rotationIdx_;
     RotationIndex prevRotationIdx_;
-    const std::vector<std::vector<Vec2>> &offsetData_;
+    const std::vector<std::vector<Vec2>> *offsetData_;
 
   protected:
     // #### SRS Offsets Data Constants ####
@@ -71,23 +71,24 @@ class Tetromino {
      * @param shape The shape of the Tetromino.
      * */
     Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
-              const std::vector<std::vector<Vec2>> &offsetData,
+              const std::vector<std::vector<Vec2>> *offsetData,
               TetrominoShape shape);
 
   public:
     // #### Copy Constructor ####
 
-    /**
-     * @brief Tetromino's copy constructor.
-     */
-    Tetromino(const Tetromino &other);
+    Tetromino() = delete;
+    Tetromino(const Tetromino &other) = default;
+    Tetromino(Tetromino &&) = default;
+
+    // #### Assignment ####
+
+    Tetromino &operator=(const Tetromino &) = default;
+    Tetromino &operator=(Tetromino &&) = default;
 
     // #### Destructor ####
 
-    /**
-     * @brief Tetromino's destructor.
-     */
-    virtual ~Tetromino();
+    virtual ~Tetromino() = default;
 
     // #### Factory ####
 

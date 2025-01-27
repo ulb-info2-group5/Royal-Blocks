@@ -117,9 +117,20 @@ class Board final {
     void gravity();
 
   public:
+    // #### Constructors ####
+
+    Board() = default;
+    Board(const Board &) = default;
+    Board(Board &&) = default;
+
+    // #### Assignment ####
+
+    Board &operator=(const Board &) = default;
+    Board &operator=(Board &&) = default;
+
     // #### Destructor ####
 
-    virtual ~Board();
+    virtual ~Board() = default;
 
     // #### Getters ####
 

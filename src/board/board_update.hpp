@@ -15,15 +15,22 @@ class BoardUpdate final {
     size_t numClearedCols_;
 
   public:
-    /**
-     * @brief Constructor
-     */
-    BoardUpdate();
+    // #### Constructors ####
 
-    /**
-     * @brief Destructor
-     */
-    virtual ~BoardUpdate();
+    BoardUpdate();
+    BoardUpdate(const BoardUpdate &) = default;
+    BoardUpdate(BoardUpdate &&) = default;
+
+    // #### Assignment ####
+
+    BoardUpdate &operator=(const BoardUpdate &) = default;
+    BoardUpdate &operator=(BoardUpdate &&) = default;
+
+    // #### Destructor ####
+
+    virtual ~BoardUpdate() = default;
+
+    // #### Getters ####
 
     /**
      * @brief Returns the number of rows cleared in this board update.
@@ -38,6 +45,8 @@ class BoardUpdate final {
      * @return Number of columns cleared in this board update.
      */
     size_t getNumClearedColumns() const noexcept;
+
+    // #### Incrementing ####
 
     /**
      * @brief Increments the number of rows cleared in this board update.

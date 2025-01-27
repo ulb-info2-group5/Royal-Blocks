@@ -10,6 +10,7 @@
 #include <limits>
 #include <memory>
 #include <stdexcept>
+#include <utility>
 
 /*--------------------------------------------------
                     PROTECTED
@@ -40,7 +41,7 @@ const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
 // #### Constructor ####
 
 Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
-                     const std::vector<std::vector<Vec2>> &offsetData,
+                     const std::vector<std::vector<Vec2>> *offsetData,
                      TetrominoShape shape)
     : shape_(shape), anchorPoint_{std::move(anchorPoint)},
       body_{std::move(body)}, offsetData_(offsetData) {
@@ -69,14 +70,6 @@ Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
 /*--------------------------------------------------
                      PUBLIC
 --------------------------------------------------*/
-
-// #### Copy Constructor ####
-
-Tetromino::Tetromino(const Tetromino &other) = default;
-
-// #### Destructor ####
-
-Tetromino::~Tetromino() = default;
 
 // #### Factory ####
 
@@ -143,14 +136,14 @@ const RotationIndex &Tetromino::getPrevRotationIndex() const noexcept {
 }
 
 uint8_t Tetromino::getNumOfTests() const noexcept {
-    return static_cast<uint8_t>(offsetData_.at(0).size());
+    return static_cast<uint8_t>(offsetData_->at(0).size());
 }
 
 TetrominoPtr Tetromino::getNthOffset(uint8_t offsetIndex) const {
     TetrominoPtr copy = std::make_unique<Tetromino>(*this);
 
-    Vec2 offsetVal1 = offsetData_.at(prevRotationIdx_).at(offsetIndex - 1);
-    Vec2 offsetVal2 = offsetData_.at(rotationIdx_).at(offsetIndex - 1);
+    Vec2 offsetVal1 = offsetData_->at(prevRotationIdx_).at(offsetIndex - 1);
+    Vec2 offsetVal2 = offsetData_->at(rotationIdx_).at(offsetIndex - 1);
 
     // Compute offset with offset data
     Vec2 offset = (offsetVal1 - offsetVal2);

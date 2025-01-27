@@ -249,14 +249,6 @@ bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
                      PUBLIC
 --------------------------------------------------*/
 
-// #### Constructor ####
-
-Tetris::Tetris() = default;
-
-// #### Destructor ####
-
-Tetris::~Tetris() = default;
-
 // #### Event Queue API ####
 
 void Tetris::addEvent(EventType event) {
