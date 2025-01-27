@@ -63,6 +63,7 @@ void *inputHandlerRoutine(void *arg) {
             break;
         case 'q':
             tetris->addEvent(EventType::Quit);
+            break;
         case 0x1b:     // special case like arrows
             getchar(); // '['
             key = getchar();

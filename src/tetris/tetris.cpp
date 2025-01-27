@@ -76,9 +76,10 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
     for (const auto &relativeVec2 : tetromino.getBody()) {
         absoluteVec2 = anchorPoint + relativeVec2;
 
-        if (absoluteVec2.getX() < 0 or absoluteVec2.getX() >= board_.getWidth()
+        if (absoluteVec2.getX() < 0
+            or absoluteVec2.getX() >= static_cast<int>(board_.getWidth())
             or absoluteVec2.getY() < 0
-            or absoluteVec2.getY() >= board_.getHeight()
+            or absoluteVec2.getY() >= static_cast<int>(board_.getHeight())
             or !checkEmptyCell(absoluteVec2.getX(), absoluteVec2.getY()))
             return false;
     }
