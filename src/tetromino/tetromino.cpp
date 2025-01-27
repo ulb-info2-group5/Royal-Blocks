@@ -42,8 +42,8 @@ const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
 Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
                      const std::vector<std::vector<Vec2>> &offsetData,
                      TetrominoShape shape)
-    : anchorPoint_{std::move(anchorPoint)}, body_{std::move(body)},
-      offsetData_(offsetData), shape_(shape) {
+    : shape_(shape), anchorPoint_{std::move(anchorPoint)},
+      body_{std::move(body)}, offsetData_(offsetData) {
 
     if (body_.size() != 4) {
         throw std::invalid_argument(
