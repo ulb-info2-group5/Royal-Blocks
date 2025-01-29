@@ -2,15 +2,14 @@
 
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
-#include "../grid/print_grid.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 #include "event_type.hpp"
 
 #include <algorithm>
 #include <cstdlib>
-#include <iostream>
 #include <memory>
+#include <mutex>
 #include <pthread.h>
 #include <random>
 
@@ -57,15 +56,15 @@ void Tetris::bigDrop() {
     }
 }
 
-// #### Manage Preview-Tetromino ####
+// #### Preview-Tetromino ####
 
 void Tetris::updatePreviewVertical() {
     while (checkCanDrop(*previewTetromino_)) {
-        previewTetromino_->move(Direction::Down); // go down
+        previewTetromino_->move(Direction::Down);
     }
 }
 
-// #### Placing and Dropping in Grid ####
+// #### Tetromino: Placing and checking that it can drop ####
 
 bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
     Vec2 anchorPoint = tetromino.getAnchorPoint();
@@ -88,8 +87,6 @@ bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
 }
 
 void Tetris::placeActive() {
-    std::cout << "placeActive called" << std::endl;
-
     setIsAlive(board_.checkInGrid(*activeTetromino_));
 
     if (getIsAlive()) {
@@ -136,60 +133,47 @@ void Tetris::fetchNewTetromino() {
     tetrominoesQueue_.pop();
 }
 
-// #### Event Queue Internals ####
+// #### Grid Checks ####
 
-EventType Tetris::getNextEvent() {
-    EventType event;
-
-    pthread_mutex_lock(&queueMutex_);
-
-    if (!eventQueue_.empty()) {
-        event = eventQueue_.front();
-        eventQueue_.pop();
-    } else {
-        event = EventType::None;
-    }
-
-    pthread_mutex_unlock(&queueMutex_);
-
-    return event;
+bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
+    return board_.get(rowIdx, colIdx).isEmpty();
 }
 
-void Tetris::handleNextEvent() {
+/*--------------------------------------------------
+                     PUBLIC
+--------------------------------------------------*/
 
-    EventType event = getNextEvent();
+// #### Event API ####
+
+void Tetris::sendEvent(EventType event) {
+    std::lock_guard<std::mutex> lock(mutex_);
 
     switch (event) {
     case EventType::None:
         break;
 
     case EventType::ClockTick: {
-        if (newTetrominosFirstTick_) newTetrominosFirstTick_ = false;
-        tryMoveActive(Direction::Down);
-
         if (!checkCanDrop(*activeTetromino_)) {
-            if (!inGracePeriod_) inGracePeriod_ = true;
-            else {
-
+            if (ticks_since_lock_start_ >= lock_delay_ticks_num_) {
+                // lock-delay has expired -> must place active now
                 placeActive();
-
                 score_ += board_.update().getNumClearedRows();
                 fetchNewTetromino();
-                newTetrominosFirstTick_ = true;
+
+                ticks_since_lock_start_ = 0;
+            } else {
+                ticks_since_lock_start_++;
             }
         } else {
-            if (inGracePeriod_) inGracePeriod_ = false;
+            tryMoveActive(Direction::Down);
         }
+
         break;
     }
 
     case EventType::BigDrop:
         bigDrop();
-
-        //! WILL CAUSES CLIENT SERVER GAME TICK DESYNC BUT ALLOWS BETTER
-        //! GAME EXPERIENCE
-        addEvent(EventType::ClockTick);
-
+        // NOTE: Could add a lock_delay here
         break;
 
     case EventType::MoveDown:
@@ -213,78 +197,30 @@ void Tetris::handleNextEvent() {
         break;
 
     case EventType::Quit:
-
-        // #if ENABLE_TUI
-        ncurses_quit();
-        // #endif // ENABLE_TUI
-
-        exit(0); //! VERY NOT GOOD but temporary <3
+        // TODO:: When the player quits, we should make him loose instantly and
+        // disconnect him but it shouldn't be handled here.
+        setIsAlive(false);
         break;
     }
 
     if (event != EventType::None) {
         previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
         updatePreviewVertical();
-
-        // #if ENABLE_TUI
-        draw_grid(board_.getWidth(), board_.getHeight());
-        draw_cells(&board_); // BUG: this cause crash
-
-        draw_preview(previewTetromino_.get());
-        draw_active(activeTetromino_.get());
-        print_debug("score :", board_.getWidth());
-        print_score(score_, board_.getWidth());
-        ncurses_refresh();
-        // #endif // ENABLE_TUI
     }
 }
 
-// #### Grid Checks ####
-
-bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
-    return board_.get(rowIdx, colIdx).isEmpty();
-}
-
-/*--------------------------------------------------
-                     PUBLIC
---------------------------------------------------*/
-
-// #### Event Queue API ####
-
-void Tetris::addEvent(EventType event) {
-    pthread_mutex_lock(&queueMutex_);
-    eventQueue_.push(event);
-    pthread_mutex_unlock(&queueMutex_);
-}
-
-// #### Tetris Loop ####
-
-void Tetris::run() {
-    fetchNewTetromino();
-
-    while (getIsAlive()) {
-        handleNextEvent();
-    }
-
-    ncurses_quit();
-    std::cout << "Game Over" << std::endl;
-}
-
-// #### IsAlive Flag Internals ####
+// #### Setters ####
 
 void Tetris::setIsAlive(bool isAlive) {
-    pthread_mutex_lock(&isAliveMutex_);
+    std::lock_guard<std::mutex> lock(mutex_);
     isAlive_ = isAlive;
-    pthread_mutex_unlock(&isAliveMutex_);
 }
 
 // #### Getters ####
 
 bool Tetris::getIsAlive() {
-    pthread_mutex_lock(&isAliveMutex_);
-    bool isAlive = isAlive_;
-    pthread_mutex_unlock(&isAliveMutex_);
-    return isAlive;
+    std::lock_guard<std::mutex> lock(mutex_);
+    return isAlive_;
 }
 
 size_t Tetris::getCurrentScore() { return score_; }

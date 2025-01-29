@@ -5,10 +5,14 @@
 #include "../tetromino/tetromino.hpp"
 #include "event_type.hpp"
 
+#include <mutex>
 #include <pthread.h>
 #include <queue>
+#include <sys/types.h>
 
 class TetrisTest;
+
+constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
 
 /**
  * @class Tetris
@@ -22,15 +26,16 @@ class TetrisTest;
 class Tetris final {
     size_t score_ = 0;
     bool isAlive_ = true;
-    bool inGracePeriod_ = false;
-    bool newTetrominosFirstTick_ = true; // could also be a uint32_t tickCount
     Board board_;
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
     std::queue<TetrominoPtr> tetrominoesQueue_;
-    std::queue<EventType> eventQueue_;
-    pthread_mutex_t queueMutex_ = PTHREAD_MUTEX_INITIALIZER;
-    pthread_mutex_t isAliveMutex_ = PTHREAD_MUTEX_INITIALIZER;
+
+    // TODO: move this to constructor ?
+    uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
+    uint32_t ticks_since_lock_start_ = 0;
+
+    std::mutex mutex_;
 
   private:
     // #### Tetromino Actions ####
@@ -56,14 +61,14 @@ class Tetris final {
      */
     void bigDrop();
 
-    // #### Manage Preview-Tetromino ####
+    // #### Preview-Tetromino ####
 
     /**
      * @brief Updates the preview-Tetromino's vertical component.
      */
     void updatePreviewVertical();
 
-    // #### Placing and Dropping in Grid ####
+    // #### Tetromino: Placing and checking that it can drop ####
 
     /**
      * @brief Checks whether the given tetromino can be droppped.
@@ -91,23 +96,9 @@ class Tetris final {
      * active tetromino.
      *
      * If there are no tetrominoes left in the queue, the queue is re-filled
-     * with new tetrominoes.
+     * with 7 new tetrominoes.
      */
     void fetchNewTetromino();
-
-    // #### Event Queue Internals ####
-
-    /**
-     * @brief Fetches the next event from the event-queue.
-     *
-     * @return The next event to handle.
-     */
-    EventType getNextEvent();
-
-    /**
-     * @brief Handles the next event in the event-queue.
-     */
-    void handleNextEvent();
 
     // #### Grid Checks ####
 
@@ -124,34 +115,26 @@ class Tetris final {
 
     Tetris() = default;
     Tetris(const Tetris &) = delete;
-    Tetris(Tetris &&) = default;
+    Tetris(Tetris &&) = delete;
 
     // #### Assignment ####
 
     Tetris &operator=(const Tetris &) = delete;
-    Tetris &operator=(Tetris &&) = default;
+    Tetris &operator=(Tetris &&) = delete;
 
     // #### Destructor ####
 
     virtual ~Tetris() = default;
 
-    // #### Event Queue API ####
+    // #### Event API ####
 
     /**
-     * @brief Adds the event to the event-queue.
-     *
+     * @brief Handles the given event.
      * @param event The event to add to the queue.
      */
-    void addEvent(EventType event);
+    void sendEvent(EventType event);
 
-    // #### Tetris Loop ####
-
-    /**
-     * @brief Handles each event from the event-queue.
-     */
-    void run();
-
-    // #### IsAlive Flag Setter ####
+    // #### Setters ####
 
     /**
      * @brief Thread-safe way of setting the isAlive member.
@@ -163,7 +146,7 @@ class Tetris final {
     // #### Getters ####
 
     /**
-     * @brief Thread-safe way of getting the isAlive.
+     * @brief Thread-safe way of getting the isAlive member.
      *
      * @return False if the game is over; otherwise, true.
      */
