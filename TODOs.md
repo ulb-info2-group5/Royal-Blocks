@@ -1,6 +1,7 @@
 # TODO's
 
 ## Différents modes
+
 ### Endless
 
 ### Classic
@@ -9,8 +10,8 @@
 
 ### Royal Compétition
 
-
 ## Malus
+
 Se présente sous forme de lignes incomplètes supplémentaires lorsque l'envoyeur du malus réussit à compléter plusieurs lignes en un seul coup.
 
 - 1 ligne complétée n'envoie pas de malus,
@@ -26,7 +27,7 @@ Se présente sous forme de lignes incomplètes supplémentaires lorsque l'envoye
 
 ## Avoiret et gérer une liste d'amis, discuter avec des amis
 
-## Créer ou rejoindre une partie 
+## Créer ou rejoindre une partie
 
 ## Inviter des personnes à rejoindre la partie en tant que joueur ou observateur (Seulement pour le créateur de la partie)
 
@@ -35,9 +36,11 @@ Se présente sous forme de lignes incomplètes supplémentaires lorsque l'envoye
 ## Jouer à Tetris sans tricher
 
 ## Chat
+
 Le chat doit être accessible depuis tous les menus !
 
 ## Affichage des tableaux adverses
+
 Les tableaux de tous les adversaires doivent être visible (en minimaliste) durant une partie multijoueur.
 
 ## Terminal et GUI doivent pouvoir jouer entre eux
