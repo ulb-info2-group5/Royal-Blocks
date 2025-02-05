@@ -1,46 +1,40 @@
 # TODO's
 
-## Différents modes
+- Différents modes
+- Endless
+- Classic
+- Duel
+- Royal Compétition
+- Malus
+    - Se présente sous forme de lignes incomplètes supplémentaires lorsque l'envoyeur du malus réussit à compléter plusieurs lignes en un seul coup.
 
-### Endless
+        - 1 ligne complétée n'envoie pas de malus,
+        - 2 lignes complétées envoient 1 ligne de malus,
+        - 3 lignes complétées envoient 2 lignes de malus,
+        - 4 lignes complétées (Tetris) envoient 4 lignes de malus.
 
-### Classic
+- Création d'une partie
 
-### Duel
+- Créer un compte avec pseudo et mot de passe
 
-### Royal Compétition
+- Se connecter à son compte
 
-## Malus
+- Avoir et et gérer une liste d'amis, discuter avec des amis
 
-Se présente sous forme de lignes incomplètes supplémentaires lorsque l'envoyeur du malus réussit à compléter plusieurs lignes en un seul coup.
+- Créer ou rejoindre une partie
 
-- 1 ligne complétée n'envoie pas de malus,
-- 2 lignes complétées envoient 1 ligne de malus,
-- 3 lignes complétées envoient 2 lignes de malus,
-- 4 lignes complétées (Tetris) envoient 4 lignes de malus.
+- Inviter des personnes à rejoindre la partie en tant que joueur ou observateur (Seulement pour le créateur de la partie)
 
-## Création d'une partie
+- Consulter le classement à points en ligne des meilleurs joueurs du mode Endless
 
-## Créer un compte avec pseudo et mot de passe
+- Jouer à Tetris sans tricher
 
-## Se connecter à son compte
+- Chat
 
-## Avoiret et gérer une liste d'amis, discuter avec des amis
+    - Le chat doit être accessible depuis tous les menus !
 
-## Créer ou rejoindre une partie
+- Affichage des tableaux adverses
 
-## Inviter des personnes à rejoindre la partie en tant que joueur ou observateur (Seulement pour le créateur de la partie)
+    - Les tableaux de tous les adversaires doivent être visible (en minimaliste) durant une partie multijoueur.
 
-## Consulter le classement à points en ligne des meilleurs joueurs du mode Endless
-
-## Jouer à Tetris sans tricher
-
-## Chat
-
-Le chat doit être accessible depuis tous les menus !
-
-## Affichage des tableaux adverses
-
-Les tableaux de tous les adversaires doivent être visible (en minimaliste) durant une partie multijoueur.
-
-## Terminal et GUI doivent pouvoir jouer entre eux
+- Terminal et GUI doivent pouvoir jouer entre eux
