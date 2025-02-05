@@ -23,7 +23,7 @@ AccountManager::~AccountManager() { sqlite3_close(db); }
 void AccountManager::createTable() {
     string sql = "CREATE TABLE IF NOT EXISTS users ("
                       "username TEXT PRIMARY KEY NOT NULL, "
-                      "password TEXT NOT NULL);";
+                      "password TEXT NOT NULL)";
     executeSQL(sql);
 }
 
@@ -38,12 +38,12 @@ bool AccountManager::executeSQL(const string &sql) {
 }
 
 bool AccountManager::createAccount(const string &username, const string &password) {
-  string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "');";
+  string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
   return executeSQL(sql);
 }
 
 bool AccountManager::login(const string &username, const string &password) {
-    string sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "';";
+    string sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
@@ -56,7 +56,7 @@ bool AccountManager::login(const string &username, const string &password) {
 }
 
 void AccountManager::getUsers() {
-  string sql = "SELECT username, password FROM users;";
+  string sql = "SELECT username, password FROM users";
   sqlite3_stmt *stmt;
 
   if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {

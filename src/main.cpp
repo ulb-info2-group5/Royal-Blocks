@@ -11,6 +11,6 @@
 int main() {
     AccountManager accountManager("accounts.db");
     accountManager.launch();
-    accountManager.getUsers(accountManager.getDB());
+    accountManager.getUsers();
     return 0;
 }
