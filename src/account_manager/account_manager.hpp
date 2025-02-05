@@ -19,14 +19,6 @@ class AccountManager {
     sqlite3 *db;
 
     /*
-      * @brief Execute an SQL statement
-      * 
-      * @param sql SQL statement to execute
-      * @return true if the statement was executed successfully
-    */
-    bool executeSQL(const string &sql);
-
-    /*
       * @brief Create the users table in the database
     */
     void createTable();

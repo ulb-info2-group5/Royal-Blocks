@@ -7,7 +7,7 @@
  */
 
 #include "account_manager.hpp"
-
+#include "../common/execute_sql.hpp"
 #include <iostream>
 
 AccountManager::AccountManager(const string &dbPath) {
@@ -24,22 +24,14 @@ void AccountManager::createTable() {
     string sql = "CREATE TABLE IF NOT EXISTS users ("
                       "username TEXT PRIMARY KEY NOT NULL, "
                       "password TEXT NOT NULL)";
-    executeSQL(sql);
+    executeSQL(db,sql);
 }
 
-bool AccountManager::executeSQL(const string &sql) {
-    char *errMsg;
-    if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
-        cerr << "Error SQLite: " << errMsg << endl;
-        sqlite3_free(errMsg);
-        return false;
-    }
-    return true;
-}
-
-bool AccountManager::createAccount(const string &username, const string &password) {
+bool AccountManager::createAccount(const string &username,
+                                   const string &password) {
+    // TODO: add a checking if the username already exists
   string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
-  return executeSQL(sql);
+  return executeSQL(db, sql);
 }
 
 bool AccountManager::login(const string &username, const string &password) {
@@ -71,12 +63,11 @@ void AccountManager::getUsers() {
       }
       sqlite3_finalize(stmt);
   } else {
-      cerr << "Erreur de lecture des utilisateurs." << endl;
+      cerr << "User reading error." << endl;
   }
 }
 
 void AccountManager::launch() {
-
     cout << "Do you want to create an account? (y/n): ";
     char choice;
     cin >> choice;
