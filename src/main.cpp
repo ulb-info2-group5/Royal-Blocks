@@ -9,7 +9,7 @@
 #include "account_manager/account_manager.hpp"
 
 int main() {
-    AccountManager accountManager("accounts.db");
+    AccountManager accountManager("data/accounts.db");
     accountManager.launch();
     accountManager.getUsers();
     return 0;
