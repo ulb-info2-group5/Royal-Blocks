@@ -6,7 +6,7 @@
  *
  */
 
-#include "execute_sql.hpp"
+#include "sql_functions.hpp"
 #include <iostream>
 
 bool executeSQL(sqlite3 *db, const string &sql) {
