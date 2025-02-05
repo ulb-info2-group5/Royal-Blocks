@@ -55,9 +55,18 @@ class AccountManager {
     bool login(const string &username, const string &password);
 
     /*
-      * @brief Launch the account manager to create an account and/or login
+      * @brief Update the score of a user
+      * 
+      * @param username Username of the user
+      * @param newScore New score of the user
+      * @return true if the score was updated successfully
     */
-    void launch();
+    bool updateScore(const string &username, int newScore);
+
+        /*
+         * @brief Launch the account manager to create an account and/or login
+         */
+        void launch();
 
     /*
       * @brief Get all users from the database

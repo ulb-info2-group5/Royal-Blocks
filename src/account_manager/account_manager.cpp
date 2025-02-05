@@ -22,8 +22,9 @@ AccountManager::~AccountManager() { sqlite3_close(db); }
 
 void AccountManager::createTable() {
     string sql = "CREATE TABLE IF NOT EXISTS users ("
-                      "username TEXT PRIMARY KEY NOT NULL, "
-                      "password TEXT NOT NULL)";
+                 "username TEXT PRIMARY KEY NOT NULL, "
+                 "password TEXT NOT NULL, "
+                 "score INTEGER DEFAULT 0)";
     executeSQL(db,sql);
 }
 
@@ -111,4 +112,13 @@ void AccountManager::launch() {
     }
 
     cout << "Login successful!" << endl;
+}
+
+// TODO: keep the function in AccountManager class or do it in a separate class ?
+bool AccountManager::updateScore(const std::string &username, int newScore) {
+    string sql = "UPDATE users SET score = MAX(score, "
+                      + std::to_string(newScore) + ") WHERE username = '"
+                      + username + "'";
+
+    return executeSQL(db, sql);
 }
