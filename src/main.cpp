@@ -10,6 +10,9 @@
 #include "friends_manager/friends_manager.hpp"
 #include "config.hpp"
 #include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 using namespace std;
 
@@ -33,7 +36,20 @@ int main() {
     cin >> user2;
 
     friendManager.addFriend(user1, user2);
-    friendManager.getFriends(user1);
+    vector<string> vec = friendManager.getFriends(user1);
+    cout << "Friends of " << user1 << ":" << endl;
+    for (const string &friendUser : vec) {
+        cout << "- " << friendUser << endl;
+    }
+
+    accountManager.updateScore("ethan", 10);
+
+    vector<pair<string, int>> ranking = accountManager.getRanking();
+    cout << endl;
+    cout << "Ranking:" << endl;
+    for (const pair<string, int> &user : ranking) {
+        cout << user.first << " - " << user.second << endl;
+    }
 
     return 0;
 }

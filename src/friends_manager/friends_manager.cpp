@@ -9,6 +9,8 @@
 #include "friends_manager.hpp"
 #include "../common/execute_sql.hpp"
 #include <iostream>
+#include <string>
+#include <vector>
 
 // TODO: check if in the friend list we have he current user with all the
 // friends or just for each line we have the current user with 1 friend
@@ -70,7 +72,9 @@ bool FriendsManager::addFriend(const string &user, const string &friendUser) {
     return executeSQL(db, sql1) && executeSQL(db, sql2);
 }
 
-void FriendsManager::getFriends(const string &username) {
+vector<string> FriendsManager::getFriends(const string &username) {
+    vector<string> friends;
+
     string sql = "SELECT user2 FROM friends WHERE user1 = '" + username
                       + "' "
                         "UNION "
@@ -78,15 +82,17 @@ void FriendsManager::getFriends(const string &username) {
                       + username + "'";
 
     sqlite3_stmt *stmt;
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        cout << "Friends of " << username << " :" << endl;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr)
+        == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
-            string friendName =
-                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-            cout << "- " << friendName << endl;
+            friends.push_back(
+                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
         }
         sqlite3_finalize(stmt);
     } else {
-        cerr << "Error retrieving friends." << endl;
+        cerr << "Error in getting friends." << endl;
     }
+
+    return friends;
 }

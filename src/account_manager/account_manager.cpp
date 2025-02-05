@@ -9,6 +9,9 @@
 #include "account_manager.hpp"
 #include "../common/execute_sql.hpp"
 #include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 AccountManager::AccountManager(const string &dbPath) {
     if (sqlite3_open(dbPath.c_str(), &db) != SQLITE_OK) {
@@ -30,9 +33,26 @@ void AccountManager::createTable() {
 
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {
-    // TODO: add a checking if the username already exists
-  string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
-  return executeSQL(db, sql);
+    string checkSQL = "SELECT COUNT(*) FROM users WHERE username = ?";
+    sqlite3_stmt *stmt;
+    
+    if (sqlite3_prepare_v2(db, checkSQL.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "Error checking username existence: " << sqlite3_errmsg(db) << endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_step(stmt);
+    int count = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+
+    if (count > 0) {
+        cerr << "Error: Username already exists!" << endl;
+        return false;
+    }
+  
+    string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
+    return executeSQL(db, sql);
 }
 
 bool AccountManager::login(const string &username, const string &password) {
@@ -84,16 +104,19 @@ void AccountManager::launch() {
 
     if (choice == 'y') {
         cout << "An account will be created." << endl;
-        cout << "Enter username: ";
+        cout << "Enter a username: ";
         cin >> username;
-        cout << "Enter password: ";
+        cout << "Enter a password: ";
         cin >> password;
 
-        if (createAccount(username, password)) {
-            cout << "Account created!" << endl;
-        } else {
-            cout << "Account creation failed!" << endl;
+        while (!createAccount(username, password)) {
+            cout << "Enter a username: ";
+            cin >> username;
+            cout << "Enter a password: ";
+            cin >> password;
         }
+            
+        cout << "Account created!" << endl;
     }
 
 
@@ -114,11 +137,32 @@ void AccountManager::launch() {
     cout << "Login successful!" << endl;
 }
 
-// TODO: keep the function in AccountManager class or do it in a separate class ?
-bool AccountManager::updateScore(const std::string &username, int newScore) {
-    string sql = "UPDATE users SET score = MAX(score, "
-                      + std::to_string(newScore) + ") WHERE username = '"
-                      + username + "'";
+vector<pair<string, int>> AccountManager::getRanking() const {
+    vector<pair<string, int>> ranking;
 
-    return executeSQL(db, sql);
+    string sql = "SELECT username, score FROM users ORDER BY score DESC";
+
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr)
+        == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            string username =
+                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+            int score = sqlite3_column_int(stmt, 1);
+
+            ranking.push_back({username, score});
+        }
+        sqlite3_finalize(stmt);
+    } else {
+        cerr << "Error in getting ranking." << endl;
+    }
+
+    return ranking;
+}
+
+// TODO: keep it there or in a new class ?
+void AccountManager::updateScore(const string &username, const int newScore) {
+    string sql = "UPDATE users SET score = MAX(score, " + to_string(newScore) + ") WHERE username = '" + username + "'";
+    executeSQL(db, sql);
 }

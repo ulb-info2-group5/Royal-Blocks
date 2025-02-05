@@ -11,6 +11,7 @@
 
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 
 using namespace std;
 
@@ -50,7 +51,7 @@ class FriendsManager {
       * 
       * @param username Username of the user
     */
-    void getFriends(const string &username);
+    vector<string> getFriends(const string &username);
     
 };
 

@@ -11,6 +11,8 @@
 
 #include <string>
 #include <sqlite3.h>
+#include <utility>
+#include <vector>
 
 using namespace std;
 
@@ -54,15 +56,6 @@ class AccountManager {
     */
     bool login(const string &username, const string &password);
 
-    /*
-      * @brief Update the score of a user
-      * 
-      * @param username Username of the user
-      * @param newScore New score of the user
-      * @return true if the score was updated successfully
-    */
-    bool updateScore(const string &username, int newScore);
-
         /*
          * @brief Launch the account manager to create an account and/or login
          */
@@ -72,6 +65,21 @@ class AccountManager {
       * @brief Get all users from the database
     */
     void getUsers();
+
+    /*
+      * @brief Get all the score of all the user and sort them by highest score
+      * 
+      * @return vector<pair<string, int>> A vector of pairs containing the username and the score
+    */
+    vector<pair<string, int>> getRanking() const;
+
+    /*
+      * @brief Update the score of a user
+      * 
+      * @param username Username of the user
+      * @param score New score of the user
+    */
+    void updateScore(const string &username, const int score);
 };
 
 #endif // ACCOUNT_MANAGER_HPP
