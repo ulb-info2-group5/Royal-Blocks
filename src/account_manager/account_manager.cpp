@@ -20,8 +20,6 @@ AccountManager::AccountManager(const string &dbPath) {
 
 AccountManager::~AccountManager() { sqlite3_close(db); }
 
-sqlite3 *AccountManager::getDB() { return db; }
-
 void AccountManager::createTable() {
     string sql = "CREATE TABLE IF NOT EXISTS users ("
                       "username TEXT PRIMARY KEY NOT NULL, "
@@ -57,7 +55,7 @@ bool AccountManager::login(const string &username, const string &password) {
     return result;
 }
 
-void AccountManager::getUsers(sqlite3 *db) {
+void AccountManager::getUsers() {
   string sql = "SELECT username, password FROM users;";
   sqlite3_stmt *stmt;
 
