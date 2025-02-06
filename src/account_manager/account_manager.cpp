@@ -7,42 +7,26 @@
  */
 
 #include "account_manager.hpp"
-#include "../common/sql_functions.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
 // TODO: create class for DatabaseManager to have just the dateBase to do there
 
-AccountManager::AccountManager(const string &dbPath) {
-    if (sqlite3_open(dbPath.c_str(), &db) != SQLITE_OK) {
-        cerr << "Error SQLite: " << sqlite3_errmsg(db) << endl;
-    } else {
-        createTable();
-    }
-}
-
-AccountManager::~AccountManager() { sqlite3_close(db); }
-
-void AccountManager::createTable() {
-    string sql = "CREATE TABLE IF NOT EXISTS users ("
-                 "username TEXT PRIMARY KEY NOT NULL, "
-                 "password TEXT NOT NULL, "
-                 "score INTEGER DEFAULT 0)";
-    executeSQL(db,sql);
-}
+AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {}
 
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {    
     // Check if the username already exist
-    if (userExists(db, username)) {
+    if (dbManager_->userExists(username)) {
         cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
   
     string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
-    return executeSQL(db, sql);
+    return dbManager_->executeSQL( sql);
 }
 
 bool AccountManager::login(const string &username, const string &password) {
@@ -154,5 +138,5 @@ vector<pair<string, int>> AccountManager::getRanking() const {
 
 // TODO: keep it there or in a new class ?
 void AccountManager::updateScore(const string &username, const int newScore) {
-    updateScoreDatabase(db, username, newScore);
+    dbManager_->updateScoreDatabase(username, newScore);
 }

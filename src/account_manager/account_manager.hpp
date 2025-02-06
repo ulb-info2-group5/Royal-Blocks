@@ -13,17 +13,15 @@
 #include <sqlite3.h>
 #include <utility>
 #include <vector>
+#include <memory>
+
+#include "../database_manager/database_manager.hpp"
 
 using namespace std;
 
 class AccountManager {
   private:
-    sqlite3 *db;
-
-    /*
-      * @brief Create the users table in the database
-    */
-    void createTable();
+    shared_ptr<DatabaseManager> dbManager_;
 
   public:
     /*
@@ -31,12 +29,12 @@ class AccountManager {
       * 
       * @param dbPath Path to the database file
     */
-    AccountManager(const string &dbPath);
+    AccountManager(shared_ptr<DatabaseManager> &db);
 
     /*
       * @brief Destroy the Account Manager object
     */
-    ~AccountManager();
+    ~AccountManager() = default;
 
     /*
       * @brief Create a new account

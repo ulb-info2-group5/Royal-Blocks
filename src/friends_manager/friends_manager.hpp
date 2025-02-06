@@ -9,20 +9,18 @@
 #ifndef FRIENDS_MANAGER_HPP
 #define FRIENDS_MANAGER_HPP
 
+#include <memory>
 #include <string>
 #include <sqlite3.h>
 #include <vector>
+
+#include "../database_manager/database_manager.hpp"
 
 using namespace std;
 
 class FriendsManager {
   private:
-    sqlite3 *db;
-
-    /*
-      * @brief Create the friends table in the database
-    */
-    void createTable();
+    shared_ptr<DatabaseManager> dbManager_;
 
   public:
     /*
@@ -30,12 +28,12 @@ class FriendsManager {
       * 
       * @param dbPath Path to the database file
     */
-    FriendsManager(const string &dbPath);
+    FriendsManager(shared_ptr<DatabaseManager> &db);
 
     /*
       * @brief Destroy the Friends Manager object
     */
-    ~FriendsManager();
+    ~FriendsManager() = default;
 
     /*
      * @brief Add a friend to the database

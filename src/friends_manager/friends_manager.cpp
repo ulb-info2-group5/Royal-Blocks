@@ -7,7 +7,6 @@
  */
 
 #include "friends_manager.hpp"
-#include "../common/sql_functions.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,25 +14,8 @@
 // TODO: check if in the friend list we have he current user with all the
 // friends or just for each line we have the current user with 1 friend
 
-
-FriendsManager::FriendsManager(const string &dbPath) {
-    if (sqlite3_open(dbPath.c_str(), &db) != SQLITE_OK) {
-        cerr << "Error SQLite: " << sqlite3_errmsg(db) << endl;
-    } else {
-        createTable();
-    }
-}
-
-FriendsManager::~FriendsManager() { sqlite3_close(db); }
-
-void FriendsManager::createTable() {
-    string sql = "CREATE TABLE IF NOT EXISTS friends ("
-                      "user1 TEXT NOT NULL, "
-                      "user2 TEXT NOT NULL, "
-                      "FOREIGN KEY (user1) REFERENCES users(username), "
-                      "FOREIGN KEY (user2) REFERENCES users(username), "
-                      "PRIMARY KEY (user1, user2))";
-    executeSQL(db, sql);
+FriendsManager::FriendsManager(shared_ptr<DatabaseManager> &db)
+    : dbManager_(db) {
 }
 
 bool FriendsManager::addFriend(const string &user, const string &friendUser) {
@@ -43,18 +25,18 @@ bool FriendsManager::addFriend(const string &user, const string &friendUser) {
     }
 
     // Check if the friendUser exists
-    if (!userExists(db, friendUser)) {
+    if (!dbManager_->userExists(friendUser)) {
         cerr << "Error: User '" << friendUser << "' does not exist." << endl;
         return false;
     }
 
     // Check if the friendship already exists
-    if (checkFriendshipExists(db, user, friendUser)) {
+    if (dbManager_->checkFriendshipExists(user, friendUser)) {
         return false;
     }
 
     // Add the friends each other
-    return addFriendshipDatabase(db, user, friendUser) && addFriendshipDatabase(db, friendUser, user);
+    return dbManager_->addFriendshipDatabase(user, friendUser) && addFriendshipDatabase(db, friendUser, user);
 }
 
 bool FriendsManager::removeFriend(const string &user, const string &friendUser) {
@@ -64,13 +46,13 @@ bool FriendsManager::removeFriend(const string &user, const string &friendUser) 
     }
 
     // Check if the friendship exists
-    if (!checkFriendshipExists(db, user, friendUser)) {
+    if (!dbManager_->checkFriendshipExists(user, friendUser)) {
         cerr << "Error: Friendship between '" << user << "' and '" << friendUser << "' does not exist." << endl;
         return false;
     }
 
     // Remove the friendship each other
-    return removeFriendshipDatabase(db, user, friendUser) && removeFriendshipDatabase(db, friendUser, user);
+    return dbManager_->removeFriendshipDatabase(user, friendUser) && removeFriendshipDatabase(db, friendUser, user);
 }
 
 
@@ -85,7 +67,7 @@ vector<string> FriendsManager::getFriends(const string &username) {
 
     sqlite3_stmt *stmt;
 
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr)
+    if (sqlite3_prepare_v2(sql.c_str(), -1, &stmt, nullptr)
         == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             friends.push_back(
