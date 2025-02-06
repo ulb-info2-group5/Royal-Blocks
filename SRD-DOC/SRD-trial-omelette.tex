@@ -93,6 +93,11 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
         0.3 & Ethan Van Ruyskenvelde & Ajout Besoins système non fonctionnels & 28/11/2024 \\ \hline
         0.4 & Quentin Bernard Bouissières / Lucas Verbeiren & Diagrammes de classe Game et Connexion & 01/12/2024 \\ \hline
         0.5 & Quentin Bernard Bouissières & Diagrammes de séquence Connexion et Inscription & 30/11/2024 \\ \hline
+        0.7 & Juliette Cornu / Quentin Bernard Bouissières & Diagramme de classe Tetris & 08/12/2024 \\ \hline
+        0.8 & Enerst Malysz & Relecture du SRD & 10/12/2024 \\ \hline
+        1.0 & & rendu première version du projet & 12/12/2024 \\ \hline
+        
+        
     \end{tabular}
 \end{table}
 
@@ -506,18 +511,6 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 \end{itemize}
 
 \subsubsection*{Choisir la cible du penalties} (identique au mode Classique)
-
-
-%\subsubsection*{Discuter}
-%\begin{itemize}
-%   \item \textbf{Acteur}: Joueur
-%    \item \textbf{Use case}: Discuter
-%    \item \textbf{Description}: Permet aux joueurs de discuter entre eux pendant la partie.
-%    \item \textbf{Précondition}: Une partie multijoueur est en cours.
-%    \item \textbf{Postcondition}: Message envoyé à l'adversaire.
-%    \item \textbf{Cas exceptionnels}: Connexion interrompue, messages non envoyés.
-%\end{itemize}
-
 \subsubsection*{Menu pause} (identique au mode Duel)
 \subsubsection*{Reprendre la partie} (identique au mode Duel)
 \subsubsection*{Quitter la partie} (identique au mode Duel)
@@ -619,20 +612,15 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 
 \section{Architecture du système}
 
-\subsubsection{Connexion et Création d'un compte}
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=1\textwidth]{uml/class/connexion/Connexion.png}
-    \caption{Connexion et Création d'un compte}
-    \label{fig:Royal-Competition}
-\end{figure}
-
-\subsection{Architecture du serveur}
-
 \subsection{Architecture du jeu}
 
+\subsubsection{Partie monojoueur}
+
 Au lancement d'une partie sur l'application, chaque joueur possède un objet de la classe Tetris. Dans la Board et la \textit{queue-list} de tetrominoes, attributs de Tetris, le joueur placera les formes sur la Board. En reprenant l'algorithme pré-existant dans d'autres implémentations du jeu \textit{Tetris}, le tetromino effectue une rotation similaire au fonctionnement de \textit{Super Rotation System}. À chaque action du joueur envoyé pour changer la position du tetromino, Tetris calcule la nouvelle position selon celle renvoyée par tetromino et puis vérifie la validité de cette position dans la Board. 
+
+\subsubsection{Partie multijoueur}
+
+Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Pour l'ensemble de la partie, nous aurons un objet GameState qui contient toutes les informations nécessaires pour connaitre l'évolution de la partie en cours. Puis l'objet GameEngine utilisera les informations de ce dernier pour les actualiser selon les actions valides demandées par les joueurs. 
 
 \newpage
 
@@ -643,6 +631,16 @@ Au lancement d'une partie sur l'application, chaque joueur possède un objet de 
 	 \label{fig:main-menu}
 \end{figure}
 
+\subsection{Architecture du serveur}
+
+\subsubsection{Connexion et Création d'un compte}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{uml/class/connexion/Connexion.png}
+    \caption{Connexion et Création d'un compte}
+    \label{fig:Royal-Competition}
+\end{figure}
 
 \subsection{Architecture du client}
 
