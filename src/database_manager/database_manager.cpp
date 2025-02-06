@@ -12,6 +12,8 @@
 #include <sqlite3.h>
 #include <vector>
 
+// TODO: Add documentation
+// TODO: Add tests
 
 // ### Constructor ###
 DatabaseManager::DatabaseManager() {
