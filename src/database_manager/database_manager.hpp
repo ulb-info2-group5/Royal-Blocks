@@ -34,14 +34,6 @@ class DatabaseManager {
         * @brief Destructor of the DatabaseManager class
         */
         ~DatabaseManager();
-        
-        /*
-        * @brief Execute an SQL statement
-        *
-        * @param sql SQL statement to execute
-        * @return true if the statement was executed successfully
-        */
-        bool executeSQL(const string &sql);
 
         /*
         * @brief Check if a user exists in the database

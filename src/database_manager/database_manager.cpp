@@ -9,6 +9,8 @@
 #include "database_manager.hpp"
 #include "../config.hpp"
 #include <iostream>
+#include <sqlite3.h>
+#include <vector>
 
 DatabaseManager::DatabaseManager() {
     if (sqlite3_open(DATABASE_PATH.c_str(), &db_) != SQLITE_OK) {
@@ -23,32 +25,27 @@ DatabaseManager::~DatabaseManager() {
     sqlite3_close(db_);
 }
 
-bool DatabaseManager::executeSQL(const string &sql) {
-    char *errMsg;
-    if (sqlite3_exec(db_, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
-        cerr << "Error SQLite: " << errMsg << endl;
-        sqlite3_free(errMsg);
-        return false;
-    }
-    return true;
-}
-
 bool DatabaseManager::userExists(const string &username) {
     string query = "SELECT COUNT(*) FROM users WHERE username = ?";
     sqlite3_stmt *stmt;
+    bool exists = false;
 
     if (sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
         cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
         return false;
     }
-
+        
     sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_step(stmt);
-    int count = sqlite3_column_int(stmt, 0);
-    sqlite3_finalize(stmt);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        int count = sqlite3_column_int(stmt, 0); // Récupérer le COUNT(*)
+        exists = (count > 0);
+    }
 
-    return count > 0;
-}
+    sqlite3_finalize(stmt);
+    return exists;
+} 
+
 
 void DatabaseManager::createTables() {
     string sqlUsers = "CREATE TABLE IF NOT EXISTS users ("
@@ -62,64 +59,138 @@ void DatabaseManager::createTables() {
                         "FOREIGN KEY (user1) REFERENCES users(username), "
                         "FOREIGN KEY (user2) REFERENCES users(username), "
                         "PRIMARY KEY (user1, user2));";
-
-    executeSQL(sqlUsers);
-    executeSQL(sqlFriends);
+    
+    sqlite3_exec(db_, sqlUsers.c_str(), nullptr, nullptr, nullptr);
+    sqlite3_exec(db_, sqlFriends.c_str(), nullptr, nullptr, nullptr);
 }
 
 bool DatabaseManager::checkFriendshipExists(const string &user, const string &friendUser) {
     // Check if the friendship already exists
     string checkSQL =
-        "SELECT COUNT(*) FROM friends WHERE (user1 = '" + user + "' AND user2 = '" + friendUser + "') "
-        "OR (user1 = '" + friendUser + "' AND user2 = '" + user + "')";
+        "SELECT COUNT(*) FROM friends WHERE (user1 = ? AND user2 = ?) ";
     sqlite3_stmt *stmt;
-    int count = 0;
 
-    if (sqlite3_prepare_v2(db_, checkSQL.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_step(stmt);
-        count = sqlite3_column_int(stmt, 0);
+    if (sqlite3_prepare_v2(db_, checkSQL.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
         sqlite3_finalize(stmt);
+        return false;
     }
-
-    if (count > 0) {
-        cerr << "Error: Friendship between '" << user << "' and '" << friendUser << "' already exists." << endl;
+    
+    sqlite3_bind_text(stmt, 1, user.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, friendUser.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        sqlite3_finalize(stmt);
         return true;
     }
+    
+    sqlite3_finalize(stmt);
     return false;
 }
 
 bool DatabaseManager::addFriendshipDatabase(const string &user, const string &friendUser) {
-    string sql = "INSERT INTO friends (user1, user2) VALUES ('"
-                       + user + "', '" + friendUser + "')";
-    return executeSQL(sql);
+    string sql = "INSERT INTO friends (user1, user2) VALUES (?, ?)";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, user.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, friendUser.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }
 
 bool DatabaseManager::removeFriendshipDatabase(const string &user, const string &friendUser) {
-    string sql = "DELETE FROM friends WHERE user1 = '" + user + "' AND user2 = '" + friendUser + "'";
-    return executeSQL(sql);
+    string sql = "DELETE FROM friends WHERE user1 = ? AND user2 = ?";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, user.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, friendUser.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }
 
 void DatabaseManager::updateScoreDatabase(const string &username, const int newScore) { 
-    string sql = "UPDATE users SET score = MAX(score, " + to_string(newScore) + ") WHERE username = '" + username + "'";
-    executeSQL(sql);
+    string sql = "UPDATE users SET score = MAX(score, ?) WHERE username = ?";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, newScore);
+    sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+    }
+
+    sqlite3_finalize(stmt);
 }
 
 bool DatabaseManager::addUser(const string &username, const string &password) {
-    string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
-    return executeSQL(sql);
+    string sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }
 
 bool DatabaseManager::checkUserPassword(const string &username, const string &password) {
-    string sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+    string sql = "SELECT * FROM users WHERE username = ? AND password = ?";
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, 0);
-    if (rc != SQLITE_OK) {
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
         cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        sqlite3_finalize(stmt);
         return false;
     }
-    bool result = sqlite3_step(stmt) == SQLITE_ROW;
+
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        sqlite3_finalize(stmt);
+        return true;
+    }
+
     sqlite3_finalize(stmt);
-    return result;
+    return false;
 }
 
 vector<pair<string, int>> DatabaseManager::getRanking() const {
@@ -149,24 +220,22 @@ vector<pair<string, int>> DatabaseManager::getRanking() const {
 vector<string> DatabaseManager::getFriends(const string &username) const {
     vector<string> friends;
 
-    string sql = "SELECT user2 FROM friends WHERE user1 = '" + username
-                      + "' "
-                        "UNION "
-                        "SELECT user1 FROM friends WHERE user2 = '"
-                      + username + "'";
-
+    string sql = "SELECT user2 FROM friends WHERE user1 = ? UNION SELECT user1 FROM friends WHERE user2 = ?";
     sqlite3_stmt *stmt;
 
-    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr)
-        == SQLITE_OK) {
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            friends.push_back(
-                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
-        }
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
         sqlite3_finalize(stmt);
-    } else {
-        cerr << "Error in getting friends." << endl;
+        return friends;
     }
 
+    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_STATIC);
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        string friendUser = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+        friends.push_back(friendUser);
+    }
+
+    sqlite3_finalize(stmt);
     return friends;
 }

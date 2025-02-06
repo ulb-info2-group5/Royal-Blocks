@@ -32,6 +32,12 @@ int main() {
     cin >> user2;
 
     friendManager.addFriend(user1, user2);
+    cout << endl;
+    cout << "Friends of " << user1 << ":" << endl;
+    vector<string> vec = dbManager->getFriends(user1);
+    for (const string &user : vec) {
+        cout << user << endl;
+    }
 
     cout << endl;
     cout << "Enter the username of the user that ask to remove a friend: ";
@@ -40,6 +46,13 @@ int main() {
     cin >> user2;
 
     friendManager.removeFriend(user1, user2);
+
+    cout << endl;
+    cout << "Friends of " << user1 << ":" << endl;
+    vec = dbManager->getFriends(user1);
+    for (const string &user : vec) {
+        cout << user << endl;
+    }
 
     vector<pair<string, int>> ranking = dbManager->getRanking();
     cout << endl;
