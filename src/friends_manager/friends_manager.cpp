@@ -42,35 +42,37 @@ bool FriendsManager::addFriend(const string &user, const string &friendUser) {
         return false;
     }
 
-    // Check if the friend exists in the users database
-    string checkSQL =
-        "SELECT COUNT(*) FROM users WHERE username = '" + friendUser + "'";
-    sqlite3_stmt *stmt;
+    // Check if the friendUser exists
+    if (!userExists(db, friendUser)) {
+        cerr << "Error: User '" << friendUser << "' does not exist." << endl;
+        return false;
+    }
 
-    if (sqlite3_prepare_v2(db, checkSQL.c_str(), -1, &stmt, nullptr)
-        == SQLITE_OK) {
-        sqlite3_step(stmt);
-        int count = sqlite3_column_int(stmt, 0);
-        sqlite3_finalize(stmt);
-
-        if (count == 0) {
-            cerr << "Error : The user '" << friendUser
-                      << "' doesn't exist !" << endl;
-            return false;
-        }
-    } else {
-        cerr << "Error in adding friend while checking if the user exists." << endl;
+    // Check if the friendship already exists
+    if (checkFriendshipExists(db, user, friendUser)) {
         return false;
     }
 
     // Add the friends each other
-    string sql1 = "INSERT INTO friends (user1, user2) VALUES ('"
-                       + user + "', '" + friendUser + "')";
-    string sql2 = "INSERT INTO friends (user1, user2) VALUES ('" + friendUser
-                  + "', '" + user + "')";
-
-    return executeSQL(db, sql1) && executeSQL(db, sql2);
+    return addFriendshipDatabase(db, user, friendUser) && addFriendshipDatabase(db, friendUser, user);
 }
+
+bool FriendsManager::removeFriend(const string &user, const string &friendUser) {
+    if (user == friendUser) {
+        cerr << "Error: Cannot remove yourself as a friend" << endl;
+        return false;
+    }
+
+    // Check if the friendship exists
+    if (!checkFriendshipExists(db, user, friendUser)) {
+        cerr << "Error: Friendship between '" << user << "' and '" << friendUser << "' does not exist." << endl;
+        return false;
+    }
+
+    // Remove the friendship each other
+    return removeFriendshipDatabase(db, user, friendUser) && removeFriendshipDatabase(db, friendUser, user);
+}
+
 
 vector<string> FriendsManager::getFriends(const string &username) {
     vector<string> friends;

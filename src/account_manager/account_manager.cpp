@@ -13,6 +13,8 @@
 #include <utility>
 #include <vector>
 
+// TODO: create class for DatabaseManager to have just the dateBase to do there
+
 AccountManager::AccountManager(const string &dbPath) {
     if (sqlite3_open(dbPath.c_str(), &db) != SQLITE_OK) {
         cerr << "Error SQLite: " << sqlite3_errmsg(db) << endl;
@@ -32,22 +34,10 @@ void AccountManager::createTable() {
 }
 
 bool AccountManager::createAccount(const string &username,
-                                   const string &password) {
-    string checkSQL = "SELECT COUNT(*) FROM users WHERE username = ?";
-    sqlite3_stmt *stmt;
-    
-    if (sqlite3_prepare_v2(db, checkSQL.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "Error checking username existence: " << sqlite3_errmsg(db) << endl;
-        return false;
-    }
-
-    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_step(stmt);
-    int count = sqlite3_column_int(stmt, 0);
-    sqlite3_finalize(stmt);
-
-    if (count > 0) {
-        cerr << "Error: Username already exists!" << endl;
+                                   const string &password) {    
+    // Check if the username already exist
+    if (userExists(db, username)) {
+        cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
   
@@ -68,6 +58,7 @@ bool AccountManager::login(const string &username, const string &password) {
     return result;
 }
 
+// TODO: maybe remove it
 void AccountManager::getUsers() {
   string sql = "SELECT username, password FROM users";
   sqlite3_stmt *stmt;
@@ -163,6 +154,5 @@ vector<pair<string, int>> AccountManager::getRanking() const {
 
 // TODO: keep it there or in a new class ?
 void AccountManager::updateScore(const string &username, const int newScore) {
-    string sql = "UPDATE users SET score = MAX(score, " + to_string(newScore) + ") WHERE username = '" + username + "'";
-    executeSQL(db, sql);
+    updateScoreDatabase(db, username, newScore);
 }

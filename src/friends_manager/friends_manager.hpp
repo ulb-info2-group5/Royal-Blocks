@@ -47,6 +47,15 @@ class FriendsManager {
     bool addFriend(const string &user, const string &friendUser);
 
     /*
+      * @brief Remove a friend from the database
+      * 
+      * @param user Username of the user that wants to remove a friend
+      * @param friendUser Username of the friend to remove
+      * @return true if the friend was removed successfully
+    */
+    bool removeFriend(const string &user, const string &friendUser);
+
+    /*
       * @brief Get the friends of a user
       * 
       * @param username Username of the user

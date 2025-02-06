@@ -42,6 +42,19 @@ int main() {
         cout << "- " << friendUser << endl;
     }
 
+    cout << endl;
+    cout << "Enter the username of the user that ask to remove a friend: ";
+    cin >> user1;
+    cout << "Enter the username of the user to remove from the friendlist: ";
+    cin >> user2;
+
+    friendManager.removeFriend(user1, user2);
+    vec = friendManager.getFriends(user1);
+    cout << "Friends of " << user1 << ":" << endl;
+    for (const string &friendUser : vec) {
+        cout << "- " << friendUser << endl;
+    }
+
     accountManager.updateScore("ethan", 10);
 
     vector<pair<string, int>> ranking = accountManager.getRanking();
