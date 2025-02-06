@@ -11,6 +11,7 @@
 
 #include <sqlite3.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -51,6 +52,16 @@ class DatabaseManager {
         bool userExists(const string &username);
 
         /*
+        * @brief Add a user to the database
+        */
+        bool addUser(const string &username, const string &password);
+
+        /*
+        * @brief Check if the user and password match
+        */
+        bool checkUserPassword(const string &username, const string &password);
+
+        /*
         * @brief Check if a friendship exists in the database
         *
         * @param user Username of the first user
@@ -85,6 +96,15 @@ class DatabaseManager {
         */
         void updateScoreDatabase(const string &username, const int newScore);
 
+        /*
+        * @brief Get the ranking of all the users
+        */
+        vector<pair<string, int>> getRanking() const;
+
+        /*
+        * @brief Get the friends of a user
+        */
+        vector<string> getFriends(const string &username) const;
 };
 
 #endif // EXECUTE_SQL_HPP

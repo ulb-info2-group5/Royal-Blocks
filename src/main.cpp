@@ -7,27 +7,23 @@
  */
 
 #include "account_manager/account_manager.hpp"
+#include "database_manager/database_manager.hpp"
 #include "friends_manager/friends_manager.hpp"
-#include "config.hpp"
 #include <iostream>
-#include <string>
-#include <utility>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
 int main() {
     // ### Account Manager ###
-    AccountManager accountManager(DATABASE_PATH);
+    shared_ptr<DatabaseManager> dbManager = make_shared<DatabaseManager>();
+    AccountManager accountManager = AccountManager(dbManager);
     accountManager.launch();
-    cout << endl;
-    cout << "Users in the database:" << endl;
-    accountManager.getUsers();
-
     cout << endl;
 
     // ### Friends Manager ###
-    FriendsManager friendManager(DATABASE_PATH);
+    FriendsManager friendManager(dbManager);
     cout << "Enter the username of the user that ask to add a friend: ";
     string user1;
     cin >> user1;
@@ -36,11 +32,6 @@ int main() {
     cin >> user2;
 
     friendManager.addFriend(user1, user2);
-    vector<string> vec = friendManager.getFriends(user1);
-    cout << "Friends of " << user1 << ":" << endl;
-    for (const string &friendUser : vec) {
-        cout << "- " << friendUser << endl;
-    }
 
     cout << endl;
     cout << "Enter the username of the user that ask to remove a friend: ";
@@ -49,15 +40,8 @@ int main() {
     cin >> user2;
 
     friendManager.removeFriend(user1, user2);
-    vec = friendManager.getFriends(user1);
-    cout << "Friends of " << user1 << ":" << endl;
-    for (const string &friendUser : vec) {
-        cout << "- " << friendUser << endl;
-    }
 
-    accountManager.updateScore("ethan", 10);
-
-    vector<pair<string, int>> ranking = accountManager.getRanking();
+    vector<pair<string, int>> ranking = dbManager->getRanking();
     cout << endl;
     cout << "Ranking:" << endl;
     for (const pair<string, int> &user : ranking) {

@@ -12,7 +12,6 @@
 #include <memory>
 #include <string>
 #include <sqlite3.h>
-#include <vector>
 
 #include "../database_manager/database_manager.hpp"
 
@@ -51,15 +50,7 @@ class FriendsManager {
       * @param friendUser Username of the friend to remove
       * @return true if the friend was removed successfully
     */
-    bool removeFriend(const string &user, const string &friendUser);
-
-    /*
-      * @brief Get the friends of a user
-      * 
-      * @param username Username of the user
-    */
-    vector<string> getFriends(const string &username);
-    
+    bool removeFriend(const string &user, const string &friendUser);    
 };
 
 #endif  // FRIENDS_MANAGER_HPP

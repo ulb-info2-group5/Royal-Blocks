@@ -10,8 +10,6 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include <utility>
-#include <vector>
 
 // TODO: create class for DatabaseManager to have just the dateBase to do there
 
@@ -25,42 +23,11 @@ bool AccountManager::createAccount(const string &username,
         return false;
     }
   
-    string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
-    return dbManager_->executeSQL( sql);
+    return dbManager_->addUser(username, password);
 }
 
 bool AccountManager::login(const string &username, const string &password) {
-    string sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
-    sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
-    if (rc != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
-        return false;
-    }
-    bool result = sqlite3_step(stmt) == SQLITE_ROW;
-    sqlite3_finalize(stmt);
-    return result;
-}
-
-// TODO: maybe remove it
-void AccountManager::getUsers() {
-  string sql = "SELECT username, password FROM users";
-  sqlite3_stmt *stmt;
-
-  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-      while (sqlite3_step(stmt) == SQLITE_ROW) {
-          string username =
-              reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-          string password =
-                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
-
-          cout << "Username: " << username << ", Password: " << password
-               << endl;
-      }
-      sqlite3_finalize(stmt);
-  } else {
-      cerr << "User reading error." << endl;
-  }
+    return dbManager_->checkUserPassword(username, password);
 }
 
 void AccountManager::launch() {
@@ -110,33 +77,4 @@ void AccountManager::launch() {
     }
 
     cout << "Login successful!" << endl;
-}
-
-vector<pair<string, int>> AccountManager::getRanking() const {
-    vector<pair<string, int>> ranking;
-
-    string sql = "SELECT username, score FROM users ORDER BY score DESC";
-
-    sqlite3_stmt *stmt;
-
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr)
-        == SQLITE_OK) {
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            string username =
-                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-            int score = sqlite3_column_int(stmt, 1);
-
-            ranking.push_back({username, score});
-        }
-        sqlite3_finalize(stmt);
-    } else {
-        cerr << "Error in getting ranking." << endl;
-    }
-
-    return ranking;
-}
-
-// TODO: keep it there or in a new class ?
-void AccountManager::updateScore(const string &username, const int newScore) {
-    dbManager_->updateScoreDatabase(username, newScore);
 }

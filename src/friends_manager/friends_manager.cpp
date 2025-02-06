@@ -9,7 +9,6 @@
 #include "friends_manager.hpp"
 #include <iostream>
 #include <string>
-#include <vector>
 
 // TODO: check if in the friend list we have he current user with all the
 // friends or just for each line we have the current user with 1 friend
@@ -36,7 +35,7 @@ bool FriendsManager::addFriend(const string &user, const string &friendUser) {
     }
 
     // Add the friends each other
-    return dbManager_->addFriendshipDatabase(user, friendUser) && addFriendshipDatabase(db, friendUser, user);
+    return dbManager_->addFriendshipDatabase(user, friendUser) && dbManager_->addFriendshipDatabase(friendUser, user);
 }
 
 bool FriendsManager::removeFriend(const string &user, const string &friendUser) {
@@ -52,31 +51,5 @@ bool FriendsManager::removeFriend(const string &user, const string &friendUser) 
     }
 
     // Remove the friendship each other
-    return dbManager_->removeFriendshipDatabase(user, friendUser) && removeFriendshipDatabase(db, friendUser, user);
-}
-
-
-vector<string> FriendsManager::getFriends(const string &username) {
-    vector<string> friends;
-
-    string sql = "SELECT user2 FROM friends WHERE user1 = '" + username
-                      + "' "
-                        "UNION "
-                        "SELECT user1 FROM friends WHERE user2 = '"
-                      + username + "'";
-
-    sqlite3_stmt *stmt;
-
-    if (sqlite3_prepare_v2(sql.c_str(), -1, &stmt, nullptr)
-        == SQLITE_OK) {
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            friends.push_back(
-                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
-        }
-        sqlite3_finalize(stmt);
-    } else {
-        cerr << "Error in getting friends." << endl;
-    }
-
-    return friends;
+    return dbManager_->removeFriendshipDatabase(user, friendUser) && dbManager_->removeFriendshipDatabase(friendUser, user);
 }

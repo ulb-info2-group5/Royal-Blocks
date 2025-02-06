@@ -10,7 +10,6 @@
 #include "../config.hpp"
 #include <iostream>
 
-
 DatabaseManager::DatabaseManager() {
     if (sqlite3_open(DATABASE_PATH.c_str(), &db_) != SQLITE_OK) {
         cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
@@ -18,6 +17,10 @@ DatabaseManager::DatabaseManager() {
     else {
         createTables();
     }
+}
+
+DatabaseManager::~DatabaseManager() {
+    sqlite3_close(db_);
 }
 
 bool DatabaseManager::executeSQL(const string &sql) {
@@ -99,4 +102,71 @@ bool DatabaseManager::removeFriendshipDatabase(const string &user, const string 
 void DatabaseManager::updateScoreDatabase(const string &username, const int newScore) { 
     string sql = "UPDATE users SET score = MAX(score, " + to_string(newScore) + ") WHERE username = '" + username + "'";
     executeSQL(sql);
+}
+
+bool DatabaseManager::addUser(const string &username, const string &password) {
+    string sql = "INSERT INTO users (username, password) VALUES ('" + username + "', '" + password + "')";
+    return executeSQL(sql);
+}
+
+bool DatabaseManager::checkUserPassword(const string &username, const string &password) {
+    string sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
+    sqlite3_stmt *stmt;
+    int rc = sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        return false;
+    }
+    bool result = sqlite3_step(stmt) == SQLITE_ROW;
+    sqlite3_finalize(stmt);
+    return result;
+}
+
+vector<pair<string, int>> DatabaseManager::getRanking() const {
+    vector<pair<string, int>> ranking;
+
+    string sql = "SELECT username, score FROM users ORDER BY score DESC";
+
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr)
+        == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            string username =
+                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
+            int score = sqlite3_column_int(stmt, 1);
+
+            ranking.push_back({username, score});
+        }
+        sqlite3_finalize(stmt);
+    } else {
+        cerr << "Error in getting ranking." << endl;
+    }
+
+    return ranking;
+}
+
+vector<string> DatabaseManager::getFriends(const string &username) const {
+    vector<string> friends;
+
+    string sql = "SELECT user2 FROM friends WHERE user1 = '" + username
+                      + "' "
+                        "UNION "
+                        "SELECT user1 FROM friends WHERE user2 = '"
+                      + username + "'";
+
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr)
+        == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            friends.push_back(
+                reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
+        }
+        sqlite3_finalize(stmt);
+    } else {
+        cerr << "Error in getting friends." << endl;
+    }
+
+    return friends;
 }
