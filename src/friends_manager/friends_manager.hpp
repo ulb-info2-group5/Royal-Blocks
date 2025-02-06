@@ -23,9 +23,9 @@ class FriendsManager {
 
   public:
     /*
-      * @brief Construct a new Friends Manager object
-      * 
-      * @param dbPath Path to the database file
+    * @brief Construct a new Friends Manager object
+    * 
+    * @param dbPath Path to the database file
     */
     FriendsManager(shared_ptr<DatabaseManager> &db);
 
@@ -44,11 +44,11 @@ class FriendsManager {
     bool addFriend(const string &user, const string &friendUser);
 
     /*
-      * @brief Remove a friend from the database
-      * 
-      * @param user Username of the user that wants to remove a friend
-      * @param friendUser Username of the friend to remove
-      * @return true if the friend was removed successfully
+    * @brief Remove a friend from the database
+    * 
+    * @param user Username of the user that wants to remove a friend
+    * @param friendUser Username of the friend to remove
+    * @return true if the friend was removed successfully
     */
     bool removeFriend(const string &user, const string &friendUser);    
 };

@@ -13,10 +13,12 @@
 // TODO: check if in the friend list we have he current user with all the
 // friends or just for each line we have the current user with 1 friend
 
+// ### Constructor ###
 FriendsManager::FriendsManager(shared_ptr<DatabaseManager> &db)
     : dbManager_(db) {
 }
 
+// ### Public methods ###
 bool FriendsManager::addFriend(const string &user, const string &friendUser) {
     if (user == friendUser) {
         cerr << "Error: Cannot add yourself as a friend" << endl;
@@ -24,7 +26,7 @@ bool FriendsManager::addFriend(const string &user, const string &friendUser) {
     }
 
     // Check if the friendUser exists
-    if (!dbManager_->userExists(friendUser)) {
+    if (!dbManager_->checkUserExists(friendUser)) {
         cerr << "Error: User '" << friendUser << "' does not exist." << endl;
         return false;
     }

@@ -24,6 +24,10 @@ class DatabaseManager {
         */
         void createTables();
 
+        bool executeSqlRecovery(const string &sql, const vector<string> &params, int &result) const;
+
+        bool executeSqlChangeData(const string &sql, const vector<string> &params);
+
     public:
         /*
         * @brief Constructor of the DatabaseManager class
@@ -41,15 +45,31 @@ class DatabaseManager {
         * @param username Username to check
         * @return true if the user exists
         */
-        bool userExists(const string &username);
+        bool checkUserExists(const string &username);
 
         /*
         * @brief Add a user to the database
+        *
+        * @param username Username to add
+        * @param password The password to add
+        * @return true if it has worked
         */
         bool addUser(const string &username, const string &password);
 
         /*
+        * @brief Delete a user of the datebase
+        *
+        * @param username Username to add
+        * @return true if it has worked
+        */
+        bool deleteUser(const string &username);
+
+        /*
         * @brief Check if the user and password match
+        *
+        * @param username Username to check
+        * @param password The password to check
+        * @return true if it the username match with the password
         */
         bool checkUserPassword(const string &username, const string &password);
 
@@ -90,11 +110,15 @@ class DatabaseManager {
 
         /*
         * @brief Get the ranking of all the users
+        *
+        * @return vector<pair<string, int>> A vector of pair with the username and the score
         */
         vector<pair<string, int>> getRanking() const;
 
         /*
         * @brief Get the friends of a user
+        *
+        * @return vector<string> A vector of string with all the friend of a user
         */
         vector<string> getFriends(const string &username) const;
 };

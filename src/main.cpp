@@ -61,5 +61,9 @@ int main() {
         cout << user.first << " - " << user.second << endl;
     }
 
+    cout << "Enter name of user to delete : ";
+    cin >> user1;
+    dbManager->deleteUser(user1);
+
     return 0;
 }

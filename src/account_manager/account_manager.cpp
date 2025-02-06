@@ -13,12 +13,14 @@
 
 // TODO: create class for DatabaseManager to have just the dateBase to do there
 
+// ### Constructor ###
 AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {}
 
+// ### Public methods ###
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {    
     // Check if the username already exist
-    if (dbManager_->userExists(username)) {
+    if (dbManager_->checkUserExists(username)) {
         cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
