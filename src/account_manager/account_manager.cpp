@@ -14,48 +14,45 @@
 
 // ### Constructor ###
 AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {
-    // Create the table of users if it don't exist
+    // Create the table of users if it doesn't exist
     dbManager_->createTables("CREATE TABLE IF NOT EXISTS users ("
-                        "username TEXT PRIMARY KEY NOT NULL, "
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        "username TEXT NOT NULL, "
                         "password TEXT NOT NULL, "
                         "score INTEGER DEFAULT 0)");
 }
 
 // ### Private methods ###
-bool AccountManager::checkUserExists(const string &username) const {
+bool AccountManager::checkUsernameExists(const string &username) const {
     string query = "SELECT COUNT(*) FROM users WHERE username = ?";
     int count = 0;
-    return dbManager_->executeSqlRecovery(query, {username}, count) && count > 0;
+    return dbManager_->executeSqlRecoveryInt(query, {username}, count) && count > 0;
 }
 
 bool AccountManager::checkUserPassword(const string &username, const string &password) const {
     string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
     int count = 0;
-    return dbManager_->executeSqlRecovery(sql, {username, password}, count) && count > 0;
+    return dbManager_->executeSqlRecoveryInt(sql, {username, password}, count) && count > 0;
 }
 
 
 // ### Public methods ###
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {    
-    if (checkUserExists(username)) {
+    if (checkUsernameExists(username)) {
         cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
     return dbManager_->executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password});
 }
 
-bool AccountManager::deleteAccount(const string &username) {
-    if (!checkUserExists(username)) {
-        cerr << "Error: User '" << username << "' does not exist." << endl;
-        return false;
-    }
+bool AccountManager::deleteAccount(const int userId) {
     // Delete all the friendships of the user
-    if (!dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? OR user2 = ?", {username, username})) {
-        cerr << "Error: Failed to delete friends of user '" << username << "'." << endl;
+    if (!dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? OR user2 = ?", {userId, userId})) {
+        cerr << "Error: Failed to delete friends of user '" << userId << "'." << endl;
         return false;
     }
-    return dbManager_->executeSqlChangeData("DELETE FROM users WHERE username = ?", {username});
+    return dbManager_->executeSqlChangeData("DELETE FROM users WHERE id = ?", {userId});
 }
 
 bool AccountManager::login(const string &username, const string &password) const {
@@ -112,6 +109,23 @@ void AccountManager::launch() {
     cout << "Login successful!" << endl;
 }
 
-void AccountManager::updateScore(const string &username, const int newScore) { 
-    dbManager_->executeSqlChangeData("UPDATE users SET score = MAX(score, ?) WHERE username = ?", {to_string(newScore), username});
+void AccountManager::updateScore(const int userId, const int newScore) { 
+    dbManager_->executeSqlChangeData("UPDATE users SET score = MAX(score, ?) WHERE id = ?", {newScore, userId});
+}
+
+int AccountManager::getUserId(const string &username) const {
+    string sql = "SELECT id FROM users WHERE username = ?";
+    int userId = -1;
+    dbManager_->executeSqlRecoveryInt(sql, {username}, userId);
+    if (userId == -1) {
+        cerr << "Error: User '" << username << "' does not exist." << endl;
+    }
+    return userId;
+}
+
+string AccountManager::getUsername(const int userId) const {
+    string sql = "SELECT username FROM users WHERE id = ?";
+    string username;
+    dbManager_->executeSqlRecoveryString(sql, {userId}, username);
+    return username;
 }

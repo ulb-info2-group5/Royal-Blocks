@@ -27,7 +27,7 @@ class AccountManager {
     * @param username Username to check
     * @return true if the user exists
     */
-    bool checkUserExists(const string &username) const;
+    bool checkUsernameExists(const string &username) const;
 
     /*
     * @brief Check if a friendship exists between two users
@@ -73,10 +73,10 @@ class AccountManager {
     /*
     * @brief Delete an account
     *
-    * @param username Username of the account
+    * @param userId ID of the account
     * @return true if the account was deleted successfully
     */
-    bool deleteAccount(const string &username);
+    bool deleteAccount(const int userId);
 
     /*
     * @brief Login to an account
@@ -90,15 +90,31 @@ class AccountManager {
     /*
     * @brief Update the score of a user
     *
-    * @param username Username of the user
+    * @param userId ID of the user
     * @param newScore New score of the user
     */
-    void updateScore(const string &username, const int newScore);
+    void updateScore(const int userId, const int newScore);
 
     /*
     * @brief Launch the account manager to create an account and/or login
     */
     void launch();
+
+    /*
+    * @brief Get the user ID from the username
+    *
+    * @param username Username of the user
+    * @return ID of the user
+    */
+    int getUserId(const string &username) const;
+
+    /*
+    * @brief Get the username from the user ID
+    *
+    * @param userId ID of the user
+    * @return Username of the user
+    */
+    string getUsername(const int userId) const;
 
 };
 

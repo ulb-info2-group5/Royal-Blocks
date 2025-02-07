@@ -10,7 +10,6 @@
 #define FRIENDS_MANAGER_HPP
 
 #include <memory>
-#include <string>
 #include <sqlite3.h>
 
 #include "../database_manager/database_manager.hpp"
@@ -24,11 +23,19 @@ class FriendsManager {
     /*
     * @brief Check if a friendship exists between two users
     *
-    * @param user Username of the first user
-    * @param friendUser Username of the second user
+    * @param idUser1 Id of the first user
+    * @param idUser2 Id of the second user
     * @return true if the friendship exists
     */
-    bool checkFriendshipExists(const string &user, const string &friendUser) const;
+    bool checkFriendshipExists(const int idUser1, const int idUser2) const;
+
+    /*
+    * @brief Check if a user exists in the database
+    *
+    * @param userId Id of the user
+    * @return true if the user exists
+    */
+    bool checkUserExists(const int userId) const;
     
   public:
     /*
@@ -44,13 +51,13 @@ class FriendsManager {
     ~FriendsManager() = default;
 
     /*
-     * @brief Add a friend to the database
-     *
-     * @param user Username of the user that wants to add a friend
-     * @param friendUser Username of user to add as a friend
-     * @return true if the friend was added successfully
-     */
-    bool addFriend(const string &user, const string &friendUser);
+    * @brief Add a friend to the database
+    *
+    * @param user Username of the user that wants to add a friend
+    * @param friendUser Username of the friend to add
+    * @return true if the friend was added successfully
+    */
+    bool addFriend(const int userId, const int friendUserId);
 
     /*
     * @brief Remove a friend from the database
@@ -59,15 +66,15 @@ class FriendsManager {
     * @param friendUser Username of the friend to remove
     * @return true if the friend was removed successfully
     */
-    bool removeFriend(const string &user, const string &friendUser);    
+    bool removeFriend(const int userId, const int friendUserId);    
     
     /*
     * @brief Get all the list of friends of a user
     *
-    * @param username Username of the user to get the friends
-    * @return vector of friends of the user
+    * @param userId Id of the user
+    * @return vector<int> List of friends
     */
-    vector<string> getFriends(const string &username) const;
+    vector<int> getFriends(const int userId) const;
 };
 
 #endif  // FRIENDS_MANAGER_HPP

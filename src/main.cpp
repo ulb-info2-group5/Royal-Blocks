@@ -10,60 +10,74 @@
 #include "database_manager/database_manager.hpp"
 #include "friends_manager/friends_manager.hpp"
 #include <iostream>
+#include <ostream>
 #include <vector>
 #include <memory>
 
 using namespace std;
 
 int main() {
-    // ### Account Manager ###
     shared_ptr<DatabaseManager> dbManager = make_shared<DatabaseManager>();
-    AccountManager accountManager = AccountManager(dbManager);
+
+    AccountManager accountManager(dbManager);
+    FriendsManager friendsManager(dbManager);
+
+    cout << "=== Test du module AccountManager ===" << endl;
     accountManager.launch();
+
+    string username;
+    cout << "Entrez votre nom d'utilisateur : ";
+    cin >> username;
+    int userId = accountManager.getUserId(username);
+
+    if (userId == -1) {
+        cerr << "Erreur : Impossible de récupérer l'ID de l'utilisateur." << endl;
+        return 1;
+    }
+    cout << "ID de l'utilisateur " << username << " : " << userId << endl;
+
     cout << endl;
 
-    // ### Friends Manager ###
-    FriendsManager friendManager(dbManager);
-    cout << "Enter the username of the user that ask to add a friend: ";
-    string user1;
-    cin >> user1;
-    cout << "Enter the username of the user to add to the friendlist: ";
-    string user2;
-    cin >> user2;
+    cout << "=== Test du module FriendsManager ===" << endl;
+    string friendName;
+    cout << "Entrez un nom d'utilisateur pour ajouter un ami : ";
+    cin >> friendName;
+    int friendId = accountManager.getUserId(friendName);
 
-    friendManager.addFriend(user1, user2);
-    cout << endl;
-    cout << "Friends of " << user1 << ":" << endl;
-    vector<string> vec = friendManager.getFriends(user1);
-    for (const string &user : vec) {
-        cout << user << endl;
+    if (friendId == -1) {
+        cout << "L'utilisateur " << friendName << " n'existe pas" << endl;
+    }
+
+    if (friendsManager.addFriend(userId, friendId)) {
+        cout << "Amitié ajoutée avec succès entre " << username << " et " << friendName << "." << endl;
+    } else {
+        cout << "Erreur lors de l'ajout de l'ami." << endl;
+    }
+
+    cout << "Liste des amis de " << username << " :" << endl;
+    vector<int> friends = friendsManager.getFriends(userId);
+    for (int friendId : friends) {
+        cout << accountManager.getUsername(friendId) << endl;
     }
 
     cout << endl;
-    cout << "Enter the username of the user that ask to remove a friend: ";
-    cin >> user1;
-    cout << "Enter the username of the user to remove from the friendlist: ";
-    cin >> user2;
 
-    friendManager.removeFriend(user1, user2);
+
+    cout << "=== Test de mise à jour du score ===" << endl;
+    int newScore;
+    cout << "Entrez un score pour mettre à jour : ";
+    cin >> newScore;
+    accountManager.updateScore(userId, newScore);
+    cout << "Score mis à jour !" << endl;
 
     cout << endl;
-    cout << "Friends of " << user1 << ":" << endl;
-    vec = friendManager.getFriends(user1);
-    for (const string &user : vec) {
-        cout << user << endl;
-    }
 
+
+    cout << "=== Classement ===" << endl;
     vector<pair<string, int>> ranking = dbManager->getRanking();
-    cout << endl;
-    cout << "Ranking:" << endl;
-    for (const pair<string, int> &user : ranking) {
-        cout << user.first << " - " << user.second << endl;
+    for (const auto &entry : ranking) {
+        cout << "Utilisateur " << entry.first << " : " << entry.second << " points" << endl;
     }
-
-    cout << "Enter name of user to delete : ";
-    cin >> user1;
-    accountManager.deleteAccount(user1);
 
     return 0;
 }

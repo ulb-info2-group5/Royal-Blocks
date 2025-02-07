@@ -11,12 +11,15 @@
 
 #include <sqlite3.h>
 #include <string>
+#include <variant>
 #include <vector>
 
 using namespace std;
 
 class DatabaseManager {
     private:
+        using MultiType = variant<int, string>;
+
         sqlite3* db_;
 
     public:
@@ -34,23 +37,43 @@ class DatabaseManager {
         * @brief Create a table in the database with the given SQL query
         */
         bool createTables(const string &sql);
-        /*
-        * @brief Execute a SQL query that returns a value
-        *
-        * @param sql SQL query to execute
-        * @param params Parameters to bind to the query
-        * @return true if the query was successful
-        */
-        bool executeSqlRecovery(const string &sql, const vector<string> &params, int &result) const;
 
         /*
-        * @brief Execute a SQL query that changes data in the database
+        * @brief Execute a SQL query that returns data from the database
         *
         * @param sql SQL query to execute
         * @param params Parameters to bind to the query
-        * @return true if the query was successful
+        * @param result The result of the query to set in by reference (int)
+        * return true if the query was successful
         */
-        bool executeSqlChangeData(const string &sql, const vector<string> &params);
+        bool executeSqlRecoveryInt(const string &sql, const vector<MultiType> &params, int &result) const;
+
+        /*
+        * @brief Execute a SQL query that returns data from the database
+        *
+        * @param sql SQL query to execute
+        * @param params Parameters to bind to the query
+        * @param result The result of the query to set in by reference (string)
+        * return true if the query was successful
+        */
+        bool executeSqlRecoveryString(const string &sql, const vector<MultiType> &params, string &result) const;
+
+        /*
+        * @brief Execute a SQL query that returns data from the database
+        *
+        * @param sql SQL query to execute
+        * @param id Id to bind to the query
+        * @return The result of the query (vector of int)
+        */
+        vector<int> getVectorInfo(const string &sql, const int id) const;
+
+        /*
+        * @brief Execute a SQL query that changes data of the database
+        *
+        * @param sql SQL query to execute
+        * @param params Parameters to bind to the query (vector of MultiType (int or string))
+        */
+        bool executeSqlChangeData(const string &sql, const vector<MultiType> &params);
 
         /*
         * @brief Get the database

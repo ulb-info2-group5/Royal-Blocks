@@ -8,6 +8,7 @@
 
 #include "friends_manager.hpp"
 #include <iostream>
+#include <ostream>
 #include <string>
 
 // TODO: check if in the friend list we have he current user with all the
@@ -16,79 +17,70 @@
 // ### Constructor ###
 FriendsManager::FriendsManager(shared_ptr<DatabaseManager> &db)
     : dbManager_(db) {
-    // Create the table of friends if it don't exist
+    // Create the table of friends if it doesn't exist
     dbManager_->createTables("CREATE TABLE IF NOT EXISTS friends ("
-                        "user1 TEXT NOT NULL, "
-                        "user2 TEXT NOT NULL, "
-                        "FOREIGN KEY (user1) REFERENCES users(username), "
-                        "FOREIGN KEY (user2) REFERENCES users(username), "
+                        "user1 INTEGER NOT NULL, "
+                         "user2 INTEGER NOT NULL, "
+                        "FOREIGN KEY (user1) REFERENCES users(id), "
+                        "FOREIGN KEY (user2) REFERENCES users(id), "
                         "PRIMARY KEY (user1, user2))");
 }
 
 // ### Private methods ###
-bool FriendsManager::checkFriendshipExists(const string &user, const string &friendUser) const {
-    string checkSQL = "SELECT COUNT(*) FROM friends WHERE (user1 = ? AND user2 = ?)";
+bool FriendsManager::checkFriendshipExists(const int idUser1, const int idUser2) const {
+    string checkSQL = "SELECT COUNT(*) FROM friends WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)";
     int count = 0;
-    return dbManager_->executeSqlRecovery(checkSQL, {user, friendUser}, count) && count > 0;
+    return dbManager_->executeSqlRecoveryInt(checkSQL, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0;
+}
+
+bool FriendsManager::checkUserExists(const int userId) const {
+    string query = "SELECT COUNT(*) FROM users WHERE id = ?";
+    int count = 0;
+    return dbManager_->executeSqlRecoveryInt(query, {userId}, count) && count > 0;    
 }
 
 // ### Public methods ###
-bool FriendsManager::addFriend(const string &user, const string &friendUser) {
-    if (user == friendUser) {
+bool FriendsManager::addFriend(const int userId, const int friendUserId) {
+    if (userId == friendUserId) {
         cerr << "Error: Cannot add yourself as a friend" << endl;
         return false;
     }
 
-    if (checkFriendshipExists(user, friendUser)) {
+    if (!checkUserExists(friendUserId)) {
+        cerr << "Error: User with id '" << friendUserId << "' does not exist." << endl;
+        return false;
+    }
+
+    if (checkFriendshipExists(userId, friendUserId)) {
+        cerr << "Error: Friendship between '" << userId << "' and '" << friendUserId << "' already exists." << endl;
         return false;
     }
 
     // Add the friends each other
-    return dbManager_->executeSqlChangeData("INSERT INTO friends (user1, user2) VALUES (?, ?)", {user, friendUser}) && dbManager_->executeSqlChangeData("INSERT INTO friends (user1, user2) VALUES (?, ?)", {friendUser, user});
+    return dbManager_->executeSqlChangeData("INSERT INTO friends (user1, user2) VALUES (?, ?)", {userId, friendUserId});
 }
 
-bool FriendsManager::removeFriend(const string &user, const string &friendUser) {
-    if (user == friendUser) {
+bool FriendsManager::removeFriend(const int userId, const int friendUserId) {
+    if (userId == friendUserId) {
         cerr << "Error: Cannot remove yourself as a friend" << endl;
         return false;
     }
 
-    if (!checkFriendshipExists(user, friendUser)) {
-        cerr << "Error: Friendship between '" << user << "' and '" << friendUser << "' does not exist." << endl;
+    if (!checkFriendshipExists(userId, friendUserId)) {
+        cerr << "Error: Friendship between '" << userId << "' and '" << friendUserId << "' does not exist." << endl;
         return false;
     }
 
     // Remove the friendship each other
-    return dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? AND user2 = ?", {user, friendUser}) && dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? AND user2 = ?", {friendUser, user});
+    return dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? AND user2 = ?", {userId, friendUserId}) && dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? AND user2 = ?", {friendUserId, userId});
 
 }
 
 
 // ### Getters ###
 
-vector<string> FriendsManager::getFriends(const string &username) const {
+vector<int> FriendsManager::getFriends(const int userId) const {
     // Prepare the SQL statement
-    vector<string> friends;
-    string sql = "SELECT user2 FROM friends WHERE user1 = ? UNION SELECT user1 FROM friends WHERE user2 = ?";
-    sqlite3_stmt *stmt;
-
-    // Check if the statement is valid
-    if (sqlite3_prepare_v2(dbManager_->getDatabase(), sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(dbManager_->getDatabase()) << endl;
-        sqlite3_finalize(stmt);
-        return friends;
-    }
-
-    // Bind the username to the statement
-    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_STATIC);
-    // Execute the statement
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        string friendUser = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-        friends.push_back(friendUser);
-    }
-
-    // Finalize the statement
-    sqlite3_finalize(stmt);
-    return friends;
+    string sql = "SELECT user1, user2 FROM friends WHERE user1 = ? OR user2 = ?";
+    return dbManager_->getVectorInfo(sql, userId);
 }
