@@ -24,11 +24,8 @@ endif()
 
 # tetris_lib source files
 file(GLOB_RECURSE SOURCES_LIB
-    src/board/*.cpp
-    src/vec2/*.cpp
-    src/tetris/*.cpp
-    src/tetromino/*.cpp
-    src/grid/*.cpp
+    #TODO: do not include the main here
+    src/*.cpp
 )
 
 # Ncurses
@@ -40,8 +37,8 @@ include_directories(${CURSES_INCLUDE_DIR})
 add_library(${PROJECT_NAME}_lib ${SOURCES_LIB})
 
 # main.cpp
-set(SOURCES_MAIN src/main.cpp)
-add_executable(${PROJECT_NAME} ${SOURCES_MAIN})
+# set(SOURCES_MAIN src/main.cpp)
+# add_executable(${PROJECT_NAME} ${SOURCES_MAIN})
 
 # link main with tetris_lib and ncurses
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_lib ${CURSES_LIBRARIES})
+# target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_lib ${CURSES_LIBRARIES})

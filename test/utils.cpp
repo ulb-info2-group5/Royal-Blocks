@@ -1,7 +1,5 @@
 #include "utils.hpp"
 
-#include "../src/tetromino/tetromino.hpp"
-
 #include <memory>
 
 void rotateTetrominoNTimes(std::unique_ptr<ATetromino> &tetromino,

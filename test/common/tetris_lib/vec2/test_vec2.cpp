@@ -1,7 +1,5 @@
 #include "./test_vec2.hpp"
 
-#include "./../src/vec2/vec2.hpp"
-
 #include <cppunit/TestAssert.h>
 
 void Vec2Test::setUp() {

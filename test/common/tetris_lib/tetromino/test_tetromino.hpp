@@ -1,4 +1,4 @@
-#include "../src/tetromino/tetromino.hpp"
+#include "../../../../src/common/tetris_lib/tetromino/tetromino.hpp"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

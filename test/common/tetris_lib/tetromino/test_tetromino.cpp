@@ -1,8 +1,7 @@
 #include "test_tetromino.hpp"
 
-#include "../src/tetromino/tetromino.hpp"
-#include "../src/tetromino/tetromino_shapes.hpp"
-#include "utils.hpp"
+#include "../../../../src/common/tetris_lib/tetromino/tetromino_shapes.hpp"
+#include "../../../utils.hpp"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>

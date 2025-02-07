@@ -1,7 +1,8 @@
 #include "test_board.hpp"
 
-#include "../src/tetromino/tetromino_shapes.hpp"
-#include "../src/vec2/vec2.hpp"
+#include "../../../../src/common/tetris_lib/tetromino/tetromino.hpp"
+#include "../../../../src/common/tetris_lib/tetromino/tetromino_shapes.hpp"
+#include "../../../../src/common/tetris_lib/vec2/vec2.hpp"
 
 #include <algorithm>
 #include <cppunit/TestAssert.h>

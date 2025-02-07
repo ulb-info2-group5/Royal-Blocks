@@ -1,7 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "../src/tetromino/tetromino.hpp"
+#include "../src/common/tetris_lib/tetromino/tetromino.hpp"
 #include <ostream>
 #include <vector>
 

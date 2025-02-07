@@ -1,7 +1,7 @@
 #ifndef TEST_VEC2_HPP
 #define TEST_VEC2_HPP
 
-#include "./../src/vec2/vec2.hpp"
+#include "../../../../src/common/tetris_lib/vec2/vec2.hpp"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
