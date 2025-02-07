@@ -105,7 +105,7 @@ void Board::placeTetromino(TetrominoPtr tetromino) {
     }
 }
 
-bool Board::checkInGrid(Tetromino &tetromino) const {
+bool Board::checkInGrid(ATetromino &tetromino) const {
     Vec2 anchor = tetromino.getAnchorPoint();
     for (const Vec2 &relativeCoord : tetromino.getBody()) {
         Vec2 absoluteCoord = relativeCoord + anchor;

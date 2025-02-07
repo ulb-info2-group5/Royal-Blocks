@@ -75,7 +75,7 @@ class Tetris final {
      *
      * @param tetromino The tetromino to be checked.
      */
-    bool checkCanDrop(const Tetromino &tetromino) const;
+    bool checkCanDrop(const ATetromino &tetromino) const;
 
     /**
      * @brief Places the active tetromino where it currently is in the grid

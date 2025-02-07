@@ -21,7 +21,7 @@ void BoardTest::constructorTest() {
 
 void BoardTest::placeTetrominoTest() {
     TetrominoPtr tetromino =
-        Tetromino::makeTetromino(TetrominoShape::L, Vec2{1, 0});
+        ATetromino::makeTetromino(TetrominoShape::L, Vec2{1, 0});
 
     board.placeTetromino(std::move(tetromino));
 
@@ -132,10 +132,10 @@ void BoardTest::dropRowsAboveTest() {
 
 void BoardTest::checkInGridTest() {
     TetrominoPtr tetrominoL =
-        Tetromino::makeTetromino(TetrominoShape::L, Vec2{2, 0});
+        ATetromino::makeTetromino(TetrominoShape::L, Vec2{2, 0});
 
     TetrominoPtr tetrominoO =
-        Tetromino::makeTetromino(TetrominoShape::O, Vec2{0, 0});
+        ATetromino::makeTetromino(TetrominoShape::O, Vec2{0, 0});
 
     fillCol(0);
 

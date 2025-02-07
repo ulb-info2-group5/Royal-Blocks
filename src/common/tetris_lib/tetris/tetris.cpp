@@ -66,7 +66,7 @@ void Tetris::updatePreviewVertical() {
 
 // #### Tetromino: Placing and checking that it can drop ####
 
-bool Tetris::checkCanDrop(const Tetromino &tetromino) const {
+bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
     Vec2 anchorPoint = tetromino.getAnchorPoint();
 
     anchorPoint.moveY(-1);
@@ -110,9 +110,9 @@ void Tetris::fillTetrominoesQueue() {
                            ? board_.getHeight() - 1
                            : board_.getHeight() - 2;
 
-        tetrominoes.at(i) =
-            Tetromino::makeTetromino(static_cast<TetrominoShape>(i),
-                                     Vec2(board_.getWidth() / 2 - 1, spawnRow));
+        tetrominoes.at(i) = ATetromino::makeTetromino(
+            static_cast<TetrominoShape>(i),
+            Vec2(board_.getWidth() / 2 - 1, spawnRow));
     }
 
     std::random_device rd;
@@ -204,7 +204,7 @@ void Tetris::sendEvent(EventType event) {
     }
 
     if (event != EventType::None) {
-        previewTetromino_ = std::make_unique<Tetromino>(*activeTetromino_);
+        previewTetromino_ = activeTetromino_->clone();
         updatePreviewVertical();
     }
 }

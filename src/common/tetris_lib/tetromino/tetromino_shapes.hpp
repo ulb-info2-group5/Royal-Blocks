@@ -56,7 +56,7 @@ std::ostream &operator<<(std::ostream &os, TetrominoShape shape);
 /**
  * @class TetrominoZ
  */
-class TetrominoZ final : public Tetromino {
+class TetrominoZ final : public ATetromino {
   public:
     /**
      * @brief TetrominoZ constructor.
@@ -64,6 +64,8 @@ class TetrominoZ final : public Tetromino {
      * @param anchorPoint The TetrominoZ's anchor-point.
      */
     TetrominoZ(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoZ>(*this); }
 };
 
 // #### L Shape ####
@@ -71,7 +73,7 @@ class TetrominoZ final : public Tetromino {
 /**
  * @class TetrominoL
  */
-class TetrominoL final : public Tetromino {
+class TetrominoL final : public ATetromino {
   public:
     /**
      * @brief TetrominoL constructor.
@@ -79,6 +81,8 @@ class TetrominoL final : public Tetromino {
      * @param anchorPoint The TetrominoL's anchor-point.
      */
     TetrominoL(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoL>(*this); }
 };
 
 // #### O Shape ####
@@ -86,7 +90,7 @@ class TetrominoL final : public Tetromino {
 /**
  * @class TetrominoO
  */
-class TetrominoO final : public Tetromino {
+class TetrominoO final : public ATetromino {
   public:
     /**
      * @brief TetrominoO constructor.
@@ -94,6 +98,8 @@ class TetrominoO final : public Tetromino {
      * @param anchorPoint The TetrominoO's anchor-point.
      */
     TetrominoO(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoO>(*this); }
 };
 
 // #### S Shape ####
@@ -101,7 +107,7 @@ class TetrominoO final : public Tetromino {
 /**
  * @class TetrominoS
  */
-class TetrominoS final : public Tetromino {
+class TetrominoS final : public ATetromino {
   public:
     /**
      * @brief TetrominoS constructor.
@@ -109,6 +115,8 @@ class TetrominoS final : public Tetromino {
      * @param anchorPoint The TetrominoS's anchor-point.
      */
     TetrominoS(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoS>(*this); }
 };
 
 // #### I Shape ####
@@ -116,7 +124,7 @@ class TetrominoS final : public Tetromino {
 /**
  * @class TetrominoI
  */
-class TetrominoI final : public Tetromino {
+class TetrominoI final : public ATetromino {
   public:
     /**
      * @brief TetrominoI constructor.
@@ -124,6 +132,8 @@ class TetrominoI final : public Tetromino {
      * @param anchorPoint The TetrominoI's anchor-point.
      */
     TetrominoI(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoI>(*this); }
 };
 
 // #### J Shape ####
@@ -131,7 +141,7 @@ class TetrominoI final : public Tetromino {
 /**
  * @class TetrominoJ
  */
-class TetrominoJ final : public Tetromino {
+class TetrominoJ final : public ATetromino {
   public:
     /**
      * @brief TetrominoJ constructor.
@@ -139,6 +149,8 @@ class TetrominoJ final : public Tetromino {
      * @param anchorPoint The TetrominoJ's anchor-point.
      */
     TetrominoJ(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoJ>(*this); }
 };
 
 // #### T Shape ####
@@ -146,14 +158,16 @@ class TetrominoJ final : public Tetromino {
 /**
  * @class TetrominoT
  */
-class TetrominoT final : public Tetromino {
+class TetrominoT final : public ATetromino {
+  public:
     /**
      * @brief TetrominoT constructor.
      *
      * @param anchorPoint The TetrominoT's anchor-point.
      */
-  public:
     TetrominoT(Vec2 &&anchorPoint);
+
+    virtual TetrominoPtr clone() const { return make_clone<TetrominoT>(*this); }
 };
 
 #endif

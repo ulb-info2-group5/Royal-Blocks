@@ -180,7 +180,7 @@ class Board final {
      *
      * @return True if the given Tetromino fits; otherwise, false.
      */
-    bool checkInGrid(Tetromino &tetromino) const;
+    bool checkInGrid(ATetromino &tetromino) const;
 
     // #### Update Board State ####
 

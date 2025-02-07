@@ -18,20 +18,21 @@
 
 // #### SRS Offsets Data Constants ####
 
-const std::vector<std::vector<Vec2>> Tetromino::O_OFFSET_DATA = {
+const std::vector<std::vector<Vec2>> ATetromino::O_OFFSET_DATA = {
     {{0, 0}},
     {{0, -1}},
     {{-1, -1}},
     {{-1, 0}},
 };
-const std::vector<std::vector<Vec2>> Tetromino::I_OFFSET_DATA = {
+
+const std::vector<std::vector<Vec2>> ATetromino::I_OFFSET_DATA = {
     {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},
     {{-1, 0}, {0, 0}, {0, 0}, {0, 1}, {0, -2}},
     {{-1, 1}, {1, 1}, {-2, 1}, {1, 0}, {-2, 0}},
     {{0, 1}, {0, 1}, {0, 1}, {0, -1}, {0, 2}},
 };
 
-const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
+const std::vector<std::vector<Vec2>> ATetromino::ZLSJT_OFFSET_DATA = {
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
     {{0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2}},
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -40,9 +41,9 @@ const std::vector<std::vector<Vec2>> Tetromino::ZLSJT_OFFSET_DATA = {
 
 // #### Constructor ####
 
-Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
-                     const std::vector<std::vector<Vec2>> *offsetData,
-                     TetrominoShape shape)
+ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
+                       const std::vector<std::vector<Vec2>> *offsetData,
+                       TetrominoShape shape)
     : shape_(shape), anchorPoint_{std::move(anchorPoint)},
       body_{std::move(body)}, offsetData_(offsetData) {
 
@@ -73,8 +74,8 @@ Tetromino::Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
 
 // #### Factory ####
 
-TetrominoPtr Tetromino::makeTetromino(TetrominoShape shape,
-                                      Vec2 &&anchorPoint) {
+TetrominoPtr ATetromino::makeTetromino(TetrominoShape shape,
+                                       Vec2 &&anchorPoint) {
     if (shape == TetrominoShape::NumTetrominoShape) {
         throw std::runtime_error(
             "shape must be different from NumTetrominoShape");
@@ -113,34 +114,34 @@ TetrominoPtr Tetromino::makeTetromino(TetrominoShape shape,
 
 // #### Getters ####
 
-size_t Tetromino::getWidth() const noexcept { return width_; }
+size_t ATetromino::getWidth() const noexcept { return width_; }
 
-size_t Tetromino::getHeight() const noexcept { return height_; }
+size_t ATetromino::getHeight() const noexcept { return height_; }
 
-TetrominoShape Tetromino::getShape() const noexcept { return shape_; }
+TetrominoShape ATetromino::getShape() const noexcept { return shape_; }
 
-const Vec2 &Tetromino::getAnchorPoint() const noexcept { return anchorPoint_; }
+const Vec2 &ATetromino::getAnchorPoint() const noexcept { return anchorPoint_; }
 
-const std::vector<Vec2> &Tetromino::getBody() const noexcept { return body_; }
+const std::vector<Vec2> &ATetromino::getBody() const noexcept { return body_; }
 
-unsigned Tetromino::getColorId() const noexcept {
+unsigned ATetromino::getColorId() const noexcept {
     return static_cast<unsigned>(getShape());
 }
 
-const RotationIndex &Tetromino::getRotationIndex() const noexcept {
+const RotationIndex &ATetromino::getRotationIndex() const noexcept {
     return rotationIdx_;
 }
 
-const RotationIndex &Tetromino::getPrevRotationIndex() const noexcept {
+const RotationIndex &ATetromino::getPrevRotationIndex() const noexcept {
     return prevRotationIdx_;
 }
 
-uint8_t Tetromino::getNumOfTests() const noexcept {
+uint8_t ATetromino::getNumOfTests() const noexcept {
     return static_cast<uint8_t>(offsetData_->at(0).size());
 }
 
-TetrominoPtr Tetromino::getNthOffset(uint8_t offsetIndex) const {
-    TetrominoPtr copy = std::make_unique<Tetromino>(*this);
+TetrominoPtr ATetromino::getNthOffset(uint8_t offsetIndex) const {
+    TetrominoPtr copy = this->clone();
 
     Vec2 offsetVal1 = offsetData_->at(prevRotationIdx_).at(offsetIndex - 1);
     Vec2 offsetVal2 = offsetData_->at(rotationIdx_).at(offsetIndex - 1);
@@ -156,13 +157,13 @@ TetrominoPtr Tetromino::getNthOffset(uint8_t offsetIndex) const {
 
 // #### Setters ####
 
-void Tetromino::setAnchorPoint(const Vec2 &anchorPoint) {
+void ATetromino::setAnchorPoint(const Vec2 &anchorPoint) {
     anchorPoint_ = anchorPoint;
 }
 
 // #### Tetromino Actions ####
 
-void Tetromino::move(Direction direction, bool reverse) {
+void ATetromino::move(Direction direction, bool reverse) {
     switch (direction) {
     case Direction::Down:
         anchorPoint_.moveY(reverse ? +1 : -1);
@@ -176,7 +177,7 @@ void Tetromino::move(Direction direction, bool reverse) {
     }
 }
 
-void Tetromino::rotate(bool rotateClockwise) {
+void ATetromino::rotate(bool rotateClockwise) {
     prevRotationIdx_ = rotationIdx_;
     rotationIdx_ += (rotateClockwise) ? 1 : -1;
 
@@ -191,7 +192,7 @@ void Tetromino::rotate(bool rotateClockwise) {
 
 // #### Comparisons Operators ####
 
-bool Tetromino::operator==(const Tetromino &other) const {
+bool ATetromino::operator==(const ATetromino &other) const {
     return (
         std::equal(getBody().begin(), getBody().end(), other.getBody().begin())
         and getAnchorPoint() == other.getAnchorPoint()
@@ -201,13 +202,13 @@ bool Tetromino::operator==(const Tetromino &other) const {
         and getShape() == other.getShape());
 }
 
-bool Tetromino::operator!=(const Tetromino &other) const {
+bool ATetromino::operator!=(const ATetromino &other) const {
     return !(operator==(other));
 }
 
 // #### Output Stream ####
 
-std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) {
+std::ostream &operator<<(std::ostream &os, const ATetromino &tetromino) {
     os << "anchor: " << tetromino.getAnchorPoint() << " body: {";
     for (const auto &coord : tetromino.getBody()) {
         std::cout << coord << " ";

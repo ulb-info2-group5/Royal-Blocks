@@ -49,51 +49,51 @@ std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
 // #### Z Shape ####
 
 TetrominoZ::TetrominoZ(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {0, 1}, {-1, 1}, {1, 0}},
-                &Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::Z) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {0, 1}, {-1, 1}, {1, 0}},
+                 &ATetromino::ZLSJT_OFFSET_DATA, TetrominoShape::Z) {}
 
 // #### L Shape ####
 
 TetrominoL::TetrominoL(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {-1, 0}, {1, 0}, {1, 1}},
-                &Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::L) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {-1, 0}, {1, 0}, {1, 1}},
+                 &ATetromino::ZLSJT_OFFSET_DATA, TetrominoShape::L) {}
 
 // #### O Shape ####
 
 TetrominoO::TetrominoO(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {0, 1}, {1, 1}, {1, 0}},
-                &Tetromino::O_OFFSET_DATA, TetrominoShape::O) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {0, 1}, {1, 1}, {1, 0}},
+                 &ATetromino::O_OFFSET_DATA, TetrominoShape::O) {}
 
 // #### S Shape ####
 
 TetrominoS::TetrominoS(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {-1, 0}, {0, 1}, {1, 1}},
-                &Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::S) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {-1, 0}, {0, 1}, {1, 1}},
+                 &ATetromino::ZLSJT_OFFSET_DATA, TetrominoShape::S) {}
 
 // #### I Shape ####
 
 TetrominoI::TetrominoI(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {-1, 0}, {1, 0}, {2, 0}},
-                &Tetromino::I_OFFSET_DATA, TetrominoShape::I) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {-1, 0}, {1, 0}, {2, 0}},
+                 &ATetromino::I_OFFSET_DATA, TetrominoShape::I) {}
 
 // #### J Shape ####
 
 TetrominoJ::TetrominoJ(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {-1, 0}, {-1, 1}, {1, 0}},
-                &Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::J) {}
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {-1, 0}, {-1, 1}, {1, 0}},
+                 &ATetromino::ZLSJT_OFFSET_DATA, TetrominoShape::J) {}
 
 // #### T Shape ####
 
 TetrominoT::TetrominoT(Vec2 &&anchorPoint)
-    : Tetromino(std::move(anchorPoint),
-                std::vector<Vec2>{{0, 0}, {-1, 0}, {0, 1}, {1, 0}},
-                &Tetromino::ZLSJT_OFFSET_DATA, TetrominoShape::T) {
+    : ATetromino(std::move(anchorPoint),
+                 std::vector<Vec2>{{0, 0}, {-1, 0}, {0, 1}, {1, 0}},
+                 &ATetromino::ZLSJT_OFFSET_DATA, TetrominoShape::T) {
 
     // This tetromino should spawn in a way that it looks like a T so we need to
     // rotate it twice.

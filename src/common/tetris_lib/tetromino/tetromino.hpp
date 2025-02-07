@@ -4,14 +4,15 @@
 #include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
 
+#include <concepts>
 #include <cstdint>
 #include <memory>
 #include <vector>
 
 enum class TetrominoShape;
 class TetrominoTest;
-class Tetromino;
-using TetrominoPtr = std::unique_ptr<Tetromino>;
+class ATetromino;
+using TetrominoPtr = std::unique_ptr<ATetromino>;
 
 /**
  * @enum Direction
@@ -32,7 +33,7 @@ enum class Direction { Left, Right, Down };
  *      @note The process of determining which offset-test is passed must be
  *      implemented outside of this class.
  */
-class Tetromino {
+class ATetromino {
   private:
     size_t width_ = 0;
     size_t height_ = 0;
@@ -70,25 +71,38 @@ class Tetromino {
      * e.g. ZLSJT_OFFSET_DATA.
      * @param shape The shape of the Tetromino.
      * */
-    Tetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
-              const std::vector<std::vector<Vec2>> *offsetData,
-              TetrominoShape shape);
+    ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
+               const std::vector<std::vector<Vec2>> *offsetData,
+               TetrominoShape shape);
+
+    // #### Cloning Tetromino's derivatives #####
+
+    template <typename Derived>
+        requires std::derived_from<Derived, ATetromino>
+    static TetrominoPtr make_clone(const ATetromino &tetromino) {
+        const Derived *pDerived = dynamic_cast<const Derived *>(&tetromino);
+        if (!pDerived) {
+            return nullptr;
+        }
+
+        return std::make_unique<Derived>(*pDerived);
+    }
 
   public:
     // #### Copy Constructor ####
 
-    Tetromino() = delete;
-    Tetromino(const Tetromino &other) = default;
-    Tetromino(Tetromino &&) = default;
+    ATetromino() = delete;
+    ATetromino(const ATetromino &other) = default;
+    ATetromino(ATetromino &&) = default;
 
     // #### Assignment ####
 
-    Tetromino &operator=(const Tetromino &) = default;
-    Tetromino &operator=(Tetromino &&) = default;
+    ATetromino &operator=(const ATetromino &) = default;
+    ATetromino &operator=(ATetromino &&) = default;
 
     // #### Destructor ####
 
-    virtual ~Tetromino() = default;
+    virtual ~ATetromino() = default;
 
     // #### Factory ####
 
@@ -217,7 +231,7 @@ class Tetromino {
      * @param other The Tetromino to compare with.
      * @return True if the two Tetrominoes are equal; otherwise, false.
      */
-    bool operator==(const Tetromino &other) const;
+    bool operator==(const ATetromino &other) const;
 
     /**
      * @brief Compares two Tetromino objects.
@@ -225,7 +239,11 @@ class Tetromino {
      * @param other The Tetromino to compare with.
      * @return True if the two Tetrominoes are different; otherwise, false.
      */
-    bool operator!=(const Tetromino &other) const;
+    bool operator!=(const ATetromino &other) const;
+
+    // #### Cloning Tetromino's derivatives ####
+
+    virtual TetrominoPtr clone() const = 0;
 
     // #### Output Stream ####
 
@@ -237,7 +255,7 @@ class Tetromino {
      * @return A reference to the output stream.
      */
     friend std::ostream &operator<<(std::ostream &os,
-                                    const Tetromino &tetromino);
+                                    const ATetromino &tetromino);
 
     // #### Test Fixture Class ####
 
