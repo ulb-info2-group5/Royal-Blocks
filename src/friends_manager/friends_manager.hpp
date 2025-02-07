@@ -21,6 +21,15 @@ class FriendsManager {
   private:
     shared_ptr<DatabaseManager> dbManager_;
 
+    /*
+    * @brief Check if a friendship exists between two users
+    *
+    * @param user Username of the first user
+    * @param friendUser Username of the second user
+    * @return true if the friendship exists
+    */
+    bool checkFriendshipExists(const string &user, const string &friendUser);
+    
   public:
     /*
     * @brief Construct a new Friends Manager object
@@ -51,6 +60,14 @@ class FriendsManager {
     * @return true if the friend was removed successfully
     */
     bool removeFriend(const string &user, const string &friendUser);    
+    
+    /*
+    * @brief Get all the list of friends of a user
+    *
+    * @param username Username of the user to get the friends
+    * @return vector of friends of the user
+    */
+    vector<string> getFriends(const string &username) const;
 };
 
 #endif  // FRIENDS_MANAGER_HPP

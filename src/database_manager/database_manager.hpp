@@ -24,10 +24,6 @@ class DatabaseManager {
         */
         void createTables();
 
-        bool executeSqlRecovery(const string &sql, const vector<string> &params, int &result) const;
-
-        bool executeSqlChangeData(const string &sql, const vector<string> &params);
-
     public:
         /*
         * @brief Constructor of the DatabaseManager class
@@ -40,87 +36,37 @@ class DatabaseManager {
         ~DatabaseManager();
 
         /*
-        * @brief Check if a user exists in the database
+        * @brief Execute a SQL query that returns a value
         *
-        * @param username Username to check
-        * @return true if the user exists
+        * @param sql SQL query to execute
+        * @param params Parameters to bind to the query
+        * @return true if the query was successful
         */
-        bool checkUserExists(const string &username);
+        bool executeSqlRecovery(const string &sql, const vector<string> &params, int &result) const;
 
         /*
-        * @brief Add a user to the database
+        * @brief Execute a SQL query that changes data in the database
         *
-        * @param username Username to add
-        * @param password The password to add
-        * @return true if it has worked
+        * @param sql SQL query to execute
+        * @param params Parameters to bind to the query
+        * @return true if the query was successful
         */
-        bool addUser(const string &username, const string &password);
+        bool executeSqlChangeData(const string &sql, const vector<string> &params);
 
         /*
-        * @brief Delete a user of the datebase
+        * @brief Get the database
         *
-        * @param username Username to add
-        * @return true if it has worked
+        * @return The database
         */
-        bool deleteUser(const string &username);
+        sqlite3* getDatabase() const;
 
         /*
-        * @brief Check if the user and password match
+        * @brief Add a friend to the database
         *
-        * @param username Username to check
-        * @param password The password to check
-        * @return true if it the username match with the password
-        */
-        bool checkUserPassword(const string &username, const string &password);
-
-        /*
-        * @brief Check if a friendship exists in the database
-        *
-        * @param user Username of the first user
-        * @param friendUser Username of the second user
-        * @return true if the friendship exists
-        */
-        bool checkFriendshipExists(const string &user, const string &friendUser);
-
-        /*
-        * @brief Add a friendship to the database
-        *
-        * @param user Username of the first user
-        * @param friendUser Username of the second user
-        * @return true if the friendship was added successfully
-        */
-        bool addFriendshipDatabase(const string &user, const string &friendUser);
-
-        /*
-        * @brief Remove a friendship from the database
-        *
-        * @param user Username of the first user
-        * @param friendUser Username of the second user
-        * @return true if the friendship was removed successfully
-        */
-        bool removeFriendshipDatabase(const string &user, const string &friendUser);
-
-        /*
-        * @brief Update the score of a user in the database
-        *
-        * @param username Username of the user
-        * @param newScore New score of the user
-        */
-        void updateScoreDatabase(const string &username, const int newScore);
-
-        /*
-        * @brief Get the ranking of all the users
-        *
-        * @return vector<pair<string, int>> A vector of pair with the username and the score
+        * @return a vector of pairs containing the username and score of each user
         */
         vector<pair<string, int>> getRanking() const;
 
-        /*
-        * @brief Get the friends of a user
-        *
-        * @return vector<string> A vector of string with all the friend of a user
-        */
-        vector<string> getFriends(const string &username) const;
 };
 
 #endif // EXECUTE_SQL_HPP

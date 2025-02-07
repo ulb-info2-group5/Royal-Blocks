@@ -25,6 +25,7 @@ DatabaseManager::DatabaseManager() {
     }
 }
 
+
 // ### Destructor ###
 DatabaseManager::~DatabaseManager() {
     sqlite3_close(db_);
@@ -49,6 +50,8 @@ void DatabaseManager::createTables() {
     sqlite3_exec(db_, sqlFriends.c_str(), nullptr, nullptr, nullptr);
 }
 
+
+// ### Public methods ###
 bool DatabaseManager::executeSqlChangeData(const string &sql, const vector<string> &params) {
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
@@ -91,48 +94,11 @@ bool DatabaseManager::executeSqlRecovery(const string &sql, const vector<string>
 }
 
 
-// ### Public methods ###
-bool DatabaseManager::checkUserExists(const string &username) {
-    string query = "SELECT COUNT(*) FROM users WHERE username = ?";
-    int count = 0;
-    return executeSqlRecovery(query, {username}, count) && count > 0;
-}
-
-
-bool DatabaseManager::checkFriendshipExists(const string &user, const string &friendUser) {
-    string checkSQL = "SELECT COUNT(*) FROM friends WHERE (user1 = ? AND user2 = ?)";
-    int count = 0;
-    return executeSqlRecovery(checkSQL, {user, friendUser}, count) && count > 0;
-}
-
-bool DatabaseManager::addFriendshipDatabase(const string &user, const string &friendUser) {
-    return executeSqlChangeData("INSERT INTO friends (user1, user2) VALUES (?, ?)", {user, friendUser});
-}
-
-bool DatabaseManager::removeFriendshipDatabase(const string &user, const string &friendUser) {
-    return executeSqlChangeData("DELETE FROM friends WHERE user1 = ? AND user2 = ?", {user, friendUser});
-}
-
-void DatabaseManager::updateScoreDatabase(const string &username, const int newScore) { 
-    executeSqlChangeData("UPDATE users SET score = MAX(score, ?) WHERE username = ?", {to_string(newScore), username});
-}
-
-bool DatabaseManager::addUser(const string &username, const string &password) {
-    return executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password});
-}
-
-bool DatabaseManager::deleteUser(const string &username) {
-    return executeSqlChangeData("DELETE FROM users WHERE username = ?", {username});
-}
-
-bool DatabaseManager::checkUserPassword(const string &username, const string &password) {
-    string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
-    int count = 0;
-    return executeSqlRecovery(sql, {username, password}, count) && count > 0;
-}
-
-
 // ### Getters ###
+sqlite3* DatabaseManager::getDatabase() const {
+    return db_;
+}
+
 vector<pair<string, int>> DatabaseManager::getRanking() const {
     vector<pair<string, int>> ranking;
 
@@ -155,27 +121,4 @@ vector<pair<string, int>> DatabaseManager::getRanking() const {
     }
 
     return ranking;
-}
-
-vector<string> DatabaseManager::getFriends(const string &username) const {
-    vector<string> friends;
-
-    string sql = "SELECT user2 FROM friends WHERE user1 = ? UNION SELECT user1 FROM friends WHERE user2 = ?";
-    sqlite3_stmt *stmt;
-
-    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
-        sqlite3_finalize(stmt);
-        return friends;
-    }
-
-    sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_STATIC);
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        string friendUser = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-        friends.push_back(friendUser);
-    }
-
-    sqlite3_finalize(stmt);
-    return friends;
 }

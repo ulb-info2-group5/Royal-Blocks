@@ -16,20 +16,48 @@
 // ### Constructor ###
 AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {}
 
+// ### Private methods ###
+bool AccountManager::checkUserExists(const string &username) {
+    string query = "SELECT COUNT(*) FROM users WHERE username = ?";
+    int count = 0;
+    return dbManager_->executeSqlRecovery(query, {username}, count) && count > 0;
+}
+
+bool AccountManager::checkUserPassword(const string &username, const string &password) {
+    string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
+    int count = 0;
+    return dbManager_->executeSqlRecovery(sql, {username, password}, count) && count > 0;
+}
+
+
 // ### Public methods ###
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {    
     // Check if the username already exist
-    if (dbManager_->checkUserExists(username)) {
+    if (checkUserExists(username)) {
         cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
   
-    return dbManager_->addUser(username, password);
+    return dbManager_->executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password});
+}
+
+bool AccountManager::deleteAccount(const string &username) {
+    if (!checkUserExists(username)) {
+        cerr << "Error: User '" << username << "' does not exist." << endl;
+        return false;
+    }
+    // Delete all the friendships of the user
+    if (!dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? OR user2 = ?", {username, username})) {
+        cerr << "Error: Failed to delete friends of user '" << username << "'." << endl;
+        return false;
+    }
+
+    return dbManager_->executeSqlChangeData("DELETE FROM users WHERE username = ?", {username});
 }
 
 bool AccountManager::login(const string &username, const string &password) {
-    return dbManager_->checkUserPassword(username, password);
+    return checkUserPassword(username, password);
 }
 
 void AccountManager::launch() {
@@ -79,4 +107,8 @@ void AccountManager::launch() {
     }
 
     cout << "Login successful!" << endl;
+}
+
+void AccountManager::updateScore(const string &username, const int newScore) { 
+    dbManager_->executeSqlChangeData("UPDATE users SET score = MAX(score, ?) WHERE username = ?", {to_string(newScore), username});
 }
