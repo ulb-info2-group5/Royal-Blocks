@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/*
+* string of the configuration file
+*/
 extern const string DATABASE_PATH;
 
 #endif // CONFIG_HPP

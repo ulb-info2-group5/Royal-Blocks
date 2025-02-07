@@ -27,7 +27,7 @@ class AccountManager {
     * @param username Username to check
     * @return true if the user exists
     */
-    bool checkUserExists(const string &username);
+    bool checkUserExists(const string &username) const;
 
     /*
     * @brief Check if a friendship exists between two users
@@ -36,7 +36,7 @@ class AccountManager {
     * @param friendUser Username of the second user
     * @return true if the friendship exists
     */
-    bool checkFriendshipExists(const string &user, const string &friendUser);
+    bool checkFriendshipExists(const string &user, const string &friendUser) const;
 
     /*
     * @brief Check if the password is correct for a user
@@ -45,7 +45,7 @@ class AccountManager {
     * @param password Password to check
     * @return true if the password is correct
     */
-    bool checkUserPassword(const string &username, const string &password);
+    bool checkUserPassword(const string &username, const string &password) const;
 
 
   public:
@@ -85,7 +85,7 @@ class AccountManager {
     * @param password Password of the account
     * @return true if the login was successful
     */
-    bool login(const string &username, const string &password);
+    bool login(const string &username, const string &password) const;
 
     /*
     * @brief Update the score of a user

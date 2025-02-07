@@ -28,7 +28,7 @@ class FriendsManager {
     * @param friendUser Username of the second user
     * @return true if the friendship exists
     */
-    bool checkFriendshipExists(const string &user, const string &friendUser);
+    bool checkFriendshipExists(const string &user, const string &friendUser) const;
     
   public:
     /*

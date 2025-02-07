@@ -11,19 +11,18 @@
 #include <memory>
 #include <string>
 
-// TODO: create class for DatabaseManager to have just the dateBase to do there
 
 // ### Constructor ###
 AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {}
 
 // ### Private methods ###
-bool AccountManager::checkUserExists(const string &username) {
+bool AccountManager::checkUserExists(const string &username) const {
     string query = "SELECT COUNT(*) FROM users WHERE username = ?";
     int count = 0;
     return dbManager_->executeSqlRecovery(query, {username}, count) && count > 0;
 }
 
-bool AccountManager::checkUserPassword(const string &username, const string &password) {
+bool AccountManager::checkUserPassword(const string &username, const string &password) const {
     string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
     int count = 0;
     return dbManager_->executeSqlRecovery(sql, {username, password}, count) && count > 0;
@@ -33,12 +32,10 @@ bool AccountManager::checkUserPassword(const string &username, const string &pas
 // ### Public methods ###
 bool AccountManager::createAccount(const string &username,
                                    const string &password) {    
-    // Check if the username already exist
     if (checkUserExists(username)) {
         cerr << "Error: User '" << username << "' already exist." << endl;
         return false;
     }
-  
     return dbManager_->executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password});
 }
 
@@ -52,15 +49,15 @@ bool AccountManager::deleteAccount(const string &username) {
         cerr << "Error: Failed to delete friends of user '" << username << "'." << endl;
         return false;
     }
-
     return dbManager_->executeSqlChangeData("DELETE FROM users WHERE username = ?", {username});
 }
 
-bool AccountManager::login(const string &username, const string &password) {
+bool AccountManager::login(const string &username, const string &password) const {
     return checkUserPassword(username, password);
 }
 
 void AccountManager::launch() {
+    // ### Part 1: Create an account ###
     cout << "Do you want to create an account? (y/n): ";
     char choice;
     cin >> choice;
@@ -91,7 +88,7 @@ void AccountManager::launch() {
         cout << "Account created!" << endl;
     }
 
-
+    // ### Part 2: Login ###
     cout << "You will have to login." << endl;
     cout << "Enter username: ";
     cin >> username;
