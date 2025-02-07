@@ -1,8 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "../src/tetromino/tetromino.hpp"
-#include <memory>
+#include "../src/common/tetris_lib/tetromino/tetromino.hpp"
 #include <ostream>
 #include <vector>
 
@@ -21,7 +20,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec) {
     return os;
 }
 
-void rotateTetrominoNTimes(std::unique_ptr<Tetromino> &tetromino,
-                           bool rotateClockwise, int n);
+void rotateTetrominoNTimes(TetrominoPtr &tetromino, bool rotateClockwise,
+                           int n);
 
 #endif
