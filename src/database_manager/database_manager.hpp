@@ -89,6 +89,11 @@ class DatabaseManager {
         */
         vector<pair<string, int>> getRanking() const;
 
+        /* 
+        * I will revome this method, juste, it was just a test 
+        */
+        void getAllMessages();
+
 };
 
 #endif // EXECUTE_SQL_HPP

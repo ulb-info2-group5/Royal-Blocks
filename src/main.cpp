@@ -9,6 +9,7 @@
 #include "account_manager/account_manager.hpp"
 #include "database_manager/database_manager.hpp"
 #include "friends_manager/friends_manager.hpp"
+#include "messages_manager/messages_manager.hpp"
 #include <iostream>
 #include <ostream>
 #include <vector>
@@ -21,6 +22,8 @@ int main() {
 
     AccountManager accountManager(dbManager);
     FriendsManager friendsManager(dbManager);
+    MessagesManager messagesManager(dbManager);
+    
 
     cout << "=== Test du module AccountManager ===" << endl;
     accountManager.launch();
@@ -49,7 +52,7 @@ int main() {
     }
 
     if (friendsManager.addFriend(userId, friendId)) {
-        cout << "Amitié ajoutée avec succès entre " << username << " et " << friendName << "." << endl;
+        cout << "Amitié ajoutée Test messages  messages avec succès entre " << username << " et " << friendName << "." << endl;
     } else {
         cout << "Erreur lors de l'ajout de l'ami." << endl;
     }
@@ -72,12 +75,23 @@ int main() {
 
     cout << endl;
 
+    cout << "=== message sending test === " << endl; 
+    string recieveName;
+    cout << "the name of the user who will receive the message :";
+    cin >> recieveName; 
+    cout << endl;
+    string message; 
+    cout << "message content : "; 
+    cin >> message;
+    messagesManager.sendMessage(userId, accountManager.getUserId(recieveName), message);
+
 
     cout << "=== Classement ===" << endl;
     vector<pair<string, int>> ranking = dbManager->getRanking();
     for (const auto &entry : ranking) {
         cout << "Utilisateur " << entry.first << " : " << entry.second << " points" << endl;
     }
+    dbManager->getAllMessages();
 
     return 0;
 }
