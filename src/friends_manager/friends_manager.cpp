@@ -11,8 +11,6 @@
 #include <ostream>
 #include <string>
 
-// TODO: check if in the friend list we have he current user with all the
-// friends or just for each line we have the current user with 1 friend
 
 // ### Constructor ###
 FriendsManager::FriendsManager(shared_ptr<DatabaseManager> &db)
