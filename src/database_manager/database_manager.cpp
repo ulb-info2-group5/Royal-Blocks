@@ -20,9 +20,6 @@ DatabaseManager::DatabaseManager() {
     if (sqlite3_open(DATABASE_PATH.c_str(), &db_) != SQLITE_OK) {
         cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
     }
-    else {
-        createTables();
-    }
 }
 
 
@@ -33,21 +30,8 @@ DatabaseManager::~DatabaseManager() {
 
 
 // ### Private methods ###
-void DatabaseManager::createTables() {
-    string sqlUsers = "CREATE TABLE IF NOT EXISTS users ("
-                        "username TEXT PRIMARY KEY NOT NULL, "
-                        "password TEXT NOT NULL, "
-                        "score INTEGER DEFAULT 0);";
-
-    string sqlFriends = "CREATE TABLE IF NOT EXISTS friends ("
-                        "user1 TEXT NOT NULL, "
-                        "user2 TEXT NOT NULL, "
-                        "FOREIGN KEY (user1) REFERENCES users(username), "
-                        "FOREIGN KEY (user2) REFERENCES users(username), "
-                        "PRIMARY KEY (user1, user2));";
-    
-    sqlite3_exec(db_, sqlUsers.c_str(), nullptr, nullptr, nullptr);
-    sqlite3_exec(db_, sqlFriends.c_str(), nullptr, nullptr, nullptr);
+bool DatabaseManager::createTables(const string &sql) {  
+    return sqlite3_exec(db_, sql.c_str(), nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
 

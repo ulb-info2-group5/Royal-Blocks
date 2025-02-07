@@ -16,6 +16,13 @@
 // ### Constructor ###
 FriendsManager::FriendsManager(shared_ptr<DatabaseManager> &db)
     : dbManager_(db) {
+    // Create the table of friends if it don't exist
+    dbManager_->createTables("CREATE TABLE IF NOT EXISTS friends ("
+                        "user1 TEXT NOT NULL, "
+                        "user2 TEXT NOT NULL, "
+                        "FOREIGN KEY (user1) REFERENCES users(username), "
+                        "FOREIGN KEY (user2) REFERENCES users(username), "
+                        "PRIMARY KEY (user1, user2))");
 }
 
 // ### Private methods ###

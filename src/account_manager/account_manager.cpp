@@ -13,7 +13,13 @@
 
 
 // ### Constructor ###
-AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {}
+AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {
+    // Create the table of users if it don't exist
+    dbManager_->createTables("CREATE TABLE IF NOT EXISTS users ("
+                        "username TEXT PRIMARY KEY NOT NULL, "
+                        "password TEXT NOT NULL, "
+                        "score INTEGER DEFAULT 0)");
+}
 
 // ### Private methods ###
 bool AccountManager::checkUserExists(const string &username) const {

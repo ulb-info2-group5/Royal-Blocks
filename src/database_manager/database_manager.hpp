@@ -19,11 +19,6 @@ class DatabaseManager {
     private:
         sqlite3* db_;
 
-        /*
-        * @brief Create the tables in the database (users and friends)
-        */
-        void createTables();
-
     public:
         /*
         * @brief Constructor of the DatabaseManager class
@@ -35,6 +30,10 @@ class DatabaseManager {
         */
         ~DatabaseManager();
 
+        /*
+        * @brief Create a table in the database with the given SQL query
+        */
+        bool createTables(const string &sql);
         /*
         * @brief Execute a SQL query that returns a value
         *
