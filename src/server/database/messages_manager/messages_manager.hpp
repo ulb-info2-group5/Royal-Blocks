@@ -57,6 +57,13 @@ class MessagesManager{
         */
         bool isThereDiscussion(int idUser1, int idUser2 );  
 
+        /*
+        *@brief return the discussion pathfile between user 1 and user 2 
+        *( private because MessagesManager must be the only one to have access to it )
+        *
+        */
+        string getDiscussion(int idUser1, int idUser2);
+
     public: 
         /*
         * @brief Construct a new messagesManager object
@@ -80,12 +87,12 @@ class MessagesManager{
         * 
         **/
         void  sendMessage(const int senderId, const int recieverId, const string &content); 
-
         
         void writeMessage(const string &pathfile, const string &content, const int senderId);
 
+        void readDiscussion(const string &pathfile);
 
-        void showAllMessages(const string &pathfile);
+        void showAllMessages(const int & idUser1, const int & idUser2);
 
         /**
          * @brief read all messages between two users 
