@@ -50,7 +50,7 @@ bool MessagesManager::addDiscussion(int idUser1, int idUser2){
     const char * sqlRe = "INSERT INTO userMessages (user1_id, user2_id, file_path) VALUES (?, ?, ?);";
     if (!dbManager_->executeSqlChangeData(sqlRe, {idUser1, idUser2, filePath}) ) return false ;
 
-    cout << "a conversation has been created between " << idUser1 << "and "<< idUser2 << endl;
+    cout << "a conversation has been created between " << idUser1 << " and "<< idUser2 << endl;
     return true;
 }
 

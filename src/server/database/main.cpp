@@ -47,6 +47,15 @@ int main() {
     cout << "ID de l'utilisateur " << username << " : " << userId << endl;
 
     cout << endl;
+    cout << "=== Test du module MessagesManager ===" << endl;
+    string reciever;
+    cout << "who receives the message ?" << endl;
+    cin >> reciever;
+    cout << endl;
+    messagesManager.sendMessage(userId, accountManager.getUserId(reciever), "message de test de " + username + " pour " + reciever );
+    cout << "this is all your discussion : " << endl;
+    messagesManager.showAllMessages(userId, accountManager.getUserId(reciever));
+    
 
     cout << "=== Test du module FriendsManager ===" << endl;
     string friendName;
@@ -78,4 +87,5 @@ int main() {
     accountManager.updateScore(userId, newScore);
     cout << "Score mis à jour !" << endl;
 
+    return 0;
 }
