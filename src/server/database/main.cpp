@@ -23,7 +23,7 @@ int main() {
     AccountManager accountManager(dbManager);
     FriendsManager friendsManager(dbManager);
     MessagesManager messagesManager(dbManager);
-    
+
 
     cout << "=== Test du module AccountManager ===" << endl;
     accountManager.launch();

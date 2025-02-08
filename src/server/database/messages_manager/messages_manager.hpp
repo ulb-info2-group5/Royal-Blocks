@@ -34,7 +34,7 @@ class MessagesManager{
         * @param filePath : the path of the file which will be created
         * @return true if there has been no error
         */
-        bool createDiscussionFile(const std::string& filePath);
+        bool createDiscussionFile(const string& filePath);
 
         /*
         *@brief add and create a new discussion between two users
@@ -79,11 +79,13 @@ class MessagesManager{
         * @param content the content of the messages 
         * 
         **/
-        void  sendMessage(const int senderId, const int recieverId, const string &content = "Message"); 
+        void  sendMessage(const int senderId, const int recieverId, const string &content); 
 
         
+        void writeMessage(const string &pathfile, const string &content, const int senderId);
 
-        
+
+        void showAllMessages(const string &pathfile);
 
         /**
          * @brief read all messages between two users 
@@ -94,7 +96,8 @@ class MessagesManager{
          * @return vector of all messages between user1 and user2
          */
         vector<string> getAllMessage(const int user1_id , const int user2_id); 
-        //void MessagesManager::markMessageAsRead(const int& messageId);
+
+        void markMessageAsRead(const int& messageId);
 
 
 }; 

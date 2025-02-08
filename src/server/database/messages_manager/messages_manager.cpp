@@ -27,13 +27,13 @@ MessagesManager::MessagesManager(shared_ptr<DatabaseManager> &db) : dbManager_(d
 
 // ==== Private ====
 string MessagesManager::generateFileName(int idUser1, int idUser2 ){
-    return "../data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".txt";
+    return "data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".txt";
 }
 
-bool createDiscussionFile(const std::string& filePath) {
+bool MessagesManager::createDiscussionFile(const string& filePath) {
     std::ofstream file(filePath);
     if (!file) {
-        std::cerr << "Erreur : impossible de créer le fichier " << filePath << std::endl;
+        std::cerr << "file error" << filePath << std::endl;
         return false;
     }
     file.close();
@@ -43,11 +43,11 @@ bool createDiscussionFile(const std::string& filePath) {
 
 
 bool MessagesManager::addDiscussion(int idUser1, int idUser2){
-    string filePath = generateFileName(idUser1, idUser2);
+    const string filePath = generateFileName(idUser1, idUser2);
     
-    if (!createDiscussionFile(filePath) ) return false;
+    if (!this->createDiscussionFile(filePath) ) return false;
     
-    const char * sqlRe = "INSER INTO createDiscussionFile (idUser1, idUser2, filePath) VALEUE (?, ?, ?);";
+    const char * sqlRe = "INSERT INTO userMessages (user1_id, user2_id, file_path) VALUES (?, ?, ?);";
     if (!dbManager_->executeSqlChangeData(sqlRe, {idUser1, idUser2, filePath}) ) return false ;
 
     cout << "a conversation has been created between " << idUser1 << "and "<< idUser2 << endl;
@@ -56,19 +56,35 @@ bool MessagesManager::addDiscussion(int idUser1, int idUser2){
 
 
 bool MessagesManager::isThereDiscussion(int idUser1, int idUser2 ){
-    string checkSQL = "SELECT file_path FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
+    string sql = "SELECT file_path FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
     int count = 0;
-    return dbManager_->executeSqlRecoveryInt(checkSQL, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0;
+    return dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0;
 }
 
 // ==== Public ====
 
-
-void MessagesManager::sendMessage(const int senderId, const int recieverId, const string &content = "Message"){
-    if (!isThereDiscussion(senderId, recieverId)){
-        addDiscussion(senderId, recieverId);
-    }
-
+void MessagesManager::sendMessage(const int senderId, const int recieverId, const string &content){
+    if (!isThereDiscussion(senderId, recieverId)) addDiscussion(senderId, recieverId);
+    
+    string sql = "SELECT file_path FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?);";
+    string discussionFile;
+    dbManager_->executeSqlRecoveryString(sql, {senderId, recieverId, recieverId, senderId}, discussionFile );
+    writeMessage(discussionFile, content, senderId);
+    showAllMessages(discussionFile);
+    
 }
- 
 
+
+void MessagesManager::writeMessage(const string &pathfile, const string &content, const int senderId){
+    ofstream disc;
+	disc.open(pathfile);
+	disc << senderId << " : " << content << endl;
+	disc.close();
+}
+
+void MessagesManager::showAllMessages(const string &pathfile){
+    ifstream f(pathfile);
+    string s;
+    while (getline(f, s)) cout << s << endl;
+    f.close();
+}
