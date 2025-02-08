@@ -52,7 +52,7 @@ class InterfaceGame {
     //getters everywhere 
 
     uint8_t getPlayersNumber() const;
-    uint8_t getPlayMode() const;
+    PlayMode getPlayMode() const;
 
     
     std::array<std::array<colors, WIDTH>, HEIGHT>& getCurrPlayerBoard() const;

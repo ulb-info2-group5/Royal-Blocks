@@ -13,13 +13,24 @@ const uint32_t WIDTH = 10,
                 HEIGHT = 20;
 
 
-const uint8_t  PIECE_Z = 1,
-                PIECE_L = 2,
-                PIECE_O = 3,
-                PIECE_S = 4,
-                PIECE_I = 5,
-                PIECE_J = 6,
-                PIECE_T = 7;
+// const uint8_t  PIECE_Z = 1,
+//                 PIECE_L = 2,
+//                 PIECE_O = 3,
+//                 PIECE_S = 4,
+//                 PIECE_I = 5,
+//                 PIECE_J = 6,
+//                 PIECE_T = 7;
+
+enum class PIECE : uint8_t 
+{
+    PIECE_Z,
+    PIECE_L,
+    PIECE_O,
+    PIECE_S,
+    PIECE_I,
+    PIECE_J,
+    PIECE_T
+};
 
 enum colors {
     BLACK,
