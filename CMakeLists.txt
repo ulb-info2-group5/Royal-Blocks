@@ -16,6 +16,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(tetris_royal)
 
+# Find SQLite3 package needed for the project
+find_package(SQLite3 REQUIRED)
+
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     enable_testing()
@@ -27,3 +30,15 @@ add_subdirectory(src/common/tetris_lib)
 
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
+
+file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
+    # WARN: do not include the main's here
+    src/*.cpp
+)
+
+# tetris_royal_lib
+add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Link SQLite3 to the project
+target_link_libraries(${PROJECT_NAME}_lib PRIVATE SQLite::SQLite3)
