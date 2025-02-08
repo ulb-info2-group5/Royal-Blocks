@@ -34,11 +34,11 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
 Le projet peut être compilé en mode **Release** ou **Debug** :
 
 ```sh
-make -C build
+make release
 ```
 
 ```sh
-make -C build debug
+make debug
 ```
 
 ## Exécution du jeu
