@@ -29,7 +29,7 @@ class GridCell {
 
     // #### Destructor ####
 
-    virtual ~GridCell();
+    ~GridCell();
 
     // #### Getters ####
 

@@ -26,7 +26,7 @@ class RotationIndex {
 
     // #### Destructor ####
 
-    virtual ~RotationIndex() = default;
+    ~RotationIndex() = default;
 
     // #### Operators ####
 

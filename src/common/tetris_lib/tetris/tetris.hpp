@@ -135,7 +135,7 @@ class Tetris {
 
     // #### Destructor ####
 
-    virtual ~Tetris() = default;
+    ~Tetris() = default;
 
     // #### Event API ####
 

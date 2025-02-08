@@ -36,7 +36,7 @@ class Vec2 {
 
     // #### Destructor ####
 
-    virtual ~Vec2() = default;
+    ~Vec2() = default;
 
     // #### Getters ####
 

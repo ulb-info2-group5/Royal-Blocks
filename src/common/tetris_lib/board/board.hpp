@@ -169,7 +169,7 @@ class Board {
 
     // #### Destructor ####
 
-    virtual ~Board() = default;
+    ~Board() = default;
 
     // #### Getters ####
 

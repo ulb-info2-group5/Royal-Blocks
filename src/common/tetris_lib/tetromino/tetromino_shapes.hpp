@@ -65,7 +65,9 @@ class TetrominoZ final : public ATetromino {
      */
     TetrominoZ(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoZ>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoZ>(*this);
+    }
 };
 
 // #### L Shape ####
@@ -82,7 +84,9 @@ class TetrominoL final : public ATetromino {
      */
     TetrominoL(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoL>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoL>(*this);
+    }
 };
 
 // #### O Shape ####
@@ -99,7 +103,9 @@ class TetrominoO final : public ATetromino {
      */
     TetrominoO(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoO>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoO>(*this);
+    }
 };
 
 // #### S Shape ####
@@ -116,7 +122,9 @@ class TetrominoS final : public ATetromino {
      */
     TetrominoS(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoS>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoS>(*this);
+    }
 };
 
 // #### I Shape ####
@@ -133,7 +141,9 @@ class TetrominoI final : public ATetromino {
      */
     TetrominoI(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoI>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoI>(*this);
+    }
 };
 
 // #### J Shape ####
@@ -150,7 +160,9 @@ class TetrominoJ final : public ATetromino {
      */
     TetrominoJ(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoJ>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoJ>(*this);
+    }
 };
 
 // #### T Shape ####
@@ -167,7 +179,9 @@ class TetrominoT final : public ATetromino {
      */
     TetrominoT(Vec2 &&anchorPoint);
 
-    virtual TetrominoPtr clone() const { return make_clone<TetrominoT>(*this); }
+    TetrominoPtr clone() const override {
+        return make_clone<TetrominoT>(*this);
+    }
 };
 
 #endif

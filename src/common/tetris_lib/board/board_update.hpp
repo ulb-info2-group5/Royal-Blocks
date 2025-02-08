@@ -28,7 +28,7 @@ class BoardUpdate {
 
     // #### Destructor ####
 
-    virtual ~BoardUpdate() = default;
+    ~BoardUpdate() = default;
 
     // #### Getters ####
 
