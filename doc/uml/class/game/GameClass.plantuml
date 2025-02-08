@@ -1,0 +1,51 @@
+@startuml Game
+
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor AliceBlue
+}
+
+!include BoardClass.plantuml!0
+
+!include BoardUpdateClass.plantuml!0
+
+!include CoordinateClass.plantuml!0
+
+!include EventClass.plantuml!0
+
+!include GridCellClass.plantuml!0
+
+!include RotationStateClass.plantuml!0
+
+!include TetrisClass.plantuml!0
+
+!include TetrominoesClass.plantuml!0
+
+' class GameEngine{
+    
+' }
+
+' class Player {
+'     -isPlaying_ : bool
+'     +isPlaying() : bool
+    
+' }
+
+TetrominoShape"1"- Tetromino
+ 
+Tetromino  - "1" RotationIndex : have  >
+Tetromino *--"4" Coordinate : have > 
+Tetromino - "1" RotationState
+
+
+
+
+Board *--"width_* height_" GridCell
+
+'there's not a clear enough link between Board and Tetromino '
+' Board <- Tetromino
+
+Tetris ->"1" Board
+Tetris --> "1..*" Tetromino
+
+@enduml

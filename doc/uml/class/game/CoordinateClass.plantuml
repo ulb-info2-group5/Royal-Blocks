@@ -1,0 +1,18 @@
+@startuml (id=Coordinate)
+
+class Coordinate {
+    - col_ : int
+    - row_ : int
+
+    + getRow() : int
+    + getCol() : int
+    + setRow( row: int ) : void
+    + setCol( col: int ) : void
+    + moveRow( row : int ) : void
+    + moveCol( col: int ) : void
+
+    + rotateAround( rotationCenter : const Coordinate, rotateClockwise : bool ): Coordinate
+
+}
+
+@endluml
