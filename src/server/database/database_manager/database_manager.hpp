@@ -39,7 +39,7 @@ class DatabaseManager {
         bool createTables(const string &sql);
 
         /*
-        * @brief Execute a SQL query that returns data from the database
+        * @brief Execute a SQL query that m returns data frothe database
         *
         * @param sql SQL query to execute
         * @param params Parameters to bind to the query
@@ -89,11 +89,7 @@ class DatabaseManager {
         */
         vector<pair<string, int>> getRanking() const;
 
-        /* 
-        * I will revome this method, juste, it was just a test 
-        */
-        void getAllMessages();
-
+  
 };
 
 #endif // EXECUTE_SQL_HPP

@@ -7,6 +7,8 @@
 #define MESSAGE_MANAGER_HPP
 
 #include <memory>
+#include <iostream>
+#include <fstream> 
 #include <sqlite3.h>
 
 #include "../database_manager/database_manager.hpp"
@@ -17,6 +19,43 @@ class MessagesManager{
 
     private: 
         shared_ptr<DatabaseManager> dbManager_;
+        /*
+        * @brief generate a file Name, this file will contain the discussion between the two users 
+        * 
+        * @param idUser1 Id of the first user
+        * @param idUser2 Id of the second user
+        * 
+        * @return a file name 
+        */
+        string generateFileName(int idUser1, int idUser2 );
+        /*
+        * @brief create a file for a discussion  
+        * 
+        * @param filePath : the path of the file which will be created
+        * @return true if there has been no error
+        */
+        bool createDiscussionFile(const std::string& filePath);
+
+        /*
+        *@brief add and create a new discussion between two users
+        * @param idUser1 Id of the first user
+        * @param idUser2 Id of the second user
+        * 
+        * @return true if there has been no error
+        *  
+        */
+
+        bool addDiscussion(int idUser1, int idUser2); 
+        /*
+        *
+        *@brief check if there is a discussion between two users 
+        * @param idUser1 Id of the first user
+        * @param idUser2 Id of the second user
+        * 
+        * @return true if there is any discussion and false is not  
+        *  
+        */
+        bool isThereDiscussion(int idUser1, int idUser2 );  
 
     public: 
         /*
@@ -37,8 +76,10 @@ class MessagesManager{
         * @param senderId Id of the sender user
         * @param recieverId Id of the reciever user
         * 
+        * @param content the content of the messages 
+        * 
         **/
-        void  sendMessage(const int senderId, const int recieverId, const string &content); 
+        void  sendMessage(const int senderId, const int recieverId, const string &content = "Message"); 
 
         
 

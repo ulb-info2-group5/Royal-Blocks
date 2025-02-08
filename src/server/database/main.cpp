@@ -74,24 +74,5 @@ int main() {
     cout << "Score mis à jour !" << endl;
 
     cout << endl;
-
-    cout << "=== message sending test === " << endl; 
-    string recieveName;
-    cout << "the name of the user who will receive the message :";
-    cin >> recieveName; 
-    cout << endl;
-    string message; 
-    cout << "message content : "; 
-    cin >> message;
-    messagesManager.sendMessage(userId, accountManager.getUserId(recieveName), message);
-
-
-    cout << "=== Classement ===" << endl;
-    vector<pair<string, int>> ranking = dbManager->getRanking();
-    for (const auto &entry : ranking) {
-        cout << "Utilisateur " << entry.first << " : " << entry.second << " points" << endl;
-    }
-    dbManager->getAllMessages();
-
     return 0;
 }

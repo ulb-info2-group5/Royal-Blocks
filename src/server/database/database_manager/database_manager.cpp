@@ -29,7 +29,14 @@ DatabaseManager::~DatabaseManager() {
 
 // ### Private methods ###
 bool DatabaseManager::createTables(const string &sql) {  
-    return sqlite3_exec(db_, sql.c_str(), nullptr, nullptr, nullptr) == SQLITE_OK;
+    char* errorMess = nullptr;
+    if ( sqlite3_exec(db_, sql.c_str(), nullptr, nullptr, &errorMess) == SQLITE_OK) {
+        return true;
+    }else {
+        std::cerr << "error (create Table): " << errorMess << std::endl;
+        sqlite3_free(errorMess);
+        return false;
+    }
 }
 
 
@@ -93,30 +100,6 @@ bool DatabaseManager::executeSqlRecoveryInt(const string &sql, const vector<Mult
     return success;
 }
 
- // I will remove this methode, it was juste for test the message table 
-  void DatabaseManager::getAllMessages() {
-        std::string sql = "SELECT id, senderId, receiverId, content FROM messages;";
-        sqlite3_stmt *stmt;
-
-        if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-            std::cerr << "Erreur SQLite : " << sqlite3_errmsg(db_) << std::endl;
-            return;
-        }
-
-        std::cout << "All messages:" << std::endl;
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            int id = sqlite3_column_int(stmt, 0);
-            int senderId = sqlite3_column_int(stmt, 1);
-            int receiverId = sqlite3_column_int(stmt, 2);
-            std::string content = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-            
-
-            std::cout << "ID: " << id << " | " << senderId << " -> " << receiverId 
-                      << " | content :  " << content  << std::endl;
-        }
-
-        sqlite3_finalize(stmt);
-    }
 
 bool DatabaseManager::executeSqlRecoveryString(const string &sql, const vector<MultiType> &params, string &result) const {
     // Prepare the SQL statement
