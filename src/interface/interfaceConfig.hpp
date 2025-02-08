@@ -5,14 +5,16 @@
 
 
 //not sure if it should go here 
-const uint8_t   STATE_LOG = 1,
-                STATE_MENU = 2,
-                STATE_POOL = 3,
-                STATE_IN_GAME = 4,
-                STATE_END_OF_GAME = 5,
-                STATE_CLASSEMENT = 6,
-                STATE_MESSAGE_BOX = 7,
-                STATE_MESSAGE_CHAT = 8;
+const uint8_t   STATE_LOG = 0,
+                STATE_MENU = 1,
+                STATE_POOL = 2,
+                STATE_IN_GAME = 3,
+                STATE_END_OF_GAME = 4,
+                STATE_CLASSEMENT = 5,
+                STATE_MESSAGE_BOX = 6,
+                STATE_MESSAGE_CHAT = 7;
+
+const uint8_t   NUMBER_OF_STATES = 8;
 
 const uint8_t ENDLESS = 1,
               DUEL    = 2,

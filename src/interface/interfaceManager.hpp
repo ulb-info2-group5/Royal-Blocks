@@ -23,8 +23,8 @@ class InterfaceManager {
 
     //setters
     void changeUserState(uint8_t newUserState) noexcept;
-    void changeUserName(std::string newUserName) noexcept;
     void changeUserScoreClassement(uint32_t newUserScore) noexcept;
+    void changeUserName(std::string newUserName) noexcept;
     
 };
 
