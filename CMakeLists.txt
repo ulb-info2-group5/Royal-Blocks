@@ -14,7 +14,7 @@ endif()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(tetris)
+project(tetris_royal)
 
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -22,23 +22,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(test)
 endif()
 
-# tetris_lib source files
-file(GLOB_RECURSE SOURCES_LIB
-    #TODO: do not include the main here
+# tetris_lib
+add_subdirectory(src/common/tetris_lib)
+
+file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
+    # WARN: do not include the main's here
     src/*.cpp
 )
 
-# Ncurses
-set(CURSES_NEED_NCURSES TRUE)
-find_package(Curses REQUIRED)
-include_directories(${CURSES_INCLUDE_DIR})
-
-# add tetris_lib as lib
-add_library(${PROJECT_NAME}_lib ${SOURCES_LIB})
-
-# main.cpp
-# set(SOURCES_MAIN src/main.cpp)
-# add_executable(${PROJECT_NAME} ${SOURCES_MAIN})
-
-# link main with tetris_lib and ncurses
-# target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_lib ${CURSES_LIBRARIES})
+# tetris_royal_lib
+add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
