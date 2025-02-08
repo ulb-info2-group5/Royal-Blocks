@@ -10,7 +10,7 @@ class Vec2Test;
  *
  * @brief Represents a 2D vector.
  */
-class Vec2 final {
+class Vec2 {
   private:
     int x_;
     int y_;

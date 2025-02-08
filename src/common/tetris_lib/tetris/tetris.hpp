@@ -23,7 +23,7 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  * events like rotation, movement, and clockTick, making the Tetromino drop
  * one block down. Events are managed through an event-queue API.
  */
-class Tetris final {
+class Tetris {
     size_t score_ = 0;
     bool isAlive_ = true;
     Board board_;

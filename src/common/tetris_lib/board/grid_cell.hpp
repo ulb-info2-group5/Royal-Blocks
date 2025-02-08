@@ -11,7 +11,7 @@
  *  1. Holds a color, and therefore is not empty.
  *  2. Is empty and therefore has no color assigned.
  */
-class GridCell final {
+class GridCell {
   private:
     std::optional<unsigned> colorId_;
 

@@ -23,7 +23,7 @@ constexpr int PenaltyBlocksColor =
  * place them. It does not store Tetrominoes but updates its GridCell objects
  * based on the Tetromino's shape, position, and color.
  */
-class Board final {
+class Board {
   private:
     static constexpr size_t width_ = 10;
     static constexpr size_t height_ = 20;
