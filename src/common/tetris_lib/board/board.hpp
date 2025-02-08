@@ -70,6 +70,25 @@ class Board final {
     void dropRowsAbove(int yRow);
 
     /**
+     * @brief Moves all rows from the specified row up by a one position.
+     *
+     * This method ignores the fact that some tiles from the top row could go
+     * out of the grid.
+     *
+     * @param yRow The y-coordinate of the row from which all rows are shifted
+     * up.
+     */
+    void liftRowsFrom(int yRow);
+
+    /**
+     * @brief Sets row at yRow to the given row.
+     *
+     * @param row The new row.
+     * @param yRow The y-coordinate of the row to set.
+     */
+    void setRow(const std::array<GridCell, width_> &row, size_t yRow);
+
+    /**
      * @brief Checks whether the row at the given y-coordinate is full.
      *
      * @param yRow The row's y-coordinate.

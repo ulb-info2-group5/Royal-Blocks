@@ -3,6 +3,7 @@
 #include "../tetromino/tetromino.hpp"
 #include "../vec2/vec2.hpp"
 #include "board_update.hpp"
+#include "grid_cell.hpp"
 
 #include <cstddef>
 #include <memory>
@@ -24,11 +25,27 @@ const std::array<GridCell, Board::width_> &Board::getRow(int yRow) const {
 }
 
 void Board::dropRowsAbove(int yRow) {
-    for (int y = yRow; y < static_cast<int>(getHeight()) - 1; y++) {
-        getRow(y) = getRow(y + 1);
+    const int topRow = getHeight() - 1;
+
+    for (int y = yRow; y < static_cast<int>(topRow); y++) {
+        setRow(getRow(y + 1), y);
     }
 
     emptyRow(getHeight() - 1);
+}
+
+void Board::liftRowsFrom(int yRow) {
+    const int topRow = getHeight() - 1;
+
+    for (int y = topRow; y > static_cast<int>(yRow); y--) {
+        setRow(getRow(y - 1), y);
+    }
+
+    emptyRow(yRow);
+}
+
+void Board::setRow(const std::array<GridCell, width_> &row, size_t yRow) {
+    getRow(yRow) = row;
 }
 
 bool Board::checkFullRow(int yRow) const {
