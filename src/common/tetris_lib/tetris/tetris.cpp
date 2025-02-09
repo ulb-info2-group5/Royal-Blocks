@@ -171,6 +171,18 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
     updatePreviewTetromino();
 }
 
+void Tetris::holdNextTetromino() {
+    if (holdTetromino_ == nullptr) {
+        // If there is no hold, simply move the next to hold.
+        // TODO: adapt this once we switch to our own queue wrapper
+        holdTetromino_ = std::move(tetrominoesQueue_.front());
+        tetrominoesQueue_.pop();
+    } else {
+        // If there is a hold, swap it with next tetromino.
+        std::swap(holdTetromino_, tetrominoesQueue_.front());
+    }
+}
+
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
     bool hasLost = board_.receivePenaltyLines(numPenalties);
     setIsAlive(!hasLost);

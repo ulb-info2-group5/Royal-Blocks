@@ -22,9 +22,11 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  */
 class Tetris {
     bool isAlive_ = true;
-    Board board_;
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
+    Board board_;
+
+    TetrominoPtr holdTetromino_;
     std::queue<TetrominoPtr> tetrominoesQueue_;
 
     // TODO: move this to constructor ?
@@ -124,6 +126,14 @@ class Tetris {
      * counter-clockwise.
      */
     void eventTryRotateActive(bool rotateClockwise);
+
+    /**
+     * @brief Moves the next Tetromino from the queue to hold.
+     *
+     * If there was no hold tetromino, move the tetromino to hold.
+     * If there was a hold tetromino, swap it with the tetromino to hold.
+     */
+    void holdNextTetromino();
 
     /**
      * @brief Adds penalty lines, sets isAlive flag to false if it made the
