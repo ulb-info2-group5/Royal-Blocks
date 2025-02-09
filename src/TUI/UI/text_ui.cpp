@@ -1,5 +1,5 @@
 /**
- * @file text_ui.hpp
+ * @file text_ui.cpp
  * @author Ethan Van Ruyskensvelde
  * @brief TextUI declaration file
  * @date 2025-02-09

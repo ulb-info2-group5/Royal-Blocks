@@ -1,5 +1,5 @@
 /**
- * @file menu_ui.hpp
+ * @file menu_ui.cpp
  * @author Ethan Van Ruyskensvelde
  * @brief Menu UI definition file
  * @date 2025-02-09

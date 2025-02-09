@@ -1,5 +1,5 @@
 /**
- * @file button_ui.hpp
+ * @file button_ui.cpp
  * @author Ethan Van Ruyskensvelde
  * @brief ButtonUI declaration file
  * @date 2025-02-09
