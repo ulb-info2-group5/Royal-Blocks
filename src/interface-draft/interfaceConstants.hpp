@@ -1,20 +1,27 @@
 #ifndef INTERFACECONSTANTS_HPP
 #define INTERFACECONSTANTS_HPP
 
+#include <string>
+#include <optional>
+#include <vector>
 #include <array>
 #include <cstdlib>
 #include <iostream>
-#include <optional>
 #include <stdint.h>
-#include <string>
-#include <utility>
-#include <vector>
 
 const uint32_t WIDTH = 10,
                 HEIGHT = 20;
 
 const uint8_t NB_BLOCKS_PER_PIECE = 4;
 
+
+// const uint8_t  PIECE_Z = 1,
+//                 PIECE_L = 2,
+//                 PIECE_O = 3,
+//                 PIECE_S = 4,
+//                 PIECE_I = 5,
+//                 PIECE_J = 6,
+//                 PIECE_T = 7;
 enum colors {
     BLACK,
     WHITE, 
@@ -27,7 +34,7 @@ enum colors {
     PINK,
     GREEN, 
     YELLOW
-};
+}color_t;
 
 struct vec2Int {
     uint8_t x;
@@ -53,7 +60,7 @@ struct pieces
 };
 
 const pieces piece =
-//submatrix 4x4 with (0,0) on top left
+//submatrix 4x4 with 0,0 on top left
 {
     .PIECE_Z = {.type = 'Z',
                 .coordinates = {{.x = 0,.y = 1}, {.x = 1,.y = 1}, 
@@ -94,7 +101,7 @@ enum effects {
     LIGHTNING,
     LIGHT_SHUTDOWN, 
     TRANSFORM  
-};
+}effect_t;
 
 
 #endif

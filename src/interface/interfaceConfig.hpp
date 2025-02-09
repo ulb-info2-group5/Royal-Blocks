@@ -4,17 +4,7 @@
 #include "interfaceConstants.hpp"
 
 
-//not sure if it should go here 
-// const uint8_t   STATE_LOG = 0,
-//                 STATE_MENU = 1,
-//                 STATE_POOL = 2,
-//                 STATE_IN_GAME = 3,
-//                 STATE_END_OF_GAME = 4,
-//                 STATE_CLASSEMENT = 5,
-//                 STATE_MESSAGE_BOX = 6,
-//                 STATE_MESSAGE_CHAT = 7;
-
-enum class StateUser : uint8_t
+enum class UserState : uint8_t
 {
     STATE_INITIAL,
     STATE_LOG,
@@ -28,40 +18,12 @@ enum class StateUser : uint8_t
     STATE_MESSAGE_CHAT
 };
 
-// const uint8_t   NUMBER_OF_STATES = 8;
-
 enum class PlayMode : uint8_t 
 {
     ENDLESS,
     DUEL   ,
     CLASSIC,
     ROYAL
-};
-
-// const uint8_t ENDLESS = 1,
-//               DUEL    = 2,
-//               CLASSIC = 3,
-//               ROYAL   = 4;
-
-struct playerGameInfo 
-{
-    uint32_t score;
-    PlayMode mode;
-    uint8_t totalPlayers;
-    std::string name;
-};
-
-struct userInfo 
-{
-    StateUser state;
-    uint32_t scoreClassement;
-    std::string name;
-};
-
-struct opponentInfo
-{
-    std::string name;
-    std::array<std::array<colors, WIDTH>,HEIGHT>& board;
 };
 
 #endif

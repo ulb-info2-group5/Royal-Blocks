@@ -15,14 +15,14 @@ class InterfaceManager {
 
     //getters everywhere
 
-    StateUser getUserState() const;
+    UserState getUserState() const;
     uint32_t getUserScore() const;
     std::string getUserName() const;
 
     //not sure of the visibility of the methods below
 
     //setters
-    void changeUserState( StateUser newUserState) noexcept;
+    void changeUserState( UserState newUserState) noexcept;
     void changeUserScoreClassement(uint32_t newUserScore) noexcept;
     void changeUserName(std::string newUserName) noexcept;
     
