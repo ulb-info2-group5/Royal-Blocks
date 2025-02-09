@@ -2,6 +2,9 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <memory>
+
+using BoardPtr = std::unique_ptr<Board>;
 
 class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST_SUITE(BoardTest);
@@ -14,7 +17,13 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(gravityTest);
     CPPUNIT_TEST(dropRowsAboveTest);
     CPPUNIT_TEST(checkInGridTest);
+    CPPUNIT_TEST(receivePenaltyLinesTest);
     CPPUNIT_TEST_SUITE_END();
+
+  public:
+    void setUp() override;
+
+    void tearDown() override;
 
   private:
     // #### Helpers ####
@@ -31,9 +40,10 @@ class BoardTest : public CppUnit::TestFixture {
     void gravityTest();
     void dropRowsAboveTest();
     void checkInGridTest();
+    void receivePenaltyLinesTest();
 
   private:
-    Board board;
+    BoardPtr pBoard;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BoardTest);
