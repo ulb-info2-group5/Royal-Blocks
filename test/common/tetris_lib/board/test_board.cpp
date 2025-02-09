@@ -5,10 +5,36 @@
 #include "../../../../src/common/tetris_lib/vec2/vec2.hpp"
 
 #include <algorithm>
-#include <array>
 #include <cppunit/TestAssert.h>
+#include <initializer_list>
 #include <memory>
 #include <vector>
+
+bool BoardTest::checkEmptyOrFilled(CellState expectedState,
+                                   const std::vector<Vec2> &coords) {
+    for (int yRow = 0; yRow < static_cast<int>(pBoard->getHeight()); yRow++) {
+        for (int xCol = 0; xCol < static_cast<int>(pBoard->getWidth());
+             xCol++) {
+
+            Vec2 coord{xCol, yRow};
+            bool isFilled = !pBoard->get(coord.getX(), coord.getY()).isEmpty();
+
+            if (std::find(coords.begin(), coords.end(), coord)
+                != coords.end()) {
+                // should be expectedState
+                if (isFilled != static_cast<bool>(expectedState)) {
+                    return false;
+                }
+            } else {
+                // should be != expectedState
+                if (isFilled == static_cast<bool>(expectedState)) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
 
 void BoardTest::setUp() { pBoard = std::make_unique<Board>(); }
 
@@ -18,12 +44,8 @@ void BoardTest::constructorTest() {
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), pBoard->getHeight());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pBoard->getWidth());
 
-    for (int xCol = 0; xCol < static_cast<int>(pBoard->getWidth()); xCol++) {
-        for (int yRow = 0; yRow < static_cast<int>(pBoard->getHeight());
-             yRow++) {
-            CPPUNIT_ASSERT(pBoard->get(xCol, yRow).isEmpty());
-        }
-    }
+    // no cells should be set to filled state
+    CPPUNIT_ASSERT(checkEmptyOrFilled(CellState::Filled, {}));
 }
 
 void BoardTest::placeTetrominoTest() {
@@ -32,21 +54,7 @@ void BoardTest::placeTetrominoTest() {
 
     pBoard->placeTetromino(std::move(tetromino));
 
-    std::vector<Vec2> expectedFilledCellsCoords = {
-        {0, 0}, {1, 0}, {2, 0}, {2, 1}};
-
-    for (int yRow = 0; yRow < static_cast<int>(pBoard->getHeight()); yRow++) {
-        for (int xCol = 0; xCol < static_cast<int>(pBoard->getWidth());
-             xCol++) {
-            if (std::find(expectedFilledCellsCoords.begin(),
-                          expectedFilledCellsCoords.end(), Vec2{xCol, yRow})
-                != expectedFilledCellsCoords.end()) {
-                CPPUNIT_ASSERT(!pBoard->get(xCol, yRow).isEmpty());
-            } else {
-                CPPUNIT_ASSERT(pBoard->get(xCol, yRow).isEmpty());
-            }
-        }
-    }
+    checkEmptyOrFilled(CellState::Filled, {{0, 0}, {1, 0}, {2, 0}, {2, 1}});
 }
 
 void BoardTest::fillRow(int yRowToFill) {
@@ -105,8 +113,6 @@ void BoardTest::gravityTest() {
     constexpr unsigned colorId = 0;
 
     std::vector<Vec2> cellsToBeFilled = {{0, 0}, {0, 1}, {1, 2}, {2, 1}};
-    std::vector<Vec2> expectedCellsAfterGravity = {
-        {0, 0}, {0, 1}, {1, 0}, {2, 0}};
 
     // The cells we fill before applying gravity
     for (const Vec2 &toFill : cellsToBeFilled) {
@@ -115,22 +121,9 @@ void BoardTest::gravityTest() {
 
     pBoard->gravity();
 
-    for (int yRow = 0; yRow < pBoard->getHeight(); yRow++) {
-        for (int xCol = 0; xCol < pBoard->getWidth(); xCol++) {
-
-            Vec2 coord{xCol, yRow};
-
-            if (std::find(expectedCellsAfterGravity.begin(),
-                          expectedCellsAfterGravity.end(), coord)
-                != expectedCellsAfterGravity.end()) {
-                CPPUNIT_ASSERT(
-                    !pBoard->get(coord.getX(), coord.getY()).isEmpty());
-            } else {
-                CPPUNIT_ASSERT(
-                    pBoard->get(coord.getX(), coord.getY()).isEmpty());
-            }
-        }
-    }
+    // Thoses cells should be the only filled ones once the gravity has
+    // occured.
+    checkEmptyOrFilled(CellState::Filled, {{0, 0}, {0, 1}, {1, 0}, {2, 0}});
 }
 
 void BoardTest::dropRowsAboveTest() {
@@ -158,6 +151,15 @@ void BoardTest::checkInGridTest() {
     CPPUNIT_ASSERT(!(pBoard->checkInGrid(*tetrominoO)));
 }
 
-void BoardTest::receivePenaltyLinesTest() {
-    // TODO
+void BoardTest::receivePenaltyOutOfBoundsTest() {
+    constexpr int yBottomRow = 0;
+    constexpr int xLeftCol = 0;
+
+    fillRow(yBottomRow);
+    fillCol(xLeftCol);
+
+    // The player has lost because [left-col, top-row] exceeded the board's
+    // bounds.
+    bool hasLost = !pBoard->receivePenaltyLines();
+    CPPUNIT_ASSERT(hasLost);
 }

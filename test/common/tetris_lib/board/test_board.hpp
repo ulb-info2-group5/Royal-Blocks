@@ -17,7 +17,7 @@ class BoardTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(gravityTest);
     CPPUNIT_TEST(dropRowsAboveTest);
     CPPUNIT_TEST(checkInGridTest);
-    CPPUNIT_TEST(receivePenaltyLinesTest);
+    CPPUNIT_TEST(receivePenaltyOutOfBoundsTest);
     CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -26,9 +26,21 @@ class BoardTest : public CppUnit::TestFixture {
     void tearDown() override;
 
   private:
+    enum class CellState : bool {
+        Empty = false,
+        Filled = true,
+    };
+
     // #### Helpers ####
     void fillRow(int fullRowIdx);
     void fillCol(int fullColIdx);
+
+    /**
+     * Checks that the cells at the given coords are empty/filled according to
+     * the given expected state.
+     */
+    bool checkEmptyOrFilled(CellState expectedState,
+                            const std::vector<Vec2> &coords);
 
   protected:
     void constructorTest();
@@ -40,7 +52,7 @@ class BoardTest : public CppUnit::TestFixture {
     void gravityTest();
     void dropRowsAboveTest();
     void checkInGridTest();
-    void receivePenaltyLinesTest();
+    void receivePenaltyOutOfBoundsTest();
 
   private:
     BoardPtr pBoard;
