@@ -10,6 +10,7 @@ class InterfaceGame {
     std::array<std::array<colors, WIDTH>, HEIGHT>& playerBoard_;
 
     std::optional<uint8_t> playerMalus_ = std::optional<uint8_t>{std::nullopt};
+
     std::optional<uint8_t> energyPower_ = std::optional<uint16_t>{std::nullopt};
     std::optional<std::vector<effects>>&& effectsQueue_ = std::optional<std::vector<effects>>{std::nullopt};
 
