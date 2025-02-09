@@ -3,8 +3,8 @@
 
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
+#include "../tetromino_queue/tetromino_queue.hpp"
 
-#include <queue>
 #include <sys/types.h>
 
 class TetrisTest;
@@ -27,7 +27,7 @@ class Tetris {
     Board board_;
 
     TetrominoPtr holdTetromino_;
-    std::queue<TetrominoPtr> tetrominoesQueue_;
+    TetrominoQueue tetrominoQueue_;
 
     // TODO: move this to constructor ?
     uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;

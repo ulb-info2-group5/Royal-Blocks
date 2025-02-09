@@ -190,14 +190,14 @@ class Board {
      *
      * @return The width of the grid.
      */
-    size_t getWidth() const noexcept;
+    static constexpr size_t getWidth() noexcept { return width_; }
 
     /**
      * @brief Returns the height of the grid.
      *
      * @return The height of the grid.
      */
-    size_t getHeight() const noexcept;
+    static constexpr size_t getHeight() noexcept { return height_; }
 
     // #### Board Actions ####
 
@@ -206,8 +206,9 @@ class Board {
      *
      * @param tetromino A unique pointer to the tetromino to be placed.
      *
-     * @note The Tetromino will no longer be accessible after this function gets
-     * called, ensuring it cannot be moved after being placed in the grid.
+     * @note The Tetromino will no longer be accessible after this function
+     * gets called, ensuring it cannot be moved after being placed in the
+     * grid.
      */
     void placeTetromino(TetrominoPtr tetromino);
 

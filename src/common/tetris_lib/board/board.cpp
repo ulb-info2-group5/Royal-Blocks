@@ -139,10 +139,6 @@ const GridCell &Board::get(int xCol, int yRow) const {
     return getRow(yRow).at(xCol);
 }
 
-size_t Board::getWidth() const noexcept { return width_; }
-
-size_t Board::getHeight() const noexcept { return height_; }
-
 // #### Board Actions ####
 
 void Board::placeTetromino(TetrominoPtr tetromino) {

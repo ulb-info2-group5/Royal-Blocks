@@ -3,12 +3,10 @@
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "../tetromino/tetromino_shapes.hpp"
 
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
-#include <random>
 
 /*--------------------------------------------------
                      PRIVATE
@@ -59,41 +57,10 @@ bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
 
 // #### Tetrominoes Queue ####
 
-void Tetris::fillTetrominoesQueue() {
-    constexpr size_t numShapes =
-        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
-
-    std::array<TetrominoPtr, numShapes> tetrominoes;
-
-    for (size_t i = 0; i < numShapes; i++) {
-        // I tetromino should have its anchorPoint one row above compared to
-        // the others when spawned
-        int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
-                        or static_cast<TetrominoShape>(i) == TetrominoShape::T)
-                           ? board_.getHeight() - 1
-                           : board_.getHeight() - 2;
-
-        tetrominoes.at(i) = ATetromino::makeTetromino(
-            static_cast<TetrominoShape>(i),
-            Vec2(board_.getWidth() / 2 - 1, spawnRow));
-    }
-
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(tetrominoes.begin(), tetrominoes.end(), g);
-
-    for (auto &tetromino : tetrominoes) {
-        tetrominoesQueue_.push(std::move(tetromino));
-    }
-}
-
 void Tetris::fetchNewTetromino() {
-    if (tetrominoesQueue_.empty()) {
-        fillTetrominoesQueue();
-    }
-
-    activeTetromino_ = std::move(tetrominoesQueue_.front());
-    tetrominoesQueue_.pop();
+    // The queue will refill itself if there are too few Tetrominos
+    // inside. -> No need to do it here.
+    activeTetromino_ = std::move(tetrominoQueue_.fetchNext());
 }
 
 /*--------------------------------------------------
@@ -174,18 +141,18 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 void Tetris::holdNextTetromino() {
     if (holdTetromino_ == nullptr) {
         // If there is no hold, simply move the next to hold.
-        // TODO: adapt this once we switch to our own queue wrapper
-        holdTetromino_ = std::move(tetrominoesQueue_.front());
-        tetrominoesQueue_.pop();
+        holdTetromino_ = std::move(tetrominoQueue_.fetchNext());
     } else {
         // If there is a hold, swap it with next tetromino.
-        std::swap(holdTetromino_, tetrominoesQueue_.front());
+        std::swap(holdTetromino_, tetrominoQueue_.front());
     }
 }
 
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
     bool hasLost = board_.receivePenaltyLines(numPenalties);
-    setIsAlive(!hasLost);
+    if (hasLost) {
+        setIsAlive(false);
+    }
 }
 
 // #### Setters ####
@@ -197,5 +164,5 @@ void Tetris::setIsAlive(bool isAlive) { isAlive_ = isAlive; }
 bool Tetris::getIsAlive() const { return isAlive_; }
 
 size_t Tetris::getTetrominoesQueueSize() const {
-    return tetrominoesQueue_.size();
+    return tetrominoQueue_.size();
 }
