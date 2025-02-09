@@ -9,7 +9,7 @@
 #include "screen_manager.hpp"
 
 
-ScreenManager::ScreenManager() : screen(ftxui::ScreenInteractive::TerminalOutput()) {}
+ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::TerminalOutput()) {}
 
 void ScreenManager::SetComponent(ftxui::Component component) {
     mainComponent_ = component;

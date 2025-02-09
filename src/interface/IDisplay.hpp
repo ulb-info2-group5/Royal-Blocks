@@ -13,6 +13,9 @@ class IDisplay {
    virtual UserState getUserState() = 0;
 
    virtual void drawWindow() = 0;
+
+   virtual void drawButtons() = 0;
+
 };
 
 
