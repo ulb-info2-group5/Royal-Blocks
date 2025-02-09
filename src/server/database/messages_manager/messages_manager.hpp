@@ -27,7 +27,7 @@ class MessagesManager{
         * 
         * @return a file name 
         */
-        string generateFileName(int idUser1, int idUser2 );
+        string generateFileName(const int &idUser1, const int &idUser2 );
         /*
         * @brief create a file for a discussion  
         * 
@@ -45,7 +45,7 @@ class MessagesManager{
         *  
         */
 
-        bool addDiscussion(int idUser1, int idUser2); 
+        bool addDiscussion(const int &idUser1,const  int &idUser2); 
         /*
         *
         *@brief check if there is a discussion between two users 
@@ -55,14 +55,14 @@ class MessagesManager{
         * @return true if there is any discussion and false is not  
         *  
         */
-        bool isThereDiscussion(int idUser1, int idUser2 );  
+        bool isThereDiscussion(const int &idUser1,const int &idUser2 );  
 
         /*
         *@brief return the discussion pathfile between user 1 and user 2 
         *( private because MessagesManager must be the only one to have access to it )
         *
         */
-        string getDiscussion(int idUser1, int idUser2);
+        string getDiscussion(const int &idUser1,const int &idUser2);
 
     public: 
         /*
@@ -78,7 +78,7 @@ class MessagesManager{
         ~MessagesManager() = default;
 
         /**
-        * @brief send a messages 
+        * @brief send a messages to a user
         *
         * @param senderId Id of the sender user
         * @param recieverId Id of the reciever user
@@ -86,9 +86,9 @@ class MessagesManager{
         * @param content the content of the messages 
         * 
         **/
-        void  sendMessage(const int senderId, const int recieverId, const string &content); 
+        void  sendMessage(const int &senderId, const int &recieverId, const string &content); 
         
-        void writeMessage(const string &pathfile, const string &content, const int senderId);
+        void writeMessage(const string &pathfile, const string &content, const int &senderId);
 
         void readDiscussion(const string &pathfile);
 
@@ -102,9 +102,15 @@ class MessagesManager{
          * 
          * @return vector of all messages between user1 and user2
          */
-        vector<string> getAllMessage(const int user1_id , const int user2_id); 
+        vector<string> getAllMessage(const int &user1_id , const int &user2_id); 
 
-        void markMessageAsRead(const int& messageId);
+        /*
+        * @brief finds all users who have a discussion with the user : idUser
+        * @param IdUser the user 
+        *
+        * @return vector of all users who have a discussion with idUser  
+        */
+        vector<int> getAllUser(const int& idUser);
 
 
 }; 

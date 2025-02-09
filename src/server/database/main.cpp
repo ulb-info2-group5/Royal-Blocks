@@ -25,13 +25,6 @@ int main() {
     MessagesManager messagesManager(dbManager);
 
 
-    messagesManager.sendMessage(1, 2, "test messages de test encore un test "); 
-    messagesManager.sendMessage(1, 2, "message eu salut c'est le message pour tester le messages");
-    messagesManager.sendMessage(2, 1, "c'est un message de 2 -> 1 le messages le test bonjour");
-    messagesManager.sendMessage(4, 1, "la c'est le test message message de test salut ");
-    messagesManager.sendMessage(1, 4, "vivelavie");
-    
-
     cout << "=== Test du module AccountManager ===" << endl;
     accountManager.launch();
 

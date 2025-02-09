@@ -26,7 +26,7 @@ MessagesManager::MessagesManager(shared_ptr<DatabaseManager> &db) : dbManager_(d
 }
 
 // ==== Private ====
-string MessagesManager::generateFileName(int idUser1, int idUser2 ){
+string MessagesManager::generateFileName(const int &idUser1,const int &idUser2 ){
     return "data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".txt";
 }
 
@@ -42,7 +42,7 @@ bool MessagesManager::createDiscussionFile(const string& filePath) {
 
 
 
-bool MessagesManager::addDiscussion(int idUser1, int idUser2){
+bool MessagesManager::addDiscussion(const int &idUser1,const  int &idUser2){
     const string filePath = generateFileName(idUser1, idUser2);
     
     if (!this->createDiscussionFile(filePath) ) return false;
@@ -55,14 +55,14 @@ bool MessagesManager::addDiscussion(int idUser1, int idUser2){
 }
 
 
-bool MessagesManager::isThereDiscussion(int idUser1, int idUser2 ){
+bool MessagesManager::isThereDiscussion(const int &idUser1, const int &idUser2 ){
     string sql = "SELECT COUNT(*) FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
     int count = 0;
     return dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count)&& count > 0;
 }
 
 
-string MessagesManager::getDiscussion(int idUser1, int idUser2){
+string MessagesManager::getDiscussion(const int &idUser1, const int &idUser2){
     string sql = "SELECT file_path FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?);";
     string discussionFile;
     dbManager_->executeSqlRecoveryString(sql, {idUser1, idUser2, idUser2, idUser1}, discussionFile );
@@ -71,22 +71,24 @@ string MessagesManager::getDiscussion(int idUser1, int idUser2){
 
 
 
-void MessagesManager::writeMessage(const string &pathfile, const string &content, const int senderId){
+void MessagesManager::writeMessage(const string &pathfile, const string &content, const int &senderId){
     ofstream disc;
 	disc.open(pathfile, ios::app);
 	disc << senderId << " : " << content << endl;
 	disc.close();
 }
 
+
+
 // ==== Public ====
 
-void MessagesManager::sendMessage(const int senderId, const int recieverId, const string &content){
+void MessagesManager::sendMessage(const int &senderId, const int &recieverId, const string &content){
     if (!isThereDiscussion(senderId, recieverId)) addDiscussion(senderId, recieverId);
     writeMessage(getDiscussion(senderId, recieverId), content, senderId);
 }
 
 
-void MessagesManager::showAllMessages(const int & idUser1, const int & idUser2){
+void MessagesManager::showAllMessages(const int &idUser1, const int &idUser2){
     readDiscussion(getDiscussion(idUser1, idUser2));    
 }
 
@@ -98,3 +100,4 @@ void MessagesManager::readDiscussion(const string &pathfile){
     while (getline(f, s)) cout << s << endl;
     f.close();
 }
+
