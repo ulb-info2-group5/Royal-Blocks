@@ -55,10 +55,10 @@ void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
     std::uniform_int_distribution<int> distrib(firstCol, lastCol);
 
     // The empty block in the row
-    int emptyIndex = distrib(gen);
+    size_t emptyIndex = distrib(gen);
 
     // Fill all the GridCell with PenaltyBlocksColor except one (empty state)
-    for (int xCol = 0; xCol < getWidth(); xCol++) {
+    for (size_t xCol = 0; xCol < getWidth(); xCol++) {
         if (xCol == emptyIndex) {
             row.at(xCol).setEmpty();
         } else {
@@ -183,12 +183,12 @@ bool Board::receivePenaltyLines(size_t numPenaltyLines) {
     // Lift rows from the bottom to make room for the penalty lines.
     // TODO: avoid for-loop and make liftRows take a numRows parameter
     // (algorithmically better)
-    for (int lineCount = 0; lineCount < numPenaltyLines; lineCount++) {
-        liftRowsFrom(bottomRow);
+    for (size_t lineCount = 0; lineCount < numPenaltyLines; lineCount++) {
+        liftRowsFrom(static_cast<int>(bottomRow));
     }
 
     // Fill the newly freed lines with penalty lines.
-    for (int penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
+    for (size_t penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
          penaltyLinesCount++) {
         setPenaltyLine(getRow(penaltyLinesCount));
     }
