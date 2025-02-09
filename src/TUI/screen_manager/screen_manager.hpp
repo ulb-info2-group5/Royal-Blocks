@@ -14,8 +14,8 @@
 
 class ScreenManager {
     private:
-        ftxui::ScreenInteractive screen;
-        ftxui::Component mainComponent;
+        ftxui::ScreenInteractive screen_;
+        ftxui::Component mainComponent_;
 
     public:
         /*

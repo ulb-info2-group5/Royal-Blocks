@@ -1,7 +1,7 @@
 /**
 * @file screen_manager.cpp
 * @author Ethan Van Ruyskensvelde
-* @brief ScreenManager class header file
+* @brief ScreenManager class implementation file
 * @date 2025-02-09
 *
 */
@@ -12,11 +12,11 @@
 ScreenManager::ScreenManager() : screen(ftxui::ScreenInteractive::TerminalOutput()) {}
 
 void ScreenManager::SetComponent(ftxui::Component component) {
-    mainComponent = component;
+    mainComponent_ = component;
 }
 void ScreenManager::Run() {
-    screen.Loop(mainComponent);
+    screen_.Loop(mainComponent_);
 }
 void ScreenManager::Exit() {
-    screen.Exit();
+    screen_.Exit();
 }
