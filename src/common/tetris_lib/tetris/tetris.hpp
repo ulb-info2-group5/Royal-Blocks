@@ -110,6 +110,17 @@ class Tetris final {
      */
     bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 
+    // #### Penalties ####
+
+    /**
+     * @brief Adds penalty lines, sets isAlive flag to false if it made the
+     * player lose.
+     */
+    void receivePenaltyLines(int numPenalties) {
+        bool hasLost = board_.receivePenaltyLines(numPenalties);
+        setIsAlive(!hasLost);
+    }
+
   public:
     // #### Constructors ####
 

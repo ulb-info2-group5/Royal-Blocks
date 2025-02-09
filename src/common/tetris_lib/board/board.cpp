@@ -5,8 +5,10 @@
 #include "board_update.hpp"
 #include "grid_cell.hpp"
 
+#include <array>
 #include <cstddef>
 #include <memory>
+#include <random>
 
 /*--------------------------------------------------
                     PRIVATE
@@ -44,8 +46,39 @@ void Board::liftRowsFrom(int yRow) {
     emptyRow(yRow);
 }
 
+void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
+    constexpr int firstCol = 0;
+    const int lastCol = getWidth() - 1;
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(firstCol, lastCol);
+
+    // The empty block in the row
+    int emptyIndex = distrib(gen);
+
+    // Fill all the GridCell with PenaltyBlocksColor except one (empty state)
+    for (int xCol = 0; xCol < getWidth(); xCol++) {
+        if (xCol == emptyIndex) {
+            row.at(xCol).setEmpty();
+        } else {
+            row.at(xCol).setColorId(PenaltyBlocksColor);
+        }
+    }
+}
+
 void Board::setRow(const std::array<GridCell, width_> &row, size_t yRow) {
     getRow(yRow) = row;
+}
+
+bool Board::checkEmptyRow(int yRow) const {
+    for (const GridCell &gridCell : getRow(yRow)) {
+        if (!gridCell.isEmpty()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Board::checkFullRow(int yRow) const {
@@ -134,6 +167,30 @@ bool Board::checkInGrid(ATetromino &tetromino) const {
 
             return false;
         }
+    }
+
+    return true;
+}
+
+// #### Penalty Lines ####
+
+bool Board::receivePenaltyLines(size_t numPenaltyLines) {
+    if (!checkEmptyRow(getHeight() - numPenaltyLines)) {
+        return false;
+    }
+
+    constexpr int bottomRow = 0;
+    // Lift rows from the bottom to make room for the penalty lines.
+    // TODO: avoid for-loop and make liftRows take a numRows parameter
+    // (algorithmically better)
+    for (int lineCount = 0; lineCount < numPenaltyLines; lineCount++) {
+        liftRowsFrom(bottomRow);
+    }
+
+    // Fill the newly freed lines with penalty lines.
+    for (int penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
+         penaltyLinesCount++) {
+        setPenaltyLine(getRow(penaltyLinesCount));
     }
 
     return true;

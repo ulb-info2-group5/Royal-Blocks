@@ -2,12 +2,16 @@
 #define BOARD_HPP
 
 #include "../tetromino/tetromino.hpp"
+#include "../tetromino/tetromino_shapes.hpp"
 #include "board_update.hpp"
 #include "grid_cell.hpp"
 #include <array>
 #include <cstddef>
 
 class BoardTest;
+
+constexpr int PenaltyBlocksColor =
+    static_cast<int>(TetrominoShape::NumTetrominoShape);
 
 /**
  * @class Board
@@ -87,6 +91,22 @@ class Board final {
      * @param yRow The y-coordinate of the row to set.
      */
     void setRow(const std::array<GridCell, width_> &row, size_t yRow);
+
+    /**
+     * @brief Sets the given row to a penalty line.
+     * Doesn't check whether the line was empty before doing so.
+     */
+    void setPenaltyLine(std::array<GridCell, width_> &row);
+
+    /**
+     * @brief Checks whether the row at the given y-coordinate is empty.
+     *
+     * @param yRow The row's y-coordinate.
+     *
+     * @return True if the row is empty, meaning it has only empty GridCells;
+     * otherwise, false.
+     */
+    bool checkEmptyRow(int yRow) const;
 
     /**
      * @brief Checks whether the row at the given y-coordinate is full.
@@ -200,6 +220,17 @@ class Board final {
      * @return True if the given Tetromino fits; otherwise, false.
      */
     bool checkInGrid(ATetromino &tetromino) const;
+
+    // #### Penalty Lines ####
+
+    /**
+     * Adds penalty lines, making all rows go up.
+     * If it causes blocks to go outside the Board, doesn't do anything and
+     * returns false (meaning the player has lost).
+     *
+     * @return False if any occupied tile goes out of the board
+     */
+    bool receivePenaltyLines(size_t numPenalty = 1);
 
     // #### Update Board State ####
 
