@@ -4,67 +4,26 @@
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
-#include "event_type.hpp"
 
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
-#include <mutex>
-#include <pthread.h>
 #include <random>
 
 /*--------------------------------------------------
                      PRIVATE
 --------------------------------------------------*/
 
-// #### Tetromino Actions ####
+// #### Preview Tetromino ####
 
-void Tetris::tryRotateActive(bool rotateClockwise) {
-    activeTetromino_->rotate(rotateClockwise);
-
-    TetrominoPtr testTetromino;
-
-    bool isValid = false;
-
-    for (size_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
-         ++testIdx) {
-        testTetromino = activeTetromino_->getNthOffset(testIdx);
-
-        if (board_.checkInGrid(*testTetromino)) {
-            activeTetromino_ = std::move(testTetromino);
-            isValid = true;
-            break;
-        }
-    }
-
-    if (!isValid) {
-        activeTetromino_->rotate(!rotateClockwise);
-    }
-}
-
-void Tetris::tryMoveActive(Direction direction) {
-    activeTetromino_->move(direction);
-
-    if (!board_.checkInGrid(*activeTetromino_)) {
-        activeTetromino_->move(direction, true);
-    }
-}
-
-void Tetris::bigDrop() {
-    while (checkCanDrop(*activeTetromino_)) {
-        activeTetromino_->move(Direction::Down);
-    }
-}
-
-// #### Preview-Tetromino ####
-
-void Tetris::updatePreviewVertical() {
+void Tetris::updatePreviewTetromino() {
+    previewTetromino_ = activeTetromino_->clone();
     while (checkCanDrop(*previewTetromino_)) {
         previewTetromino_->move(Direction::Down);
     }
 }
 
-// #### Tetromino: Placing and checking that it can drop ####
+// #### Checks helper ####
 
 bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
     Vec2 anchorPoint = tetromino.getAnchorPoint();
@@ -92,6 +51,10 @@ void Tetris::placeActive() {
     if (getIsAlive()) {
         board_.placeTetromino(std::move(activeTetromino_));
     }
+}
+
+bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
+    return board_.get(xCol, yRow).isEmpty();
 }
 
 // #### Tetrominoes Queue ####
@@ -133,97 +96,93 @@ void Tetris::fetchNewTetromino() {
     tetrominoesQueue_.pop();
 }
 
-// #### Grid Checks ####
-
-bool Tetris::checkEmptyCell(size_t rowIdx, size_t colIdx) const {
-    return board_.get(rowIdx, colIdx).isEmpty();
-}
-
 /*--------------------------------------------------
                      PUBLIC
 --------------------------------------------------*/
 
 // #### Event API ####
 
-void Tetris::sendEvent(EventType event) {
-    std::lock_guard<std::mutex> lock(mutex_);
+size_t Tetris::eventClockTick() {
+    size_t numClearedRows = 0;
 
-    switch (event) {
-    case EventType::None:
-        break;
+    if (!checkCanDrop(*activeTetromino_)) {
+        if (ticks_since_lock_start_ >= lock_delay_ticks_num_) {
+            // lock-delay has expired -> must place active now
+            placeActive();
+            numClearedRows = board_.update().getNumClearedRows();
+            fetchNewTetromino();
 
-    case EventType::ClockTick: {
-        if (!checkCanDrop(*activeTetromino_)) {
-            if (ticks_since_lock_start_ >= lock_delay_ticks_num_) {
-                // lock-delay has expired -> must place active now
-                placeActive();
-                score_ += board_.update().getNumClearedRows();
-                fetchNewTetromino();
-
-                ticks_since_lock_start_ = 0;
-            } else {
-                ticks_since_lock_start_++;
-            }
+            // reset lock delay for next time
+            ticks_since_lock_start_ = 0;
         } else {
-            tryMoveActive(Direction::Down);
+            // lock-delay hasn't expired but a tick occured (don't place active
+            // yet)
+            ticks_since_lock_start_++;
         }
-
-        break;
+    } else {
+        eventTryMoveActive(Direction::Down);
     }
 
-    case EventType::BigDrop:
-        bigDrop();
-        // NOTE: Could add a lock_delay here
-        break;
+    updatePreviewTetromino();
 
-    case EventType::MoveDown:
-        tryMoveActive(Direction::Down);
-        break;
+    return numClearedRows;
+}
 
-    case EventType::MoveLeft:
-        tryMoveActive(Direction::Left);
-        break;
-
-    case EventType::MoveRight:
-        tryMoveActive(Direction::Right);
-        break;
-
-    case EventType::RotateClockwise:
-        tryRotateActive(true);
-        break;
-
-    case EventType::RotateCounterClockwise:
-        tryRotateActive(false);
-        break;
-
-    case EventType::Quit:
-        // TODO:: When the player quits, we should make him loose instantly and
-        // disconnect him but it shouldn't be handled here.
-        setIsAlive(false);
-        break;
+void Tetris::eventBigDrop() {
+    while (checkCanDrop(*activeTetromino_)) {
+        activeTetromino_->move(Direction::Down);
     }
 
-    if (event != EventType::None) {
-        previewTetromino_ = activeTetromino_->clone();
-        updatePreviewVertical();
+    updatePreviewTetromino();
+}
+
+void Tetris::eventTryMoveActive(Direction direction) {
+    activeTetromino_->move(direction);
+
+    if (!board_.checkInGrid(*activeTetromino_)) {
+        activeTetromino_->move(direction, true);
     }
+
+    updatePreviewTetromino();
+}
+
+void Tetris::eventTryRotateActive(bool rotateClockwise) {
+    activeTetromino_->rotate(rotateClockwise);
+
+    TetrominoPtr testTetromino;
+
+    bool isValid = false;
+
+    for (size_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
+         ++testIdx) {
+        testTetromino = activeTetromino_->getNthOffset(testIdx);
+
+        if (board_.checkInGrid(*testTetromino)) {
+            activeTetromino_ = std::move(testTetromino);
+            isValid = true;
+            break;
+        }
+    }
+
+    if (!isValid) {
+        activeTetromino_->rotate(!rotateClockwise);
+    }
+
+    updatePreviewTetromino();
+}
+
+void Tetris::eventReceivePenaltyLines(int numPenalties) {
+    bool hasLost = board_.receivePenaltyLines(numPenalties);
+    setIsAlive(!hasLost);
 }
 
 // #### Setters ####
 
-void Tetris::setIsAlive(bool isAlive) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    isAlive_ = isAlive;
-}
+void Tetris::setIsAlive(bool isAlive) { isAlive_ = isAlive; }
 
 // #### Getters ####
 
-bool Tetris::getIsAlive() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return isAlive_;
-}
-
-size_t Tetris::getCurrentScore() { return score_; }
+bool Tetris::getIsAlive() const { return isAlive_; }
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoesQueue_.size();

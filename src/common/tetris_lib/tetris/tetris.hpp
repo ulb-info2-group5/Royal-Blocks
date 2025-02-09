@@ -3,10 +3,7 @@
 
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "event_type.hpp"
 
-#include <mutex>
-#include <pthread.h>
 #include <queue>
 #include <sys/types.h>
 
@@ -24,7 +21,6 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  * one block down. Events are managed through an event-queue API.
  */
 class Tetris {
-    size_t score_ = 0;
     bool isAlive_ = true;
     Board board_;
     TetrominoPtr activeTetromino_;
@@ -35,40 +31,15 @@ class Tetris {
     uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
     uint32_t ticks_since_lock_start_ = 0;
 
-    std::mutex mutex_;
-
   private:
-    // #### Tetromino Actions ####
+    // #### Preview Tetromino ####
 
     /**
-     * @brief Rotates the active Tetromino if possible.
-     *
-     * @param rotateClockwise True to rotate clockwise, false for
-     * counter-clockwise.
+     * @brief Updates the preview tetromino.
      */
-    void tryRotateActive(bool rotateClockwise);
+    void updatePreviewTetromino();
 
-    /**
-     * @brief Moves the active Tetromino in the given direction if possible.
-     *
-     * @param direction The direction to move the Tetromino.
-     */
-    void tryMoveActive(Direction direction);
-
-    /**
-     * @brief Drops the active Tetromino until it hits the bottom or an occupied
-     * cell.
-     */
-    void bigDrop();
-
-    // #### Preview-Tetromino ####
-
-    /**
-     * @brief Updates the preview-Tetromino's vertical component.
-     */
-    void updatePreviewVertical();
-
-    // #### Tetromino: Placing and checking that it can drop ####
+    // #### Checks helper ####
 
     /**
      * @brief Checks whether the given tetromino can be droppped.
@@ -83,6 +54,14 @@ class Tetris {
      * grid.
      */
     void placeActive();
+
+    /**
+     * @brief Checks whether the cell at the given position is empty.
+     *
+     * @param xCol The x-coordinate.
+     * @param yRow The y-coordinate.
+     */
+    bool checkEmptyCell(size_t xCol, size_t yRow) const;
 
     // #### Tetrominoes Queue ####
 
@@ -99,27 +78,6 @@ class Tetris {
      * with 7 new tetrominoes.
      */
     void fetchNewTetromino();
-
-    // #### Grid Checks ####
-
-    /**
-     * @brief Checks whether the cell at rowIdx, colIdx is empty.
-     *
-     * @param rowIdx The row index.
-     * @param colIdx The col index.
-     */
-    bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
-
-    // #### Penalties ####
-
-    /**
-     * @brief Adds penalty lines, sets isAlive flag to false if it made the
-     * player lose.
-     */
-    void receivePenaltyLines(int numPenalties) {
-        bool hasLost = board_.receivePenaltyLines(numPenalties);
-        setIsAlive(!hasLost);
-    }
 
   public:
     // #### Constructors ####
@@ -140,15 +98,43 @@ class Tetris {
     // #### Event API ####
 
     /**
-     * @brief Handles the given event.
-     * @param event The event to add to the queue.
+     * @brief Makes the active Tetromino go down (and manages the lock delay).
+     * Also updates de board to clear the fullRows and returns how many rows
+     * were cleared.
      */
-    void sendEvent(EventType event);
-
-    // #### Setters ####
+    size_t eventClockTick();
 
     /**
-     * @brief Thread-safe way of setting the isAlive member.
+     * @brief Drops the active Tetromino until it hits the bottom or an occupied
+     * cell.
+     */
+    void eventBigDrop();
+
+    /**
+     * @brief Moves the active Tetromino in the given direction if possible.
+     *
+     * @param direction The direction to move the Tetromino.
+     */
+    void eventTryMoveActive(Direction direction);
+
+    /**
+     * @brief Rotates the active Tetromino if possible.
+     *
+     * @param rotateClockwise True to rotate clockwise, false for
+     * counter-clockwise.
+     */
+    void eventTryRotateActive(bool rotateClockwise);
+
+    /**
+     * @brief Adds penalty lines, sets isAlive flag to false if it made the
+     * player lose.
+     */
+    void eventReceivePenaltyLines(int numPenalties);
+
+    // #### Setter ####
+
+    /**
+     * @brief Sets the isAlive member.
      *
      * @param isAlive The new isAlive value.
      */
@@ -157,18 +143,11 @@ class Tetris {
     // #### Getters ####
 
     /**
-     * @brief Thread-safe way of getting the isAlive member.
+     * @brief Gets the isAlive member.
      *
      * @return False if the game is over; otherwise, true.
      */
-    bool getIsAlive();
-
-    /**
-     * @brief Returns the current score.
-     *
-     * @return The current score.
-     */
-    size_t getCurrentScore();
+    bool getIsAlive() const;
 
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
