@@ -28,7 +28,7 @@ enum colors {
     GREY,
     DARK_BLUE,
     LIGHT_BLUE,
-    MAGENTA,
+    PURPLE,
     RED,
     ORANGE, 
     PINK,
@@ -44,12 +44,12 @@ struct vec2Int {
 struct pieceDetails
 {
    unsigned char type;
-   std::array<vec2Int, NB_BLOCKS_PER_PIECE> coordinates;
+   std::vector<vec2Int> coordinates;
    colors color;
 };
 
 struct pieces
-    {
+{
     pieceDetails PIECE_Z;
     pieceDetails PIECE_L;
     pieceDetails PIECE_O;
@@ -60,28 +60,36 @@ struct pieces
 };
 
 const pieces piece =
+//submatrix 4x4 with 0,0 on top left
 {
     .PIECE_Z = {.type = 'Z',
-                .coordinates = {{1,0}, {1,1}, {2,1}, {2,2}},
+                .coordinates = {{.x = 0,.y = 1}, {.x = 1,.y = 1}, 
+                                {.x = 1,.y = 2}, {.x = 2,.y = 2}},
                 .color = colors::RED },
     .PIECE_L = {.type = 'L',
-                .coordinates = {{0,2}, {1,2}, {2,2}, {2,1}},
+                .coordinates = {{.x = 1,.y = 2}, {.x = 2,.y = 2}, 
+                                {.x = 3,.y = 2}, {.x = 3,.y = 1}},
                 .color = colors::ORANGE },
     .PIECE_O = {.type = 'O',
-                .coordinates = {{0,2}, {2,1}, {2,1}, {2,2}},
-                .color = colors::RED },
-    .PIECE_S = {.type = 'Z',
-                .coordinates = {{1,0}, {1,1}, {2,1}, {2,2}},
-                .color = colors::RED },
-    .PIECE_I = {.type = 'Z',
-                .coordinates = {{1,0}, {1,1}, {2,1}, {2,2}},
-                .color = colors::RED },
-    .PIECE_J = {.type = 'Z',
-                .coordinates = {{1,0}, {1,1}, {2,1}, {2,2}},
-                .color = colors::RED },
-    .PIECE_T = {.type = 'Z',
-                .coordinates = {{1,0}, {1,1}, {2,1}, {2,2}},
-                .color = colors::RED }
+                .coordinates = {{.x = 1,.y = 2}, {.x = 1,.y = 1}, 
+                                {.x = 2,.y = 1}, {.x = 2,.y = 2}},
+                .color = colors::YELLOW },
+    .PIECE_S = {.type = 'S',
+                .coordinates = {{.x = 1,.y = 2}, {.x = 2,.y = 1}, 
+                                {.x = 3,.y = 1}, {.x = 2,.y = 2}},
+                .color = colors::GREEN },
+    .PIECE_I = {.type = 'I',
+                .coordinates = {{.x = 0,.y = 2}, {.x = 1,.y = 2}, 
+                                {.x = 3,.y = 2}, {.x = 2,.y = 2}},
+                .color = colors::LIGHT_BLUE },
+    .PIECE_J = {.type = 'J',
+                .coordinates = {{.x = 0,.y = 1}, {.x = 1,.y = 2}, 
+                                {.x = 0,.y = 2}, {.x = 2,.y = 2}},
+                .color = colors::DARK_BLUE },
+    .PIECE_T = {.type = 'T',
+                .coordinates = {{.x = 3,.y = 1}, {.x = 1,.y = 1}, 
+                                {.x = 1,.y = 1}, {.x = 2,.y = 2}},
+                .color = colors::PURPLE }
 };
 
 

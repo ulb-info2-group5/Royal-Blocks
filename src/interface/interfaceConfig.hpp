@@ -16,6 +16,7 @@
 
 enum class StateUser : uint8_t
 {
+    STATE_INITIAL,
     STATE_LOG,
     STATE_INSCRIPTION,
     STATE_MENU,
@@ -42,17 +43,25 @@ enum class PlayMode : uint8_t
 //               CLASSIC = 3,
 //               ROYAL   = 4;
 
-struct playerGameInfo {
+struct playerGameInfo 
+{
     uint32_t score;
     PlayMode mode;
     uint8_t totalPlayers;
     std::string name;
 };
 
-struct userInfo {
+struct userInfo 
+{
     StateUser state;
     uint32_t scoreClassement;
     std::string name;
+};
+
+struct opponentInfo
+{
+    std::string name;
+    std::array<std::array<colors, WIDTH>,HEIGHT>& board;
 };
 
 #endif

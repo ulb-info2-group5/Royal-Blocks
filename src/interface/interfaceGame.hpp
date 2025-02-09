@@ -14,8 +14,7 @@ class InterfaceGame {
     std::optional<uint8_t> energyPower_ = std::optional<uint16_t>{std::nullopt};
     std::optional<std::vector<effects>>&& effectsQueue_ = std::optional<std::vector<effects>>{std::nullopt};
 
-    std::optional<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>&& opponentsBoards_ = 
-                std::optional<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>{std::nullopt};
+    std::optional<std::vector<opponentInfo>> opponents_ = std::optional<std::vector<opponentInfo>>{std::nullopt};
 
     protected:
 
@@ -40,13 +39,13 @@ class InterfaceGame {
     //version CLASSIQUE and DUO
     InterfaceGame(playerGameInfo currPlayer, std::array<std::array<colors, WIDTH>, HEIGHT>& playerBoard,
               uint8_t playerMalus, 
-              std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& opponentsBoards) noexcept;
+              std::vector<opponentInfo> opponentsInfo) noexcept;
 
     //version ROYAL
     InterfaceGame(playerGameInfo currPlayer, std::array<std::array<colors, WIDTH>, HEIGHT>& playerBoard,
               uint8_t playerMalus,
               uint16_t energyPower, std::vector<effects>& effectsQueue,
-              std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& opponentsBoards) noexcept;
+              std::vector<opponentInfo> opponentsInfo) noexcept;
 
     ~InterfaceGame();
 
@@ -66,7 +65,7 @@ class InterfaceGame {
     std::optional<std::vector<effects>> getEffectsQueue() const;
     
 
-    std::optional< std::array< std::array<colors, WIDTH>, HEIGHT>>& getOpponentBoard(uint8_t index) const;
+    std::array< std::array<colors, WIDTH>, HEIGHT>& getOpponentBoard(uint8_t index);
 
     //update methode : having 3 overload ( 1 for endless, 1 for Duo & classique, 1 for royal)
     //passing in parameter the gamestate and the player state surely

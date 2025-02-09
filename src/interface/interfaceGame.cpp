@@ -6,18 +6,18 @@
 
  InterfaceGame::InterfaceGame(playerGameInfo currPlayer, std::array<std::array<colors, WIDTH>, HEIGHT>& playerBoard,
               uint8_t playerMalus, 
-              std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& opponentsBoards) noexcept :
+              std::vector<opponentInfo> opponentsInfo) noexcept :
     InterfaceGame(currPlayer, playerBoard)
 {
     playerMalus_.emplace(playerMalus);
-    opponentsBoards_.emplace(opponentsBoards);
+    opponents_.emplace(opponentsInfo);
 }
 
 InterfaceGame::InterfaceGame(playerGameInfo currPlayer, std::array<std::array<colors, WIDTH>, HEIGHT>& playerBoard,
               uint8_t playerMalus,
               uint16_t energyPower, std::vector<effects>& effectsQueue,
-              std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& opponentsBoards) noexcept :
-    InterfaceGame(currPlayer, playerBoard, playerMalus, opponentsBoards)
+              std::vector<opponentInfo> opponentsInfo) noexcept :
+    InterfaceGame(currPlayer, playerBoard, playerMalus, opponentsInfo)
 {
     energyPower_.emplace(energyPower);
     effectsQueue_.emplace(effectsQueue);
@@ -51,16 +51,16 @@ void InterfaceGame::updatePlayerEffectState(uint8_t currEnergyPower, std::vector
 // void InterfaceGame::updateOpponentBoard(std::array<std::array<colors, WIDTH>, HEIGHT>& newOpponentBoard, uint8_t index) noexcept 
 // {
 //     //not sure if it does correctly what it should 
-//     opponentsBoards_[index] = newOpponentBoard;
+//     opponentInfo[index] = newOpponentBoard;
 // }
 
-void InterfaceGame::updateAllOpponentBoards(std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& newOpponentBoards) noexcept
-{
-    for (uint8_t i = 0; i < currPlayer_.totalPlayers ; ++i)
-    {
-        updateOpponentBoard(newOpponentBoards.at(i), i);
-    }
-}
+// void InterfaceGame::updateAllOpponentBoards(std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>& newOpponentBoards) noexcept
+// {
+//     for (uint8_t i = 0; i < currPlayer_.totalPlayers ; ++i)
+//     {
+//         updateOpponentBoard(newOpponentBoards.at(i), i);
+//     }
+// }
 
 // public methods 
 
@@ -79,8 +79,5 @@ std::optional<uint8_t> InterfaceGame::getPlayerEnergyPower() const { return ener
 std::optional<std::vector<effects>> InterfaceGame::getEffectsQueue() const { return effectsQueue_; }
 
 
-// std::optional< std::array< std::array<colors, WIDTH>, HEIGHT>>& InterfaceGame::getOpponentBoard(uint8_t index) const 
-// {
-//     return opponentsBoards_;
-// }
+// std::array < std::array<colors, WIDTH>, HEIGHT>& InterfaceGame::getOpponentBoard(uint8_t index) { return opponents_.value().at(index); }
 
