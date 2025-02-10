@@ -51,15 +51,15 @@ Dans cette application, quatre modes sont proposés au joueur. Il existe la vers
  
 \paragraph*{}
 
-Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de malus}". Un joueur peut envoyer un malus à un adversaire. Le receveur du malus retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimées par les combinaisons.  
+Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de penalty}". Un joueur peut envoyer un penalty à un adversaire. Le receveur du penalty retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimées par les combinaisons.  
 
 \paragraph*{}
 
-La version \textit{Classic} et la version \textit{Duel} comprennent respectivement des parties de trois à neuf, et de deux joueurs. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent; celui qui complète une ou plusieurs lignes en même temps peut envoyer des lignes de malus selon sa combinaison à un adversaire de son choix. 
+La version \textit{Classic} et la version \textit{Duel} comprennent respectivement des parties de trois à neuf, et de deux joueurs. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent; celui qui complète une ou plusieurs lignes en même temps peut envoyer des lignes de penalty selon sa combinaison à un adversaire de son choix. 
 
 \paragraph*{}
 
-Le dernier mode, \textit{ Royal Competition}, comprend des malus multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplit selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des malus à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de malus et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
+Le dernier mode, \textit{ Royal Competition}, comprend des penalty multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplit selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des penalty à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de penalty et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
 
 \paragraph*{}
 
@@ -71,12 +71,17 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 
 \begin{itemize}
+
 	\item \textbf{Bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes comme réduire un tetromino en bloc de 1 x 1 , ou réduire son temps de chute. 
-	\item \textbf{Penalty} : Pénalité infligée à un joueur par un de ses adversaires. Le penalty se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite.
-	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
-        \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
-        \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
 	
+	 \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
+
+	\item \textbf{Penalty} : Pénalité infligée à un joueur par un de ses adversaires. Le penalty se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite. Cette ligne de pénalité peut être supprimé de la grille si le joueur arrive à compléter avec ses tetrominoes. 
+	
+	 \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
+	
+	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
+
 \end{itemize}
 
 \subsection{Historique}
@@ -309,7 +314,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 \begin{figure}[!h]
     \centering
     \includegraphics[width=1\textwidth]{uml/usescase/en-jeu/useCase_endless.png}
-    \caption{Diagramme Use Case en mode Classique}
+    \caption{Diagramme Use Case en mode Endless}
     \label{fig:Classique}
 \end{figure}
 
@@ -541,7 +546,7 @@ Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut cons
 
 \subsection{Gestion de la partie}
 
-De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées sous forme de requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroit de la grille, envoyer un malus à un adversaire, etc.). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
+De la création à la fin de la partie, toutes les actions de l'utilisateur sont envoyées sous forme de requête au serveur et ce dernier applique l'action si elle est possible (ex. placer une pièce à tel endroit de la grille, envoyer un penalty à un adversaire, etc.). Le serveur permet de valider les actions et de vérifier s'il n'y a pas de triche en cours. La partie modifiée par le serveur avec la nouvelle action intégrée ou non sera récupérée et affichée à l'utilisateur.
 
 \subsection{Gestion des amis}
 
@@ -585,7 +590,7 @@ Le client doit être connecté à internet pour accéder au serveur. Son utilisa
 
 Afin de minimiser le nombre de requêtes du client au serveur, des conditions seront vérifiées par le client avant d'envoyer ces dernières au serveur. \\
 
-\textit{Exemple} : l'utilisateur a bien fait au minimum deux combinaisons de lignes avant de pouvoir envoyer un ou plusieurs malus à un de ses adversaires.
+\textit{Exemple} : l'utilisateur a bien fait au minimum deux combinaisons de lignes avant de pouvoir envoyer un ou plusieurs penalty à un de ses adversaires.
 
 \subsubsection{Capacité}
 
