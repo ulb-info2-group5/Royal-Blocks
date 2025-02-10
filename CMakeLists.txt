@@ -42,3 +42,7 @@ target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 
 # Link SQLite3 to the project
 target_link_libraries(${PROJECT_NAME}_lib PRIVATE SQLite::SQLite3)
+
+
+# glaze lib
+target_include_directories(tetris_royal_lib PRIVATE ${CMAKE_SOURCE_DIR}/lib/glaze/include)

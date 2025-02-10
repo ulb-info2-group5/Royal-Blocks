@@ -11,9 +11,17 @@
 #include <fstream> 
 #include <sqlite3.h>
 
+#include "../../../../lib/glaze/include/glaze/glaze.hpp"
 #include "../database_manager/database_manager.hpp"
 
+
 using namespace std;
+
+struct Message {
+    int senderId; 
+    string content;
+};
+
 
 class MessagesManager{
 
@@ -88,7 +96,7 @@ class MessagesManager{
         **/
         void  sendMessage(const int &senderId, const int &recieverId, const string &content); 
         
-        void writeMessage(const string &pathfile, const string &content, const int &senderId);
+        void writeMessage(const string &pathfile, const Message& message);
 
         void readDiscussion(const string &pathfile);
 
@@ -114,5 +122,8 @@ class MessagesManager{
 
 
 }; 
+
+
+
 
 #endif

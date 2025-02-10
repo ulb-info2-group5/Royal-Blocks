@@ -27,7 +27,7 @@ MessagesManager::MessagesManager(shared_ptr<DatabaseManager> &db) : dbManager_(d
 
 // ==== Private ====
 string MessagesManager::generateFileName(const int &idUser1,const int &idUser2 ){
-    return "data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".txt";
+    return "data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".json";
 }
 
 bool MessagesManager::createDiscussionFile(const string& filePath) {
@@ -71,11 +71,30 @@ string MessagesManager::getDiscussion(const int &idUser1, const int &idUser2){
 
 
 
-void MessagesManager::writeMessage(const string &pathfile, const string &content, const int &senderId){
-    ofstream disc;
-	disc.open(pathfile, ios::app);
-	disc << senderId << " : " << content << endl;
-	disc.close();
+void MessagesManager::writeMessage(const string &pathfile, const Message& message){
+    std::ifstream infile(pathfile); 
+    string discussion;    
+    if (infile) {
+        stringstream buffer;
+        buffer << infile.rdbuf();
+        discussion = buffer.str();
+    }
+    vector<Message> messages;
+    if (!discussion.empty()) {
+        glz::error_ctx err = glz::read_json(messages, discussion);
+        if (err) {
+            std::cerr << "error readJSON : " << glz::format_error(err, discussion) << std::endl;
+        }  
+    }
+    messages.push_back(message);
+    auto result = glz::write_json(messages);
+    if (!result) {
+        std::cerr << "erpror eerr error write JSON : " << glz::format_error(result.error()) << std::endl;
+    } else {
+        discussion = result.value();  
+    }
+    std::ofstream outfile(pathfile);
+    outfile << discussion;
 }
 
 
@@ -84,7 +103,7 @@ void MessagesManager::writeMessage(const string &pathfile, const string &content
 
 void MessagesManager::sendMessage(const int &senderId, const int &recieverId, const string &content){
     if (!isThereDiscussion(senderId, recieverId)) addDiscussion(senderId, recieverId);
-    writeMessage(getDiscussion(senderId, recieverId), content, senderId);
+    writeMessage(getDiscussion(senderId, recieverId),{senderId, content});
 }
 
 
