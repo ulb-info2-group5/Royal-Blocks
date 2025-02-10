@@ -25,17 +25,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(test)
 endif()
 
-# tetris_lib
-add_subdirectory(src/common/tetris_lib)
 
 file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
     # WARN: do not include the main's here
     src/*.cpp
 )
 
-# tetris_royal_lib
-add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
-target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Create a library with the project's sources
+add_library(${PROJECT_NAME}_lib ${SOURCES_TETRIS_ROYAL_LIB})
+
 
 # Link SQLite3 and FTXUI to the project
 target_link_libraries(${PROJECT_NAME}_lib PRIVATE ftxui::screen ftxui::dom ftxui::component)
