@@ -17,9 +17,17 @@
 
 using namespace std;
 
+
+
 struct Message {
     int senderId; 
     string content;
+};
+
+struct Discution{
+    int userId1;
+    int userId2;
+    vector<Message> messages; 
 };
 
 
@@ -70,7 +78,7 @@ class MessagesManager{
         *( private because MessagesManager must be the only one to have access to it )
         *
         */
-        string getDiscussion(const int &idUser1,const int &idUser2);
+        string getPathDiscussion(const int &idUser1,const int &idUser2);
 
     public: 
         /*
@@ -103,14 +111,14 @@ class MessagesManager{
         void showAllMessages(const int & idUser1, const int & idUser2);
 
         /**
-         * @brief read all messages between two users 
+         * @brief return the discussion between two users  
          * 
          * @param  user1_id  Id of the first user
          * @param user2_id Id of the second user
          * 
          * @return vector of all messages between user1 and user2
          */
-        vector<string> getAllMessage(const int &user1_id , const int &user2_id); 
+        Discution getDiscussion(const int &idUser1 , const int &idUser2); 
 
         /*
         * @brief finds all users who have a discussion with the user : idUser

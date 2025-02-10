@@ -62,7 +62,7 @@ bool MessagesManager::isThereDiscussion(const int &idUser1, const int &idUser2 )
 }
 
 
-string MessagesManager::getDiscussion(const int &idUser1, const int &idUser2){
+string MessagesManager::getPathDiscussion(const int &idUser1, const int &idUser2){
     string sql = "SELECT file_path FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?);";
     string discussionFile;
     dbManager_->executeSqlRecoveryString(sql, {idUser1, idUser2, idUser2, idUser1}, discussionFile );
@@ -74,6 +74,7 @@ string MessagesManager::getDiscussion(const int &idUser1, const int &idUser2){
 void MessagesManager::writeMessage(const string &pathfile, const Message& message){
     std::ifstream infile(pathfile); 
     string discussion;    
+    // TODO : use stringstream
     if (infile) {
         stringstream buffer;
         buffer << infile.rdbuf();
@@ -103,20 +104,33 @@ void MessagesManager::writeMessage(const string &pathfile, const Message& messag
 
 void MessagesManager::sendMessage(const int &senderId, const int &recieverId, const string &content){
     if (!isThereDiscussion(senderId, recieverId)) addDiscussion(senderId, recieverId);
-    writeMessage(getDiscussion(senderId, recieverId),{senderId, content});
+    writeMessage(getPathDiscussion(senderId, recieverId),{senderId, content});
 }
 
 
-void MessagesManager::showAllMessages(const int &idUser1, const int &idUser2){
-    readDiscussion(getDiscussion(idUser1, idUser2));    
+// void MessagesManager::showAllMessages(const int &idUser1, const int &idUser2){
+//     readDiscussion(getDiscussion(idUser1, idUser2));    
+// }
+
+
+
+// void MessagesManager::readDiscussion(const string &pathfile){
+//     std::if 
+// }
+
+
+Discution MessagesManager::getDiscussion(const int &idUser1 , const int &idUser2){
+    ifstream infile(getPathDiscussion(idUser1, idUser2));
+    if (!infile) {
+        std::cerr << "error open json file (ifstream) !" << std::endl;
+    }
+    //https://app.studyraid.com/en/read/12316/397451/secure-json-parsing-practices
+    const string content((istreambuf_iterator<char>(infile)), istreambuf_iterator<char>());
+    Discution discussion;
+    auto result = glz::read_json(discussion, content);
+
+    if (!result) {
+        throw std::runtime_error("error glz read_json ");
+    }
+    return discussion;
 }
-
-
-
-void MessagesManager::readDiscussion(const string &pathfile){
-    ifstream f(pathfile);
-    string s;
-    while (getline(f, s)) cout << s << endl;
-    f.close();
-}
-

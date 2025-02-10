@@ -17,6 +17,17 @@
 
 using namespace std;
 
+/*
+*@brief just for show a discussion between two users 
+*/
+void printDiscussion(Discution discussion, AccountManager &accountmanager){
+    std::cout << "====="<< std::endl;
+    for (const auto& message : discussion.messages) {
+        std::cout << "User " << accountmanager.getUsername(message.senderId) << ": " << message.content << std::endl;
+    }
+}
+
+
 int main() {
     shared_ptr<DatabaseManager> dbManager = make_shared<DatabaseManager>();
 
@@ -47,8 +58,7 @@ int main() {
     cout << endl;
     messagesManager.sendMessage(userId, accountManager.getUserId(reciever), "message de test de " + username + " pour " + reciever );
     cout << "this is all your discussion : " << endl;
-    messagesManager.showAllMessages(userId, accountManager.getUserId(reciever));
-    
+    printDiscussion(messagesManager.getDiscussion(userId, accountManager.getUserId(reciever)), accountManager);
 
     cout << "=== Test du module FriendsManager ===" << endl;
     string friendName;
