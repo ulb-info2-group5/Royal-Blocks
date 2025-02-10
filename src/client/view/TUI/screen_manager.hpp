@@ -10,6 +10,7 @@ class ScreenManager {
 
     public:
         ScreenManager();
+        
         ~ScreenManager() = default;
 
         void loopScreen(const ftxui::Component component);
