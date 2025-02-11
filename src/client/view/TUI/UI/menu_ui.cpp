@@ -23,9 +23,9 @@ void MenuUi::run() {
     option.on_enter = [this]() {
         std::string selected_entry = entries_[selected_];
         if (submenus_.count(selected_entry)) {
-        submenus_[selected_entry]->run();
+            submenus_[selected_entry]->run();
         } else {
-        screenManager_->ExitLoopClosure();
+
         }
     };
 

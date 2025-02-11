@@ -1,18 +1,12 @@
 #include "screen_manager.hpp"
 #include <csignal>
+#include <ftxui/component/component_base.hpp>
 
-/*
-* Handle the signal SIGINT (Ctrl+C) to exit the program
-*/
-void handleSignal(int signal) {
-    if (signal == SIGINT) {
-        std::exit(0);
-    }
-}
 
-ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()) {
-    std::signal(SIGINT, handleSignal);
+ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()) {}
 
+ScreenManager::~ScreenManager() {
+    screen_.Exit();
 }
 
 void ScreenManager::loopScreen(const ftxui::Component component) {
@@ -21,4 +15,8 @@ void ScreenManager::loopScreen(const ftxui::Component component) {
 
 void ScreenManager::ExitLoopClosure() {
     screen_.ExitLoopClosure()();
+}
+
+void ScreenManager::Exit() {
+    screen_.Exit();
 }

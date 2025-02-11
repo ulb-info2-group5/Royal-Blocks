@@ -1,5 +1,6 @@
 #include "login_menu.hpp"
 #include "../login_input/login_input.hpp"
+#include <cstdlib>
 #include <ftxui/component/component.hpp>
 
 LoginMenu::LoginMenu(std::shared_ptr<ScreenManager> screenManager) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}) {}
@@ -24,7 +25,7 @@ void LoginMenu::run() {
     });
 
     auto buttonExit = ftxui::Button("Exit", [&] {
-        screenManager_->ExitLoopClosure();
+        screenManager_->Exit();
     });
 
     auto component = ftxui::Container::Vertical({
