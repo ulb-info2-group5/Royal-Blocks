@@ -27,7 +27,7 @@ class MenuUi {
     public:
         MenuUi(std::shared_ptr<ScreenManager> screenManager, const std::string& title, std::vector<std::string> entries);
 
-        void AddSubMenu(const std::string& label, std::shared_ptr<MenuUi> submenu);
+        void addSubMenu(const std::string& label, std::shared_ptr<MenuUi> submenu);
 
         virtual void run();
    

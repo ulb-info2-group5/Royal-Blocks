@@ -12,11 +12,11 @@ class ScreenManager {
         
         ~ScreenManager();
 
-        void loopScreen(const ftxui::Component component);
+        void loopScreen(const ftxui::Component &component);
 
-        void ExitLoopClosure();
+        void exitLoopClosure();
         
-        void Exit();
+        void exit();
 
 };
 

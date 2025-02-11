@@ -25,7 +25,7 @@ void LoginMenu::run() {
     });
 
     auto buttonExit = ftxui::Button("Exit", [&] {
-        screenManager_->Exit();
+        screenManager_->exit();
     });
 
     auto component = ftxui::Container::Vertical({

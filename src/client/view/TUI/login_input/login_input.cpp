@@ -18,8 +18,10 @@ LoginInputStatus LoginInput::run() {
 
     auto buttonSubmit = ftxui::Button("Submit", [&] {
         if (!username_.empty() && !password_.empty()) {
+            // TODO: add logic with controller and server to check with the database for the register
+            // TODO: add logic with controller and server to check with the database for the login
             status = LoginInputStatus::SUCCESS;
-            screenManager_->ExitLoopClosure();
+            screenManager_->exitLoopClosure();
         } else {
             username_.clear();
             password_.clear();
@@ -30,7 +32,7 @@ LoginInputStatus LoginInput::run() {
     auto buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
-        screenManager_->ExitLoopClosure();
+        screenManager_->exitLoopClosure();
     });
 
     auto component = ftxui::Container::Vertical({

@@ -9,14 +9,14 @@ ScreenManager::~ScreenManager() {
     screen_.Exit();
 }
 
-void ScreenManager::loopScreen(const ftxui::Component component) {
+void ScreenManager::loopScreen(const ftxui::Component &component) {
     screen_.Loop(component);
 }
 
-void ScreenManager::ExitLoopClosure() {
+void ScreenManager::exitLoopClosure() {
     screen_.ExitLoopClosure()();
 }
 
-void ScreenManager::Exit() {
+void ScreenManager::exit() {
     screen_.Exit();
 }
