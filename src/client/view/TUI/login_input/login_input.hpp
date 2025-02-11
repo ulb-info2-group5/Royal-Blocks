@@ -5,23 +5,34 @@
 #include <memory>
 #include <string>
 
+enum LoginInputStatus {
+    SUCCESS,
+    FAILURE
+};
+
 class LoginInput {
     private:
         std::shared_ptr<ScreenManager> screenManager_;
         std::string title_;
         std::string username_;
         std::string password_;
+        std::string message_;
+        std::string instructons_;
 
     public:
         LoginInput(std::shared_ptr<ScreenManager> screenManager, std::string &title);
 
         ~LoginInput() = default;
 
-        void run();
+        LoginInputStatus run();
 
         std::string getUsername() const;
 
         std::string getPassword() const;
+
+        void addTextUnder(const std::string& text);
+
+        void addInstructions(const std::string& instructions);
 };
 
 
