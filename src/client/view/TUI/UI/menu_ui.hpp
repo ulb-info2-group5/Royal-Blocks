@@ -25,10 +25,27 @@ class MenuUi {
         std::unordered_map<std::string, std::shared_ptr<MenuUi>> submenus_;
 
     public:
+        /*
+        * @brief Construct a new Menu Ui object
+        */
         MenuUi(std::shared_ptr<ScreenManager> screenManager, const std::string& title, std::vector<std::string> entries);
 
+        /*
+        * @brief Destroy the Menu Ui object
+        */
+        ~MenuUi() = default;
+
+        /*
+        * @brief Add a submenu (a MenuUi) to the menu with a label
+        *
+        * @param label the label of the submenu
+        * @param submenu the submenu to add
+        */
         void addSubMenu(const std::string& label, std::shared_ptr<MenuUi> submenu);
 
+        /*
+        * @brief Run the menu screen with all the components
+        */
         virtual void run();
    
 };

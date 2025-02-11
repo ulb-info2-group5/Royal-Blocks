@@ -5,13 +5,22 @@
 #include "../UI/menu_ui.hpp"
 #include <memory>
 
-class LoginMenu : public MenuUi {
-    private:
-        
-    public:
-        LoginMenu(std::shared_ptr<ScreenManager> screenManager);
-        ~LoginMenu() = default;
 
+class LoginMenu : public MenuUi {
+    public:
+        /*
+        * @brief Construct a new Login Menu object
+        */
+        LoginMenu(std::shared_ptr<ScreenManager> screenManager);
+        
+        /*
+        * @brief Destroy the Login Menu object
+        */
+        ~LoginMenu() = default;
+        
+        /*
+        * @brief Run the login menu screen with all the components
+        */
         void run() override;
 };
 
