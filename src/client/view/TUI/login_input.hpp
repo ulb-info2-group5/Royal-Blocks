@@ -8,11 +8,12 @@
 class LoginInput {
     private:
         std::shared_ptr<ScreenManager> screenManager_;
+        std::string title_;
         std::string username_;
         std::string password_;
 
     public:
-        LoginInput(std::shared_ptr<ScreenManager> screenManager);
+        LoginInput(std::shared_ptr<ScreenManager> screenManager, std::string &title);
 
         ~LoginInput() = default;
 

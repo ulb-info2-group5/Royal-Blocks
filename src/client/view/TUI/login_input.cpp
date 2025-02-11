@@ -6,7 +6,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <string>
 
-LoginInput::LoginInput(std::shared_ptr<ScreenManager> screenManager) : screenManager_(screenManager) {}
+LoginInput::LoginInput(std::shared_ptr<ScreenManager> screenManager, std::string &title) : screenManager_(screenManager), title_(title) {}
 
 void LoginInput::run() {
     std::string message;
@@ -18,7 +18,9 @@ void LoginInput::run() {
         if (!username_.empty() && !password_.empty()) {
             screenManager_->ExitLoopClosure();
         } else {
-            message = "Please enter a username and a password";
+            username_.clear();
+            password_.clear();
+            message = "Please enter a valid username and a valid password";
         }
     });
 
@@ -30,9 +32,12 @@ void LoginInput::run() {
 
     auto renderer = ftxui::Renderer(component, [&] {
         return ftxui::vbox({
+            ftxui::text(title_) | ftxui::bold | ftxui::center,
+            ftxui::separator(),
             inputUsername->Render(),
             inputPassword->Render(),
             buttonSubmit->Render(),
+            ftxui::text(message)
         }) | ftxui::border;
     });
    

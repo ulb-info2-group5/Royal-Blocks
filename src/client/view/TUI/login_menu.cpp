@@ -1,20 +1,25 @@
 #include "login_menu.hpp"
+#include "login_input.hpp"
 #include <ftxui/component/component.hpp>
 
-LoginMenu::LoginMenu(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<LoginInput> loginInput) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}), loginInput_(loginInput) {}
+LoginMenu::LoginMenu(std::shared_ptr<ScreenManager> screenManager) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}) {}
 
 void LoginMenu::run() {
-    std::string message;
-
-    auto buttonRegister = ftxui::Button("Register", [&] {
-        loginInput_->run();
-    });
+    std::string loginStr = "Login";
+    std::string registerStr = "Register";
+    LoginInput loginInput(screenManager_, loginStr);
+    LoginInput registerInput(screenManager_, registerStr);
 
     auto buttonLogin = ftxui::Button("Login", [&] {
-        loginInput_->run();
+        loginInput.run();
     });
 
-    auto buttonBack = ftxui::Button("Back", [&] {
+    auto buttonRegister = ftxui::Button("Register", [&] {
+        registerInput.run();
+        loginInput.run();
+    });
+
+    auto buttonBack = ftxui::Button("Exit", [&] {
         screenManager_->ExitLoopClosure();
     });
 
@@ -30,7 +35,6 @@ void LoginMenu::run() {
             buttonRegister->Render(),
             buttonLogin->Render(),
             buttonBack->Render(),
-            ftxui::text(message) | ftxui::color(ftxui::Color::Red),
         }) | ftxui::border;
     });
 
