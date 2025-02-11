@@ -7,7 +7,6 @@
  */
 
 #include "menu_ui.hpp"
-#include "screen_manager.hpp"
 #include <ftxui/component/component.hpp>
 
 MenuUi::MenuUi(std::shared_ptr<ScreenManager> screenManager, const std::string& title, std::vector<std::string> entries)

@@ -1,7 +1,7 @@
 #ifndef LOGIN_INPUT_HPP
 #define LOGIN_INPUT_HPP
 
-#include "screen_manager.hpp"
+#include "../screen_manager/screen_manager.hpp"
 #include <memory>
 #include <string>
 

@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "screen_manager.hpp"
+#include "../screen_manager/screen_manager.hpp"
 
 class MenuUi {
     protected:

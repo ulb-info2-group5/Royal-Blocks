@@ -2,9 +2,7 @@
 #define LOGIN_MENU_HPP
 
 
-#include "menu_ui.hpp"
-#include "login_input.hpp"
-#include "screen_manager.hpp"
+#include "../UI/menu_ui.hpp"
 #include <memory>
 
 class LoginMenu : public MenuUi {
