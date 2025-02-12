@@ -29,7 +29,7 @@ enum class InputState {
  */
 class LoginInput {
     private:
-        std::shared_ptr<ftxui::ScreenInteractive> screen;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
         std::string title_;
         std::string username_;
         std::string password_;

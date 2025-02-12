@@ -14,7 +14,7 @@
 #include <string>
 
 
-LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, std::string &title) : screen(screen), title_(title) {}
+LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, std::string &title) : screen_(screen), title_(title) {}
 
 InputState LoginInput::render() {
     InputState state = InputState::WAITING;
@@ -28,7 +28,7 @@ InputState LoginInput::render() {
             // TODO: add logic with controller and server to check with the database for the register
             // TODO: add logic with controller and server to check with the database for the login
             state = InputState::SUCCESS;
-            screen->ExitLoopClosure()();
+            screen_->ExitLoopClosure()();
             return state;
 
         } else {
@@ -42,7 +42,7 @@ InputState LoginInput::render() {
     auto buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
-        screen->ExitLoopClosure()();
+        screen_->ExitLoopClosure()();
     });
 
     auto component = ftxui::Container::Vertical({
@@ -68,7 +68,7 @@ InputState LoginInput::render() {
         }) | ftxui::border;
     });
 
-    screen->Loop(render);
+    screen_->Loop(render);
     return state;
 }
 

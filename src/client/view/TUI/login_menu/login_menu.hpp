@@ -29,7 +29,7 @@ class LoginMenu {
         /*
         * @brief ScreenInteractive to render the menu
         */
-        std::shared_ptr<ftxui::ScreenInteractive> screen;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
         /*
         * @brief Show the register input screen
@@ -62,7 +62,6 @@ class LoginMenu {
         * @brief Render the login menu screen with all the components
         */
         void render();
-
 };
 
 

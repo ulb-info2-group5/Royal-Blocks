@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
 
-LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen(screen) {}
+LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen) {}
 
 void LoginMenu::render() {
     std::string emptyMessage = "";
@@ -22,7 +22,7 @@ void LoginMenu::render() {
             std::string addMessage = "Account created successfully ! You can now login";
             if (ShowLogin(addMessage) == InputState::SUCCESS) {
                 exit_ = true;
-                screen->ExitLoopClosure();
+                screen_->ExitLoopClosure();
                 return;
             }
         }
@@ -30,14 +30,14 @@ void LoginMenu::render() {
     auto buttonLogin = ftxui::Button("Login", [&] {
         if (ShowLogin(emptyMessage) == InputState::SUCCESS) {
             exit_ = true;
-            screen->ExitLoopClosure();
+            screen_->ExitLoopClosure();
             return;
         }
     });
 
     auto buttonExit = ftxui::Button("Exit", [&] {
         exit_ = true;
-        screen->ExitLoopClosure();
+        screen_->ExitLoopClosure();
     });
 
     auto component = ftxui::Container::Vertical({
@@ -48,7 +48,7 @@ void LoginMenu::render() {
 
     auto render = Renderer(component, [&] {
         if (exit_) {
-            screen->ExitLoopClosure()();
+            screen_->ExitLoopClosure()();
         }
         return ftxui::vbox({
             ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
@@ -58,13 +58,13 @@ void LoginMenu::render() {
         }) | ftxui::border;
     });
 
-    screen->Loop(render);
+    screen_->Loop(render);
 }
 
 InputState LoginMenu::ShowRegister(std::string &addMessage) {
     std::string title = "Register";
     std::string instruction = "Please enter a username and a password to create an account";
-    LoginInput registerInput(screen, title);
+    LoginInput registerInput(screen_, title);
     registerInput.addInstruction(instruction);
     if (!addMessage.empty()) {
         registerInput.addMessage(addMessage);
@@ -75,7 +75,7 @@ InputState LoginMenu::ShowRegister(std::string &addMessage) {
 InputState LoginMenu::ShowLogin(std::string &addMessage) {
     std::string title = "Login";
     std::string instruction = "Please enter your username and password to login";
-    LoginInput loginInput(screen, title);
+    LoginInput loginInput(screen_, title);
     loginInput.addInstruction(instruction);
     if (!addMessage.empty()) {
         loginInput.addMessage(addMessage);
