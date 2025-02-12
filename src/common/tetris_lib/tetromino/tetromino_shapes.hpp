@@ -33,6 +33,7 @@ enum class TetrominoShape {
     I,
     J,
     T,
+    MiniTetromino,
     NumTetrominoShape,
 };
 
@@ -181,6 +182,25 @@ class TetrominoT final : public ATetromino {
 
     TetrominoPtr clone() const override {
         return make_clone<TetrominoT>(*this);
+    }
+};
+
+// #### MiniTetromino Shape ####
+
+/**
+ * @class MiniTetromino
+ */
+class MiniTetromino final : public ATetromino {
+  public:
+    /**
+     * @brief MiniTetromino constructor.
+     *
+     * @param anchorPoint The MiniTetromino's anchor-point.
+     */
+    MiniTetromino(Vec2 &&anchorPoint);
+
+    TetrominoPtr clone() const override {
+        return make_clone<MiniTetromino>(*this);
     }
 };
 

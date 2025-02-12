@@ -47,11 +47,6 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
     : shape_(shape), anchorPoint_{std::move(anchorPoint)},
       body_{std::move(body)}, offsetData_(offsetData) {
 
-    if (body_.size() != 4) {
-        throw std::invalid_argument(
-            "All Tetrominoes must be composed of 4 blocks");
-    }
-
     int minY = std::numeric_limits<int>::max();
     int maxY = std::numeric_limits<int>::min();
     int minX = std::numeric_limits<int>::max();

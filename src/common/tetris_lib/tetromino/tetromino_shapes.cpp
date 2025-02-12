@@ -103,3 +103,10 @@ TetrominoT::TetrominoT(Vec2 &&anchorPoint)
         rotate(true);
     }
 }
+
+// #### MiniTetromino Shape ####
+
+MiniTetromino::MiniTetromino(Vec2 &&anchorPoint)
+    : ATetromino(std::move(anchorPoint), std::vector<Vec2>{{0, 0}},
+                 &ATetromino::ZLSJT_OFFSET_DATA,
+                 TetrominoShape::MiniTetromino) {}
