@@ -47,7 +47,7 @@ TetrominoPtr TetrominoQueue::fetchNext() {
         refill();
     }
 
-    std::optional<TetrominoPtr> pTetromino = pop();
+    std::optional<TetrominoPtr> pTetromino = popFront();
 
     // if it's nullopt, then the queue was empty, which should never have
     // happened in the first place.

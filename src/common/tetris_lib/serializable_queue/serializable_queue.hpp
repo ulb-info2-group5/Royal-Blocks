@@ -50,10 +50,10 @@ template <typename T> class SerializableQueue {
     T &back() { return queue_.back(); }
 
     /**
-     * @brief Removes the next T in the queue and returns it (wrapped in an
-     * std::optional, nullopt if the queue was already empty).
+     * @brief Removes the next T at the front of the queue and returns it
+     * (wrapped in an std::optional, nullopt if the queue was already empty).
      */
-    std::optional<T> pop() {
+    std::optional<T> popFront() {
         if (queue_.empty()) {
             return std::nullopt;
         } else {

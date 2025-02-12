@@ -1,0 +1,95 @@
+#ifndef GAME_ENGINE_HPP
+#define GAME_ENGINE_HPP
+
+#include "../game_state/game_state.hpp"
+
+#include <array>
+#include <bitset>
+#include <memory>
+
+using GameStatePtr = std::shared_ptr<GameState>;
+
+class GameEngine {
+  public:
+    enum class GameModeFeature {
+        Effects,
+        SelectPenaltyTarget,
+        NumGameModeFeatures,
+    };
+
+    static constexpr size_t numFeatures =
+        static_cast<size_t>(GameModeFeature::NumGameModeFeatures);
+
+    using FeaturesBitset = std::bitset<GameEngine::numFeatures>;
+    using FeaturesMap = std::array<FeaturesBitset, numFeatures>;
+
+  private:
+    // #### Features-related ####
+
+    const static FeaturesMap featuresBitsets;
+
+    /**
+     * @brief Checks whether the given feature is enabled for the current
+     * GameMode.
+     */
+    bool checkFeaturesEnabled(GameModeFeature gameModeFeatures) const;
+
+    // #### GameState ####
+
+    GameStatePtr pGameState_;
+
+  public:
+    /**
+     * @brief Constructor
+     *
+     * @param pGameState A shared pointer to the GameState that the GameEngine
+     * should manage.
+     */
+    GameEngine(const GameStatePtr &pGameState);
+    GameEngine(const GameEngine &) = default;
+    GameEngine(GameEngine &&) = default;
+    GameEngine &operator=(const GameEngine &) = default;
+    GameEngine &operator=(GameEngine &&) = default;
+
+    virtual ~GameEngine() = default;
+
+  private:
+    /**
+     * @brief Sends the given penalty to the sender's selected target.
+     */
+    void sendPenaltyEffect(PlayerID sender, Penalty::PenaltyType penaltyType);
+
+  public:
+    /**
+     * @brief Returns true if the given player has enough energy to buy the
+     * given effect; false otherwise.
+     */
+    bool checkCanBuyEffect(PlayerID buyerID, EffectType effectType);
+
+    /**
+     * @brief Makes the given player buy the given effect if possible (meaning
+     * he had enough Energy).
+     */
+    void tryBuyEffect(PlayerID playerID, EffectType effectType);
+
+    /**
+     * @brief Changes the given player's target to the new target.
+     * @param playerID The player whose target will be changed.
+     * @param target The new target.
+     */
+    void selectTarget(PlayerID playerID, PlayerID target);
+
+    /**
+     * @brief Makes the given player select the next item in the effect
+     * selector.
+     */
+    void selectNextEffect(PlayerID playerID);
+
+    /**
+     * @brief Makes the given player select the prev item in the effect
+     * selector.
+     */
+    void selectPrevEffect(PlayerID playerID);
+};
+
+#endif // GAME_ENGINE_HPP
