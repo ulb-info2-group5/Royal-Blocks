@@ -26,7 +26,7 @@ class ScreenManager {
         /*
         * @brief Exit the loop closure
         */
-        void exitLoopClosure();
+        void exitLoop();
         
         /*
         * @brief Exit the screen

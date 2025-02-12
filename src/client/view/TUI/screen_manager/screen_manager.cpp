@@ -13,7 +13,7 @@ void ScreenManager::loopScreen(const ftxui::Component &component) {
     screen_.Loop(component);
 }
 
-void ScreenManager::exitLoopClosure() {
+void ScreenManager::exitLoop() {
     screen_.ExitLoopClosure()();
 }
 

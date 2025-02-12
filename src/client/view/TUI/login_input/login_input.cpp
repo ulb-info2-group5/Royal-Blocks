@@ -21,7 +21,7 @@ LoginInputStatus LoginInput::run() {
             // TODO: add logic with controller and server to check with the database for the register
             // TODO: add logic with controller and server to check with the database for the login
             status = LoginInputStatus::SUCCESS;
-            screenManager_->exitLoopClosure();
+            screenManager_->exitLoop();
         } else {
             username_.clear();
             password_.clear();
@@ -32,7 +32,7 @@ LoginInputStatus LoginInput::run() {
     auto buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
-        screenManager_->exitLoopClosure();
+        screenManager_->exitLoop();
     });
 
     auto component = ftxui::Container::Vertical({
