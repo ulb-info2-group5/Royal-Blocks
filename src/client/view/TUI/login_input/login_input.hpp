@@ -1,3 +1,11 @@
+/**
+ * @file login_input.hpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief LoginInput class header file
+ * @date 2025-02-12
+ * 
+ */
+
 #ifndef LOGIN_INPUT_HPP
 #define LOGIN_INPUT_HPP
 

@@ -1,3 +1,11 @@
+/**
+ * @file screen_manager.hpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief ScreenManager class header file
+ * @date 2025-02-12
+ * 
+ */
+
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 

@@ -1,3 +1,11 @@
+/**
+ * @file login_input.hpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief LoginInput class definition file
+ * @date 2025-02-12
+ * 
+ */
+
 #include "login_input.hpp"
 
 #include <ftxui/component/component.hpp>

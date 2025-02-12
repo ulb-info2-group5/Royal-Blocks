@@ -1,3 +1,11 @@
+/**
+ * @file login_menu.cpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief LoginMenu class definition file
+ * @date 2025-02-12
+ * 
+ */
+
 #include "login_menu.hpp"
 #include "../login_input/login_input.hpp"
 #include <cstdlib>
