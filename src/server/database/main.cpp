@@ -20,7 +20,7 @@ using namespace std;
 /*
 *@brief just for show a discussion between two users 
 */
-void printDiscussion(Discution discussion, AccountManager &accountmanager){
+void printDiscussion(Discution&& discussion, AccountManager &accountmanager){
     std::cout << "====="<< std::endl;
     for (const auto& message : discussion.messages) {
         std::cout << "User " << accountmanager.getUsername(message.senderId) << ": " << message.content << std::endl;

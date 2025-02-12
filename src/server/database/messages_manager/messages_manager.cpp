@@ -30,13 +30,21 @@ string MessagesManager::generateFileName(const int &idUser1,const int &idUser2 )
     return "data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".json";
 }
 
-bool MessagesManager::createDiscussionFile(const string& filePath) {
+bool MessagesManager::createDiscussionFile(const string& filePath, Discution discussion) {
     std::ofstream file(filePath);
     if (!file) {
         std::cerr << "file error" << filePath << std::endl;
         return false;
     }
-    file.close();
+
+    string content = glz::write_json(discussion).value_or("{}");
+    // if (!content) {
+    //     std::cerr << "erpror eerr error write (init discussion) JSON : " << glz::format_error(content.error()) << std::endl;
+    // } else {
+        
+    // }
+    std::cout << "content " << content << endl;
+    file << content;  
     return true;
 }
 
@@ -44,8 +52,11 @@ bool MessagesManager::createDiscussionFile(const string& filePath) {
 
 bool MessagesManager::addDiscussion(const int &idUser1,const  int &idUser2){
     const string filePath = generateFileName(idUser1, idUser2);
-    
-    if (!this->createDiscussionFile(filePath) ) return false;
+    Discution discussion;
+    discussion.idUser1 = idUser1; 
+    discussion.idUser2 = idUser2;
+    discussion.messages = {};
+    if (!this->createDiscussionFile(filePath, discussion) ) return false;
     
     const char * sqlRe = "INSERT INTO userMessages (user1_id, user2_id, file_path) VALUES (?, ?, ?);";
     if (!dbManager_->executeSqlChangeData(sqlRe, {idUser1, idUser2, filePath}) ) return false ;
@@ -58,7 +69,14 @@ bool MessagesManager::addDiscussion(const int &idUser1,const  int &idUser2){
 bool MessagesManager::isThereDiscussion(const int &idUser1, const int &idUser2 ){
     string sql = "SELECT COUNT(*) FROM userMessages WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
     int count = 0;
-    return dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count)&& count > 0;
+    //check if the discussion exists on the table 
+     if (! dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count)&& count > 0) {
+        return false ; 
+     }else{
+        //check if the discussion file exists (json file)
+        return std::filesystem::exists("data/chat/user" + std::to_string(idUser1) + "_user" + std::to_string(idUser2) + ".json")
+         || std::filesystem::exists("data/chat/user" + std::to_string(idUser2) + "_user" + std::to_string(idUser1) + ".json");
+     }
 }
 
 
@@ -72,30 +90,34 @@ string MessagesManager::getPathDiscussion(const int &idUser1, const int &idUser2
 
 
 void MessagesManager::writeMessage(const string &pathfile, const Message& message){
+    
     std::ifstream infile(pathfile); 
-    string discussion;    
+    string stringDiscussion;    
     // TODO : use stringstream
     if (infile) {
         stringstream buffer;
         buffer << infile.rdbuf();
-        discussion = buffer.str();
+        stringDiscussion = buffer.str();
+    }else {
+
     }
-    vector<Message> messages;
-    if (!discussion.empty()) {
-        glz::error_ctx err = glz::read_json(messages, discussion);
+
+    Discution discussion;
+    if (!stringDiscussion.empty()) {
+        glz::error_ctx err = glz::read_json(discussion, stringDiscussion);
         if (err) {
-            std::cerr << "error readJSON : " << glz::format_error(err, discussion) << std::endl;
+            std::cerr << "error readJSON : " << glz::format_error(err, stringDiscussion) << std::endl;
         }  
     }
-    messages.push_back(message);
-    auto result = glz::write_json(messages);
+    discussion.messages.push_back(message);
+    auto result = glz::write_json(discussion);
     if (!result) {
         std::cerr << "erpror eerr error write JSON : " << glz::format_error(result.error()) << std::endl;
     } else {
-        discussion = result.value();  
+        stringDiscussion = result.value();  
     }
     std::ofstream outfile(pathfile);
-    outfile << discussion;
+    outfile << stringDiscussion;
 }
 
 
@@ -104,20 +126,9 @@ void MessagesManager::writeMessage(const string &pathfile, const Message& messag
 
 void MessagesManager::sendMessage(const int &senderId, const int &recieverId, const string &content){
     if (!isThereDiscussion(senderId, recieverId)) addDiscussion(senderId, recieverId);
+    
     writeMessage(getPathDiscussion(senderId, recieverId),{senderId, content});
 }
-
-
-// void MessagesManager::showAllMessages(const int &idUser1, const int &idUser2){
-//     readDiscussion(getDiscussion(idUser1, idUser2));    
-// }
-
-
-
-// void MessagesManager::readDiscussion(const string &pathfile){
-//     std::if 
-// }
-
 
 Discution MessagesManager::getDiscussion(const int &idUser1 , const int &idUser2){
     ifstream infile(getPathDiscussion(idUser1, idUser2));
@@ -125,12 +136,12 @@ Discution MessagesManager::getDiscussion(const int &idUser1 , const int &idUser2
         std::cerr << "error open json file (ifstream) !" << std::endl;
     }
     //https://app.studyraid.com/en/read/12316/397451/secure-json-parsing-practices
-    const string content((istreambuf_iterator<char>(infile)), istreambuf_iterator<char>());
+    const string content((std::istreambuf_iterator<char>(infile)), std::istreambuf_iterator<char>());
     Discution discussion;
     auto result = glz::read_json(discussion, content);
 
-    if (!result) {
-        throw std::runtime_error("error glz read_json ");
-    }
+    // if (!result) {
+    //     throw std::runtime_error("error glz read_json ");
+    // }
     return discussion;
 }

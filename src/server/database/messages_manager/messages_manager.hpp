@@ -22,12 +22,22 @@ using namespace std;
 struct Message {
     int senderId; 
     string content;
+    // reflect is used to read a json, because Glaze cannot automatically guess where to put the Json values 
+    template <typename T>
+    void reflect(T& t) {
+        t("senderId", senderId, "content", content);
+    }
 };
 
 struct Discution{
-    int userId1;
-    int userId2;
-    vector<Message> messages; 
+    int idUser1;  
+    int idUser2;
+    std::vector<Message> messages;
+
+    template <typename T>
+    void reflect(T& t) {
+        t("idUser1", idUser1, "idUser2", idUser2, "messages", messages);
+    }
 };
 
 
@@ -50,7 +60,7 @@ class MessagesManager{
         * @param filePath : the path of the file which will be created
         * @return true if there has been no error
         */
-        bool createDiscussionFile(const string& filePath);
+        bool createDiscussionFile(const string& filePath, Discution discussion);
 
         /*
         *@brief add and create a new discussion between two users
@@ -64,7 +74,8 @@ class MessagesManager{
         bool addDiscussion(const int &idUser1,const  int &idUser2); 
         /*
         *
-        *@brief check if there is a discussion between two users 
+        *@brief check if there is a discussion between two users managing the case where the discussion exists on the table but the file containing 
+        * the discussion no longer exists or does not exist
         * @param idUser1 Id of the first user
         * @param idUser2 Id of the second user
         * 
