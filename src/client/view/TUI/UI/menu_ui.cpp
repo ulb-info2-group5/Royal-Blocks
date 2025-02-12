@@ -9,7 +9,7 @@
 #include "menu_ui.hpp"
 #include <ftxui/component/component.hpp>
 
-MenuUi::MenuUi(std::shared_ptr<ScreenManager> screenManager, const std::string& title, std::vector<std::string> entries)
+MenuUi::MenuUi(ScreenManager *screenManager, const std::string& title, std::vector<std::string> entries)
          : screenManager_(screenManager), title_(title), entries_(std::move(entries)), selected_(0) {}
    
 void MenuUi::addSubMenu(const std::string& label, std::shared_ptr<MenuUi> submenu) {

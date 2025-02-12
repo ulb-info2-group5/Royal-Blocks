@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
 
-LoginMenu::LoginMenu(std::shared_ptr<ScreenManager> screenManager) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}) {}
+LoginMenu::LoginMenu(ScreenManager *screenManager) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}) {}
 
 void LoginMenu::run() {
     std::string loginStr = "Login";
@@ -23,13 +23,17 @@ void LoginMenu::run() {
 
     auto buttonRegister = ftxui::Button("Register", [&] {
         if (registerInput.run() == SUCCESS) {
-        loginInput.addTextUnder("Your account has been created ! You can now login");
-        loginInput.run();
+            loginInput.addTextUnder("Your account has been created ! You can now login");
+            if (loginInput.run() == SUCCESS) {
+                screenManager_->exitLoop();
+            }
         }
     });
 
     auto buttonLogin = ftxui::Button("Login", [&] {
-        loginInput.run();
+        if (loginInput.run() == SUCCESS) {
+            screenManager_->exitLoop();
+        }
     });
 
     auto buttonExit = ftxui::Button("Exit", [&] {

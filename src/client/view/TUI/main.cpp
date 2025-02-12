@@ -1,11 +1,8 @@
-#include "login_menu/login_menu.hpp"
-#include <memory>
-
+#include "screen_manager/screen_manager.hpp"
 
 int main() {
-    std::shared_ptr<ScreenManager> screenManager = std::make_shared<ScreenManager>();
-    LoginMenu loginMenu(screenManager);
-    loginMenu.run();
+    ScreenManager screenManager;
+    screenManager.run();
 
     return 0;
 }

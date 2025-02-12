@@ -18,7 +18,7 @@
 
 class MenuUi {
     protected:
-        std::shared_ptr<ScreenManager> screenManager_;
+        ScreenManager * screenManager_;
         std::string title_;
         std::vector<std::string> entries_;
         int selected_;
@@ -28,12 +28,12 @@ class MenuUi {
         /*
         * @brief Construct a new Menu Ui object
         */
-        MenuUi(std::shared_ptr<ScreenManager> screenManager, const std::string& title, std::vector<std::string> entries);
+        MenuUi(ScreenManager *screenManager, const std::string& title, std::vector<std::string> entries);
 
         /*
         * @brief Destroy the Menu Ui object
         */
-        ~MenuUi() = default;
+       virtual  ~MenuUi() = default;
 
         /*
         * @brief Add a submenu (a MenuUi) to the menu with a label

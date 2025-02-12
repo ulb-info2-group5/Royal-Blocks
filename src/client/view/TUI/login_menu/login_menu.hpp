@@ -10,14 +10,13 @@
 #define LOGIN_MENU_HPP
 
 #include "../UI/menu_ui.hpp"
-#include <memory>
 
 class LoginMenu : public MenuUi {
     public:
         /*
         * @brief Construct a new Login Menu object
         */
-        LoginMenu(std::shared_ptr<ScreenManager> screenManager);
+        LoginMenu(ScreenManager *screenManager);
         
         /*
         * @brief Destroy the Login Menu object

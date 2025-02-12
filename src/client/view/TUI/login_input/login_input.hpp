@@ -10,7 +10,6 @@
 #define LOGIN_INPUT_HPP
 
 #include "../screen_manager/screen_manager.hpp"
-#include <memory>
 #include <string>
 
 enum LoginInputStatus {
@@ -20,7 +19,7 @@ enum LoginInputStatus {
 
 class LoginInput {
     private:
-        std::shared_ptr<ScreenManager> screenManager_;
+        ScreenManager * screenManager_;
         std::string title_;
         std::string username_;
         std::string password_;
@@ -31,7 +30,7 @@ class LoginInput {
         /*
         * @brief Construct a new Login Input object
         */
-        LoginInput(std::shared_ptr<ScreenManager> screenManager, std::string &title);
+        LoginInput(ScreenManager *screenManager, std::string &title);
 
         /*
         * @brief Destroy the Login Input object

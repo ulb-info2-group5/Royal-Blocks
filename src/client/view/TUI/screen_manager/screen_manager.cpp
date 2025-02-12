@@ -7,7 +7,8 @@
  */
 
 #include "screen_manager.hpp"
-#include <csignal>
+#include "../login_menu/login_menu.hpp"
+#include "../main_menu/main_menu.hpp"
 #include <ftxui/component/component_base.hpp>
 
 ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()) {}
@@ -26,4 +27,12 @@ void ScreenManager::exitLoop() {
 
 void ScreenManager::exit() {
     screen_.Exit();
+    std::exit(0); // TODO: check it
+}
+
+void ScreenManager::run() {
+    auto loginMenu = std::make_unique<LoginMenu>(this);
+    auto mainMenu = std::make_unique<MainMenu>(this);
+    loginMenu->run();  
+    mainMenu->run();
 }

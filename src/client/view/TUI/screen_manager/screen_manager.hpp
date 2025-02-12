@@ -41,6 +41,11 @@ class ScreenManager {
         */
         void exit();
 
+        /*
+        * @brief Run the screen with all the components and the menus
+        */
+        void run();
+
 };
 
 #endif // SCREEN_MANAGER_HPP

@@ -12,10 +12,9 @@
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <memory>
 #include <string>
 
-LoginInput::LoginInput(std::shared_ptr<ScreenManager> screenManager, std::string &title) : screenManager_(screenManager), title_(title) {}
+LoginInput::LoginInput(ScreenManager *screenManager, std::string &title) : screenManager_(screenManager), title_(title) {}
 
 LoginInputStatus LoginInput::run() {
     LoginInputStatus status = LoginInputStatus::FAILURE;
