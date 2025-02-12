@@ -5,7 +5,11 @@
 #include <cppunit/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
+#include "../src/common/tetris_royal_lib/foo/foo.hpp"
+
 int main() {
+    Foo foo;
+
     // informs test-listener about testResults
     CppUnit::TestResult testResult;
 

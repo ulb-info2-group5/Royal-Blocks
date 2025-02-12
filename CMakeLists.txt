@@ -27,9 +27,10 @@ add_subdirectory(src/common/tetris_lib)
 
 file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
     # WARN: do not include the main's here
-    src/*.cpp
+    src/common/tetris_royal_lib/*.cpp
 )
 
 # tetris_royal_lib
 add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
 target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME}_lib PUBLIC tetris_lib)
