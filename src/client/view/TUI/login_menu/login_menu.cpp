@@ -21,6 +21,7 @@ void LoginMenu::render() {
         if (ShowRegister(emptyMessage) == InputState::SUCCESS) {
             std::string addMessage = "Account created successfully ! You can now login";
             if (ShowLogin(addMessage) == InputState::SUCCESS) {
+                exit_ = true;
                 screen->ExitLoopClosure();
                 return;
             }
