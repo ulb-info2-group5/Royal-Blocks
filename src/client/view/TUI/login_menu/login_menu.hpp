@@ -9,14 +9,49 @@
 #ifndef LOGIN_MENU_HPP
 #define LOGIN_MENU_HPP
 
-#include "../UI/menu_ui.hpp"
 
-class LoginMenu : public MenuUi {
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+
+#include "../input/login_input.hpp"
+
+/**
+ * @brief LoginMenu class to show the login menu screen with choices to login or register
+ * 
+ */
+class LoginMenu {
+    private:
+        /*
+        * @brief Exit menu flag to exit the menu 
+        */
+        bool exit_ = false;
+
+        /*
+        * @brief ScreenInteractive to render the menu
+        */
+        std::shared_ptr<ftxui::ScreenInteractive> screen;
+
+        /*
+        * @brief Show the register input screen
+        *
+        * @param string addMessage the message to display
+        * @return InputState the state of the input
+        */
+        InputState ShowRegister(std::string &addMessage);
+
+        /*
+        * @brief Show the login input screen
+        *
+        * @param string addMessage the message to display
+        * @return InputState the state of the input
+        */
+        InputState ShowLogin(std::string &addMessage);
+
     public:
         /*
         * @brief Construct a new Login Menu object
         */
-        LoginMenu(ScreenManager *screenManager);
+        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen);
         
         /*
         * @brief Destroy the Login Menu object
@@ -24,9 +59,10 @@ class LoginMenu : public MenuUi {
         ~LoginMenu() = default;
         
         /*
-        * @brief Run the login menu screen with all the components
+        * @brief Render the login menu screen with all the components
         */
-        void run() override;
+        void render();
+
 };
 
 

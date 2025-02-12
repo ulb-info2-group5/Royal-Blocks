@@ -7,37 +7,36 @@
  */
 
 #include "login_menu.hpp"
-#include "../login_input/login_input.hpp"
+#include "../input/login_input.hpp"
+
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
 
-LoginMenu::LoginMenu(ScreenManager *screenManager) : MenuUi(screenManager, "Login Menu", std::vector<std::string>{"Login", "Exit"}) {}
+LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen(screen) {}
 
-void LoginMenu::run() {
-    std::string loginStr = "Login";
-    std::string registerStr = "Sign In";
-    LoginInput loginInput(screenManager_, loginStr);
-    LoginInput registerInput(screenManager_, registerStr);
-    registerInput.addInstructions("Please enter a username and a password to create an account");
-
+void LoginMenu::render() {
+    std::string emptyMessage = "";
 
     auto buttonRegister = ftxui::Button("Register", [&] {
-        if (registerInput.run() == SUCCESS) {
-            loginInput.addTextUnder("Your account has been created ! You can now login");
-            if (loginInput.run() == SUCCESS) {
-                screenManager_->exitLoop();
+        if (ShowRegister(emptyMessage) == InputState::SUCCESS) {
+            std::string addMessage = "Account created successfully ! You can now login";
+            if (ShowLogin(addMessage) == InputState::SUCCESS) {
+                screen->ExitLoopClosure();
+                return;
             }
         }
     });
-
     auto buttonLogin = ftxui::Button("Login", [&] {
-        if (loginInput.run() == SUCCESS) {
-            screenManager_->exitLoop();
+        if (ShowLogin(emptyMessage) == InputState::SUCCESS) {
+            exit_ = true;
+            screen->ExitLoopClosure();
+            return;
         }
     });
 
     auto buttonExit = ftxui::Button("Exit", [&] {
-        screenManager_->exit();
+        exit_ = true;
+        screen->ExitLoopClosure();
     });
 
     auto component = ftxui::Container::Vertical({
@@ -46,14 +45,39 @@ void LoginMenu::run() {
         buttonExit,
     });
 
-    auto renderer = ftxui::Renderer(component, [&] {
+    auto render = Renderer(component, [&] {
+        if (exit_) {
+            screen->ExitLoopClosure()();
+        }
         return ftxui::vbox({
-            ftxui::text("Connection Menu") | ftxui::bold | ftxui::center,
+            ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
             buttonRegister->Render(),
             buttonLogin->Render(),
             buttonExit->Render(),
         }) | ftxui::border;
     });
 
-    screenManager_->loopScreen(renderer);
+    screen->Loop(render);
+}
+
+InputState LoginMenu::ShowRegister(std::string &addMessage) {
+    std::string title = "Register";
+    std::string instruction = "Please enter a username and a password to create an account";
+    LoginInput registerInput(screen, title);
+    registerInput.addInstruction(instruction);
+    if (!addMessage.empty()) {
+        registerInput.addMessage(addMessage);
+    }
+    return registerInput.render();
+}
+
+InputState LoginMenu::ShowLogin(std::string &addMessage) {
+    std::string title = "Login";
+    std::string instruction = "Please enter your username and password to login";
+    LoginInput loginInput(screen, title);
+    loginInput.addInstruction(instruction);
+    if (!addMessage.empty()) {
+        loginInput.addMessage(addMessage);
+    }
+    return loginInput.render();
 }
