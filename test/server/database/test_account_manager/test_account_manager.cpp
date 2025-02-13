@@ -11,8 +11,8 @@
 
 void TestAccountManager::setUp() {
     // Créer une instance de MockDatabaseManager pour chaque test
-    dbManager = new MockDatabaseManager();
-    accountManager = new AccountManager(std::shared_ptr<DatabaseManager>(dbManager));
+    std::shared_ptr<DatabaseManager> db = std::make_shared<MockDatabaseManager>();
+    accountManager = new AccountManager(db);
 }
 
 void TestAccountManager::tearDown() {
