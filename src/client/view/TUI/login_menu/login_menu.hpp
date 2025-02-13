@@ -32,26 +32,20 @@ class LoginMenu {
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
         /*
-        * @brief Show the register input screen
-        *
-        * @param string addMessage the message to display
-        * @return InputState the state of the input
+        * @brief LoginInput object to render the login input
         */
-        InputState ShowRegister(std::string &addMessage);
+        std::shared_ptr<LoginInput> loginInput_;
 
         /*
-        * @brief Show the login input screen
-        *
-        * @param string addMessage the message to display
-        * @return InputState the state of the input
+        * @brief LoginInput object to render the register input
         */
-        InputState ShowLogin(std::string &addMessage);
+        std::shared_ptr<LoginInput> registerInput_;
 
     public:
         /*
         * @brief Construct a new Login Menu object
         */
-        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen);
+        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<LoginInput> loginInput, std::shared_ptr<LoginInput> registerInput);
         
         /*
         * @brief Destroy the Login Menu object

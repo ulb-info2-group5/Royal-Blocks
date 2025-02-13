@@ -8,6 +8,7 @@
 
 #include "main_menu.hpp"
 
+// ### Public methods ###
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen) {}
 
 void MainMenu::render() {

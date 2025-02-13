@@ -13,7 +13,7 @@
 
 #include <string>
 
-
+// ### Public methods ###
 LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, std::string &title) : screen_(screen), title_(title) {}
 
 InputState LoginInput::render() {

@@ -1,13 +1,7 @@
-#include "login_menu/login_menu.hpp"
-#include <ftxui/component/component.hpp>
-#include <memory>
+#include "tui_manager.hpp"
 
 int main() {
-    std::shared_ptr<ftxui::ScreenInteractive> screen = std::shared_ptr<ftxui::ScreenInteractive>(
-        new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen())
-    );
-    // TODO: add loginInput to the loginMenu
-    LoginMenu loginMenu = LoginMenu(screen);
-    loginMenu.render();
+    TuiManager tuiManager;
+    tuiManager.run();
     return 0;
 }
