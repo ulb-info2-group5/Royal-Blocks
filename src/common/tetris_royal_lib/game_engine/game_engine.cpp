@@ -1,11 +1,11 @@
 #include "game_engine.hpp"
+#include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
+#include "effect_price/effect_price.hpp"
+#include "player_state/player_state.hpp"
+
 #include <optional>
 #include <variant>
-
-// TODO: Remove this.
-// Temporary, still have to implement a way of mapping each effect to a price.
-constexpr Energy EFFECT_PRICE = 5;
 
 static constexpr auto genFeaturesBitset =
     [](std::initializer_list<GameEngine::GameModeFeature> enabledFeatures)
@@ -64,9 +64,9 @@ void GameEngine::sendPenaltyEffect(PlayerID sender,
         return;
     }
 
-    // TODO: Decide whether a player an have no selected target at the beginning
-    // of the game.
-    // If so, one more case to handle with the optional (nullopt)
+    // TODO: Decide whether a player can have no selected target at the
+    // beginning of the game. If so, one more case to handle with the optional
+    // (nullopt)
 
     std::optional<PlayerID> target =
         pGameState_->getPlayerState(sender)->getPenaltyTarget();
@@ -79,7 +79,8 @@ bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
         return false;
     }
 
-    return pGameState_->getPlayerState(buyerID)->getEnergy() >= EFFECT_PRICE;
+    return pGameState_->getPlayerState(buyerID)->getEnergy()
+           >= getEffectPrice(effectType);
 }
 
 void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {
@@ -93,7 +94,8 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {
     }
 
     // Take the player's energy (effect price)
-    pGameState_->getPlayerState(buyerID)->decreaseEnergy(EFFECT_PRICE);
+    pGameState_->getPlayerState(buyerID)->decreaseEnergy(
+        getEffectPrice(effectType));
 
     std::visit(
         [&](auto &&effectType) {
@@ -103,8 +105,6 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {
                 pGameState_->getPlayerState(buyerID)->grantBonus(effectType);
             } else if constexpr (std::is_same_v<T, Penalty::PenaltyType>) {
                 // Penalty case
-                // TODO: this doesn't allow sending multiple penalties in a row.
-                // Needs to be adapted.
                 sendPenaltyEffect(buyerID, effectType);
             }
         },

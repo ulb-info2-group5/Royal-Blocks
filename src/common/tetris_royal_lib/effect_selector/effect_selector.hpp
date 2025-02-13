@@ -16,14 +16,9 @@ constexpr size_t NUM_BONUSES =
 constexpr size_t NUM_PENALTIES =
     static_cast<size_t>(Penalty::PenaltyType::NumPenaltyType);
 
-constexpr size_t EFFECTS_COUNT = NUM_BONUSES + NUM_PENALTIES;
+constexpr size_t NUM_EFFECTS = NUM_BONUSES + NUM_PENALTIES;
 
-// Ensure that we cannot create an EffectSelector with 0 effects in it at
-// compile time.
-static_assert(EFFECTS_COUNT > 0,
-              "EffectTypeArr must have at least one element");
-
-using EffectTypeArr = std::array<EffectType, EFFECTS_COUNT>;
+using EffectTypeArr = std::array<EffectType, NUM_EFFECTS>;
 
 /**
  * @class Represents the effects (bonuses/penalties) which the player can
