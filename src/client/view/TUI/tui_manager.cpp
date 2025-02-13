@@ -11,6 +11,9 @@
 #include "main_menu/main_menu.hpp"
 
 #include <chrono>
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/node.hpp>
+#include <memory>
 #include <thread>
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -47,15 +50,16 @@ void TuiManager::startScreen() {
 
     ftxui::Component title = ftxui::Renderer([&] {
         return exit ? ftxui::text("") : ftxui::vbox({
-            ftxui::filler(),
-            ftxui::hbox({
-                ftxui::filler(),
-                ftxui::text("Welcome to Tetris Royal !") | ftxui::bold | ftxui::border | ftxui::center,
-                ftxui::filler()
-            }),
-            ftxui::filler()
+            ftxui::text(R"(__          __  _                            _          _____                   _   _______   _        _       _ )"),
+            ftxui::text(R"(\ \        / / | |                          | |        |  __ \                 | | |__   __| | |      (_)     | |)"),
+            ftxui::text(R"( \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |__) |___  _   _  __ _| |    | | ___| |_ _ __ _ ___  | |)"),
+            ftxui::text(R"(  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  _  // _ \| | | |/ _` | |    | |/ _ \ __| '__| / __| | |)"),
+            ftxui::text(R"(   \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | | \ \ (_) | |_| | (_| | |    | |  __/ |_| |  | \__ \ |_|)"),
+            ftxui::text(R"(    \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_|  \_\___/ \__, |\__,_|_|    |_|\___|\__|_|  |_|___/ (_))"),
+            ftxui::text(R"(                                                                     __/ |                                       )"),
+            ftxui::text(R"(                                                                    |___/                                        )"),
         });
-    });
+    }) | ftxui::border | ftxui::center;
 
     // Use a thread to exit this display after 2 seconds
     std::thread([&] {
