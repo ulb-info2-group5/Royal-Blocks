@@ -18,20 +18,28 @@
  */
 class MainMenu {
     private:
+        /*
+         * @brief The screen that will be used to display the main menu
+         */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
+        /*
+         * @brief Boolean to know if the user wants to exit the main menu
+         */
+        bool exit_ = false;
+
     public:
-        /**
+        /*
          * @brief Construct a new Main Menu object
          */
         MainMenu(std::shared_ptr<ftxui::ScreenInteractive>);
 
-        /**
+        /*
          * @brief Destroy the Main Menu object
          */
         ~MainMenu() = default;
 
-        /**
+        /*
          * @brief Render the main menu screen with all the components
          *
          */

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(ftxui REQUIRED)
 
-add_executable(main main.cpp input/login_input.cpp login_menu/login_menu.cpp tui_manager.cpp)
+add_executable(main main.cpp input/login_input.cpp login_menu/login_menu.cpp tui_manager.cpp main_menu/main_menu.cpp)
 
 target_link_libraries(main PRIVATE ftxui::screen ftxui::dom ftxui::component)
 

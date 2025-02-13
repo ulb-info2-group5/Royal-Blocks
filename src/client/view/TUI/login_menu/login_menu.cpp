@@ -24,7 +24,6 @@ void LoginMenu::render() {
             if (loginInput_->render() == InputState::SUCCESS) {
                 exit_ = true;
                 screen_->ExitLoopClosure();
-                return;
             }
         }
     });
@@ -32,7 +31,6 @@ void LoginMenu::render() {
         if (loginInput_->render() == InputState::SUCCESS) {
             exit_ = true;
             screen_->ExitLoopClosure();
-            return;
         }
     });
 
@@ -47,7 +45,7 @@ void LoginMenu::render() {
         buttonExit,
     });
 
-    auto render = Renderer(component, [&] {
+    auto render = ftxui::Renderer(component, [&] {
         if (exit_) {
             screen_->ExitLoopClosure()();
         }

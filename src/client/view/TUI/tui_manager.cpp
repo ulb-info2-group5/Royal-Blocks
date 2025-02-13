@@ -8,6 +8,7 @@
 
 #include "tui_manager.hpp"
 #include "login_menu/login_menu.hpp"
+#include "main_menu/main_menu.hpp"
 
 #include <chrono>
 #include <thread>
@@ -34,7 +35,9 @@ TuiManager::TuiManager() {
 void TuiManager::run() {
     startScreen();
     LoginMenu loginMenu = LoginMenu(screen_, loginInput_, registerInput_);
+    MainMenu mainMenu = MainMenu(screen_);
     loginMenu.render();
+    mainMenu.render();
 }
 
 
