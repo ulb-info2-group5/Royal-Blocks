@@ -36,7 +36,21 @@ class MainMenu {
          * @param ranking The ranking of the players of the Endless mode to display,
          * the vector has to be already sorted by the score of the players
          */
-        void renderRanking(std::vector<std::tuple<int, std::string, int>> ranking);
+        void renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking);
+
+        /*
+         * @brief Render the friends list of the user to display with all friends dislayed is a button
+         *
+         * @param friendsList The list of the friends of the user to display
+         */
+        void renderFriendsList(const std::vector<std::string> &friendsList);
+
+        /*
+         * @brief Manage the profile of the user
+         *
+         * @param friendName The name of the friend to manage
+         */
+        void manageFriendlistScren(const std::string &friendName);
 
     public:
         /*
