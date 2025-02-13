@@ -22,11 +22,6 @@
 class LoginMenu {
     private:
         /*
-        * @brief Exit menu flag to exit the menu 
-        */
-        bool exit_ = false;
-
-        /*
         * @brief ScreenInteractive to render the menu
         */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;

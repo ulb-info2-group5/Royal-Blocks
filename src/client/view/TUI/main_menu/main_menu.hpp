@@ -24,12 +24,6 @@ class MainMenu {
          * @brief The screen that will be used to display the main menu
          */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
-
-        /*
-         * @brief Boolean to know if the user wants to exit the main menu
-         */
-        bool exit_ = false;
-
         /*
          * @brief Render the ranking of the players of the Endless mode
          *

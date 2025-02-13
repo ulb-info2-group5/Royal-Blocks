@@ -47,7 +47,7 @@ void MainMenu::render() {
         renderFriendsList(friendsList);
     });
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
-        exit_ = true;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component component = ftxui::Container::Vertical({
@@ -61,9 +61,6 @@ void MainMenu::render() {
     });
 
     ftxui::Component render = ftxui::Renderer(component, [&] {
-        if (exit_) {
-            screen_->Exit();
-        }
         return ftxui::vbox({
             ftxui::text("Main Menu") | ftxui::bold | ftxui::center,
             ftxui::separator(),
@@ -78,11 +75,6 @@ void MainMenu::render() {
             buttonExit->Render(),
         }) | ftxui::border | ftxui::center;
     });
-
-    if (exit_) {
-        screen_->Exit();
-        return;
-    }
 
     screen_->Loop(render);
 }

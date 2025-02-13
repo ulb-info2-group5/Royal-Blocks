@@ -22,22 +22,19 @@ void LoginMenu::render() {
             std::string addMessage = "Account created successfully ! You can now login";
             loginInput_->addMessage(addMessage);
             if (loginInput_->render() == InputState::SUCCESS) {
-                exit_ = true;
-                screen_->ExitLoopClosure();
+                screen_->ExitLoopClosure()();
             }
         }
     });
 
     ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
         if (loginInput_->render() == InputState::SUCCESS) {
-            exit_ = true;
-            screen_->ExitLoopClosure();
+            screen_->ExitLoopClosure()();
         }
     });
 
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
-        exit_ = true;
-        screen_->ExitLoopClosure();
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component component = ftxui::Container::Vertical({
@@ -47,9 +44,6 @@ void LoginMenu::render() {
     });
 
     ftxui::Component render = ftxui::Renderer(component, [&] {
-        if (exit_) {
-            screen_->ExitLoopClosure()();
-        }
         return ftxui::vbox({
             ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
             ftxui::separator(),
