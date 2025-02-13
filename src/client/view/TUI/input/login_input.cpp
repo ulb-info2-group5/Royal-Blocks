@@ -66,7 +66,7 @@ InputState LoginInput::render() {
             buttonBack->Render(),
             ftxui::text(msg),
             ftxui::text(message_),
-        }) | ftxui::border;
+        }) | ftxui::border | ftxui::center;
     });
 
     screen_->Loop(render);

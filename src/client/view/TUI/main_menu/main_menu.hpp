@@ -11,6 +11,8 @@
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <memory>
+#include <vector>
+#include <tuple>
 
 /**
  * @brief Main menu of the game that will be displayed to the user
@@ -27,6 +29,14 @@ class MainMenu {
          * @brief Boolean to know if the user wants to exit the main menu
          */
         bool exit_ = false;
+
+        /*
+         * @brief Render the ranking of the players of the Endless mode
+         *
+         * @param ranking The ranking of the players of the Endless mode to display,
+         * the vector has to be already sorted by the score of the players
+         */
+        void renderRanking(std::vector<std::tuple<int, std::string, int>> ranking);
 
     public:
         /*

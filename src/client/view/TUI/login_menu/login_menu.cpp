@@ -58,7 +58,7 @@ void LoginMenu::render() {
             buttonRegister->Render(),
             buttonLogin->Render(),
             buttonExit->Render(),
-        }) | ftxui::border;
+        }) | ftxui::border | ftxui::center;
     });
 
     screen_->Loop(render);
