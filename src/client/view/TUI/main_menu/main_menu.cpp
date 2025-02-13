@@ -15,18 +15,18 @@
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen) {}
 
 void MainMenu::render() {
-    auto buttonPlay = ftxui::Button("Play a game", [&] {});
-    auto buttonJoinGame = ftxui::Button("Join a game", [&] {});
-    auto buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {});
-    auto buttonLookRanking = ftxui::Button("Look at ranking", [&] {});
-    auto buttonManageProfile = ftxui::Button("Manage profile", [&] {});
-    auto buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {});
-    auto buttonExit = ftxui::Button("Exit", [&] {
+    ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {});
+    ftxui::Component buttonJoinGame = ftxui::Button("Join a game", [&] {});
+    ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {});
+    ftxui::Component buttonLookRanking = ftxui::Button("Look at ranking", [&] {});
+    ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {});
+    ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {});
+    ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         exit_ = true;
         screen_->ExitLoopClosure();
     });
 
-    auto component = ftxui::Container::Vertical({
+    ftxui::Component component = ftxui::Container::Vertical({
         buttonPlay,
         buttonJoinGame,
         buttonSendMessagesToFriends,
@@ -36,7 +36,7 @@ void MainMenu::render() {
         buttonExit,
     });
 
-    auto render = ftxui::Renderer(component, [&] {
+    ftxui::Component render = ftxui::Renderer(component, [&] {
         if (exit_) {
             screen_->ExitLoopClosure()();
         }

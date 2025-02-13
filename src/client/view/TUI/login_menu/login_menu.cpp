@@ -17,7 +17,7 @@
 LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<LoginInput> loginInput, std::shared_ptr<LoginInput> registerInput) : screen_(screen), loginInput_(loginInput), registerInput_(registerInput) {}
 
 void LoginMenu::render() {
-    auto buttonRegister = ftxui::Button("Register", [&] {
+    ftxui::Component buttonRegister = ftxui::Button("Register", [&] {
         if (registerInput_->render() == InputState::SUCCESS) {
             std::string addMessage = "Account created successfully ! You can now login";
             loginInput_->addMessage(addMessage);
@@ -27,25 +27,26 @@ void LoginMenu::render() {
             }
         }
     });
-    auto buttonLogin = ftxui::Button("Login", [&] {
+
+    ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
         if (loginInput_->render() == InputState::SUCCESS) {
             exit_ = true;
             screen_->ExitLoopClosure();
         }
     });
 
-    auto buttonExit = ftxui::Button("Exit", [&] {
+    ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         exit_ = true;
         screen_->ExitLoopClosure();
     });
 
-    auto component = ftxui::Container::Vertical({
+    ftxui::Component component = ftxui::Container::Vertical({
         buttonRegister,
         buttonLogin,
         buttonExit,
     });
 
-    auto render = ftxui::Renderer(component, [&] {
+    ftxui::Component render = ftxui::Renderer(component, [&] {
         if (exit_) {
             screen_->ExitLoopClosure()();
         }

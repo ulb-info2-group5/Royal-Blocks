@@ -9,6 +9,7 @@
 #include "login_input.hpp"
 
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
 
 #include <string>
@@ -23,7 +24,7 @@ InputState LoginInput::render() {
     ftxui::Component inputUsername = ftxui::Input(&username_, "Enter username");
     ftxui::Component inputPassword = ftxui::Input(&password_, "Enter password");
 
-    auto buttonSubmit = ftxui::Button("Submit", [&] {
+    ftxui::Component buttonSubmit = ftxui::Button("Submit", [&] {
         if (!username_.empty() && !password_.empty()) {
             // TODO: add logic with controller and server to check with the database for the register
             // TODO: add logic with controller and server to check with the database for the login
@@ -39,13 +40,13 @@ InputState LoginInput::render() {
         return state;
     });
 
-    auto buttonBack = ftxui::Button("Back", [&] {
+    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
         screen_->ExitLoopClosure()();
     });
 
-    auto component = ftxui::Container::Vertical({
+    ftxui::Component component = ftxui::Container::Vertical({
         inputUsername,
         inputPassword,
         buttonSubmit,
@@ -53,7 +54,7 @@ InputState LoginInput::render() {
     });
 
 
-    auto render = ftxui::Renderer(component, [&] {
+    ftxui::Component render = ftxui::Renderer(component, [&] {
         return ftxui::vbox({
             ftxui::text(title_) | ftxui::bold | ftxui::center,
             ftxui::separator(),

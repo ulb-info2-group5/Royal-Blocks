@@ -45,7 +45,7 @@ void TuiManager::run() {
 void TuiManager::startScreen() {
     bool exit = false;
 
-    auto title = ftxui::Renderer([&] {
+    ftxui::Component title = ftxui::Renderer([&] {
         return exit ? ftxui::text("") : ftxui::vbox({
             ftxui::filler(),
             ftxui::hbox({
