@@ -13,8 +13,6 @@
 
 using PlayerStateTetris = std::pair<PlayerState, Tetris>;
 
-using PlayerStateTetrisIt = std::vector<PlayerStateTetris>::iterator;
-
 class GameState : public GameStateView {
   private:
     GameMode gameMode_;
@@ -72,11 +70,52 @@ class GameState : public GameStateView {
      */
     Tetris *getTetris(PlayerID playerID);
 
+    class CircularIt {
+      private:
+        size_t currentIdx_;
+        std::vector<PlayerStateTetris> &playerToTetris_;
+
+      public:
+        CircularIt(std::vector<PlayerStateTetris> &playerToTetris,
+                   size_t startIdx)
+            : currentIdx_{startIdx}, playerToTetris_(playerToTetris) {}
+
+        PlayerStateTetris &operator*() const {
+            return playerToTetris_.at(currentIdx_);
+        }
+
+        CircularIt &operator++() {
+            currentIdx_ = (currentIdx_ + 1) % playerToTetris_.size();
+            return *this;
+        }
+
+        CircularIt &operator--() {
+            currentIdx_ = (currentIdx_ + playerToTetris_.size() - 1)
+                          % playerToTetris_.size();
+            return *this;
+        }
+
+        bool operator==(const CircularIt &other) const {
+            // TODO: Add this check to the operator must define operator== for
+            // PlayerState first for this:
+            // playerToTetris_ == other.playerToTetris_
+            return currentIdx_ == other.currentIdx_;
+        }
+
+        bool operator!=(const CircularIt &other) const {
+            return !operator==(other);
+        }
+    };
+
+    CircularIt getCircularItAt(size_t idx);
+
+    CircularIt getCircularItEnd();
+
     /**
-     * @brief Returns an iterator on the PlayerStateTetris that matches the
-     * given PlayerID.
+     * @brief Returns an iterator on the PlayerStateTetris that matches
+     * the given PlayerID.
      */
-    PlayerStateTetrisIt getPlayerToTetrisIt(PlayerID playerID);
+    CircularIt getCircularIt(PlayerID playerID);
 };
 
 #endif // GAME_STATE_HPP

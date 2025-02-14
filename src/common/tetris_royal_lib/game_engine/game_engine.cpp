@@ -2,8 +2,10 @@
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
 #include "effect_price/effect_price.hpp"
+#include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
+#include <cassert>
 #include <optional>
 #include <variant>
 
@@ -117,6 +119,44 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     }
 
     pGameState_->getPlayerState(playerID)->setPenaltyTarget(target);
+}
+
+// TODO
+void GameEngine::selectNextAliveTarget(PlayerID playerID) {
+    if (!checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
+        return;
+    }
+
+    // Assume that if no target had been chosen by this player previously,
+    // the target was the player himslef so that it chooses the player after
+    // himself (in the getPlayerToTetris() vector) as next target.
+    PlayerID prevTargetID =
+        pGameState_->getPlayerState(playerID)->getPenaltyTarget().value_or(
+            playerID);
+
+    GameState::CircularIt playerSelfIt = pGameState_->getCircularIt(playerID);
+
+    GameState::CircularIt prevTargetIt =
+        pGameState_->getCircularIt(prevTargetID);
+
+    GameState::CircularIt newTargetIt = prevTargetIt;
+
+    do {
+        ++newTargetIt;
+        // TODO: Check that this is correct
+        // avoid stopping the player himself
+        if (newTargetIt == playerSelfIt) {
+            ++newTargetIt;
+        }
+    } while (newTargetIt != prevTargetIt && !(*newTargetIt).first.isAlive());
+
+    // NOTE: This should never happen, if it does, the game should have ended
+    // earlier because there is only one player left.
+    assert(newTargetIt != playerSelfIt);
+
+    PlayerID newTargetID = (*newTargetIt).first.getPlayerID();
+
+    pGameState_->getPlayerState(playerID)->setPenaltyTarget(newTargetID);
 }
 
 void GameEngine::selectNextEffect(PlayerID playerID) {

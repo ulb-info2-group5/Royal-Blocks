@@ -59,7 +59,22 @@ class GameEngine {
      */
     void sendPenaltyEffect(PlayerID sender, Penalty::PenaltyType penaltyType);
 
+    // NOTE: just moved it to private
+    /**
+     * @brief Changes the given player's target to the new target.
+     * @param playerID The player whose target will be changed.
+     * @param target The new target.
+     */
+    void selectTarget(PlayerID playerID, PlayerID target);
+
   public:
+    /**
+     * @brief Changes the given player's target to the new target.
+     * @param playerID The player whose target will be changed.
+     * @param target The new target.
+     */
+    void selectNextAliveTarget(PlayerID playerID);
+
     /**
      * @brief Returns true if the given player has enough energy to buy the
      * given effect; false otherwise.
@@ -71,13 +86,6 @@ class GameEngine {
      * he had enough Energy).
      */
     void tryBuyEffect(PlayerID playerID, EffectType effectType);
-
-    /**
-     * @brief Changes the given player's target to the new target.
-     * @param playerID The player whose target will be changed.
-     * @param target The new target.
-     */
-    void selectTarget(PlayerID playerID, PlayerID target);
 
     /**
      * @brief Makes the given player select the next item in the effect
