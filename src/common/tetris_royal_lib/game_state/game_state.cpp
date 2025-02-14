@@ -1,5 +1,7 @@
 #include "game_state.hpp"
 #include "game_state_view.hpp"
+
+#include <algorithm>
 #include <optional>
 
 GameState::GameState(GameMode gameMode) : gameMode_{gameMode} {}
@@ -63,4 +65,11 @@ PlayerState *GameState::getPlayerState(PlayerID playerID) {
 
 Tetris *GameState::getTetris(PlayerID playerID) {
     return const_cast<Tetris *>(GameStateView::getTetris(playerID));
+}
+
+PlayerStateTetrisIt GameState::getPlayerToTetrisIt(PlayerID playerID) {
+    return std::find_if(playerToTetris_.begin(), playerToTetris_.end(),
+                        [playerID](const auto &element) {
+                            return element.first.getPlayerID() == playerID;
+                        });
 }

@@ -13,6 +13,8 @@
 
 using PlayerStateTetris = std::pair<PlayerState, Tetris>;
 
+using PlayerStateTetrisIt = std::vector<PlayerStateTetris>::iterator;
+
 class GameState : public GameStateView {
   private:
     GameMode gameMode_;
@@ -69,6 +71,12 @@ class GameState : public GameStateView {
      * @param playerID The player's ID.
      */
     Tetris *getTetris(PlayerID playerID);
+
+    /**
+     * @brief Returns an iterator on the PlayerStateTetris that matches the
+     * given PlayerID.
+     */
+    PlayerStateTetrisIt getPlayerToTetrisIt(PlayerID playerID);
 };
 
 #endif // GAME_STATE_HPP
