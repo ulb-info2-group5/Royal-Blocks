@@ -18,6 +18,19 @@ project(tetris_royal)
 
 # Find FTXUI package needed for the project
 find_package(ftxui REQUIRED)
+include(cmake/ftxui.cmake)
+
+add_library(ftxui-grid-container STATIC
+    include/ftxui-grid-container/grid-container.hpp
+    src/ftxui-grid-container/grid-container.cpp
+    )
+target_link_libraries(ftxui-grid-container PUBLIC ftxui::component)
+
+target_include_directories(ftxui-grid-container PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    )
+add_subdirectory(example)
 
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
