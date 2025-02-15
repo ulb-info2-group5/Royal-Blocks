@@ -14,6 +14,7 @@
 #include <vector>
 #include <tuple>
 
+#include "../messaging/messaging.hpp"
 /**
  * @brief Main menu of the game that will be displayed to the user
  * 
@@ -24,6 +25,8 @@ class MainMenu {
          * @brief The screen that will be used to display the main menu
          */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        
+
         /*
          * @brief Render the ranking of the players of the Endless mode
          *
@@ -45,6 +48,13 @@ class MainMenu {
          * @param friendName The name of the friend to manage
          */
         void manageFriendlistScren(const std::string &friendName);
+
+        /*
+        *@brief Launch and render the messagingMenu
+        *
+        */
+        void renderMessagingMenu(std::vector<std::string> &friendsList );
+
 
     public:
         /*

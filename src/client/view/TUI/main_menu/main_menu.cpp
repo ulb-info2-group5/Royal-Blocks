@@ -21,9 +21,17 @@
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen) {}
 
 void MainMenu::render() {
+    std::vector<std::string> friendsList = {
+        "Player1",
+        "Player2",
+        "ethan",
+        "readyPlayerOne",
+        "theBestPlayerOfTheGame"
+    };
+
     ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {});
     ftxui::Component buttonJoinGame = ftxui::Button("Join a game", [&] {});
-    ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {});
+    ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {renderMessagingMenu(friendsList);});
     ftxui::Component buttonLookRanking = ftxui::Button("Look at ranking", [&] {
         // TODO: It's an example, must remove it
         const std::vector<std::tuple<int, std::string, int>> ranking = {
@@ -37,13 +45,7 @@ void MainMenu::render() {
     });
     ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {});
     ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {
-        const std::vector<std::string> friendsList = {
-            "Player1",
-            "Player2",
-            "ethan",
-            "readyPlayerOne",
-            "theBestPlayerOfTheGame"
-        };
+        
         renderFriendsList(friendsList);
     });
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
@@ -206,3 +208,8 @@ void MainMenu::manageFriendlistScren(const std::string &friendName) {
     screen_->Loop(component);
 }
 
+void MainMenu::renderMessagingMenu(std::vector<std::string>& friendsList){
+    // very bad just for the tests
+    Messaging messagingMenue(screen_,friendsList );
+    messagingMenue.render();
+}
