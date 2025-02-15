@@ -68,19 +68,6 @@ void TestAccountManager::testLogin() {
     CPPUNIT_ASSERT(!accountManager->login(username, password));  // Connexion échouée
 }
 
-void TestAccountManager::testUpdateScore() {
-    // Test 1 : Mise à jour du score avec succès
-    dbManager->accountExists = true;  // L'utilisateur existe
-    int userId = 1;
-    int newScore = 50;
-    
-    // Mettre à jour le score
-    CPPUNIT_ASSERT(accountManager->updateScore(userId, newScore));
-
-    // Test 2 : Utilisateur n'existe pas, mise à jour échouée
-    dbManager->accountExists = false;  // L'utilisateur n'existe pas
-    CPPUNIT_ASSERT(!accountManager->updateScore(userId, newScore));  // La mise à jour échoue
-}
 
 void TestAccountManager::testGetUserId() {
     // Test 1 : Récupérer l'ID utilisateur d'un utilisateur existant

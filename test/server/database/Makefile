@@ -20,11 +20,14 @@ CPPFLAGS = -std=c++17 -I$(SRC_DIR) -I$(TEST_DIR) -Wall -g
 CXX = g++
 CXXFLAGS = $(CPPFLAGS) -fPIC
 
-# CppUnit
+# Bibliothèques à lier
 LIBS = -lcppunit -lsqlite3
 
 # Créer le répertoire de construction si nécessaire
 $(shell mkdir -p $(BUILD_SRC_DIR) $(BUILD_TEST_DIR))
+
+# Définition de DATABASE_PATH (ajustez le chemin selon votre projet)
+DATABASE_PATH = "/path/to/database"
 
 # Règle par défaut
 all: $(TEST_EXEC)
