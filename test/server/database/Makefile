@@ -13,15 +13,15 @@ TEST_FILES = $(TEST_DIR)/test_account_manager.cpp
 
 # Fichiers objets et exécutables dans le répertoire de construction
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(BUILD_SRC_DIR)/%.o) $(TEST_FILES:$(TEST_DIR)/%.cpp=$(BUILD_TEST_DIR)/%.o)
-TEST_EXEC = $(BUILD_DIR)/test_runner
+TEST_EXEC = $(BUILD_DIR)/test_account_manager
 
 # Bibliothèques et options de compilation
 CPPFLAGS = -std=c++17 -I$(SRC_DIR) -I$(TEST_DIR) -Wall -g
 CXX = g++
 CXXFLAGS = $(CPPFLAGS) -fPIC
 
-# Bibliothèques à lier
-LIBS = -lcppunit -lsqlite3
+# CppUnit
+CPPUNIT_LIBS = -lcppunit
 
 # Créer le répertoire de construction si nécessaire
 $(shell mkdir -p $(BUILD_SRC_DIR) $(BUILD_TEST_DIR))
@@ -34,11 +34,10 @@ all: $(TEST_EXEC)
 
 # Lier les fichiers objets pour créer l'exécutable
 $(TEST_EXEC): $(OBJ_FILES)
-	$(CXX) $(OBJ_FILES) -o $(TEST_EXEC) $(LIBS)
+	$(CXX) $(OBJ_FILES) -o $(TEST_EXEC) $(CPPUNIT_LIBS)
 
 # Compiler les fichiers source en fichiers objets
 $(BUILD_SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
-	mkdir -p $(dir $@)
 	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 # Compiler les fichiers de test en fichiers objets
