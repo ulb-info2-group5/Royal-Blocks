@@ -50,6 +50,13 @@ class ScreenManager {
         void renderComponent(const ftxui::Component &component);
 
         /*
+        * @brief Render the component on the screen without exiting the previous loop
+        *
+        * @param component The component to render on the screen
+        */
+        void renderComponentNoExitLoop(const ftxui::Component &component);
+
+        /*
         * @brief Exit the screen manager and close the screen
         */
         void exit();

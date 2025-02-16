@@ -48,7 +48,6 @@ void MainMenu::render() {
     });
     ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {});
     ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {
-        
         renderFriendsList(friendsList);
     });
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
@@ -126,7 +125,6 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         exit = true;
-        render();
     });
 
     ftxui::Component container = ftxui::Container::Vertical({
@@ -135,7 +133,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
         if (exit) {
-            render();
+            screenManager_->exitLoop();
         }
         return ftxui::vbox({
             ftxui::text("Endless mod Ranking") | ftxui::bold | ftxui::center,
@@ -146,7 +144,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
         }) | ftxui::border | ftxui::center;
     });
 
-    screenManager_->renderComponent(component);    
+    screenManager_->renderComponentNoExitLoop(component);    
 }
 
 
@@ -155,7 +153,7 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
     std::vector<ftxui::Component> buttons;
     for (auto& friendName : friendsList) {
         buttons.push_back(ftxui::Button(friendName, [&] {
-            manageFriendlistScren(friendName);
+            manageFriendlistScreen(friendName);
         }));
     }
 
@@ -171,7 +169,7 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
         if (back) {
-            render();
+            screenManager_->exitLoop();
         }
         return ftxui::vbox({
             ftxui::text("Friends list") | ftxui::bold | ftxui::center,
@@ -180,10 +178,10 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
         }) | ftxui::border | ftxui::center;
     });
 
-    screenManager_->renderComponent(component);
+    screenManager_->renderComponentNoExitLoop(component);    
 }
 
-void MainMenu::manageFriendlistScren(const std::string &friendName) {
+void MainMenu::manageFriendlistScreen(const std::string &friendName) {
     bool exit = false;
 
     ftxui::Component buttonYes = ftxui::Button("Yes", [&] {}); // TODO: Implement the function to send to server to remove the friend
@@ -198,7 +196,7 @@ void MainMenu::manageFriendlistScren(const std::string &friendName) {
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
         if (exit) {
-            render();
+            screenManager_->exitLoop();
         }
         return ftxui::vbox({
             ftxui::text("Do you want to remove " + friendName + " from your friends list ?") | ftxui::bold | ftxui::center,
@@ -208,7 +206,7 @@ void MainMenu::manageFriendlistScren(const std::string &friendName) {
         }) | ftxui::border | ftxui::center;
     });
 
-    screenManager_->renderComponent(component);
+    screenManager_->renderComponentNoExitLoop(component);    
 }
 
 void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){

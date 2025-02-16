@@ -43,7 +43,7 @@ class MainMenu {
          *
          * @param friendName The name of the friend to manage
          */
-        void manageFriendlistScren(const std::string &friendName);
+        void manageFriendlistScreen(const std::string &friendName);
 
         /*
         *@brief Launch and render the messagingMenu

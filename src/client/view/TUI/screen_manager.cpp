@@ -5,6 +5,7 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <thread>
+#include <csignal>
 
 // ### Public methods ###
 ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()), component_(nullptr), exit_(false) {}
@@ -29,6 +30,12 @@ void ScreenManager::renderComponent(const ftxui::Component &component) {
     screen_.Loop(component_);
 
 }
+
+void ScreenManager::renderComponentNoExitLoop(const ftxui::Component &component) {
+    component_ = component;
+    screen_.Loop(component_);
+}
+
 
 void ScreenManager::exit() {
     exit_ = true;
