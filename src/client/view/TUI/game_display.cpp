@@ -34,13 +34,13 @@ ftxui::Color getFTXUIColor(colors color)
 
 // constructor
 
-GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards, 
+GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                         PlayMode playMode, uint8_t numberPlayers, 
-                        std::shared_ptr<ftxui::ScreenInteractive> screenManager) : 
+                        ftxui::ScreenInteractive screenManager) : 
                         vectorBoards_{boards},
                         playMode_{playMode},
                         totalPlayers_{numberPlayers},
-                        screen_{screenManager}
+                        screen_{std::move(screenManager)}
 {
     //initialialising for the preview
     score_ = 100000;
@@ -54,8 +54,20 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::array<std::array<color
     pixel_ = ftxui::Pixel();
 
     drawPlayerBoard();
-    if (playMode_ != PlayMode::ENDLESS) drawOpponentsBoard();
-    else : opBoards_ = {};
+    if (playMode_ != PlayMode::ENDLESS) 
+    {
+        drawOpponentsBoard();
+    } else 
+    {
+        opBoards_ = {};
+    }
+
+    if (playMode_ == PlayMode::ROYAL) 
+    {
+        effects_ = {"bon1", "bon2", "bon3", "bon4", "bon5", "bon6",
+                    "bon7", "bon8", "bon9"};
+    }
+
 }
 
 //GameDisplay::GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
@@ -193,6 +205,34 @@ void GameDisplay::displayMiddleSide()
         score,
     });
 }
+
+void GameDisplay::displayLeftSide()
+{
+    ftxui::Components lines;
+
+    for (uint8_t i = 0; i < 3; ++i)
+    {
+        ftxui::Component line = ftxui::Container::Horizontal({
+            ftxui::Button(
+                effects_.at(i), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            ),
+            ftxui::Button(
+                effects_.at(i + 1), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            ),
+            ftxui::Button(
+                effects_.at(i + 2), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            )
+        });
+
+        lines.push_back(line);
+    }
+
+    displayLeftSide_ = ftxui::Container::Vertical({
+        lines.at(0),
+        lines.at(1),
+        lines.at(2)
+    });
+}
 //void GameDisplay::drawEndlessMode() override;
 
 //void GameDisplay::drawDualMode() override;
@@ -225,5 +265,5 @@ void GameDisplay::drawWindow() override
         case PlayMode::ROYAL : drawRoyalMode(); break;
     };
 
-    screen_->loop(displayWindow_);
+    screen_.loop(displayWindow_);
 }

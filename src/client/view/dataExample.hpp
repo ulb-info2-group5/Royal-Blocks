@@ -33,7 +33,7 @@ const std::vector<std::vector<colors>> EXEMPLE_BOARD =
 // const std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>> EXEMPLE_BOARDS = {EXEMPLE_BOARD};  
 const std::vector<std::vector<std::vector<colors>>> EXEMPLE_BOARDS = {EXEMPLE_BOARD, EXEMPLE_BOARD, EXEMPLE_BOARD,
                                                                     EXEMPLE_BOARD, EXEMPLE_BOARD, EXEMPLE_BOARD,
-                                                                    EXEMPLE_BOARD, EXEMPLE_BOARD};
+                                                                    EXEMPLE_BOARD, EXEMPLE_BOARD, EXEMPLE_BOARD};
 
 // const userInfo EXEMPLE_USER_INFO = {.state = UserState::STATE_INITIAL,
 //                                     .name = "lucas12345",

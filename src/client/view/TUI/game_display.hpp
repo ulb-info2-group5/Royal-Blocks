@@ -35,10 +35,11 @@ class GameDisplay : public IGame
     private:
         // std::shared_ptr<GameState> partyInfo_;
         // std::shared_ptr<PlayerState> player_;
-        std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> vectorBoards_;
+        std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> vectorBoards_;
         PlayMode playMode_;
         uint8_t totalPlayers_;
         uint32_t score_;
+        std::vector<std::string> effects_ = {};
 
         ftxui::Component playerBoard_;
         ftxui::Components opBoards_;
@@ -49,7 +50,7 @@ class GameDisplay : public IGame
         ftxui::Component displayLeftSide_;
         ftxui::Component displayWindow_;
 
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        ftxui::ScreenInteractive screen_;
 
     protected:
 
@@ -75,9 +76,9 @@ class GameDisplay : public IGame
 
     public: 
         //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
-        GameDisplay(std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards, 
+        GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                     PlayMode playMode, uint8_t numberPlayers, 
-                    std::shared_ptr<ftxui::ScreenInteractive> screenManager);
+                    ftxui::ScreenInteractive screen);
 
         ~GameDisplay() = default;
 
