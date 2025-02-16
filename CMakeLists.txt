@@ -25,8 +25,5 @@ endif()
 # tetris_lib
 add_subdirectory(src/common/tetris_lib)
 
-# tetris_royal_lib
-add_subdirectory(src/common/tetris_royal_lib)
-
-# Make lsp's aware of our libraries (make includes work basically)
+# Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)

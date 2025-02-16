@@ -8,5 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 if(TEST_SOURCES)
     add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES})
 
-    target_link_libraries(${PROJECT_NAME}_tests PRIVATE ${PROJECT_NAME}_lib cppunit)
+    # TODO: link against more than just tetris_lib
+    # (tetris_royal_lib and all libs that we wrote tests for)
+    target_link_libraries(${PROJECT_NAME}_tests PRIVATE tetris_lib cppunit)
 endif()

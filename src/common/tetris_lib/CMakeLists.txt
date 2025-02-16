@@ -3,11 +3,16 @@ file(GLOB_RECURSE SOURCES_TETRIS_LIB
     *.cpp
 )
 
-
-# Make lsp's aware of our libraries (make includes work basically)
-set(CMAKE_EXPORT_COMPILE_COMMANDS True)
+include(../../../third_party/glaze.cmake)
 
 # add tetris_lib as lib
 add_library(tetris_lib STATIC ${SOURCES_TETRIS_LIB})
 
+target_link_libraries(tetris_lib
+  PUBLIC glaze::glaze
+)
+
 target_include_directories(tetris_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Make lsp's aware of our libraries (make includes work basically)
+set(CMAKE_EXPORT_COMPILE_COMMANDS True)
