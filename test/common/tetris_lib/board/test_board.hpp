@@ -1,4 +1,4 @@
-#include "../../../../src/common/tetris_lib/board/board.hpp"
+#include "board/board.hpp"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

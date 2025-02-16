@@ -1,6 +1,6 @@
-#include "../../../../src/common/tetris_lib/tetris/tetris.hpp"
+#include "tetris/tetris.hpp"
 
-#include "../../../../src/common/tetris_lib/tetromino/tetromino_shapes.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

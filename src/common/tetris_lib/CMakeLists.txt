@@ -14,5 +14,5 @@ target_link_libraries(tetris_lib
 
 target_include_directories(tetris_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Make lsp's aware of our libraries (make includes work basically)
+# Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
