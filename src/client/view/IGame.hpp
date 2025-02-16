@@ -7,9 +7,18 @@
 
 class IGame 
 {
-    public:
+    protected : 
 
-    virtual ~IGame() = default;
+    virtual void drawPlayerBoard() = 0;
+
+    virtual void drawOpponentsBoard() = 0;
+
+    //virtual void drawPieceQueue() = 0;
+
+    //virtual void drawPlayerInfo() = 0;
+
+    // not sure of the name
+    //virtual void drawMenuOptions() = 0;
 
    // virtual void changePlayerState() = 0;
 
@@ -19,16 +28,17 @@ class IGame
 
     //virtual void changePieceInStock() = 0;
 
-    virtual void drawPlayerBoard() = 0;
+    // virtual void drawEndlessMode() = 0;
 
-    //virtual void drawOpponentsBoard() = 0;
+    // virtual void drawDualMode() = 0;
 
-    //virtual void drawPieceQueue() = 0;
+    // virtual void drawClassicMode() = 0;
 
-    //virtual void drawPlayerInfo() = 0;
+    virtual void drawRoyalMode() = 0;
 
-    // not sure of the name
-    //virtual void drawMenuOptions() = 0;
+    public:
+
+    virtual ~IGame() = default;
 
     virtual void drawWindow() = 0;
 
