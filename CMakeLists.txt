@@ -24,9 +24,17 @@ endif()
 
 # tetris_lib
 add_subdirectory(src/common/tetris_lib)
-
 # database_lib
 add_subdirectory(src/server/database)
 
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
+
+file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
+    # WARN: do not include the main's here
+    src/*.cpp
+)
+
+# tetris_royal_lib
+add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
