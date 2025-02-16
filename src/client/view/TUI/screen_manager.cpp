@@ -1,51 +1,49 @@
-/**
- * @file tui_manager.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief TuiManager class definition file
- * @date 2025-02-13
- * 
- */
-
-#include "tui_manager.hpp"
+#include "screen_manager.hpp"
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
 
-#include <chrono>
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/dom/node.hpp>
-#include <memory>
-#include <thread>
 #include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <thread>
 
 // ### Public methods ###
-TuiManager::TuiManager() {
-    screen_ = std::shared_ptr<ftxui::ScreenInteractive>(
-        new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen())
-    );
-    std::string login = "Login";
-    std::string signIn = "Sign in";
-    std::string loginInstruction = "Please enter your username and password to login";
-    std::string registerInstruction = "Please enter a username and password to create an account";
+ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()), component_(nullptr), exit_(false) {}
 
-    loginInput_ = std::shared_ptr<LoginInput>(new LoginInput(screen_, login));
-    registerInput_ = std::shared_ptr<LoginInput>(new LoginInput(screen_, signIn));
+void ScreenManager::run() {
+    LoginMenu loginMenu = LoginMenu(this);
+    MainMenu mainMenu = MainMenu(this);
 
-    loginInput_->addInstruction(loginInstruction);
-    registerInput_->addInstruction(registerInstruction);
+    drawStartScreen();
+    loginMenu.render();
+    if (exit_) {
+        return;
+    }
+    mainMenu.render();
 }
 
-void TuiManager::run() {
-    startScreen();
-    LoginMenu loginMenu = LoginMenu(screen_, loginInput_, registerInput_);
-    MainMenu mainMenu = MainMenu(screen_);
-    loginMenu.render();
-    mainMenu.render();
+void ScreenManager::renderComponent(const ftxui::Component &component) {
+    if (component_ != nullptr) {
+        screen_.ExitLoopClosure();
+    }
+    component_ = component;
+    screen_.Loop(component_);
+
+}
+
+void ScreenManager::exit() {
+    exit_ = true;
+    exitLoop();
+}
+
+void ScreenManager::exitLoop() {
+    screen_.ExitLoopClosure()();
+    component_ = nullptr;
 }
 
 
 // ### Private methods ###
-void TuiManager::startScreen() {
+void ScreenManager::drawStartScreen() {
+
     bool exit = false;
 
     ftxui::Component title = ftxui::Renderer([&] {
@@ -63,11 +61,11 @@ void TuiManager::startScreen() {
 
     // Use a thread to exit this display after 2 seconds
     std::thread([&] {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(3));
         exit = true;
-        screen_->PostEvent(ftxui::Event::Custom); // Refresh the screen to exit the display after 2 seconds
-        screen_->ExitLoopClosure()();
+        screen_.PostEvent(ftxui::Event::Custom); // Refresh the screen to exit the display after 2 seconds
+        screen_.ExitLoopClosure()();
     }).detach();
 
-    screen_->Loop(title);
+    renderComponent(title);    
 }

@@ -5,13 +5,12 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/mouse.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <memory>
 #include <string>
 #include <vector>
 
 using namespace ftxui;
 
-Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive>& screen, std::vector<std::string>& friends) : screen_(screen), friends_(friends) {
+Messaging::Messaging(ScreenManager *screenManager, const std::vector<std::string>& friends) : screenManager_(screenManager), friends_(friends) {
     initMessaging();
 }
 
@@ -105,7 +104,6 @@ void Messaging::render(){
 
         });
     });
-    screen_->Loop(render);
 
-
+    screenManager_->renderComponent(render);
 }

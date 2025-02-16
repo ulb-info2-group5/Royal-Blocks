@@ -10,22 +10,18 @@
 #define MAIN_MENU_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
-#include <memory>
 #include <vector>
 #include <tuple>
 
-#include "../messaging/messaging.hpp"
+#include "../screen_manager.hpp"
+
 /**
  * @brief Main menu of the game that will be displayed to the user
  * 
  */
 class MainMenu {
     private:
-        /*
-         * @brief The screen that will be used to display the main menu
-         */
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
-        
+        ScreenManager *screenManager_;
 
         /*
          * @brief Render the ranking of the players of the Endless mode
@@ -53,14 +49,14 @@ class MainMenu {
         *@brief Launch and render the messagingMenu
         *
         */
-        void renderMessagingMenu(std::vector<std::string> &friendsList );
+        void renderMessagingMenu(const std::vector<std::string> &friendsList );
 
 
     public:
         /*
          * @brief Construct a new Main Menu object
          */
-        MainMenu(std::shared_ptr<ftxui::ScreenInteractive>);
+        MainMenu(ScreenManager *screenManager);
 
         /*
          * @brief Destroy the Main Menu object
@@ -68,7 +64,7 @@ class MainMenu {
         ~MainMenu() = default;
 
         /*
-         * @brief Render the main menu screen with all the components
+         * @brief Render the main menu screen with all the components by asking the screen manager to render the components
          *
          */
         void render();

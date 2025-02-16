@@ -7,6 +7,7 @@
  */
 
 #include "login_input.hpp"
+#include "../login_menu/login_menu.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -15,10 +16,9 @@
 #include <string>
 
 // ### Public methods ###
-LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, std::string &title) : screen_(screen), title_(title) {}
+LoginInput::LoginInput(LoginMenu *loginMenu, ScreenManager *screenManager, std::string title, InputType type) : loginMenu_(loginMenu), screenManager_(screenManager), title_(title), type_(type) {}
 
-InputState LoginInput::render() {
-    InputState state = InputState::WAITING;
+void LoginInput::render() {
     std::string msg;
 
     ftxui::Component inputUsername = ftxui::Input(&username_, "Enter username");
@@ -28,22 +28,23 @@ InputState LoginInput::render() {
         if (!username_.empty() && !password_.empty()) {
             // TODO: add logic with controller and server to check with the database for the register
             // TODO: add logic with controller and server to check with the database for the login
-            state = InputState::SUCCESS;
-            screen_->ExitLoopClosure()();
-            return state;
-
+            if (type_ == InputType::LOGIN) {
+                loginMenu_->addOption(LoginOption::LOGIN_SUCCESS);
+            } else {
+                loginMenu_->addOption(LoginOption::REGISTER_SUCCESS);
+            }
+            screenManager_->exitLoop();
         } else {
             username_.clear();
             password_.clear();
             msg = "Please enter a valid username and a valid password";
         }
-        return state;
     });
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
-        screen_->ExitLoopClosure()();
+        screenManager_->exitLoop();
     });
 
     ftxui::Component component = ftxui::Container::Vertical({
@@ -69,8 +70,7 @@ InputState LoginInput::render() {
         }) | ftxui::border | ftxui::center;
     });
 
-    screen_->Loop(render);
-    return state;
+    screenManager_->renderComponent(render);
 }
 
 void LoginInput::addInstruction(std::string &instruction) {

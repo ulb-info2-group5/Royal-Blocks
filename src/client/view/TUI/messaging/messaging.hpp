@@ -2,17 +2,16 @@
 #define MESSAGESING_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
-#include <memory>
 #include <vector>
-#include <tuple>
 #include <map>
+#include "../screen_manager.hpp"
 
 using namespace std;
 
 class Messaging {
     private :  
 
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        ScreenManager *screenManager_;
         std::map<std::string, std::vector<std::string>> conversations;
         std::vector<std::string> friends_;
         int selectedFriend = 0;
@@ -22,14 +21,24 @@ class Messaging {
         void initMessaging();
 
     public : 
-        Messaging(std::shared_ptr<ftxui::ScreenInteractive>& screen, std::vector<std::string>& friends) ; 
+        /*
+        * @brief Construct a new Messaging object
+        */
+        Messaging(ScreenManager *screenManager, const std::vector<std::string>& friends) ; 
+
+        /*
+        * @brief Destroy the Messaging object
+        */
+        ~Messaging() = default;
+
+        /*
+        * @brief Render the messaging screen with all the components by asking the screen manager to render the components
+        */
         void render();
+
         void addFriends(string friendName);
+        
         void addMessage(string message);
-
-
-
-
 };
 
 #endif 

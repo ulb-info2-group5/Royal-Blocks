@@ -14,27 +14,28 @@
 #include <ftxui/dom/elements.hpp>
 
 // ### Public methods ###
-LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<LoginInput> loginInput, std::shared_ptr<LoginInput> registerInput) : screen_(screen), loginInput_(loginInput), registerInput_(registerInput) {}
+LoginMenu::LoginMenu(ScreenManager *screenManager, LoginOption option) : screenManager_(screenManager), option_(option), loginInput_(this, screenManager_, "Login", InputType::LOGIN), registerInput_(this, screenManager_, "Sign in", InputType::REGISTER) {
+    std::string loginInstruction = "Please enter your username and password to login";
+    std::string registerInstruction = "Please enter a username and a password to create an account";
+    loginInput_.addInstruction(loginInstruction);
+    registerInput_.addInstruction(registerInstruction);
+}
 
 void LoginMenu::render() {
+    checkOption();
+
     ftxui::Component buttonRegister = ftxui::Button("Register", [&] {
-        if (registerInput_->render() == InputState::SUCCESS) {
-            std::string addMessage = "Account created successfully ! You can now login";
-            loginInput_->addMessage(addMessage);
-            if (loginInput_->render() == InputState::SUCCESS) {
-                screen_->ExitLoopClosure()();
-            }
-        }
+        registerInput_.render();
+        checkOption();
     });
 
     ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
-        if (loginInput_->render() == InputState::SUCCESS) {
-            screen_->ExitLoopClosure()();
-        }
+        loginInput_.render();
+        checkOption();
     });
 
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
-        screen_->ExitLoopClosure()();
+        screenManager_->exit();
     });
 
     ftxui::Component component = ftxui::Container::Vertical({
@@ -44,6 +45,9 @@ void LoginMenu::render() {
     });
 
     ftxui::Component render = ftxui::Renderer(component, [&] {
+        if (exit_) {
+            screenManager_->exitLoop();
+        }
         return ftxui::vbox({
             ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
             ftxui::separator(),
@@ -55,5 +59,22 @@ void LoginMenu::render() {
         }) | ftxui::border | ftxui::center;
     });
 
-    screen_->Loop(render);
+    screenManager_->renderComponent(render);
+}
+
+void LoginMenu::addOption(const LoginOption option) {
+    option_ = option;
+}
+
+void LoginMenu::checkOption() {
+    if (option_ == LoginOption::LOGIN_SUCCESS) {
+        exit_ = true;
+    }
+    else if (option_ == LoginOption::REGISTER_SUCCESS) {
+        std::string msg = "Account created successfully, you can now login";
+        loginInput_.addMessage(msg);
+        loginInput_.render();
+        exit_ = true;
+    }
+    
 }

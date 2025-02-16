@@ -1,7 +1,7 @@
-#include "tui_manager.hpp"
+#include "screen_manager.hpp"
 
 int main() {
-    TuiManager tuiManager;
-    tuiManager.run();
+    ScreenManager screenManager;
+    screenManager.run();
     return 0;
 }
