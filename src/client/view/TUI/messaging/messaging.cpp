@@ -45,6 +45,12 @@ void Messaging::render(){
     });
 
 
+    auto buttonBack = ftxui::Button("Back", [&] {
+        newMessage.clear();
+        newFriend.clear();
+        screenManager_->exitLoop();
+    });
+
     auto sidebar = Container::Vertical({
         friends_menu,
     });
@@ -52,6 +58,7 @@ void Messaging::render(){
     auto addMenue = Container::Vertical({
       addFriendInput,
         addFriendButton,
+        buttonBack,
     });
 
     auto chatDisplay = Renderer([&] {
@@ -61,7 +68,7 @@ void Messaging::render(){
                 chat_elements.push_back(text(msg) | bold | color(Color::Yellow));
             }
         }
-        return vbox(chat_elements) | flex;
+        return vbox(chat_elements) | flex ;
     });
 
     auto main_container = Container::Horizontal({
@@ -95,11 +102,18 @@ void Messaging::render(){
             }) | border | flex,
             separator(),
             vbox({
-              text("Ajouter un ami") | bold | color(Color::Green) | center,
+              text("-- Ajouter un ami --") | bold | color(Color::Green) | center,
                 separator(),
+                separatorEmpty(),
                 addFriendInput->Render(),
                 separator(),
                 addFriendButton->Render(),
+                separator(),
+                separatorEmpty(),
+                separatorEmpty(),
+                separator(),
+
+                buttonBack->Render(),
             }) | border,
 
         });
