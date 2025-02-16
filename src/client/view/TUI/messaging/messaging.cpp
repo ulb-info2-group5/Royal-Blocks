@@ -16,7 +16,7 @@ Messaging::Messaging(ScreenManager *screenManager, const std::vector<std::string
 
 void Messaging::initMessaging(){
     for (const auto& friend_name : friends_) {
-        conversations[friend_name] = {friend_name + ": Salut !", "Comment ça va ?"};
+        conversations[friend_name] = {Message{1, friend_name + " : test bonjour "} };
     }
 }
 
@@ -38,9 +38,8 @@ void Messaging::render(){
 
     auto messageInput = Input(&newMessage, "Écrire un message...");
     auto sendButton = Button("Envoyer", [&] {
-        if (!newMessage.empty() && !friends_.empty()) {
-            conversations[friends_[static_cast<size_t>(selectedFriend)]].push_back(newMessage);
-            newMessage.clear();
+        if (!newMessage.empty() && !friends_.empty()) { 
+            addMessage(newMessage);
         }
     });
 
@@ -65,7 +64,12 @@ void Messaging::render(){
         Elements chat_elements;
         if (!friends_.empty()) {
             for (const auto& msg : conversations[friends_[static_cast<size_t>(selectedFriend)]]) {
-                chat_elements.push_back(text(msg) | bold | color(Color::Yellow));
+                if (msg.idSender != userId){
+                    chat_elements.push_back(text(msg.message) | bold | color(Color::Yellow));
+                }else {
+                    chat_elements.push_back(text(msg.message) | bold | color(Color::DarkCyan));
+                }
+                
             }
         }
         return vbox(chat_elements) | flex ;
@@ -84,7 +88,7 @@ void Messaging::render(){
     auto render = Renderer(main_container, [&] {
         return hbox({
             vbox({
-                text(" --- LISTE AMIS --- ") | bold | color(Color::Cyan) | center,
+                text(" --- LISTE AMIS --- ") | bold | color(Color::Green) | center,
                 separator(),
                 friends_menu->Render(),
                 
@@ -120,4 +124,9 @@ void Messaging::render(){
     });
 
     screenManager_->renderComponent(render);
+}
+
+void Messaging::addMessage(const string &message){
+    conversations[friends_[static_cast<size_t>(selectedFriend)]].push_back(Message{userId, message});
+    newMessage.clear();
 }
