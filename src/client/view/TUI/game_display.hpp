@@ -50,7 +50,7 @@ class GameDisplay : public IGame
         ftxui::Component displayLeftSide_;
         ftxui::Component displayWindow_;
 
-        ftxui::ScreenInteractive screen_;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
     protected:
 
@@ -78,7 +78,7 @@ class GameDisplay : public IGame
         //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
         GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                     PlayMode playMode, uint8_t numberPlayers, 
-                    ftxui::ScreenInteractive screen);
+                    std::shared_ptr<ftxui::ScreenInteractive> &screen);
 
         ~GameDisplay() = default;
 

@@ -36,11 +36,11 @@ ftxui::Color getFTXUIColor(colors color)
 
 GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                         PlayMode playMode, uint8_t numberPlayers, 
-                        ftxui::ScreenInteractive screenManager) : 
+                        std::shared_ptr<ftxui::ScreenInteractive> &screenManager) : 
                         vectorBoards_{boards},
                         playMode_{playMode},
                         totalPlayers_{numberPlayers},
-                        screen_{std::move(screenManager)}
+                        screen_{screenManager}
 {
     //initialialising for the preview
     score_ = 100000;
@@ -71,6 +71,7 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
 }
 
 //GameDisplay::GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
+
 
 // protected methods
 
