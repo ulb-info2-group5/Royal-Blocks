@@ -22,7 +22,9 @@ void Messaging::initMessaging(){
     }
 }
 
-void Messaging::render(){
+MessagingState Messaging::render(){
+    MessagingState res = MessagingState::NONE;
+
     //
     auto friends_menu = Menu(&friends_, &selectedFriend);
 
@@ -49,6 +51,7 @@ void Messaging::render(){
     auto buttonBack = ftxui::Button("Back", [&] {
         newMessage.clear();
         newFriend.clear();
+        res = MessagingState::BACK;
         screen_->ExitLoopClosure()();
     });
 
@@ -126,6 +129,8 @@ void Messaging::render(){
     });
 
     screen_->Loop(render);
+
+    return res;
 }
 
 void Messaging::addMessage(const string &message){

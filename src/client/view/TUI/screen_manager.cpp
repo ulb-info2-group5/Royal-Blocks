@@ -7,6 +7,7 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <string>
 #include <thread>
+#include <vector>
 
 // ### Public methods ###
 ScreenManager::ScreenManager() {
@@ -110,17 +111,55 @@ void ScreenManager::manageMainMenu() {
             std::exit(0);
             break;
         
-        case MainMenuState::LOOK_RANKING:
+        case MainMenuState::LOOK_RANKING: {
+            // TODO: remove it because it's an example
+            // TODO: communicate with the server to get the ranking
+            std::vector<std::tuple<int, std::string, int>> ranking = {};
+            ranking.push_back(std::make_tuple(1, "Player1", 100));
+            ranking.push_back(std::make_tuple(2, "Player2", 90));
+            ranking.push_back(std::make_tuple(3, "Player3", 80));
+            ranking.push_back(std::make_tuple(4, "Player4", 70));
+            ranking.push_back(std::make_tuple(5, "Player5", 60));
+
+            mainMenu_.renderRanking(ranking);
+            manageMainMenu();
             break;
+        }
             
-        case MainMenuState::MANAGE_FRIENDS_LIST:
+        case MainMenuState::MANAGE_FRIENDS_LIST: {
+            // TODO: remove it because it's an example
+            // TODO: communicate with the server to get the friendsList
+            std::vector<std::string> friendsList = {
+                "Player1",
+                "Player2",
+                "ethan",
+                "readyPlayerOne",
+                "theBestPlayerOfTheGame"
+            };
+
+            mainMenu_.renderFriendsManager(friendsList);
+            manageMainMenu();
             break;
+        }
             
         case MainMenuState::MANAGE_PROFILE:
             break;
             
-        case MainMenuState::SEND_MESSAGES:
+        case MainMenuState::SEND_MESSAGES: {
+            // TODO: remove it because it's an example
+            // TODO: communicate with the server to get the friends list
+            std::vector<std::string> friendsList = {
+                "Player1",
+                "Player2",
+                "ethan",
+                "readyPlayerOne",
+                "theBestPlayerOfTheGame"
+            };
+    
+            mainMenu_.renderMessagingMenu(friendsList);
+            manageMainMenu();
             break;
+        }
             
         default:
             throw std::runtime_error("Invalid MainMenuState");

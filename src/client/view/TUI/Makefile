@@ -9,7 +9,7 @@ build:
 
 # Supprimer les fichiers générés
 clean:
-	rm -rf build
+	rm -rf build main
 
 # Exécuter le programme après compilation
 run: build

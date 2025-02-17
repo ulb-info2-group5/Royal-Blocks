@@ -28,14 +28,6 @@ MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_(
 MainMenuState MainMenu::render() {
     MainMenuState res = MainMenuState::NONE;
 
-    std::vector<std::string> friendsList = {
-        "Player1",
-        "Player2",
-        "ethan",
-        "readyPlayerOne",
-        "theBestPlayerOfTheGame"
-    };
-
     ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {
         res = MainMenuState::PLAY;
         screen_->ExitLoopClosure()();
@@ -97,9 +89,7 @@ MainMenuState MainMenu::render() {
 }
 
 
-// ### Private methods ###
 void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) {
-    bool exit = false;
     std::vector<ftxui::Element> rows;
 
     // Width of the columns
@@ -137,7 +127,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
     }
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        exit = true;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component container = ftxui::Container::Vertical({
@@ -145,9 +135,6 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
     });
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
-        if (exit) {
-            screen_->ExitLoopClosure()();
-        }
         return ftxui::vbox({
             ftxui::text("Endless mod Ranking") | ftxui::bold | ftxui::center,
             ftxui::separator(),
@@ -160,9 +147,13 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
     screen_->Loop(component);    
 }
 
+void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
+    // very bad just for the tests
+    Messaging messagingMenue(screen_, friendsList);
+    messagingMenue.render();
+}
 
-void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
-    bool back = false;
+void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList) {
     std::vector<ftxui::Component> buttons;
     for (auto& friendName : friendsList) {
         buttons.push_back(ftxui::Button(friendName, [&] {
@@ -171,7 +162,7 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
     }
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        back = true;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component container = ftxui::Container::Vertical({});
@@ -181,9 +172,6 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
     container->Add(buttonBack);
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
-        if (back) {
-            screen_->ExitLoopClosure()();
-        }
         return ftxui::vbox({
             ftxui::text("Friends list") | ftxui::bold | ftxui::center,
             ftxui::separator(),
@@ -194,12 +182,13 @@ void MainMenu::renderFriendsList(const std::vector<std:: string> &friendsList) {
     screen_->Loop(component);    
 }
 
+
+// ### Private methods ###
 void MainMenu::manageFriendlistScreen(const std::string &friendName) {
-    bool exit = false;
 
     ftxui::Component buttonYes = ftxui::Button("Yes", [&] {}); // TODO: Implement the function to send to server to remove the friend
     ftxui::Component buttonNo = ftxui::Button("No", [&] {
-        exit = true;
+        screen_->ExitLoopClosure()();
     }); // Like it's a back button
 
     ftxui::Component container = ftxui::Container::Vertical({
@@ -208,9 +197,6 @@ void MainMenu::manageFriendlistScreen(const std::string &friendName) {
     });
 
     ftxui::Component component = ftxui::Renderer(container, [&] {
-        if (exit) {
-            screen_->ExitLoopClosure()();
-        }
         return ftxui::vbox({
             ftxui::text("Do you want to remove " + friendName + " from your friends list ?") | ftxui::bold | ftxui::center,
             ftxui::separator(),
@@ -220,10 +206,4 @@ void MainMenu::manageFriendlistScreen(const std::string &friendName) {
     });
 
     screen_->Loop(component);    
-}
-
-void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
-    // very bad just for the tests
-    Messaging messagingMenue(screen_, friendsList);
-    messagingMenue.render();
 }

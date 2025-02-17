@@ -8,6 +8,10 @@
 
 using namespace std;
 
+enum class MessagingState {
+    BACK,
+    NONE,
+};
 
 struct Message {
     int idSender; 
@@ -42,7 +46,7 @@ class Messaging {
         /*
         * @brief Render the messaging screen with all the components by asking the screen manager to render the components
         */
-        void render();
+        MessagingState render();
         
         void addFriends(string friendName);
         
