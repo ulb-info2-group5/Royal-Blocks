@@ -48,9 +48,6 @@ class GameDisplay : public IGame
         ftxui::Component displayRightSide_;
         ftxui::Component displayMiddleSide_;
         ftxui::Component displayLeftSide_;
-        ftxui::Component displayWindow_;
-
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
     protected:
 
@@ -75,6 +72,9 @@ class GameDisplay : public IGame
         void drawRoyalMode() override;
 
     public: 
+        ftxui::Component displayWindow_;
+
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
         //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
         GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                     PlayMode playMode, uint8_t numberPlayers, 

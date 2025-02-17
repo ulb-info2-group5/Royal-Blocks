@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(ftxui REQUIRED)
 
+# add_executable(main main.cpp game_display.cpp)
 add_executable(main main.cpp input/login_input.cpp login_menu/login_menu.cpp screen_manager.cpp main_menu/main_menu.cpp messaging/messaging.cpp)
 
 target_link_libraries(main PRIVATE ftxui::screen ftxui::dom ftxui::component)

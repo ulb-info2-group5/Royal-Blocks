@@ -53,14 +53,14 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
 
     pixel_ = ftxui::Pixel();
 
-    drawPlayerBoard();
-    if (playMode_ != PlayMode::ENDLESS) 
-    {
-        drawOpponentsBoard();
-    } else 
-    {
-        opBoards_ = {};
-    }
+    // drawPlayerBoard();
+    // if (playMode_ != PlayMode::ENDLESS) 
+    // {
+    //     drawOpponentsBoard();
+    // } else 
+    // {
+    //     opBoards_ = {};
+    // }
 
     if (playMode_ == PlayMode::ROYAL) 
     {
@@ -78,7 +78,7 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
 void GameDisplay::drawPlayerBoard()
 {
 
-    ftxui::Component playerBoard_ = ftxui::Renderer([&] {
+    playerBoard_ = ftxui::Renderer([&] {
 
         ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
 
@@ -98,6 +98,7 @@ void GameDisplay::drawPlayerBoard()
 
         return ftxui::canvas(std::move(playerCanvas)) | ftxui::border;
     });
+
 }
 
 void GameDisplay::drawOpponentsBoard()
@@ -105,15 +106,15 @@ void GameDisplay::drawOpponentsBoard()
 
     for (uint32_t index = 1; index < vectorBoards_->size() ; ++index)
     {
-        auto boardPlayer = ftxui::Renderer([&] {
-
-        auto opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
+        ftxui::Component boardPlayer = ftxui::Renderer([&] {
+        
+        ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
 
         for (uint32_t y = 0; y < HEIGHT; ++y) 
         {
             for (uint32_t x = 0; x < WIDTH; ++x)
             {
-                pixel_.background_color = getFTXUIColor(vectorBoards_->at(index).at(y).at(x));
+                pixel_.background_color = getFTXUIColor((*vectorBoards_).at(index).at(y).at(x));
                 
                 //for thickness of the pixel
                 for (uint32_t i = 0; i < PIXEL_LENGTH_OPPONENT; ++i)
@@ -125,10 +126,13 @@ void GameDisplay::drawOpponentsBoard()
 
         return ftxui::canvas(std::move(opCanvas)) | ftxui::border;
     });
+
     
-    opBoards_.at(index) = boardPlayer;
+    if (opBoards_.size() == totalPlayers_ - 1) opBoards_.at(index) = boardPlayer;
+    else opBoards_.push_back(boardPlayer);
 
     }
+
     
 }
 
@@ -168,6 +172,7 @@ void GameDisplay::displayBoardsOp()
         case 2 : displayRightSide_ = ftxui::Container::Vertical({rows.at(0), rows.at(1)}); break;
         case 3 : displayRightSide_ = ftxui::Container::Vertical({rows.at(0), rows.at(1), rows.at(2)}); break;
     };
+
 }
 
 void GameDisplay::displayRightSide() 
@@ -204,6 +209,7 @@ void GameDisplay::displayMiddleSide()
         playerBoard_,
         score,
     });
+
 }
 
 void GameDisplay::displayLeftSide()
@@ -232,6 +238,7 @@ void GameDisplay::displayLeftSide()
         lines.at(1),
         lines.at(2)
     });
+
 }
 //void GameDisplay::drawEndlessMode() override;
 
@@ -257,13 +264,14 @@ void GameDisplay::drawRoyalMode()
 
 void GameDisplay::drawWindow() 
 {
-    switch (playMode_)
-    {
-        case PlayMode::ENDLESS : break;
-        case PlayMode::DUEL : break;
-        case PlayMode::CLASSIC : break;
-        case PlayMode::ROYAL : drawRoyalMode(); break;
-    };
+    // switch (playMode_)
+    // {
+    //     case PlayMode::ENDLESS : break;
+    //     case PlayMode::DUEL : break;
+    //     case PlayMode::CLASSIC : break;
+    //     case PlayMode::ROYAL : drawRoyalMode(); break;
+    // };
+    drawRoyalMode();
 
     screen_->Loop(displayWindow_);
 }
