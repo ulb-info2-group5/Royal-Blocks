@@ -4,13 +4,15 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/mouse.hpp>
+#include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <memory>
 #include <string>
 #include <vector>
 
 using namespace ftxui;
 
-Messaging::Messaging(ScreenManager *screenManager, const std::vector<std::string>& friends) : screenManager_(screenManager), friends_(friends) {
+Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const std::vector<std::string>& friends) : screen_(screen), friends_(friends) {
     initMessaging();
 }
 
@@ -47,7 +49,7 @@ void Messaging::render(){
     auto buttonBack = ftxui::Button("Back", [&] {
         newMessage.clear();
         newFriend.clear();
-        screenManager_->exitLoop();
+        screen_->ExitLoopClosure()();
     });
 
     auto sidebar = Container::Vertical({
@@ -123,7 +125,7 @@ void Messaging::render(){
         });
     });
 
-    screenManager_->renderComponent(render);
+    screen_->Loop(render);
 }
 
 void Messaging::addMessage(const string &message){

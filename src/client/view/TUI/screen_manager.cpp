@@ -1,50 +1,25 @@
 #include "screen_manager.hpp"
+
+#include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
-#include "main_menu/main_menu.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <string>
 #include <thread>
-#include <csignal>
 
 // ### Public methods ###
-ScreenManager::ScreenManager() : screen_(ftxui::ScreenInteractive::Fullscreen()), component_(nullptr), exit_(false) {}
+ScreenManager::ScreenManager() {
+    std::string loginInstructions = "Please enter your username and password to login.";
+    std::string registerInstructions = "Please enter a username and a password to create an account.";
+    loginInput_.addInstruction(loginInstructions);
+    registerInput_.addInstruction(registerInstructions);
+}
 
 void ScreenManager::run() {
-    LoginMenu loginMenu = LoginMenu(this);
-    MainMenu mainMenu = MainMenu(this);
-
     drawStartScreen();
-    loginMenu.render();
-    if (exit_) {
-        return;
-    }
-    mainMenu.render();
-}
-
-void ScreenManager::renderComponent(const ftxui::Component &component) {
-    if (component_ != nullptr) {
-        screen_.ExitLoopClosure();
-    }
-    component_ = component;
-    screen_.Loop(component_);
-
-}
-
-void ScreenManager::renderComponentNoExitLoop(const ftxui::Component &component) {
-    component_ = component;
-    screen_.Loop(component_);
-}
-
-
-void ScreenManager::exit() {
-    exit_ = true;
-    exitLoop();
-}
-
-void ScreenManager::exitLoop() {
-    screen_.ExitLoopClosure()();
-    component_ = nullptr;
+    manageLoginMenu();
+    manageMainMenu();
 }
 
 
@@ -70,9 +45,84 @@ void ScreenManager::drawStartScreen() {
     std::thread([&] {
         std::this_thread::sleep_for(std::chrono::seconds(3));
         exit = true;
-        screen_.PostEvent(ftxui::Event::Custom); // Refresh the screen to exit the display after 2 seconds
-        screen_.ExitLoopClosure()();
+        screen_->PostEvent(ftxui::Event::Custom); // Refresh the screen to exit the display after 2 seconds
+        screen_->ExitLoopClosure()();
     }).detach();
 
-    renderComponent(title);    
+    screen_->Loop(title);    
+}
+
+void ScreenManager::manageLoginMenu() {
+    switch (loginMenu_.render()) {
+        case LoginState::EXIT:
+            std::exit(0);
+            break;
+        
+        case LoginState::LAUNCH_REGISTER: {
+            manageInputMenu(InputType::REGISTER);
+            break;
+        }
+            
+        case LoginState::LAUNCH_LOGIN:
+            manageInputMenu(InputType::LOGIN);
+            break;
+
+        default:
+            throw std::runtime_error("Invalid LoginState");    
+    }
+}
+
+void ScreenManager::manageInputMenu(InputType type) {
+    if (type == InputType::LOGIN) {
+        switch (loginInput_.render()) {
+            case InputState::BACK:
+                manageLoginMenu();
+                break;
+            
+            case InputState::DONE:
+                break;
+                
+            default:
+                throw std::runtime_error("Invalid InputState");
+        }
+    } else {
+        switch (registerInput_.render()) {
+            case InputState::BACK:
+                manageLoginMenu();
+                break;
+            
+            case InputState::DONE: {
+                std::string msg = "Your account has been created successfully! You can now login.";
+                loginInput_.addMessage(msg);
+                manageInputMenu(InputType::LOGIN);
+                break;
+            }
+                
+            default:
+                throw std::runtime_error("Invalid InputState");
+        }
+    }
+}
+
+void ScreenManager::manageMainMenu() {
+    switch (mainMenu_.render()) {
+        case MainMenuState::EXIT:
+            std::exit(0);
+            break;
+        
+        case MainMenuState::LOOK_RANKING:
+            break;
+            
+        case MainMenuState::MANAGE_FRIENDS_LIST:
+            break;
+            
+        case MainMenuState::MANAGE_PROFILE:
+            break;
+            
+        case MainMenuState::SEND_MESSAGES:
+            break;
+            
+        default:
+            throw std::runtime_error("Invalid MainMenuState");
+    }
 }

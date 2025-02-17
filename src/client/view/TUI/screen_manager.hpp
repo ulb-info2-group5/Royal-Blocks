@@ -1,16 +1,37 @@
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 
+#include "input/login_input.hpp"
+#include "login_menu/login_menu.hpp"
+#include "main_menu/main_menu.hpp"
+
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <memory>
+
+constexpr std::string LOGIN_INPUT_TITLE = "Login";
+constexpr std::string REGISTER_INPUT_TITLE = "Register";
+
+enum class InputType {
+    LOGIN,
+    REGISTER,
+};
 
 class ScreenManager {
     private:
         /*
         * @brief The screen that will be used to show things to the terminal user interface (TUI)
         */
-        ftxui::ScreenInteractive screen_;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_ = std::shared_ptr<ftxui::ScreenInteractive>(new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen()));
 
+        LoginMenu loginMenu_ = LoginMenu(screen_);
+
+        LoginInput loginInput_ = LoginInput(screen_, LOGIN_INPUT_TITLE);
+
+        LoginInput registerInput_ = LoginInput(screen_, REGISTER_INPUT_TITLE);
+
+        MainMenu mainMenu_ = MainMenu(screen_);
+        
         /*
         * @brief The current component to render on the screen
         */
@@ -25,6 +46,12 @@ class ScreenManager {
         * @brief Draw the start screen of the game with the title of the game
         */
         void drawStartScreen();
+
+        void manageLoginMenu();
+
+        void manageInputMenu(InputType type);
+
+        void manageMainMenu();
 
     public:
         /*
@@ -41,30 +68,6 @@ class ScreenManager {
         * @brief Run the screen manager to display the components on the screen with the LoginMenu, MainMenu, etc
         */
         void run();
-    
-        /*
-        * @brief Render the component on the screen
-        *
-        * @param component The component to render on the screen
-        */
-        void renderComponent(const ftxui::Component &component);
-
-        /*
-        * @brief Render the component on the screen without exiting the previous loop
-        *
-        * @param component The component to render on the screen
-        */
-        void renderComponentNoExitLoop(const ftxui::Component &component);
-
-        /*
-        * @brief Exit the screen manager and close the screen
-        */
-        void exit();
-
-        /*
-        * @brief Exit the current loop of the screen manager
-        */
-        void exitLoop();
 };
 
 #endif // SCREEN_MANAGER_HPP

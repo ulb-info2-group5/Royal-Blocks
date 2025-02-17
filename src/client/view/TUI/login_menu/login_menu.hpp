@@ -12,11 +12,10 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
-#include "../input/login_input.hpp"
-
-enum class LoginOption {
-    REGISTER_SUCCESS,
-    LOGIN_SUCCESS,
+enum class LoginState {
+    LAUNCH_LOGIN,
+    LAUNCH_REGISTER,
+    EXIT,
     NONE,
 };
 
@@ -26,19 +25,13 @@ enum class LoginOption {
  */
 class LoginMenu {
     private:
-        ScreenManager *screenManager_;
-        LoginOption option_;
-        bool exit_ = false;
-        LoginInput loginInput_;
-        LoginInput registerInput_;
-
-        void checkOption();
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
     public:
         /*
         * @brief Construct a new Login Menu object
         */
-        LoginMenu(ScreenManager *screenManager, LoginOption option = LoginOption::NONE);
+        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen);
         
         /*
         * @brief Destroy the Login Menu object
@@ -48,15 +41,7 @@ class LoginMenu {
         /*
         * @brief Render the login menu screen with all the components by asking the screen manager to render the components
         */
-        void render();
-
-        /*
-        * @brief Add an option to the login menu to know what to do after the login/register process.
-        * It's used to know if we have to add a message to the screen after the login/register process depending on the login/register input.
-        *
-        * @param option The option to add to the login menu
-        */
-        void addOption(const LoginOption option);
+        LoginState render();
 };
 
 #endif // LOGIN_MENU_HPP

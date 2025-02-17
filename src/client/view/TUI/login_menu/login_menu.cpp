@@ -7,35 +7,31 @@
  */
 
 #include "login_menu.hpp"
-#include "../input/login_input.hpp"
 
-#include <cstdlib>
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <memory>
 
 // ### Public methods ###
-LoginMenu::LoginMenu(ScreenManager *screenManager, LoginOption option) : screenManager_(screenManager), option_(option), loginInput_(this, screenManager_, "Login", InputType::LOGIN), registerInput_(this, screenManager_, "Sign in", InputType::REGISTER) {
-    std::string loginInstruction = "Please enter your username and password to login";
-    std::string registerInstruction = "Please enter a username and a password to create an account";
-    loginInput_.addInstruction(loginInstruction);
-    registerInput_.addInstruction(registerInstruction);
-}
+LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_(screen) {}
 
-void LoginMenu::render() {
-    checkOption();
+LoginState LoginMenu::render() {
+    LoginState res = LoginState::NONE;
 
     ftxui::Component buttonRegister = ftxui::Button("Register", [&] {
-        registerInput_.render();
-        checkOption();
+        res = LoginState::LAUNCH_REGISTER;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
-        loginInput_.render();
-        checkOption();
+        res = LoginState::LAUNCH_LOGIN;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
-        screenManager_->exit();
+        res = LoginState::EXIT;
+        screen_->ExitLoopClosure()();
     });
 
     ftxui::Component component = ftxui::Container::Vertical({
@@ -45,13 +41,10 @@ void LoginMenu::render() {
     });
 
     ftxui::Component render = ftxui::Renderer(component, [&] {
-        if (exit_) {
-            screenManager_->exitLoop();
-        }
         return ftxui::vbox({
             ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
             ftxui::separator(),
-            ftxui::text("Please login to your accounnt or create one to enter the game") | ftxui::center,
+            ftxui::text("Please login to your account or create one to enter the game") | ftxui::center,
             ftxui::separator(),
             buttonRegister->Render(),
             buttonLogin->Render(),
@@ -59,22 +52,7 @@ void LoginMenu::render() {
         }) | ftxui::border | ftxui::center;
     });
 
-    screenManager_->renderComponent(render);
-}
+    screen_->Loop(render);
 
-void LoginMenu::addOption(const LoginOption option) {
-    option_ = option;
-}
-
-void LoginMenu::checkOption() {
-    if (option_ == LoginOption::LOGIN_SUCCESS) {
-        exit_ = true;
-    }
-    else if (option_ == LoginOption::REGISTER_SUCCESS) {
-        std::string msg = "Account created successfully, you can now login";
-        loginInput_.addMessage(msg);
-        loginInput_.render();
-        exit_ = true;
-    }
-    
+    return res;
 }

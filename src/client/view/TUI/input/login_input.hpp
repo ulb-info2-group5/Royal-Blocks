@@ -9,18 +9,17 @@
 #ifndef LOGIN_INPUT_HPP
 #define LOGIN_INPUT_HPP
 
-#include "../screen_manager.hpp"
-
 #include <ftxui/component/screen_interactive.hpp>
+#include <memory>
 #include <string>
 
 
-enum class InputType {
-    REGISTER,
-    LOGIN,
+enum class InputState {
+    DONE,
+    BACK,
+    NONE,
 };
 
-class LoginMenu; // Forward declaration
 
 /**
  * @brief LoginInput class to get the login input or register input from the user
@@ -28,10 +27,8 @@ class LoginMenu; // Forward declaration
  */
 class LoginInput {
     private:
-        LoginMenu *loginMenu_;
-        ScreenManager *screenManager_;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
         std::string title_;
-        InputType type_;
         std::string username_;
         std::string password_;
         std::string instruction_;
@@ -41,7 +38,7 @@ class LoginInput {
         /*
         * @brief Construct a new Login Input object
         */
-        LoginInput(LoginMenu *loginMenu, ScreenManager *screenManager, std::string title, InputType type);
+        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title);
 
         /*
         * @brief Destroy the Login Input object
@@ -52,7 +49,7 @@ class LoginInput {
         * @brief Render the login input screen with all the components by askig ScreenManager to render the components
         *
         */
-        void render();
+        InputState render();
 
         /*
         * @brief Add an instruction to show to the user
