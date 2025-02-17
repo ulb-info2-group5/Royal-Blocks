@@ -9,12 +9,14 @@
 #include <thread>
 #include <vector>
 
+constexpr std::string_view LOGIN_INSTRUCTIONS = "Please enter your username and password to login.";
+constexpr std::string_view REGISTER_INSTRUCTIONS = "Please enter a username and a password to create an account.";
+constexpr std::string_view LOGIN_MESSAGE = "Your account has been created successfully! You can now login.";
+
 // ### Public methods ###
 ScreenManager::ScreenManager() {
-    std::string loginInstructions = "Please enter your username and password to login.";
-    std::string registerInstructions = "Please enter a username and a password to create an account.";
-    loginInput_.addInstruction(loginInstructions);
-    registerInput_.addInstruction(registerInstructions);
+    loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
+    registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 }
 
 void ScreenManager::run() {
@@ -92,12 +94,10 @@ void ScreenManager::manageInputMenu(const InputType type) {
                 manageLoginMenu();
                 break;
             
-            case InputState::DONE: {
-                std::string msg = "Your account has been created successfully! You can now login.";
-                loginInput_.addMessage(msg);
+            case InputState::DONE:
+                loginInput_.addMessage(LOGIN_MESSAGE);
                 manageInputMenu(InputType::LOGIN);
                 break;
-            }
                 
             default:
                 throw std::runtime_error("Invalid InputState");

@@ -12,6 +12,7 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <memory>
 #include <string>
+#include <string_view>
 
 /**
  * @brief Enum class to represent the state of the input
@@ -86,14 +87,14 @@ class LoginInput {
         *
         * @param string instruction the instruction to show
         */
-        void addInstruction(std::string &instruction);
+        void addInstruction(const std::string_view instruction);
 
         /*
         * @brief Add a message to show to the user
         *
         * @param string message the message to show
         */
-        void addMessage(std::string &message);
+        void addMessage(const std::string_view message);
 
         /*
         * @brief Get the username

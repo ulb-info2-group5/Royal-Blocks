@@ -53,20 +53,31 @@ InputState LoginInput::render() {
         buttonBack,
     });
 
-
     ftxui::Component render = ftxui::Renderer(component, [&] {
-        return ftxui::vbox({
+        std::vector<ftxui::Element> elements = {
             ftxui::text(title_) | ftxui::bold | ftxui::center,
-            ftxui::separator(),
-            ftxui::text(instruction_) | ftxui::center, 
-            ftxui::separator(),
-            inputUsername->Render(),
-            inputPassword->Render(),
-            buttonSubmit->Render(),
-            buttonBack->Render(),
-            ftxui::text(msg),
-            ftxui::text(message_),
-        }) | ftxui::border | ftxui::center;
+        };
+
+        if (!instruction_.empty()) {
+            elements.push_back(ftxui::separator());
+            elements.push_back(ftxui::text(instruction_) | ftxui::center);
+            elements.push_back(ftxui::separator());
+        }
+
+        elements.push_back(inputUsername->Render());
+        elements.push_back(inputPassword->Render());
+        elements.push_back(buttonSubmit->Render());
+        elements.push_back(buttonBack->Render());
+
+        if (!msg.empty()) {
+            elements.push_back(ftxui::text(msg));
+        }
+        
+        if (!message_.empty()) {
+            elements.push_back(ftxui::text(message_));
+        }
+
+        return ftxui::vbox(elements) | ftxui::border | ftxui::center;
     });
 
     screen_->Loop(render);
@@ -74,11 +85,11 @@ InputState LoginInput::render() {
     return res;
 }
 
-void LoginInput::addInstruction(std::string &instruction) {
+void LoginInput::addInstruction(const std::string_view instruction) {
     instruction_ = instruction;
 }
 
-void LoginInput::addMessage(std::string &message) {
+void LoginInput::addMessage(const std::string_view message) {
     message_ = message;
 }
 
