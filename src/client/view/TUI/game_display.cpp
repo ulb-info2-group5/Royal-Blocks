@@ -75,7 +75,7 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
 
 // protected methods
 
-void GameDisplay::drawPlayerBoard() override
+void GameDisplay::drawPlayerBoard()
 {
 
     ftxui::Component playerBoard_ = ftxui::Renderer([&] {
@@ -98,10 +98,9 @@ void GameDisplay::drawPlayerBoard() override
 
         return ftxui::canvas(std::move(playerCanvas)) | ftxui::border;
     });
-
 }
 
-void GameDisplay::drawOpponentsBoard() override
+void GameDisplay::drawOpponentsBoard()
 {
 
     for (uint32_t index = 1; index < vectorBoards_->size() ; ++index)
@@ -174,7 +173,7 @@ void GameDisplay::displayBoardsOp()
 void GameDisplay::displayRightSide() 
 {
     drawOpponentsBoard();
-    displayBoardOp();
+    displayBoardsOp();
 } 
 
 void GameDisplay::displayMiddleSide()
@@ -192,11 +191,11 @@ void GameDisplay::displayMiddleSide()
         case PlayMode::ROYAL : test = "Royal"; break;
     };
 
-    ftxui::Component mode = ftxui::Renderer([]{
+    ftxui::Component mode = ftxui::Renderer([&]{
         return ftxui::text(test) | ftxui::borderRounded;
     });
 
-    ftxui::Component score = ftxui::Renderer([]{
+    ftxui::Component score = ftxui::Renderer([&]{
         return ftxui::text(std::to_string(score_)) | ftxui::borderRounded;
     });
 
@@ -240,7 +239,7 @@ void GameDisplay::displayLeftSide()
 
 //void GameDisplay::drawClassicMode() override;
 
-void GameDisplay::drawRoyalMode() override
+void GameDisplay::drawRoyalMode() 
 {
     displayLeftSide();
     displayMiddleSide();
@@ -256,7 +255,7 @@ void GameDisplay::drawRoyalMode() override
 
 // public methods 
 
-void GameDisplay::drawWindow() override
+void GameDisplay::drawWindow() 
 {
     switch (playMode_)
     {
@@ -266,5 +265,5 @@ void GameDisplay::drawWindow() override
         case PlayMode::ROYAL : drawRoyalMode(); break;
     };
 
-    screen_.loop(displayWindow_);
+    screen_->Loop(displayWindow_);
 }
