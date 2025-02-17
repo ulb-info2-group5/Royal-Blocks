@@ -12,6 +12,10 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
+/**
+ * @brief Enum class to represent the state of the login menu
+ * 
+ */
 enum class LoginState {
     LAUNCH_LOGIN,
     LAUNCH_REGISTER,
@@ -25,11 +29,16 @@ enum class LoginState {
  */
 class LoginMenu {
     private:
+        /*
+        * @brief The screen to use to render the components
+        */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
     public:
         /*
         * @brief Construct a new Login Menu object
+        *
+        * @param screen The screen to use to render the components
         */
         LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen);
         
@@ -39,7 +48,9 @@ class LoginMenu {
         ~LoginMenu() = default;
         
         /*
-        * @brief Render the login menu screen with all the components by asking the screen manager to render the components
+        * @brief Render the login menu screen with all the components
+        *
+        * @return LoginState The state of the login menu
         */
         LoginState render();
 };

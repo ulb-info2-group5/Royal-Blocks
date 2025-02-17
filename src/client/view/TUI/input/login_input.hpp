@@ -13,7 +13,10 @@
 #include <memory>
 #include <string>
 
-
+/**
+ * @brief Enum class to represent the state of the input
+ * 
+ */
 enum class InputState {
     DONE,
     BACK,
@@ -27,16 +30,42 @@ enum class InputState {
  */
 class LoginInput {
     private:
+        /*
+        * @brief The screen to use to render the components
+        */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+
+        /*
+        * @brief The title of the input screen (Login or Register)
+        */
         std::string title_;
+
+        /*
+        * @brief The username of the user
+        */
         std::string username_;
+        
+        /*
+        * @brief The password of the user
+        */
         std::string password_;
+
+        /*
+        * @brief The instruction to show to the user
+        */
         std::string instruction_;
+
+        /*
+        * @brief The custom message to show to the user
+        */
         std::string message_;
 
     public:
         /*
         * @brief Construct a new Login Input object
+        *
+        * @param screen The screen to use to render the components
+        * @param title The title of the input screen (Login or Register)
         */
         LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title);
 
@@ -46,8 +75,9 @@ class LoginInput {
         ~LoginInput() = default;
 
         /*
-        * @brief Render the login input screen with all the components by askig ScreenManager to render the components
+        * @brief Render the login input screen with all the components
         *
+        * @return InputState the state of the input
         */
         InputState render();
 

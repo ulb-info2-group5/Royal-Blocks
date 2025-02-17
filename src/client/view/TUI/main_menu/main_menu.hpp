@@ -14,6 +14,10 @@
 #include <vector>
 #include <tuple>
 
+/**
+ * @brief Enum class to represent the state of the main menu
+ * 
+ */
 enum class MainMenuState {
     PLAY,
     JOIN_GAME,
@@ -31,6 +35,9 @@ enum class MainMenuState {
  */
 class MainMenu {
     private:
+        /*
+        * @brief The screen to use to render the components
+        */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
         /*
@@ -44,6 +51,8 @@ class MainMenu {
     public:
         /*
          * @brief Construct a new Main Menu object
+         *
+         * @param screen The screen to use to render the components
          */
         MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen);
 
@@ -53,8 +62,9 @@ class MainMenu {
         ~MainMenu() = default;
 
         /*
-         * @brief Render the main menu screen with all the components by asking the screen manager to render the components
+         * @brief Render the main menu screen with all the components
          *
+         * @return MainMenuState The state of the main menu
          */
         MainMenuState render();
 
@@ -69,6 +79,7 @@ class MainMenu {
         /*
         *@brief Launch and render the messagingMenu
         *
+        *@param friendsList The list of the friends of the user to display
         */
         void renderMessagingMenu(const std::vector<std::string> &friendsList );
 

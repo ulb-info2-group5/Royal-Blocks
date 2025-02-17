@@ -8,6 +8,10 @@
 
 using namespace std;
 
+/**
+ * @brief Enum class to represent the state of the messaging
+ * 
+ */
 enum class MessagingState {
     BACK,
     NONE,
@@ -20,8 +24,11 @@ struct Message {
 
 class Messaging {
     private :  
-
+        /*
+        * @brief The screen to use to render the components
+        */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+
         std::map<std::string, std::vector<Message>> conversations;
         std::vector<std::string> friends_;
         int selectedFriend = 0;
@@ -35,6 +42,9 @@ class Messaging {
     public : 
         /*
         * @brief Construct a new Messaging object
+        *
+        * @param screen The screen to use to render the components
+        * @param friends The list of friends to display in the messaging screen
         */
         Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const std::vector<std::string>& friends) ; 
 
@@ -44,7 +54,9 @@ class Messaging {
         ~Messaging() = default;
 
         /*
-        * @brief Render the messaging screen with all the components by asking the screen manager to render the components
+        * @brief Render the messaging screen with all the components
+        *
+        * @return MessagingState The state of the messaging screen
         */
         MessagingState render();
         

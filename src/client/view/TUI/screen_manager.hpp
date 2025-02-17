@@ -9,9 +9,13 @@
 #include <ftxui/dom/elements.hpp>
 #include <memory>
 
-constexpr std::string LOGIN_INPUT_TITLE = "Login";
-constexpr std::string REGISTER_INPUT_TITLE = "Register";
+constexpr char LOGIN_INPUT_TITLE[] = "Login";
+constexpr char REGISTER_INPUT_TITLE[] = "Register";
 
+/**
+ * @brief Enum class to represent the type of input to show to the user
+ * 
+ */
 enum class InputType {
     LOGIN,
     REGISTER,
@@ -20,37 +24,50 @@ enum class InputType {
 class ScreenManager {
     private:
         /*
-        * @brief The screen that will be used to show things to the terminal user interface (TUI)
+        * @brief The screen to use to render the components in the terminal user interface
         */
         std::shared_ptr<ftxui::ScreenInteractive> screen_ = std::shared_ptr<ftxui::ScreenInteractive>(new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen()));
 
+        /*
+        * @brief The login menu to show to the user
+        */
         LoginMenu loginMenu_ = LoginMenu(screen_);
 
+        /*
+        * @brief The login input to show to the user
+        */
         LoginInput loginInput_ = LoginInput(screen_, LOGIN_INPUT_TITLE);
 
+        /*
+        * @brief The register input to show to the user
+        */
         LoginInput registerInput_ = LoginInput(screen_, REGISTER_INPUT_TITLE);
 
+        /*
+        * @brief The main menu to show to the user
+        */
         MainMenu mainMenu_ = MainMenu(screen_);
-        
-        /*
-        * @brief The current component to render on the screen
-        */
-        ftxui::Component component_;
-
-        /*
-        * @brief The exit status flag of the screen manager
-        */
-        bool exit_;
 
         /*
         * @brief Draw the start screen of the game with the title of the game
         */
         void drawStartScreen();
 
+        /*
+        * @brief Manage the login menu to show to the user with the choices to login or register or exit the game
+        */
         void manageLoginMenu();
 
-        void manageInputMenu(InputType type);
+        /*
+        * @brief Manage the input menu to show to the user with entering their information to login or register
+        *
+        * @param type The type of input to know if it's a login or register input
+        */
+        void manageInputMenu(const InputType type);
 
+        /*
+        * @brief Manage the main menu to show to the user with the choices to play a game, join a game, send messages to friends, etc
+        */
         void manageMainMenu();
 
     public:

@@ -73,7 +73,7 @@ void ScreenManager::manageLoginMenu() {
     }
 }
 
-void ScreenManager::manageInputMenu(InputType type) {
+void ScreenManager::manageInputMenu(const InputType type) {
     if (type == InputType::LOGIN) {
         switch (loginInput_.render()) {
             case InputState::BACK:

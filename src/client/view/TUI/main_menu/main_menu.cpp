@@ -20,7 +20,6 @@
 #include <string>
 #include <vector>
 
-// TODO: bug with exit and back button: example with the friends list management menu when do back and then exit, it doesn't exit the program
 
 // ### Public methods ###
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_(screen) {}
