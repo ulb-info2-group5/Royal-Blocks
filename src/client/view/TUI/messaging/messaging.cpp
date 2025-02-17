@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+
 using namespace ftxui;
 
 Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const std::vector<std::string>& friends) : screen_(screen), friends_(friends) {
@@ -30,6 +31,16 @@ MessagingState Messaging::render(){
 
     //
     auto addFriendInput = Input(&newFriend, "Nom de l'ami");
+    //attempt to send the result when  user press enter
+
+    // addFriendInput |= CatchEvent([&](ftxui::Event event) {
+    //     if ( event == event.Return) {
+    //         if (!newFriend.empty()) {
+    //         }
+             
+    //     }
+    // });
+
     auto addFriendButton = Button("Ajouter un ami", [&] {
         if (!newFriend.empty()) {
             friends_.push_back(newFriend);
@@ -41,6 +52,8 @@ MessagingState Messaging::render(){
 
 
     auto messageInput = Input(&newMessage, "Écrire un message...") | center;
+
+
     auto sendButton = Button("Envoyer", [&] {
         if (!newMessage.empty() && !friends_.empty()) { 
             addMessage(newMessage);
@@ -99,7 +112,6 @@ MessagingState Messaging::render(){
                 
             }) | border,
 
-            separator(),
 
             vbox({
                 text(" --- CONVERSATION --- ") | bold | color(Color::Green) | center,
@@ -110,7 +122,6 @@ MessagingState Messaging::render(){
                 separator(),
                 sendButton->Render(),
             }) | border | flex,
-            separator(),
             vbox({
               text("-- Ajouter un ami --") | bold | color(Color::Green) | center,
                 separator(),
@@ -122,12 +133,10 @@ MessagingState Messaging::render(){
                 buttonBack->Render(),
                 separator(),
             }) | border,
-
-        });
+        }) | border;
     });
 
     screen_->Loop(render);
-
     return res;
 }
 
