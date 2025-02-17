@@ -35,16 +35,17 @@ InputState LoginInput::render() {
         } else {
             username_.clear();
             password_.clear();
+            message_.clear(); 
             msg = "Please enter a valid username and a valid password";
         }
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
         res = InputState::BACK;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component component = ftxui::Container::Vertical({
         inputUsername,
@@ -66,16 +67,21 @@ InputState LoginInput::render() {
 
         elements.push_back(inputUsername->Render());
         elements.push_back(inputPassword->Render());
-        elements.push_back(buttonSubmit->Render());
-        elements.push_back(buttonBack->Render());
 
         if (!msg.empty()) {
+            elements.push_back(ftxui::separator());
             elements.push_back(ftxui::text(msg));
+            elements.push_back(ftxui::separator());
         }
         
         if (!message_.empty()) {
+            elements.push_back(ftxui::separator());
             elements.push_back(ftxui::text(message_));
+            elements.push_back(ftxui::separator());
         }
+
+        elements.push_back(buttonSubmit->Render());
+        elements.push_back(buttonBack->Render());
 
         return ftxui::vbox(elements) | ftxui::border | ftxui::center;
     });

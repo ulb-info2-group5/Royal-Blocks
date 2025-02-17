@@ -22,17 +22,17 @@ LoginState LoginMenu::render() {
     ftxui::Component buttonRegister = ftxui::Button("Register", [&] {
         res = LoginState::LAUNCH_REGISTER;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
         res = LoginState::LAUNCH_LOGIN;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         res = LoginState::EXIT;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component component = ftxui::Container::Vertical({
         buttonRegister,
@@ -42,14 +42,14 @@ LoginState LoginMenu::render() {
 
     ftxui::Component render = ftxui::Renderer(component, [&] {
         return ftxui::vbox({
-            ftxui::text("Login Menu") | ftxui::bold | ftxui::center,
+            ftxui::text("Login Menu") | ftxui::bold | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
             ftxui::separator(),
-            ftxui::text("Please login to your account or create one to enter the game") | ftxui::center,
+            ftxui::text("Please login to your account or create one to enter the game") | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
             ftxui::separator(),
-            buttonRegister->Render(),
-            buttonLogin->Render(),
-            buttonExit->Render(),
-        }) | ftxui::border | ftxui::center;
+            buttonRegister->Render() | ftxui::bgcolor(ftxui::Color::Black),
+            buttonLogin->Render() | ftxui::bgcolor(ftxui::Color::Black),
+            buttonExit->Render() | ftxui::bgcolor(ftxui::Color::Black),
+        }) | ftxui::border | ftxui::center | ftxui::bgcolor(ftxui::Color::Black);
     });
 
     screen_->Loop(render);

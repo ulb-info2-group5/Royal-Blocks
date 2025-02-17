@@ -36,16 +36,16 @@ MessagingState Messaging::render(){
             conversations[newFriend] = {}; 
             newFriend.clear();
         }
-    });
+    }, ftxui::ButtonOption::Animated());
 
 
 
-    auto messageInput = Input(&newMessage, "Écrire un message...");
+    auto messageInput = Input(&newMessage, "Écrire un message...") | center;
     auto sendButton = Button("Envoyer", [&] {
         if (!newMessage.empty() && !friends_.empty()) { 
             addMessage(newMessage);
         }
-    });
+    }) | center;
 
 
     auto buttonBack = ftxui::Button("Back", [&] {
@@ -53,7 +53,7 @@ MessagingState Messaging::render(){
         newFriend.clear();
         res = MessagingState::BACK;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     auto sidebar = Container::Vertical({
         friends_menu,
@@ -107,22 +107,20 @@ MessagingState Messaging::render(){
                 chatDisplay->Render() | flex,
                 separator(),
                 messageInput->Render(),
+                separator(),
                 sendButton->Render(),
             }) | border | flex,
             separator(),
             vbox({
               text("-- Ajouter un ami --") | bold | color(Color::Green) | center,
                 separator(),
-                separatorEmpty(),
                 addFriendInput->Render(),
                 separator(),
                 addFriendButton->Render(),
                 separator(),
-                separatorEmpty(),
-                separatorEmpty(),
-                separator(),
 
                 buttonBack->Render(),
+                separator(),
             }) | border,
 
         });

@@ -30,31 +30,31 @@ MainMenuState MainMenu::render() {
     ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {
         res = MainMenuState::PLAY;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonJoinGame = ftxui::Button("Join a game", [&] {
         res = MainMenuState::JOIN_GAME;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {
         res = MainMenuState::SEND_MESSAGES;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonLookRanking = ftxui::Button("Look at ranking", [&] {
         res = MainMenuState::LOOK_RANKING;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {
         res = MainMenuState::MANAGE_PROFILE;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {
         res = MainMenuState::MANAGE_FRIENDS_LIST;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         res = MainMenuState::EXIT;
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component component = ftxui::Container::Vertical({
         buttonPlay,
@@ -127,7 +127,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component container = ftxui::Container::Vertical({
         buttonBack,
@@ -157,12 +157,12 @@ void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList
     for (auto& friendName : friendsList) {
         buttons.push_back(ftxui::Button(friendName, [&] {
             manageFriendlistScreen(friendName);
-        }));
+        }, ftxui::ButtonOption::Animated()));
     }
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         screen_->ExitLoopClosure()();
-    });
+    }, ftxui::ButtonOption::Animated());
 
     ftxui::Component container = ftxui::Container::Vertical({});
     for (auto& button : buttons) {
@@ -185,10 +185,10 @@ void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList
 // ### Private methods ###
 void MainMenu::manageFriendlistScreen(const std::string &friendName) {
 
-    ftxui::Component buttonYes = ftxui::Button("Yes", [&] {}); // TODO: Implement the function to send to server to remove the friend
+    ftxui::Component buttonYes = ftxui::Button("Yes", [&] {}, ftxui::ButtonOption::Animated()); // TODO: Implement the function to send to server to remove the friend
     ftxui::Component buttonNo = ftxui::Button("No", [&] {
         screen_->ExitLoopClosure()();
-    }); // Like it's a back button
+    }, ftxui::ButtonOption::Animated()); // Like it's a back button
 
     ftxui::Component container = ftxui::Container::Vertical({
         buttonYes,
