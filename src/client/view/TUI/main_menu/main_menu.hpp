@@ -47,6 +47,11 @@ class MainMenu {
          */
         void manageFriendlistScreen(const std::string &friendName);
 
+        /*
+         * @brief Screen to add a friend
+         */
+        void addFriendScreen();
+
 
     public:
         /*
