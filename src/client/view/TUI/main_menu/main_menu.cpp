@@ -30,31 +30,31 @@ MainMenuState MainMenu::render() {
     ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {
         res = MainMenuState::PLAY;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonJoinGame = ftxui::Button("Join a game", [&] {
         res = MainMenuState::JOIN_GAME;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {
         res = MainMenuState::SEND_MESSAGES;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonLookRanking = ftxui::Button("Look at ranking", [&] {
         res = MainMenuState::LOOK_RANKING;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {
         res = MainMenuState::MANAGE_PROFILE;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {
         res = MainMenuState::MANAGE_FRIENDS_LIST;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         res = MainMenuState::EXIT;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
 
     ftxui::Component component = ftxui::Container::Vertical({
         buttonPlay,
@@ -160,25 +160,41 @@ void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList
         }, ftxui::ButtonOption::Animated()));
     }
 
+    ftxui::Component buttonAddFriend = ftxui::Button("Add a friend", [&] {
+        addFriendScreen();
+    }, ftxui::ButtonOption::Animated());
+        
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated());
 
-    ftxui::Component container = ftxui::Container::Vertical({});
+    ftxui::Component friendsContainer = ftxui::Container::Vertical({});
     for (auto& button : buttons) {
-        container->Add(button);
+        friendsContainer->Add(button);
     }
-    container->Add(buttonBack);
 
-    ftxui::Component component = ftxui::Renderer(container, [&] {
+    ftxui::Component addContainer = ftxui::Container::Vertical({
+        buttonAddFriend,
+    });
+
+    ftxui::Component backContainer = ftxui::Container::Vertical({
+        buttonBack,
+    });
+
+    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({friendsContainer, addContainer, backContainer}), [&] {
         return ftxui::vbox({
-            ftxui::text("Friends list") | ftxui::bold | ftxui::center,
+            ftxui::text("Friends List") | ftxui::bold | ftxui::center,
             ftxui::separator(),
-            container->Render(),
+            ftxui::text("Your friends") | ftxui::center,
+            friendsContainer->Render() | ftxui::border,
+            ftxui::separator(),
+            addContainer->Render() | ftxui::border,
+            ftxui::separator(),
+            backContainer->Render() | ftxui::border,
         }) | ftxui::border | ftxui::center;
     });
 
-    screen_->Loop(component);    
+    screen_->Loop(component);
 }
 
 
@@ -205,4 +221,42 @@ void MainMenu::manageFriendlistScreen(const std::string &friendName) {
     });
 
     screen_->Loop(component);    
+}
+
+
+void MainMenu::addFriendScreen() {
+    // TODO: communicate with the server to add the friend to the list
+    std::string friendName;
+    std::string msg;
+
+    ftxui::Component input = ftxui::Input(&friendName, "Name of friend") | ftxui::border | ftxui::center;
+
+    ftxui::Component submitButton = ftxui::Button("Add", [&] {
+        if (friendName.empty()) {
+            // TODO: add check if name exist with server, etc
+            msg = "Please enter a name";
+        }
+        else {
+            screen_->ExitLoopClosure()();
+        }
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+
+    ftxui::Component backButton = ftxui::Button("Back", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+
+    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({input, submitButton,backButton}), [&] {
+        return ftxui::vbox({
+            ftxui::text("Add a friend") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            ftxui::text(""), // Empty line
+            input->Render(),
+            ftxui::text(msg) | ftxui::center,
+            ftxui::separator(),
+            submitButton->Render(),
+            backButton->Render(),
+        }) | ftxui::border | ftxui::center;
+    });
+
+    screen_->Loop(component);
 }
