@@ -1,9 +1,9 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../interfaceConfig.hpp"
-#include "../IGame.hpp"
-#include "../dataExample.hpp"
+#include "../../interfaceConfig.hpp"
+#include "../../IGame.hpp"
+#include "../../dataExample.hpp"
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
 #include "ftxui/dom/node.hpp"    // for Render
@@ -35,6 +35,7 @@ class GameDisplay : public IGame
     private:
         // std::shared_ptr<GameState> partyInfo_;
         // std::shared_ptr<PlayerState> player_;
+        std::shared_ptr<ftxui::ScreenInteractive> screen_;
         std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> vectorBoards_;
         PlayMode playMode_;
         uint8_t totalPlayers_;
@@ -81,7 +82,7 @@ class GameDisplay : public IGame
         //             PlayMode playMode, uint8_t numberPlayers, 
         //             std::shared_ptr<ftxui::ScreenInteractive> screen);
         
-        GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
+        GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                     PlayMode playMode, uint8_t numberPlayers);
 
 
@@ -89,6 +90,8 @@ class GameDisplay : public IGame
 
 
         void drawWindow() override;
+
+        void render();
 };
 
 #endif

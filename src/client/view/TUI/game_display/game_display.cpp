@@ -70,8 +70,9 @@ ftxui::Color getFTXUIColor(colors color)
 
 // }
 
-GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
+GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                         PlayMode playMode, uint8_t numberPlayers) : 
+                        screen_{screen},
                         vectorBoards_{boards},
                         playMode_{playMode},
                         totalPlayers_{numberPlayers}
@@ -113,7 +114,6 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
 
 void GameDisplay::drawPlayerBoard()
 {
-
     playerBoard_ = ftxui::Renderer([&] {
 
         ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
@@ -122,55 +122,53 @@ void GameDisplay::drawPlayerBoard()
         {
             for (uint32_t x = 0; x < WIDTH; ++x)
             {
-                pixel_.background_color = getFTXUIColor(vectorBoards_->at(0).at(y).at(x));
-                
-                //for thickness of the pixel
+                // Obtenir la couleur de la case actuelle
+                ftxui::Color color = getFTXUIColor(vectorBoards_->at(0).at(y).at(x));
+
+                // Dessiner le pixel
                 for (uint32_t i = 0; i < PIXEL_LENGTH_PLAYER; ++i)
                 {
-                    playerCanvas.DrawPixel(x * PIXEL_LENGTH_PLAYER + i, y * PIXEL_LENGTH_PLAYER + i, pixel_);
+                    playerCanvas.DrawBlockCircleFilled(x * PIXEL_LENGTH_PLAYER + i, y * PIXEL_LENGTH_PLAYER + i, true, color);
                 }
             }
         }
 
         return ftxui::canvas(std::move(playerCanvas)) | ftxui::border;
     });
-
 }
+
 
 void GameDisplay::drawOpponentsBoard()
 {
-
-    for (uint32_t index = 1; index < vectorBoards_->size() ; ++index)
+    for (uint32_t index = 1; index < vectorBoards_->size(); ++index)
     {
         ftxui::Component boardPlayer = ftxui::Renderer([&] {
         
-        ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
+            ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
 
-        for (uint32_t y = 0; y < HEIGHT; ++y) 
-        {
-            for (uint32_t x = 0; x < WIDTH; ++x)
+            for (uint32_t y = 0; y < HEIGHT; ++y) 
             {
-                pixel_.background_color = getFTXUIColor((*vectorBoards_).at(index).at(y).at(x));
-                
-                //for thickness of the pixel
-                for (uint32_t i = 0; i < PIXEL_LENGTH_OPPONENT; ++i)
+                for (uint32_t x = 0; x < WIDTH; ++x)
                 {
-                    opCanvas.DrawPixel(x * PIXEL_LENGTH_OPPONENT + i, y * PIXEL_LENGTH_OPPONENT + i, pixel_);
+                    ftxui::Color color = getFTXUIColor((*vectorBoards_).at(index).at(y).at(x));
+
+                    for (uint32_t i = 0; i < PIXEL_LENGTH_OPPONENT; ++i)
+                    {
+                        opCanvas.DrawBlockCircleFilled(x * PIXEL_LENGTH_OPPONENT + i, y * PIXEL_LENGTH_OPPONENT + i, true, color);
+                    }
                 }
             }
-        }
 
-        return ftxui::canvas(std::move(opCanvas)) | ftxui::border;
-    });
+            return ftxui::canvas(std::move(opCanvas)) | ftxui::border;
+        });
 
-    
-    if (opBoards_.size() == totalPlayers_ - 1) opBoards_.at(index) = boardPlayer;
-    else opBoards_.push_back(boardPlayer);
-
+        if (opBoards_.size() == totalPlayers_ - 1) 
+            opBoards_.at(index) = boardPlayer;
+        else 
+            opBoards_.push_back(boardPlayer);
     }
-
-    
 }
+
 
 void GameDisplay::displayBoardsOp() 
 {
@@ -310,4 +308,11 @@ void GameDisplay::drawWindow()
     drawRoyalMode();
 
     // screen_->Loop(displayWindow_);
+}
+
+
+void GameDisplay::render() 
+{
+    drawWindow();
+    screen_->Loop(displayWindow_);
 }

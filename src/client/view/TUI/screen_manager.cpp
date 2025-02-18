@@ -2,6 +2,8 @@
 
 #include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
+#include "game_display/game_display.hpp"
+#include "main_menu/main_menu.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -107,6 +109,14 @@ void ScreenManager::manageInputMenu(const InputType type) {
 
 void ScreenManager::manageMainMenu() {
     switch (mainMenu_.render()) {
+        case MainMenuState::PLAY: {
+            GameDisplay game = GameDisplay(screen_, std::make_shared<std::vector<std::vector<std::vector<colors>>>>(EXEMPLE_BOARDS), 
+                    PlayMode::ROYAL, 9);
+            game.render();
+            break;
+        }
+
+
         case MainMenuState::EXIT:
             std::exit(0);
             break;
