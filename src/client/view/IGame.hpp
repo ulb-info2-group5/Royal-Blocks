@@ -40,7 +40,7 @@ class IGame
 
     virtual ~IGame() = default;
 
-    virtual void drawWindow() = 0;
+    virtual void render() = 0;
 
 };
 

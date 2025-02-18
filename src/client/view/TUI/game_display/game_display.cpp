@@ -85,19 +85,9 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, std:
     displayRightSide_ = {};
 
     displayWindow_ = ftxui::Component();
+    buttonsEffects_ = ftxui::Component();
 
     pixel_ = ftxui::Pixel();
-
-    // screen_ = ftxui::ScreenInteractive::FitComponent();
-
-    // drawPlayerBoard();
-    // if (playMode_ != PlayMode::ENDLESS) 
-    // {
-    //     drawOpponentsBoard();
-    // } else 
-    // {
-    //     opBoards_ = {};
-    // }
 
     if (playMode_ == PlayMode::ROYAL) 
     {
@@ -209,6 +199,35 @@ void GameDisplay::displayBoardsOp()
 
 }
 
+void GameDisplay::displayEffects()
+{
+    ftxui::Components lines;
+
+    for (uint8_t i = 0; i < 3; ++i)
+    {
+        ftxui::Component line = ftxui::Container::Horizontal({
+            ftxui::Button(
+                effects_.at(i), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            ),
+            ftxui::Button(
+                effects_.at(i + 1), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            ),
+            ftxui::Button(
+                effects_.at(i + 2), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
+            )
+        });
+
+        lines.push_back(line);
+    }
+
+    buttonsEffects_ = ftxui::Container::Vertical({
+        lines.at(0),
+        lines.at(1),
+        lines.at(2)
+    });
+
+}
+
 void GameDisplay::displayRightSide() 
 {
     drawOpponentsBoard();
@@ -248,31 +267,11 @@ void GameDisplay::displayMiddleSide()
 
 void GameDisplay::displayLeftSide()
 {
-    ftxui::Components lines;
-
-    for (uint8_t i = 0; i < 3; ++i)
-    {
-        ftxui::Component line = ftxui::Container::Horizontal({
-            ftxui::Button(
-                effects_.at(i), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            ),
-            ftxui::Button(
-                effects_.at(i + 1), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            ),
-            ftxui::Button(
-                effects_.at(i + 2), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            )
-        });
-
-        lines.push_back(line);
-    }
+    if (playMode_ == PlayMode::ROYAL) displayEffects();
 
     displayLeftSide_ = ftxui::Container::Vertical({
-        lines.at(0),
-        lines.at(1),
-        lines.at(2)
+        buttonsEffects_,
     });
-
 }
 //void GameDisplay::drawEndlessMode() override;
 
@@ -296,23 +295,16 @@ void GameDisplay::drawRoyalMode()
 
 // public methods 
 
-void GameDisplay::drawWindow() 
-{
-    // switch (playMode_)
-    // {
-    //     case PlayMode::ENDLESS : break;
-    //     case PlayMode::DUEL : break;
-    //     case PlayMode::CLASSIC : break;
-    //     case PlayMode::ROYAL : drawRoyalMode(); break;
-    // };
-    drawRoyalMode();
-
-    // screen_->Loop(displayWindow_);
-}
-
 
 void GameDisplay::render() 
 {
-    drawWindow();
+    switch (playMode_)
+    {
+        case PlayMode::ENDLESS : break;
+        case PlayMode::DUEL : break;
+        case PlayMode::CLASSIC : break;
+        case PlayMode::ROYAL : drawRoyalMode(); break;
+    };
+
     screen_->Loop(displayWindow_);
 }

@@ -7,7 +7,7 @@
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
 #include "ftxui/dom/node.hpp"    // for Render
-#include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
+#include "ftxui/screen/color.hpp"  // for Color
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/component_base.hpp"
 
@@ -36,6 +36,7 @@ class GameDisplay : public IGame
         // std::shared_ptr<GameState> partyInfo_;
         // std::shared_ptr<PlayerState> player_;
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+
         std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> vectorBoards_;
         PlayMode playMode_;
         uint8_t totalPlayers_;
@@ -44,11 +45,13 @@ class GameDisplay : public IGame
 
         ftxui::Component playerBoard_;
         ftxui::Components opBoards_;
+        ftxui::Component buttonsEffects_;
         ftxui::Pixel pixel_;
         
         ftxui::Component displayRightSide_;
         ftxui::Component displayMiddleSide_;
         ftxui::Component displayLeftSide_;
+        ftxui::Component displayWindow_;
 
     protected:
 
@@ -57,6 +60,8 @@ class GameDisplay : public IGame
         void drawOpponentsBoard() override;
 
         void displayBoardsOp();
+        
+        void displayEffects();
 
         void displayRightSide();
 
@@ -73,10 +78,8 @@ class GameDisplay : public IGame
         void drawRoyalMode() override;
 
     public: 
-        ftxui::Component displayWindow_;
 
         // std::shared_ptr<ftxui::ScreenInteractive> screen_;
-        // ftxui::ScreenInteractive screen_;
         //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
         // GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
         //             PlayMode playMode, uint8_t numberPlayers, 
@@ -88,10 +91,7 @@ class GameDisplay : public IGame
 
         ~GameDisplay() = default;
 
-
-        void drawWindow() override;
-
-        void render();
+        void render() override;
 };
 
 #endif
