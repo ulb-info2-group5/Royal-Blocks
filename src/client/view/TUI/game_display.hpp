@@ -74,11 +74,16 @@ class GameDisplay : public IGame
     public: 
         ftxui::Component displayWindow_;
 
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        // std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        // ftxui::ScreenInteractive screen_;
         //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
+        // GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
+        //             PlayMode playMode, uint8_t numberPlayers, 
+        //             std::shared_ptr<ftxui::ScreenInteractive> screen);
+        
         GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-                    PlayMode playMode, uint8_t numberPlayers, 
-                    std::shared_ptr<ftxui::ScreenInteractive> &screen);
+                    PlayMode playMode, uint8_t numberPlayers);
+
 
         ~GameDisplay() = default;
 

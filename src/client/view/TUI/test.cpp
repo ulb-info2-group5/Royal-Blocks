@@ -1,14 +1,33 @@
-#include "game_display.hpp"
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <stdio.h>                 // for getchar
+#include <string>
+#include <utility>
+#include <ftxui/dom/elements.hpp>  // for Fit, canvas, operator|, border, Element
+#include <ftxui/screen/screen.hpp>  // for Pixel, Screen
+#include <ftxui/component/component.hpp>
+#include <vector>                   // for vector, allocator
+#include <memory>
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
 #include "ftxui/dom/node.hpp"    // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/component_base.hpp"
+// #include "../../../../lib/grid-container.hpp"
 
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
+//#include "game_display.hpp"
+#include "../dataExample.hpp"
+#include "../interfaceConstants.hpp"
+#include "../IGame.hpp"
+
+const uint32_t PIXEL_LENGTH_PLAYER = 4, PIXEL_LENGTH_OPPONENT = 2;
+
+const uint32_t WIDTH_PLAYER_CANVAS = 40,
+               HEIGHT_PLAYER_CANVAS = 80,
+               WIDTH_OP_CANVAS = 20,
+               HEIGHT_OP_CANVAS = 40;
 
 ftxui::Color getFTXUIColor(colors color)
 {
@@ -32,43 +51,109 @@ ftxui::Color getFTXUIColor(colors color)
     return returnValue;
 }
 
-// constructor
-
-// GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-//                         PlayMode playMode, uint8_t numberPlayers, 
-//                         std::shared_ptr<ftxui::ScreenInteractive> screenManager) : 
-//                         vectorBoards_{boards},
-//                         playMode_{playMode},
-//                         totalPlayers_{numberPlayers},
-//                         screen_{screenManager}
+// class Bitch
 // {
-//     //initialialising for the preview
-//     score_ = 100000;
+//     private:
+//     // ftxui::ScreenInteractive screen_;
 
-//     displayLeftSide_ = {};
-//     displayMiddleSide_ = {};
-//     displayRightSide_ = {};
+//     protected:
+//     void createDisplay();
+    
+//     public:
+//     ftxui::Component doc_;
+//     Bitch();
+//     ~Bitch() = default;
 
-//     displayWindow_ = ftxui::Component();
+//     void drawWindow();
+// };
 
-//     pixel_ = ftxui::Pixel();
+// void Bitch::createDisplay()
+// {
+//     ftxui::Component comp1 = ftxui::Renderer([&]{
+//         return ftxui::text("hello") | ftxui::borderRounded;
+//     }),
+//     comp2 = ftxui::Renderer([&]{
+//         return ftxui::text("coucou") | ftxui::borderDashed;
+//     });
 
-//     // drawPlayerBoard();
-//     // if (playMode_ != PlayMode::ENDLESS) 
-//     // {
-//     //     drawOpponentsBoard();
-//     // } else 
-//     // {
-//     //     opBoards_ = {};
-//     // }
-
-//     if (playMode_ == PlayMode::ROYAL) 
-//     {
-//         effects_ = {"bon1", "bon2", "bon3", "bon4", "bon5", "bon6",
-//                     "bon7", "bon8", "bon9"};
-//     }
-
+//     doc_ = ftxui::Container::Horizontal({
+//         comp1,
+//         comp2
+//     });
 // }
+
+// Bitch::Bitch()
+// {
+//     doc_ = ftxui::Component();
+//     // screen_ = ftxui::ScreenInteractive::TerminalOutput();
+// }
+
+// void Bitch::drawWindow()
+// {
+//     createDisplay();
+//     // screen_.Loop(doc_);
+// }
+
+class GameDisplay : public IGame 
+{
+    private:
+        // std::shared_ptr<GameState> partyInfo_;
+        // std::shared_ptr<PlayerState> player_;
+        
+
+    protected:
+
+
+
+
+        //void drawEndlessMode() override;
+
+        //void drawDualMode() override;
+
+        //void drawClassicMode() override;
+
+
+    public: 
+        std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> vectorBoards_;
+        PlayMode playMode_;
+        uint8_t totalPlayers_;
+        uint32_t score_;
+        std::vector<std::string> effects_ = {};
+
+        ftxui::Components opBoards_;
+        ftxui::Pixel pixel_;
+        void drawRoyalMode() override;
+        void drawOpponentsBoard() override;
+
+        void displayBoardsOp();
+        ftxui::Component playerBoard_;
+        void drawPlayerBoard() override;
+        void displayRightSide();
+
+        void displayMiddleSide();
+
+        void displayLeftSide();
+        // ftxui::Component displayWindow_;
+        ftxui::Component displayRightSide_;
+        ftxui::Component displayMiddleSide_;
+        ftxui::Component displayLeftSide_;
+
+        // std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        // ftxui::ScreenInteractive screen_;
+        //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
+        // GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
+        //             PlayMode playMode, uint8_t numberPlayers, 
+        //             std::shared_ptr<ftxui::ScreenInteractive> screen);
+        
+        GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
+                    PlayMode playMode, uint8_t numberPlayers);
+
+
+        ~GameDisplay() = default;
+
+
+        void drawWindow() override;
+};
 
 GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
                         PlayMode playMode, uint8_t numberPlayers) : 
@@ -83,7 +168,7 @@ GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<col
     displayMiddleSide_ = {};
     displayRightSide_ = {};
 
-    displayWindow_ = ftxui::Component();
+    // displayWindow_ = ftxui::Component();
 
     pixel_ = ftxui::Pixel();
 
@@ -221,19 +306,19 @@ void GameDisplay::displayMiddleSide()
 {
     drawPlayerBoard();
 
-    //to suppress later this part of code
-    std::string test;
+    // //to suppress later this part of code
+    // std::string test;
 
-    switch(playMode_)
-    {
-        case PlayMode::ENDLESS : test = "Endless"; break;
-        case PlayMode::DUEL : test = "Duel" ; break;
-        case PlayMode::CLASSIC : test = "Classic" ; break;
-        case PlayMode::ROYAL : test = "Royal"; break;
-    };
+    // switch(playMode_)
+    // {
+    //     case PlayMode::ENDLESS : test = "Endless"; break;
+    //     case PlayMode::DUEL : test = "Duel" ; break;
+    //     case PlayMode::CLASSIC : test = "Classic" ; break;
+    //     case PlayMode::ROYAL : test = "Royal"; break;
+    // };
 
     ftxui::Component mode = ftxui::Renderer([&]{
-        return ftxui::text(test) | ftxui::borderRounded;
+        return ftxui::text("royal") | ftxui::borderRounded;
     });
 
     ftxui::Component score = ftxui::Renderer([&]{
@@ -284,15 +369,15 @@ void GameDisplay::displayLeftSide()
 
 void GameDisplay::drawRoyalMode() 
 {
-    displayLeftSide();
-    displayMiddleSide();
-    displayRightSide();
+    // displayLeftSide();
+    // displayMiddleSide();
+    // displayRightSide();
 
-    displayWindow_ = ftxui::Container::Horizontal({
-        displayLeftSide_,
-        displayMiddleSide_,
-        displayRightSide_,
-    });
+    // displayWindow_ = ftxui::Container::Horizontal({
+    //     displayLeftSide_,
+    //     displayMiddleSide_,
+    //     displayRightSide_,
+    // });
 }
 
 
@@ -307,7 +392,39 @@ void GameDisplay::drawWindow()
     //     case PlayMode::CLASSIC : break;
     //     case PlayMode::ROYAL : drawRoyalMode(); break;
     // };
-    drawRoyalMode();
+    // drawRoyalMode();
 
     // screen_->Loop(displayWindow_);
+    displayLeftSide();
+    displayMiddleSide();
+    displayRightSide();
+
+    // displayWindow_ = ftxui::Container::Horizontal({
+    //     displayLeftSide_,
+    //     displayMiddleSide_,
+    //     displayRightSide_,
+    // });
+}
+
+
+int main()
+{   
+    ftxui::ScreenInteractive screen = ftxui::ScreenInteractive::FitComponent();
+    GameDisplay game = GameDisplay(std::make_shared<std::vector<std::vector<std::vector<colors>>>>(EXEMPLE_BOARDS), 
+                    PlayMode::ROYAL, 9);
+
+    // game.displayRightSide();
+    // game.displayLeftSide();
+    // game.displayMiddleSide();
+    // game.drawPlayerBoard();
+    game.drawWindow();
+    //il aime pas ce container doc
+    ftxui::Component doc = ftxui::Container::Horizontal({
+        game.displayLeftSide_,
+        game.displayMiddleSide_,
+        game.displayRightSide_
+    });
+
+    screen.Loop(doc);
+    return 0;
 }
