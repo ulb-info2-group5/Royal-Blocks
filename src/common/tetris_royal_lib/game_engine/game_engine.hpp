@@ -70,7 +70,6 @@ class GameEngine {
      */
     void sendPenaltyRows(PlayerID senderID, size_t numRows);
 
-    // NOTE: just moved it to private
     /**
      * @brief Changes the given player's target to the new target.
      * @param playerID The player whose target will be changed.
