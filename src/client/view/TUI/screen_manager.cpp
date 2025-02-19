@@ -153,6 +153,8 @@ void ScreenManager::manageMainMenu() {
         }
             
         case MainMenuState::MANAGE_PROFILE:
+            mainMenu_.renderProfileManager();
+            manageMainMenu();
             break;
             
         case MainMenuState::SEND_MESSAGES: {
@@ -170,7 +172,7 @@ void ScreenManager::manageMainMenu() {
             manageMainMenu();
             break;
         }
-            
+
         default:
             throw std::runtime_error("Invalid MainMenuState");
     }

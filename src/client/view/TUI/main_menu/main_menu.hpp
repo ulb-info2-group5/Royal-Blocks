@@ -52,7 +52,6 @@ class MainMenu {
          */
         void addFriendScreen();
 
-
     public:
         /*
          * @brief Construct a new Main Menu object
@@ -94,6 +93,11 @@ class MainMenu {
          * @param friendsList The list of the friends of the user to display
          */
          void renderFriendsManager(const std::vector<std::string> &friendsList);
+
+        /*
+        * @brief Render the profile manager of the user
+        */
+         void renderProfileManager();
 };
 
 #endif // MAIN_MENU_HPP

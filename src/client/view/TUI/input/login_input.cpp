@@ -23,8 +23,8 @@ InputState LoginInput::render() {
     InputState res = InputState::NONE;
     std::string msg;
 
-    ftxui::Component inputUsername = ftxui::Input(&username_, "Enter username");
-    ftxui::Component inputPassword = ftxui::Input(&password_, "Enter password");
+    ftxui::Component inputUsername = ftxui::Input(&username_, "Enter username") | ftxui::border;
+    ftxui::Component inputPassword = ftxui::Input(&password_, "Enter password") | ftxui::border;
 
     ftxui::Component buttonSubmit = ftxui::Button("Submit", [&] {
         if (!username_.empty() && !password_.empty()) {
@@ -67,15 +67,14 @@ InputState LoginInput::render() {
 
         elements.push_back(inputUsername->Render());
         elements.push_back(inputPassword->Render());
+        elements.push_back(ftxui::separator());
 
         if (!msg.empty()) {
-            elements.push_back(ftxui::separator());
             elements.push_back(ftxui::text(msg));
             elements.push_back(ftxui::separator());
         }
         
         if (!message_.empty()) {
-            elements.push_back(ftxui::separator());
             elements.push_back(ftxui::text(message_));
             elements.push_back(ftxui::separator());
         }

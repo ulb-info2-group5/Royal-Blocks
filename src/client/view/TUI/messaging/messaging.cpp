@@ -51,7 +51,7 @@ MessagingState Messaging::render(){
 
 
 
-    auto messageInput = Input(&newMessage, "Écrire un message...") | center;
+    auto messageInput = Input(&newMessage, "Écrire un message...") | center | border;
 
 
     auto sendButton = Button("Envoyer", [&] {

@@ -197,6 +197,54 @@ void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList
     screen_->Loop(component);
 }
 
+void MainMenu::renderProfileManager() {
+    std::string username;
+    std::string password;
+    std::string msg;
+
+    ftxui::Component inputChangeUsername = ftxui::Input(&username, "New username") | ftxui::border;
+
+    ftxui::Component inputChangePassword = ftxui::Input(&password, "New password") | ftxui::border;
+
+    ftxui::Component submitButton = ftxui::Button("Submit", [&] {
+        if (username.empty() && password.empty()) {
+            msg = "Please enter a new username or password";
+        }
+        else {
+            screen_->ExitLoopClosure()();
+        }
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+
+    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+
+    ftxui::Component container = ftxui::Container::Vertical({
+        inputChangeUsername,
+        inputChangePassword,
+        submitButton,
+        buttonBack,
+    });
+
+    ftxui::Component component = ftxui::Renderer(container, [&] {
+        return ftxui::vbox({
+            ftxui::text("Profile Manager") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            ftxui::text("You can change your username and password here") | ftxui::center,
+            ftxui::separator(),
+            ftxui::text(""), // Empty line
+            inputChangeUsername->Render(),
+            inputChangePassword->Render(),
+            ftxui::text(msg),
+            ftxui::separator(),
+            submitButton->Render(),
+            buttonBack->Render(),
+        }) | ftxui::border | ftxui::center;
+    });
+
+    screen_->Loop(component);
+}
+
 
 // ### Private methods ###
 void MainMenu::manageFriendlistScreen(const std::string &friendName) {
@@ -260,3 +308,4 @@ void MainMenu::addFriendScreen() {
 
     screen_->Loop(component);
 }
+
