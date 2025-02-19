@@ -202,6 +202,14 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
     pGameState_->getTetris(playerID)->eventTryMoveActive(tetrominoMove);
 }
 
+void GameEngine::bigDrop(PlayerID playerID) {
+    pGameState_->getTetris(playerID)->eventBigDrop();
+}
+
+void GameEngine::holdNextTetromino(PlayerID playerID) {
+    pGameState_->getTetris(playerID)->eventHoldNextTetromino();
+}
+
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
     pGameState_->getTetris(playerID)->eventTryRotateActive(rotateClockwise);
 }

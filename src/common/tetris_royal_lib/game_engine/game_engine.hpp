@@ -55,7 +55,7 @@ class GameEngine {
     GameEngine &operator=(const GameEngine &) = default;
     GameEngine &operator=(GameEngine &&) = default;
 
-    virtual ~GameEngine() = default;
+    ~GameEngine() = default;
 
   private:
     /**
@@ -127,8 +127,19 @@ class GameEngine {
     void tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove);
 
     /**
-     * @brief Rotates the player's active Tetromino in the given direction if
-     * possible.
+     * @brief Drops the active Tetromino until it hits the bottom or an occupied
+     * cell.
+     */
+    void bigDrop(PlayerID playerID);
+
+    /**
+     * @brief Moves the next Tetromino from the queue to hold.
+     */
+    void holdNextTetromino(PlayerID playerID);
+
+    /**
+     * @brief Rotates the player's active Tetromino in the given direction
+     * if possible.
      */
     void tryRotateActive(PlayerID playerID, bool rotateClockwise);
 
