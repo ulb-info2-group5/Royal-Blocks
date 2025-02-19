@@ -1,9 +1,12 @@
 #include "game_engine.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
+#include "effect/bonus/mini_tetrominoes.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
+#include "tetromino/tetromino.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
 #include <cassert>
 #include <optional>
@@ -102,6 +105,18 @@ bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
 
     return pGameState_->getPlayerState(buyerID)->getEnergy()
            >= getEffectPrice(effectType);
+}
+
+void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
+    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+        return;
+    }
+
+    // Push 2 MiniTetrominoes at the front of the player's queue.
+    for (int i = 0; i < 2; i++) {
+        pGameState_->getTetris(playerID)->insertNextTetromino(
+            Tetris::createTetromino(TetrominoShape::MiniTetromino));
+    }
 }
 
 void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {

@@ -4,6 +4,7 @@
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino_queue/tetromino_queue.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
 #include <sys/types.h>
 
@@ -165,6 +166,15 @@ class Tetris {
      * @return The size of the queue.
      */
     size_t getTetrominoesQueueSize() const;
+
+    /**
+     * @brief Inserts the given tetromino at the front of the tetrominoes queue.
+     */
+    void insertNextTetromino(TetrominoPtr pTetromino) {
+        tetrominoQueue_.insertNextTetromino(std::move(pTetromino));
+    }
+
+    static TetrominoPtr createTetromino(TetrominoShape tetrominoShape);
 
     // #### Test Fixture Class ####
 

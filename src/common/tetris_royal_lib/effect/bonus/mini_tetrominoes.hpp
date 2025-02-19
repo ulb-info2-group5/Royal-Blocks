@@ -1,16 +1,15 @@
 #ifndef MINI_TETROMINOES_HPP
 #define MINI_TETROMINOES_HPP
 
-#include "../placement_timed_effect.hpp"
 #include "bonus.hpp"
 
 #include <cstddef>
 
-class MiniTetrominoes final : public Bonus, public PlacementTimedEffect {
-  private:
-    // NOTE: This IS imposed in the instructions
-    static constexpr size_t PIECES_NUM = 2;
+// TODO: Remove this class because it is useless:
+// Inserting two mini tetrominoes in the player's tetromino queue can be done as
+// soon as we detect that the BonusType the player picked is MiniTetrominoes.
 
+class MiniTetrominoes final : public Bonus {
   public:
     MiniTetrominoes();
 

@@ -22,10 +22,15 @@
  *
  * @brief All possible shapes a tetromino can have.
  *
- * @note NumTetrominoShape is not an actual Shape, it is just there to avoid
- * having to hardcode the number of shapes in other parts of the code.
+ * @note
+ *
+ *  NumTetrominoShape & NumBasicTetrominoShape are not actual Shapes. They are
+ *  just used to iterate over all types of shapes and separate special
+ * tetrominoes from normal tetrominoes.
  */
 enum class TetrominoShape {
+    // normal tetrominoes
+
     Z = 0,
     L,
     O,
@@ -33,6 +38,10 @@ enum class TetrominoShape {
     I,
     J,
     T,
+    NumBasicTetrominoShape,
+
+    // special (bonus) tetrominoes
+
     MiniTetromino,
     NumTetrominoShape,
 };

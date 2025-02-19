@@ -1,6 +1,8 @@
 #include "tetromino_queue.hpp"
 #include "../board/board.hpp"
+#include "../tetris/tetris.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
+#include "tetromino/tetromino.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -11,24 +13,13 @@ TetrominoQueue::TetrominoQueue() { refill(); }
 
 void TetrominoQueue::refill() {
     constexpr size_t numShapes =
-        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
+        static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
     // generate array of Tetrominoes (ordered)
     std::array<TetrominoPtr, numShapes> tetrominoes;
     for (size_t i = 0; i < numShapes; i++) {
-        // TODO: Check if we could solve this issue in the I tetromino's
-        // constructor for a cleaner solution
-        //
-        // I tetromino should have its anchorPoint one row above compared to
-        // the others when spawned
-        int spawnRow = (static_cast<TetrominoShape>(i) == TetrominoShape::I
-                        or static_cast<TetrominoShape>(i) == TetrominoShape::T)
-                           ? Board::getHeight() - 1
-                           : Board::getHeight() - 2;
-
-        tetrominoes.at(i) = ATetromino::makeTetromino(
-            static_cast<TetrominoShape>(i),
-            Vec2(Board::getWidth() / 2 - 1, spawnRow));
+        tetrominoes.at(i) =
+            Tetris::createTetromino(static_cast<TetrominoShape>(i));
     }
 
     // shuffle the array of Tetrominoes
@@ -55,4 +46,8 @@ TetrominoPtr TetrominoQueue::fetchNext() {
     assert(pTetromino != std::nullopt);
 
     return std::move(pTetromino.value());
+}
+
+void TetrominoQueue::insertNextTetromino(TetrominoPtr pTetromino) {
+    queue_.emplace_front(std::move(pTetromino));
 }

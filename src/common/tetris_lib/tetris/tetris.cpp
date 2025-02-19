@@ -166,3 +166,15 @@ bool Tetris::getIsAlive() const { return isAlive_; }
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoQueue_.size();
 }
+
+TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
+    // I & T tetromino should have its anchorPoint one row above compared to
+    // the others when spawned
+    int spawnRow = (tetrominoShape == TetrominoShape::I
+                    || tetrominoShape == TetrominoShape::T)
+                       ? Board::getHeight() - 1
+                       : Board::getHeight() - 2;
+
+    return ATetromino::makeTetromino(tetrominoShape,
+                                     Vec2(Board::getWidth() / 2 - 1, spawnRow));
+}

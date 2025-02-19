@@ -7,7 +7,7 @@
 
 class TetrominoQueue : public SerializableQueue<TetrominoPtr> {
     static constexpr size_t MINIMUM_ENQUEUED_NUM =
-        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
+        static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
   public:
     TetrominoQueue();
@@ -24,7 +24,16 @@ class TetrominoQueue : public SerializableQueue<TetrominoPtr> {
      */
     void refill();
 
+    /**
+     * @brief Returns the next tetromino from the queue and removes it from the
+     * queue.
+     */
     TetrominoPtr fetchNext();
+
+    /**
+     * @brief Inserts the given tetromino at the front of the queue.
+     */
+    void insertNextTetromino(TetrominoPtr pTetromino);
 };
 
 #endif // TETROMINO_QUEUE_HPP

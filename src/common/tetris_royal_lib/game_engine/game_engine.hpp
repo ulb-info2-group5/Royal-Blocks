@@ -4,6 +4,8 @@
 #include "../game_state/game_state.hpp"
 
 #include "effect/penalty/penalty.hpp"
+#include "effect_price/effect_price.hpp"
+#include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
 
 #include <array>
@@ -88,6 +90,12 @@ class GameEngine {
      */
     Energy calculateEnergyClearedRows(size_t numClearedRows);
 
+    /**
+     * @brief Inserts two mini tetrominoes at the front of the given player's
+     * tetrominoes queue.
+     */
+    void handleMiniTetrominoes(PlayerID playerID);
+
   public:
     /**
      * @brief Changes the given player's target to the new target.
@@ -103,8 +111,8 @@ class GameEngine {
     bool checkCanBuyEffect(PlayerID buyerID, EffectType effectType);
 
     /**
-     * @brief Makes the given player buy the given effect if possible (meaning
-     * he had enough Energy).
+     * @brief Makes the given player buy the given effect if possible
+     * (meaning he had enough Energy).
      */
     void tryBuyEffect(PlayerID playerID, EffectType effectType);
 
@@ -127,8 +135,8 @@ class GameEngine {
     void tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove);
 
     /**
-     * @brief Drops the active Tetromino until it hits the bottom or an occupied
-     * cell.
+     * @brief Drops the active Tetromino until it hits the bottom or an
+     * occupied cell.
      */
     void bigDrop(PlayerID playerID);
 

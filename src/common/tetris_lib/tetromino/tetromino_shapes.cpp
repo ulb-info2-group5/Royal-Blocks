@@ -32,8 +32,11 @@ std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
     case TetrominoShape::T:
         os << "T";
         break;
-    case TetrominoShape::NumTetrominoShape:
+    case TetrominoShape::NumBasicTetrominoShape:
         os << "NumTetrominoShape";
+        break;
+    case TetrominoShape::MiniTetromino:
+        os << "MiniTetromino";
         break;
     default:
         os << "Unknown";

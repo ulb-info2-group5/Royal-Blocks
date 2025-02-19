@@ -62,8 +62,6 @@ template <typename T> class SerializableQueue {
             return next;
         }
     }
-
-    // TODO: serialize method
 };
 
 #endif // SERIALIZABLE_QUEUE_HPP

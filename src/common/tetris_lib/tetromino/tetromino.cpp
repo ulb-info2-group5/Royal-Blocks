@@ -71,9 +71,9 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
 
 TetrominoPtr ATetromino::makeTetromino(TetrominoShape shape,
                                        Vec2 &&anchorPoint) {
-    if (shape == TetrominoShape::NumTetrominoShape) {
+    if (shape == TetrominoShape::NumBasicTetrominoShape) {
         throw std::runtime_error(
-            "shape must be different from NumTetrominoShape");
+            "invalid tetromino shape: NumBasicTetrominoShape");
     }
 
     TetrominoPtr ret;
