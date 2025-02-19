@@ -18,6 +18,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 
@@ -107,7 +108,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
     rows.push_back(ftxui::separator());
 
     // infos of the ranking table (Ranking, User, Score) with the ranking vector
-    for (auto& [rank, user, score] : ranking) {
+    for (const auto& [rank, user, score] : ranking) {
         rows.push_back(
             ftxui::hbox({
                 // Ranging on the left
@@ -154,7 +155,7 @@ void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
 
 void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList) {
     std::vector<ftxui::Component> buttons;
-    for (auto& friendName : friendsList) {
+    for (const std::string& friendName : friendsList) {
         buttons.push_back(ftxui::Button(friendName, [&] {
             manageFriendlistScreen(friendName);
         }, ftxui::ButtonOption::Animated()));
@@ -169,7 +170,7 @@ void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList
     }, ftxui::ButtonOption::Animated());
 
     ftxui::Component friendsContainer = ftxui::Container::Vertical({});
-    for (auto& button : buttons) {
+    for (const ftxui::Component& button : buttons) {
         friendsContainer->Add(button);
     }
 

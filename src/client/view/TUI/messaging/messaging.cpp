@@ -6,6 +6,7 @@
 #include <ftxui/component/mouse.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@ Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const st
 }
 
 void Messaging::initMessaging(){
-    for (const auto& friend_name : friends_) {
+    for (const string& friend_name : friends_) {
         conversations[friend_name] = {Message{1, friend_name + " : test bonjour "} };
     }
 }
@@ -27,10 +28,10 @@ MessagingState Messaging::render(){
     MessagingState res = MessagingState::NONE;
 
     //
-    auto friends_menu = Menu(&friends_, &selectedFriend);
+    Component friends_menu = Menu(&friends_, &selectedFriend);
 
     //
-    auto addFriendInput = Input(&newFriend, "Nom de l'ami");
+    Component addFriendInput = Input(&newFriend, "Nom de l'ami");
     //attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
@@ -41,7 +42,7 @@ MessagingState Messaging::render(){
     //     }
     // });
 
-    auto addFriendButton = Button("Ajouter un ami", [&] {
+    Component addFriendButton = Button("Ajouter un ami", [&] {
         if (!newFriend.empty()) {
             friends_.push_back(newFriend);
             conversations[newFriend] = {}; 
@@ -51,37 +52,37 @@ MessagingState Messaging::render(){
 
 
 
-    auto messageInput = Input(&newMessage, "Écrire un message...") | center | border;
+    Component messageInput = Input(&newMessage, "Écrire un message...") | center | border;
 
 
-    auto sendButton = Button("Envoyer", [&] {
+    Component sendButton = Button("Envoyer", [&] {
         if (!newMessage.empty() && !friends_.empty()) { 
             addMessage(newMessage);
         }
     }) | center;
 
 
-    auto buttonBack = ftxui::Button("Back", [&] {
+    Component buttonBack = ftxui::Button("Back", [&] {
         newMessage.clear();
         newFriend.clear();
         res = MessagingState::BACK;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated());
 
-    auto sidebar = Container::Vertical({
+    Component sidebar = Container::Vertical({
         friends_menu,
     });
 
-    auto addMenue = Container::Vertical({
+    Component addMenue = Container::Vertical({
       addFriendInput,
         addFriendButton,
         buttonBack,
     });
 
-    auto chatDisplay = Renderer([&] {
+    Component chatDisplay = Renderer([&] {
         Elements chat_elements;
         if (!friends_.empty()) {
-            for (const auto& msg : conversations[friends_[static_cast<size_t>(selectedFriend)]]) {
+            for (const Message &msg : conversations[friends_[static_cast<size_t>(selectedFriend)]]) {
                 if (msg.idSender != userId){
                     chat_elements.push_back(text(msg.message) | bold | color(Color::Yellow));
                 }else {
@@ -93,7 +94,7 @@ MessagingState Messaging::render(){
         return vbox(chat_elements) | flex ;
     });
 
-    auto main_container = Container::Horizontal({
+    Component main_container = Container::Horizontal({
         sidebar,
         Container::Vertical({
             chatDisplay,
@@ -103,7 +104,7 @@ MessagingState Messaging::render(){
         addMenue,
     });
 
-    auto render = Renderer(main_container, [&] {
+    Component render = Renderer(main_container, [&] {
         return hbox({
             vbox({
                 text(" --- LISTE AMIS --- ") | bold | color(Color::Green) | center,
