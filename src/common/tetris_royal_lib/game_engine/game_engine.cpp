@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <optional>
+#include <stdexcept>
 #include <variant>
 
 static constexpr auto genFeaturesBitset =
@@ -32,12 +33,14 @@ const GameEngine::FeaturesMap GameEngine::featuresBitsets =
 
     featuresPerGameMode.at(static_cast<size_t>(GameMode::Dual)) =
         genFeaturesBitset({
+            GameModeFeature::PenaltyRows,
             // Dual features go here
         });
 
     featuresPerGameMode.at(static_cast<size_t>(GameMode::Classic)) =
         genFeaturesBitset({
             // Classic features go here
+            GameModeFeature::PenaltyRows,
             GameModeFeature::SelectPenaltyTarget,
         });
 
@@ -59,7 +62,7 @@ bool GameEngine::checkFeaturesEnabled(GameModeFeature gameModeFeature) const {
 GameEngine::GameEngine(const GameStatePtr &pGameState)
     : pGameState_(pGameState) {}
 
-void GameEngine::sendPenaltyEffect(PlayerID sender,
+void GameEngine::sendPenaltyEffect(PlayerID senderID,
                                    Penalty::PenaltyType penaltyType) {
     if (!checkFeaturesEnabled(GameModeFeature::Effects)
         || !checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
@@ -71,9 +74,25 @@ void GameEngine::sendPenaltyEffect(PlayerID sender,
     // (nullopt)
 
     std::optional<PlayerID> target =
-        pGameState_->getPlayerState(sender)->getPenaltyTarget();
+        pGameState_->getPlayerState(senderID)->getPenaltyTarget();
 
     pGameState_->getPlayerState(target.value())->receivePenalty(penaltyType);
+}
+
+void GameEngine::sendPenaltyRows(PlayerID senderID, size_t numRows) {
+    if (checkFeaturesEnabled(GameModeFeature::PenaltyRows)) {
+        std::optional<PlayerID> targetID =
+            pGameState_->getPlayerState(senderID)->getPenaltyTarget();
+
+        if (!targetID.has_value()) {
+            throw std::runtime_error{
+                "A player attempted to send penalty rows but "
+                "has not target selected."};
+        } else {
+            pGameState_->getTetris(targetID.value())
+                ->eventReceivePenaltyLines(numRows);
+        }
+    }
 }
 
 bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
@@ -187,10 +206,26 @@ void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
     pGameState_->getTetris(playerID)->eventTryRotateActive(rotateClockwise);
 }
 
+Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) {
+    // TODO: Adapt this to what the assistant asked
+    return numClearedRows;
+}
+
 void GameEngine::clockTick(PlayerID playerID) {
     size_t numClearedRows = pGameState_->getTetris(playerID)->eventClockTick();
 
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
 
     pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
+
+    if (checkFeaturesEnabled(GameModeFeature::PenaltyRows)) {
+        // For n rows cleared by the player, his target receives n-1 penalty
+        // rows.
+        sendPenaltyRows(playerID, numClearedRows - 1);
+    }
+
+    if (checkFeaturesEnabled(GameModeFeature::Effects)) {
+        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
+        pGameState_->getPlayerState(playerID)->increaseEnergy(earnedEnergy);
+    }
 }

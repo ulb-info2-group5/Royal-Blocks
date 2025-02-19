@@ -3,6 +3,7 @@
 
 #include "../game_state/game_state.hpp"
 
+#include "effect/penalty/penalty.hpp"
 #include "tetromino/tetromino.hpp"
 
 #include <array>
@@ -14,6 +15,7 @@ using GameStatePtr = std::shared_ptr<GameState>;
 class GameEngine {
   public:
     enum class GameModeFeature {
+        PenaltyRows,
         Effects,
         SelectPenaltyTarget,
         NumGameModeFeatures,
@@ -59,7 +61,12 @@ class GameEngine {
     /**
      * @brief Sends the given penalty to the sender's selected target.
      */
-    void sendPenaltyEffect(PlayerID sender, Penalty::PenaltyType penaltyType);
+    void sendPenaltyEffect(PlayerID senderID, Penalty::PenaltyType penaltyType);
+
+    /**
+     * @brief Makes the sender send penalty rows to its chosen target.
+     */
+    void sendPenaltyRows(PlayerID senderID, size_t numRows);
 
     // NOTE: just moved it to private
     /**
@@ -74,6 +81,12 @@ class GameEngine {
      * the given number of rows.
      */
     Score calculatePointsClearedRows(size_t numClearedRows);
+
+    /**
+     * @brief Returns the amount of Energy awarded to the player for clearing
+     * the given number of rows.
+     */
+    Energy calculateEnergyClearedRows(size_t numClearedRows);
 
   public:
     /**
