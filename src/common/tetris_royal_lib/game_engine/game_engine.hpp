@@ -3,6 +3,8 @@
 
 #include "../game_state/game_state.hpp"
 
+#include "tetromino/tetromino.hpp"
+
 #include <array>
 #include <bitset>
 #include <memory>
@@ -98,6 +100,18 @@ class GameEngine {
      * selector.
      */
     void selectPrevEffect(PlayerID playerID);
+
+    /**
+     * @brief Moves the player's active Tetromino in the given direction if
+     * possible.
+     */
+    void tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove);
+
+    /**
+     * @brief Rotates the player's active Tetromino in the given direction if
+     * possible.
+     */
+    void tryRotateActive(PlayerID playerID, bool rotateClockwise);
 };
 
 #endif // GAME_ENGINE_HPP

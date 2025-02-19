@@ -15,12 +15,12 @@ class ATetromino;
 using TetrominoPtr = std::unique_ptr<ATetromino>;
 
 /**
- * @enum Direction
+ * @enum TetrominoMove
  *
  * @brief The three directions in which a Tetromino can be moved: left, right,
  * down.
  */
-enum class Direction { Left, Right, Down };
+enum class TetrominoMove { Left, Right, Down };
 
 /**
  * @class Tetromino
@@ -210,10 +210,10 @@ class ATetromino {
     /**
      * @brief Moves the Tetromino in the given direction.
      *
-     * @param direction The direction to move the Tetromino.
+     * @param tetrominoMove The direction to move the Tetromino.
      * @param reverse If true, moves the Tetromino in the opposite direction.
      */
-    void move(Direction direction, bool reverse = false);
+    void move(TetrominoMove tetrominoMove, bool reverse = false);
 
     /**
      * @brief Rotates the Tetromino around it rotation-center (Without SRS).

@@ -176,3 +176,11 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
 
     pGameState_->getPlayerState(playerID)->selectPrevEffect();
 }
+
+void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
+    pGameState_->getTetris(playerID)->eventTryMoveActive(tetrominoMove);
+}
+
+void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
+    pGameState_->getTetris(playerID)->eventTryRotateActive(rotateClockwise);
+}

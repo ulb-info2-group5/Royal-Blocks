@@ -115,9 +115,9 @@ class Tetris {
     /**
      * @brief Moves the active Tetromino in the given direction if possible.
      *
-     * @param direction The direction to move the Tetromino.
+     * @param tetrominoMove The direction to move the Tetromino.
      */
-    void eventTryMoveActive(Direction direction);
+    void eventTryMoveActive(TetrominoMove tetrominoMove);
 
     /**
      * @brief Rotates the active Tetromino if possible.
@@ -133,7 +133,7 @@ class Tetris {
      * If there was no hold tetromino, move the tetromino to hold.
      * If there was a hold tetromino, swap it with the tetromino to hold.
      */
-    void holdNextTetromino();
+    void eventHoldNextTetromino();
 
     /**
      * @brief Adds penalty lines, sets isAlive flag to false if it made the

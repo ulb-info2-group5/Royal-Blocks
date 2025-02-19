@@ -158,15 +158,15 @@ void ATetromino::setAnchorPoint(const Vec2 &anchorPoint) {
 
 // #### Tetromino Actions ####
 
-void ATetromino::move(Direction direction, bool reverse) {
-    switch (direction) {
-    case Direction::Down:
+void ATetromino::move(TetrominoMove tetrominoMove, bool reverse) {
+    switch (tetrominoMove) {
+    case TetrominoMove::Down:
         anchorPoint_.moveY(reverse ? +1 : -1);
         break;
-    case Direction::Left:
+    case TetrominoMove::Left:
         anchorPoint_.moveX(reverse ? +1 : -1);
         break;
-    case Direction::Right:
+    case TetrominoMove::Right:
         anchorPoint_.moveX(reverse ? -1 : +1);
         break;
     }

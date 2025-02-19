@@ -17,7 +17,7 @@
 void Tetris::updatePreviewTetromino() {
     previewTetromino_ = activeTetromino_->clone();
     while (checkCanDrop(*previewTetromino_)) {
-        previewTetromino_->move(Direction::Down);
+        previewTetromino_->move(TetrominoMove::Down);
     }
 }
 
@@ -87,7 +87,7 @@ size_t Tetris::eventClockTick() {
             ticks_since_lock_start_++;
         }
     } else {
-        eventTryMoveActive(Direction::Down);
+        eventTryMoveActive(TetrominoMove::Down);
     }
 
     updatePreviewTetromino();
@@ -97,17 +97,17 @@ size_t Tetris::eventClockTick() {
 
 void Tetris::eventBigDrop() {
     while (checkCanDrop(*activeTetromino_)) {
-        activeTetromino_->move(Direction::Down);
+        activeTetromino_->move(TetrominoMove::Down);
     }
 
     updatePreviewTetromino();
 }
 
-void Tetris::eventTryMoveActive(Direction direction) {
-    activeTetromino_->move(direction);
+void Tetris::eventTryMoveActive(TetrominoMove tetrominoMove) {
+    activeTetromino_->move(tetrominoMove);
 
     if (!board_.checkInGrid(*activeTetromino_)) {
-        activeTetromino_->move(direction, true);
+        activeTetromino_->move(tetrominoMove, true);
     }
 
     updatePreviewTetromino();
@@ -138,7 +138,7 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
     updatePreviewTetromino();
 }
 
-void Tetris::holdNextTetromino() {
+void Tetris::eventHoldNextTetromino() {
     if (holdTetromino_ == nullptr) {
         // If there is no hold, simply move the next to hold.
         holdTetromino_ = std::move(tetrominoQueue_.fetchNext());
