@@ -101,7 +101,7 @@ class Tetris {
 
     /**
      * @brief Makes the active Tetromino go down (and manages the lock delay).
-     * Also updates de board to clear the fullRows and returns how many rows
+     * Also updates the board to clear the fullRows and returns how many rows
      * were cleared.
      */
     size_t eventClockTick();

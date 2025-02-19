@@ -121,7 +121,11 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     pGameState_->getPlayerState(playerID)->setPenaltyTarget(target);
 }
 
-// TODO
+Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) {
+    // TODO: Adapt this to what the assistant asked
+    return numClearedRows * 100;
+}
+
 void GameEngine::selectNextAliveTarget(PlayerID playerID) {
     if (!checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
@@ -150,8 +154,8 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
         }
     } while (newTargetIt != prevTargetIt && !(*newTargetIt).first.isAlive());
 
-    // NOTE: This should never happen, if it does, the game should have ended
-    // earlier because there is only one player left.
+    // NOTE: This should never happen, if it does, the game should have
+    // ended earlier because there is only one player left.
     assert(newTargetIt != playerSelfIt);
 
     PlayerID newTargetID = (*newTargetIt).first.getPlayerID();
@@ -160,7 +164,6 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
 }
 
 void GameEngine::selectNextEffect(PlayerID playerID) {
-
     if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
         return;
     }
@@ -169,7 +172,6 @@ void GameEngine::selectNextEffect(PlayerID playerID) {
 }
 
 void GameEngine::selectPrevEffect(PlayerID playerID) {
-
     if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
         return;
     }
@@ -183,4 +185,12 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
 
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
     pGameState_->getTetris(playerID)->eventTryRotateActive(rotateClockwise);
+}
+
+void GameEngine::clockTick(PlayerID playerID) {
+    size_t numClearedRows = pGameState_->getTetris(playerID)->eventClockTick();
+
+    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
+
+    pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
 }

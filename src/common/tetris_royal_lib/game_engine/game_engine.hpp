@@ -69,6 +69,12 @@ class GameEngine {
      */
     void selectTarget(PlayerID playerID, PlayerID target);
 
+    /**
+     * @brief Returns the number of points awarded for clearing
+     * the given number of rows.
+     */
+    Score calculatePointsClearedRows(size_t numClearedRows);
+
   public:
     /**
      * @brief Changes the given player's target to the new target.
@@ -112,6 +118,11 @@ class GameEngine {
      * possible.
      */
     void tryRotateActive(PlayerID playerID, bool rotateClockwise);
+
+    /**
+     * @brief Makes a clock tick happen for the given player.
+     */
+    void clockTick(PlayerID playerID);
 };
 
 #endif // GAME_ENGINE_HPP
