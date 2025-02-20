@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-const uint32_t WIDTH = 10,
+constexpr uint32_t WIDTH = 10,
                 HEIGHT = 20;
 
 const uint8_t NB_BLOCKS_PER_PIECE = 4;

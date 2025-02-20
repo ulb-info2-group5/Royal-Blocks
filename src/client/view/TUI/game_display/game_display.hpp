@@ -1,8 +1,8 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../interfaceConfig.hpp"
-#include "../../IGame.hpp"
+#include "../../interfaceConstants.hpp"
+// #include "../../IGame.hpp"
 #include "../../dataExample.hpp"
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
@@ -18,80 +18,79 @@
 #include <memory>
 #include <utility>
 #include <string>
+#include <vector>
+#include <array>
 
-const uint32_t PIXEL_LENGTH_PLAYER = 4,
-               PIXEL_LENGTH_OPPONENT = 2;
+const uint32_t LENGTH_PLAYER = 4,
+               LENGTH_OPPONENT = 2;
 
 const uint32_t WIDTH_PLAYER_CANVAS = 40,
                HEIGHT_PLAYER_CANVAS = 80,
                WIDTH_OP_CANVAS = 20,
                HEIGHT_OP_CANVAS = 40;
 
+enum class PlayMode : uint8_t 
+{
+    ENDLESS,
+    DUEL   ,
+    CLASSIC,
+    ROYAL
+};
+
 
 ftxui::Color getFTXUIColor(colors color);
 
-class GameDisplay : public IGame 
+class GameDisplay
 {
     private:
-        // std::shared_ptr<GameState> partyInfo_;
-        // std::shared_ptr<PlayerState> player_;
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
-        std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> vectorBoards_;
-        PlayMode playMode_;
-        uint8_t totalPlayers_;
-        uint32_t score_;
-        std::vector<std::string> effects_ = {};
+    std::vector<std::string> pseudos_;
+    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> playersBoards_;
+    uint32_t score_;
+    float malusGauge_;
+    PlayMode play_;
 
-        ftxui::Component playerBoard_;
-        ftxui::Components opBoards_;
-        ftxui::Component buttonsEffects_;
-        ftxui::Pixel pixel_;
-        
-        ftxui::Component displayRightSide_;
-        ftxui::Component displayMiddleSide_;
-        ftxui::Component displayLeftSide_;
-        ftxui::Component displayWindow_;
+    float energyGauge_;
+    std::vector<std::string> effects_ = {};
+
+    ftxui::Component displayRight_;
+    ftxui::Component displayMiddle_;
+    ftxui::Component displayLeft_;
+    ftxui::Component displayWindow_;
 
     protected:
 
-        void drawPlayerBoard() override;
+    // void drawEndlessRight();
 
-        void drawOpponentsBoard() override;
+    // void drawClassicRight();
 
-        void displayBoardsOp();
-        
-        void displayEffects();
+    void drawRoyalRight();
 
-        void displayRightSide();
+    void drawMiddle();
 
-        void displayMiddleSide();
+    // void drawDuoLeft();
 
-        void displayLeftSide();
+    // void drawClassicLeft();
 
-        //void drawEndlessMode() override;
+    void drawRoyalLeft();
 
-        //void drawDualMode() override;
+    // void drawEndless();
 
-        //void drawClassicMode() override;
+    // void drawDuo();
 
-        void drawRoyalMode() override;
+    // void drawClassic();
 
-    public: 
+    void drawRoyal();
 
-        // std::shared_ptr<ftxui::ScreenInteractive> screen_;
-        //GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
-        // GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-        //             PlayMode playMode, uint8_t numberPlayers, 
-        //             std::shared_ptr<ftxui::ScreenInteractive> screen);
-        
-        GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-                    PlayMode playMode, uint8_t numberPlayers);
+    public:
+
+    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+                PlayMode play);
+
+    void render();
 
 
-        ~GameDisplay() = default;
-
-        void render() override;
 };
 
 #endif

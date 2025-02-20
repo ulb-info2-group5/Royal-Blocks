@@ -32,278 +32,254 @@ ftxui::Color getFTXUIColor(colors color)
     return returnValue;
 }
 
-// constructor
+// constructor 
 
-// GameDisplay::GameDisplay(std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-//                         PlayMode playMode, uint8_t numberPlayers, 
-//                         std::shared_ptr<ftxui::ScreenInteractive> screenManager) : 
-//                         vectorBoards_{boards},
-//                         playMode_{playMode},
-//                         totalPlayers_{numberPlayers},
-//                         screen_{screenManager}
-// {
-//     //initialialising for the preview
-//     score_ = 100000;
-
-//     displayLeftSide_ = {};
-//     displayMiddleSide_ = {};
-//     displayRightSide_ = {};
-
-//     displayWindow_ = ftxui::Component();
-
-//     pixel_ = ftxui::Pixel();
-
-//     // drawPlayerBoard();
-//     // if (playMode_ != PlayMode::ENDLESS) 
-//     // {
-//     //     drawOpponentsBoard();
-//     // } else 
-//     // {
-//     //     opBoards_ = {};
-//     // }
-
-//     if (playMode_ == PlayMode::ROYAL) 
-//     {
-//         effects_ = {"bon1", "bon2", "bon3", "bon4", "bon5", "bon6",
-//                     "bon7", "bon8", "bon9"};
-//     }
-
-// }
-
-GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::shared_ptr<std::vector<std::vector<std::vector<colors>>>> boards, 
-                        PlayMode playMode, uint8_t numberPlayers) : 
-                        screen_{screen},
-                        vectorBoards_{boards},
-                        playMode_{playMode},
-                        totalPlayers_{numberPlayers}
+GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+                PlayMode play) :
+                screen_{screen}, playersBoards_{boards}, play_{play}
 {
-    //initialialising for the preview
-    score_ = 100000;
+    // initialise for preview
+    pseudos_ = {"juliette", "ethan", "quentin", "frog", 
+             "lucas", "rafaou", "jonas", "ernest", "vanilla"};
+    score_ = 10000;
+    malusGauge_ = 0.5;
+    energyGauge_ = 0.5;
 
-    displayLeftSide_ = {};
-    displayMiddleSide_ = {};
-    displayRightSide_ = {};
-
-    displayWindow_ = ftxui::Component();
-    buttonsEffects_ = ftxui::Component();
-
-    pixel_ = ftxui::Pixel();
-
-    if (playMode_ == PlayMode::ROYAL) 
-    {
-        effects_ = {"bon1", "bon2", "bon3", "bon4", "bon5", "bon6",
-                    "bon7", "bon8", "bon9"};
-    }
+    effects_ = {"bonus0","bonus1", "bonus2", "bonus3", 
+                "bonus4", "bonus5", "bonus6", "bonus7", "bonus8"};
 
 }
-
-//GameDisplay::GameDisplay(std::shared_ptr<ScreenManager> screenManager, std::shared_ptr<GameState> partyInfo_, std::shared_ptr<PlayerState> player_;);
 
 
 // protected methods
 
-void GameDisplay::drawPlayerBoard()
+// void GameDisplay::drawEndlessLeft();
+
+// void GameDisplay::drawClassicLeft();
+
+void GameDisplay::drawRoyalLeft()
 {
-    playerBoard_ = ftxui::Renderer([&] {
+    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+    
+    ftxui::Components effectsButton = {};
 
+    for (uint8_t i = 0; i < 3; ++i)
+    {
+        ftxui::Component but = ftxui::Container::Horizontal({
+            ftxui::Button(effects_.at(i * 3 ), [&] { /* function to call */}, 
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Red)),
+            ftxui::Button(effects_.at(i * 3 + 1), [&] { /* function to call */}, 
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Red)),
+            ftxui::Button(effects_.at(i * 3 + 2 ), [&] { /* function to call */}, 
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Red)),
+        });
+
+        effectsButton.push_back(but);
+    }
+
+    ftxui::Component effectsDisplay = ftxui::Container::Vertical({
+        effectsButton.at(0),
+        effectsButton.at(1),
+        effectsButton.at(2)
+    });
+
+    ftxui::Component energyDisplay = ftxui::Renderer([&]{
+        return ftxui::vbox({
+            ftxui::gaugeRight(energyGauge_),
+            ftxui::text("energy power") | ftxui::borderRounded}); 
+    });
+
+    ftxui::Component playerDisplay = ftxui::Renderer([&]{
+        return ftxui::vbox({
+            ftxui::text(std::to_string(score_)),
+            ftxui::text(pseudos_.at(0))
+        }) | ftxui::borderDashed;
+    });
+
+    displayLeft_ = ftxui::Container::Vertical({
+        menuDisplay,
+        effectsDisplay,
+        energyDisplay,
+        playerDisplay,
+    });
+}
+
+void GameDisplay::drawMiddle()
+{
+    ftxui::Component modeDisplay = ftxui::Renderer([&] {
+        return ftxui::text("Royal") | ftxui::borderRounded;
+    });
+
+    ftxui::Component boardPlayerDisplay = ftxui::Renderer([&] {
         ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
+        ftxui::Pixel pixel = ftxui::Pixel();
 
-        for (uint32_t y = 0; y < HEIGHT; ++y) 
+        for (uint32_t x = 0; x < WIDTH; ++x)
+        {
+            for (uint32_t y = 0; y < HEIGHT; ++y)
+            {
+                pixel.background_color = getFTXUIColor(playersBoards_->at(0).at(y).at(x));
+
+                for (uint32_t i = 0; i < LENGTH_PLAYER; ++i)
+                {
+                    playerCanvas.DrawBlockCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
+                    // playerCanvas.DrawPointCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
+                }
+            }
+        }
+
+        return ftxui::canvas(playerCanvas) | ftxui::border;
+    });
+
+    ftxui::Component playButtonsDisplay = ftxui::Container::Horizontal({
+        ftxui::Button("g", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+        ftxui::Button("f", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+        ftxui::Button("<-", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+        ftxui::Button("->", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+        ftxui::Button("j", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+        ftxui::Button("G", [&] { /* function to call */}, 
+                    ftxui::ButtonOption::Animated(ftxui::Color::Red)) | ftxui::borderDouble,
+    });
+
+    displayMiddle_ = ftxui::Container::Vertical({
+        modeDisplay,
+        boardPlayerDisplay,
+        playButtonsDisplay,
+    });
+}
+
+// void GameDisplay::drawDuoLeft();
+
+// void GameDisplay::drawClassicLeft();
+
+void GameDisplay::drawRoyalRight()
+{
+    // ftxui::Components boardsOp = {}, rows= {};
+    uint32_t totalPlayers = playersBoards_->size();
+
+    // for (uint32_t index = 1; index < totalPlayers; ++index)
+    // {
+    //     ftxui::Component opDisplay = ftxui::Renderer([&]{
+    //         ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
+
+    //         ftxui::Pixel pixel = ftxui::Pixel();
+
+    //         for (uint32_t x = 0; x < WIDTH; ++x)
+    //         {
+    //             for (uint32_t y = 0; y < HEIGHT; ++y)
+    //             {
+    //                 pixel.background_color = getFTXUIColor(playersBoards_->at(index).at(y).at(x));
+
+    //                 for (uint32_t i = 0; i < LENGTH_OPPONENT; ++i)
+    //                 {
+    //                     opCanvas.DrawBlockCircleFilled(x * LENGTH_OPPONENT + i, y * LENGTH_OPPONENT + i, LENGTH_OPPONENT, pixel.background_color);
+    //                 }
+    //             }
+    //         }
+
+    //         return ftxui::canvas(opCanvas) | ftxui::border; 
+    //     });
+
+    //     // boardsOp.push_back(ftxui::Container::Vertical({
+    //     //     opDisplay,
+    //     //     ftxui::Button(pseudos_.at(index), [&] { /* function to call */}, 
+    //     //             ftxui::ButtonOption::Animated(ftxui::Color::Yellow1)) | ftxui::borderDouble,
+    //     // }));
+    //     boardsOp.push_back(opDisplay);
+    // }
+    ftxui::Component opDisplay = ftxui::Renderer([&]{
+        ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS  * (totalPlayers - 1), HEIGHT_OP_CANVAS * (totalPlayers - 1));
+        for (uint32_t index = 1; index < totalPlayers; ++index)
         {
             for (uint32_t x = 0; x < WIDTH; ++x)
             {
-                // Obtenir la couleur de la case actuelle
-                ftxui::Color color = getFTXUIColor(vectorBoards_->at(0).at(y).at(x));
-
-                // Dessiner le pixel
-                for (uint32_t i = 0; i < PIXEL_LENGTH_PLAYER; ++i)
-                {
-                    playerCanvas.DrawBlockCircleFilled(x * PIXEL_LENGTH_PLAYER + i, y * PIXEL_LENGTH_PLAYER + i, true, color);
-                }
+                for (uint32_t y = 0)
             }
         }
-
-        return ftxui::canvas(std::move(playerCanvas)) | ftxui::border;
-    });
-}
-
-
-void GameDisplay::drawOpponentsBoard()
-{
-    for (uint32_t index = 1; index < vectorBoards_->size(); ++index)
-    {
-        ftxui::Component boardPlayer = ftxui::Renderer([&] {
-        
-            ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
-
-            for (uint32_t y = 0; y < HEIGHT; ++y) 
-            {
-                for (uint32_t x = 0; x < WIDTH; ++x)
-                {
-                    ftxui::Color color = getFTXUIColor((*vectorBoards_).at(index).at(y).at(x));
-
-                    for (uint32_t i = 0; i < PIXEL_LENGTH_OPPONENT; ++i)
-                    {
-                        opCanvas.DrawBlockCircleFilled(x * PIXEL_LENGTH_OPPONENT + i, y * PIXEL_LENGTH_OPPONENT + i, true, color);
-                    }
-                }
-            }
-
-            return ftxui::canvas(std::move(opCanvas)) | ftxui::border;
-        });
-
-        if (opBoards_.size() == totalPlayers_ - 1) 
-            opBoards_.at(index) = boardPlayer;
-        else 
-            opBoards_.push_back(boardPlayer);
-    }
-}
-
-
-void GameDisplay::displayBoardsOp() 
-{
-    ftxui::Components rows;
-    //yeah i need to do this because idk how to use an extern ftxui lib and i can't use gridbox bc typo
-    for (uint8_t i = 0; i < 3; ++i)
-    {
-        ftxui::Component line;
-
-        // need to verify if the opponents grid to add is still in the totalPlayers' number range
-        // -1 to substract the main player
-        if (totalPlayers_ - ( 1 + i * 3) <= 0) break;
-
-        //switch case to make a line 3 x 1
-        switch (totalPlayers_ - ( 1 + i * 3))
-        {
-            case 1 : 
-                line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3)});
-                break;
-            case 2 : 
-                line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3), opBoards_.at(1 + i * 3)});
-                break;
-            default : 
-                line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3), opBoards_.at(1 + i * 3), opBoards_.at(2 + i * 3)});
-                break;
-        }
-
-        rows.push_back(line);
-    }
-
-    // switch case to make a grid like 3 x 3
-    switch(rows.size())
-    {
-        case 1 : displayRightSide_ = ftxui::Container::Vertical({rows.at(0)}); break;
-        case 2 : displayRightSide_ = ftxui::Container::Vertical({rows.at(0), rows.at(1)}); break;
-        case 3 : displayRightSide_ = ftxui::Container::Vertical({rows.at(0), rows.at(1), rows.at(2)}); break;
-    };
-
-}
-
-void GameDisplay::displayEffects()
-{
-    ftxui::Components lines;
-
-    for (uint8_t i = 0; i < 3; ++i)
-    {
-        ftxui::Component line = ftxui::Container::Horizontal({
-            ftxui::Button(
-                effects_.at(i), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            ),
-            ftxui::Button(
-                effects_.at(i + 1), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            ),
-            ftxui::Button(
-                effects_.at(i + 2), [&] {/*function void to call*/}, ftxui::ButtonOption::Animated(ftxui::Color::Red)
-            )
-        });
-
-        lines.push_back(line);
-    }
-
-    buttonsEffects_ = ftxui::Container::Vertical({
-        lines.at(0),
-        lines.at(1),
-        lines.at(2)
     });
 
+    ftxui::Component malusDisplay = ftxui::Renderer([&]{
+         return ftxui::vbox({
+            ftxui::gaugeRight(malusGauge_),
+            ftxui::text("malus to come") | ftxui::borderDashed,
+            });
+    });
+
+    // displayRight_ = ftxui::Container::Vertical({
+    //     malusDisplay,
+    //     boardsOp.at(0),
+    //     boardsOp.at(1),
+    //     boardsOp.at(2),
+    //     boardsOp.at(3),
+    //     boardsOp.at(4),
+    //     boardsOp.at(5),
+    //     boardsOp.at(6),
+    //     boardsOp.at(7),
+    // });
+
+    // for (uint32_t i = 0; i < 3; ++i)
+    // {   
+    //     ftxui::Component line;
+    //     uint32_t leftPlayers = totalPlayers - (i*3 + 1);
+
+    //     if (leftPlayers  <= 0) break;
+
+    //     switch(leftPlayers)
+    //     {
+    //         case 1 :
+    //         line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3)}); break;
+    //         case 2 :
+    //         line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3), boardsOp.at(1 + i * 3)}); break;
+    //         default : 
+    //         line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3), boardsOp.at(1 + i * 3), boardsOp.at(2 + i * 3)}); break;
+    //     }
+
+    //     rows.push_back(line); 
+    // }
+
+    // switch(rows.size())
+    // {
+    //     case 1 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0)}); break;
+    //     case 2 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0), rows.at(1)}); break;
+    //     case 3 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0), rows.at(1), rows.at(2)}); break;
+    // }
 }
 
-void GameDisplay::displayRightSide() 
+// void GameDisplay::drawEndless();
+
+// void GameDisplay::drawDuo();
+
+// void GameDisplay::drawClassic();
+
+void GameDisplay::drawRoyal()
 {
-    drawOpponentsBoard();
-    displayBoardsOp();
-} 
-
-void GameDisplay::displayMiddleSide()
-{
-    drawPlayerBoard();
-
-    //to suppress later this part of code
-    std::string test;
-
-    switch(playMode_)
-    {
-        case PlayMode::ENDLESS : test = "Endless"; break;
-        case PlayMode::DUEL : test = "Duel" ; break;
-        case PlayMode::CLASSIC : test = "Classic" ; break;
-        case PlayMode::ROYAL : test = "Royal"; break;
-    };
-
-    ftxui::Component mode = ftxui::Renderer([&]{
-        return ftxui::text(test) | ftxui::borderRounded;
-    });
-
-    ftxui::Component score = ftxui::Renderer([&]{
-        return ftxui::text(std::to_string(score_)) | ftxui::borderRounded;
-    });
-
-    displayMiddleSide_ = ftxui::Container::Vertical({
-        mode,
-        playerBoard_,
-        score,
-    });
-
-}
-
-void GameDisplay::displayLeftSide()
-{
-    if (playMode_ == PlayMode::ROYAL) displayEffects();
-
-    displayLeftSide_ = ftxui::Container::Vertical({
-        buttonsEffects_,
-    });
-}
-//void GameDisplay::drawEndlessMode() override;
-
-//void GameDisplay::drawDualMode() override;
-
-//void GameDisplay::drawClassicMode() override;
-
-void GameDisplay::drawRoyalMode() 
-{
-    displayLeftSide();
-    displayMiddleSide();
-    displayRightSide();
-
+    drawRoyalLeft();
+    drawMiddle();
+    // drawRoyalRight();
     displayWindow_ = ftxui::Container::Horizontal({
-        displayLeftSide_,
-        displayMiddleSide_,
-        displayRightSide_,
+        displayLeft_,
+        displayMiddle_,
+        // displayRight_,
     });
 }
 
 
-// public methods 
+// public methods
 
-
-void GameDisplay::render() 
+void GameDisplay::render()
 {
-    switch (playMode_)
+    switch(play_)
     {
-        case PlayMode::ENDLESS : break;
-        case PlayMode::DUEL : break;
-        case PlayMode::CLASSIC : break;
-        case PlayMode::ROYAL : drawRoyalMode(); break;
+        case PlayMode::ENDLESS: break;
+        case PlayMode::DUEL: break;
+        case PlayMode::CLASSIC: break;
+        case PlayMode::ROYAL: drawRoyal(); break;
     };
 
     screen_->Loop(displayWindow_);

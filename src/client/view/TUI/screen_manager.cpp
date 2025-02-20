@@ -110,8 +110,8 @@ void ScreenManager::manageInputMenu(const InputType type) {
 void ScreenManager::manageMainMenu() {
     switch (mainMenu_.render()) {
         case MainMenuState::PLAY: {
-            GameDisplay game = GameDisplay(screen_, std::make_shared<std::vector<std::vector<std::vector<colors>>>>(EXEMPLE_BOARDS), 
-                    PlayMode::ROYAL, 9);
+            GameDisplay game = GameDisplay(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
+                    PlayMode::ROYAL);
             game.render();
             break;
         }
