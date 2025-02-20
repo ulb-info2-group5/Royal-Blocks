@@ -4,21 +4,13 @@
 #include "../effect/bonus/bonus.hpp"
 #include "../effect/penalty/penalty.hpp"
 
-#include <array>
+#include <nlohmann/json.hpp>
+
 #include <cstddef>
 #include <variant>
+#include <vector>
 
 using EffectType = std::variant<Bonus::BonusType, Penalty::PenaltyType>;
-
-constexpr size_t NUM_BONUSES =
-    static_cast<size_t>(Bonus::BonusType::NumBonusType);
-
-constexpr size_t NUM_PENALTIES =
-    static_cast<size_t>(Penalty::PenaltyType::NumPenaltyType);
-
-constexpr size_t NUM_EFFECTS = NUM_BONUSES + NUM_PENALTIES;
-
-using EffectTypeArr = std::array<EffectType, NUM_EFFECTS>;
 
 /**
  * @class Represents the effects (bonuses/penalties) which the player can
@@ -29,10 +21,15 @@ class EffectSelector {
     size_t selectionIdx_;
 
     // bonuses & penalties
-    static const EffectTypeArr EFFECTS;
+    std::array<Bonus::BonusType,
+               static_cast<size_t>(Bonus::BonusType::NumBonusType)>
+        bonuses_;
+    std::array<Penalty::PenaltyType,
+               static_cast<size_t>(Penalty::PenaltyType::NumPenaltyType)>
+        penalties_;
 
   public:
-    EffectSelector() = default;
+    EffectSelector();
     EffectSelector(const EffectSelector &) = default;
     EffectSelector(EffectSelector &&) = default;
     EffectSelector &operator=(const EffectSelector &) = default;
@@ -59,6 +56,16 @@ class EffectSelector {
      * @brief Returns the index of the selected effect.
      */
     size_t getSelectedIdx() const;
+
+    size_t getNumEffects() const;
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const;
+
+    void deserialize(const nlohmann::json &j);
 };
 
 #endif // EFFECT_SELECTOR_HPP

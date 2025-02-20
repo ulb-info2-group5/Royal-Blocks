@@ -34,6 +34,18 @@ class TetrominoQueue : public SerializableQueue<TetrominoPtr> {
      * @brief Inserts the given tetromino at the front of the queue.
      */
     void insertNextTetromino(TetrominoPtr pTetromino);
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j_queue = nlohmann::json::array();
+        for (const auto &tetromino : queue_) {
+            j_queue.push_back(tetromino ? tetromino->serialize() : nullptr);
+        }
+        return j_queue;
+    }
 };
 
 #endif // TETROMINO_QUEUE_HPP

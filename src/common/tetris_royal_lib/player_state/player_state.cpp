@@ -1,6 +1,40 @@
 #include "player_state.hpp"
+#include "effect_selector/effect_selector.hpp"
 
 #include <optional>
+
+PlayerState::PlayerState(PlayerID playerID, Score score)
+    : playerID_{playerID}, score_{score}, isAlive_{true},
+      penaltyTarget_{std::nullopt}, energy_{std::nullopt},
+      receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
+      effectSelector_{std::nullopt}, pActiveBonus_{nullptr},
+      pActivePenalty_{nullptr} {}
+
+void PlayerState::toggleEffects(bool activated) {
+    if (activated) {
+        energy_ = Energy{};
+    } else {
+        energy_ = std::nullopt;
+    }
+
+    if (activated) {
+        receivedPenaltiesQueue_ = SerializableQueue<Penalty::PenaltyType>{};
+    } else {
+        receivedPenaltiesQueue_ = std::nullopt;
+    }
+
+    if (activated) {
+        grantedBonusesQueue_ = SerializableQueue<Bonus::BonusType>{};
+    } else {
+        grantedBonusesQueue_ = std::nullopt;
+    }
+
+    if (activated) {
+        effectSelector_ = EffectSelector{};
+    } else {
+        effectSelector_ = std::nullopt;
+    }
+}
 
 /* ------------------------------------------------
  *              Common to all GameModes
@@ -109,3 +143,43 @@ void PlayerState::setActiveBonus(AbstractTimedEffectPtr pTimedEffect) {
 void PlayerState::selectNextEffect() { effectSelector_->next(); }
 
 void PlayerState::selectPrevEffect() { effectSelector_->prev(); }
+
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json PlayerState::serializeExternal() const {
+    nlohmann::json j;
+    j["playerID"] = playerID_;
+    j["score"] = score_;
+    j["isAlive"] = isAlive_;
+
+    return j;
+}
+
+nlohmann::json PlayerState::serializeSelf() const {
+    nlohmann::json j;
+    j["playerID"] = playerID_;
+    j["score"] = score_;
+    j["isAlive"] = isAlive_;
+
+    if (penaltyTarget_) {
+        j["penaltyTarget"] = *penaltyTarget_;
+    } else {
+        j["penaltyTarget"] = nullptr;
+    }
+
+    if (energy_) {
+        j["energy"] = *energy_;
+    } else {
+        j["energy"] = nullptr;
+    }
+
+    if (effectSelector_) {
+        j["effectSelector"] = effectSelector_->serialize();
+    } else {
+        j["effectSelector"] = nullptr;
+    }
+
+    return j;
+}

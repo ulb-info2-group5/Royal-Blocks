@@ -1,0 +1,39 @@
+#include "tetris_self.hpp"
+
+nlohmann::json client::TetrisSelf::serialize() const {
+    return {{"isAlive", isAlive_},
+            {"activeTetromino",
+             activeTetromino_ ? activeTetromino_->serialize() : nullptr},
+            {"previewTetromino",
+             previewTetromino_ ? previewTetromino_->serialize() : nullptr},
+            {"holdTetromino",
+             holdTetromino_ ? holdTetromino_->serialize() : nullptr},
+            {"board", board_.serialize()},
+            {"tetrominoQueue", tetrominoQueue_.serialize()}};
+}
+
+void client::TetrisSelf::deserialize(const nlohmann::json &j) {
+    j.at("isAlive").get_to(isAlive_);
+
+    if (!j.at("activeTetromino").is_null()) {
+        activeTetromino_->deserialize(j.at("activeTetromino"));
+    } else {
+        activeTetromino_ = std::nullopt;
+    }
+
+    if (!j.at("previewTetromino").is_null()) {
+        previewTetromino_->deserialize(j.at("previewTetromino"));
+    } else {
+        previewTetromino_ = std::nullopt;
+    }
+
+    board_.deserialize(j.at("board"));
+
+    if (!j.at("holdTetromino").is_null()) {
+        holdTetromino_->deserialize(j.at("holdTetromino"));
+    } else {
+        holdTetromino_ = std::nullopt;
+    }
+
+    tetrominoQueue_.deserialize(j.at("tetrominoQueue"));
+};

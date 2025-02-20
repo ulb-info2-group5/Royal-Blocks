@@ -6,7 +6,7 @@
 #include "../tetromino_queue/tetromino_queue.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
-#include <sys/types.h>
+#include <cstddef>
 
 class TetrisTest;
 
@@ -87,12 +87,12 @@ class Tetris {
 
     Tetris() = default;
     Tetris(const Tetris &) = delete;
-    Tetris(Tetris &&) = delete;
+    Tetris(Tetris &&) = default;
 
     // #### Assignment ####
 
     Tetris &operator=(const Tetris &) = delete;
-    Tetris &operator=(Tetris &&) = delete;
+    Tetris &operator=(Tetris &&) = default;
 
     // #### Destructor ####
 
@@ -176,7 +176,32 @@ class Tetris {
 
     static TetrominoPtr createTetromino(TetrominoShape tetrominoShape);
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serializeSelf() const {
+        return {{"isAlive", isAlive_},
+                {"activeTetromino",
+                 activeTetromino_ ? activeTetromino_->serialize() : nullptr},
+                {"previewTetromino",
+                 previewTetromino_ ? previewTetromino_->serialize() : nullptr},
+                {"holdTetromino",
+                 holdTetromino_ ? holdTetromino_->serialize() : nullptr},
+                {"board", board_.serialize()},
+                {"tetrominoQueue", tetrominoQueue_.serialize()}};
+    }
+
+    nlohmann::json serializeExternal() const {
+        return {
+            {"isAlive", isAlive_},
+            {"board", board_.serialize()},
+        };
+    }
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend TetrisTest;
 };

@@ -1,6 +1,8 @@
 #ifndef SERIALIZABLE_QUEUE_HPP
 #define SERIALIZABLE_QUEUE_HPP
 
+#include <nlohmann/json.hpp>
+
 #include <deque>
 #include <optional>
 

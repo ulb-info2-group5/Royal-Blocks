@@ -186,13 +186,14 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
         if (newTargetIt == playerSelfIt) {
             ++newTargetIt;
         }
-    } while (newTargetIt != prevTargetIt && !(*newTargetIt).first.isAlive());
+    } while (newTargetIt != prevTargetIt
+             && !(*newTargetIt).playerState_.isAlive());
 
     // NOTE: This should never happen, if it does, the game should have
     // ended earlier because there is only one player left.
     assert(newTargetIt != playerSelfIt);
 
-    PlayerID newTargetID = (*newTargetIt).first.getPlayerID();
+    PlayerID newTargetID = (*newTargetIt).playerState_.getPlayerID();
 
     pGameState_->getPlayerState(playerID)->setPenaltyTarget(newTargetID);
 }

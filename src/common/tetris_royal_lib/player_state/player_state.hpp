@@ -50,13 +50,15 @@ class PlayerState {
     AbstractTimedEffectPtr pActivePenalty_;
 
   public:
-    PlayerState() = default;
-    PlayerState(const PlayerState &) = delete;
+    PlayerState(PlayerID playerID, Score score = 0);
+    PlayerState(const PlayerState &) = default;
     PlayerState(PlayerState &&) = default;
-    PlayerState &operator=(const PlayerState &) = delete;
+    PlayerState &operator=(const PlayerState &) = default;
     PlayerState &operator=(PlayerState &&) = default;
 
     ~PlayerState() = default;
+
+    void toggleEffects(bool activated);
 
     /* ------------------------------------------------
      *              Common to all GameModes
@@ -167,6 +169,15 @@ class PlayerState {
      * @brief Selects the previous effect in the effect selector.
      */
     void selectPrevEffect();
+
+  public:
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serializeExternal() const;
+
+    nlohmann::json serializeSelf() const;
 };
 
 #endif // PLAYER_STATE_HPP

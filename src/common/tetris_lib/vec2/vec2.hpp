@@ -1,6 +1,9 @@
 #ifndef VEC2_HPP
 #define VEC2_HPP
 
+#include "nlohmann/json_fwd.hpp"
+#include <nlohmann/json.hpp>
+
 #include <iostream>
 
 class Vec2Test;
@@ -166,7 +169,17 @@ class Vec2 {
      */
     friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const;
+
+    void deserialize(const nlohmann::json &j);
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend Vec2Test;
 };

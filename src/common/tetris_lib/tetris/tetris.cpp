@@ -60,7 +60,7 @@ bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
 void Tetris::fetchNewTetromino() {
     // The queue will refill itself if there are too few Tetrominos
     // inside. -> No need to do it here.
-    activeTetromino_ = std::move(tetrominoQueue_.fetchNext());
+    activeTetromino_ = tetrominoQueue_.fetchNext();
 }
 
 /*--------------------------------------------------
@@ -82,8 +82,8 @@ size_t Tetris::eventClockTick() {
             // reset lock delay for next time
             ticks_since_lock_start_ = 0;
         } else {
-            // lock-delay hasn't expired but a tick occured (don't place active
-            // yet)
+            // lock-delay hasn't expired but a tick occured (don't place
+            // active yet)
             ticks_since_lock_start_++;
         }
     } else {
@@ -141,7 +141,7 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 void Tetris::eventHoldNextTetromino() {
     if (holdTetromino_ == nullptr) {
         // If there is no hold, simply move the next to hold.
-        holdTetromino_ = std::move(tetrominoQueue_.fetchNext());
+        holdTetromino_ = tetrominoQueue_.fetchNext();
     } else {
         // If there is a hold, swap it with next tetromino.
         std::swap(holdTetromino_, tetrominoQueue_.front());

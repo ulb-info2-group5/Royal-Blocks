@@ -3,28 +3,28 @@
 
 #include "../game_mode/game_mode.hpp"
 #include "../player_state/player_state.hpp"
-#include "game_state_view.hpp"
+#include "../player_tetris/player_tetris.hpp"
 #include "tetris/tetris.hpp"
+
+#include <nlohmann/json.hpp>
 
 #include <vector>
 
 // TODO: For getPlayerState and getTetris, might wanna use
 // optional<reference_wrapper> to avoid raw pointers.
 
-using PlayerStateTetris = std::pair<PlayerState, Tetris>;
-
-class GameState : public GameStateView {
+class GameState {
   private:
     GameMode gameMode_;
 
-    std::vector<PlayerStateTetris> playerToTetris_;
+    std::vector<PlayerTetris> playerToTetris_;
 
   public:
     /**
      * @brief Constructs a GameState object with given game-mode.
      * @param gameMode The game-mode
      */
-    GameState(GameMode gameMode);
+    GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates);
     GameState(const GameState &) = default;
     GameState(GameState &&) = delete;
     GameState &operator=(const GameState &) = default;
@@ -32,23 +32,9 @@ class GameState : public GameStateView {
 
     ~GameState() = default;
 
-    /* ---------------------------------------------------------
-     *                  GameStateView Interface
-     * ---------------------------------------------------------*/
+    GameMode getGameMode() const;
 
-    const std::vector<PlayerStateTetris> &getPlayerToTetris() const override;
-
-    const PlayerState *getPlayerState(PlayerID playerID) const override;
-
-    const Tetris *getTetris(PlayerID playerID) const override;
-
-    GameMode getGameMode() const override;
-
-    std::optional<PlayerID> getWinner() const override;
-
-    /* ---------------------------------------------------------------
-     *          Non-const Methods (not part of GameStateView)
-     * ---------------------------------------------------------------*/
+    std::optional<PlayerID> getWinner() const;
 
     /**
      * @brief Returns a pointer to the PlayerState of the player whose
@@ -73,14 +59,13 @@ class GameState : public GameStateView {
     class CircularIt {
       private:
         size_t currentIdx_;
-        std::vector<PlayerStateTetris> &playerToTetris_;
+        std::vector<PlayerTetris> &playerToTetris_;
 
       public:
-        CircularIt(std::vector<PlayerStateTetris> &playerToTetris,
-                   size_t startIdx)
+        CircularIt(std::vector<PlayerTetris> &playerToTetris, size_t startIdx)
             : currentIdx_{startIdx}, playerToTetris_(playerToTetris) {}
 
-        PlayerStateTetris &operator*() const {
+        PlayerTetris &operator*() const {
             return playerToTetris_.at(currentIdx_);
         }
 
@@ -116,6 +101,12 @@ class GameState : public GameStateView {
      * the given PlayerID.
      */
     CircularIt getCircularIt(PlayerID playerID);
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serializeFor(PlayerID playerID) const;
 };
 
 #endif // GAME_STATE_HPP

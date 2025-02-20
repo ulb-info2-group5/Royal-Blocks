@@ -1,6 +1,8 @@
 #ifndef GRID_CELL_HPP
 #define GRID_CELL_HPP
 
+#include <nlohmann/json.hpp>
+
 #include <optional>
 
 /**
@@ -60,6 +62,28 @@ class GridCell {
      * @brief Clears the cell's ColorId.
      */
     void setEmpty() noexcept;
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j;
+        if (colorId_) {
+            j["colorId"] = *colorId_;
+        } else {
+            j["colorId"] = nullptr;
+        }
+        return j;
+    }
+
+    void deserialize(const nlohmann::json &j) {
+        if (j.contains("colorId") && !j["colorId"].is_null()) {
+            colorId_ = j.at("colorId").get<unsigned>();
+        } else {
+            colorId_ = std::nullopt;
+        }
+    }
 };
 
 #endif

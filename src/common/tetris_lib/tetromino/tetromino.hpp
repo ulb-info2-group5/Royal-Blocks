@@ -4,6 +4,8 @@
 #include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
 
+#include <nlohmann/json.hpp>
+
 #include <concepts>
 #include <cstdint>
 #include <memory>
@@ -23,7 +25,7 @@ using TetrominoPtr = std::unique_ptr<ATetromino>;
 enum class TetrominoMove { Left, Right, Down };
 
 /**
- * @class Tetromino
+ * @class ATetromino
  *
  * @brief This class represents an abstract Tetromino (piece in Tetris), it
  * supports two rotation algorithms:
@@ -257,7 +259,23 @@ class ATetromino {
     friend std::ostream &operator<<(std::ostream &os,
                                     const ATetromino &tetromino);
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j_body = nlohmann::json::array();
+        for (const auto &vec : body_) {
+            j_body.push_back(vec.serialize());
+        }
+
+        return nlohmann::json{{"anchorPoint", anchorPoint_.serialize()},
+                              {"body", j_body}};
+    }
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend TetrominoTest;
 };

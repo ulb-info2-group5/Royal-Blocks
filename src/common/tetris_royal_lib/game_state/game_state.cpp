@@ -1,37 +1,21 @@
 #include "game_state.hpp"
-#include "game_state_view.hpp"
+#include "nlohmann/json_fwd.hpp"
+#include "player_tetris/player_tetris.hpp"
 
 #include <algorithm>
 #include <optional>
+#include <vector>
 
-GameState::GameState(GameMode gameMode) : gameMode_{gameMode} {}
+GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
+    : gameMode_{gameMode} {
 
-/* ---------------------------------------------------------
- *                  GameStateView Interface
- * ---------------------------------------------------------*/
-
-const std::vector<PlayerStateTetris> &GameState::getPlayerToTetris() const {
-    return playerToTetris_;
-}
-
-const PlayerState *GameState::getPlayerState(PlayerID playerID) const {
-    for (const PlayerStateTetris &playerStateTetris : getPlayerToTetris()) {
-        if (playerStateTetris.first.getPlayerID() == playerID) {
-            return &playerStateTetris.first;
-        }
+    for (PlayerState &playerState : playerStates) {
+        // TODO: this isn't really clean, should find a way to use sth like
+        // GameEngine::checkFeaturesEnabled, as there may be more GameModes that
+        // require the effects-related stuff.
+        playerState.toggleEffects(gameMode == GameMode::RoyalCompetition);
+        playerToTetris_.emplace_back(PlayerTetris{playerState, Tetris{}});
     }
-
-    return nullptr;
-}
-
-const Tetris *GameState::getTetris(PlayerID playerID) const {
-    for (const PlayerStateTetris &playerStateTetris : getPlayerToTetris()) {
-        if (playerStateTetris.first.getPlayerID() == playerID) {
-            return &playerStateTetris.second;
-        }
-    }
-
-    return nullptr;
 }
 
 GameMode GameState::getGameMode() const { return gameMode_; }
@@ -39,8 +23,8 @@ GameMode GameState::getGameMode() const { return gameMode_; }
 std::optional<PlayerID> GameState::getWinner() const {
     std::optional<PlayerID> winner;
 
-    for (const PlayerStateTetris &playerStateTetris : getPlayerToTetris()) {
-        if (playerStateTetris.first.isAlive()) {
+    for (const PlayerTetris &playerStateTetris : playerToTetris_) {
+        if (playerStateTetris.playerState_.isAlive()) {
             if (winner.has_value()) {
                 // had already found a player that is
                 // still alive -> more than one player
@@ -48,23 +32,31 @@ std::optional<PlayerID> GameState::getWinner() const {
                 return std::nullopt;
             }
 
-            winner = playerStateTetris.first.getPlayerID();
+            winner = playerStateTetris.playerState_.getPlayerID();
         }
     }
 
     return winner;
 }
 
-/* ---------------------------------------------------------------
- *          Non-const Methods (not part of GameStateView)
- * ---------------------------------------------------------------*/
-
 PlayerState *GameState::getPlayerState(PlayerID playerID) {
-    return const_cast<PlayerState *>(GameStateView::getPlayerState(playerID));
+    for (PlayerTetris &playerStateTetris : playerToTetris_) {
+        if (playerStateTetris.playerState_.getPlayerID() == playerID) {
+            return &playerStateTetris.playerState_;
+        }
+    }
+
+    return nullptr;
 }
 
 Tetris *GameState::getTetris(PlayerID playerID) {
-    return const_cast<Tetris *>(GameStateView::getTetris(playerID));
+    for (PlayerTetris &playerStateTetris : playerToTetris_) {
+        if (playerStateTetris.playerState_.getPlayerID() == playerID) {
+            return &playerStateTetris.tetris_;
+        }
+    }
+
+    return nullptr;
 }
 
 GameState::CircularIt GameState::getCircularItAt(size_t idx) {
@@ -76,10 +68,11 @@ GameState::CircularIt GameState::getCircularItEnd() {
 }
 
 GameState::CircularIt GameState::getCircularIt(PlayerID playerID) {
-    auto it = std::find_if(playerToTetris_.begin(), playerToTetris_.end(),
-                           [playerID](const auto &element) {
-                               return element.first.getPlayerID() == playerID;
-                           });
+    auto it =
+        std::find_if(playerToTetris_.begin(), playerToTetris_.end(),
+                     [playerID](const auto &element) {
+                         return element.playerState_.getPlayerID() == playerID;
+                     });
 
     if (it != playerToTetris_.end()) {
         size_t playerIndex = std::distance(playerToTetris_.begin(), it);
@@ -88,4 +81,26 @@ GameState::CircularIt GameState::getCircularIt(PlayerID playerID) {
 
     // Case no matching player is found -> expired iterator.
     return getCircularItEnd();
+}
+
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json GameState::serializeFor(PlayerID playerID) const {
+    nlohmann::json j;
+
+    j["gameMode"] = gameMode_;
+
+    j["externals"] = nlohmann::json::array();
+
+    for (const auto &playerTetris : playerToTetris_) {
+        if (playerTetris.playerState_.getPlayerID() == playerID) {
+            j["self"] = playerTetris.serializeSelf();
+        } else {
+            j["externals"].push_back(playerTetris.serializeExternal());
+        }
+    }
+
+    return j;
 }
