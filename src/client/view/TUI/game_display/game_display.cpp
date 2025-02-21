@@ -123,7 +123,8 @@ void GameDisplay::drawMiddle()
 
                 for (uint32_t i = 0; i < LENGTH_PLAYER; ++i)
                 {
-                    playerCanvas.DrawBlockCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
+                    playerCanvas.DrawBlock(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
+                    // playerCanvas.DrawPoint(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
                     // playerCanvas.DrawPointCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
                 }
             }
@@ -193,23 +194,63 @@ void GameDisplay::drawRoyalRight()
     //     // }));
     //     boardsOp.push_back(opDisplay);
     // }
-    ftxui::Component opDisplay = ftxui::Renderer([&]{
-        ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS  * (totalPlayers - 1), HEIGHT_OP_CANVAS * (totalPlayers - 1));
-        for (uint32_t index = 1; index < totalPlayers; ++index)
-        {
-            for (uint32_t x = 0; x < WIDTH; ++x)
-            {
-                for (uint32_t y = 0)
-            }
-        }
-    });
+    // ftxui::Component opDisplay = ftxui::Renderer([&]{
+    //     ftxui::Canvas opCanvas = ftxui::Canvas(3 * WIDTH_OP_CANVAS + (4 * PADDING), 3 * HEIGHT_OP_CANVAS + 4 * PADDING);
+    //     ftxui::Pixel pixel = ftxui::Pixel();
+    //     int px, py;
 
-    ftxui::Component malusDisplay = ftxui::Renderer([&]{
-         return ftxui::vbox({
-            ftxui::gaugeRight(malusGauge_),
-            ftxui::text("malus to come") | ftxui::borderDashed,
-            });
-    });
+    //     for (uint32_t index = 1; index < totalPlayers; ++index)
+    //     {
+    //         for (uint32_t x = 0; x < WIDTH; ++x)
+    //         {
+    //             for (uint32_t y = 0; y < HEIGHT; ++y)
+    //             {
+    //                 pixel.background_color = getFTXUIColor(playersBoards_->at(index).at(y).at(x));
+
+    //                 for (uint32_t i = 0; i < LENGTH_OPPONENT; ++i)
+    //                 {
+    //                     // numbers add to the coordinates to display on the canvas correctly
+    //                     px = x * LENGTH_OPPONENT + i + PADDING * (index % 3) + WIDTH * (index % 3 - 1);
+    //                     py = y * LENGTH_OPPONENT + i + PADDING * (index % 3) + HEIGHT * (index % 3 - 1);
+    //                     // opCanvas.DrawBlock(x * LENGTH_OPPONENT + i + PADDING * (index % 3) + WIDTH * (index % 3 - 1), 
+    //                     //                     y * LENGTH_OPPONENT + i + PADDING * (index % 3) + HEIGHT * (index % 3 - 1), 
+    //                     //                     true, pixel.background_color);
+    //                     opCanvas.DrawBlock(px, 
+    //                                         py, 
+    //                                         true, pixel.background_color);
+    //                 }
+
+    //             }
+    //         }
+    //         // numbers add to the coordinates to display on the canvas correctly
+    //         px = (index % 3 + 1) * PADDING                + (index % 3 - 1) * WIDTH_OP_CANVAS + WIDTH_OP_CANVAS/ 2;
+    //         py = (index % 3  + 1) * PADDING + PADDING / 2 + (index % 3 + 1) * HEIGHT_OP_CANVAS;
+    //         // opCanvas.DrawText((index % 3 + 1) * PADDING                + (index % 3 - 1) * WIDTH_OP_CANVAS + WIDTH_OP_CANVAS/ 2,
+    //         //                   (index % 3  + 1) * PADDING + PADDING / 2 + (index % 3 + 1) * HEIGHT_OP_CANVAS, 
+    //         //                    pseudos_.at(index));
+    //         opCanvas.DrawText(px,
+    //                           py, 
+    //                            pseudos_.at(index));
+    //     }
+
+    // //     return ftxui::canvas(opCanvas) | ftxui::border;
+    // // });
+
+    // ftxui::Component opDisplay = ftxui::Renderer([&]{
+    //     return ftxui::canvas(opCanvas) | ftxui::border;
+    // });
+
+    // ftxui::Component malusDisplay = ftxui::Renderer([&]{
+    //      return ftxui::vbox({
+    //         ftxui::gaugeRight(malusGauge_),
+    //         ftxui::text("malus to come") | ftxui::borderDashed,
+    //         });
+    // });
+
+    // displayRight_ = ftxui::Container::Vertical({
+    //     malusDisplay,
+    //     opDisplay,
+    // });
 
     // displayRight_ = ftxui::Container::Vertical({
     //     malusDisplay,
@@ -259,9 +300,9 @@ void GameDisplay::drawRoyalRight()
 
 void GameDisplay::drawRoyal()
 {
-    drawRoyalLeft();
-    drawMiddle();
-    // drawRoyalRight();
+    // drawRoyalLeft();
+    // drawMiddle();
+    drawRoyalRight();
     displayWindow_ = ftxui::Container::Horizontal({
         displayLeft_,
         displayMiddle_,

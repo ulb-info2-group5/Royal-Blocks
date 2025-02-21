@@ -22,7 +22,8 @@
 #include <array>
 
 const uint32_t LENGTH_PLAYER = 4,
-               LENGTH_OPPONENT = 2;
+               LENGTH_OPPONENT = 2, 
+               PADDING = 10;
 
 const uint32_t WIDTH_PLAYER_CANVAS = 40,
                HEIGHT_PLAYER_CANVAS = 80,
