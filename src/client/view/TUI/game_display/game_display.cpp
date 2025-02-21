@@ -55,8 +55,12 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::
 
 void GameDisplay::drawEndlessLeft()
 {
+<<<<<<< HEAD
     ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
                                                 ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+=======
+    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+>>>>>>> refs/remotes/origin/feat/interface
 
     ftxui::Component playerDisplay = ftxui::Renderer([&]{
         return ftxui::vbox({
