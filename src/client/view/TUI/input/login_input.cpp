@@ -38,14 +38,14 @@ InputState LoginInput::render() {
             message_.clear(); 
             msg = "Please enter a valid username and a valid password";
         }
-    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
         res = InputState::BACK;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component component = ftxui::Container::Vertical({
         inputUsername,

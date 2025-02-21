@@ -22,17 +22,17 @@ LoginState LoginMenu::render() {
     ftxui::Component buttonRegister = ftxui::Button("Register", [&] {
         res = LoginState::LAUNCH_REGISTER;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component buttonLogin = ftxui::Button("Login", [&] {
         res = LoginState::LAUNCH_LOGIN;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
         res = LoginState::EXIT;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated()) | ftxui::border;
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component component = ftxui::Container::Vertical({
         buttonRegister,

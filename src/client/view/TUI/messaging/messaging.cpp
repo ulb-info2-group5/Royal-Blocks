@@ -48,7 +48,7 @@ MessagingState Messaging::render(){
             conversations[newFriend] = {}; 
             newFriend.clear();
         }
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
 
 
@@ -67,7 +67,7 @@ MessagingState Messaging::render(){
         newFriend.clear();
         res = MessagingState::BACK;
         screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated());
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
     Component sidebar = Container::Vertical({
         friends_menu,

@@ -62,25 +62,21 @@ class GameDisplay
 
     protected:
 
-    // void drawEndlessRight();
-
-    // void drawClassicRight();
+    void drawDuoRight();
 
     void drawRoyalRight();
 
     void drawMiddle();
 
-    // void drawDuoLeft();
-
-    // void drawClassicLeft();
+    void drawEndlessLeft();
 
     void drawRoyalLeft();
 
-    // void drawEndless();
+    void drawEndless();
 
-    // void drawDuo();
+    void drawDuo();
 
-    // void drawClassic();
+    void drawClassic();
 
     void drawRoyal();
 
