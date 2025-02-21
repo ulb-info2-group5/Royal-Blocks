@@ -55,13 +55,8 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::
 
 void GameDisplay::drawEndlessLeft()
 {
-<<<<<<< HEAD
     ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
                                                 ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
-=======
-    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
->>>>>>> refs/remotes/origin/feat/interface
-
     ftxui::Component playerDisplay = ftxui::Renderer([&]{
         return ftxui::vbox({
             ftxui::text(std::to_string(score_)),
@@ -90,7 +85,7 @@ void GameDisplay::drawRoyalLeft()
             ftxui::Button(effects_.at(i * 3 + 1), [&] { /* function to call */}, 
                                                 ftxui::ButtonOption::Animated(ftxui::Color::Red)),
             ftxui::Button(effects_.at(i * 3 + 2 ), [&] { /* function to call */}, 
-                                                ftxui::B>uttonOption::Animated(ftxui::Color::Red)),
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Red)),
         });
 
         effectsButton.push_back(but);
