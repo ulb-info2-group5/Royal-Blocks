@@ -16,45 +16,60 @@
 #include <memory>
 #include <string>
 
-// ### Public methods ###
-LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title) : screen_(screen), title_(title) {}
+// ### Constructor ###
+LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title) : 
+        screen_(screen), title_(title) 
+{
+    userState_ = InputState::NONE;
+}
 
-InputState LoginInput::render() {
-    InputState res = InputState::NONE;
-    std::string msg;
+// ### protected methods ###
 
-    ftxui::Component inputUsername = ftxui::Input(&username_, "Enter username") | ftxui::border;
-    ftxui::Component inputPassword = ftxui::Input(&password_, "Enter password") | ftxui::border;
+void LoginInput::displayButtonBack()
+{
+    buttonBack_ = ftxui::Button("Back", [&] {
+        username_.clear();
+        password_.clear();
+        userState_ = InputState::BACK;
+        printf("userState change to Back \n");
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
 
-    ftxui::Component buttonSubmit = ftxui::Button("Submit", [&] {
+void LoginInput::displayButtonSubmit()
+{
+    buttonSubmit_ = ftxui::Button("Submit", [&] {
         if (!username_.empty() && !password_.empty()) {
             // TODO: add logic with controller and server to check with the database for the register
-            // TODO: add logic with controller and server to check with the database for the login
-            res = InputState::DONE;
+            // TODO: add logic with controller and server to check with the database for the logic
+            userState_ = InputState::DONE;
+            printf("userState change to Done \n");
             screen_->ExitLoopClosure()();
         } else {
             username_.clear();
             password_.clear();
             message_.clear(); 
-            msg = "Please enter a valid username and a valid password";
+            msg_ = "Please enter a valid username and a valid password";
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
 
-    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        username_.clear();
-        password_.clear();
-        res = InputState::BACK;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+void LoginInput::displayWindow() 
+{
+    displayButtonBack();
+    displayButtonSubmit();
 
-    ftxui::Component component = ftxui::Container::Vertical({
-        inputUsername,
-        inputPassword,
-        buttonSubmit,
-        buttonBack,
+    inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::border;
+    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::border;
+
+    ftxui::Component displayButtons = ftxui::Container::Vertical({
+        inputUsername_,
+        inputPassword_,
+        buttonSubmit_,
+        buttonBack_,
     });
 
-    ftxui::Component render = ftxui::Renderer(component, [&] {
+    displayWindow_ = ftxui::Renderer(displayButtons, [&] {
         std::vector<ftxui::Element> elements = {
             ftxui::text(title_) | ftxui::bold | ftxui::center,
         };
@@ -65,12 +80,12 @@ InputState LoginInput::render() {
             elements.push_back(ftxui::separator());
         }
 
-        elements.push_back(inputUsername->Render());
-        elements.push_back(inputPassword->Render());
+        elements.push_back(inputUsername_->Render());
+        elements.push_back(inputPassword_->Render());
         elements.push_back(ftxui::separator());
 
-        if (!msg.empty()) {
-            elements.push_back(ftxui::text(msg));
+        if (!msg_.empty()) {
+            elements.push_back(ftxui::text(msg_));
             elements.push_back(ftxui::separator());
         }
         
@@ -79,15 +94,22 @@ InputState LoginInput::render() {
             elements.push_back(ftxui::separator());
         }
 
-        elements.push_back(buttonSubmit->Render());
-        elements.push_back(buttonBack->Render());
+        elements.push_back(buttonSubmit_->Render());
+        elements.push_back(buttonBack_->Render());
 
         return ftxui::vbox(elements) | ftxui::border | ftxui::center;
     });
 
-    screen_->Loop(render);
+}
 
-    return res;
+// ### public methods ###
+InputState LoginInput::render() {
+     
+    displayWindow();
+
+    screen_->Loop(displayWindow_);
+
+    return userState_;
 }
 
 void LoginInput::addInstruction(const std::string_view instruction) {
@@ -104,4 +126,8 @@ std::string LoginInput::getUsername() const {
 
 std::string LoginInput::getPassword() const {
     return password_;
+}
+
+InputState LoginInput::getUserState() const {
+    return userState_;
 }

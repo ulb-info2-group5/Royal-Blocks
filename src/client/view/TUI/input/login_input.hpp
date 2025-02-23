@@ -10,15 +10,19 @@
 #define LOGIN_INPUT_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
+
 #include <memory>
 #include <string>
 #include <string_view>
+
+#include "../../ILogin_Input.hpp"
 
 /**
  * @brief Enum class to represent the state of the input
  * 
  */
-enum class InputState {
+enum class InputState 
+{
     DONE,
     BACK,
     NONE,
@@ -29,7 +33,8 @@ enum class InputState {
  * @brief LoginInput class to get the login input or register input from the user
  * 
  */
-class LoginInput {
+class LoginInput : public ILogin_Input
+{
     private:
         /*
         * @brief The screen to use to render the components
@@ -61,6 +66,24 @@ class LoginInput {
         */
         std::string message_;
 
+        InputState userState_;
+
+        std::string msg_;
+
+        ftxui::Component buttonSubmit_;
+        ftxui::Component buttonBack_;
+        ftxui::Component inputUsername_;
+        ftxui::Component inputPassword_;
+        ftxui::Component displayWindow_;
+
+    protected:
+
+        void displayButtonBack();
+
+        void displayButtonSubmit(); 
+
+        void displayWindow() override;
+
     public:
         /*
         * @brief Construct a new Login Input object
@@ -78,7 +101,6 @@ class LoginInput {
         /*
         * @brief Render the login input screen with all the components
         *
-        * @return InputState the state of the input
         */
         InputState render();
 
@@ -101,14 +123,16 @@ class LoginInput {
         *
         * @return string the username
         */
-        std::string getUsername() const;
+        std::string getUsername() const override;
 
         /*
         * @brief Get the password
         *
         * @return string the password
         */
-        std::string getPassword() const;
+        std::string getPassword() const override;
+
+        InputState getUserState() const;
 };
 
 #endif // LOGIN_INPUT_HPP
