@@ -30,6 +30,11 @@ template <typename T> class Queue {
     size_t size() const noexcept { return queue_.size(); };
 
     /**
+     * @brief Clears the queue's content.
+     */
+    void clear() { queue_.clear(); }
+
+    /**
      * @brief Pushes a new T to the back of the queue.
      */
     void pushBack(const T &elem) { queue_.push_back(elem); }

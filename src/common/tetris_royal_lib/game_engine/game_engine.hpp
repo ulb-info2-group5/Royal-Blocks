@@ -110,10 +110,11 @@ class GameEngine {
     bool checkCanBuyEffect(PlayerID buyerID, EffectType effectType);
 
     /**
-     * @brief Makes the given player buy the given effect if possible
-     * (meaning he had enough Energy).
+     * @brief Makes the given player buy the given effect if he has enough
+     * energy for it, stashes the effect for later or activates it instantly.
      */
-    void tryBuyEffect(PlayerID playerID, EffectType effectType);
+    void tryBuyEffect(PlayerID playerID, EffectType effectType,
+                      bool stashForLater = false);
 
     /**
      * @brief Makes the given player select the next item in the effect
@@ -154,6 +155,8 @@ class GameEngine {
      * @brief Makes a clock tick happen for the given player.
      */
     void clockTick(PlayerID playerID);
+
+    void emptyPenaltyStash(PlayerID playerID);
 };
 
 #endif // GAME_ENGINE_HPP

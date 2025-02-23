@@ -1,7 +1,10 @@
 #include "player_state.hpp"
+#include "effect/penalty/penalty.hpp"
 #include "effect_selector/effect_selector.hpp"
+#include "queue/queue.hpp"
 
 #include <optional>
+#include <vector>
 
 PlayerState::PlayerState(PlayerID playerID, Score score)
     : playerID_{playerID}, score_{score}, isAlive_{true},
@@ -19,13 +22,9 @@ void PlayerState::toggleEffects(bool activated) {
 
     if (activated) {
         receivedPenaltiesQueue_ = Queue<Penalty::PenaltyType>{};
-    } else {
-        receivedPenaltiesQueue_ = std::nullopt;
-    }
-
-    if (activated) {
         grantedBonusesQueue_ = Queue<Bonus::BonusType>{};
     } else {
+        receivedPenaltiesQueue_ = std::nullopt;
         grantedBonusesQueue_ = std::nullopt;
     }
 
@@ -33,6 +32,12 @@ void PlayerState::toggleEffects(bool activated) {
         effectSelector_ = EffectSelector{};
     } else {
         effectSelector_ = std::nullopt;
+    }
+
+    if (activated) {
+        stashedPenalties_ = Queue<Penalty::PenaltyType>{};
+    } else {
+        stashedPenalties_ = std::nullopt;
     }
 }
 
@@ -143,6 +148,14 @@ void PlayerState::setActiveBonus(AbstractTimedEffectPtr pTimedEffect) {
 void PlayerState::selectNextEffect() { effectSelector_->next(); }
 
 void PlayerState::selectPrevEffect() { effectSelector_->prev(); }
+
+void PlayerState::stashPenalty(Penalty::PenaltyType penalty) {
+    stashedPenalties_->pushBack(penalty);
+}
+
+Queue<Penalty::PenaltyType> PlayerState::getStashedPenalties() {
+    return std::move(stashedPenalties_.value());
+}
 
 /* ------------------------------------------------
  *          Serialization

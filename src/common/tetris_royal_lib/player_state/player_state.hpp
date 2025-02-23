@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <queue>
 #include <sys/types.h>
 
 using PlayerID = size_t;
@@ -43,6 +44,9 @@ class PlayerState {
     // Penalties/Bonuses the player can send/grant himself
     std::optional<EffectSelector> effectSelector_;
 
+    // Store stacked effects
+    std::optional<Queue<Penalty::PenaltyType>> stashedPenalties_;
+
     // Currently active bonus & penalty (no optional needed, just make it
     // nullptr)
     AbstractTimedEffectPtr pActiveBonus_;
@@ -77,7 +81,6 @@ class PlayerState {
      * @brief Increases the player's score by the given value.
      */
     void increaseScore(Score val);
-
     /**
      * @brief Returns true if the player is alive (hasn't lost yet); false
      * otherwise.
@@ -168,6 +171,16 @@ class PlayerState {
      * @brief Selects the previous effect in the effect selector.
      */
     void selectPrevEffect();
+
+    /**
+     * @brief Stashes the penalty for later.
+     */
+    void stashPenalty(Penalty::PenaltyType penalty);
+
+    /**
+     * @brief Returns the penalties that were stashed and empties the stash.
+     */
+    Queue<Penalty::PenaltyType> getStashedPenalties();
 
   public:
     /* ------------------------------------------------

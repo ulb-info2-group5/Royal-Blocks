@@ -1,10 +1,10 @@
 #include "game_engine.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
-#include "effect/bonus/mini_tetrominoes.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
+#include "queue/queue.hpp"
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
@@ -119,7 +119,8 @@ void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
     }
 }
 
-void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {
+void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
+                              bool stashForLater) {
     if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
         return;
     }
@@ -141,7 +142,12 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType) {
                 pGameState_->getPlayerState(buyerID)->grantBonus(effectType);
             } else if constexpr (std::is_same_v<T, Penalty::PenaltyType>) {
                 // Penalty case
-                sendPenaltyEffect(buyerID, effectType);
+                if (stashForLater) {
+                    pGameState_->getPlayerState(buyerID)->stashPenalty(
+                        effectType);
+                } else {
+                    sendPenaltyEffect(buyerID, effectType);
+                }
             }
         },
         effectType);
@@ -251,5 +257,18 @@ void GameEngine::clockTick(PlayerID playerID) {
     if (checkFeaturesEnabled(GameModeFeature::Effects)) {
         Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
         pGameState_->getPlayerState(playerID)->increaseEnergy(earnedEnergy);
+    }
+}
+
+void GameEngine::emptyPenaltyStash(PlayerID playerID) {
+    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+        return;
+    }
+
+    Queue<Penalty::PenaltyType> penaltiesQueue =
+        pGameState_->getPlayerState(playerID)->getStashedPenalties();
+
+    while (penaltiesQueue.size() > 0) {
+        sendPenaltyEffect(playerID, *penaltiesQueue.popFront());
     }
 }
