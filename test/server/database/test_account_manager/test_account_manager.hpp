@@ -7,12 +7,11 @@
 #ifndef ACCOUNT_MANAGER_TEST_HPP
 #define ACCOUNT_MANAGER_TEST_HPP
 
+#include "../../../../src/server/database/account_manager/account_manager.hpp"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <memory>
-#include <string>
-#include "../../../../src/server/database/account_manager/account_manager.hpp"
 
 /**
  * @class AccountManagerTest
@@ -28,11 +27,11 @@ class AccountManagerTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testGetUsername);
     CPPUNIT_TEST_SUITE_END();
 
-private:
+  private:
     std::shared_ptr<DatabaseManager> dbManager;
-    std::shared_ptr<AccountManager> accountManager; 
+    std::shared_ptr<AccountManager> accountManager;
 
-public:
+  public:
     /**
      * @brief Set up the test environment.
      * Called before every test case.
@@ -75,5 +74,7 @@ public:
      */
     void testGetUsername();
 };
+
+CPPUNIT_TEST_SUITE_REGISTRATION(AccountManagerTest);
 
 #endif // TEST_ACCOUNT_MANAGER_HPP

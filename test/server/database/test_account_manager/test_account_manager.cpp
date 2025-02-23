@@ -12,7 +12,6 @@ void AccountManagerTest::setUp() {
     // Path correct? Or use default path?
     const std::string dbPath = "data/test.db";
 
-
     dbManager = std::make_shared<DatabaseManager>(dbPath);
     accountManager = std::make_shared<AccountManager>(dbManager);
 }
@@ -31,7 +30,8 @@ void AccountManagerTest::testCreateAccount() {
     bool result = accountManager->createAccount("test_user", "password123");
     CPPUNIT_ASSERT(result);
 
-    // Verify account creation (Assuming getUserId returns a valid ID if account exists)
+    // Verify account creation (Assuming getUserId returns a valid ID if account
+    // exists)
     int userId = accountManager->getUserId("test_user");
     CPPUNIT_ASSERT(userId > 0);
 }
@@ -45,7 +45,8 @@ void AccountManagerTest::testDeleteAccount() {
     bool result = accountManager->deleteAccount(userId);
     CPPUNIT_ASSERT(result);
 
-    // Verify account deletion (Assuming getUserId returns 0 for non-existing account)
+    // Verify account deletion (Assuming getUserId returns 0 for non-existing
+    // account)
     userId = accountManager->getUserId("test_user");
     CPPUNIT_ASSERT(userId == 0);
 }
@@ -94,14 +95,3 @@ void AccountManagerTest::testGetUsername() {
     std::string username = accountManager->getUsername(userId);
     CPPUNIT_ASSERT_EQUAL(std::string("test_user"), username);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(AccountManagerTest);
-
-// Run the test suite
-int main() {
-    CppUnit::TextUi::TestRunner runner;
-    runner.addTest(AccountManagerTest::suite());
-    runner.run();
-    return 0;
-}
-

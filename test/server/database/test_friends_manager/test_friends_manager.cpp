@@ -9,10 +9,8 @@
 void FriendsManagerTest::setUp() {
     // Initialize DatabaseManager and FriendsManager before each test case
 
-
     // Path correct? Or use default path?
     const std::string dbPath = "data/test.db";
-
 
     dbManager = std::make_shared<DatabaseManager>(dbPath);
     friendsManager = std::make_shared<FriendsManager>(dbManager);
@@ -67,14 +65,4 @@ void FriendsManagerTest::testGetFriends() {
     CPPUNIT_ASSERT(friends.size() == 2);
     CPPUNIT_ASSERT(friends[0] == friendUserId1 || friends[0] == friendUserId2);
     CPPUNIT_ASSERT(friends[1] == friendUserId1 || friends[1] == friendUserId2);
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FriendsManagerTest);
-
-// Run the test suite
-int main() {
-    CppUnit::TextUi::TestRunner runner;
-    runner.addTest(FriendsManagerTest::suite());
-    runner.run();
-    return 0;
 }

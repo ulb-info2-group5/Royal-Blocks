@@ -14,6 +14,8 @@
 #include "../database_manager/database_manager.hpp"
 #include "glaze/glaze.hpp"
 
+class MessagesManagerTest;
+
 using namespace std;
 
 struct Message {
@@ -137,6 +139,8 @@ class MessagesManager {
      * @return vector of all users who have a discussion with idUser
      */
     vector<int> getAllUser(const int &idUser);
+
+    friend MessagesManagerTest;
 };
 
 #endif

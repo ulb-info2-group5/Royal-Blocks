@@ -7,5 +7,9 @@ if(TEST_SOURCES)
 
     # TODO: link against more than just tetris_lib
     # (tetris_royal_lib and all libs that we wrote tests for)
-    target_link_libraries(${PROJECT_NAME}_tests PRIVATE tetris_lib cppunit)
+    target_link_libraries(${PROJECT_NAME}_tests
+        PRIVATE tetris_lib
+        PRIVATE cppunit
+        PRIVATE database_lib
+    )
 endif()

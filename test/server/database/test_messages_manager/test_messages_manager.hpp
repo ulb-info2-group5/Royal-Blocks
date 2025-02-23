@@ -7,10 +7,10 @@
 #ifndef MESSAGES_MANAGER_TEST_HPP
 #define MESSAGES_MANAGER_TEST_HPP
 
+#include "../../../../src/server/database/messages_manager/messages_manager.hpp"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
-#include "../../../../src/server/database/messages_manager/messages_manager.hpp"
 #include <memory>
 
 class MessagesManagerTest : public CppUnit::TestFixture {
@@ -20,11 +20,11 @@ class MessagesManagerTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(testGetDiscussion);
     CPPUNIT_TEST_SUITE_END();
 
-private:
+  private:
     std::shared_ptr<DatabaseManager> dbManager;
     std::shared_ptr<MessagesManager> messagesManager;
 
-public:
+  public:
     /**
      * @brief Set up the test environment.
      * Called before every test case.
@@ -52,5 +52,7 @@ public:
      */
     void testGetDiscussion();
 };
+
+CPPUNIT_TEST_SUITE_REGISTRATION(MessagesManagerTest);
 
 #endif // TEST_MESSAGES_MANAGER_HPP

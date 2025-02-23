@@ -11,12 +11,12 @@
  * Called before every test case.
  */
 void MessagesManagerTest::setUp() {
-    // Initialize the database manager and messages manager before each test case
+    // Initialize the database manager and messages manager before each test
+    // case
 
     // Path correct? Or use default path?
     const std::string dbPath = "data/test.db";
 
-    
     dbManager = std::make_shared<DatabaseManager>(dbPath);
     messagesManager = std::make_shared<MessagesManager>(dbManager);
 }
@@ -46,11 +46,12 @@ void MessagesManagerTest::testAddDiscussion() {
 void MessagesManagerTest::testSendMessage() {
     // Send a message from user 1 to user 2 and verify it is sent
     messagesManager->sendMessage(1, 2, "Hello!");
-    
+
     // Retrieve the discussion and check if the message was added
     Discution discussion = messagesManager->getDiscussion(1, 2);
     CPPUNIT_ASSERT(!discussion.messages.empty());
-    CPPUNIT_ASSERT_EQUAL(std::string("Hello!"), discussion.messages.back().content);
+    CPPUNIT_ASSERT_EQUAL(std::string("Hello!"),
+                         discussion.messages.back().content);
 }
 
 /**
@@ -59,20 +60,10 @@ void MessagesManagerTest::testSendMessage() {
 void MessagesManagerTest::testGetDiscussion() {
     // Send a message between user 1 and user 2
     messagesManager->sendMessage(1, 2, "Test Message");
-    
+
     // Retrieve the discussion between the two users and check its properties
     Discution discussion = messagesManager->getDiscussion(1, 2);
     CPPUNIT_ASSERT_EQUAL(1, discussion.idUser1);
     CPPUNIT_ASSERT_EQUAL(2, discussion.idUser2);
     CPPUNIT_ASSERT(!discussion.messages.empty());
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(MessagesManagerTest);
-
-// Run the test suite
-int main() {
-    CppUnit::TextUi::TestRunner runner;
-    runner.addTest(AccountManagerTest::suite());
-    runner.run();
-    return 0;
 }
