@@ -7,6 +7,7 @@
 #include "tetromino/tetromino_shapes.hpp"
 
 #include <cstddef>
+#include <optional>
 
 class TetrisTest;
 
@@ -174,7 +175,16 @@ class Tetris {
         tetrominoQueue_.insertNextTetromino(std::move(pTetromino));
     }
 
+    /**
+     * @brief Creates an return a new Tetromino located at the top of the board.
+     */
     static TetrominoPtr createTetromino(TetrominoShape tetrominoShape);
+
+    /**
+     * @brief Destroys a random 2 by 2 square in
+     * which all the cells are occupied in the board if found.
+     */
+    void destroy2By2Occupied();
 
     /* ------------------------------------------------
      *          Serialization

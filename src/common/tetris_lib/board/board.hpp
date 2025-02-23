@@ -155,6 +155,18 @@ class Board {
      */
     void gravity();
 
+    /**
+     * @brief Returns true if all cells in the 2 by 2 square whose bottom left
+     * corner is in x,y are occupied.
+     */
+    bool check2By2Occupied(int x, int y);
+
+    /**
+     * @brief Empties all the cells in the 2 by 2 square
+     * whose bottom left corner is in x,y.
+     */
+    void empty2By2Square(int x, int y);
+
   public:
     // #### Constructors ####
 
@@ -222,6 +234,12 @@ class Board {
      */
     bool checkInGrid(ATetromino &tetromino) const;
 
+    /**
+     * @brief Destroys a random 2 by 2 square in
+     * which all the cells are occupied in the board if found.
+     */
+    void destroy2By2Occupied();
+
     // #### Penalty Lines ####
 
     /**
@@ -236,8 +254,8 @@ class Board {
     // #### Update Board State ####
 
     /**
-     * @brief Clears/Empties full rows, makes rows above the cleared row drop
-     * one row down and returns a BoardUpdate object.
+     * @brief Clears/Empties full rows, makes rows above the cleared row
+     * drop one row down and returns a BoardUpdate object.
      *
      * @return A BoardUpdate object.
      */

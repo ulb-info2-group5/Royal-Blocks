@@ -95,6 +95,12 @@ class GameEngine {
      */
     void handleMiniTetrominoes(PlayerID playerID);
 
+    /**
+     * @brief Destroys a 2x2 block in a random position in the player's grid if
+     * there one was found;otherwise, doesn't do anything.
+     */
+    void handleLightning(PlayerID playerID);
+
   public:
     /**
      * @brief Changes the given player's target to the new target.

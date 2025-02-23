@@ -168,6 +168,55 @@ bool Board::checkInGrid(ATetromino &tetromino) const {
     return true;
 }
 
+bool Board::check2By2Occupied(int x, int y) {
+    constexpr int SQUARE_WIDTH = 2;
+
+    bool ret = true;
+    for (int xOffset = 0; xOffset < SQUARE_WIDTH; xOffset++)
+        for (int yOffset = 0; yOffset < SQUARE_WIDTH; yOffset++) {
+            if (get(x + xOffset, y + yOffset).isEmpty()) {
+                ret = false;
+            }
+        };
+    return ret;
+}
+
+void Board::empty2By2Square(int x, int y) {
+    constexpr int SQUARE_WIDTH = 2;
+
+    for (int xOffset = 0; xOffset < SQUARE_WIDTH; xOffset++)
+        for (int yOffset = 0; yOffset < SQUARE_WIDTH; yOffset++) {
+            at(x, y).setEmpty();
+        }
+}
+
+void Board::destroy2By2Occupied() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(0, Board::getHeight()
+                                                      * Board::getWidth());
+    int tmp = distrib(gen);
+    int startY = tmp / Board::getHeight();
+    int startX = tmp % Board::getWidth();
+
+    for (int yOffset = 0; yOffset < static_cast<int>(Board::getHeight() - 1);
+         yOffset++) {
+        for (int xOffset = 0; xOffset < static_cast<int>(Board::getWidth() - 1);
+             xOffset++) {
+
+            int x =
+                (startX + xOffset) % static_cast<int>(Board::getWidth() - 1);
+            int y =
+                (startY + yOffset) % static_cast<int>(Board::getHeight() - 1);
+
+            if (check2By2Occupied(x, y)) {
+                empty2By2Square(x, y);
+            } else {
+            }
+        }
+    }
+}
+
 // #### Penalty Lines ####
 
 bool Board::receivePenaltyLines(size_t numPenaltyLines) {

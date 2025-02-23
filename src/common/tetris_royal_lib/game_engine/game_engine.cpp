@@ -1,6 +1,7 @@
 #include "game_engine.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
+#include "board/board.hpp"
 #include "effect/penalty/penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
@@ -10,6 +11,7 @@
 
 #include <cassert>
 #include <optional>
+#include <random>
 #include <stdexcept>
 #include <variant>
 
@@ -117,6 +119,10 @@ void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
         pGameState_->getTetris(playerID)->insertNextTetromino(
             Tetris::createTetromino(TetrominoShape::MiniTetromino));
     }
+}
+
+void GameEngine::handleLightning(PlayerID playerID) {
+    pGameState_->getTetris(playerID)->destroy2By2Occupied();
 }
 
 void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
