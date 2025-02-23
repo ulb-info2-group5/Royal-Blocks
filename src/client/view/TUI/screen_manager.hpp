@@ -7,7 +7,10 @@
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+
 #include <memory>
+
+#include "../dataExample.hpp"
 
 constexpr char LOGIN_INPUT_TITLE[] = "Login";
 constexpr char REGISTER_INPUT_TITLE[] = "Register";

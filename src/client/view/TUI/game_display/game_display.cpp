@@ -53,28 +53,18 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::
 
 // protected methods
 
-void GameDisplay::drawEndlessLeft()
+void GameDisplay::drawPlayerInfo()
 {
-    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
-                                                ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
-    ftxui::Component playerDisplay = ftxui::Renderer([&]{
+    playerInfo_ = ftxui::Renderer([&]{
         return ftxui::vbox({
             ftxui::text(std::to_string(score_)),
             ftxui::text(pseudos_.at(0))
         }) | ftxui::borderDashed;
     });
-
-    displayLeft_ = ftxui::Container::Vertical({
-        menuDisplay,
-        playerDisplay,
-    });
 }
 
-void GameDisplay::drawRoyalLeft()
+void GameDisplay::drawRoyalEffectsEnergy()
 {
-    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
-                                                ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
-    
     ftxui::Components effectsButton = {};
 
     for (uint8_t i = 0; i < 3; ++i)
@@ -97,34 +87,43 @@ void GameDisplay::drawRoyalLeft()
         effectsButton.at(2)
     });
 
-    ftxui::Component energyDisplay = ftxui::Renderer([&]{
+    effectsDisplay_ = ftxui::Renderer([&]{
         return ftxui::vbox({
             ftxui::gaugeRight(energyGauge_),
             ftxui::text("energy power") | ftxui::borderRounded}); 
     });
-
-    ftxui::Component playerDisplay = ftxui::Renderer([&]{
-        return ftxui::vbox({
-            ftxui::text(std::to_string(score_)),
-            ftxui::text(pseudos_.at(0))
-        }) | ftxui::borderDashed;
-    });
-
-    displayLeft_ = ftxui::Container::Vertical({
-        menuDisplay,
-        effectsDisplay,
-        energyDisplay,
-        playerDisplay,
-    });
 }
 
-void GameDisplay::drawMiddle()
+void GameDisplay::displayLeftWindow()
 {
-    ftxui::Component modeDisplay = ftxui::Renderer([&] {
-        return ftxui::text("Royal") | ftxui::borderRounded;
-    });
+    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
+                                                ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
-    ftxui::Component boardPlayerDisplay = ftxui::Renderer([&] {
+    if (play_ == PlayMode::ROYAL)
+    {
+        drawPlayerInfo();
+        drawRoyalEffectsEnergy();
+
+        displayLeft_ = ftxui::Container::Vertical({
+            menuDisplay,
+            effectsDisplay_,
+            playerInfo_,
+        });
+    }
+    else
+    {
+        drawPlayerInfo();
+
+        displayLeft_ = ftxui::Container::Vertical({
+            menuDisplay,
+            playerInfo_,
+        });
+    }
+}
+
+void GameDisplay::drawPlayerBoard()
+{
+    playerBoard_ = ftxui::Renderer([&] {
         ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
 
@@ -136,15 +135,22 @@ void GameDisplay::drawMiddle()
 
                 for (uint32_t i = 0; i < LENGTH_PLAYER; ++i)
                 {
-                    // playerCanvas.DrawBlock(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
-                    // playerCanvas.DrawPoint(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
-                    // playerCanvas.DrawPointCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
                     playerCanvas.DrawBlockCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
                 }
             }
         }
 
         return ftxui::canvas(playerCanvas) | ftxui::border;
+    });
+}
+
+void GameDisplay::displayMiddleWindow()
+{
+    drawPlayerBoard();
+
+    //need to modify this for different game mode
+    ftxui::Component modeDisplay = ftxui::Renderer([&] {
+        return ftxui::text("Royal") | ftxui::borderRounded;
     });
 
     ftxui::Component playButtonsDisplay = ftxui::Container::Horizontal({
@@ -164,61 +170,17 @@ void GameDisplay::drawMiddle()
 
     displayMiddle_ = ftxui::Container::Vertical({
         modeDisplay,
-        boardPlayerDisplay,
+        playerBoard_,
         playButtonsDisplay,
     });
 }
 
-void GameDisplay::drawDuoRight()
+void GameDisplay::drawOpponentsBoard()
 {
-    ftxui::Component boardOpDisplay = ftxui::Renderer([&] {
-        ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
-        ftxui::Pixel pixel = ftxui::Pixel();
-
-        for (uint32_t x = 0; x < WIDTH; ++x)
-        {
-            for (uint32_t y = 0; y < HEIGHT; ++y)
-            {
-                pixel.background_color = getFTXUIColor(playersBoards_->at(1).at(y).at(x));
-
-                for (uint32_t i = 0; i < LENGTH_PLAYER; ++i)
-                {
-                    // playerCanvas.DrawBlock(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
-                    // playerCanvas.DrawPoint(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, true, pixel.background_color);
-                    // playerCanvas.DrawPointCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
-                    playerCanvas.DrawBlockCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
-                }
-            }
-        }
-
-        return ftxui::vbox({
-            ftxui::canvas(playerCanvas) | ftxui::border,
-            ftxui::text(pseudos_.at(1)) | ftxui::borderDouble,
-        });
-    });
-
-    ftxui::Component malusDisplay = ftxui::Renderer([&]{
-         return ftxui::vbox({
-            ftxui::gaugeRight(malusGauge_),
-            ftxui::text("malus to come") | ftxui::borderDashed,
-            });
-    });
-
-    displayRight_ = ftxui::Container::Vertical({
-        malusDisplay,
-        boardOpDisplay,
-    });
-
-}
-
-void GameDisplay::drawRoyalRight()
-{
-    ftxui::Components boardsOp = {}, rows = {};
+    opBoards_ = {};
     ftxui::Component opDisplay;
-    uint32_t totalPlayers = playersBoards_->size();
 
-    uint32_t index;
-    for (index = 1; index < totalPlayers; ++index)
+    for (uint32_t index = 1; index < playersBoards_->size(); ++index)
     {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&](uint32_t index) {
             ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
@@ -244,16 +206,17 @@ void GameDisplay::drawRoyalRight()
                  ftxui::ButtonOption::Animated(ftxui::Color::Yellow1)) | ftxui::borderDouble,
         });
 
-        boardsOp.push_back(opDisplay);
+        opBoards_.push_back(opDisplay);
     }
+}
 
-    ftxui::Component malusDisplay = ftxui::Renderer([&]{
-         return ftxui::vbox({
-            ftxui::gaugeRight(malusGauge_),
-            ftxui::text("malus to come") | ftxui::borderDashed,
-            });
-    });
+void GameDisplay::displayOppponentsBoard()
+{
+    drawOpponentsBoard();
 
+    ftxui::Components rows= {};
+    uint32_t totalPlayers = playersBoards_->size();
+    
     for (uint32_t i = 0; i < 3; ++i)
     {   
         ftxui::Component line;
@@ -264,11 +227,11 @@ void GameDisplay::drawRoyalRight()
         switch(leftPlayers)
         {
             case 1 :
-            line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3)}); break;
+            line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3)}); break;
             case 2 :
-            line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3), boardsOp.at(1 + i * 3)}); break;
+            line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3), opBoards_.at(1 + i * 3)}); break;
             default : 
-            line = ftxui::Container::Horizontal({boardsOp.at(0 + i * 3), boardsOp.at(1 + i * 3), boardsOp.at(2 + i * 3)}); break;
+            line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3), opBoards_.at(1 + i * 3), opBoards_.at(2 + i * 3)}); break;
         }
 
         rows.push_back(line); 
@@ -276,16 +239,63 @@ void GameDisplay::drawRoyalRight()
 
     switch(rows.size())
     {
-        case 1 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0)}); break;
-        case 2 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0), rows.at(1)}); break;
-        case 3 : displayRight_ = ftxui::Container::Vertical({malusDisplay, rows.at(0), rows.at(1), rows.at(2)}); break;
+        case 1 : opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0)}); break;
+        case 2 : opBoardDisplay_= ftxui::Container::Vertical({rows.at(0), rows.at(1)}); break;
+        case 3 : opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0), rows.at(1), rows.at(2)}); break;
     }
 }
 
-void GameDisplay::drawEndless()
+void GameDisplay::displayOpponentBoardDuel()
 {
-    drawEndlessLeft();
-    drawMiddle();
+    opBoardDisplay_ = ftxui::Renderer([&] {
+        ftxui::Canvas playerCanvas = ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
+        ftxui::Pixel pixel = ftxui::Pixel();
+
+        for (uint32_t x = 0; x < WIDTH; ++x)
+        {
+            for (uint32_t y = 0; y < HEIGHT; ++y)
+            {
+                pixel.background_color = getFTXUIColor(playersBoards_->at(1).at(y).at(x));
+
+                for (uint32_t i = 0; i < LENGTH_PLAYER; ++i)
+                {
+                    playerCanvas.DrawBlockCircleFilled(x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i, LENGTH_PLAYER, pixel.background_color);
+                }
+            }
+        }
+
+        return ftxui::vbox({
+            ftxui::canvas(playerCanvas) | ftxui::border,
+            ftxui::text(pseudos_.at(1)) | ftxui::borderDouble,
+        });
+    });
+
+}
+
+void GameDisplay::displayMultiRightWindow()
+{
+    if(play_ == PlayMode::DUEL) displayOpponentBoardDuel();
+    else displayOppponentsBoard();
+
+    ftxui::Component malusDisplay = ftxui::Renderer([&]{
+         return ftxui::vbox({
+            ftxui::gaugeRight(malusGauge_),
+            ftxui::text("malus to come") | ftxui::borderDashed,
+            });
+    });
+
+    displayRight_ = ftxui::Container::Vertical({
+        malusDisplay,
+        opBoardDisplay_,
+    });
+
+}
+
+
+void GameDisplay::drawEndlessMode()
+{
+    displayLeftWindow();
+    displayMiddleWindow();
     
     displayWindow_= ftxui::Container::Horizontal({
         displayLeft_,
@@ -293,37 +303,11 @@ void GameDisplay::drawEndless()
     });
 }
 
-void GameDisplay::drawDuo()
+void GameDisplay::drawMultiMode()
 {
-    drawEndlessLeft();
-    drawMiddle();
-    drawDuoRight();
-
-    displayWindow_ = ftxui::Container::Horizontal({
-        displayLeft_,
-        displayMiddle_,
-        displayRight_,
-    });
-}
-
-void GameDisplay::drawClassic()
-{
-    drawEndlessLeft();
-    drawMiddle();
-    drawRoyalRight();
-
-    displayWindow_ = ftxui::Container::Horizontal({
-        displayLeft_,
-        displayMiddle_,
-        displayRight_,
-    });
-}
-
-void GameDisplay::drawRoyal()
-{
-    drawRoyalLeft();
-    drawMiddle();
-    drawRoyalRight();
+    displayLeftWindow();
+    displayMiddleWindow();
+    displayMultiRightWindow();
 
     displayWindow_ = ftxui::Container::Horizontal({
         displayLeft_,
@@ -337,13 +321,8 @@ void GameDisplay::drawRoyal()
 
 void GameDisplay::render()
 {
-    switch(play_)
-    {
-        case PlayMode::ENDLESS: break;
-        case PlayMode::DUEL: break;
-        case PlayMode::CLASSIC: break;
-        case PlayMode::ROYAL: drawRoyal(); break;
-    };
+    if (play_ == PlayMode::ENDLESS) drawEndlessMode();
+    else drawMultiMode();
 
     screen_->Loop(displayWindow_);
 }

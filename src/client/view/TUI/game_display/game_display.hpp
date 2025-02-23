@@ -2,7 +2,7 @@
 #define GAME_DISPLAY_HPP
 
 #include "../../interfaceConstants.hpp"
-// #include "../../IGame.hpp"
+#include "../../IGame.hpp"
 #include "../../dataExample.hpp"
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
@@ -41,7 +41,7 @@ enum class PlayMode : uint8_t
 
 ftxui::Color getFTXUIColor(colors color);
 
-class GameDisplay
+class GameDisplay : public IGame
 {
     private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
@@ -55,6 +55,12 @@ class GameDisplay
     float energyGauge_;
     std::vector<std::string> effects_ = {};
 
+    ftxui::Component playerInfo_;
+    ftxui::Component effectsDisplay_;
+    ftxui::Component playerBoard_;
+    ftxui::Components opBoards_;
+    ftxui::Component opBoardDisplay_;
+
     ftxui::Component displayRight_;
     ftxui::Component displayMiddle_;
     ftxui::Component displayLeft_;
@@ -62,30 +68,36 @@ class GameDisplay
 
     protected:
 
-    void drawDuoRight();
+    void drawPlayerInfo() override;
 
-    void drawRoyalRight();
+    void drawRoyalEffectsEnergy() override;
 
-    void drawMiddle();
+    void displayLeftWindow() override;
 
-    void drawEndlessLeft();
+    void drawPlayerBoard() override;
 
-    void drawRoyalLeft();
+    void displayMiddleWindow() override;
 
-    void drawEndless();
+    void drawOpponentsBoard() override;
 
-    void drawDuo();
+    void displayOpponentBoardDuel() override;
 
-    void drawClassic();
+    void displayOppponentsBoard() override;
 
-    void drawRoyal();
+    void displayMultiRightWindow() override;
+
+    void drawEndlessMode() override;
+
+    void drawMultiMode() override;
 
     public:
 
     GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
                 PlayMode play);
+    
+    ~GameDisplay() = default;
 
-    void render();
+    void render() override;
 
 
 };
