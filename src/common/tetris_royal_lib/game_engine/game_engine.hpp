@@ -53,6 +53,12 @@ class GameEngine {
     bool shouldReverseControls(PlayerID playerID);
 
     /**
+     * @brief Returns true if the given player currently has the input lock
+     * penalty.
+     */
+    bool shouldLockInput(PlayerID playerID);
+
+    /**
      * @brief Returns the opposite move of the given TetrominioMove
      */
     TetrominoMove invertTetrominoMove(TetrominoMove tetrominoMove);

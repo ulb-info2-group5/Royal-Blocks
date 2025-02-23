@@ -77,6 +77,21 @@ bool GameEngine::shouldReverseControls(PlayerID playerID) {
     return false;
 }
 
+bool GameEngine::shouldLockInput(PlayerID playerID) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return false;
+    }
+
+    TimedPenaltyPtr pPenalty =
+        pGameState_->getPlayerState(playerID)->getActivePenalty();
+
+    if (pPenalty != nullptr) {
+        return pPenalty->getPenaltyType() == PenaltyType::InputLock;
+    }
+
+    return false;
+}
+
 TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
     switch (tetrominoMove) {
     case TetrominoMove::Left:
@@ -253,6 +268,10 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
 }
 
 void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
+    if (shouldLockInput(playerID)) {
+        return;
+    }
+
     pGameState_->getTetris(playerID)->eventTryMoveActive(
         shouldReverseControls(playerID) ? invertTetrominoMove(tetrominoMove)
                                         : tetrominoMove);
@@ -267,6 +286,10 @@ void GameEngine::holdNextTetromino(PlayerID playerID) {
 }
 
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
+    if (shouldLockInput(playerID)) {
+        return;
+    }
+
     pGameState_->getTetris(playerID)->eventTryRotateActive(
         shouldReverseControls(playerID) ? !rotateClockwise : rotateClockwise);
 }
