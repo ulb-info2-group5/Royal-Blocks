@@ -90,7 +90,7 @@ void GameEngine::sendPenaltyRows(PlayerID senderID, size_t numRows) {
         if (!targetID.has_value()) {
             throw std::runtime_error{
                 "A player attempted to send penalty rows but "
-                "has not target selected."};
+                "has no target selected."};
         } else {
             pGameState_->getTetris(targetID.value())
                 ->eventReceivePenaltyLines(numRows);
