@@ -100,9 +100,8 @@ TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
     case TetrominoMove::Right:
         return TetrominoMove::Left;
         break;
-    case TetrominoMove::Down:
+    default:
         throw std::runtime_error{"TetrominoMove::Down cannot be inverted"};
-        break;
     }
 }
 

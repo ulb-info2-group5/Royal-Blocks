@@ -8,7 +8,6 @@
 
 #include <cstddef>
 #include <variant>
-#include <vector>
 
 using EffectType = std::variant<BonusType, PenaltyType>;
 
