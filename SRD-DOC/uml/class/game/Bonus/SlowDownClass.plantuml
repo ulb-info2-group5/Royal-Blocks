@@ -1,0 +1,10 @@
+@startuml (id=SlowDownClass)
+
+class SlowDownClass {
+
+    - {static} TICKS_NUM : static constexpr size_t
+
+    + getAbstractTimedEffect() : virtual AbstractTimedEffectPtr
+}
+
+@enduml
