@@ -1,11 +1,14 @@
 #ifndef TETROMINO_QUEUE_HPP
 #define TETROMINO_QUEUE_HPP
 
-#include "../queue/queue.hpp"
+#include <deque>
+
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 
-class TetrominoQueue : public Queue<TetrominoPtr> {
+class TetrominoQueue {
+  private:
+    std::deque<TetrominoPtr> queue_;
     static constexpr size_t MINIMUM_ENQUEUED_NUM =
         static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
@@ -17,6 +20,17 @@ class TetrominoQueue : public Queue<TetrominoPtr> {
     TetrominoQueue &operator=(TetrominoQueue &&) = default;
 
     ~TetrominoQueue() = default;
+
+    /**
+     * @brief Returns the queue's size.
+     */
+    size_t size() const noexcept;
+
+    /**
+     * @brief Returns a mutable reference to the element at the front of the
+     * queue.
+     */
+    TetrominoPtr &front();
 
     /**
      * @brief Pushes randomly shuffled tetrominoes in the queue (one of each

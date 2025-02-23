@@ -1,10 +1,10 @@
 #include "game_engine.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
+#include "effect/penalty/penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
-#include "queue/queue.hpp"
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
@@ -265,10 +265,12 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
         return;
     }
 
-    Queue<Penalty::PenaltyType> penaltiesQueue =
+    std::queue<Penalty::PenaltyType> penaltiesQueue =
         pGameState_->getPlayerState(playerID)->getStashedPenalties();
 
-    while (penaltiesQueue.size() > 0) {
-        sendPenaltyEffect(playerID, *penaltiesQueue.popFront());
+    while (!penaltiesQueue.empty()) {
+        Penalty::PenaltyType penaltyType = penaltiesQueue.front();
+        sendPenaltyEffect(playerID, penaltyType);
+        penaltiesQueue.pop();
     }
 }

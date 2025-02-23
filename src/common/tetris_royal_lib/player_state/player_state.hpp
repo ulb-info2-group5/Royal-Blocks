@@ -3,7 +3,6 @@
 
 #include "../effect/penalty/penalty.hpp"
 #include "../effect_selector/effect_selector.hpp"
-#include "queue/queue.hpp"
 
 #include <cstddef>
 #include <optional>
@@ -38,14 +37,14 @@ class PlayerState {
 
     // Penalties/Bonuses that the player has received/granted himself and will
     // be applied as soon as the current Penalty/Bonus is finished.
-    std::optional<Queue<Penalty::PenaltyType>> receivedPenaltiesQueue_;
-    std::optional<Queue<Bonus::BonusType>> grantedBonusesQueue_;
+    std::optional<std::queue<Penalty::PenaltyType>> receivedPenaltiesQueue_;
+    std::optional<std::queue<Bonus::BonusType>> grantedBonusesQueue_;
 
     // Penalties/Bonuses the player can send/grant himself
     std::optional<EffectSelector> effectSelector_;
 
     // Store stacked effects
-    std::optional<Queue<Penalty::PenaltyType>> stashedPenalties_;
+    std::optional<std::queue<Penalty::PenaltyType>> stashedPenalties_;
 
     // Currently active bonus & penalty (no optional needed, just make it
     // nullptr)
@@ -180,7 +179,7 @@ class PlayerState {
     /**
      * @brief Returns the penalties that were stashed and empties the stash.
      */
-    Queue<Penalty::PenaltyType> getStashedPenalties();
+    std::queue<Penalty::PenaltyType> getStashedPenalties();
 
   public:
     /* ------------------------------------------------

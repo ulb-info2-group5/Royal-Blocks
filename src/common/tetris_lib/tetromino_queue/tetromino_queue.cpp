@@ -1,51 +1,34 @@
 #include "tetromino_queue.hpp"
-#include "../board/board.hpp"
 #include "../tetris/tetris.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 #include "tetromino/tetromino.hpp"
 
-#include <algorithm>
-#include <cassert>
-#include <optional>
 #include <random>
 
 TetrominoQueue::TetrominoQueue() { refill(); }
 
+size_t TetrominoQueue::size() const noexcept { return queue_.size(); };
+
+TetrominoPtr &TetrominoQueue::front() { return queue_.front(); }
+
 void TetrominoQueue::refill() {
-    constexpr size_t numShapes =
-        static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
+    // TODO: avoid instantiation of random device at each call
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(
+        0, static_cast<int>(TetrominoShape::NumBasicTetrominoShape) - 1);
 
-    // generate array of Tetrominoes (ordered)
-    std::array<TetrominoPtr, numShapes> tetrominoes;
-    for (size_t i = 0; i < numShapes; i++) {
-        tetrominoes.at(i) =
-            Tetris::createTetromino(static_cast<TetrominoShape>(i));
-    }
-
-    // shuffle the array of Tetrominoes
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(tetrominoes.begin(), tetrominoes.end(), g);
-
-    // Push the Tetrominoes in the queue
-    for (auto &tetromino : tetrominoes) {
-        queue_.emplace_back(std::move(tetromino));
+    while (queue_.size() < MINIMUM_ENQUEUED_NUM) {
+        queue_.push_back(
+            Tetris::createTetromino(static_cast<TetrominoShape>(distrib(gen))));
     }
 }
 
 TetrominoPtr TetrominoQueue::fetchNext() {
-    if (queue_.size() > MINIMUM_ENQUEUED_NUM) {
-        refill();
-    }
-
-    std::optional<TetrominoPtr> pTetromino = popFront();
-
-    // if it's nullopt, then the queue was empty, which should never have
-    // happened in the first place.
-    // TODO: check that assert is fine here
-    assert(pTetromino != std::nullopt);
-
-    return std::move(pTetromino.value());
+    refill();
+    TetrominoPtr ret = std::move(queue_.front());
+    queue_.pop_front();
+    return ret;
 }
 
 void TetrominoQueue::insertNextTetromino(TetrominoPtr pTetromino) {
