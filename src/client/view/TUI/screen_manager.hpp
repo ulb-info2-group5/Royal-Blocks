@@ -3,17 +3,25 @@
 
 #include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
+#include "game_display/game_display.hpp"
 #include "main_menu/main_menu.hpp"
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
 #include <memory>
+#include <string>
+#include <string_view>
+#include <thread>
+#include <vector>
 
 #include "../dataExample.hpp"
 
 constexpr char LOGIN_INPUT_TITLE[] = "Login";
 constexpr char REGISTER_INPUT_TITLE[] = "Register";
+constexpr std::string_view LOGIN_INSTRUCTIONS = "Please enter your username and password to login.";
+constexpr std::string_view REGISTER_INSTRUCTIONS = "Please enter a username and a password to create an account.";
+constexpr std::string_view LOGIN_MESSAGE = "Your account has been created successfully! You can now login.";
 
 /**
  * @brief Enum class to represent the type of input to show to the user
