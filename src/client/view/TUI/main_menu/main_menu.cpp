@@ -8,108 +8,109 @@
 
 #include "main_menu.hpp"
 
-#include "../messaging/messaging.hpp"
 
-#include <cstdlib>
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/mouse.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <memory>
-#include <string>
-#include <tuple>
-#include <vector>
+// ### Constructor ###
+MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : 
+screen_(screen) 
+{
+    userState_ = MainMenuState::NONE;
+    userInput_ = {"", "", ""};
+    buttonBack_ = ftxui::Button("Back", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+}
 
+// ### Protected methods ###
 
-// ### Public methods ###
-MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_(screen) {}
-
-MainMenuState MainMenu::render() {
-    MainMenuState res = MainMenuState::NONE;
-
-    ftxui::Component buttonPlay = ftxui::Button("Play a game", [&] {
-        res = MainMenuState::PLAY;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonJoinGame = ftxui::Button("Join a game", [&] {
-        res = MainMenuState::JOIN_GAME;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonSendMessagesToFriends = ftxui::Button("Send messages to friends", [&] {
-        res = MainMenuState::SEND_MESSAGES;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonLookRanking = ftxui::Button("Look at ranking", [&] {
-        res = MainMenuState::LOOK_RANKING;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonManageProfile = ftxui::Button("Manage profile", [&] {
-        res = MainMenuState::MANAGE_PROFILE;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonManageFriendsList = ftxui::Button("Manage friends list", [&] {
-        res = MainMenuState::MANAGE_FRIENDS_LIST;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component buttonExit = ftxui::Button("Exit", [&] {
-        res = MainMenuState::EXIT;
+void MainMenu::displayMainMenuButtons()
+{
+    buttonPlay_ = ftxui::Button("Play a game", [&] {
+        userState_ = MainMenuState::PLAY;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
-    ftxui::Component component = ftxui::Container::Vertical({
-        buttonPlay,
-        buttonJoinGame,
-        buttonSendMessagesToFriends,
-        buttonLookRanking,
-        buttonManageProfile,
-        buttonManageFriendsList,
-        buttonExit,
+    buttonJoinGame_ = ftxui::Button("Join a game", [&] {
+        userState_ = MainMenuState::JOIN_GAME;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonSendMessagesToFriends_ = ftxui::Button("Send messages to friends", [&] {
+        userState_ = MainMenuState::SEND_MESSAGES;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonLookRanking_ = ftxui::Button("Look at ranking", [&] {
+        userState_ = MainMenuState::LOOK_RANKING;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonManageProfile_ = ftxui::Button("Manage profile", [&] {
+        userState_ = MainMenuState::MANAGE_PROFILE;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonManageFriendsList_ = ftxui::Button("Manage friends list", [&] {
+        userState_ = MainMenuState::MANAGE_FRIENDS_LIST;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonExit_ = ftxui::Button("Exit", [&] {
+        userState_ = MainMenuState::EXIT;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
+
+void MainMenu::displayMainWindow()
+{
+    displayMainMenuButtons();
+
+    ftxui::Component buttonDisplay = ftxui::Container::Vertical({
+        buttonPlay_,
+        buttonJoinGame_,
+        buttonSendMessagesToFriends_,
+        buttonLookRanking_,
+        buttonManageProfile_,
+        buttonManageFriendsList_,
+        buttonExit_,
     });
 
-    ftxui::Component render = ftxui::Renderer(component, [&] {
+    mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
             ftxui::text("Main Menu") | ftxui::bold | ftxui::center,
             ftxui::separator(),
             ftxui::text("Welcome to the main menu of Tetris Royal !") | ftxui::center,
             ftxui::separator(),
-            buttonPlay->Render(),
-            buttonJoinGame->Render(),
-            buttonSendMessagesToFriends->Render(),
-            buttonLookRanking->Render(),
-            buttonManageProfile->Render(),
-            buttonManageFriendsList->Render(),
-            buttonExit->Render(),
+            buttonPlay_->Render(),
+            buttonJoinGame_->Render(),
+            buttonSendMessagesToFriends_->Render(),
+            buttonLookRanking_->Render(),
+            buttonManageProfile_->Render(),
+            buttonManageFriendsList_->Render(),
+            buttonExit_->Render(),
         }) | ftxui::border | ftxui::center;
     });
-
-    screen_->Loop(render);
-
-    return res;
 }
 
-
-void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) {
-    std::vector<ftxui::Element> rows;
-
+void MainMenu::displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking)
+{
     // Width of the columns
     const int widthRanking = 10;
     const int widthUser = 30;
     const int widthScore = 10;
 
     // Title of the table
-    rows.push_back(
+    rowsRanking_.push_back(
         ftxui::hbox({
             ftxui::text("Ranking") | ftxui::bold | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking) | ftxui::center,
             ftxui::text("User")    | ftxui::bold | size(ftxui::WIDTH, ftxui::EQUAL, widthUser)    | ftxui::center,
             ftxui::text("Score")   | ftxui::bold | size(ftxui::WIDTH, ftxui::EQUAL, widthScore)   | ftxui::center,
         })
     );
-    rows.push_back(ftxui::separator());
+    rowsRanking_.push_back(ftxui::separator());
 
     // infos of the ranking table (Ranking, User, Score) with the ranking vector
     for (const auto& [rank, user, score] : ranking) {
-        rows.push_back(
+        rowsRanking_.push_back(
             ftxui::hbox({
                 // Ranging on the left
                 ftxui::text(std::to_string(rank))
@@ -125,26 +126,131 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
             })
         );
     }
+}
 
-    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+void MainMenu::displayRankingWindow(const std::vector<std::tuple<int, std::string, int>> &ranking)
+{
+    displayRankingList(ranking);
 
     ftxui::Component container = ftxui::Container::Vertical({
-        buttonBack,
+        buttonBack_,
     });
 
-    ftxui::Component component = ftxui::Renderer(container, [&] {
+    rankingWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
             ftxui::text("Endless mod Ranking") | ftxui::bold | ftxui::center,
             ftxui::separator(),
-            ftxui::vbox(rows) | ftxui::border,
+            ftxui::vbox(rowsRanking_) | ftxui::border,
             ftxui::separator(),
-            buttonBack->Render(),
+            buttonBack_->Render(),
         }) | ftxui::border | ftxui::center;
     });
+}
 
-    screen_->Loop(component);    
+void MainMenu::displayFriendButtons(const std::vector<std:: string> &friendsList)
+{
+    for (const std::string& friendName : friendsList) {
+        friendButtons_.push_back(ftxui::Button(friendName, [&] {
+            manageFriendlistScreen(friendName);
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)));
+    }
+
+    buttonAddFriend_ = ftxui::Button("Add a friend", [&] {
+        addFriendScreen();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+
+    friendsContainer_ = ftxui::Container::Vertical({});
+    for (const ftxui::Component& button : friendButtons_) {
+        friendsContainer_->Add(button);
+    }
+}
+
+void MainMenu::displayFriendWindow(const std::vector<std:: string> &friendsList)
+{
+    displayFriendButtons(friendsList);
+
+    ftxui::Component addContainer = ftxui::Container::Vertical({
+        buttonAddFriend_,
+    });
+
+    ftxui::Component backContainer = ftxui::Container::Vertical({
+        buttonBack_,
+    });
+
+    friendManagerWindow_ = ftxui::Renderer(ftxui::Container::Vertical({friendsContainer_, addContainer, backContainer}), [&] {
+        return ftxui::vbox({
+            ftxui::text("Friends List") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            ftxui::text("Your friends") | ftxui::center,
+            friendsContainer_->Render() | ftxui::border,
+            ftxui::separator(),
+            buttonAddFriend_->Render() | ftxui::border,
+            ftxui::separator(),
+            buttonBack_->Render() | ftxui::border,
+        }) | ftxui::border | ftxui::center;
+    });
+}
+
+void MainMenu::displayProfileManagerButton()
+{
+    inputChangeUsername_ = ftxui::Input(&userInput_.at(0), "New username") | ftxui::border;
+
+    inputChangePassword_ = ftxui::Input(&userInput_.at(1), "New password") | ftxui::border;
+
+    submitButton_ = ftxui::Button("Submit", [&] {
+        if (userInput_.at(0).empty() && userInput_.at(1).empty()) {
+            userInput_.at(2) = "Please enter a new username or password";
+        }
+        else {
+            screen_->ExitLoopClosure()();
+        }
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
+
+void MainMenu::displayProfileManagerWindow()
+{
+    displayProfileManagerButton();
+
+    ftxui::Component container = ftxui::Container::Vertical({
+        inputChangeUsername_,
+        inputChangePassword_,
+        submitButton_,
+        buttonBack_,
+    });
+
+    profileManagerWindow_ = ftxui::Renderer(container, [&] {
+        return ftxui::vbox({
+            ftxui::text("Profile Manager") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            ftxui::text("You can change your username and password here") | ftxui::center,
+            ftxui::separator(),
+            ftxui::text(""), // Empty line
+            inputChangeUsername_->Render(),
+            inputChangePassword_->Render(),
+            ftxui::text(userInput_.at(2)),
+            ftxui::separator(),
+            submitButton_->Render(),
+            buttonBack_->Render(),
+        }) | ftxui::border | ftxui::center;
+    });
+}
+
+// ### Public methods ###
+MainMenuState MainMenu::render() {
+    
+    displayMainWindow();
+
+    screen_->Loop(mainMenuWindow_);
+
+    return userState_;
+}
+
+
+void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) {
+
+    displayRankingWindow(ranking);
+
+    screen_->Loop(rankingWindow_);    
 }
 
 void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
@@ -154,96 +260,17 @@ void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
 }
 
 void MainMenu::renderFriendsManager(const std::vector<std:: string> &friendsList) {
-    std::vector<ftxui::Component> buttons;
-    for (const std::string& friendName : friendsList) {
-        buttons.push_back(ftxui::Button(friendName, [&] {
-            manageFriendlistScreen(friendName);
-        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)));
-    }
 
-    ftxui::Component buttonAddFriend = ftxui::Button("Add a friend", [&] {
-        addFriendScreen();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
-        
-    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+    displayFriendWindow(friendsList);
 
-    ftxui::Component friendsContainer = ftxui::Container::Vertical({});
-    for (const ftxui::Component& button : buttons) {
-        friendsContainer->Add(button);
-    }
-
-    ftxui::Component addContainer = ftxui::Container::Vertical({
-        buttonAddFriend,
-    });
-
-    ftxui::Component backContainer = ftxui::Container::Vertical({
-        buttonBack,
-    });
-
-    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({friendsContainer, addContainer, backContainer}), [&] {
-        return ftxui::vbox({
-            ftxui::text("Friends List") | ftxui::bold | ftxui::center,
-            ftxui::separator(),
-            ftxui::text("Your friends") | ftxui::center,
-            friendsContainer->Render() | ftxui::border,
-            ftxui::separator(),
-            addContainer->Render() | ftxui::border,
-            ftxui::separator(),
-            backContainer->Render() | ftxui::border,
-        }) | ftxui::border | ftxui::center;
-    });
-
-    screen_->Loop(component);
+    screen_->Loop(friendManagerWindow_);
 }
 
 void MainMenu::renderProfileManager() {
-    std::string username;
-    std::string password;
-    std::string msg;
 
-    ftxui::Component inputChangeUsername = ftxui::Input(&username, "New username") | ftxui::border;
+    displayProfileManagerWindow();
 
-    ftxui::Component inputChangePassword = ftxui::Input(&password, "New password") | ftxui::border;
-
-    ftxui::Component submitButton = ftxui::Button("Submit", [&] {
-        if (username.empty() && password.empty()) {
-            msg = "Please enter a new username or password";
-        }
-        else {
-            screen_->ExitLoopClosure()();
-        }
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
-    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
-    ftxui::Component container = ftxui::Container::Vertical({
-        inputChangeUsername,
-        inputChangePassword,
-        submitButton,
-        buttonBack,
-    });
-
-    ftxui::Component component = ftxui::Renderer(container, [&] {
-        return ftxui::vbox({
-            ftxui::text("Profile Manager") | ftxui::bold | ftxui::center,
-            ftxui::separator(),
-            ftxui::text("You can change your username and password here") | ftxui::center,
-            ftxui::separator(),
-            ftxui::text(""), // Empty line
-            inputChangeUsername->Render(),
-            inputChangePassword->Render(),
-            ftxui::text(msg),
-            ftxui::separator(),
-            submitButton->Render(),
-            buttonBack->Render(),
-        }) | ftxui::border | ftxui::center;
-    });
-
-    screen_->Loop(component);
+    screen_->Loop(profileManagerWindow_);
 }
 
 
