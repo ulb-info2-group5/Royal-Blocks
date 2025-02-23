@@ -67,6 +67,8 @@ void Tetris::fetchNewTetromino() {
                      PUBLIC
 --------------------------------------------------*/
 
+Tetris::Tetris() { fetchNewTetromino(); }
+
 // #### Event API ####
 
 size_t Tetris::eventClockTick() {

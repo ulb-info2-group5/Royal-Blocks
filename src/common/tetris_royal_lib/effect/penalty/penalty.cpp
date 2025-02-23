@@ -1,7 +1,6 @@
 #include "penalty.hpp"
 #include "blackout.hpp"
 #include "input_lock.hpp"
-#include "lightning.hpp"
 #include "reverse_controls.hpp"
 #include "speed_up.hpp"
 
@@ -21,9 +20,6 @@ PenaltyPtr Penalty::makePenalty(PenaltyType penaltyType) {
         break;
     case PenaltyType::SpeedUp:
         pPenalty = std::make_unique<SpeedUp>();
-        break;
-    case PenaltyType::Lightning:
-        pPenalty = std::make_unique<Lightning>();
         break;
     case PenaltyType::Blackout:
         pPenalty = std::make_unique<Blackout>();

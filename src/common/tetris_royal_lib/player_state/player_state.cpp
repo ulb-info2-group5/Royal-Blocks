@@ -148,6 +148,14 @@ void PlayerState::setActiveBonus(AbstractTimedEffectPtr pTimedEffect) {
     pActiveBonus_ = pTimedEffect;
 }
 
+AbstractTimedEffectPtr PlayerState::getActiveBonus() const {
+    return pActiveBonus_;
+}
+
+AbstractTimedEffectPtr PlayerState::getActivePenalty() const {
+    return pActivePenalty_;
+}
+
 void PlayerState::selectNextEffect() { effectSelector_->next(); }
 
 void PlayerState::selectPrevEffect() { effectSelector_->prev(); }

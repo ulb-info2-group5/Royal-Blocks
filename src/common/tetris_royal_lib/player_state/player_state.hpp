@@ -1,6 +1,7 @@
 #ifndef PLAYER_STATE_HPP
 #define PLAYER_STATE_HPP
 
+#include "../effect/abstract_timed_effect.hpp"
 #include "../effect/penalty/penalty.hpp"
 #include "../effect_selector/effect_selector.hpp"
 
@@ -155,6 +156,16 @@ class PlayerState {
      * @brief Sets the given timed-effect bonus as active bonus.
      */
     void setActiveBonus(AbstractTimedEffectPtr pTimedEffect);
+
+    /**
+     * @brief Returns active bonus.
+     */
+    AbstractTimedEffectPtr getActiveBonus() const;
+
+    /**
+     * @brief Returns active penalty.
+     */
+    AbstractTimedEffectPtr getActivePenalty() const;
 
     /**
      * @brief Sets the given timed-effect penalty as active penalty.

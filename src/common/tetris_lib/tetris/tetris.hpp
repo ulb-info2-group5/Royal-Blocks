@@ -85,7 +85,7 @@ class Tetris {
   public:
     // #### Constructors ####
 
-    Tetris() = default;
+    Tetris();
     Tetris(const Tetris &) = delete;
     Tetris(Tetris &&) = default;
 
@@ -180,16 +180,17 @@ class Tetris {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serializeSelf() const {
-        return {{"isAlive", isAlive_},
-                {"activeTetromino",
-                 activeTetromino_ ? activeTetromino_->serialize() : nullptr},
-                {"previewTetromino",
-                 previewTetromino_ ? previewTetromino_->serialize() : nullptr},
-                {"holdTetromino",
-                 holdTetromino_ ? holdTetromino_->serialize() : nullptr},
-                {"board", board_.serialize()},
-                {"tetrominoQueue", tetrominoQueue_.serialize()}};
+    nlohmann::json serializeSelf(bool emptyBoard = false) const {
+        return {
+            {"isAlive", isAlive_},
+            {"activeTetromino",
+             activeTetromino_ ? activeTetromino_->serialize() : nullptr},
+            {"previewTetromino",
+             previewTetromino_ ? previewTetromino_->serialize() : nullptr},
+            {"holdTetromino",
+             holdTetromino_ ? holdTetromino_->serialize() : nullptr},
+            {"board", emptyBoard ? Board{}.serialize() : board_.serialize()},
+            {"tetrominoQueue", tetrominoQueue_.serialize()}};
     }
 
     nlohmann::json serializeExternal() const {

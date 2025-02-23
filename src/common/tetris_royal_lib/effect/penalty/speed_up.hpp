@@ -17,12 +17,6 @@ class SpeedUp final : public Penalty, public TickTimedEffect {
     SpeedUp &operator=(SpeedUp &&) = delete;
 
     ~SpeedUp() = default;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect();
 };
 
 #endif // SPEED_UP_HPP

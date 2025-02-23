@@ -1,16 +1,14 @@
 #ifndef PENALTY_HPP
 #define PENALTY_HPP
 
-#include "../abstract_effect.hpp"
-
 #include <memory>
 
 class PenaltyTest;
 
 class Penalty;
-using PenaltyPtr = std::unique_ptr<Penalty>;
+using PenaltyPtr = std::shared_ptr<Penalty>;
 
-class Penalty : public virtual AbstractEffect {
+class Penalty {
   public:
     enum class PenaltyType {
         ReverseControls,

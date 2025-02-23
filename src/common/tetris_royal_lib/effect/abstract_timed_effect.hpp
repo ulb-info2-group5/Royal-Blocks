@@ -1,9 +1,10 @@
 #ifndef ABSTRACT_TIMED_EFFECT_HPP
 #define ABSTRACT_TIMED_EFFECT_HPP
 
-#include "abstract_effect.hpp"
+#include <memory>
 
-class AbstractTimedEffect : public virtual AbstractEffect {
+class AbstractTimedEffect {
+
   protected:
     AbstractTimedEffect() = default;
     AbstractTimedEffect(const AbstractTimedEffect &) = delete;
@@ -17,25 +18,19 @@ class AbstractTimedEffect : public virtual AbstractEffect {
     /**
      * @brief Notifies that a clock tick has occurred.
      */
-    virtual void tick(){};
+    virtual void tick() {};
 
     /**
      * @brief Notifies that the active tetromino has been placed.
      */
-    virtual void tetrominoPlaced(){};
+    virtual void tetrominoPlaced() {};
 
     /**
      * @brief Returns true if the effect isn't active anymore; false otherwise.
      */
     virtual bool isFinished() const = 0;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect() {
-        return AbstractTimedEffectPtr{this};
-    }
 };
+
+using AbstractTimedEffectPtr = std::shared_ptr<AbstractTimedEffect>;
 
 #endif // ABSTRACT_TIMED_EFFECT_HPP

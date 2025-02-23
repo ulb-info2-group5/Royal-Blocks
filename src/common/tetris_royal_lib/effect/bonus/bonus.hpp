@@ -1,8 +1,6 @@
 #ifndef BONUS_HPP
 #define BONUS_HPP
 
-#include "../abstract_effect.hpp"
-
 #include <memory>
 
 class BonusTest;
@@ -10,7 +8,7 @@ class BonusTest;
 class Bonus;
 using BonusPtr = std::shared_ptr<Bonus>;
 
-class Bonus : public virtual AbstractEffect {
+class Bonus {
   public:
     enum class BonusType {
         SlowDown,

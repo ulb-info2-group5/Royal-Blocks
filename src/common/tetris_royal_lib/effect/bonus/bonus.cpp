@@ -1,5 +1,4 @@
 #include "bonus.hpp"
-#include "mini_tetrominoes.hpp"
 #include "slow_down.hpp"
 
 #include <memory>
@@ -12,9 +11,6 @@ BonusPtr Bonus::makeBonus(BonusType bonusType) {
     BonusPtr pBonus;
 
     switch (bonusType) {
-    case BonusType::MiniTetrominoes:
-        pBonus = std::make_unique<MiniTetrominoes>();
-        break;
     case BonusType::SlowDown:
         pBonus = std::make_unique<SlowDown>();
         break;

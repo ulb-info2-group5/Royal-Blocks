@@ -19,12 +19,6 @@ class SlowDown final : public Bonus, public TickTimedEffect {
     SlowDown &operator=(SlowDown &&) = delete;
 
     ~SlowDown() = default;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect();
 };
 
 #endif // SLOW_DOWN_HPP

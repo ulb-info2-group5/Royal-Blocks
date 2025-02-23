@@ -17,12 +17,6 @@ class InputLock final : public Penalty, public PlacementTimedEffect {
     InputLock &operator=(InputLock &&) = delete;
 
     ~InputLock() = default;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect();
 };
 
 #endif // INPUT_LOCK_HPP

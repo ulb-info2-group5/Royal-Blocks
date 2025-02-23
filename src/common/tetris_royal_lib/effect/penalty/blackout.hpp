@@ -17,12 +17,6 @@ class Blackout final : public Penalty, public TickTimedEffect {
     Blackout &operator=(Blackout &&) = delete;
 
     ~Blackout() = default;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect();
 };
 
 #endif // BLACKOUT_HPP

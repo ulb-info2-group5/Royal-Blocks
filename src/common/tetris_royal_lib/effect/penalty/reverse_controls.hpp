@@ -17,12 +17,6 @@ class ReverseControls final : public Penalty, public PlacementTimedEffect {
     ReverseControls &operator=(ReverseControls &&) = delete;
 
     ~ReverseControls() = default;
-
-    /* ----------------------------------------
-     *              AbstractEffect
-     * ----------------------------------------*/
-
-    virtual AbstractTimedEffectPtr getAbstractTimedEffect();
 };
 
 #endif // REVERSE_CONTROLS_HPP
