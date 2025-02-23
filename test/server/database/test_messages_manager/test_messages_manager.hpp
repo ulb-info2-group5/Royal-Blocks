@@ -53,4 +53,4 @@ public:
     void testGetDiscussion();
 };
 
-#endif // MESSAGES_MANAGER_TEST_HPP
+#endif // TEST_MESSAGES_MANAGER_HPP

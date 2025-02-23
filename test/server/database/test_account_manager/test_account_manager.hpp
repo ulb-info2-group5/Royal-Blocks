@@ -1,5 +1,5 @@
 /**
- * @file AccountManagerTest.hpp
+ * @file test_account_manager.hpp
  * @authors Rafaou, Ernest, Jonas
  * @brief Unit test header for AccountManager using CppUnit.
  */
@@ -76,4 +76,4 @@ public:
     void testGetUsername();
 };
 
-#endif // ACCOUNT_MANAGER_TEST_HPP
+#endif // TEST_ACCOUNT_MANAGER_HPP

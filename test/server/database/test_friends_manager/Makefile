@@ -9,13 +9,13 @@ TEST_DIR = .
 INCLUDE_DIR = ../../../../include
 
 # Fichiers source et objets
-SRC_FILES = $(SRC_DIR)/account_manager/account_manager.cpp $(SRC_DIR)/database_manager/database_manager.cpp  # ajoutez ici d'autres fichiers source si nécessaires
-TEST_FILES = $(TEST_DIR)/test_account_manager.cpp  # ajoutez d'autres fichiers de test si nécessaires
+SRC_FILES = $(SRC_DIR)/friends_manager/friends_manager.cpp $(SRC_DIR)/database_manager/database_manager.cpp  # ajoutez ici d'autres fichiers source si nécessaires
+TEST_FILES = $(TEST_DIR)/test_friends_manager.cpp  # ajoutez d'autres fichiers de test si nécessaires
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)
 
 # Nom des fichiers exécutables
-TARGET = test_account_manager
+TARGET = test_friends_manager
 
 # Commande de compilation
 $(TARGET): $(OBJ_FILES)
@@ -36,4 +36,4 @@ test: $(TARGET)
 .PHONY: clean test
 
 # Temp compile script for mac
-# g++ -I$(brew --prefix cppunit)/include -L$(brew --prefix cppunit)/lib -lcppunit -lsqlite3 -o test test_account_manager.cpp ../../../../src/server/database/account_manager/account_manager.cpp ../../../../src/server/database/database_manager/database_manager.cpp ../../../../src/server/database/config.cpp -std=c++17
+# g++ -I$(brew --prefix cppunit)/include -L$(brew --prefix cppunit)/lib -lcppunit -lsqlite3 -o test test_friends_manager.cpp ../../../../src/server/database/friends_manager/friends_manager.cpp ../../../../src/server/database/database_manager/database_manager.cpp ../../../../src/server/database/config.cpp -std=c++17

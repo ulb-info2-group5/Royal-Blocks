@@ -1,5 +1,5 @@
 /**
- * @file AccountManagerTest.cpp
+ * @file test_account_manager.cpp
  * @authors Rafaou, Ernest, Jonas
  * @brief Unit tests for AccountManager using CppUnit.
  */
@@ -12,7 +12,7 @@ void AccountManagerTest::setUp() {
     // Path correct? Or use default path?
     const std::string dbPath = "data/test.db";
 
-    
+
     dbManager = std::make_shared<DatabaseManager>(dbPath);
     accountManager = std::make_shared<AccountManager>(dbManager);
 }
