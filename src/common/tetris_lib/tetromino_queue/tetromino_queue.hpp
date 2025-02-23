@@ -1,11 +1,11 @@
 #ifndef TETROMINO_QUEUE_HPP
 #define TETROMINO_QUEUE_HPP
 
-#include "../serializable_queue/serializable_queue.hpp"
+#include "../queue/queue.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 
-class TetrominoQueue : public SerializableQueue<TetrominoPtr> {
+class TetrominoQueue : public Queue<TetrominoPtr> {
     static constexpr size_t MINIMUM_ENQUEUED_NUM =
         static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 

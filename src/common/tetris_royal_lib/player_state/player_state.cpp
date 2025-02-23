@@ -18,13 +18,13 @@ void PlayerState::toggleEffects(bool activated) {
     }
 
     if (activated) {
-        receivedPenaltiesQueue_ = SerializableQueue<Penalty::PenaltyType>{};
+        receivedPenaltiesQueue_ = Queue<Penalty::PenaltyType>{};
     } else {
         receivedPenaltiesQueue_ = std::nullopt;
     }
 
     if (activated) {
-        grantedBonusesQueue_ = SerializableQueue<Bonus::BonusType>{};
+        grantedBonusesQueue_ = Queue<Bonus::BonusType>{};
     } else {
         grantedBonusesQueue_ = std::nullopt;
     }

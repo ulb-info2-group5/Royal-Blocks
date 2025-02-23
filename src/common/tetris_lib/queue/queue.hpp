@@ -11,18 +11,18 @@
  *
  * @tparam T The type of objects stored in the queue.
  */
-template <typename T> class SerializableQueue {
+template <typename T> class Queue {
   protected:
     std::deque<T> queue_;
 
   public:
-    SerializableQueue() = default;
-    SerializableQueue(const SerializableQueue &) = default;
-    SerializableQueue(SerializableQueue &&) = default;
-    SerializableQueue &operator=(const SerializableQueue &) = default;
-    SerializableQueue &operator=(SerializableQueue &&) = default;
+    Queue() = default;
+    Queue(const Queue &) = default;
+    Queue(Queue &&) = default;
+    Queue &operator=(const Queue &) = default;
+    Queue &operator=(Queue &&) = default;
 
-    ~SerializableQueue() = default;
+    ~Queue() = default;
 
     /**
      * @brief Returns the queue's size.
