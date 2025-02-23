@@ -1,28 +1,38 @@
-#ifndef MESSAGESING_HPP
-#define MESSAGESING_HPP
+#ifndef MESSAGING_HPP
+#define MESSAGING_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
-#include <memory>
-#include <vector>
-#include <map>
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/component/mouse.hpp>
+#include <ftxui/dom/elements.hpp>
 
-using namespace std;
+#include <cstdlib>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "../../IMessage.hpp"
 
 /**
  * @brief Enum class to represent the state of the messaging
  * 
  */
-enum class MessagingState {
+enum class MessagingState 
+{
     BACK,
     NONE,
 };
 
-struct Message {
+struct Message 
+{
     int idSender; 
     std::string message; 
 };
 
-class Messaging {
+class Messaging : public IMessage
+{
     private :  
         /*
         * @brief The screen to use to render the components
@@ -32,12 +42,42 @@ class Messaging {
         std::map<std::string, std::vector<Message>> conversations;
         std::vector<std::string> friends_;
         int selectedFriend = 0;
-        std::string newFriend;
-        std::string newMessage;
+        std::string newFriend_;
+        std::string newMessage_;
+
+        MessagingState userState_;
+
+        ftxui::Component friendsMenu_;
+        ftxui::Component addMenu_;
+
+        ftxui::Component addFriendInput_;
+        ftxui::Component messageInput_;
+
+        ftxui::Component backButton_;
+        ftxui::Component sendButton_;
+        ftxui::Component addFriendButton_;
+
+        ftxui::Component sidebar_;
+        ftxui::Component chatDisplay_;
+
+        ftxui::Component displayWindow_;
+
 
         //just to simulate a user ID 
         int userId = 5;
         void initMessaging();
+
+    protected : 
+
+        void drawButtons() override;
+
+        void drawInputUSer() override;
+
+        void drawMenu() override;
+
+        void drawDisplay() override;
+
+        void drawWindow() override;
 
     public : 
         /*
@@ -60,12 +100,12 @@ class Messaging {
         */
         MessagingState render();
         
-        void addFriends(string friendName);
+        // void addFriends(std::string friendName) override;
         
         /*
         * @brief add a message to a discussion
         */
-        void addMessage(const string &message);
+        void addMessage(const std::string &message) override;
 };
 
 #endif 
