@@ -70,11 +70,11 @@ bool GameEngine::shouldReverseControls(PlayerID playerID) {
     TimedPenaltyPtr pPenalty =
         pGameState_->getPlayerState(playerID)->getActivePenalty();
 
-    if (pPenalty != nullptr) {
-        return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
+    if (pPenalty == nullptr) {
+        return false;
     }
 
-    return false;
+    return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
 }
 
 bool GameEngine::shouldLockInput(PlayerID playerID) {
@@ -85,11 +85,11 @@ bool GameEngine::shouldLockInput(PlayerID playerID) {
     TimedPenaltyPtr pPenalty =
         pGameState_->getPlayerState(playerID)->getActivePenalty();
 
-    if (pPenalty != nullptr) {
-        return pPenalty->getPenaltyType() == PenaltyType::InputLock;
+    if (pPenalty == nullptr) {
+        return false;
     }
 
-    return false;
+    return pPenalty->getPenaltyType() == PenaltyType::InputLock;
 }
 
 TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
