@@ -29,6 +29,12 @@ class DatabaseManager {
         DatabaseManager();
 
         /*
+        * @brief Constructor of the DatabaseManager class
+        * @param path Path to the database
+        */
+        DatabaseManager(const string &path);
+
+        /*
         * @brief Destructor of the DatabaseManager class
         */
         ~DatabaseManager();

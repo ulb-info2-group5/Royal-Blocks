@@ -20,6 +20,13 @@ DatabaseManager::DatabaseManager() {
     }
 }
 
+// ### Constructor With Database Path ###
+DatabaseManager::DatabaseManager(const string &path) {
+    if (sqlite3_open(path.c_str(), &db_) != SQLITE_OK) {
+        cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
+    }
+}
+
 
 // ### Destructor ###
 DatabaseManager::~DatabaseManager() {
