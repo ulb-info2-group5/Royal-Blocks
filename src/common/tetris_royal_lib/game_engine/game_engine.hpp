@@ -38,7 +38,7 @@ class GameEngine {
      * @brief Checks whether the given feature is enabled for the current
      * GameMode.
      */
-    bool checkFeaturesEnabled(GameModeFeature gameModeFeatures) const;
+    bool checkFeatureEnabled(GameModeFeature gameModeFeatures) const;
 
     // #### GameState ####
 

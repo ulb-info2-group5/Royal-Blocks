@@ -57,7 +57,7 @@ const GameEngine::FeaturesMap GameEngine::featuresBitsets =
     return featuresPerGameMode;
 }();
 
-bool GameEngine::checkFeaturesEnabled(GameModeFeature gameModeFeature) const {
+bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
     return featuresBitsets.at(static_cast<size_t>(pGameState_->getGameMode()))
         .test(static_cast<size_t>(gameModeFeature));
 }
@@ -67,8 +67,8 @@ GameEngine::GameEngine(const GameStatePtr &pGameState)
 
 void GameEngine::sendPenaltyEffect(PlayerID senderID,
                                    Penalty::PenaltyType penaltyType) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)
-        || !checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)
+        || !checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
     }
 
@@ -83,7 +83,7 @@ void GameEngine::sendPenaltyEffect(PlayerID senderID,
 }
 
 void GameEngine::sendPenaltyRows(PlayerID senderID, size_t numRows) {
-    if (checkFeaturesEnabled(GameModeFeature::PenaltyRows)) {
+    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
         std::optional<PlayerID> targetID =
             pGameState_->getPlayerState(senderID)->getPenaltyTarget();
 
@@ -99,7 +99,7 @@ void GameEngine::sendPenaltyRows(PlayerID senderID, size_t numRows) {
 }
 
 bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
 
@@ -108,7 +108,7 @@ bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
 }
 
 void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
@@ -121,7 +121,7 @@ void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
 
 void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
                               bool stashForLater) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
@@ -154,7 +154,7 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
 }
 
 void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
-    if (!checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
+    if (!checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
     }
 
@@ -167,7 +167,7 @@ Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) {
 }
 
 void GameEngine::selectNextAliveTarget(PlayerID playerID) {
-    if (!checkFeaturesEnabled(GameModeFeature::SelectPenaltyTarget)) {
+    if (!checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
     }
 
@@ -205,7 +205,7 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
 }
 
 void GameEngine::selectNextEffect(PlayerID playerID) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
@@ -213,7 +213,7 @@ void GameEngine::selectNextEffect(PlayerID playerID) {
 }
 
 void GameEngine::selectPrevEffect(PlayerID playerID) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
@@ -248,20 +248,20 @@ void GameEngine::clockTick(PlayerID playerID) {
 
     pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
 
-    if (checkFeaturesEnabled(GameModeFeature::PenaltyRows)) {
+    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
         // For n rows cleared by the player, his target receives n-1 penalty
         // rows.
         sendPenaltyRows(playerID, numClearedRows - 1);
     }
 
-    if (checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (checkFeatureEnabled(GameModeFeature::Effects)) {
         Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
         pGameState_->getPlayerState(playerID)->increaseEnergy(earnedEnergy);
     }
 }
 
 void GameEngine::emptyPenaltyStash(PlayerID playerID) {
-    if (!checkFeaturesEnabled(GameModeFeature::Effects)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
