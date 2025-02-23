@@ -1,7 +1,6 @@
 #include "game_engine.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
-#include "board/board.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
@@ -11,7 +10,6 @@
 
 #include <cassert>
 #include <optional>
-#include <random>
 #include <stdexcept>
 #include <variant>
 
@@ -64,6 +62,35 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
         .test(static_cast<size_t>(gameModeFeature));
 }
 
+bool GameEngine::shouldReverseControls(PlayerID playerID) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return false;
+    }
+
+    TimedPenaltyPtr pPenalty =
+        pGameState_->getPlayerState(playerID)->getActivePenalty();
+
+    if (pPenalty != nullptr) {
+        return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
+    }
+
+    return false;
+}
+
+TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
+    switch (tetrominoMove) {
+    case TetrominoMove::Left:
+        return TetrominoMove::Right;
+        break;
+    case TetrominoMove::Right:
+        return TetrominoMove::Left;
+        break;
+    case TetrominoMove::Down:
+        throw std::runtime_error{"TetrominoMove::Down cannot be inverted"};
+        break;
+    }
+}
+
 GameEngine::GameEngine(const GameStatePtr &pGameState)
     : pGameState_(pGameState) {}
 
@@ -74,8 +101,8 @@ void GameEngine::sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType) {
     }
 
     // TODO: Decide whether a player can have no selected target at the
-    // beginning of the game. If so, one more case to handle with the optional
-    // (nullopt)
+    // beginning of the game. If so, one more case to handle with the
+    // optional (nullopt)
 
     std::optional<PlayerID> target =
         pGameState_->getPlayerState(senderID)->getPenaltyTarget();
@@ -226,7 +253,9 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
 }
 
 void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
-    pGameState_->getTetris(playerID)->eventTryMoveActive(tetrominoMove);
+    pGameState_->getTetris(playerID)->eventTryMoveActive(
+        shouldReverseControls(playerID) ? invertTetrominoMove(tetrominoMove)
+                                        : tetrominoMove);
 }
 
 void GameEngine::bigDrop(PlayerID playerID) {
@@ -238,7 +267,8 @@ void GameEngine::holdNextTetromino(PlayerID playerID) {
 }
 
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
-    pGameState_->getTetris(playerID)->eventTryRotateActive(rotateClockwise);
+    pGameState_->getTetris(playerID)->eventTryRotateActive(
+        shouldReverseControls(playerID) ? !rotateClockwise : rotateClockwise);
 }
 
 Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) {

@@ -44,6 +44,19 @@ class GameEngine {
 
     GameStatePtr pGameState_;
 
+    // #### Helpers ####
+
+    /**
+     * @brief Returns true if the given player currently has the inverted
+     * controls penalty.
+     */
+    bool shouldReverseControls(PlayerID playerID);
+
+    /**
+     * @brief Returns the opposite move of the given TetrominioMove
+     */
+    TetrominoMove invertTetrominoMove(TetrominoMove tetrominoMove);
+
   public:
     /**
      * @brief Constructor
