@@ -1,9 +1,11 @@
 #ifndef PLAYER_STATE_HPP
 #define PLAYER_STATE_HPP
 
-#include "../effect/abstract_timed_effect.hpp"
-#include "../effect/penalty/penalty.hpp"
+#include "../effect/bonus/timed_bonus.hpp"
+#include "../effect/penalty/penalty_type.hpp"
+#include "../effect/penalty/timed_penalty.hpp"
 #include "../effect_selector/effect_selector.hpp"
+#include "effect/bonus/timed_bonus.hpp"
 
 #include <cstddef>
 #include <optional>
@@ -38,19 +40,19 @@ class PlayerState {
 
     // Penalties/Bonuses that the player has received/granted himself and will
     // be applied as soon as the current Penalty/Bonus is finished.
-    std::optional<std::queue<Penalty::PenaltyType>> receivedPenaltiesQueue_;
-    std::optional<std::queue<Bonus::BonusType>> grantedBonusesQueue_;
+    std::optional<std::queue<PenaltyType>> receivedPenaltiesQueue_;
+    std::optional<std::queue<BonusType>> grantedBonusesQueue_;
 
     // Penalties/Bonuses the player can send/grant himself
     std::optional<EffectSelector> effectSelector_;
 
     // Store stacked effects
-    std::optional<std::queue<Penalty::PenaltyType>> stashedPenalties_;
+    std::optional<std::queue<PenaltyType>> stashedPenalties_;
 
     // Currently active bonus & penalty (no optional needed, just make it
     // nullptr)
-    AbstractTimedEffectPtr pActiveBonus_;
-    AbstractTimedEffectPtr pActivePenalty_;
+    TimedBonusPtr pActiveBonus_;
+    TimedPenaltyPtr pActivePenalty_;
 
   public:
     PlayerState(PlayerID playerID, Score score = 0);
@@ -133,44 +135,44 @@ class PlayerState {
     /**
      * @brief Adds the bonus to the grantedBonusQueue.
      */
-    void grantBonus(Bonus::BonusType bonus);
+    void grantBonus(BonusType bonus);
 
     /**
      * @brief Adds the penalty to the receivedPenaltiesQueue.
      */
-    void receivePenalty(Penalty::PenaltyType penalty);
+    void receivePenalty(PenaltyType penalty);
 
     /**
      * @brief Fetches the next bonus that the player has granted himself (stored
      * in the queue).
      */
-    std::optional<Bonus::BonusType> fetchGrantedBonus();
+    std::optional<BonusType> fetchGrantedBonus();
 
     /**
      * @brief Fetches the next penalty that the player has received (stored
      * in the queue).
      */
-    std::optional<Penalty::PenaltyType> fetchReceivedPenalty();
+    std::optional<PenaltyType> fetchReceivedPenalty();
 
     /**
-     * @brief Sets the given timed-effect bonus as active bonus.
+     * @brief Sets the given timed-bonus as active bonus.
      */
-    void setActiveBonus(AbstractTimedEffectPtr pTimedEffect);
+    void setActiveBonus(TimedBonusPtr pTimedBonus);
 
     /**
      * @brief Returns active bonus.
      */
-    AbstractTimedEffectPtr getActiveBonus() const;
+    TimedBonusPtr getActiveBonus() const;
 
     /**
      * @brief Returns active penalty.
      */
-    AbstractTimedEffectPtr getActivePenalty() const;
+    TimedPenaltyPtr getActivePenalty() const;
 
     /**
-     * @brief Sets the given timed-effect penalty as active penalty.
+     * @brief Sets the given timed-penalty as active penalty.
      */
-    void setActivePenalty(AbstractTimedEffectPtr pTimedEffect);
+    void setActivePenalty(TimedPenaltyPtr pTimedPenalty);
 
     /**
      * @brief Selects the next effect in the effect selector.
@@ -185,12 +187,12 @@ class PlayerState {
     /**
      * @brief Stashes the penalty for later.
      */
-    void stashPenalty(Penalty::PenaltyType penalty);
+    void stashPenalty(PenaltyType penalty);
 
     /**
      * @brief Returns the penalties that were stashed and empties the stash.
      */
-    std::queue<Penalty::PenaltyType> getStashedPenalties();
+    std::queue<PenaltyType> getStashedPenalties();
 
   public:
     /* ------------------------------------------------

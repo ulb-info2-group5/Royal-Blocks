@@ -1,14 +1,14 @@
-#include "bonus.hpp"
 #include "slow_down.hpp"
+#include "timed_bonus.hpp"
 
 #include <memory>
 
 #include <iostream>
 
-Bonus::Bonus(BonusType bonusType) : bonusType_(bonusType) {}
+TimedBonus::TimedBonus(BonusType bonusType) : bonusType_(bonusType) {}
 
-BonusPtr Bonus::makeBonus(BonusType bonusType) {
-    BonusPtr pBonus;
+TimedBonusPtr TimedBonus::makeBonus(BonusType bonusType) {
+    TimedBonusPtr pBonus;
 
     switch (bonusType) {
     case BonusType::SlowDown:
@@ -21,19 +21,19 @@ BonusPtr Bonus::makeBonus(BonusType bonusType) {
     return pBonus;
 }
 
-Bonus::BonusType Bonus::getBonusType() const { return bonusType_; }
+BonusType TimedBonus::getBonusType() const { return bonusType_; }
 
-std::ostream &operator<<(std::ostream &os, const Bonus &bonus) {
+std::ostream &operator<<(std::ostream &os, const TimedBonus &bonus) {
     os << "Bonus(" << bonus.getBonusType() << ")";
     return os;
 }
 
-std::ostream &operator<<(std::ostream &os, Bonus::BonusType type) {
+std::ostream &operator<<(std::ostream &os, BonusType type) {
     switch (type) {
-    case Bonus::BonusType::SlowDown:
+    case BonusType::SlowDown:
         os << "SlowDown";
         break;
-    case Bonus::BonusType::MiniTetrominoes:
+    case BonusType::MiniTetrominoes:
         os << "MiniTetrominoes";
         break;
     default:

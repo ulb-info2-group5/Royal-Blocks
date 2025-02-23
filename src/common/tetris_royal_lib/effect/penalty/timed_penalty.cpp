@@ -1,4 +1,4 @@
-#include "penalty.hpp"
+#include "timed_penalty.hpp"
 #include "blackout.hpp"
 #include "input_lock.hpp"
 #include "reverse_controls.hpp"
@@ -6,10 +6,11 @@
 
 #include <memory>
 
-Penalty::Penalty(PenaltyType penaltyType) : penaltyType_{penaltyType} {}
+TimedPenalty::TimedPenalty(PenaltyType penaltyType)
+    : penaltyType_{penaltyType} {}
 
-PenaltyPtr Penalty::makePenalty(PenaltyType penaltyType) {
-    PenaltyPtr pPenalty;
+TimedPenaltyPtr TimedPenalty::makePenalty(PenaltyType penaltyType) {
+    TimedPenaltyPtr pPenalty;
 
     switch (penaltyType) {
     case PenaltyType::ReverseControls:
@@ -31,23 +32,23 @@ PenaltyPtr Penalty::makePenalty(PenaltyType penaltyType) {
     return pPenalty;
 }
 
-Penalty::PenaltyType Penalty::getPenaltyType() const { return penaltyType_; }
+PenaltyType TimedPenalty::getPenaltyType() const { return penaltyType_; }
 
-std::ostream &operator<<(std::ostream &os, Penalty::PenaltyType type) {
+std::ostream &operator<<(std::ostream &os, PenaltyType type) {
     switch (type) {
-    case Penalty::PenaltyType::Blackout:
+    case PenaltyType::Blackout:
         os << "Blackout";
         break;
-    case Penalty::PenaltyType::InputLock:
+    case PenaltyType::InputLock:
         os << "InputLock";
         break;
-    case Penalty::PenaltyType::Lightning:
+    case PenaltyType::Lightning:
         os << "Lightning";
         break;
-    case Penalty::PenaltyType::ReverseControls:
+    case PenaltyType::ReverseControls:
         os << "ReverseControls";
         break;
-    case Penalty::PenaltyType::SpeedUp:
+    case PenaltyType::SpeedUp:
         os << "SpeedUp";
         break;
     default:

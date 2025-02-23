@@ -1,18 +1,20 @@
 #include "effect_price.hpp"
 
+#include "effect/bonus/bonus_type.hpp"
+
 #include <unordered_map>
 
 std::unordered_map<EffectType, Energy> effectPriceMap{
     // Bonuses
-    {Bonus::BonusType::SlowDown, DEFAULT_EFFECT_PRICE},
-    {Bonus::BonusType::MiniTetrominoes, DEFAULT_EFFECT_PRICE},
+    {BonusType::SlowDown, DEFAULT_EFFECT_PRICE},
+    {BonusType::MiniTetrominoes, DEFAULT_EFFECT_PRICE},
 
     // Penalties
-    {Penalty::PenaltyType::ReverseControls, DEFAULT_EFFECT_PRICE},
-    {Penalty::PenaltyType::InputLock, DEFAULT_EFFECT_PRICE},
-    {Penalty::PenaltyType::SpeedUp, DEFAULT_EFFECT_PRICE},
-    {Penalty::PenaltyType::Lightning, DEFAULT_EFFECT_PRICE},
-    {Penalty::PenaltyType::Blackout, DEFAULT_EFFECT_PRICE},
+    {PenaltyType::ReverseControls, DEFAULT_EFFECT_PRICE},
+    {PenaltyType::InputLock, DEFAULT_EFFECT_PRICE},
+    {PenaltyType::SpeedUp, DEFAULT_EFFECT_PRICE},
+    {PenaltyType::Lightning, DEFAULT_EFFECT_PRICE},
+    {PenaltyType::Blackout, DEFAULT_EFFECT_PRICE},
 };
 
 Energy getEffectPrice(EffectType effectType) {

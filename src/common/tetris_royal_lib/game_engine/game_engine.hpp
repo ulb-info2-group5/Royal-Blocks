@@ -3,7 +3,7 @@
 
 #include "../game_state/game_state.hpp"
 
-#include "effect/penalty/penalty.hpp"
+#include "effect/penalty/penalty_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
@@ -63,7 +63,7 @@ class GameEngine {
     /**
      * @brief Sends the given penalty to the sender's selected target.
      */
-    void sendPenaltyEffect(PlayerID senderID, Penalty::PenaltyType penaltyType);
+    void sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType);
 
     /**
      * @brief Makes the sender send penalty rows to its chosen target.

@@ -1,5 +1,5 @@
 #include "player_state.hpp"
-#include "effect/penalty/penalty.hpp"
+#include "effect/penalty/penalty_type.hpp"
 #include "effect_selector/effect_selector.hpp"
 
 #include <optional>
@@ -19,8 +19,8 @@ void PlayerState::toggleEffects(bool activated) {
     }
 
     if (activated) {
-        receivedPenaltiesQueue_ = std::queue<Penalty::PenaltyType>{};
-        grantedBonusesQueue_ = std::queue<Bonus::BonusType>{};
+        receivedPenaltiesQueue_ = std::queue<PenaltyType>{};
+        grantedBonusesQueue_ = std::queue<BonusType>{};
     } else {
         receivedPenaltiesQueue_ = std::nullopt;
         grantedBonusesQueue_ = std::nullopt;
@@ -33,7 +33,7 @@ void PlayerState::toggleEffects(bool activated) {
     }
 
     if (activated) {
-        stashedPenalties_ = std::queue<Penalty::PenaltyType>{};
+        stashedPenalties_ = std::queue<PenaltyType>{};
     } else {
         stashedPenalties_ = std::nullopt;
     }
@@ -100,7 +100,7 @@ std::optional<EffectType> PlayerState::getSelectedEffect() {
         });
 }
 
-void PlayerState::grantBonus(Bonus::BonusType bonus) {
+void PlayerState::grantBonus(BonusType bonus) {
     if (!grantedBonusesQueue_.has_value()) {
         return;
     }
@@ -108,7 +108,7 @@ void PlayerState::grantBonus(Bonus::BonusType bonus) {
     grantedBonusesQueue_->push(bonus);
 }
 
-void PlayerState::receivePenalty(Penalty::PenaltyType penalty) {
+void PlayerState::receivePenalty(PenaltyType penalty) {
     if (!receivedPenaltiesQueue_.has_value()) {
         return;
     }
@@ -116,43 +116,33 @@ void PlayerState::receivePenalty(Penalty::PenaltyType penalty) {
     receivedPenaltiesQueue_->push(penalty);
 }
 
-std::optional<Bonus::BonusType> PlayerState::fetchGrantedBonus() {
+std::optional<BonusType> PlayerState::fetchGrantedBonus() {
     return grantedBonusesQueue_.and_then([](auto &queue) {
-        std::optional<Bonus::BonusType> ret;
+        std::optional<BonusType> ret;
         queue.pop();
         return ret;
     });
 }
 
-std::optional<Penalty::PenaltyType> PlayerState::fetchReceivedPenalty() {
+std::optional<PenaltyType> PlayerState::fetchReceivedPenalty() {
     return receivedPenaltiesQueue_.and_then([](auto &queue) {
-        std::optional<Penalty::PenaltyType> ret;
+        std::optional<PenaltyType> ret;
         queue.pop();
         return ret;
     });
 }
 
-void PlayerState::setActivePenalty(AbstractTimedEffectPtr pTimedEffect) {
-    // TODO: if *pTimedEffect doesn't derive from Penalty,
-    // throw std::invalid_argument("Attempted to set an effect that
-    // doesn't " "derive from penalty as active-penalty.");
-
-    pActivePenalty_ = pTimedEffect;
+void PlayerState::setActivePenalty(TimedPenaltyPtr pTimedPenalty) {
+    pActivePenalty_ = pTimedPenalty;
 }
 
-void PlayerState::setActiveBonus(AbstractTimedEffectPtr pTimedEffect) {
-    // TODO: if *pTimedEffect doesn't derive from Bonus,
-    // throw std::invalid_argument("Attempted to set an effect that doesn't
-    // derive from bonus as active-bonus.");
-
-    pActiveBonus_ = pTimedEffect;
+void PlayerState::setActiveBonus(TimedBonusPtr pTimedBonus) {
+    pActiveBonus_ = pTimedBonus;
 }
 
-AbstractTimedEffectPtr PlayerState::getActiveBonus() const {
-    return pActiveBonus_;
-}
+TimedBonusPtr PlayerState::getActiveBonus() const { return pActiveBonus_; }
 
-AbstractTimedEffectPtr PlayerState::getActivePenalty() const {
+TimedPenaltyPtr PlayerState::getActivePenalty() const {
     return pActivePenalty_;
 }
 
@@ -160,11 +150,11 @@ void PlayerState::selectNextEffect() { effectSelector_->next(); }
 
 void PlayerState::selectPrevEffect() { effectSelector_->prev(); }
 
-void PlayerState::stashPenalty(Penalty::PenaltyType penalty) {
+void PlayerState::stashPenalty(PenaltyType penalty) {
     stashedPenalties_->push(penalty);
 }
 
-std::queue<Penalty::PenaltyType> PlayerState::getStashedPenalties() {
+std::queue<PenaltyType> PlayerState::getStashedPenalties() {
     return std::move(stashedPenalties_.value());
 }
 

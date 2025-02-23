@@ -2,11 +2,11 @@
 #define SLOW_DOWN_HPP
 
 #include "../tick_timed_effect.hpp"
-#include "bonus.hpp"
+#include "timed_bonus.hpp"
 
 #include <cstddef>
 
-class SlowDown final : public Bonus, public TickTimedEffect {
+class SlowDown final : public TimedBonus, public TickTimedEffect {
   private:
     // NOTE: This IS NOT imposed in the instructions (can change it)
     static constexpr size_t TICKS_NUM = 10;

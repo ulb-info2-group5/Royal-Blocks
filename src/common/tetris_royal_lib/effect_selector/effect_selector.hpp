@@ -1,8 +1,8 @@
 #ifndef EFFECT_SELECTOR_HPP
 #define EFFECT_SELECTOR_HPP
 
-#include "../effect/bonus/bonus.hpp"
-#include "../effect/penalty/penalty.hpp"
+#include "../effect/bonus/bonus_type.hpp"
+#include "../effect/penalty/penalty_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -10,7 +10,7 @@
 #include <variant>
 #include <vector>
 
-using EffectType = std::variant<Bonus::BonusType, Penalty::PenaltyType>;
+using EffectType = std::variant<BonusType, PenaltyType>;
 
 /**
  * @class Represents the effects (bonuses/penalties) which the player can
@@ -21,11 +21,9 @@ class EffectSelector {
     size_t selectionIdx_;
 
     // bonuses & penalties
-    std::array<Bonus::BonusType,
-               static_cast<size_t>(Bonus::BonusType::NumBonusType)>
+    std::array<BonusType, static_cast<size_t>(BonusType::NumBonusType)>
         bonuses_;
-    std::array<Penalty::PenaltyType,
-               static_cast<size_t>(Penalty::PenaltyType::NumPenaltyType)>
+    std::array<PenaltyType, static_cast<size_t>(PenaltyType::NumPenaltyType)>
         penalties_;
 
   public:

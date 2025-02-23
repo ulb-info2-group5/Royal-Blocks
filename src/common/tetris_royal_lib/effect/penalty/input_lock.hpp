@@ -2,9 +2,9 @@
 #define INPUT_LOCK_HPP
 
 #include "../placement_timed_effect.hpp"
-#include "penalty.hpp"
+#include "timed_penalty.hpp"
 
-class InputLock final : public Penalty, public PlacementTimedEffect {
+class InputLock final : public TimedPenalty, public PlacementTimedEffect {
   private:
     // NOTE: This IS imposed in the instructions
     static constexpr size_t PIECES_NUM = 1;

@@ -1,22 +1,21 @@
 #include "effect_selector.hpp"
-#include "effect/bonus/bonus.hpp"
-#include "effect/penalty/penalty.hpp"
+#include "effect/bonus/bonus_type.hpp"
+#include "effect/penalty/penalty_type.hpp"
 
 #include <cassert>
 
 EffectSelector::EffectSelector() : selectionIdx_{0} {
 
     for (size_t bonusCount = 0;
-         bonusCount < static_cast<size_t>(Bonus::BonusType::NumBonusType);
+         bonusCount < static_cast<size_t>(BonusType::NumBonusType);
          bonusCount++) {
-        bonuses_.at(bonusCount) = static_cast<Bonus::BonusType>(bonusCount);
+        bonuses_.at(bonusCount) = static_cast<BonusType>(bonusCount);
     }
 
-    for (size_t penaltyCount = 0; penaltyCount < static_cast<size_t>(
-                                      Penalty::PenaltyType::NumPenaltyType);
+    for (size_t penaltyCount = 0;
+         penaltyCount < static_cast<size_t>(PenaltyType::NumPenaltyType);
          penaltyCount++) {
-        penalties_.at(penaltyCount) =
-            static_cast<Penalty::PenaltyType>(penaltyCount);
+        penalties_.at(penaltyCount) = static_cast<PenaltyType>(penaltyCount);
     }
 
     // TODO: add a message here if assert fails?

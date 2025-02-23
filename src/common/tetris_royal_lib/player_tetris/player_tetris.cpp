@@ -1,6 +1,5 @@
 #include "player_tetris.hpp"
 #include "tetris/tetris.hpp"
-#include <memory>
 
 nlohmann::json PlayerTetris::serializeSelf() const {
     nlohmann::json j;
@@ -8,11 +7,9 @@ nlohmann::json PlayerTetris::serializeSelf() const {
 
     bool emptyBoard = false;
 
-    PenaltyPtr pPenalty =
-        std::dynamic_pointer_cast<Penalty>(playerState_.getActivePenalty());
+    TimedPenaltyPtr pPenalty = playerState_.getActivePenalty();
     if (pPenalty != nullptr) {
-        emptyBoard =
-            (pPenalty->getPenaltyType() == Penalty::PenaltyType::Blackout);
+        emptyBoard = (pPenalty->getPenaltyType() == PenaltyType::Blackout);
     }
 
     j["tetris"] = tetris_.serializeSelf(emptyBoard);

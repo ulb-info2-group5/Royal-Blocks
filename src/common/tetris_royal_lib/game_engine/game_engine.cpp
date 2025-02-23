@@ -2,7 +2,7 @@
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
 #include "board/board.hpp"
-#include "effect/penalty/penalty.hpp"
+#include "effect/penalty/penalty_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
@@ -67,8 +67,7 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
 GameEngine::GameEngine(const GameStatePtr &pGameState)
     : pGameState_(pGameState) {}
 
-void GameEngine::sendPenaltyEffect(PlayerID senderID,
-                                   Penalty::PenaltyType penaltyType) {
+void GameEngine::sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)
         || !checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
@@ -143,10 +142,10 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
     std::visit(
         [&](auto &&effectType) {
             using T = std::decay_t<decltype(effectType)>;
-            if constexpr (std::is_same_v<T, Bonus::BonusType>) {
+            if constexpr (std::is_same_v<T, BonusType>) {
                 // Bonus case
                 pGameState_->getPlayerState(buyerID)->grantBonus(effectType);
-            } else if constexpr (std::is_same_v<T, Penalty::PenaltyType>) {
+            } else if constexpr (std::is_same_v<T, PenaltyType>) {
                 // Penalty case
                 if (stashForLater) {
                     pGameState_->getPlayerState(buyerID)->stashPenalty(
@@ -271,11 +270,11 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
         return;
     }
 
-    std::queue<Penalty::PenaltyType> penaltiesQueue =
+    std::queue<PenaltyType> penaltiesQueue =
         pGameState_->getPlayerState(playerID)->getStashedPenalties();
 
     while (!penaltiesQueue.empty()) {
-        Penalty::PenaltyType penaltyType = penaltiesQueue.front();
+        PenaltyType penaltyType = penaltiesQueue.front();
         sendPenaltyEffect(playerID, penaltyType);
         penaltiesQueue.pop();
     }

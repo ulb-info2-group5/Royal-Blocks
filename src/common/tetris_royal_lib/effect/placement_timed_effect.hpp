@@ -8,7 +8,7 @@
 
 class PlacementTimedEffectTest;
 
-class PlacementTimedEffect : public AbstractTimedEffect {
+class PlacementTimedEffect : public virtual AbstractTimedEffect {
   private:
     // Number of Tetrominoes left to place before the effect expires (decreases
     // with each placement)
