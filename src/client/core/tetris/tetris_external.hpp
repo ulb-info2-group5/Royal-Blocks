@@ -6,7 +6,6 @@
 namespace client {
 
     struct TetrisExternal {
-        bool isAlive_;
         Board board_;
 
         nlohmann::json serialize() const;

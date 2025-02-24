@@ -2,8 +2,7 @@
 #include <optional>
 
 nlohmann::json client::TetrisSelf::serialize() const {
-    return {{"isAlive", isAlive_},
-            {"activeTetromino",
+    return {{"activeTetromino",
              activeTetromino_ ? activeTetromino_->serialize() : nullptr},
             {"previewTetromino",
              previewTetromino_ ? previewTetromino_->serialize() : nullptr},
@@ -14,8 +13,6 @@ nlohmann::json client::TetrisSelf::serialize() const {
 }
 
 void client::TetrisSelf::deserialize(const nlohmann::json &j) {
-    j.at("isAlive").get_to(isAlive_);
-
     if (!j.at("activeTetromino").is_null()) {
         activeTetromino_ = std::make_optional(Tetromino{});
         activeTetromino_->deserialize(j.at("activeTetromino"));

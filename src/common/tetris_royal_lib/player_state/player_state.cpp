@@ -160,6 +160,12 @@ std::deque<PenaltyType> PlayerState::getStashedPenalties() {
 }
 
 /* ------------------------------------------------
+ *          TetrisObserver
+ * ------------------------------------------------*/
+
+void PlayerState::notifyLost() { isAlive_ = false; }
+
+/* ------------------------------------------------
  *          Serialization
  * ------------------------------------------------*/
 

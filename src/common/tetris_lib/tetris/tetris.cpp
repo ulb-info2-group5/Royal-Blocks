@@ -44,9 +44,11 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
 }
 
 void Tetris::placeActive() {
-    setIsAlive(board_.checkInGrid(*activeTetromino_));
-
-    if (getIsAlive()) {
+    if (!board_.checkInGrid(*activeTetromino_)) {
+        for (auto &tetrisObserver : tetrisObservers_) {
+            tetrisObserver->notifyLost();
+        }
+    } else {
         board_.placeTetromino(std::move(activeTetromino_));
     }
 }
@@ -67,7 +69,19 @@ void Tetris::fetchNewTetromino() {
                      PUBLIC
 --------------------------------------------------*/
 
+// #### Constructors ####
+
 Tetris::Tetris() { fetchNewTetromino(); }
+
+// #### TetrisObserver ####
+
+void Tetris::addObserver(TetrisObserver *pTetrisObserver) {
+    tetrisObservers_.push_back(pTetrisObserver);
+}
+
+void Tetris::removeObserver(TetrisObserver *pTetrisObserver) {
+    std::erase(tetrisObservers_, pTetrisObserver);
+}
 
 // #### Event API ####
 
@@ -153,17 +167,11 @@ void Tetris::eventHoldNextTetromino() {
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
     bool hasLost = board_.receivePenaltyLines(numPenalties);
     if (hasLost) {
-        setIsAlive(false);
+        for (auto &tetrisObserver : tetrisObservers_) {
+            tetrisObserver->notifyLost();
+        }
     }
 }
-
-// #### Setters ####
-
-void Tetris::setIsAlive(bool isAlive) { isAlive_ = isAlive; }
-
-// #### Getters ####
-
-bool Tetris::getIsAlive() const { return isAlive_; }
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoQueue_.size();
@@ -191,8 +199,7 @@ void Tetris::destroy2By2Occupied() {
  * ------------------------------------------------*/
 
 nlohmann::json Tetris::serializeSelf(bool emptyBoard) const {
-    return {{"isAlive", isAlive_},
-            {"activeTetromino",
+    return {{"activeTetromino",
              activeTetromino_ ? activeTetromino_->serialize() : nullptr},
             {"previewTetromino",
              previewTetromino_ ? previewTetromino_->serialize() : nullptr},
@@ -204,7 +211,6 @@ nlohmann::json Tetris::serializeSelf(bool emptyBoard) const {
 
 nlohmann::json Tetris::serializeExternal() const {
     return {
-        {"isAlive", isAlive_},
         {"board", board_.serialize()},
     };
 }

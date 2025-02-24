@@ -13,7 +13,7 @@ GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
     for (PlayerState &playerState : playerStates) {
         playerState.toggleEffects(GameEngine::checkFeatureEnabled(
             gameMode, GameEngine::GameModeFeature::Effects));
-        playerToTetris_.emplace_back(PlayerTetris{playerState, Tetris{}});
+        playerToTetris_.emplace_back(PlayerTetris{playerState});
     }
 }
 

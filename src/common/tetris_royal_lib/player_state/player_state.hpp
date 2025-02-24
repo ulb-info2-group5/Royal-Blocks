@@ -6,6 +6,7 @@
 #include "../effect/penalty/timed_penalty.hpp"
 #include "../effect_selector/effect_selector.hpp"
 #include "effect/bonus/timed_bonus.hpp"
+#include "tetris/tetris_observer.hpp"
 
 #include <cstddef>
 #include <optional>
@@ -16,7 +17,7 @@ using PlayerID = size_t;
 using Score = size_t;
 using Energy = size_t;
 
-class PlayerState {
+class PlayerState : public TetrisObserver {
   private:
     /* ------------------------------------------------
      *              Common to all GameModes
@@ -193,6 +194,12 @@ class PlayerState {
      * @brief Returns the penalties that were stashed and empties the stash.
      */
     std::deque<PenaltyType> getStashedPenalties();
+
+    /* ------------------------------------------------
+     *          TetrisObserver
+     * ------------------------------------------------*/
+
+    void notifyLost();
 
   public:
     /* ------------------------------------------------

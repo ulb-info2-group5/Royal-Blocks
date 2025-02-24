@@ -4,9 +4,11 @@
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino_queue/tetromino_queue.hpp"
+#include "tetris_observer.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
 #include <cstddef>
+#include <vector>
 
 class TetrisTest;
 
@@ -23,7 +25,8 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  */
 class Tetris {
   private:
-    bool isAlive_ = true;
+    std::vector<TetrisObserver *> tetrisObservers_;
+
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
     Board board_;
@@ -98,6 +101,18 @@ class Tetris {
 
     ~Tetris() = default;
 
+    // #### TetrisObserver ####
+
+    /**
+     * @brief Adds a new TetrisObserver.
+     */
+    void addObserver(TetrisObserver *pTetrisObserver);
+
+    /**
+     * @brief Removes the given TetrisObserver.
+     */
+    void removeObserver(TetrisObserver *pTetrisObserver);
+
     // #### Event API ####
 
     /**
@@ -142,23 +157,7 @@ class Tetris {
      */
     void eventReceivePenaltyLines(int numPenalties);
 
-    // #### Setter ####
-
-    /**
-     * @brief Sets the isAlive member.
-     *
-     * @param isAlive The new isAlive value.
-     */
-    void setIsAlive(bool isAlive);
-
     // #### Getters ####
-
-    /**
-     * @brief Gets the isAlive member.
-     *
-     * @return False if the game is over; otherwise, true.
-     */
-    bool getIsAlive() const;
 
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
