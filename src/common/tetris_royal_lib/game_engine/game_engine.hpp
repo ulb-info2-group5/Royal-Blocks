@@ -117,6 +117,12 @@ class GameEngine {
      */
     TetrominoMove invertTetrominoMove(TetrominoMove tetrominoMove);
 
+    /**
+     * @brief Returns true if the tick should be ignored for the given player.
+     * (Due to slowdown bonus).
+     */
+    bool shouldIgnoreTick(PlayerID playerID);
+
   public:
     /**
      * @brief Constructor

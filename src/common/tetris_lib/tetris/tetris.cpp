@@ -50,6 +50,9 @@ void Tetris::placeActive() {
         }
     } else {
         board_.placeTetromino(std::move(activeTetromino_));
+        for (auto &tetrisObserver : tetrisObservers_) {
+            tetrisObserver->notifyActiveTetrominoPlaced();
+        }
     }
 }
 

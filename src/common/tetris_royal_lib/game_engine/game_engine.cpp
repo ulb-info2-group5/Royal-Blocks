@@ -1,6 +1,8 @@
 #include "game_engine.hpp"
+#include "../effect/bonus/slow_down.hpp"
 #include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
+#include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
@@ -65,6 +67,32 @@ TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
     default:
         throw std::runtime_error{"TetrominoMove::Down cannot be inverted"};
     }
+}
+
+bool GameEngine::shouldIgnoreTick(PlayerID playerID) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return false;
+    }
+
+    TimedBonusPtr pActiveBonus =
+        pGameState_->getPlayerState(playerID)->getActiveBonus();
+
+    if (pActiveBonus == nullptr) {
+        return false;
+    }
+
+    if (pActiveBonus->getBonusType() != BonusType::SlowDown) {
+        return false;
+    }
+
+    std::shared_ptr<SlowDown> pSlowDownBonus =
+        std::dynamic_pointer_cast<SlowDown>(pActiveBonus);
+
+    if (pSlowDownBonus == nullptr) {
+        return false;
+    }
+
+    return pSlowDownBonus->shouldIgnoreTick();
 }
 
 GameEngine::GameEngine(const GameStatePtr &pGameState)
@@ -261,6 +289,23 @@ Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) {
 }
 
 void GameEngine::clockTick(PlayerID playerID) {
+    TimedBonusPtr pActiveBonus =
+        pGameState_->getPlayerState(playerID)->getActiveBonus();
+
+    // TODO: handle player's timed effect
+    // (reset the pActiveBonus/Penalty if finshed)
+
+    if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
+        if (pActiveBonus != nullptr) {
+            pActiveBonus->tick();
+        }
+
+        // ignore tick (slowdown bonus)
+        if (shouldIgnoreTick(playerID)) {
+            return;
+        }
+    }
+
     size_t numClearedRows = pGameState_->getTetris(playerID)->eventClockTick();
 
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);

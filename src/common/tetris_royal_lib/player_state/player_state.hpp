@@ -201,6 +201,8 @@ class PlayerState : public TetrisObserver {
 
     void notifyLost();
 
+    void notifyActiveTetrominoPlaced();
+
   public:
     /* ------------------------------------------------
      *          Serialization

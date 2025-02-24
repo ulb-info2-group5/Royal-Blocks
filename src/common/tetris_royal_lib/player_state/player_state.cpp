@@ -1,7 +1,7 @@
 #include "player_state.hpp"
+#include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect_selector/effect_selector.hpp"
-#include "nlohmann/detail/conversions/to_json.hpp"
 
 #include <optional>
 
@@ -164,6 +164,14 @@ std::deque<PenaltyType> PlayerState::getStashedPenalties() {
  * ------------------------------------------------*/
 
 void PlayerState::notifyLost() { isAlive_ = false; }
+
+void PlayerState::notifyActiveTetrominoPlaced() {
+    if (pActiveBonus_ == nullptr) {
+        return;
+    }
+
+    pActiveBonus_->tetrominoPlaced();
+}
 
 /* ------------------------------------------------
  *          Serialization

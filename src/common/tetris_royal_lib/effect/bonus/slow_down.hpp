@@ -11,6 +11,8 @@ class SlowDown final : public TimedBonus, public TickTimedEffect {
     // NOTE: This IS NOT imposed in the instructions (can change it)
     static constexpr size_t TICKS_NUM = 10;
 
+    static constexpr size_t SLOW_DOWN_FACTOR = 2;
+
   public:
     SlowDown();
     SlowDown(const SlowDown &) = delete;
@@ -19,6 +21,8 @@ class SlowDown final : public TimedBonus, public TickTimedEffect {
     SlowDown &operator=(SlowDown &&) = delete;
 
     ~SlowDown() = default;
+
+    bool shouldIgnoreTick();
 };
 
 #endif // SLOW_DOWN_HPP
