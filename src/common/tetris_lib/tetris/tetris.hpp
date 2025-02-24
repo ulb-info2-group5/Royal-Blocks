@@ -7,7 +7,6 @@
 #include "tetromino/tetromino_shapes.hpp"
 
 #include <cstddef>
-#include <optional>
 
 class TetrisTest;
 
@@ -23,6 +22,7 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  * one block down. Events are managed through an event-queue API.
  */
 class Tetris {
+  private:
     bool isAlive_ = true;
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
@@ -35,7 +35,6 @@ class Tetris {
     uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
     uint32_t ticks_since_lock_start_ = 0;
 
-  private:
     // #### Preview Tetromino ####
 
     /**
@@ -190,25 +189,9 @@ class Tetris {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serializeSelf(bool emptyBoard = false) const {
-        return {
-            {"isAlive", isAlive_},
-            {"activeTetromino",
-             activeTetromino_ ? activeTetromino_->serialize() : nullptr},
-            {"previewTetromino",
-             previewTetromino_ ? previewTetromino_->serialize() : nullptr},
-            {"holdTetromino",
-             holdTetromino_ ? holdTetromino_->serialize() : nullptr},
-            {"board", emptyBoard ? Board{}.serialize() : board_.serialize()},
-            {"tetrominoQueue", tetrominoQueue_.serialize()}};
-    }
+    nlohmann::json serializeSelf(bool emptyBoard = false) const;
 
-    nlohmann::json serializeExternal() const {
-        return {
-            {"isAlive", isAlive_},
-            {"board", board_.serialize()},
-        };
-    }
+    nlohmann::json serializeExternal() const;
 
     /* ------------------------------------------------
      *          Test Fixture Class

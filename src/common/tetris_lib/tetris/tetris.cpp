@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
-#include <random>
 
 /*--------------------------------------------------
                      PRIVATE
@@ -185,4 +184,27 @@ TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
 void Tetris::destroy2By2Occupied() {
     std::cout << "shape: " << activeTetromino_->getShape() << std::endl;
     board_.destroy2By2Occupied();
+}
+
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json Tetris::serializeSelf(bool emptyBoard) const {
+    return {{"isAlive", isAlive_},
+            {"activeTetromino",
+             activeTetromino_ ? activeTetromino_->serialize() : nullptr},
+            {"previewTetromino",
+             previewTetromino_ ? previewTetromino_->serialize() : nullptr},
+            {"holdTetromino",
+             holdTetromino_ ? holdTetromino_->serialize() : nullptr},
+            {"board", emptyBoard ? Board{}.serialize() : board_.serialize()},
+            {"tetrominoQueue", tetrominoQueue_.serialize()}};
+}
+
+nlohmann::json Tetris::serializeExternal() const {
+    return {
+        {"isAlive", isAlive_},
+        {"board", board_.serialize()},
+    };
 }
