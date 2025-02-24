@@ -46,7 +46,12 @@ class Tetris {
      */
     void updatePreviewTetromino();
 
-    // #### Checks helper ####
+    // #### helpers ####
+
+    /**
+     * @brief Expires the lock delay.
+     */
+    void expireLockDelay();
 
     /**
      * @brief Checks whether the given tetromino can be droppped.

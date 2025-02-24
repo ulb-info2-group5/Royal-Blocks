@@ -12,6 +12,12 @@
                      PRIVATE
 --------------------------------------------------*/
 
+// #### Lock delay ####
+
+void Tetris::expireLockDelay() {
+    ticks_since_lock_start_ = lock_delay_ticks_num_;
+}
+
 // #### Preview Tetromino ####
 
 void Tetris::updatePreviewTetromino() {
@@ -115,6 +121,9 @@ size_t Tetris::eventClockTick() {
 }
 
 void Tetris::eventBigDrop() {
+    // Disable lock delay when BigDrop.
+    expireLockDelay();
+
     while (checkCanDrop(*activeTetromino_)) {
         activeTetromino_->move(TetrominoMove::Down);
     }
