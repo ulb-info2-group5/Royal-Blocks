@@ -30,14 +30,7 @@ const uint32_t WIDTH_PLAYER_CANVAS = 40,
                WIDTH_OP_CANVAS = 20,
                HEIGHT_OP_CANVAS = 40;
 
-enum class PlayMode : uint8_t 
-{
-    ENDLESS,
-    DUEL   ,
-    CLASSIC,
-    ROYAL
-};
-
+enum class PlayMode : uint8_t;
 
 ftxui::Color getFTXUIColor(colors color);
 

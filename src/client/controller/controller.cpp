@@ -24,7 +24,7 @@ void Controller::run() {
         if (handleMainMenu() == MainMenuState::EXIT) {
             break;
         }
-        screenManager_.runGame();
+        handleGame();
     }
 }
 
@@ -174,21 +174,30 @@ void Controller::handleFriendsMenu() {
     };
 
     std::string friendName;
-    screenManager_.runFriendsManager(friendsList);
-    FriendsManagerState state = screenManager_.getFriendsManagerState();
+    FriendsManagerState state = screenManager_.runFriendsManager(friendsList);
 
     while (state != FriendsManagerState::NONE) {
         // TODO: communicate with the server to add or remove a friend
         if (state == FriendsManagerState::REMOVE_FRIEND) {
-            friendName = screenManager_.getFriendName();
-            std::cout << "Remove friend: " << friendName << std::endl; // here to check with server
+            if (screenManager_.runAddfriendScreen()) {
+                friendName = screenManager_.getFriendName();
+                std::cout << "Remove friend: " << friendName << std::endl; // here to check with server
+            }
         }
         else if (state == FriendsManagerState::ADD_FRIEND) {
-            screenManager_.runAddfriendScreen();
-            friendName = screenManager_.getFriendName();
-            std::cout << "Add friend: " << friendName << std::endl; // here to check with server
+            if (screenManager_.runAddfriendScreen()) {
+                friendName = screenManager_.getFriendName();
+                std::cout << "Add friend: " << friendName << std::endl; // here to check with server
+            }
         }
-        screenManager_.runFriendsManager(friendsList);
-        state = screenManager_.getFriendsManagerState();
+        state = screenManager_.runFriendsManager(friendsList);
     }
+}
+
+void Controller::handleGame() {
+    PlayMode mod = screenManager_.runGameMenu();
+    if (mod == PlayMode::NONE) {
+        return;
+    }
+    screenManager_.runGame(mod);
 }

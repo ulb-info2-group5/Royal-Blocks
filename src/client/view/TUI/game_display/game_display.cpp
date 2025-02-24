@@ -1,5 +1,7 @@
 #include "game_display.hpp"
 
+#include "../game_menu/game_menu.hpp"
+
 #include "ftxui/dom/canvas.hpp"  // for Canvas
 #include "ftxui/dom/node.hpp"    // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui

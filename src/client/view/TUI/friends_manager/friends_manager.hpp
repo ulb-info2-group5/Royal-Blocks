@@ -19,6 +19,7 @@ enum class FriendsManagerState
     REMOVE_FRIEND,
     NONE,
     NO,
+    BACK,
 };
 
 class FriendsManager {
@@ -55,7 +56,7 @@ class FriendsManager {
         * @param friendsList The list of the friends of the user to display
         * @return FriendsManagerState The state of the friends manager
         */
-        void render(const std::vector<std::string> &friendsList);
+        FriendsManagerState render(const std::vector<std::string> &friendsList);
 
         /*
         * @brief Get the name of the friend to add
@@ -65,16 +66,11 @@ class FriendsManager {
         std::string getName() const;
 
         /*
-        * @brief Get the state of the friends manager
-        *
-        * @return FriendsManagerState The state of the friends manager
-        */
-        FriendsManagerState getState() const;
-
-        /*
         * @brief Screen to add a friend
+        *
+        * @return bool True if the friend will be added, false otherwise
         */
-        void addFriendScreen();
+        bool addFriendScreen();
 
 };
 

@@ -16,7 +16,7 @@
 
 FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_{screen}, state_{FriendsManagerState::NONE} {}
 
-void FriendsManager::render(const std::vector<std::string> &friendsList) {
+FriendsManagerState FriendsManager::render(const std::vector<std::string> &friendsList) {
     std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);
 
     ftxui::Component friendsContainer = ftxui::Container::Vertical(friendsButton);
@@ -55,17 +55,17 @@ void FriendsManager::render(const std::vector<std::string> &friendsList) {
     });
 
     screen_->Loop(render);
+
+    return state_;
 }
 
 std::string FriendsManager::getName() const {
     return friendName_;
 }
 
-FriendsManagerState FriendsManager::getState() const {
-    return state_;
-}
+bool FriendsManager::addFriendScreen() {
+    bool res;
 
-void FriendsManager::addFriendScreen() {
     // TODO: communicate with the server to add the friend to the list
     friendName_.clear(); // Reset the name of the friend
     std::string msg;
@@ -78,11 +78,13 @@ void FriendsManager::addFriendScreen() {
             msg = "Please enter a name";
         }
         else {
+            res = true;
             screen_->ExitLoopClosure()();
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component backButton = ftxui::Button("Back", [&] {
+        res = false;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
@@ -106,6 +108,8 @@ void FriendsManager::addFriendScreen() {
     });
 
     screen_->Loop(component);
+
+    return res;
 }
 
 // ### Private methods ###

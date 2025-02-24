@@ -6,6 +6,7 @@
 #include "login_menu/login_menu.hpp"
 #include "game_display/game_display.hpp"
 #include "main_menu/main_menu.hpp"
+#include "game_menu/game_menu.hpp"
 
 #include <boost/asio/detail/std_fenced_block.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -15,8 +16,6 @@
 #include <string>
 #include <string_view>
 #include <vector>
-
-#include "../dataExample.hpp"
 
 constexpr char LOGIN_INPUT_TITLE[] = "Login";
 constexpr char REGISTER_INPUT_TITLE[] = "Register";
@@ -71,10 +70,9 @@ class ScreenManager {
         FriendsManager friendsManager_ = FriendsManager(screen_);
 
         /*
-        * @brief The game to show to the user
+        * @brief The game menu to show to the user
         */
-        GameDisplay game_ = GameDisplay(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
-                    PlayMode::ROYAL);
+        GameMenu gameMenu_ = GameMenu(screen_);
 
     public:
         /*
@@ -124,8 +122,10 @@ class ScreenManager {
 
         /*
         * @brief Run the game to show to the user
+        *
+        * @param mod The mode of the game to run
         */
-        void runGame();
+        void runGame(const PlayMode mod);
 
         /*
         * @brief Add a message to the login input to show to the user
@@ -152,8 +152,9 @@ class ScreenManager {
         * @brief Run the friends manager to show to the user
         *
         * @param friendsList The list of the friends of the user to display
+        * @return FriendsManagerState The state of the friends manager
         */
-        void runFriendsManager(const std::vector<std::string> &friendsList);
+        FriendsManagerState runFriendsManager(const std::vector<std::string> &friendsList);
 
         /*
         * @brief Get the name of the friend to add
@@ -163,21 +164,23 @@ class ScreenManager {
         std::string getFriendName() const;
 
         /*
-        * @brief Get the state of the friends manager
-        *
-        * @return FriendsManagerState The state of the friends manager
-        */
-        FriendsManagerState getFriendsManagerState() const;
-
-        /*
         * @brief Run the profile manager to show to the user
         */
         std::vector<std::string> runProfileManager();
 
         /*
         * @brief Run the Add friend screen to show to the user
+        *
+        * @return bool True if the friend will be added, false otherwise
         */
-        void runAddfriendScreen();
+        bool runAddfriendScreen();
+
+        /*
+        * @brief Run the game menu to show to the user
+        *
+        * @return PlayMode The game mode selected by the user
+        */
+        PlayMode runGameMenu();
 };
 
 #endif // SCREEN_MANAGER_HPP

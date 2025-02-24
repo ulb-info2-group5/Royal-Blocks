@@ -1,4 +1,6 @@
 #include "screen_manager.hpp"
+#include "game_display/game_display.hpp"
+#include "game_menu/game_menu.hpp"
 #include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
@@ -69,8 +71,10 @@ MainMenuState ScreenManager::runMainMenu() {
     return mainMenu_.render();
 }
 
-void ScreenManager::runGame() {
-    game_.render();
+void ScreenManager::runGame(const PlayMode mod) {
+    GameDisplay game(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
+    mod);
+    game.render();
 }
 
 void ScreenManager::addMessageToLoginInput(const std::string_view message) {
@@ -85,16 +89,12 @@ void ScreenManager::runRankingMenu(std::vector<std::tuple<int, std::string, int>
     mainMenu_.renderRanking(ranking);
 }
 
-void ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
-    friendsManager_.render(friendsList);
+FriendsManagerState ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
+    return friendsManager_.render(friendsList);
 }
 
 std::string ScreenManager::getFriendName() const {
     return friendsManager_.getName();
-}
-
-FriendsManagerState ScreenManager::getFriendsManagerState() const {
-    return friendsManager_.getState();
 }
 
 std::vector<std::string> ScreenManager::runProfileManager() {
@@ -102,6 +102,10 @@ std::vector<std::string> ScreenManager::runProfileManager() {
     return mainMenu_.getUserNewInput();
 }
 
-void ScreenManager::runAddfriendScreen() {
-    friendsManager_.addFriendScreen();
+bool ScreenManager::runAddfriendScreen() {
+    return friendsManager_.addFriendScreen();
+}
+
+PlayMode ScreenManager::runGameMenu() {
+    return gameMenu_.render();
 }

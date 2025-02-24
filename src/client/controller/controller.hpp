@@ -48,6 +48,11 @@ class Controller {
         */
         void handleFriendsMenu();
 
+        /*
+        * @brief Handle the game to show to the user
+        */
+        void handleGame();
+
     public:
 
         /*
