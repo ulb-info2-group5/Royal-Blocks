@@ -7,11 +7,6 @@
 
 class IMain_Menu
 {
-    private:
-        virtual void manageFriendlistScreen(const std::string &friendName) = 0;
-
-        virtual void addFriendScreen() = 0;
-
     protected:
         virtual void displayMainMenuButtons() = 0;
 
@@ -20,10 +15,6 @@ class IMain_Menu
         virtual void displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
 
         virtual void displayRankingWindow(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
-
-        virtual void displayFriendButtons(const std::vector<std:: string> &friendsList) = 0;
-
-        virtual void displayFriendWindow(const std::vector<std:: string> &friendsList) = 0;
 
         virtual void displayProfileManagerButton() = 0;
 
@@ -36,8 +27,6 @@ class IMain_Menu
         virtual void renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
 
         virtual void renderMessagingMenu(const std::vector<std::string> &friendsList ) = 0;
-
-        virtual void renderFriendsManager(const std::vector<std::string> &friendsList) = 0;
 
         virtual void renderProfileManager() = 0;
 };

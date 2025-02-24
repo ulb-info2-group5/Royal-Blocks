@@ -86,10 +86,22 @@ void ScreenManager::runRankingMenu(std::vector<std::tuple<int, std::string, int>
 }
 
 void ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
-    mainMenu_.renderFriendsManager(friendsList);
+    friendsManager_.render(friendsList);
+}
+
+std::string ScreenManager::getFriendName() const {
+    return friendsManager_.getName();
+}
+
+FriendsManagerState ScreenManager::getFriendsManagerState() const {
+    return friendsManager_.getState();
 }
 
 std::vector<std::string> ScreenManager::runProfileManager() {
     mainMenu_.renderProfileManager();
     return mainMenu_.getUserNewInput();
+}
+
+void ScreenManager::runAddfriendScreen() {
+    friendsManager_.addFriendScreen();
 }

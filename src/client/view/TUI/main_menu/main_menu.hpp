@@ -81,17 +81,6 @@ class MainMenu : public IMain_Menu
         ftxui::Component friendManagerWindow_;
         ftxui::Component profileManagerWindow_;
 
-        /*
-         * @brief Manage the profile of the user
-         *
-         * @param friendName The name of the friend to manage
-         */
-        void manageFriendlistScreen(const std::string &friendName) override;
-
-        /*
-         * @brief Screen to add a friend
-         */
-        void addFriendScreen() override;
 
     protected:
 
@@ -102,10 +91,6 @@ class MainMenu : public IMain_Menu
         void displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking) override;
 
         void displayRankingWindow(const std::vector<std::tuple<int, std::string, int>> &ranking) override;
-
-        void displayFriendButtons(const std::vector<std:: string> &friendsList) override;
-
-        void displayFriendWindow(const std::vector<std:: string> &friendsList) override;
 
         void displayProfileManagerButton() override;
 
@@ -146,13 +131,6 @@ class MainMenu : public IMain_Menu
         *@param friendsList The list of the friends of the user to display
         */
         void renderMessagingMenu(const std::vector<std::string> &friendsList ) override;
-
-        /*
-         * @brief Render the friends list of the user to display with all friends dislayed is a button
-         *
-         * @param friendsList The list of the friends of the user to display
-         */
-         void renderFriendsManager(const std::vector<std::string> &friendsList) override;
 
         /*
         * @brief Render the profile manager of the user

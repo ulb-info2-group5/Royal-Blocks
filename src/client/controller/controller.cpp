@@ -139,7 +139,25 @@ MainMenuState Controller::handleMainMenu() {
                     "readyPlayerOne",
                     "theBestPlayerOfTheGame"
                 };
+
+                std::string friendName;
                 screenManager_.runFriendsManager(friendsList);
+                FriendsManagerState state = screenManager_.getFriendsManagerState();
+
+                while (state != FriendsManagerState::NONE) {
+                    // TODO: communicate with the server to add or remove a friend
+                    if (state == FriendsManagerState::REMOVE_FRIEND) {
+                        friendName = screenManager_.getFriendName();
+                        std::cout << "Remove friend: " << friendName << std::endl;
+                    }
+                    else if (state == FriendsManagerState::ADD_FRIEND) {
+                        screenManager_.runAddfriendScreen();
+                        friendName = screenManager_.getFriendName();
+                        std::cout << "Add friend: " << friendName << std::endl; // here to check with server
+                    }
+                    screenManager_.runFriendsManager(friendsList);
+                    state = screenManager_.getFriendsManagerState();
+                }
                 break;
             }
                 

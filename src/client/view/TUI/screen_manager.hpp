@@ -1,6 +1,7 @@
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 
+#include "friends_manager/friends_manager.hpp"
 #include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
 #include "game_display/game_display.hpp"
@@ -63,6 +64,11 @@ class ScreenManager {
         * @brief The main menu to show to the user
         */
         MainMenu mainMenu_ = MainMenu(screen_);
+
+        /*
+        * @brief The friends manager to show to the user
+        */
+        FriendsManager friendsManager_ = FriendsManager(screen_);
 
         /*
         * @brief The game to show to the user
@@ -150,10 +156,28 @@ class ScreenManager {
         void runFriendsManager(const std::vector<std::string> &friendsList);
 
         /*
+        * @brief Get the name of the friend to add
+        *
+        * @return std::string The name of the friend to add
+        */
+        std::string getFriendName() const;
+
+        /*
+        * @brief Get the state of the friends manager
+        *
+        * @return FriendsManagerState The state of the friends manager
+        */
+        FriendsManagerState getFriendsManagerState() const;
+
+        /*
         * @brief Run the profile manager to show to the user
         */
         std::vector<std::string> runProfileManager();
 
+        /*
+        * @brief Run the Add friend screen to show to the user
+        */
+        void runAddfriendScreen();
 };
 
 #endif // SCREEN_MANAGER_HPP
