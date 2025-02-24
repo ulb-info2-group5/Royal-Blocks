@@ -7,6 +7,7 @@
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
+#include "player_tetris/player_tetris.hpp"
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
@@ -24,6 +25,48 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
 bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
     return GameEngine::checkFeatureEnabled(pGameState_->getGameMode(),
                                            gameModeFeature);
+}
+
+void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return;
+    }
+
+    PlayerState *pPlayerState = pGameState_->getPlayerState(playerID);
+
+    if (pPlayerState == nullptr) {
+        return;
+    }
+
+    if (pPlayerState->getActiveBonus() != nullptr) {
+        // currently has an active bonus
+        if (pPlayerState->getActiveBonus()->isFinished()) {
+            pPlayerState->getActiveBonus().reset();
+        }
+    } else {
+        // currently has no active bonus
+        // TODO: apply new active bonus if any bonus enqueued
+    }
+
+    if (pPlayerState->getActivePenalty() != nullptr) {
+        // currently has an active penalty
+        if (pPlayerState->getActivePenalty()->isFinished()) {
+            pPlayerState->getActivePenalty().reset();
+        }
+    } else {
+        // currently has no active penalty
+        // TODO: apply new active penalty if any penalty enqueued
+    }
+}
+
+void GameEngine::handleAllTimedEffects() {
+    GameState::CircularIt it = pGameState_->getCircularItAt(0);
+    GameState::CircularIt endIt = it;
+
+    do {
+        handlePlayerTimedEffect((*it).playerState_.getPlayerID());
+        ++it;
+    } while (it != endIt);
 }
 
 bool GameEngine::shouldReverseControls(PlayerID playerID) {
@@ -292,8 +335,7 @@ void GameEngine::clockTick(PlayerID playerID) {
     TimedBonusPtr pActiveBonus =
         pGameState_->getPlayerState(playerID)->getActiveBonus();
 
-    // TODO: handle player's timed effect
-    // (reset the pActiveBonus/Penalty if finshed)
+    handleAllTimedEffects();
 
     if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
         if (pActiveBonus != nullptr) {

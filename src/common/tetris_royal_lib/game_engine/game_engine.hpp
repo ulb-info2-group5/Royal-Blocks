@@ -101,6 +101,20 @@ class GameEngine {
     // #### Effects Helpers ####
 
     /**
+     * @brief Handles the timed effects for the given player.
+     * (Deleting effects once they are expired).
+     *
+     * TODO: Add the fact that it also sets the new active effects if any
+     * already enqueued. (once it is implemented)
+     */
+    void handlePlayerTimedEffect(PlayerID playerID);
+
+    /**
+     * @brief Handles all the active timed effects in the game.
+     */
+    void handleAllTimedEffects();
+
+    /**
      * @brief Returns true if the given player currently has the inverted
      * controls penalty.
      */
@@ -118,8 +132,8 @@ class GameEngine {
     TetrominoMove invertTetrominoMove(TetrominoMove tetrominoMove);
 
     /**
-     * @brief Returns true if the tick should be ignored for the given player.
-     * (Due to slowdown bonus).
+     * @brief Returns true if the tick should be ignored for the given
+     * player. (Due to slowdown bonus).
      */
     bool shouldIgnoreTick(PlayerID playerID);
 
@@ -127,8 +141,8 @@ class GameEngine {
     /**
      * @brief Constructor
      *
-     * @param pGameState A shared pointer to the GameState that the GameEngine
-     * should manage.
+     * @param pGameState A shared pointer to the GameState that the
+     * GameEngine should manage.
      */
     GameEngine(const GameStatePtr &pGameState);
     GameEngine(const GameEngine &) = default;
@@ -163,20 +177,20 @@ class GameEngine {
     Score calculatePointsClearedRows(size_t numClearedRows);
 
     /**
-     * @brief Returns the amount of Energy awarded to the player for clearing
-     * the given number of rows.
+     * @brief Returns the amount of Energy awarded to the player for
+     * clearing the given number of rows.
      */
     Energy calculateEnergyClearedRows(size_t numClearedRows);
 
     /**
-     * @brief Inserts two mini tetrominoes at the front of the given player's
-     * tetrominoes queue.
+     * @brief Inserts two mini tetrominoes at the front of the given
+     * player's tetrominoes queue.
      */
     void handleMiniTetrominoes(PlayerID playerID);
 
     /**
-     * @brief Destroys a 2x2 block in a random position in the player's grid if
-     * there one was found;otherwise, doesn't do anything.
+     * @brief Destroys a 2x2 block in a random position in the player's grid
+     * if there one was found;otherwise, doesn't do anything.
      */
     void handleLightning(PlayerID playerID);
 
@@ -196,7 +210,8 @@ class GameEngine {
 
     /**
      * @brief Makes the given player buy the given effect if he has enough
-     * energy for it, stashes the effect for later or activates it instantly.
+     * energy for it, stashes the effect for later or activates it
+     * instantly.
      */
     void tryBuyEffect(PlayerID playerID, EffectType effectType,
                       bool stashForLater = false);
