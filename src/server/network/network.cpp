@@ -100,21 +100,3 @@ Network::Network(boost::asio::io_context& io) : io_(io), acceptor_(io, tcp::endp
     this->accept();
 }
 
-
-
-
-int main()
-{
-    try
-    {
-        boost::asio::io_context io_context;
-        Network network(io_context);
-        io_context.run();
-    }
-    catch (std::exception& e)
-    {
-        std::cerr << "Exception : " << e.what() << std::endl;
-    }
-
-    return 0;
-}

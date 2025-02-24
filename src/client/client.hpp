@@ -24,6 +24,7 @@ class TcpClient{
         void sendAuthentication(const Authentication &authentication);
         void readSocket();
         void writeSocket();
+        
     public: 
         TcpClient(boost::asio::io_context& ioContex, const std::string& host, const std::string& port );
 };
