@@ -186,7 +186,7 @@ void Board::empty2By2Square(int x, int y) {
 
     for (int xOffset = 0; xOffset < SQUARE_WIDTH; xOffset++)
         for (int yOffset = 0; yOffset < SQUARE_WIDTH; yOffset++) {
-            at(x, y).setEmpty();
+            at(x + xOffset, y + yOffset).setEmpty();
         }
 }
 
@@ -199,9 +199,13 @@ void Board::destroy2By2Occupied() {
     int startY = tmp / Board::getHeight();
     int startX = tmp % Board::getWidth();
 
-    for (int yOffset = 0; yOffset < static_cast<int>(Board::getHeight() - 1);
+    bool found2By2 = false;
+
+    for (int yOffset = 0;
+         yOffset < static_cast<int>(Board::getHeight() - 1) && !found2By2;
          yOffset++) {
-        for (int xOffset = 0; xOffset < static_cast<int>(Board::getWidth() - 1);
+        for (int xOffset = 0;
+             xOffset < static_cast<int>(Board::getWidth() - 1) && !found2By2;
              xOffset++) {
 
             int x =
@@ -210,8 +214,8 @@ void Board::destroy2By2Occupied() {
                 (startY + yOffset) % static_cast<int>(Board::getHeight() - 1);
 
             if (check2By2Occupied(x, y)) {
+                found2By2 = true;
                 empty2By2Square(x, y);
-            } else {
             }
         }
     }
