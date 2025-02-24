@@ -36,8 +36,8 @@ const GameEngine::FeaturesMap GameEngine::featuresBitsets =
 
     featuresPerGameMode.at(static_cast<size_t>(GameMode::Dual)) =
         genFeaturesBitset({
-            GameModeFeature::PenaltyRows,
             // Dual features go here
+            GameModeFeature::PenaltyRows,
         });
 
     featuresPerGameMode.at(static_cast<size_t>(GameMode::Classic)) =

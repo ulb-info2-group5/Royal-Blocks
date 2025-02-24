@@ -26,8 +26,11 @@ class GameEngine {
     static constexpr size_t numFeatures =
         static_cast<size_t>(GameModeFeature::NumGameModeFeatures);
 
+    static constexpr size_t numGameMode =
+        static_cast<size_t>(GameMode::NumGameMode);
+
     using FeaturesBitset = std::bitset<GameEngine::numFeatures>;
-    using FeaturesMap = std::array<FeaturesBitset, numFeatures>;
+    using FeaturesMap = std::array<FeaturesBitset, numGameMode>;
 
   private:
     // #### Features-related ####
