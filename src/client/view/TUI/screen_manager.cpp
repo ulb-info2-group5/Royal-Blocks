@@ -1,4 +1,6 @@
 #include "screen_manager.hpp"
+#include "input/login_input.hpp"
+#include "login_menu/login_menu.hpp"
 
 // ### Public methods ###
 ScreenManager::ScreenManager() {
@@ -6,14 +8,6 @@ ScreenManager::ScreenManager() {
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 }
 
-void ScreenManager::run() {
-    drawStartScreen();
-    manageLoginMenu();
-    manageMainMenu();
-}
-
-
-// ### Private methods ###
 void ScreenManager::drawStartScreen() {
 
     bool exit = false;
@@ -42,54 +36,32 @@ void ScreenManager::drawStartScreen() {
     screen_->Loop(title);    
 }
 
-void ScreenManager::manageLoginMenu() {
-    switch (loginMenu_.render()) {
-        case LoginState::EXIT:
-            std::exit(0);
-            break;
-        
-        case LoginState::LAUNCH_REGISTER: {
-            manageInputMenu(InputType::REGISTER);
-            break;
-        }
-            
-        case LoginState::LAUNCH_LOGIN:
-            manageInputMenu(InputType::LOGIN);
-            break;
-
-        default:
-            throw std::runtime_error("Invalid LoginState");    
-    }
+LoginInfo ScreenManager::getLoginInfo() {
+    LoginInfo info;
+    info.username = loginInput_.getUsername();
+    info.password = loginInput_.getPassword();
+    return info;
 }
 
-void ScreenManager::manageInputMenu(const InputType type) {
-    if (type == InputType::LOGIN) {
-        switch (loginInput_.render()) {
-            case InputState::BACK:
-                manageLoginMenu();
-                break;
-            
-            case InputState::DONE:
-                break;
-                
-            default:
-                throw std::runtime_error("Invalid InputState");
-        }
-    } else {
-        switch (registerInput_.render()) {
-            case InputState::BACK:
-                manageLoginMenu();
-                break;
-            
-            case InputState::DONE:
-                loginInput_.addMessage(LOGIN_MESSAGE);
-                manageInputMenu(InputType::LOGIN);
-                break;
-                
-            default:
-                throw std::runtime_error("Invalid InputState");
-        }
-    }
+LoginInfo ScreenManager::getRegisterInfo() {
+    LoginInfo info;
+    info.username = registerInput_.getUsername();
+    info.password = registerInput_.getPassword();
+    return info;
+}
+
+LoginState ScreenManager::runLoginMenu() {
+    return loginMenu_.render();
+}
+
+InputState ScreenManager::runLoginInput() {
+    loginInput_.clearInfo();
+    return loginInput_.render();
+}
+
+InputState ScreenManager::runRegisterInput() {
+    registerInput_.clearInfo();
+    return registerInput_.render();
 }
 
 void ScreenManager::manageMainMenu() {
@@ -161,4 +133,12 @@ void ScreenManager::manageMainMenu() {
         default:
             throw std::runtime_error("Invalid MainMenuState");
     }
+}
+
+void ScreenManager::addMessageToLoginInput(const std::string_view message) {
+    loginInput_.addMessage(message);
+}
+
+void ScreenManager::addMessageToRegisterInput(const std::string_view message) {
+    registerInput_.addMessage(message);
 }

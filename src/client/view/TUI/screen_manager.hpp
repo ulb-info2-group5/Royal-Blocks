@@ -32,6 +32,11 @@ enum class InputType {
     REGISTER,
 };
 
+struct LoginInfo {
+    std::string username;
+    std::string password;
+};
+
 class ScreenManager {
     private:
         /*
@@ -59,28 +64,6 @@ class ScreenManager {
         */
         MainMenu mainMenu_ = MainMenu(screen_);
 
-        /*
-        * @brief Draw the start screen of the game with the title of the game
-        */
-        void drawStartScreen();
-
-        /*
-        * @brief Manage the login menu to show to the user with the choices to login or register or exit the game
-        */
-        void manageLoginMenu();
-
-        /*
-        * @brief Manage the input menu to show to the user with entering their information to login or register
-        *
-        * @param type The type of input to know if it's a login or register input
-        */
-        void manageInputMenu(const InputType type);
-
-        /*
-        * @brief Manage the main menu to show to the user with the choices to play a game, join a game, send messages to friends, etc
-        */
-        void manageMainMenu();
-
     public:
         /*
         * @brief Construct a new Screen Manager object
@@ -93,9 +76,53 @@ class ScreenManager {
         ~ScreenManager() = default;
 
         /*
-        * @brief Run the screen manager to display the components on the screen with the LoginMenu, MainMenu, etc
+        * @brief Draw the start screen of the game with the title of the game
         */
-        void run();
+        void drawStartScreen();
+
+        /*
+        * @brief Get the login info from the user
+        */
+        LoginInfo getLoginInfo();
+
+        /*
+        * @brief Get the register info from the user
+        */
+        LoginInfo getRegisterInfo();
+
+        /*
+        * @brief Run the login menu to show to the user
+        */
+        LoginState runLoginMenu();
+
+        /*
+        * @brief Run the login input to show to the user
+        */
+        InputState runLoginInput();
+
+        /*
+        * @brief Run the register input to show to the user
+        */
+        InputState runRegisterInput();
+
+        /*
+        * @brief Manage the main menu to show to the user with the choices to play a game, join a game, send messages to friends, etc
+        */
+        void manageMainMenu();
+
+        /*
+        * @brief Add a message to the login input to show to the user
+        *
+        * @param string message The message to show
+        */
+        void addMessageToLoginInput(const std::string_view message);
+
+        /*
+        * @brief Add a message to the register input to show to the user
+        *
+        * @param string message The message to show
+        */
+        void addMessageToRegisterInput(const std::string_view message);
 };
 
 #endif // SCREEN_MANAGER_HPP

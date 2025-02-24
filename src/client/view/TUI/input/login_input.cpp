@@ -42,7 +42,7 @@ void LoginInput::displayButtonSubmit()
         if (!username_.empty() && !password_.empty()) {
             // TODO: add logic with controller and server to check with the database for the register
             // TODO: add logic with controller and server to check with the database for the logic
-            userState_ = InputState::DONE;
+            userState_ = InputState::SUBMIT;
             printf("userState change to Done \n");
             screen_->ExitLoopClosure()();
         } else {
@@ -130,4 +130,9 @@ std::string LoginInput::getPassword() const {
 
 InputState LoginInput::getUserState() const {
     return userState_;
+}
+
+void LoginInput::clearInfo() {
+    username_.clear();
+    password_.clear();
 }

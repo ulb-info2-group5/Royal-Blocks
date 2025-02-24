@@ -23,7 +23,7 @@
  */
 enum class InputState 
 {
-    DONE,
+    SUBMIT,
     BACK,
     NONE,
 };
@@ -133,6 +133,11 @@ class LoginInput : public ILogin_Input
         std::string getPassword() const override;
 
         InputState getUserState() const;
+
+        /*
+        * @brief Clear the info of the user input (username and password)
+        */
+        void clearInfo();
 };
 
 #endif // LOGIN_INPUT_HPP
