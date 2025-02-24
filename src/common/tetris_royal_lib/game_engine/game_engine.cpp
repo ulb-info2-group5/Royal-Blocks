@@ -243,17 +243,23 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
         effectType);
 }
 
+Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) {
+    // TODO: Adapt this to what the assistant asked
+    return numClearedRows * 100;
+}
+
 void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     if (!checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
     }
 
-    pGameState_->getPlayerState(playerID)->setPenaltyTarget(target);
-}
+    // ensure that both players are alive
+    if (!(pGameState_->getPlayerState(playerID)->isAlive()
+          && pGameState_->getPlayerState(target)->isAlive())) {
+        return;
+    }
 
-Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) {
-    // TODO: Adapt this to what the assistant asked
-    return numClearedRows * 100;
+    pGameState_->getPlayerState(playerID)->setPenaltyTarget(target);
 }
 
 void GameEngine::selectNextAliveTarget(PlayerID playerID) {

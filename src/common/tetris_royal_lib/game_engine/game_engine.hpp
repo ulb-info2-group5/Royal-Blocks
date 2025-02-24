@@ -162,13 +162,6 @@ class GameEngine {
     void sendPenaltyRows(PlayerID senderID, size_t numRows);
 
     /**
-     * @brief Changes the given player's target to the new target.
-     * @param playerID The player whose target will be changed.
-     * @param target The new target.
-     */
-    void selectTarget(PlayerID playerID, PlayerID target);
-
-    /**
      * @brief Returns the number of points awarded for clearing
      * the given number of rows.
      */
@@ -193,6 +186,13 @@ class GameEngine {
     void handleLightning(PlayerID playerID);
 
   public:
+    /**
+     * @brief Changes the given player's target to the new target.
+     * @param playerID The player whose target will be changed.
+     * @param target The new target.
+     */
+    void selectTarget(PlayerID playerID, PlayerID target);
+
     /**
      * @brief Changes the given player's target to the new target.
      * @param playerID The player whose target will be changed.
