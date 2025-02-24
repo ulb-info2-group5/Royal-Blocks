@@ -15,11 +15,19 @@
 
 #include "../database_manager/database_manager.hpp"
 
-using namespace std;
+/**
+ * @brief Status of the account creation (success, failure, etc.)
+ * 
+ */
+enum class CreateAccountStatus {
+    FAILED,
+    USERNAME_EXISTS,
+    SUCCESS,
+};
 
 class AccountManager {
   private:
-    shared_ptr<DatabaseManager> dbManager_;
+    std::shared_ptr<DatabaseManager> dbManager_;
 
     /*
     * @brief Check if the user already exists
@@ -27,7 +35,7 @@ class AccountManager {
     * @param username Username to check
     * @return true if the user exists
     */
-    bool checkUsernameExists(const string &username) const;
+    bool checkUsernameExists(const std::string &username) const;
 
     /*
     * @brief Check if a friendship exists between two users
@@ -36,7 +44,7 @@ class AccountManager {
     * @param friendUser Username of the second user
     * @return true if the friendship exists
     */
-    bool checkFriendshipExists(const string &user, const string &friendUser) const;
+    bool checkFriendshipExists(const std::string &user, const std::string &friendUser) const;
 
     /*
     * @brief Check if the password is correct for a user
@@ -45,7 +53,7 @@ class AccountManager {
     * @param password Password to check
     * @return true if the password is correct
     */
-    bool checkUserPassword(const string &username, const string &password) const;
+    bool checkUserPassword(const std::string &username, const std::string &password) const;
 
 
   public:
@@ -54,7 +62,7 @@ class AccountManager {
     * 
     * @param dbPath Path to the database file
     */
-    AccountManager(shared_ptr<DatabaseManager> &db);
+    AccountManager(std::shared_ptr<DatabaseManager> &db);
 
     /*
     * @brief Destroy the Account Manager object
@@ -68,7 +76,7 @@ class AccountManager {
     * @param password Password of the account
     * @return true if the account was created successfully
     */
-    bool createAccount(const string &username, const string &password);
+    CreateAccountStatus createAccount(const std::string &username, const std::string &password);
 
     /*
     * @brief Delete an account
@@ -85,7 +93,7 @@ class AccountManager {
     * @param password Password of the account
     * @return true if the login was successful
     */
-    bool login(const string &username, const string &password) const;
+    bool login(const std::string &username, const std::string &password) const;
 
     /*
     * @brief Update the score of a user
@@ -106,7 +114,7 @@ class AccountManager {
     * @param username Username of the user
     * @return ID of the user
     */
-    int getUserId(const string &username) const;
+    int getUserId(const std::string &username) const;
 
     /*
     * @brief Get the username from the user ID
@@ -114,7 +122,7 @@ class AccountManager {
     * @param userId ID of the user
     * @return Username of the user
     */
-    string getUsername(const int userId) const;
+    std::string getUsername(const int userId) const;
 
 };
 

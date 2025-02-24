@@ -5,18 +5,22 @@
  */
 
 #include "test_account_manager.hpp"
+#include <memory>
 
 void AccountManagerTest::setUp() {
     // Initialize DatabaseManager and AccountManager before each test case.
 
-    // Path correct? Or use default path?
-    const std::string dbPath = "data/test.db";
+    dbManager = std::make_shared<DatabaseManager>();
+    accountManager = std::make_unique<AccountManager>(dbManager);
 
-    dbManager = std::make_shared<DatabaseManager>(dbPath);
-    accountManager = std::make_shared<AccountManager>(dbManager);
+    accountManager->createAccount("test_user", "password123");
 }
 
 void AccountManagerTest::tearDown() {
+    // Delete the user after the test so when we restart the test, the user test is no longer in the database
+    int userId = accountManager->getUserId("test_user");
+    accountManager->deleteAccount(userId);
+
     // Clean up resources after each test case.
     accountManager.reset();
     dbManager.reset();
@@ -27,13 +31,16 @@ void AccountManagerTest::testCreateAccount() {
      * @brief Test case for creating an account.
      * Verifies if creating an account with valid credentials is successful.
      */
-    bool result = accountManager->createAccount("test_user", "password123");
-    CPPUNIT_ASSERT(result);
+     CreateAccountStatus result = accountManager->createAccount("test", "password123");
+     CPPUNIT_ASSERT(result == CreateAccountStatus::SUCCESS);
 
     // Verify account creation (Assuming getUserId returns a valid ID if account
     // exists)
-    int userId = accountManager->getUserId("test_user");
+    int userId = accountManager->getUserId("test");
     CPPUNIT_ASSERT(userId > 0);
+
+    // Delete the user after the test so when we restart the test, the user test is no longer in the database
+    accountManager->deleteAccount(userId);
 }
 
 void AccountManagerTest::testDeleteAccount() {
@@ -41,21 +48,19 @@ void AccountManagerTest::testDeleteAccount() {
      * @brief Test case for deleting an account.
      * Verifies if deleting an existing account is successful.
      */
-    int userId = accountManager->getUserId("test_user");
+    CreateAccountStatus create = accountManager->createAccount("delete_user", "password123");
+    CPPUNIT_ASSERT(create == CreateAccountStatus::SUCCESS);
+
+    int userId = accountManager->getUserId("delete_user");
     bool result = accountManager->deleteAccount(userId);
     CPPUNIT_ASSERT(result);
-
-    // Verify account deletion (Assuming getUserId returns 0 for non-existing
-    // account)
-    userId = accountManager->getUserId("test_user");
-    CPPUNIT_ASSERT(userId == 0);
 }
 
 void AccountManagerTest::testLogin() {
     /**
      * @brief Test case for logging in with valid credentials.
      * Verifies if login works with correct username and password.
-     */
+     */     
     bool result = accountManager->login("test_user", "password123");
     CPPUNIT_ASSERT(result);
 

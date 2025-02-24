@@ -8,4 +8,4 @@
 
 #include "config.hpp"
 
-const string DATABASE_PATH = "data/users.db";
+const std::string DATABASE_PATH = "data/users.db";

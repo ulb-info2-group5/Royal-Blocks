@@ -13,7 +13,7 @@
 
 
 // ### Constructor ###
-AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db) {
+AccountManager::AccountManager(std::shared_ptr<DatabaseManager> &db) : dbManager_(db) {
     // Create the table of users if it doesn't exist
     dbManager_->createTables("CREATE TABLE IF NOT EXISTS users ("
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -23,45 +23,59 @@ AccountManager::AccountManager(shared_ptr<DatabaseManager> &db) : dbManager_(db)
 }
 
 // ### Private methods ###
-bool AccountManager::checkUsernameExists(const string &username) const {
-    string query = "SELECT COUNT(*) FROM users WHERE username = ?";
+bool AccountManager::checkUsernameExists(const std::string &username) const {
+    std::string query = "SELECT COUNT(*) FROM users WHERE username = ?";
     int count = 0;
     return dbManager_->executeSqlRecoveryInt(query, {username}, count) && count > 0;
 }
 
-bool AccountManager::checkUserPassword(const string &username, const string &password) const {
-    string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
+bool AccountManager::checkUserPassword(const std::string &username, const std::string &password) const {
+    std::string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
     int count = 0;
     return dbManager_->executeSqlRecoveryInt(sql, {username, password}, count) && count > 0;
 }
 
 
 // ### Public methods ###
-bool AccountManager::createAccount(const string &username,
-                                   const string &password) {    
+CreateAccountStatus AccountManager::createAccount(const std::string &username,
+                                   const std::string &password) {    
+    CreateAccountStatus res = CreateAccountStatus::SUCCESS;
+
     if (checkUsernameExists(username)) {
-        cerr << "Error: User '" << username << "' already exist." << endl;
-        return false;
+        std::cerr << "Error: User '" << username << "' already exist." << std::endl;
+        res = CreateAccountStatus::USERNAME_EXISTS;
+        return res;
     }
-    return dbManager_->executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password});
+
+    if (!dbManager_->executeSqlChangeData("INSERT INTO users (username, password) VALUES (?, ?)", {username, password})) { // if the query fails
+        res = CreateAccountStatus::FAILED;
+        return res;
+    };
+
+    return res;
 }
 
 bool AccountManager::deleteAccount(const int userId) {
-    // Delete all the friendships of the user
-    if (!dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? OR user2 = ?", {userId, userId})) {
-        cerr << "Error: Failed to delete friends of user '" << userId << "'." << endl;
-        return false;
+    if (dbManager_->findUserInDatabase("friends", userId)) {
+        // Delete all the friendships of the user
+        if (!dbManager_->executeSqlChangeData("DELETE FROM friends WHERE user1 = ? OR user2 = ?", {userId, userId})) {
+            std::cerr << "Error: Failed to delete friends of user '" << userId << "'." << std::endl;
+            return false;
+        }
     }
+
     return dbManager_->executeSqlChangeData("DELETE FROM users WHERE id = ?", {userId});
 }
 
-bool AccountManager::login(const string &username, const string &password) const {
+bool AccountManager::login(const std::string &username, const std::string &password) const {
     return checkUserPassword(username, password);
 }
 
 void AccountManager::launch() {
+    using namespace std;
+
     // ### Part 1: Create an account ###
-    cout << "Do you want to create an account? (y/n): ";
+    std::cout << "Do you want to create an account? (y/n): ";
     char choice;
     cin >> choice;
     choice = tolower(choice);
@@ -72,7 +86,7 @@ void AccountManager::launch() {
         choice = tolower(choice);
     }
 
-    string username, password;
+    std::string username, password;
 
     if (choice == 'y') {
         cout << "An account will be created." << endl;
@@ -81,7 +95,7 @@ void AccountManager::launch() {
         cout << "Enter a password: ";
         cin >> password;
 
-        while (!createAccount(username, password)) {
+        while (createAccount(username, password) != CreateAccountStatus::SUCCESS) {
             cout << "Enter a username: ";
             cin >> username;
             cout << "Enter a password: ";
@@ -113,19 +127,19 @@ void AccountManager::updateScore(const int userId, const int newScore) {
     dbManager_->executeSqlChangeData("UPDATE users SET score = MAX(score, ?) WHERE id = ?", {newScore, userId});
 }
 
-int AccountManager::getUserId(const string &username) const {
-    string sql = "SELECT id FROM users WHERE username = ?";
+int AccountManager::getUserId(const std::string &username) const {
+    std::string sql = "SELECT id FROM users WHERE username = ?";
     int userId = -1;
     dbManager_->executeSqlRecoveryInt(sql, {username}, userId);
     if (userId == -1) {
-        cerr << "Error: User '" << username << "' does not exist." << endl;
+        std::cerr << "Error: User '" << username << "' does not exist." << std::endl;
     }
     return userId;
 }
 
-string AccountManager::getUsername(const int userId) const {
-    string sql = "SELECT username FROM users WHERE id = ?";
-    string username;
+std::string AccountManager::getUsername(const int userId) const {
+    std::string sql = "SELECT username FROM users WHERE id = ?";
+    std::string username;
     dbManager_->executeSqlRecoveryString(sql, {userId}, username);
     return username;
 }

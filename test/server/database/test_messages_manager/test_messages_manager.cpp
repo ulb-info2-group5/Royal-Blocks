@@ -5,6 +5,7 @@
  */
 
 #include "test_messages_manager.hpp"
+#include <memory>
 
 /**
  * @brief Set up the test environment.
@@ -14,11 +15,8 @@ void MessagesManagerTest::setUp() {
     // Initialize the database manager and messages manager before each test
     // case
 
-    // Path correct? Or use default path?
-    const std::string dbPath = "data/test.db";
-
-    dbManager = std::make_shared<DatabaseManager>(dbPath);
-    messagesManager = std::make_shared<MessagesManager>(dbManager);
+    dbManager = std::make_shared<DatabaseManager>();
+    messagesManager = std::make_unique<MessagesManager>(dbManager);
 }
 
 /**

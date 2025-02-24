@@ -14,11 +14,10 @@
 
 #include "../database_manager/database_manager.hpp"
 
-using namespace std;
 
 class FriendsManager {
   private:
-    shared_ptr<DatabaseManager> dbManager_;
+    std::shared_ptr<DatabaseManager> dbManager_;
 
     /*
     * @brief Check if a friendship exists between two users
@@ -43,7 +42,7 @@ class FriendsManager {
     * 
     * @param dbPath Path to the database file
     */
-    FriendsManager(shared_ptr<DatabaseManager> &db);
+    FriendsManager(std::shared_ptr<DatabaseManager> &db);
 
     /*
       * @brief Destroy the Friends Manager object
@@ -74,7 +73,7 @@ class FriendsManager {
     * @param userId Id of the user
     * @return vector<int> List of friends
     */
-    vector<int> getFriends(const int userId) const;
+    std::vector<int> getFriends(const int userId) const;
 };
 
 #endif  // FRIENDS_MANAGER_HPP

@@ -16,11 +16,9 @@
 
 class MessagesManagerTest;
 
-using namespace std;
-
 struct Message {
     int senderId;
-    string content;
+    std::string content;
     // reflect is used to read a json, because Glaze cannot automatically guess
     // where to put the Json values
     template <typename T> void reflect(T &t) {
@@ -41,7 +39,7 @@ struct Discution {
 class MessagesManager {
 
   private:
-    shared_ptr<DatabaseManager> dbManager_;
+    std::shared_ptr<DatabaseManager> dbManager_;
     /*
      * @brief generate a file Name, this file will contain the discussion
      * between the two users
@@ -51,14 +49,14 @@ class MessagesManager {
      *
      * @return a file name
      */
-    string generateFileName(const int &idUser1, const int &idUser2);
+     std::string generateFileName(const int &idUser1, const int &idUser2);
     /*
      * @brief create a file for a discussion
      *
      * @param filePath : the path of the file which will be created
      * @return true if there has been no error
      */
-    bool createDiscussionFile(const string &filePath, Discution discussion);
+    bool createDiscussionFile(const std::string &filePath, Discution discussion);
 
     /*
      *@brief add and create a new discussion between two users
@@ -89,7 +87,7 @@ class MessagesManager {
      *it )
      *
      */
-    string getPathDiscussion(const int &idUser1, const int &idUser2);
+     std::string getPathDiscussion(const int &idUser1, const int &idUser2);
 
   public:
     /*
@@ -97,7 +95,7 @@ class MessagesManager {
      *
      * @param dbPath Path to the database file
      */
-    MessagesManager(shared_ptr<DatabaseManager> &db);
+    MessagesManager(std::shared_ptr<DatabaseManager> &db);
 
     /*
      * @brief Destroy the messages Manager object
@@ -114,11 +112,11 @@ class MessagesManager {
      *
      **/
     void sendMessage(const int &senderId, const int &recieverId,
-                     const string &content);
+                     const std::string &content);
 
-    void writeMessage(const string &pathfile, const Message &message);
+    void writeMessage(const std::string &pathfile, const Message &message);
 
-    void readDiscussion(const string &pathfile);
+    void readDiscussion(const std::string &pathfile);
 
     void showAllMessages(const int &idUser1, const int &idUser2);
 
@@ -138,7 +136,7 @@ class MessagesManager {
      *
      * @return vector of all users who have a discussion with idUser
      */
-    vector<int> getAllUser(const int &idUser);
+     std::vector<int> getAllUser(const int &idUser);
 
     friend MessagesManagerTest;
 };

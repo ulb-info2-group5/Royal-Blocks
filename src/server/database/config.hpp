@@ -11,11 +11,9 @@
 
 #include <string>
 
-using namespace std;
-
 /*
 * string of the configuration file
 */
-extern const string DATABASE_PATH;
+extern const std::string DATABASE_PATH;
 
 #endif // CONFIG_HPP

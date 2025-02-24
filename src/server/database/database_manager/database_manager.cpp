@@ -10,6 +10,7 @@
 #include "../config.hpp"
 #include <iostream>
 #include <sqlite3.h>
+#include <string>
 #include <vector>
 
 
@@ -19,14 +20,6 @@ DatabaseManager::DatabaseManager() {
         cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
     }
 }
-
-// ### Constructor With Database Path ###
-DatabaseManager::DatabaseManager(const string &path) {
-    if (sqlite3_open(path.c_str(), &db_) != SQLITE_OK) {
-        cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
-    }
-}
-
 
 // ### Destructor ###
 DatabaseManager::~DatabaseManager() {
@@ -168,6 +161,30 @@ vector<pair<string, int>> DatabaseManager::getRanking() const {
     }
     return ranking;
 }
+
+bool DatabaseManager::findUserInDatabase(const std::string &table, const int userId) {
+    // Prepare the SQL statement
+    std::string sql = "SELECT COUNT(*) FROM " + table + " WHERE user1 = ? OR user2 = ?";
+    sqlite3_stmt *stmt;
+    bool exists = false;
+
+
+    // Execute the SQL statement
+    if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, userId);
+        sqlite3_bind_int(stmt, 2, userId);
+
+        // Get the data from the statement
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            int count = sqlite3_column_int(stmt, 0);
+            exists = (count > 0); 
+        } 
+    }
+
+    sqlite3_finalize(stmt);
+    return exists;
+}
+
 
 vector<int> DatabaseManager::getVectorInfo(const string &sql, int id) const {
     vector<int> result;
