@@ -13,53 +13,15 @@
 #include <stdexcept>
 #include <variant>
 
-static constexpr auto genFeaturesBitset =
-    [](std::initializer_list<GameEngine::GameModeFeature> enabledFeatures)
-    -> GameEngine::FeaturesBitset {
-    GameEngine::FeaturesBitset bitset;
-
-    for (GameEngine::GameModeFeature features : enabledFeatures) {
-        bitset.set(static_cast<size_t>(features));
-    }
-
-    return bitset;
-};
-
-const GameEngine::FeaturesMap GameEngine::featuresBitsets =
-    []() -> GameEngine::FeaturesMap {
-    GameEngine::FeaturesMap featuresPerGameMode;
-
-    featuresPerGameMode.at(static_cast<size_t>(GameMode::Endless)) =
-        genFeaturesBitset({
-            // Endless features go here
-        });
-
-    featuresPerGameMode.at(static_cast<size_t>(GameMode::Dual)) =
-        genFeaturesBitset({
-            // Dual features go here
-            GameModeFeature::PenaltyRows,
-        });
-
-    featuresPerGameMode.at(static_cast<size_t>(GameMode::Classic)) =
-        genFeaturesBitset({
-            // Classic features go here
-            GameModeFeature::PenaltyRows,
-            GameModeFeature::SelectPenaltyTarget,
-        });
-
-    featuresPerGameMode.at(static_cast<size_t>(GameMode::RoyalCompetition)) =
-        genFeaturesBitset({
-            // Royal features go here
-            GameModeFeature::Effects,
-            GameModeFeature::SelectPenaltyTarget,
-        });
-
-    return featuresPerGameMode;
-}();
+bool GameEngine::checkFeatureEnabled(GameMode gameMode,
+                                     GameModeFeature gameModeFeature) {
+    return featuresBitsets.at(static_cast<size_t>(gameMode))
+        .test(static_cast<size_t>(gameModeFeature));
+}
 
 bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
-    return featuresBitsets.at(static_cast<size_t>(pGameState_->getGameMode()))
-        .test(static_cast<size_t>(gameModeFeature));
+    return GameEngine::checkFeatureEnabled(pGameState_->getGameMode(),
+                                           gameModeFeature);
 }
 
 bool GameEngine::shouldReverseControls(PlayerID playerID) {

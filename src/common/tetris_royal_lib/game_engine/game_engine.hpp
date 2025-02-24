@@ -20,11 +20,11 @@ class GameEngine {
         PenaltyRows,
         Effects,
         SelectPenaltyTarget,
-        NumGameModeFeatures,
+        NumGameModeFeature,
     };
 
     static constexpr size_t numFeatures =
-        static_cast<size_t>(GameModeFeature::NumGameModeFeatures);
+        static_cast<size_t>(GameModeFeature::NumGameModeFeature);
 
     static constexpr size_t numGameMode =
         static_cast<size_t>(GameMode::NumGameMode);
@@ -35,19 +35,70 @@ class GameEngine {
   private:
     // #### Features-related ####
 
-    const static FeaturesMap featuresBitsets;
+    static constexpr auto genFeaturesBitset =
+        [](std::initializer_list<GameEngine::GameModeFeature> enabledFeatures)
+        -> GameEngine::FeaturesBitset {
+        GameEngine::FeaturesBitset bitset;
 
+        for (GameEngine::GameModeFeature features : enabledFeatures) {
+            bitset.set(static_cast<size_t>(features));
+        }
+
+        return bitset;
+    };
+
+    constexpr static FeaturesMap featuresBitsets =
+        []() -> GameEngine::FeaturesMap {
+        GameEngine::FeaturesMap featuresPerGameMode;
+
+        featuresPerGameMode.at(static_cast<size_t>(GameMode::Endless)) =
+            genFeaturesBitset({
+                // Endless features go here
+            });
+
+        featuresPerGameMode.at(static_cast<size_t>(GameMode::Dual)) =
+            genFeaturesBitset({
+                // Dual features go here
+                GameModeFeature::PenaltyRows,
+            });
+
+        featuresPerGameMode.at(static_cast<size_t>(GameMode::Classic)) =
+            genFeaturesBitset({
+                // Classic features go here
+                GameModeFeature::PenaltyRows,
+                GameModeFeature::SelectPenaltyTarget,
+            });
+
+        featuresPerGameMode.at(static_cast<size_t>(
+            GameMode::RoyalCompetition)) = genFeaturesBitset({
+            // Royal features go here
+            GameModeFeature::Effects,
+            GameModeFeature::SelectPenaltyTarget,
+        });
+
+        return featuresPerGameMode;
+    }();
+
+  public:
+    /**
+     * @brief Checks whether the given feature is enabled for the given
+     * GameMode.
+     */
+    static bool checkFeatureEnabled(GameMode gameMode,
+                                    GameModeFeature gameModeFeature);
+
+  private:
     /**
      * @brief Checks whether the given feature is enabled for the current
      * GameMode.
      */
-    bool checkFeatureEnabled(GameModeFeature gameModeFeatures) const;
+    bool checkFeatureEnabled(GameModeFeature gameModeFeature) const;
 
     // #### GameState ####
 
     GameStatePtr pGameState_;
 
-    // #### Helpers ####
+    // #### Effects Helpers ####
 
     /**
      * @brief Returns true if the given player currently has the inverted

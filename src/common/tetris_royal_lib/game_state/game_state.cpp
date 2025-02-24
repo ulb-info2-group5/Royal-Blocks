@@ -1,4 +1,5 @@
 #include "game_state.hpp"
+#include "game_engine/game_engine.hpp"
 #include "nlohmann/json_fwd.hpp"
 #include "player_tetris/player_tetris.hpp"
 
@@ -10,10 +11,8 @@ GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
     : gameMode_{gameMode} {
 
     for (PlayerState &playerState : playerStates) {
-        // TODO: this isn't really clean, should find a way to use sth like
-        // GameEngine::checkFeaturesEnabled, as there may be more GameModes that
-        // require the effects-related stuff.
-        playerState.toggleEffects(gameMode == GameMode::RoyalCompetition);
+        playerState.toggleEffects(GameEngine::checkFeatureEnabled(
+            gameMode, GameEngine::GameModeFeature::Effects));
         playerToTetris_.emplace_back(PlayerTetris{playerState, Tetris{}});
     }
 }
