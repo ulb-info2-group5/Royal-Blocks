@@ -96,8 +96,9 @@ void GameDisplay::drawRoyalEffectsEnergy()
 
 void GameDisplay::displayLeftWindow()
 {
-    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] { /* function to call */}, 
-                                                ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+    ftxui::Component menuDisplay = ftxui::Button("Quit Game", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
     if (play_ == PlayMode::ROYAL)
     {

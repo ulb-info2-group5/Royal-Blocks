@@ -7,6 +7,7 @@
  */
 
 #include "main_menu.hpp"
+#include "../messaging/messaging.hpp"
 #include <ftxui/dom/elements.hpp>
 
 

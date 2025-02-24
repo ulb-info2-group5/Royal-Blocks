@@ -9,7 +9,6 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
-#include "../messaging/messaging.hpp"
 #include "../../IMain_Menu.hpp"
 
 #include <ftxui/component/screen_interactive.hpp>
