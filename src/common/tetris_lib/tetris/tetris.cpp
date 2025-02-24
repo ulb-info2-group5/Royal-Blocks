@@ -189,10 +189,7 @@ TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
                                      Vec2(Board::getWidth() / 2 - 1, spawnRow));
 }
 
-void Tetris::destroy2By2Occupied() {
-    std::cout << "shape: " << activeTetromino_->getShape() << std::endl;
-    board_.destroy2By2Occupied();
-}
+void Tetris::destroy2By2Occupied() { board_.destroy2By2Occupied(); }
 
 /* ------------------------------------------------
  *          Serialization
