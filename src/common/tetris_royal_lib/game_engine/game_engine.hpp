@@ -235,6 +235,9 @@ class GameEngine {
      */
     void clockTick(PlayerID playerID);
 
+    /**
+     * @brief Sends all the penalties that were stashed.
+     */
     void emptyPenaltyStash(PlayerID playerID);
 };
 
