@@ -54,7 +54,7 @@ class GameState {
      *
      * @param playerID The player's ID.
      */
-    Tetris *getTetris(PlayerID playerID);
+    TetrisPtr getTetris(PlayerID playerID);
 
     class CircularIt {
       private:

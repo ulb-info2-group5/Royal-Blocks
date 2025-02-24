@@ -8,6 +8,7 @@
 #include "tetromino/tetromino_shapes.hpp"
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 class TetrisTest;
@@ -198,5 +199,7 @@ class Tetris {
 
     friend TetrisTest;
 };
+
+using TetrisPtr = std::shared_ptr<Tetris>;
 
 #endif

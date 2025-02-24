@@ -50,10 +50,10 @@ PlayerStatePtr GameState::getPlayerState(PlayerID playerID) {
     return nullptr;
 }
 
-Tetris *GameState::getTetris(PlayerID playerID) {
+TetrisPtr GameState::getTetris(PlayerID playerID) {
     for (PlayerTetris &playerStateTetris : playerToTetris_) {
         if (playerStateTetris.pPlayerState_->getPlayerID() == playerID) {
-            return &playerStateTetris.tetris_;
+            return playerStateTetris.pTetris_;
         }
     }
 

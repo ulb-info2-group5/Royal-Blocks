@@ -1,5 +1,4 @@
 #include "player_tetris.hpp"
-#include "tetris/tetris.hpp"
 
 nlohmann::json PlayerTetris::serializeSelf() const {
     nlohmann::json j;
@@ -12,7 +11,7 @@ nlohmann::json PlayerTetris::serializeSelf() const {
         emptyBoard = (pPenalty->getPenaltyType() == PenaltyType::Blackout);
     }
 
-    j["tetris"] = tetris_.serializeSelf(emptyBoard);
+    j["tetris"] = pTetris_->serializeSelf(emptyBoard);
 
     return j;
 }
@@ -20,7 +19,7 @@ nlohmann::json PlayerTetris::serializeSelf() const {
 nlohmann::json PlayerTetris::serializeExternal() const {
     nlohmann::json j;
     j["playerState"] = pPlayerState_->serializeExternal();
-    j["tetris"] = tetris_.serializeExternal();
+    j["tetris"] = pTetris_->serializeExternal();
 
     return j;
 }
