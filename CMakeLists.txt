@@ -16,14 +16,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(tetris_royal)
 
-# Enable tests for Debug builds
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    enable_testing()
-    add_subdirectory(test)
-endif()
 
-# tetris_lib
-add_subdirectory(src/common/tetris_lib)
+
+
+
+add_executable(server src/server/network/network.cpp src/server/network/network.hpp)
+
+add_executable(client src/client/client.cpp src/client/client.hpp)
+
+
+
 
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
