@@ -322,12 +322,12 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
         return;
     }
 
-    std::queue<PenaltyType> penaltiesQueue =
+    std::deque<PenaltyType> penaltiesQueue =
         pGameState_->getPlayerState(playerID)->getStashedPenalties();
 
     while (!penaltiesQueue.empty()) {
         PenaltyType penaltyType = penaltiesQueue.front();
         sendPenaltyEffect(playerID, penaltyType);
-        penaltiesQueue.pop();
+        penaltiesQueue.pop_front();
     }
 }

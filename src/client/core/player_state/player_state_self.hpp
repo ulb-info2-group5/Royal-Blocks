@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
+#include <deque>
 #include <optional>
 
 using PlayerID = size_t;
@@ -25,11 +26,13 @@ namespace client {
 
         std::optional<EffectSelector> effectSelector_;
 
+        std::optional<std::deque<PenaltyType>> stashedPenalties_;
+
         // NOTE: Might want to add these if we want to display something when a
         // bonus or penalty is being applied on the player.
         //
-        // AbstractTimedEffectPtr pActiveBonus_;
-        // AbstractTimedEffectPtr pActivePenalty_;
+        // TimedBonusPtr pActiveBonus_;
+        // TimedPenaltyPtr pActivePenalty_;
 
         /* ------------------------------------------------
          *          Serialization

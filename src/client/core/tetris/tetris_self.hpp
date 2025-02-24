@@ -9,11 +9,15 @@ namespace client {
 
     struct TetrisSelf {
         bool isAlive_;
+
+        // TODO: should those be optional ?
         std::optional<Tetromino> activeTetromino_;
         std::optional<Tetromino> previewTetromino_;
+
         Board board_;
 
         std::optional<Tetromino> holdTetromino_;
+
         TetrominoQueue tetrominoQueue_;
 
         nlohmann::json serialize() const;

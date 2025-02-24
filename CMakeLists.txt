@@ -25,5 +25,15 @@ endif()
 # tetris_royal_lib
 add_subdirectory(src/common)
 
+
+
+file(GLOB_RECURSE SOURCES_CLIENT
+    ./src/client/core/*.cpp
+)
+set(SOURCES_MAIN main.cpp)
+add_executable(main ${SOURCES_MAIN} ${SOURCES_CLIENT})
+target_link_libraries(main tetris_royal_lib)
+
+
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)

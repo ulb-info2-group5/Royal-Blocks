@@ -1,6 +1,7 @@
 #include "player_state.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect_selector/effect_selector.hpp"
+#include "nlohmann/detail/conversions/to_json.hpp"
 
 #include <optional>
 
@@ -33,7 +34,7 @@ void PlayerState::toggleEffects(bool activated) {
     }
 
     if (activated) {
-        stashedPenalties_ = std::queue<PenaltyType>{};
+        stashedPenalties_ = std::deque<PenaltyType>{};
     } else {
         stashedPenalties_ = std::nullopt;
     }
@@ -151,10 +152,10 @@ void PlayerState::selectNextEffect() { effectSelector_->next(); }
 void PlayerState::selectPrevEffect() { effectSelector_->prev(); }
 
 void PlayerState::stashPenalty(PenaltyType penalty) {
-    stashedPenalties_->push(penalty);
+    stashedPenalties_->push_back(penalty);
 }
 
-std::queue<PenaltyType> PlayerState::getStashedPenalties() {
+std::deque<PenaltyType> PlayerState::getStashedPenalties() {
     return std::move(stashedPenalties_.value());
 }
 
@@ -193,6 +194,16 @@ nlohmann::json PlayerState::serializeSelf() const {
         j["effectSelector"] = effectSelector_->serialize();
     } else {
         j["effectSelector"] = nullptr;
+    }
+
+    if (stashedPenalties_) {
+        nlohmann::json j_stashedPenalties = nlohmann::json::array();
+        for (const auto &stashedPenalty : *stashedPenalties_) {
+            j_stashedPenalties.push_back(stashedPenalty);
+        }
+        j["stashedPenalties"] = j_stashedPenalties;
+    } else {
+        j["stashedPenalties"] = nullptr;
     }
 
     return j;

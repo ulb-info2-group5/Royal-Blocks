@@ -47,7 +47,7 @@ class PlayerState {
     std::optional<EffectSelector> effectSelector_;
 
     // Store stacked effects
-    std::optional<std::queue<PenaltyType>> stashedPenalties_;
+    std::optional<std::deque<PenaltyType>> stashedPenalties_;
 
     // Currently active bonus & penalty (no optional needed, just make it
     // nullptr)
@@ -192,7 +192,7 @@ class PlayerState {
     /**
      * @brief Returns the penalties that were stashed and empties the stash.
      */
-    std::queue<PenaltyType> getStashedPenalties();
+    std::deque<PenaltyType> getStashedPenalties();
 
   public:
     /* ------------------------------------------------
