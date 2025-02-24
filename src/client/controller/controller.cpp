@@ -143,8 +143,11 @@ MainMenuState Controller::handleMainMenu() {
                 break;
             }
                 
-            case MainMenuState::MANAGE_PROFILE:
+            case MainMenuState::MANAGE_PROFILE: {
+                std::vector<std::string> info = screenManager_.runProfileManager();
+                // TODO: communicate with the server to update the profile
                 break;
+            }
                 
             case MainMenuState::SEND_MESSAGES: {
                 // TODO: remove it because it's an example

@@ -158,6 +158,13 @@ class MainMenu : public IMain_Menu
         * @brief Render the profile manager of the user
         */
          void renderProfileManager() override;
+
+        /*
+        * @brief Get the user input
+        *
+        * @return std::vector<std::string> The user input
+        */
+         std::vector<std::string> getUserNewInput();
 };
 
 #endif // MAIN_MENU_HPP

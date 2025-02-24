@@ -149,6 +149,11 @@ class ScreenManager {
         */
         void runFriendsManager(const std::vector<std::string> &friendsList);
 
+        /*
+        * @brief Run the profile manager to show to the user
+        */
+        std::vector<std::string> runProfileManager();
+
 };
 
 #endif // SCREEN_MANAGER_HPP

@@ -220,7 +220,6 @@ void MainMenu::displayProfileManagerWindow()
         inputChangeUsername_,
         inputChangePassword_,
         submitButton_,
-        buttonBack_,
     });
 
     profileManagerWindow_ = ftxui::Renderer(container, [&] {
@@ -235,7 +234,6 @@ void MainMenu::displayProfileManagerWindow()
             ftxui::text(userInput_.at(2)),
             ftxui::separator(),
             submitButton_->Render(),
-            buttonBack_->Render(),
         }) | ftxui::border | ftxui::center;
     });
 }
@@ -278,6 +276,9 @@ void MainMenu::renderProfileManager() {
     screen_->Loop(profileManagerWindow_);
 }
 
+std::vector<std::string> MainMenu::getUserNewInput() {
+    return userInput_;
+}
 
 // ### Private methods ###
 void MainMenu::manageFriendlistScreen(const std::string &friendName) {

@@ -88,3 +88,8 @@ void ScreenManager::runRankingMenu(std::vector<std::tuple<int, std::string, int>
 void ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
     mainMenu_.renderFriendsManager(friendsList);
 }
+
+std::vector<std::string> ScreenManager::runProfileManager() {
+    mainMenu_.renderProfileManager();
+    return mainMenu_.getUserNewInput();
+}
