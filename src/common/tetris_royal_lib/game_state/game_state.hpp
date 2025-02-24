@@ -15,7 +15,7 @@
 
 class GameState {
   private:
-    GameMode gameMode_;
+    const GameMode gameMode_;
 
     std::vector<PlayerTetris> playerToTetris_;
 
@@ -26,8 +26,8 @@ class GameState {
      */
     GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates);
     GameState(const GameState &) = default;
-    GameState(GameState &&) = delete;
-    GameState &operator=(const GameState &) = default;
+    GameState(GameState &&) = default;
+    GameState &operator=(const GameState &) = delete;
     GameState &operator=(GameState &&) = delete;
 
     ~GameState() = default;
