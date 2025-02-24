@@ -69,7 +69,7 @@ void GameEngine::handleAllTimedEffects() {
     } while (it != endIt);
 }
 
-bool GameEngine::shouldReverseControls(PlayerID playerID) {
+bool GameEngine::shouldReverseControls(PlayerID playerID) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
@@ -84,7 +84,7 @@ bool GameEngine::shouldReverseControls(PlayerID playerID) {
     return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
 }
 
-bool GameEngine::shouldLockInput(PlayerID playerID) {
+bool GameEngine::shouldLockInput(PlayerID playerID) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
@@ -99,7 +99,8 @@ bool GameEngine::shouldLockInput(PlayerID playerID) {
     return pPenalty->getPenaltyType() == PenaltyType::InputLock;
 }
 
-TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
+TetrominoMove
+GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) const {
     switch (tetrominoMove) {
     case TetrominoMove::Left:
         return TetrominoMove::Right;
@@ -112,7 +113,7 @@ TetrominoMove GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) {
     }
 }
 
-bool GameEngine::shouldIgnoreTick(PlayerID playerID) {
+bool GameEngine::shouldIgnoreTick(PlayerID playerID) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
