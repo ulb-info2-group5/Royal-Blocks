@@ -1,6 +1,8 @@
 #ifndef TETRIS_OBSERVER_HPP
 #define TETRIS_OBSERVER_HPP
 
+#include <memory>
+
 struct TetrisObserver {
     TetrisObserver() = default;
     TetrisObserver(const TetrisObserver &) = default;
@@ -14,5 +16,7 @@ struct TetrisObserver {
 
     virtual void notifyActiveTetrominoPlaced() = 0;
 };
+
+using TetrisObserverPtr = std::shared_ptr<TetrisObserver>;
 
 #endif // TETRIS_OBSERVER_HPP

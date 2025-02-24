@@ -5,16 +5,16 @@
 #include "tetris/tetris.hpp"
 
 struct PlayerTetris {
-    PlayerState playerState_;
+    PlayerStatePtr pPlayerState_;
     Tetris tetris_;
 
-    PlayerTetris(const PlayerState &playerState)
-        : playerState_{playerState}, tetris_{} {
+    PlayerTetris(PlayerStatePtr &&pPlayerState)
+        : pPlayerState_{pPlayerState}, tetris_{} {
 
         // Register the player state as an observer of the Tetris instance.
         // This allows the player state to be notified of game events such as
         // defeat.
-        tetris_.addObserver(&playerState_);
+        tetris_.addObserver(pPlayerState_);
     }
 
     nlohmann::json serializeSelf() const;

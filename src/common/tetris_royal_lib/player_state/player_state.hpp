@@ -17,6 +17,9 @@ using PlayerID = size_t;
 using Score = size_t;
 using Energy = size_t;
 
+class PlayerState;
+using PlayerStatePtr = std::shared_ptr<PlayerState>;
+
 class PlayerState final : public TetrisObserver {
   private:
     /* ------------------------------------------------

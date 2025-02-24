@@ -44,7 +44,7 @@ class GameState {
      *
      * @param playerID The player's ID.
      */
-    PlayerState *getPlayerState(PlayerID playerID);
+    PlayerStatePtr getPlayerState(PlayerID playerID);
 
     /**
      * @brief Returns a pointer to the Tetris of the player whose PlayerID
@@ -81,9 +81,9 @@ class GameState {
         }
 
         bool operator==(const CircularIt &other) const {
-            // TODO: Add this check to the operator must define operator== for
-            // PlayerState first for this:
-            // playerToTetris_ == other.playerToTetris_
+            // TODO: Add this check to the operator must define operator==
+            // for PlayerState first for this: playerToTetris_ ==
+            // other.playerToTetris_
             return currentIdx_ == other.currentIdx_;
         }
 

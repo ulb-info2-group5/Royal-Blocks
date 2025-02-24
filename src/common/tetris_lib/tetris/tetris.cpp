@@ -78,11 +78,11 @@ Tetris::Tetris() { fetchNewTetromino(); }
 
 // #### TetrisObserver ####
 
-void Tetris::addObserver(TetrisObserver *pTetrisObserver) {
+void Tetris::addObserver(TetrisObserverPtr pTetrisObserver) {
     tetrisObservers_.push_back(pTetrisObserver);
 }
 
-void Tetris::removeObserver(TetrisObserver *pTetrisObserver) {
+void Tetris::removeObserver(TetrisObserverPtr pTetrisObserver) {
     std::erase(tetrisObservers_, pTetrisObserver);
 }
 

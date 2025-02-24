@@ -8,7 +8,6 @@
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
-#include "player_tetris/player_tetris.hpp"
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
@@ -33,7 +32,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
         return;
     }
 
-    PlayerState *pPlayerState = pGameState_->getPlayerState(playerID);
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
 
     if (pPlayerState == nullptr) {
         return;
@@ -74,7 +73,7 @@ void GameEngine::handleAllTimedEffects() {
     GameState::CircularIt endIt = it;
 
     do {
-        handlePlayerTimedEffect((*it).playerState_.getPlayerID());
+        handlePlayerTimedEffect((*it).pPlayerState_->getPlayerID());
         ++it;
     } while (it != endIt);
 }
@@ -289,13 +288,13 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
             ++newTargetIt;
         }
     } while (newTargetIt != prevTargetIt
-             && !(*newTargetIt).playerState_.isAlive());
+             && !(*newTargetIt).pPlayerState_->isAlive());
 
     // NOTE: This should never happen, if it does, the game should have
     // ended earlier because there is only one player left.
     assert(newTargetIt != playerSelfIt);
 
-    PlayerID newTargetID = (*newTargetIt).playerState_.getPlayerID();
+    PlayerID newTargetID = (*newTargetIt).pPlayerState_->getPlayerID();
 
     pGameState_->getPlayerState(playerID)->setPenaltyTarget(newTargetID);
 }

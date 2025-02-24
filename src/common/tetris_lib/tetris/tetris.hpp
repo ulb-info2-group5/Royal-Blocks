@@ -25,7 +25,7 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  */
 class Tetris {
   private:
-    std::vector<TetrisObserver *> tetrisObservers_;
+    std::vector<TetrisObserverPtr> tetrisObservers_;
 
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
@@ -106,12 +106,12 @@ class Tetris {
     /**
      * @brief Adds a new TetrisObserver.
      */
-    void addObserver(TetrisObserver *pTetrisObserver);
+    void addObserver(TetrisObserverPtr pTetrisObserver);
 
     /**
      * @brief Removes the given TetrisObserver.
      */
-    void removeObserver(TetrisObserver *pTetrisObserver);
+    void removeObserver(TetrisObserverPtr pTetrisObserver);
 
     // #### Event API ####
 
