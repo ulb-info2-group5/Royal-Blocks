@@ -17,7 +17,7 @@ using PlayerID = size_t;
 using Score = size_t;
 using Energy = size_t;
 
-class PlayerState : public TetrisObserver {
+class PlayerState final : public TetrisObserver {
   private:
     /* ------------------------------------------------
      *              Common to all GameModes

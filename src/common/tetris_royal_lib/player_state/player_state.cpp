@@ -6,7 +6,7 @@
 #include <optional>
 
 PlayerState::PlayerState(PlayerID playerID, Score score)
-    : playerID_{playerID}, score_{score}, isAlive_{true},
+    : TetrisObserver{}, playerID_{playerID}, score_{score}, isAlive_{true},
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
       receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
       effectSelector_{std::nullopt}, pActiveBonus_{nullptr},
