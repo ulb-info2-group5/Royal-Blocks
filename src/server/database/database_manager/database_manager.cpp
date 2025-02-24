@@ -17,7 +17,7 @@
 // ### Constructor ###
 DatabaseManager::DatabaseManager() {
     if (sqlite3_open(DATABASE_PATH.c_str(), &db_) != SQLITE_OK) {
-        cerr << "Error SQLite: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "Error SQLite: " << sqlite3_errmsg(db_) << std::endl;
     }
 }
 
@@ -28,7 +28,7 @@ DatabaseManager::~DatabaseManager() {
 
 
 // ### Private methods ###
-bool DatabaseManager::createTables(const string &sql) {  
+bool DatabaseManager::createTables(const std::string &sql) {  
     char* errorMess = nullptr;
     if ( sqlite3_exec(db_, sql.c_str(), nullptr, nullptr, &errorMess) == SQLITE_OK) {
         return true;
@@ -41,11 +41,11 @@ bool DatabaseManager::createTables(const string &sql) {
 
 
 // ### Public methods ###
-bool DatabaseManager::executeSqlChangeData(const string &sql, const vector<MultiType> &params) {
+bool DatabaseManager::executeSqlChangeData(const std::string &sql, const std::vector<MultiType> &params) {
     // Prepare the SQL statement
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL error: " << sqlite3_errmsg(db_) << std::endl;
         return false;
     }
 
@@ -54,14 +54,14 @@ bool DatabaseManager::executeSqlChangeData(const string &sql, const vector<Multi
         if (holds_alternative<int>(params[i])) {
             sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 
     // Execute the SQL statement
     bool success = (sqlite3_step(stmt) == SQLITE_DONE);
     if (!success) {
-        cerr << "SQL execution error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL execution error: " << sqlite3_errmsg(db_) << std::endl;
     }
 
     // Finalize the statement
@@ -69,11 +69,11 @@ bool DatabaseManager::executeSqlChangeData(const string &sql, const vector<Multi
     return success;
 }
 
-bool DatabaseManager::executeSqlRecoveryInt(const string &sql, const vector<MultiType> &params, int &result) const {
+bool DatabaseManager::executeSqlRecoveryInt(const std::string &sql, const std::vector<MultiType> &params, int &result) const {
     // Prepare the SQL statement
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL error: " << sqlite3_errmsg(db_) << std::endl;
         return false;
     }
 
@@ -82,7 +82,7 @@ bool DatabaseManager::executeSqlRecoveryInt(const string &sql, const vector<Mult
         if (holds_alternative<int>(params[i])) {
             sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 
@@ -92,7 +92,7 @@ bool DatabaseManager::executeSqlRecoveryInt(const string &sql, const vector<Mult
         result = sqlite3_column_int(stmt, 0);
         success = true;
     } else {
-        cerr << "SQL execution error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL execution error: " << sqlite3_errmsg(db_) << std::endl;
     }
 
     // Finalize the statement
@@ -101,11 +101,11 @@ bool DatabaseManager::executeSqlRecoveryInt(const string &sql, const vector<Mult
 }
 
 
-bool DatabaseManager::executeSqlRecoveryString(const string &sql, const vector<MultiType> &params, string &result) const {
+bool DatabaseManager::executeSqlRecoveryString(const std::string &sql, const std::vector<MultiType> &params, std::string &result) const {
     // Prepare the SQL statement
     sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        cerr << "SQL error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL error: " << sqlite3_errmsg(db_) << std::endl;
         return false;
     }
 
@@ -114,7 +114,7 @@ bool DatabaseManager::executeSqlRecoveryString(const string &sql, const vector<M
         if (holds_alternative<int>(params[i])) {
             sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 
@@ -124,7 +124,7 @@ bool DatabaseManager::executeSqlRecoveryString(const string &sql, const vector<M
         result = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
         success = true;
     } else {
-        cerr << "SQL execution error: " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "SQL execution error: " << sqlite3_errmsg(db_) << std::endl;
     }
 
     // Finalize the statement
@@ -138,10 +138,10 @@ sqlite3* DatabaseManager::getDatabase() const {
     return db_;
 }
 
-vector<pair<string, int>> DatabaseManager::getRanking() const {
+std::vector<std::pair<std::string, int>> DatabaseManager::getRanking() const {
     // Prepare the SQL statement
-    vector<pair<string, int>> ranking;
-    string sql = "SELECT username, score FROM users ORDER BY score DESC";
+    std::vector<std::pair<std::string, int>> ranking;
+    std::string sql = "SELECT username, score FROM users ORDER BY score DESC";
     sqlite3_stmt *stmt;
 
     // Execute the SQL statement
@@ -149,7 +149,7 @@ vector<pair<string, int>> DatabaseManager::getRanking() const {
         == SQLITE_OK) {
         // Get the data from the statement
         while (sqlite3_step(stmt) == SQLITE_ROW) {
-            string username =
+            std::string username =
                 reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
             int score = sqlite3_column_int(stmt, 1);
 
@@ -157,7 +157,7 @@ vector<pair<string, int>> DatabaseManager::getRanking() const {
         }
         sqlite3_finalize(stmt);
     } else {
-        cerr << "Error in getting ranking." << endl;
+        std::cerr << "Error in getting ranking." << std::endl;
     }
     return ranking;
 }
@@ -186,14 +186,14 @@ bool DatabaseManager::findUserInDatabase(const std::string &table, const int use
 }
 
 
-vector<int> DatabaseManager::getVectorInfo(const string &sql, int id) const {
-    vector<int> result;
+std::vector<int> DatabaseManager::getVectorInfo(const std::string &sql, int id) const {
+    std::vector<int> result;
     sqlite3_stmt* stmt;
 
     // Prepare the SQL statement
     int rc = sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
-        cerr << "Erreur lors de la préparation de la requête : " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "Erreur lors de la préparation de la requête : " << sqlite3_errmsg(db_) << std::endl;
         return result;
     }
     
@@ -212,7 +212,7 @@ vector<int> DatabaseManager::getVectorInfo(const string &sql, int id) const {
     
     // Verify that the loop exited because the statement was finished
     if (rc != SQLITE_DONE) {
-        cerr << "Erreur lors de l'exécution de la requête : " << sqlite3_errmsg(db_) << endl;
+        std::cerr << "Erreur lors de l'exécution de la requête : " << sqlite3_errmsg(db_) << std::endl;
     }
     
     // Finalize the statement
