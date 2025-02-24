@@ -9,6 +9,7 @@
 #include "network_manager.hpp"
 #include <boost/asio/ip/basic_resolver.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <cstdlib>
 #include <iostream>
 
 #define PORT "1234"    // TODO: Change this to a config file ?
@@ -38,6 +39,9 @@ void NetworkManager::connect() {
     catch (const std::exception &e) {
         std::cerr << "Connection error: " << e.what() << std::endl; // TODO: check the cerr
         disconnect();
+        std::cout << std::endl;
+        std::cerr << "Failed to connect to the server" << std::endl;
+        std::exit(1); // TODO: check the exit
     } 
 }
 

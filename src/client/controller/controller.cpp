@@ -16,6 +16,7 @@ Controller::~Controller() {}
 
 void Controller::run() {
     networkManager_.connect();
+
     screenManager_.drawStartScreen();
     handleLoginMenu();
     screenManager_.manageMainMenu();
