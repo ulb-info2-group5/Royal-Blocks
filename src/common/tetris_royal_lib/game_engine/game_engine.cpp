@@ -4,6 +4,7 @@
 #include "../game_mode/game_mode.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
+#include "effect/penalty/timed_penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
@@ -45,7 +46,11 @@ void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
         }
     } else {
         // currently has no active bonus
-        // TODO: apply new active bonus if any bonus enqueued
+        pPlayerState->fetchGrantedBonus().and_then(
+            [&pPlayerState](BonusType bonusType) {
+                pPlayerState->setActiveBonus(TimedBonus::makeBonus(bonusType));
+                return std::optional<BonusType>{};
+            });
     }
 
     if (pPlayerState->getActivePenalty() != nullptr) {
@@ -55,7 +60,12 @@ void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
         }
     } else {
         // currently has no active penalty
-        // TODO: apply new active penalty if any penalty enqueued
+        pPlayerState->fetchReceivedPenalty().and_then(
+            [&pPlayerState](PenaltyType penaltyType) {
+                pPlayerState->setActivePenalty(
+                    TimedPenalty::makePenalty(penaltyType));
+                return std::optional<PenaltyType>{};
+            });
     }
 }
 

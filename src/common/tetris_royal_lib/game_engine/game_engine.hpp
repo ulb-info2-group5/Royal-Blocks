@@ -102,10 +102,8 @@ class GameEngine {
 
     /**
      * @brief Handles the timed effects for the given player.
-     * (Deleting effects once they are expired).
-     *
-     * TODO: Add the fact that it also sets the new active effects if any
-     * already enqueued. (once it is implemented)
+     * (Deleting effects once they are expired & setting the new active effects
+     * if any already enqueued and no more active).
      */
     void handlePlayerTimedEffect(PlayerID playerID);
 
