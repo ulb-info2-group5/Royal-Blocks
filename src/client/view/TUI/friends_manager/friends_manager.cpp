@@ -17,8 +17,6 @@
 FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen) : screen_{screen}, state_{FriendsManagerState::NONE} {}
 
 void FriendsManager::render(const std::vector<std::string> &friendsList) {
-    state_ = FriendsManagerState::NONE;
-
     std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);
 
     ftxui::Component friendsContainer = ftxui::Container::Vertical(friendsButton);
@@ -34,6 +32,7 @@ void FriendsManager::render(const std::vector<std::string> &friendsList) {
 
     ftxui::Component buttonBack = ftxui::Button("Back", [&] {
         state_ = FriendsManagerState::NONE;
+        screen_->ExitLoopClosure()();
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
@@ -132,6 +131,7 @@ void FriendsManager::manageFriendlistScreen(const std::string &friendName) {
         screen_->ExitLoopClosure()();        
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)); // TODO: Implement the function to send to server to remove the friend
     ftxui::Component buttonNo = ftxui::Button("No", [&] {
+        state_ = FriendsManagerState::NO;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)); // Like it's a back button
 

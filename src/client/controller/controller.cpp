@@ -7,6 +7,7 @@
  */
 
 #include "controller.hpp"
+#include <string>
 
 // ### Public methods ###
 
@@ -130,34 +131,7 @@ MainMenuState Controller::handleMainMenu() {
             }
                 
             case MainMenuState::MANAGE_FRIENDS_LIST: {
-                // TODO: remove it because it's an example
-                // TODO: communicate with the server to get the friendsList
-                std::vector<std::string> friendsList = {
-                    "Player1",
-                    "Player2",
-                    "ethan",
-                    "readyPlayerOne",
-                    "theBestPlayerOfTheGame"
-                };
-
-                std::string friendName;
-                screenManager_.runFriendsManager(friendsList);
-                FriendsManagerState state = screenManager_.getFriendsManagerState();
-
-                while (state != FriendsManagerState::NONE) {
-                    // TODO: communicate with the server to add or remove a friend
-                    if (state == FriendsManagerState::REMOVE_FRIEND) {
-                        friendName = screenManager_.getFriendName();
-                        std::cout << "Remove friend: " << friendName << std::endl;
-                    }
-                    else if (state == FriendsManagerState::ADD_FRIEND) {
-                        screenManager_.runAddfriendScreen();
-                        friendName = screenManager_.getFriendName();
-                        std::cout << "Add friend: " << friendName << std::endl; // here to check with server
-                    }
-                    screenManager_.runFriendsManager(friendsList);
-                    state = screenManager_.getFriendsManagerState();
-                }
+                handleFriendsMenu();
                 break;
             }
                 
@@ -186,4 +160,35 @@ MainMenuState Controller::handleMainMenu() {
     }
 
     return res;
+}
+
+void Controller::handleFriendsMenu() {
+    // TODO: remove it because it's an example
+    // TODO: communicate with the server to get the friendsList
+    std::vector<std::string> friendsList = {
+        "Player1",
+        "Player2",
+        "ethan",
+        "readyPlayerOne",
+        "theBestPlayerOfTheGame"
+    };
+
+    std::string friendName;
+    screenManager_.runFriendsManager(friendsList);
+    FriendsManagerState state = screenManager_.getFriendsManagerState();
+
+    while (state != FriendsManagerState::NONE) {
+        // TODO: communicate with the server to add or remove a friend
+        if (state == FriendsManagerState::REMOVE_FRIEND) {
+            friendName = screenManager_.getFriendName();
+            std::cout << "Remove friend: " << friendName << std::endl; // here to check with server
+        }
+        else if (state == FriendsManagerState::ADD_FRIEND) {
+            screenManager_.runAddfriendScreen();
+            friendName = screenManager_.getFriendName();
+            std::cout << "Add friend: " << friendName << std::endl; // here to check with server
+        }
+        screenManager_.runFriendsManager(friendsList);
+        state = screenManager_.getFriendsManagerState();
+    }
 }

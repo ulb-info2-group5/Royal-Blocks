@@ -43,6 +43,11 @@ class Controller {
         */
         MainMenuState handleMainMenu();
 
+        /*
+        * @brief Handle the friends menu to show to the user
+        */
+        void handleFriendsMenu();
+
     public:
 
         /*

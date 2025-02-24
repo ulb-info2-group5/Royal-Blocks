@@ -18,6 +18,7 @@ enum class FriendsManagerState
     ADD_FRIEND,
     REMOVE_FRIEND,
     NONE,
+    NO,
 };
 
 class FriendsManager {
