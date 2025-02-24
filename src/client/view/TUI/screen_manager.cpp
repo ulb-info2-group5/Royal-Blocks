@@ -1,6 +1,7 @@
 #include "screen_manager.hpp"
 #include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
+#include "main_menu/main_menu.hpp"
 
 // ### Public methods ###
 ScreenManager::ScreenManager() {
@@ -64,75 +65,12 @@ InputState ScreenManager::runRegisterInput() {
     return registerInput_.render();
 }
 
-void ScreenManager::manageMainMenu() {
-    switch (mainMenu_.render()) {
-        case MainMenuState::PLAY: {
-            GameDisplay game = GameDisplay(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
-                    PlayMode::ROYAL);
-            game.render();
-            break;
-        }
+MainMenuState ScreenManager::runMainMenu() {
+    return mainMenu_.render();
+}
 
-
-        case MainMenuState::EXIT:
-            std::exit(0);
-            break;
-        
-        case MainMenuState::LOOK_RANKING: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the ranking
-            std::vector<std::tuple<int, std::string, int>> ranking = {};
-            ranking.push_back(std::make_tuple(1, "Player1", 100));
-            ranking.push_back(std::make_tuple(2, "Player2", 90));
-            ranking.push_back(std::make_tuple(3, "Player3", 80));
-            ranking.push_back(std::make_tuple(4, "Player4", 70));
-            ranking.push_back(std::make_tuple(5, "Player5", 60));
-
-            mainMenu_.renderRanking(ranking);
-            manageMainMenu();
-            break;
-        }
-            
-        case MainMenuState::MANAGE_FRIENDS_LIST: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the friendsList
-            std::vector<std::string> friendsList = {
-                "Player1",
-                "Player2",
-                "ethan",
-                "readyPlayerOne",
-                "theBestPlayerOfTheGame"
-            };
-
-            mainMenu_.renderFriendsManager(friendsList);
-            manageMainMenu();
-            break;
-        }
-            
-        case MainMenuState::MANAGE_PROFILE:
-            mainMenu_.renderProfileManager();
-            manageMainMenu();
-            break;
-            
-        case MainMenuState::SEND_MESSAGES: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the friends list
-            std::vector<std::string> friendsList = {
-                "Player1",
-                "Player2",
-                "ethan",
-                "readyPlayerOne",
-                "theBestPlayerOfTheGame"
-            };
-    
-            mainMenu_.renderMessagingMenu(friendsList);
-            manageMainMenu();
-            break;
-        }
-
-        default:
-            throw std::runtime_error("Invalid MainMenuState");
-    }
+void ScreenManager::runGame() {
+    game_.render();
 }
 
 void ScreenManager::addMessageToLoginInput(const std::string_view message) {
@@ -141,4 +79,8 @@ void ScreenManager::addMessageToLoginInput(const std::string_view message) {
 
 void ScreenManager::addMessageToRegisterInput(const std::string_view message) {
     registerInput_.addMessage(message);
+}
+
+MainMenu *ScreenManager::getMainMenu(){
+    return &mainMenu_;
 }

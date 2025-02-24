@@ -64,6 +64,12 @@ class ScreenManager {
         */
         MainMenu mainMenu_ = MainMenu(screen_);
 
+        /*
+        * @brief The game to show to the user
+        */
+        GameDisplay game_ = GameDisplay(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
+                    PlayMode::ROYAL);
+
     public:
         /*
         * @brief Construct a new Screen Manager object
@@ -106,9 +112,14 @@ class ScreenManager {
         InputState runRegisterInput();
 
         /*
-        * @brief Manage the main menu to show to the user with the choices to play a game, join a game, send messages to friends, etc
+        * @brief Run the main menu to show to the user
         */
-        void manageMainMenu();
+        MainMenuState runMainMenu();
+
+        /*
+        * @brief Run the game to show to the user
+        */
+        void runGame();
 
         /*
         * @brief Add a message to the login input to show to the user
@@ -123,6 +134,13 @@ class ScreenManager {
         * @param string message The message to show
         */
         void addMessageToRegisterInput(const std::string_view message);
+
+        /*
+        * @brief Get the main menu object
+        *
+        * @return MainMenu* The main menu object (pointer)
+        */
+        MainMenu *getMainMenu();
 };
 
 #endif // SCREEN_MANAGER_HPP

@@ -90,7 +90,7 @@ void LoginInput::displayWindow()
         }
         
         if (!message_.empty()) {
-            elements.push_back(ftxui::text(message_));
+            elements.push_back(ftxui::text(message_) | ftxui::color(ftxui::Color::Red) | ftxui::center);
             elements.push_back(ftxui::separator());
         }
 
