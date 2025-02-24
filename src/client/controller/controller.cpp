@@ -19,7 +19,12 @@ void Controller::run() {
 
     screenManager_.drawStartScreen();
     handleLoginMenu();
-    handleMainMenu();
+    while (true) { // TODO: check the while true
+        if (handleMainMenu() == MainMenuState::EXIT) {
+            break;
+        }
+        screenManager_.runGame();
+    }
 }
 
 // ### Private methods ###
@@ -95,72 +100,69 @@ void Controller::handleInputMenu(const InputType type) {
     }
 }
 
-void Controller::handleMainMenu() {
-    switch (screenManager_.runMainMenu()) {
+MainMenuState Controller::handleMainMenu() {
+    MainMenuState res = MainMenuState::NONE;
+    while (res != MainMenuState::PLAY && res != MainMenuState::EXIT) {
 
-        case MainMenuState::PLAY: {
-            screenManager_.runGame();
-            handleMainMenu();
-            break;
-        }
+        switch (screenManager_.runMainMenu()) {
 
-        case MainMenuState::EXIT:
-            std::exit(0); // TODO: check the exit
-            break;
-        
-        case MainMenuState::LOOK_RANKING: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the ranking
-            std::vector<std::tuple<int, std::string, int>> ranking = {};
-            ranking.push_back(std::make_tuple(1, "Player1", 100));
-            ranking.push_back(std::make_tuple(2, "Player2", 90));
-            ranking.push_back(std::make_tuple(3, "Player3", 80));
-            ranking.push_back(std::make_tuple(4, "Player4", 70));
-            ranking.push_back(std::make_tuple(5, "Player5", 60));
+            case MainMenuState::PLAY: {
+                res = MainMenuState::PLAY;
+                break;
+            }
 
-            screenManager_.getMainMenu()->renderRanking(ranking);
-            handleMainMenu();
-            break;
-        }
+            case MainMenuState::EXIT:
+                res = MainMenuState::EXIT;
+                break;
             
-        case MainMenuState::MANAGE_FRIENDS_LIST: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the friendsList
-            std::vector<std::string> friendsList = {
-                "Player1",
-                "Player2",
-                "ethan",
-                "readyPlayerOne",
-                "theBestPlayerOfTheGame"
-            };
+            case MainMenuState::LOOK_RANKING: {
+                // TODO: remove it because it's an example
+                // TODO: communicate with the server to get the ranking
+                std::vector<std::tuple<int, std::string, int>> ranking = {};
+                ranking.push_back(std::make_tuple(1, "Player1", 100));
+                ranking.push_back(std::make_tuple(2, "Player2", 90));
+                ranking.push_back(std::make_tuple(3, "Player3", 80));
+                ranking.push_back(std::make_tuple(4, "Player4", 70));
+                ranking.push_back(std::make_tuple(5, "Player5", 60));
 
-            screenManager_.getMainMenu()->renderFriendsManager(friendsList);
-            handleMainMenu();
-            break;
-        }
-            
-        case MainMenuState::MANAGE_PROFILE:
-            screenManager_.getMainMenu()->renderProfileManager();
-            handleMainMenu();
-            break;
-            
-        case MainMenuState::SEND_MESSAGES: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the friends list
-            std::vector<std::string> friendsList = {
-                "Player1",
-                "Player2",
-                "ethan",
-                "readyPlayerOne",
-                "theBestPlayerOfTheGame"
-            };
-    
-            screenManager_.getMainMenu()->renderMessagingMenu(friendsList);
-            handleMainMenu();
-            break;
-        }
+                screenManager_.runRankingMenu(ranking);
+                break;
+            }
+                
+            case MainMenuState::MANAGE_FRIENDS_LIST: {
+                // TODO: remove it because it's an example
+                // TODO: communicate with the server to get the friendsList
+                std::vector<std::string> friendsList = {
+                    "Player1",
+                    "Player2",
+                    "ethan",
+                    "readyPlayerOne",
+                    "theBestPlayerOfTheGame"
+                };
+                screenManager_.runFriendsManager(friendsList);
+                break;
+            }
+                
+            case MainMenuState::MANAGE_PROFILE:
+                break;
+                
+            case MainMenuState::SEND_MESSAGES: {
+                // TODO: remove it because it's an example
+                // TODO: communicate with the server to get the friends list
+                std::vector<std::string> friendsList = {
+                    "Player1",
+                    "Player2",
+                    "ethan",
+                    "readyPlayerOne",
+                    "theBestPlayerOfTheGame"
+                };
+                break;
+            }
 
-        default:
-            throw std::runtime_error("Invalid MainMenuState");
+            default:
+                throw std::runtime_error("Invalid MainMenuState");
+        }
     }
+
+    return res;
 }

@@ -81,6 +81,10 @@ void ScreenManager::addMessageToRegisterInput(const std::string_view message) {
     registerInput_.addMessage(message);
 }
 
-MainMenu *ScreenManager::getMainMenu(){
-    return &mainMenu_;
+void ScreenManager::runRankingMenu(std::vector<std::tuple<int, std::string, int>> &ranking) {
+    mainMenu_.renderRanking(ranking);
+}
+
+void ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
+    mainMenu_.renderFriendsManager(friendsList);
 }

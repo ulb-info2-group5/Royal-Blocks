@@ -95,6 +95,9 @@ void MainMenu::displayMainWindow()
 
 void MainMenu::displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking)
 {
+    // Clear the rows of the ranking table to avoid duplicates
+    rowsRanking_.clear(); 
+
     // Width of the columns
     const int widthRanking = 10;
     const int widthUser = 30;
@@ -151,6 +154,9 @@ void MainMenu::displayRankingWindow(const std::vector<std::tuple<int, std::strin
 
 void MainMenu::displayFriendButtons(const std::vector<std:: string> &friendsList)
 {
+    // Clear the friend buttons to avoid duplicates
+    friendButtons_.clear();
+
     for (const std::string& friendName : friendsList) {
         friendButtons_.push_back(ftxui::Button(friendName, [&] {
             manageFriendlistScreen(friendName);
@@ -335,4 +341,3 @@ void MainMenu::addFriendScreen() {
 
     screen_->Loop(component);
 }
-

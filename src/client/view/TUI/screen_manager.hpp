@@ -6,6 +6,7 @@
 #include "game_display/game_display.hpp"
 #include "main_menu/main_menu.hpp"
 
+#include <boost/asio/detail/std_fenced_block.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
@@ -135,11 +136,19 @@ class ScreenManager {
         void addMessageToRegisterInput(const std::string_view message);
 
         /*
-        * @brief Get the main menu object
+        * @brief Run the ranking menu to show to the user
         *
-        * @return MainMenu* The main menu object (pointer)
+        * @param ranking The ranking of the players to display
         */
-        MainMenu *getMainMenu();
+        void runRankingMenu(std::vector<std::tuple<int, std::string, int>> &ranking);
+
+        /*
+        * @brief Run the friends manager to show to the user
+        *
+        * @param friendsList The list of the friends of the user to display
+        */
+        void runFriendsManager(const std::vector<std::string> &friendsList);
+
 };
 
 #endif // SCREEN_MANAGER_HPP

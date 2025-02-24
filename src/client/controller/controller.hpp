@@ -31,13 +31,17 @@ class Controller {
 
         /*
         * @brief Handle the input menu to show to the user
+        *
+        * @param type The type of the input menu
         */
         void handleInputMenu(const InputType type);
 
         /*
         * @brief Handle the main menu to show to the user
+        *
+        * @return MainMenuState The state of the main menu
         */
-        void handleMainMenu();
+        MainMenuState handleMainMenu();
 
     public:
 
