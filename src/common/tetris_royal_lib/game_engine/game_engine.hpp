@@ -116,7 +116,7 @@ class GameEngine {
      * @brief Returns true if the given player currently has the inverted
      * controls penalty.
      */
-    bool shouldReverseControls(const PlayerStatePtr &pPlayerState) const;
+    bool shouldReverseControls(const PlayerState &playerState) const;
 
     /**
      * @brief Returns true if the given player currently has the input lock
@@ -154,12 +154,13 @@ class GameEngine {
     /**
      * @brief Sends the given penalty to the sender's selected target.
      */
-    void sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType);
+    void sendPenaltyEffect(const PlayerState &playerStateSender,
+                           PenaltyType penaltyType);
 
     /**
      * @brief Makes the sender send penalty rows to its chosen target.
      */
-    void sendPenaltyRows(PlayerID senderID, size_t numRows);
+    void sendPenaltyRows(const PlayerState &playerStateSender, size_t numRows);
 
     /**
      * @brief Returns the number of points awarded for clearing
@@ -177,13 +178,13 @@ class GameEngine {
      * @brief Inserts two mini tetrominoes at the front of the given
      * player's tetrominoes queue.
      */
-    void handleMiniTetrominoes(PlayerID playerID);
+    void handleMiniTetrominoes(Tetris &tetris);
 
     /**
      * @brief Destroys a 2x2 block in a random position in the player's grid
      * if there one was found;otherwise, doesn't do anything.
      */
-    void handleLightning(PlayerID playerID);
+    void handleLightning(Tetris &tetris);
 
   public:
     /**
@@ -197,7 +198,8 @@ class GameEngine {
      * @brief Returns true if the given player has enough energy to buy the
      * given effect; false otherwise.
      */
-    bool checkCanBuyEffect(PlayerID buyerID, EffectType effectType);
+    bool checkCanBuyEffect(const PlayerState &playerState,
+                           EffectType effectType);
 
     /**
      * @brief Makes the given player buy the given effect if he has enough
