@@ -106,12 +106,12 @@ void Controller::handleInputMenu(const InputType type) {
 void Controller::handleMainMenu() {
     mainmenuState_ = MainMenuState::NONE;
 
-    while (mainmenuState_ != MainMenuState::PLAY && mainmenuState_ != MainMenuState::EXIT && mainmenuState_ != MainMenuState::JOIN_GAME) {
+    while (mainmenuState_ != MainMenuState::CREATE_GAME && mainmenuState_ != MainMenuState::EXIT && mainmenuState_ != MainMenuState::JOIN_GAME) {
 
         switch (screenManager_.runMainMenu()) {
 
-            case MainMenuState::PLAY: {
-                mainmenuState_ = MainMenuState::PLAY;
+            case MainMenuState::CREATE_GAME: {
+                mainmenuState_ = MainMenuState::CREATE_GAME;
                 break;
             }
 
@@ -209,13 +209,13 @@ void Controller::handleFriendsMenu() {
 void Controller::handleGame() {
     PlayMode mod = PlayMode::NONE;
 
-    if (mainmenuState_ == MainMenuState::PLAY) {
-        mod = screenManager_.runGameMenuAllGames();
+    if (mainmenuState_ == MainMenuState::CREATE_GAME) {
+        mod = screenManager_.runGameMenuOnlineGames(); // can only create a game with online games
 
     }
 
     else if (mainmenuState_ == MainMenuState::JOIN_GAME) {
-        mod = screenManager_.runGameMenuOnlineGames();
+        mod = screenManager_.runGameMenuAllGames(); // can join all games
     }
 
     if (mod != PlayMode::NONE) {

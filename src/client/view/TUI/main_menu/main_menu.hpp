@@ -30,7 +30,7 @@
  */
 enum class MainMenuState 
 {
-    PLAY,
+    CREATE_GAME,
     JOIN_GAME,
     SEND_MESSAGES,
     LOOK_RANKING,

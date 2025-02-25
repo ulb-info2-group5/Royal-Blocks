@@ -27,8 +27,8 @@ screen_(screen)
 
 void MainMenu::displayMainMenuButtons()
 {
-    buttonPlay_ = ftxui::Button("Play a game", [&] {
-        userState_ = MainMenuState::PLAY;
+    buttonPlay_ = ftxui::Button("Create a game", [&] {
+        userState_ = MainMenuState::CREATE_GAME;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
