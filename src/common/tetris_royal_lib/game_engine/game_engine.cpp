@@ -248,13 +248,20 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
         return;
     }
 
-    // Take the player's energy (effect price)
+    // Cannot stash bonuses
+    if (stashForLater && std::holds_alternative<BonusType>(effectType)) {
+        return;
+    }
+
     PlayerStatePtr pPlayerStateBuyer = pGameState_->getPlayerState(buyerID);
     if (pPlayerStateBuyer == nullptr) {
         throw std::runtime_error{"tryBuyEffect: Buyer could not be found."};
     }
 
-    pPlayerStateBuyer->decreaseEnergy(getEffectPrice(effectType));
+    // The player must have either have a target defined or stash.
+    if (!(pPlayerStateBuyer->getPenaltyTarget().has_value() || stashForLater)) {
+        return;
+    }
 
     std::visit(
         [&](auto &&effectType) {
@@ -272,6 +279,8 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
             }
         },
         effectType);
+
+    pPlayerStateBuyer->decreaseEnergy(getEffectPrice(effectType));
 }
 
 void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
