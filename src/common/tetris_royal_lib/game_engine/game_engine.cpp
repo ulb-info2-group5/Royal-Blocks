@@ -33,9 +33,8 @@ void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
     }
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-
     if (pPlayerState == nullptr) {
-        return;
+        throw std::runtime_error{"handlePlayerTimedEffect: player not found"};
     }
 
     if (pPlayerState->getActiveBonus() != nullptr) {
@@ -69,13 +68,15 @@ void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
 }
 
 void GameEngine::handleAllTimedEffects() {
-    GameState::CircularIt it = pGameState_->getCircularItAt(0);
-    GameState::CircularIt endIt = it;
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return;
+    }
 
-    do {
-        handlePlayerTimedEffect((*it).pPlayerState_->getPlayerID());
-        ++it;
-    } while (it != endIt);
+    for (PlayerTetris &playerTetris : pGameState_->getPlayerToTetris()) {
+        if (playerTetris.pPlayerState_->isAlive()) {
+            handlePlayerTimedEffect(playerTetris.pPlayerState_->getPlayerID());
+        }
+    }
 }
 
 bool GameEngine::shouldReverseControls(PlayerID playerID) const {
@@ -83,8 +84,12 @@ bool GameEngine::shouldReverseControls(PlayerID playerID) const {
         return false;
     }
 
-    TimedPenaltyPtr pPenalty =
-        pGameState_->getPlayerState(playerID)->getActivePenalty();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{"shouldReverseControls: player not found"};
+    }
+
+    TimedPenaltyPtr pPenalty = pPlayerState->getActivePenalty();
 
     if (pPenalty == nullptr) {
         return false;
@@ -98,8 +103,12 @@ bool GameEngine::shouldLockInput(PlayerID playerID) const {
         return false;
     }
 
-    TimedPenaltyPtr pPenalty =
-        pGameState_->getPlayerState(playerID)->getActivePenalty();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{"shouldLockInput: player not found"};
+    }
+
+    TimedPenaltyPtr pPenalty = pPlayerState->getActivePenalty();
 
     if (pPenalty == nullptr) {
         return false;
@@ -118,7 +127,7 @@ GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) const {
         return TetrominoMove::Left;
         break;
     default:
-        throw std::runtime_error{"TetrominoMove::Down cannot be inverted"};
+        return tetrominoMove;
     }
 }
 
@@ -127,8 +136,12 @@ bool GameEngine::shouldIgnoreTick(PlayerID playerID) const {
         return false;
     }
 
-    TimedBonusPtr pActiveBonus =
-        pGameState_->getPlayerState(playerID)->getActiveBonus();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{"shouldIgnoreTick: player not found"};
+    }
+
+    TimedBonusPtr pActiveBonus = pPlayerState->getActiveBonus();
 
     if (pActiveBonus == nullptr) {
         return false;
@@ -152,8 +165,7 @@ GameEngine::GameEngine(const GameStatePtr &pGameState)
     : pGameState_(pGameState) {}
 
 void GameEngine::sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType) {
-    if (!checkFeatureEnabled(GameModeFeature::Effects)
-        || !checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
@@ -161,26 +173,52 @@ void GameEngine::sendPenaltyEffect(PlayerID senderID, PenaltyType penaltyType) {
     // beginning of the game. If so, one more case to handle with the
     // optional (nullopt)
 
-    std::optional<PlayerID> target =
-        pGameState_->getPlayerState(senderID)->getPenaltyTarget();
+    PlayerStatePtr pPlayerStateSender = pGameState_->getPlayerState(senderID);
+    if (pPlayerStateSender == nullptr) {
+        throw std::runtime_error{"sendPenaltyEffect: penalty sender not found"};
+    }
 
-    pGameState_->getPlayerState(target.value())->receivePenalty(penaltyType);
+    std::optional<PlayerID> target = pPlayerStateSender->getPenaltyTarget();
+
+    if (!target.has_value()) {
+        throw std::runtime_error{"player attempted to send penalty effect but "
+                                 "has no target selected"};
+    }
+
+    PlayerStatePtr pPlayerStateTarget =
+        pGameState_->getPlayerState(target.value());
+    if (pPlayerStateTarget == nullptr) {
+        throw std::runtime_error{"sendPenaltyEffect: penalty target not found"};
+    }
+
+    pPlayerStateTarget->receivePenalty(penaltyType);
 }
 
 void GameEngine::sendPenaltyRows(PlayerID senderID, size_t numRows) {
-    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        std::optional<PlayerID> targetID =
-            pGameState_->getPlayerState(senderID)->getPenaltyTarget();
-
-        if (!targetID.has_value()) {
-            throw std::runtime_error{
-                "A player attempted to send penalty rows but "
-                "has no target selected."};
-        } else {
-            pGameState_->getTetris(targetID.value())
-                ->eventReceivePenaltyLines(numRows);
-        }
+    if (!checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
+        return;
     }
+
+    PlayerStatePtr pPlayerStateSender = pGameState_->getPlayerState(senderID);
+    if (pPlayerStateSender == nullptr) {
+        throw std::runtime_error{"sendPenaltyRows: penalty sender not found"};
+    }
+
+    std::optional<PlayerID> targetID =
+        pGameState_->getPlayerState(senderID)->getPenaltyTarget();
+
+    if (!targetID.has_value()) {
+        throw std::runtime_error{"A player attempted to send penalty rows but "
+                                 "has no target selected."};
+    }
+
+    TetrisPtr pTetrisTarget = pGameState_->getTetris(targetID.value());
+    if (pTetrisTarget == nullptr) {
+        throw std::runtime_error{
+            "sendPenaltyRows: penalty target's tetris not found"};
+    }
+
+    pTetrisTarget->eventReceivePenaltyLines(numRows);
 }
 
 bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
@@ -188,8 +226,13 @@ bool GameEngine::checkCanBuyEffect(PlayerID buyerID, EffectType effectType) {
         return false;
     }
 
-    return pGameState_->getPlayerState(buyerID)->getEnergy()
-           >= getEffectPrice(effectType);
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(buyerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{"checkCanBuyEffect: Player attempted to buy "
+                                 "an effect but could not be found."};
+    }
+
+    return pPlayerState->getEnergy() >= getEffectPrice(effectType);
 }
 
 void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
@@ -197,15 +240,29 @@ void GameEngine::handleMiniTetrominoes(PlayerID playerID) {
         return;
     }
 
+    constexpr int NUM_MINI_TETROMINOS = 2;
+
     // Push 2 MiniTetrominoes at the front of the player's queue.
-    for (int i = 0; i < 2; i++) {
-        pGameState_->getTetris(playerID)->insertNextTetromino(
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{
+            "handleMiniTetrominoes: Player's Tetris could not be found."};
+    };
+
+    for (int i = 0; i < NUM_MINI_TETROMINOS; i++) {
+        pTetris->insertNextTetromino(
             Tetris::createTetromino(TetrominoShape::MiniTetromino));
     }
 }
 
 void GameEngine::handleLightning(PlayerID playerID) {
-    pGameState_->getTetris(playerID)->destroy2By2Occupied();
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{
+            "handleLightning: Player's Tetris could not be found."};
+    }
+
+    pTetris->destroy2By2Occupied();
 }
 
 void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
@@ -220,20 +277,23 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
     }
 
     // Take the player's energy (effect price)
-    pGameState_->getPlayerState(buyerID)->decreaseEnergy(
-        getEffectPrice(effectType));
+    PlayerStatePtr pPlayerStateBuyer = pGameState_->getPlayerState(buyerID);
+    if (pPlayerStateBuyer == nullptr) {
+        throw std::runtime_error{"tryBuyEffect: Buyer could not be found."};
+    }
+
+    pPlayerStateBuyer->decreaseEnergy(getEffectPrice(effectType));
 
     std::visit(
         [&](auto &&effectType) {
             using T = std::decay_t<decltype(effectType)>;
             if constexpr (std::is_same_v<T, BonusType>) {
                 // Bonus case
-                pGameState_->getPlayerState(buyerID)->grantBonus(effectType);
+                pPlayerStateBuyer->grantBonus(effectType);
             } else if constexpr (std::is_same_v<T, PenaltyType>) {
                 // Penalty case
                 if (stashForLater) {
-                    pGameState_->getPlayerState(buyerID)->stashPenalty(
-                        effectType);
+                    pPlayerStateBuyer->stashPenalty(effectType);
                 } else {
                     sendPenaltyEffect(buyerID, effectType);
                 }
@@ -252,13 +312,21 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
         return;
     }
 
+    PlayerStatePtr pPlayerStatePlayer = pGameState_->getPlayerState(playerID);
+    if (pPlayerStatePlayer == nullptr) {
+        throw std::runtime_error{"selectTarget: sender could not be found."};
+    }
+    PlayerStatePtr pPlayerStateTarget = pGameState_->getPlayerState(target);
+    if (pPlayerStateTarget == nullptr) {
+        throw std::runtime_error{"selectTarget: target could not be found."};
+    }
+
     // ensure that both players are alive
-    if (!(pGameState_->getPlayerState(playerID)->isAlive()
-          && pGameState_->getPlayerState(target)->isAlive())) {
+    if (!(pPlayerStatePlayer->isAlive() && pPlayerStateTarget->isAlive())) {
         return;
     }
 
-    pGameState_->getPlayerState(playerID)->setPenaltyTarget(target);
+    pPlayerStatePlayer->setPenaltyTarget(target);
 }
 
 void GameEngine::selectNextAliveTarget(PlayerID playerID) {
@@ -266,17 +334,27 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
         return;
     }
 
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{
+            "selectNextAliveTarget: target's PlayerState could not be found."};
+    }
+
     // Assume that if no target had been chosen by this player previously,
     // the target was the player himslef so that it chooses the player after
     // himself (in the getPlayerToTetris() vector) as next target.
-    PlayerID prevTargetID =
-        pGameState_->getPlayerState(playerID)->getPenaltyTarget().value_or(
-            playerID);
+    PlayerID prevTargetID = pPlayerState->getPenaltyTarget().value_or(playerID);
 
     GameState::CircularIt playerSelfIt = pGameState_->getCircularIt(playerID);
 
     GameState::CircularIt prevTargetIt =
         pGameState_->getCircularIt(prevTargetID);
+
+    // Check for invalid iterator
+    if (playerSelfIt == pGameState_->getCircularItEnd()
+        || prevTargetIt == pGameState_->getCircularItEnd()) {
+        return;
+    }
 
     GameState::CircularIt newTargetIt = prevTargetIt;
 
@@ -294,9 +372,14 @@ void GameEngine::selectNextAliveTarget(PlayerID playerID) {
     // ended earlier because there is only one player left.
     assert(newTargetIt != playerSelfIt);
 
+    // Check for invalid iterator
+    if (newTargetIt == pGameState_->getCircularItEnd()) {
+        return;
+    }
+
     PlayerID newTargetID = (*newTargetIt).pPlayerState_->getPlayerID();
 
-    pGameState_->getPlayerState(playerID)->setPenaltyTarget(newTargetID);
+    pPlayerState->setPenaltyTarget(newTargetID);
 }
 
 void GameEngine::selectNextEffect(PlayerID playerID) {
@@ -304,7 +387,13 @@ void GameEngine::selectNextEffect(PlayerID playerID) {
         return;
     }
 
-    pGameState_->getPlayerState(playerID)->selectNextEffect();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{
+            "selectNextEffect: Player could not be found."};
+    }
+
+    pPlayerState->selectNextEffect();
 }
 
 void GameEngine::selectPrevEffect(PlayerID playerID) {
@@ -312,7 +401,13 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
         return;
     }
 
-    pGameState_->getPlayerState(playerID)->selectPrevEffect();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{
+            "selectPrevEffect: Player could not be found."};
+    }
+
+    pPlayerState->selectPrevEffect();
 }
 
 void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
@@ -320,19 +415,37 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
         return;
     }
 
-    pGameState_->getTetris(playerID)->eventTryMoveActive(
-        shouldReverseControls(playerID) ? invertTetrominoMove(tetrominoMove)
-                                        : tetrominoMove);
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{
+            "selectPrevEffect: Player could not be found."};
+    }
+
+    pTetris->eventTryMoveActive(shouldReverseControls(playerID)
+                                    ? invertTetrominoMove(tetrominoMove)
+                                    : tetrominoMove);
 }
 
 void GameEngine::bigDrop(PlayerID playerID) {
     size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-    pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
+
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{"bigDrop: Player could not be found."};
+    }
+
+    pPlayerState->increaseScore(earnedPoints);
 }
 
 void GameEngine::holdNextTetromino(PlayerID playerID) {
-    pGameState_->getTetris(playerID)->eventHoldNextTetromino();
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{
+            "holdNextTetromino: Player could not be found."};
+    }
+
+    pTetris->eventHoldNextTetromino();
 }
 
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
@@ -340,7 +453,12 @@ void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
         return;
     }
 
-    pGameState_->getTetris(playerID)->eventTryRotateActive(
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{"tryRotateActive: Player could not be found."};
+    }
+
+    pTetris->eventTryRotateActive(
         shouldReverseControls(playerID) ? !rotateClockwise : rotateClockwise);
 }
 
@@ -350,8 +468,18 @@ Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) {
 }
 
 void GameEngine::clockTick(PlayerID playerID) {
-    TimedBonusPtr pActiveBonus =
-        pGameState_->getPlayerState(playerID)->getActiveBonus();
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        return;
+    }
+
+    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    if (pTetris == nullptr) {
+        throw std::runtime_error{
+            "calculateEnergyClearedRows: Player's tetris could not be found."};
+    }
+
+    TimedBonusPtr pActiveBonus = pPlayerState->getActiveBonus();
 
     handleAllTimedEffects();
 
@@ -366,14 +494,14 @@ void GameEngine::clockTick(PlayerID playerID) {
         }
     }
 
-    size_t numClearedRows = pGameState_->getTetris(playerID)->eventClockTick();
+    size_t numClearedRows = pTetris->eventClockTick();
 
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
 
-    pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
+    pPlayerState->increaseScore(earnedPoints);
 
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pGameState_->getPlayerState(playerID)->getPenaltyTarget().and_then(
+        pPlayerState->getPenaltyTarget().and_then(
             [this, numClearedRows](PlayerID playerID) {
                 // For n rows cleared by the player, his target receives n-1
                 // penalty rows.
@@ -384,7 +512,7 @@ void GameEngine::clockTick(PlayerID playerID) {
 
     if (checkFeatureEnabled(GameModeFeature::Effects)) {
         Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
-        pGameState_->getPlayerState(playerID)->increaseEnergy(earnedEnergy);
+        pPlayerState->increaseEnergy(earnedEnergy);
     }
 }
 
@@ -393,8 +521,14 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
         return;
     }
 
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        throw std::runtime_error{
+            "emptyPenaltyStash: Player could not be found."};
+    }
+
     std::deque<PenaltyType> penaltiesQueue =
-        pGameState_->getPlayerState(playerID)->getStashedPenalties();
+        pPlayerState->getStashedPenalties();
 
     while (!penaltiesQueue.empty()) {
         PenaltyType penaltyType = penaltiesQueue.front();

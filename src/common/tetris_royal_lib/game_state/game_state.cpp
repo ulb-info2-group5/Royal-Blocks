@@ -60,6 +60,10 @@ TetrisPtr GameState::getTetris(PlayerID playerID) {
     return nullptr;
 }
 
+std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
+    return playerToTetris_;
+}
+
 GameState::CircularIt GameState::getCircularItAt(size_t idx) {
     return CircularIt{playerToTetris_, idx};
 }

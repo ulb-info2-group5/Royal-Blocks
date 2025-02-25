@@ -56,6 +56,9 @@ class GameState {
      */
     TetrisPtr getTetris(PlayerID playerID);
 
+    // TODO:
+    std::vector<PlayerTetris> &getPlayerToTetris();
+
     class CircularIt {
       private:
         size_t currentIdx_;
@@ -92,8 +95,10 @@ class GameState {
         }
     };
 
+    // TODO:
     CircularIt getCircularItAt(size_t idx);
 
+    // TODO:
     CircularIt getCircularItEnd();
 
     /**
