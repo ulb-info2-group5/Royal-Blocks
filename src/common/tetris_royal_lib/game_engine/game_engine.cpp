@@ -371,9 +371,13 @@ void GameEngine::clockTick(PlayerID playerID) {
     pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
 
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        // For n rows cleared by the player, his target receives n-1 penalty
-        // rows.
-        sendPenaltyRows(playerID, numClearedRows - 1);
+        pGameState_->getPlayerState(playerID)->getPenaltyTarget().and_then(
+            [this, numClearedRows](PlayerID playerID) {
+                // For n rows cleared by the player, his target receives n-1
+                // penalty rows.
+                sendPenaltyRows(playerID, numClearedRows - 1);
+                return std::optional<PlayerID>{};
+            });
     }
 
     if (checkFeatureEnabled(GameModeFeature::Effects)) {
