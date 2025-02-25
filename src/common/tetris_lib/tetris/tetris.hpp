@@ -80,9 +80,6 @@ class Tetris {
     /**
      * @brief Fetches the next tetromino from the queue and sets it as the
      * active tetromino.
-     *
-     * If there are no tetrominoes left in the queue, the queue is re-filled
-     * with 7 new tetrominoes.
      */
     void fetchNewTetromino();
 
