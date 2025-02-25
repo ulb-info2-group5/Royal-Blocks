@@ -24,11 +24,28 @@ void ClientLink::read(){
 }
 
 
+
 // --- public ---
 ClientLink::ClientLink(tcp::socket socket, std::function<void (const std::string& )> packetHandler) 
 : socket_(std::move(socket)), packetHandler_(packetHandler) {
 
 }
+
+void ClientLink::waitForAuthentication(){
+    boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n',[self = shared_from_this()](boost::system::error_code ec, std::size_t length) {
+        if (!ec) {
+            std::cout << "packet recieve :  " << self->buffer_ << std::endl;
+            
+        }
+    });
+}
+
+
+void ClientLink::start(){
+    std::cout << "start client link" << std::endl;
+    this->waitForAuthentication();
+}
+
 
 
 // ====== Client manager class ======

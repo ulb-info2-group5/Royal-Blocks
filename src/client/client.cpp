@@ -29,7 +29,7 @@ void TcpClient::sendAuthentication(const Authentication &authentication){
     boost::asio::async_write(socket_, boost::asio::buffer(authen) , [this](boost::system::error_code ec, std::size_t /*length*/){
         if (!ec){
             std::cout << "--- *** authentifcation send *** ---" << std::endl; 
-            this->readSocket();
+            //this->readSocket();
         }
     });
 }

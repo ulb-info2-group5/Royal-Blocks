@@ -2,10 +2,10 @@
 
 int main()
 {
-    std::shared_ptr<ClientManager> clientManager;
+    ClientManager clientManager;
     try{
         boost::asio::io_context io_context;
-        Network network(io_context, *clientManager);
+        Network network(io_context, clientManager);
         io_context.run();
     }
     catch (std::exception& e){

@@ -18,8 +18,11 @@ void Network::accept(){
     if (!ec ){
         // pls just use auto  
         std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
+        newLink->start();
     }
+    accept();
    });
+   
 }
 
 

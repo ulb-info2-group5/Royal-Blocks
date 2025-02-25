@@ -28,10 +28,17 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         std::string buffer_;
         std::function<void (const std::string& )> packetHandler_;
         void read();
+
+        
+
     public :
         explicit ClientLink(tcp::socket socket, std::function<void (const std::string& )> packetHandler);
         ClientLink(ClientLink && other) = default;
         ClientLink& operator=(ClientLink&& other) =  default;
+        void waitForAuthentication();
+        void start();
+
+
    
 };
 
