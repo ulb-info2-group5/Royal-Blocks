@@ -20,8 +20,11 @@ class Network{
         boost::asio::io_context& io_;
         tcp::acceptor acceptor_;
         ClientManager &clientManager_; 
-
+        
+        void waitForAuthentication(std::shared_ptr<tcp::socket> socket);
+        bool checkCredentials(std::shared_ptr<std::string> credentials);
         void accept();
+        void createNewConnection(std::shared_ptr<tcp::socket> socket);
     public: 
         Network(boost::asio::io_context& io,ClientManager &clientManager );
 
