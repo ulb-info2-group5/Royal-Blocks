@@ -105,7 +105,7 @@ class GameEngine {
      * (Deleting effects once they are expired & setting the new active effects
      * if any already enqueued and no more active).
      */
-    void handlePlayerTimedEffect(PlayerID playerID);
+    void handlePlayerTimedEffect(PlayerState &playerState);
 
     /**
      * @brief Handles all the active timed effects in the game.
@@ -116,13 +116,13 @@ class GameEngine {
      * @brief Returns true if the given player currently has the inverted
      * controls penalty.
      */
-    bool shouldReverseControls(PlayerID playerID) const;
+    bool shouldReverseControls(const PlayerStatePtr &pPlayerState) const;
 
     /**
      * @brief Returns true if the given player currently has the input lock
      * penalty.
      */
-    bool shouldLockInput(PlayerID playerID) const;
+    bool shouldLockInput(const PlayerState &playerState) const;
 
     /**
      * @brief Returns the opposite move of the given TetrominioMove
@@ -133,7 +133,7 @@ class GameEngine {
      * @brief Returns true if the tick should be ignored for the given
      * player. (Due to slowdown bonus).
      */
-    bool shouldIgnoreTick(PlayerID playerID) const;
+    bool shouldIgnoreTick(const PlayerState &playerState) const;
 
   public:
     /**

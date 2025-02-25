@@ -26,40 +26,35 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
                                            gameModeFeature);
 }
 
-void GameEngine::handlePlayerTimedEffect(PlayerID playerID) {
+void GameEngine::handlePlayerTimedEffect(PlayerState &playerState) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (pPlayerState == nullptr) {
-        throw std::runtime_error{"handlePlayerTimedEffect: player not found"};
-    }
-
-    if (pPlayerState->getActiveBonus() != nullptr) {
+    if (playerState.getActiveBonus() != nullptr) {
         // currently has an active bonus
-        if (pPlayerState->getActiveBonus()->isFinished()) {
-            pPlayerState->getActiveBonus().reset();
+        if (playerState.getActiveBonus()->isFinished()) {
+            playerState.getActiveBonus().reset();
         }
     } else {
         // currently has no active bonus
-        pPlayerState->fetchGrantedBonus().and_then(
-            [&pPlayerState](BonusType bonusType) {
-                pPlayerState->setActiveBonus(TimedBonus::makeBonus(bonusType));
+        playerState.fetchGrantedBonus().and_then(
+            [&playerState](BonusType bonusType) {
+                playerState.setActiveBonus(TimedBonus::makeBonus(bonusType));
                 return std::optional<BonusType>{};
             });
     }
 
-    if (pPlayerState->getActivePenalty() != nullptr) {
+    if (playerState.getActivePenalty() != nullptr) {
         // currently has an active penalty
-        if (pPlayerState->getActivePenalty()->isFinished()) {
-            pPlayerState->getActivePenalty().reset();
+        if (playerState.getActivePenalty()->isFinished()) {
+            playerState.getActivePenalty().reset();
         }
     } else {
         // currently has no active penalty
-        pPlayerState->fetchReceivedPenalty().and_then(
-            [&pPlayerState](PenaltyType penaltyType) {
-                pPlayerState->setActivePenalty(
+        playerState.fetchReceivedPenalty().and_then(
+            [&playerState](PenaltyType penaltyType) {
+                playerState.setActivePenalty(
                     TimedPenalty::makePenalty(penaltyType));
                 return std::optional<PenaltyType>{};
             });
@@ -73,19 +68,15 @@ void GameEngine::handleAllTimedEffects() {
 
     for (PlayerTetris &playerTetris : pGameState_->getPlayerToTetris()) {
         if (playerTetris.pPlayerState_->isAlive()) {
-            handlePlayerTimedEffect(playerTetris.pPlayerState_->getPlayerID());
+            handlePlayerTimedEffect(*playerTetris.pPlayerState_);
         }
     }
 }
 
-bool GameEngine::shouldReverseControls(PlayerID playerID) const {
+bool GameEngine::shouldReverseControls(
+    const PlayerStatePtr &pPlayerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
-    }
-
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (pPlayerState == nullptr) {
-        throw std::runtime_error{"shouldReverseControls: player not found"};
     }
 
     TimedPenaltyPtr pPenalty = pPlayerState->getActivePenalty();
@@ -97,17 +88,12 @@ bool GameEngine::shouldReverseControls(PlayerID playerID) const {
     return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
 }
 
-bool GameEngine::shouldLockInput(PlayerID playerID) const {
+bool GameEngine::shouldLockInput(const PlayerState &playerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
 
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (pPlayerState == nullptr) {
-        throw std::runtime_error{"shouldLockInput: player not found"};
-    }
-
-    TimedPenaltyPtr pPenalty = pPlayerState->getActivePenalty();
+    TimedPenaltyPtr pPenalty = playerState.getActivePenalty();
 
     if (pPenalty == nullptr) {
         return false;
@@ -130,17 +116,12 @@ GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) const {
     }
 }
 
-bool GameEngine::shouldIgnoreTick(PlayerID playerID) const {
+bool GameEngine::shouldIgnoreTick(const PlayerState &playerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
 
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (pPlayerState == nullptr) {
-        throw std::runtime_error{"shouldIgnoreTick: player not found"};
-    }
-
-    TimedBonusPtr pActiveBonus = pPlayerState->getActiveBonus();
+    TimedBonusPtr pActiveBonus = playerState.getActiveBonus();
 
     if (pActiveBonus == nullptr) {
         return false;
