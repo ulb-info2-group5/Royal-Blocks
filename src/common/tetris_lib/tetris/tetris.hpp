@@ -78,11 +78,6 @@ class Tetris {
     // #### Tetrominoes Queue ####
 
     /**
-     * @brief Enqueues 7 new randomly shuffled Tetrominoes.
-     */
-    void fillTetrominoesQueue();
-
-    /**
      * @brief Fetches the next tetromino from the queue and sets it as the
      * active tetromino.
      *
