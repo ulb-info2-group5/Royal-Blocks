@@ -211,14 +211,16 @@ void Controller::handleGame() {
 
     if (mainmenuState_ == MainMenuState::CREATE_GAME) {
         mod = screenManager_.runGameMenuOnlineGames(); // can only create a game with online games
-
+        // TODO: launch the game parameters menu for the good mod
     }
 
     else if (mainmenuState_ == MainMenuState::JOIN_GAME) {
         mod = screenManager_.runGameMenuAllGames(); // can join all games
-    }
-
-    if (mod != PlayMode::NONE) {
-        screenManager_.runGame(mod);
+        // TODO: launch the menu to choice betwenn join a friend or join a random game
+        // TODO: if join a friend, launch the menu to choice the friend
+        // TODO: if join a random game, launch matchmaking
+        if (mod != PlayMode::NONE) {
+            screenManager_.runGame(mod);
+        }
     }
 }
