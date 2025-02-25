@@ -158,14 +158,16 @@ void GameEngine::sendPenaltyEffect(const PlayerState &playerStateSender,
     std::optional<PlayerID> target = playerStateSender.getPenaltyTarget();
 
     if (!target.has_value()) {
-        throw std::runtime_error{"Player attempted to send penalty effect but "
-                                 "has no target selected."};
+        throw std::runtime_error{
+            "sendPenaltyEffect: Player attempted to send penalty effect but "
+            "has no target selected."};
     }
 
     PlayerStatePtr pPlayerStateTarget =
         pGameState_->getPlayerState(target.value());
     if (pPlayerStateTarget == nullptr) {
-        throw std::runtime_error{"sendPenaltyEffect: penalty target not found"};
+        throw std::runtime_error{
+            "sendPenaltyEffect: Penalty target not found."};
     }
 
     pPlayerStateTarget->receivePenalty(penaltyType);
@@ -180,14 +182,15 @@ void GameEngine::sendPenaltyRows(const PlayerState &playerStateSender,
     std::optional<PlayerID> targetID = playerStateSender.getPenaltyTarget();
 
     if (!targetID.has_value()) {
-        throw std::runtime_error{"A player attempted to send penalty rows but "
-                                 "has no target selected."};
+        throw std::runtime_error{
+            "sendPenaltyRows: A player attempted to send penalty rows but "
+            "has no target selected."};
     }
 
     TetrisPtr pTetrisTarget = pGameState_->getTetris(targetID.value());
     if (pTetrisTarget == nullptr) {
         throw std::runtime_error{
-            "sendPenaltyRows: penalty target's tetris not found"};
+            "sendPenaltyRows: Penalty target's tetris not found."};
     }
 
     pTetrisTarget->eventReceivePenaltyLines(numRows);
@@ -255,7 +258,7 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
 
     PlayerStatePtr pPlayerStateBuyer = pGameState_->getPlayerState(buyerID);
     if (pPlayerStateBuyer == nullptr) {
-        throw std::runtime_error{"tryBuyEffect: Buyer could not be found."};
+        return;
     }
 
     // The player must have either have a target defined or stash.
@@ -289,12 +292,9 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     }
 
     PlayerStatePtr pPlayerStatePlayer = pGameState_->getPlayerState(playerID);
-    if (pPlayerStatePlayer == nullptr) {
-        throw std::runtime_error{"selectTarget: sender could not be found."};
-    }
     PlayerStatePtr pPlayerStateTarget = pGameState_->getPlayerState(target);
-    if (pPlayerStateTarget == nullptr) {
-        throw std::runtime_error{"selectTarget: target could not be found."};
+    if (pPlayerStatePlayer == nullptr || pPlayerStateTarget == nullptr) {
+        return;
     }
 
     // ensure that both players are alive
@@ -312,8 +312,7 @@ void GameEngine::selectNextEffect(PlayerID playerID) {
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (pPlayerState == nullptr) {
-        throw std::runtime_error{
-            "selectNextEffect: Player could not be found."};
+        return;
     }
 
     pPlayerState->selectNextEffect();
@@ -326,8 +325,7 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (pPlayerState == nullptr) {
-        throw std::runtime_error{
-            "selectPrevEffect: Player could not be found."};
+        return;
     }
 
     pPlayerState->selectPrevEffect();
@@ -340,14 +338,12 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
 
     TetrisPtr pTetris = pGameState_->getTetris(playerID);
     if (pTetris == nullptr) {
-        throw std::runtime_error{
-            "selectPrevEffect: Player could not be found."};
+        return;
     }
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (pPlayerState == nullptr) {
-        throw std::runtime_error{
-            "selectPrevEffect: Player could not be found."};
+        return;
     }
 
     pTetris->eventTryMoveActive(shouldReverseControls(*pPlayerState)
@@ -361,7 +357,7 @@ void GameEngine::bigDrop(PlayerID playerID) {
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (pPlayerState == nullptr) {
-        throw std::runtime_error{"bigDrop: Player could not be found."};
+        return;
     }
 
     pPlayerState->increaseScore(earnedPoints);
@@ -370,8 +366,7 @@ void GameEngine::bigDrop(PlayerID playerID) {
 void GameEngine::holdNextTetromino(PlayerID playerID) {
     TetrisPtr pTetris = pGameState_->getTetris(playerID);
     if (pTetris == nullptr) {
-        throw std::runtime_error{
-            "holdNextTetromino: Player could not be found."};
+        return;
     }
 
     pTetris->eventHoldNextTetromino();
@@ -384,7 +379,7 @@ void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
 
     TetrisPtr pTetris = pGameState_->getTetris(playerID);
     if (pTetris == nullptr) {
-        throw std::runtime_error{"tryRotateActive: Player could not be found."};
+        return;
     }
 
     pTetris->eventTryRotateActive(
@@ -400,7 +395,7 @@ void GameEngine::clockTick(PlayerID playerID) {
     TetrisPtr pTetris = pGameState_->getTetris(playerID);
     if (pTetris == nullptr) {
         throw std::runtime_error{
-            "calculateEnergyClearedRows: Player's tetris could not be found."};
+            "clockTick: player's tetris could not be found"};
     }
 
     TimedBonusPtr pActiveBonus = pPlayerState->getActiveBonus();
@@ -447,8 +442,7 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (pPlayerState == nullptr) {
-        throw std::runtime_error{
-            "emptyPenaltyStash: Player could not be found."};
+        return;
     }
 
     // Cannot empty the stash if the player has not target defined
