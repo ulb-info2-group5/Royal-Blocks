@@ -7,6 +7,7 @@
  */
 
 #include "controller.hpp"
+#include <iostream>
 #include <string>
 
 // ### Public methods ###
@@ -138,6 +139,13 @@ MainMenuState Controller::handleMainMenu() {
             case MainMenuState::MANAGE_PROFILE: {
                 std::vector<std::string> info = screenManager_.runProfileManager();
                 // TODO: communicate with the server to update the profile
+                if (info.at(0) == "" && info.at(1) == "") {
+                    std::cout << "It's back button" << std::endl;
+                }
+                else {
+                    std::cout << "New username: " << info.at(0) << std::endl;
+                    std::cout << "New password: " << info.at(1) << std::endl;
+                }
                 break;
             }
                 

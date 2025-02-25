@@ -8,6 +8,7 @@
 
 #include "main_menu.hpp"
 #include "../messaging/messaging.hpp"
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
 
 
@@ -170,12 +171,17 @@ void MainMenu::displayProfileManagerButton()
 
 void MainMenu::displayProfileManagerWindow()
 {
+    userInput_.at(0) = ""; // Clear the user input to take new ones
+    userInput_.at(1) = "";
+    userInput_.at(2) = "";
+
     displayProfileManagerButton();
 
     ftxui::Component container = ftxui::Container::Vertical({
         inputChangeUsername_,
         inputChangePassword_,
         submitButton_,
+        buttonBack_
     });
 
     profileManagerWindow_ = ftxui::Renderer(container, [&] {
@@ -190,6 +196,8 @@ void MainMenu::displayProfileManagerWindow()
             ftxui::text(userInput_.at(2)),
             ftxui::separator(),
             submitButton_->Render(),
+            ftxui::separator(),
+            buttonBack_->Render(),
         }) | ftxui::border | ftxui::center;
     });
 }
