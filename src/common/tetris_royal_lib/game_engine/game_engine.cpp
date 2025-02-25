@@ -158,8 +158,8 @@ void GameEngine::sendPenaltyEffect(const PlayerState &playerStateSender,
     std::optional<PlayerID> target = playerStateSender.getPenaltyTarget();
 
     if (!target.has_value()) {
-        throw std::runtime_error{"player attempted to send penalty effect but "
-                                 "has no target selected"};
+        throw std::runtime_error{"Player attempted to send penalty effect but "
+                                 "has no target selected."};
     }
 
     PlayerStatePtr pPlayerStateTarget =
@@ -449,6 +449,11 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
     if (pPlayerState == nullptr) {
         throw std::runtime_error{
             "emptyPenaltyStash: Player could not be found."};
+    }
+
+    // Cannot empty the stash if the player has not target defined
+    if (!pPlayerState->getPenaltyTarget().has_value()) {
+        return;
     }
 
     std::deque<PenaltyType> penaltiesQueue =
