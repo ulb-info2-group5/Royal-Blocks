@@ -35,7 +35,6 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         explicit ClientLink(tcp::socket socket, std::function<void (const std::string& )> packetHandler);
         ClientLink(ClientLink && other) = default;
         ClientLink& operator=(ClientLink&& other) =  default;
-        void waitForAuthentication();
         void start();
 
 
