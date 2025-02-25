@@ -326,7 +326,9 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
 }
 
 void GameEngine::bigDrop(PlayerID playerID) {
-    pGameState_->getTetris(playerID)->eventBigDrop();
+    size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
+    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
+    pGameState_->getPlayerState(playerID)->increaseScore(earnedPoints);
 }
 
 void GameEngine::holdNextTetromino(PlayerID playerID) {

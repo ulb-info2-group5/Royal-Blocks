@@ -36,8 +36,8 @@ class Tetris {
     TetrominoQueue tetrominoQueue_;
 
     // TODO: move this to constructor ?
-    uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
-    uint32_t ticks_since_lock_start_ = 0;
+    uint32_t lockDelayTicksNum_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
+    uint32_t ticksSinceLockStart_ = 0;
 
     // #### Preview Tetromino ####
 
@@ -49,9 +49,9 @@ class Tetris {
     // #### helpers ####
 
     /**
-     * @brief Expires the lock delay.
+     * @brief Resets the lock delay.
      */
-    void expireLockDelay();
+    void resetLockDelay();
 
     /**
      * @brief Checks whether the given tetromino can be droppped.
@@ -131,8 +131,11 @@ class Tetris {
     /**
      * @brief Drops the active Tetromino until it hits the bottom or an occupied
      * cell.
+     *
+     * Also updates the board to clear the fullRows and returns how many rows
+     * were cleared.
      */
-    void eventBigDrop();
+    size_t eventBigDrop();
 
     /**
      * @brief Moves the active Tetromino in the given direction if possible.
@@ -175,9 +178,7 @@ class Tetris {
     /**
      * @brief Inserts the given tetromino at the front of the tetrominoes queue.
      */
-    void insertNextTetromino(TetrominoPtr pTetromino) {
-        tetrominoQueue_.insertNextTetromino(std::move(pTetromino));
-    }
+    void insertNextTetromino(TetrominoPtr &&pTetromino);
 
     /**
      * @brief Creates an return a new Tetromino located at the top of the board.

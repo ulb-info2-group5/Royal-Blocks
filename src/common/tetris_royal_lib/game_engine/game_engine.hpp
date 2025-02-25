@@ -150,7 +150,7 @@ class GameEngine {
 
     ~GameEngine() = default;
 
-  private:
+  public:
     /**
      * @brief Sends the given penalty to the sender's selected target.
      */

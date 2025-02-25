@@ -14,9 +14,7 @@
 
 // #### Lock delay ####
 
-void Tetris::expireLockDelay() {
-    ticks_since_lock_start_ = lock_delay_ticks_num_;
-}
+void Tetris::resetLockDelay() { ticksSinceLockStart_ = 0; }
 
 // #### Preview Tetromino ####
 
@@ -50,6 +48,8 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
 }
 
 void Tetris::placeActive() {
+    resetLockDelay();
+
     if (!board_.checkInGrid(*activeTetromino_)) {
         for (auto &tetrisObserver : tetrisObservers_) {
             tetrisObserver->notifyLost();
@@ -98,18 +98,15 @@ size_t Tetris::eventClockTick() {
     size_t numClearedRows = 0;
 
     if (!checkCanDrop(*activeTetromino_)) {
-        if (ticks_since_lock_start_ >= lock_delay_ticks_num_) {
+        if (ticksSinceLockStart_ >= lockDelayTicksNum_) {
             // lock-delay has expired -> must place active now
             placeActive();
             numClearedRows = board_.update().getNumClearedRows();
             fetchNewTetromino();
-
-            // reset lock delay for next time
-            ticks_since_lock_start_ = 0;
         } else {
             // lock-delay hasn't expired but a tick occured (don't place
             // active yet)
-            ticks_since_lock_start_++;
+            ticksSinceLockStart_++;
         }
     } else {
         eventTryMoveActive(TetrominoMove::Down);
@@ -120,15 +117,18 @@ size_t Tetris::eventClockTick() {
     return numClearedRows;
 }
 
-void Tetris::eventBigDrop() {
-    // Disable lock delay when BigDrop.
-    expireLockDelay();
-
+size_t Tetris::eventBigDrop() {
     while (checkCanDrop(*activeTetromino_)) {
         activeTetromino_->move(TetrominoMove::Down);
     }
 
+    placeActive();
+    size_t numClearedRows = board_.update().getNumClearedRows();
+    fetchNewTetromino();
+
     updatePreviewTetromino();
+
+    return numClearedRows;
 }
 
 void Tetris::eventTryMoveActive(TetrominoMove tetrominoMove) {
@@ -187,6 +187,10 @@ void Tetris::eventReceivePenaltyLines(int numPenalties) {
 
 size_t Tetris::getTetrominoesQueueSize() const {
     return tetrominoQueue_.size();
+}
+
+void Tetris::insertNextTetromino(TetrominoPtr &&pTetromino) {
+    tetrominoQueue_.insertNextTetromino(std::move(pTetromino));
 }
 
 TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
