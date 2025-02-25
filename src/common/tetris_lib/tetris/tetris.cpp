@@ -12,12 +12,6 @@
                      PRIVATE
 --------------------------------------------------*/
 
-// #### Lock delay ####
-
-void Tetris::resetLockDelay() { ticksSinceLockStart_ = 0; }
-
-// #### Preview Tetromino ####
-
 void Tetris::updatePreviewTetromino() {
     previewTetromino_ = activeTetromino_->clone();
     while (checkCanDrop(*previewTetromino_)) {
@@ -25,7 +19,7 @@ void Tetris::updatePreviewTetromino() {
     }
 }
 
-// #### Checks helper ####
+void Tetris::resetLockDelay() { ticksSinceLockStart_ = 0; }
 
 bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
     Vec2 anchorPoint = tetromino.getAnchorPoint();
@@ -65,8 +59,6 @@ void Tetris::placeActive() {
 bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
     return board_.get(xCol, yRow).isEmpty();
 }
-
-// #### Tetrominoes Queue ####
 
 void Tetris::fetchNewTetromino() {
     // The queue will refill itself if there are too few Tetrominos

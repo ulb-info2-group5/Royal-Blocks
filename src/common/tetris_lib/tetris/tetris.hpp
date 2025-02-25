@@ -39,14 +39,10 @@ class Tetris {
     uint32_t lockDelayTicksNum_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
     uint32_t ticksSinceLockStart_ = 0;
 
-    // #### Preview Tetromino ####
-
     /**
      * @brief Updates the preview tetromino.
      */
     void updatePreviewTetromino();
-
-    // #### helpers ####
 
     /**
      * @brief Resets the lock delay.
@@ -74,8 +70,6 @@ class Tetris {
      * @param yRow The y-coordinate.
      */
     bool checkEmptyCell(size_t xCol, size_t yRow) const;
-
-    // #### Tetrominoes Queue ####
 
     /**
      * @brief Fetches the next tetromino from the queue and sets it as the
