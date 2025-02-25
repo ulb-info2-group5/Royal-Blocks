@@ -16,38 +16,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(tetris_royal)
 
-# Find FTXUI package needed for the project
-find_package(ftxui REQUIRED)
-include(cmake/ftxui.cmake)
-
-add_library(ftxui-grid-container STATIC
-    include/ftxui-grid-container/grid-container.hpp
-    src/ftxui-grid-container/grid-container.cpp
-    )
-target_link_libraries(ftxui-grid-container PUBLIC ftxui::component)
-
-target_include_directories(ftxui-grid-container PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    )
-add_subdirectory(example)
-
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     enable_testing()
     add_subdirectory(test)
 endif()
 
+# client_lib
+add_subdirectory(src/client)
 
-file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
-    # WARN: do not include the main's here
-    src/*.cpp
-)
-
-
-# Create a library with the project's sources
-add_library(${PROJECT_NAME}_lib ${SOURCES_TETRIS_ROYAL_LIB})
-
-
-# Link SQLite3 and FTXUI to the project
-target_link_libraries(${PROJECT_NAME}_lib PRIVATE ftxui::screen ftxui::dom ftxui::component)
+# Make lsp's aware of libraries
+set(CMAKE_EXPORT_COMPILE_COMMANDS True)
