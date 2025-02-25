@@ -22,7 +22,8 @@ void Controller::run() {
     screenManager_.drawStartScreen();
     handleLoginMenu();
     while (true) { // TODO: check the while true
-        if (handleMainMenu() == MainMenuState::EXIT) {
+        handleMainMenu();
+        if (mainmenuState_ == MainMenuState::EXIT) {
             break;
         }
         handleGame();
@@ -102,19 +103,25 @@ void Controller::handleInputMenu(const InputType type) {
     }
 }
 
-MainMenuState Controller::handleMainMenu() {
-    MainMenuState res = MainMenuState::NONE;
-    while (res != MainMenuState::PLAY && res != MainMenuState::EXIT) {
+void Controller::handleMainMenu() {
+    mainmenuState_ = MainMenuState::NONE;
+
+    while (mainmenuState_ != MainMenuState::PLAY && mainmenuState_ != MainMenuState::EXIT && mainmenuState_ != MainMenuState::JOIN_GAME) {
 
         switch (screenManager_.runMainMenu()) {
 
             case MainMenuState::PLAY: {
-                res = MainMenuState::PLAY;
+                mainmenuState_ = MainMenuState::PLAY;
+                break;
+            }
+
+            case MainMenuState::JOIN_GAME: {
+                mainmenuState_ = MainMenuState::JOIN_GAME;
                 break;
             }
 
             case MainMenuState::EXIT:
-                res = MainMenuState::EXIT;
+                mainmenuState_ = MainMenuState::EXIT;
                 break;
             
             case MainMenuState::LOOK_RANKING: {
@@ -166,8 +173,6 @@ MainMenuState Controller::handleMainMenu() {
                 throw std::runtime_error("Invalid MainMenuState");
         }
     }
-
-    return res;
 }
 
 void Controller::handleFriendsMenu() {
@@ -202,9 +207,18 @@ void Controller::handleFriendsMenu() {
 }
 
 void Controller::handleGame() {
-    PlayMode mod = screenManager_.runGameMenu();
-    if (mod == PlayMode::NONE) {
-        return;
+    PlayMode mod = PlayMode::NONE;
+
+    if (mainmenuState_ == MainMenuState::PLAY) {
+        mod = screenManager_.runGameMenuAllGames();
+
     }
-    screenManager_.runGame(mod);
+
+    else if (mainmenuState_ == MainMenuState::JOIN_GAME) {
+        mod = screenManager_.runGameMenuOnlineGames();
+    }
+
+    if (mod != PlayMode::NONE) {
+        screenManager_.runGame(mod);
+    }
 }

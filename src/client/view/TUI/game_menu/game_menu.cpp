@@ -7,61 +7,85 @@
  */
 
 #include "game_menu.hpp"
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 
 // ### Public methods ###
 
-GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen) {}
-
-PlayMode GameMenu::render() {
-    PlayMode gameChoice = PlayMode::NONE;
-
-    ftxui::Component endlessButon = ftxui::Button("Endless", [&] { 
-        gameChoice = PlayMode::ENDLESS;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component duelButon = ftxui::Button("Duel", [&] { 
-        gameChoice = PlayMode::DUEL; 
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component classicButon = ftxui::Button("Classic", [&] { 
-        gameChoice = PlayMode::CLASSIC; 
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-    ftxui::Component royalButon = ftxui::Button("Royal", [&] { 
-        gameChoice = PlayMode::ROYAL; 
+GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen), gameChoice_(PlayMode::NONE) {
+    endlessButon_ = ftxui::Button("Endless", [&] { 
+        gameChoice_ = PlayMode::ENDLESS;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
-    ftxui::Component backButton = ftxui::Button("Back", [&] {
-        gameChoice = PlayMode::NONE;
+    duelButon_ = ftxui::Button("Duel", [&] { 
+        gameChoice_ = PlayMode::DUEL; 
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
+    classicButon_ = ftxui::Button("Classic", [&] { 
+        gameChoice_ = PlayMode::CLASSIC; 
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+    
+    royalButon_ = ftxui::Button("Royal", [&] { 
+        gameChoice_ = PlayMode::ROYAL; 
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    backButton_ = ftxui::Button("Back", [&] {
+        gameChoice_ = PlayMode::NONE;
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
+
+PlayMode GameMenu::renderAllGames() {
     ftxui::Component container = ftxui::Container::Vertical({
-        endlessButon,
-        duelButon,
-        classicButon,
-        royalButon,
-        backButton
+        endlessButon_,
+        duelButon_,
+        classicButon_,
+        royalButon_,
+        backButton_,
     });
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
             ftxui::text("Select a game mode") | ftxui::center | ftxui::bold,
             ftxui::separator(),
-            endlessButon->Render(),
-            duelButon->Render(),
-            classicButon->Render(),
-            royalButon->Render(),
+            endlessButon_->Render(),
+            duelButon_->Render(),
+            classicButon_->Render(),
+            royalButon_->Render(),
             ftxui::separator(),
-            backButton->Render(),
+            backButton_->Render(),
         }) | ftxui::border | ftxui::center | ftxui::bgcolor(ftxui::Color::Black);
     });
 
     screen_->Loop(renderer);
 
-    return gameChoice;
+    return gameChoice_;
+}
+
+PlayMode GameMenu::renderOnlineGames() {
+    ftxui::Component container = ftxui::Container::Vertical({
+        duelButon_,
+        classicButon_,
+        royalButon_,
+        backButton_,
+    });
+
+    ftxui::Component renderer = ftxui::Renderer(container, [&] {
+        return ftxui::vbox({
+            ftxui::text("Select a game mode") | ftxui::center | ftxui::bold,
+            ftxui::separator(),
+            duelButon_->Render(),
+            classicButon_->Render(),
+            royalButon_->Render(),
+            ftxui::separator(),
+            backButton_->Render(),
+        }) | ftxui::border | ftxui::center | ftxui::bgcolor(ftxui::Color::Black);
+    });
+
+    screen_->Loop(renderer);
+
+    return gameChoice_;
 }

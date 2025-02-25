@@ -10,6 +10,7 @@
 #define GAME_MENU_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
 #include <memory>
 #include <cstdint>
 
@@ -30,6 +31,18 @@ class GameMenu {
     private:
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
+        PlayMode gameChoice_;
+
+        /**
+         * @brief The button components that can be in the game menu    
+         * 
+         */
+        ftxui::Component endlessButon_;
+        ftxui::Component duelButon_;
+        ftxui::Component classicButon_;
+        ftxui::Component royalButon_;
+        ftxui::Component backButton_;
+
     public:
         /*
          * @brief Construct a new Game Menu object
@@ -44,9 +57,17 @@ class GameMenu {
         ~GameMenu() = default;
 
         /*
-         * @brief Rend the game menu
+         * @brief Rend the all the game present in the game menu
+         *
+         * @return PlayMode the game mode selected
          */
-         PlayMode render();
+         PlayMode renderAllGames();
+
+         /*
+         * @brief Rend the game menu with just the online games mods
+         * @return PlayMode the game mode selected
+         */
+         PlayMode renderOnlineGames();
 };
 
 #endif // GAME_MENU_HPP

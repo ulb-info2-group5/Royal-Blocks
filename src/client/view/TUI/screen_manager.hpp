@@ -176,11 +176,18 @@ class ScreenManager {
         bool runAddfriendScreen();
 
         /*
-        * @brief Run the game menu to show to the user
+        * @brief Run the game menu to show to the user with all the games mods
         *
         * @return PlayMode The game mode selected by the user
         */
-        PlayMode runGameMenu();
+        PlayMode runGameMenuAllGames();
+
+        /*
+        * @brief Run the game menu to show to the user with just the online games mods
+        * 
+        * @return PlayMode The game mode selected by the user
+        */
+        PlayMode runGameMenuOnlineGames();
 };
 
 #endif // SCREEN_MANAGER_HPP

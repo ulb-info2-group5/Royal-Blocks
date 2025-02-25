@@ -106,6 +106,10 @@ bool ScreenManager::runAddfriendScreen() {
     return friendsManager_.addFriendScreen();
 }
 
-PlayMode ScreenManager::runGameMenu() {
-    return gameMenu_.render();
+PlayMode ScreenManager::runGameMenuAllGames() {
+    return gameMenu_.renderAllGames();
+}
+
+PlayMode ScreenManager::runGameMenuOnlineGames() {
+    return gameMenu_.renderOnlineGames();
 }

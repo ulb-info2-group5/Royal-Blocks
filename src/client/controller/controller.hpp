@@ -25,6 +25,11 @@ class Controller {
         ScreenManager screenManager_;
 
         /*
+        * @brief The state of the main menu
+        */
+        MainMenuState mainmenuState_;
+
+        /*
         * @brief Handle the login menu to show to the user
         */
         void handleLoginMenu();
@@ -38,10 +43,8 @@ class Controller {
 
         /*
         * @brief Handle the main menu to show to the user
-        *
-        * @return MainMenuState The state of the main menu
         */
-        MainMenuState handleMainMenu();
+        void handleMainMenu();
 
         /*
         * @brief Handle the friends menu to show to the user
