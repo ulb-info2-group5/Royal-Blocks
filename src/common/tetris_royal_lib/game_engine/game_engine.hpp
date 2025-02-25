@@ -194,13 +194,6 @@ class GameEngine {
     void selectTarget(PlayerID playerID, PlayerID target);
 
     /**
-     * @brief Changes the given player's target to the new target.
-     * @param playerID The player whose target will be changed.
-     * @param target The new target.
-     */
-    void selectNextAliveTarget(PlayerID playerID);
-
-    /**
      * @brief Returns true if the given player has enough energy to buy the
      * given effect; false otherwise.
      */

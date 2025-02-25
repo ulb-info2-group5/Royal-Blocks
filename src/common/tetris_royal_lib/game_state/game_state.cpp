@@ -3,7 +3,6 @@
 #include "nlohmann/json_fwd.hpp"
 #include "player_tetris/player_tetris.hpp"
 
-#include <algorithm>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -62,30 +61,6 @@ TetrisPtr GameState::getTetris(PlayerID playerID) {
 
 std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
     return playerToTetris_;
-}
-
-GameState::CircularIt GameState::getCircularItAt(size_t idx) {
-    return CircularIt{playerToTetris_, idx};
-}
-
-GameState::CircularIt GameState::getCircularItEnd() {
-    return getCircularItAt(playerToTetris_.size());
-}
-
-GameState::CircularIt GameState::getCircularIt(PlayerID playerID) {
-    auto it = std::find_if(playerToTetris_.begin(), playerToTetris_.end(),
-                           [playerID](const auto &element) {
-                               return element.pPlayerState_->getPlayerID()
-                                      == playerID;
-                           });
-
-    if (it != playerToTetris_.end()) {
-        size_t playerIndex = std::distance(playerToTetris_.begin(), it);
-        return getCircularItAt(playerIndex);
-    }
-
-    // Case no matching player is found -> expired iterator.
-    return getCircularItEnd();
 }
 
 /* ------------------------------------------------

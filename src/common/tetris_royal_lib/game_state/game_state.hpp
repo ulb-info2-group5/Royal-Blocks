@@ -59,54 +59,6 @@ class GameState {
     // TODO:
     std::vector<PlayerTetris> &getPlayerToTetris();
 
-    class CircularIt {
-      private:
-        size_t currentIdx_;
-        std::vector<PlayerTetris> &playerToTetris_;
-
-      public:
-        CircularIt(std::vector<PlayerTetris> &playerToTetris, size_t startIdx)
-            : currentIdx_{startIdx}, playerToTetris_(playerToTetris) {}
-
-        PlayerTetris &operator*() const {
-            return playerToTetris_.at(currentIdx_);
-        }
-
-        CircularIt &operator++() {
-            currentIdx_ = (currentIdx_ + 1) % playerToTetris_.size();
-            return *this;
-        }
-
-        CircularIt &operator--() {
-            currentIdx_ = (currentIdx_ + playerToTetris_.size() - 1)
-                          % playerToTetris_.size();
-            return *this;
-        }
-
-        bool operator==(const CircularIt &other) const {
-            // TODO: Add this check to the operator must define operator==
-            // for PlayerState first for this: playerToTetris_ ==
-            // other.playerToTetris_
-            return currentIdx_ == other.currentIdx_;
-        }
-
-        bool operator!=(const CircularIt &other) const {
-            return !operator==(other);
-        }
-    };
-
-    // TODO:
-    CircularIt getCircularItAt(size_t idx);
-
-    // TODO:
-    CircularIt getCircularItEnd();
-
-    /**
-     * @brief Returns an iterator on the PlayerStateTetris that matches
-     * the given PlayerID.
-     */
-    CircularIt getCircularIt(PlayerID playerID);
-
     /* ------------------------------------------------
      *          Serialization
      * ------------------------------------------------*/
