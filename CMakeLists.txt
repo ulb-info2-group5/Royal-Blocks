@@ -20,7 +20,7 @@ project(tetris_royal)
 
 
 
-add_executable(server src/server/network/main.cpp src/server/network/network.cpp src/server/network/network.hpp)
+add_executable(server src/server/network/main.cpp src/server/network/network.cpp src/server/network/network.hpp src/server/network/client_manager/client_manager.cpp src/server/network/client_manager/client_manager.hpp )
 
 add_executable(client src/client/main.cpp src/client/client.cpp src/client/client.hpp)
 

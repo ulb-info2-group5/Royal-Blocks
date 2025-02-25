@@ -2,16 +2,14 @@
 
 int main()
 {
-    try
-    {
+    std::shared_ptr<ClientManager> clientManager;
+    try{
         boost::asio::io_context io_context;
-        Network network(io_context);
+        Network network(io_context, *clientManager);
         io_context.run();
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e){
         std::cerr << "Exception : " << e.what() << std::endl;
     }
-
     return 0;
 }
