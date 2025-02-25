@@ -64,7 +64,7 @@ void Controller::handleInputMenu(const InputType type) {
                 // TODO : It's for the test, must be removed and add logic with server
                 const std::string username = "ethan";
                 const std::string password = "ethan";
-                if (info.username != username && info.password != password) {
+                if (info.username != username || info.password != password) {
                     screenManager_.addMessageToLoginInput("Invalid username or password");
                     handleInputMenu(InputType::LOGIN);
                 }
@@ -86,7 +86,7 @@ void Controller::handleInputMenu(const InputType type) {
                 // TODO : It's for the test, must be removed and add logic with server
                 const std::string username = "ethan";
                 const std::string password = "ethan";
-                if (info.username != username && info.password != password) {
+                if (info.username != username || info.password != password) {
                     screenManager_.addMessageToRegisterInput("Invalid username or password");
                     handleInputMenu(InputType::REGISTER);
                 } else {
