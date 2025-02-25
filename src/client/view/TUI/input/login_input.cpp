@@ -40,10 +40,7 @@ void LoginInput::displayButtonSubmit()
 {
     buttonSubmit_ = ftxui::Button("Submit", [&] {
         if (!username_.empty() && !password_.empty()) {
-            // TODO: add logic with controller and server to check with the database for the register
-            // TODO: add logic with controller and server to check with the database for the logic
             userState_ = InputState::SUBMIT;
-            printf("userState change to Done \n");
             screen_->ExitLoopClosure()();
         } else {
             username_.clear();

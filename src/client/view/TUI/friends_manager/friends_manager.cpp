@@ -66,7 +66,6 @@ std::string FriendsManager::getName() const {
 bool FriendsManager::addFriendScreen() {
     bool res;
 
-    // TODO: communicate with the server to add the friend to the list
     friendName_.clear(); // Reset the name of the friend
     std::string msg;
 
@@ -133,7 +132,7 @@ void FriendsManager::manageFriendlistScreen(const std::string &friendName) {
         state_ = FriendsManagerState::REMOVE_FRIEND;
         friendName_ = friendName;
         screen_->ExitLoopClosure()();        
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)); // TODO: Implement the function to send to server to remove the friend
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
     ftxui::Component buttonNo = ftxui::Button("No", [&] {
         state_ = FriendsManagerState::NO;
         screen_->ExitLoopClosure()();
