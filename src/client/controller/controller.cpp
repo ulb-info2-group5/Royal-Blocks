@@ -179,10 +179,9 @@ void Controller::handleFriendsMenu() {
     while (state != FriendsManagerState::NONE) {
         // TODO: communicate with the server to add or remove a friend
         if (state == FriendsManagerState::REMOVE_FRIEND) {
-            if (screenManager_.runAddfriendScreen()) {
-                friendName = screenManager_.getFriendName();
-                std::cout << "Remove friend: " << friendName << std::endl; // here to check with server
-            }
+            friendName = screenManager_.getFriendName();
+            std::cout << "Remove friend: " << friendName << std::endl; // here to check with server
+        
         }
         else if (state == FriendsManagerState::ADD_FRIEND) {
             if (screenManager_.runAddfriendScreen()) {
