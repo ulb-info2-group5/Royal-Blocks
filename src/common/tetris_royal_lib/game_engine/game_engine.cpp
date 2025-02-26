@@ -384,12 +384,12 @@ void GameEngine::selectPrevEffect(PlayerID playerID) {
 }
 
 void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
-    if (shouldLockInput(playerID)) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (!checkAlive(pPlayerState)) {
         return;
     }
 
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (!checkAlive(pPlayerState)) {
+    if (shouldLockInput(*pPlayerState)) {
         return;
     }
 
@@ -404,19 +404,28 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
 }
 
 void GameEngine::bigDrop(PlayerID playerID) {
-    size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
-    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
 
+    if (shouldLockInput(*pPlayerState)) {
+        return;
+    }
+
+    size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
+    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
+
     pPlayerState->increaseScore(earnedPoints);
 }
 
 void GameEngine::holdNextTetromino(PlayerID playerID) {
-    if (!checkAlive(playerID)) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (!checkAlive(pPlayerState)) {
+        return;
+    }
+
+    if (shouldLockInput(*pPlayerState)) {
         return;
     }
 
@@ -429,11 +438,12 @@ void GameEngine::holdNextTetromino(PlayerID playerID) {
 }
 
 void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
-    if (!checkAlive(playerID)) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (!checkAlive(pPlayerState)) {
         return;
     }
 
-    if (shouldLockInput(playerID)) {
+    if (shouldLockInput(*pPlayerState)) {
         return;
     }
 
@@ -452,12 +462,14 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
     }
 
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (pPlayerState == nullptr) {
+    if (!checkAlive(pPlayerState)) {
         return;
     }
 
     // Cannot empty the stash if the player has not target defined
-    if (!pPlayerState->getPenaltyTarget().has_value()) {
+    // or the target is dead.
+    if (!(pPlayerState->getPenaltyTarget().has_value()
+          && checkAlive(*pPlayerState->getPenaltyTarget()))) {
         return;
     }
 
