@@ -93,9 +93,7 @@ class GameEngine {
     // #### Effects Helpers ####
 
     /**
-     * @brief Handles the timed effects for the given player.
-     * (Deleting effects once they are expired & setting the new active effects
-     * if any already enqueued and no more active).
+     * @brief Handles the timed effects for the given player (one tick).
      */
     void handlePlayerTimedEffect(PlayerState &playerState);
 
@@ -172,7 +170,17 @@ class GameEngine {
     /**
      * @brief Checks that the given player is alive.
      */
+    bool checkAlive(const PlayerStatePtr &pPlayerState) const;
+
+    /**
+     * @brief Checks that the given player is alive.
+     */
     bool checkAlive(PlayerID playerID) const;
+
+    /**
+     * @brief Makes a clock tick happen for the given player.
+     */
+    void clockTick(PlayerTetris &playerTetris);
 
   public:
     /**
@@ -243,11 +251,6 @@ class GameEngine {
      * if possible.
      */
     void tryRotateActive(PlayerID playerID, bool rotateClockwise);
-
-    /**
-     * @brief Makes a clock tick happen for the given player.
-     */
-    void clockTick(PlayerID playerID);
 
     /**
      * @brief Sends all the penalties that were stashed.
