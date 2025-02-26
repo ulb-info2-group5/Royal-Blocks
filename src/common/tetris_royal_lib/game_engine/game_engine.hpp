@@ -169,6 +169,11 @@ class GameEngine {
      */
     Energy calculateEnergyClearedRows(size_t numClearedRows) const;
 
+    /**
+     * @brief Checks that the given player is alive.
+     */
+    bool checkAlive(PlayerID playerID) const;
+
   public:
     /**
      * @brief Constructor

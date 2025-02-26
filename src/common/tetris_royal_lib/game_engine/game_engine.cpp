@@ -228,6 +228,15 @@ Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) const {
     return numClearedRows;
 }
 
+bool GameEngine::checkAlive(PlayerID playerID) const {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        return false;
+    }
+
+    return pPlayerState->isAlive();
+}
+
 /* ------------------------------------------------
  *          Public Methods
  * ------------------------------------------------*/
