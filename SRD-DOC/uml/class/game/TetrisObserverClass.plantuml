@@ -1,0 +1,13 @@
+@startuml (id = TetrisObserver)
+interface TetrisObserver {
+    + TetrisObserver() = default
+    + TetrisObserver(const TetrisObserver &) = default
+    + TetrisObserver(TetrisObserver &&) = default
+    + operator=(const TetrisObserver &) : TetrisObserver& = default
+    + operator=(TetrisObserver &&) : TetrisObserver& = default
+    + ~TetrisObserver() = default
+    
+    + notifyLost() = 0
+    + notifyActiveTetrominoPlaced() = 0
+}
+@enduml
