@@ -146,10 +146,6 @@ void GameEngine::sendPenaltyEffect(const PlayerState &playerStateSender,
         return;
     }
 
-    // TODO: Decide whether a player can have no selected target at the
-    // beginning of the game. If so, one more case to handle with the
-    // optional (nullopt)
-
     std::optional<PlayerID> target = playerStateSender.getPenaltyTarget();
 
     if (!target.has_value()) {
@@ -261,11 +257,11 @@ void GameEngine::clockTick(PlayerTetris &playerTetris) {
     pPlayerState->increaseScore(earnedPoints);
 
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().and_then([&](PlayerID playerID) {
-            if (checkAlive(playerID)) {
-                // For n rows cleared by the player, his target receives n-1
-                // penalty rows.
-                sendPenaltyRows(playerID, numClearedRows - 1);
+        pPlayerState->getPenaltyTarget().and_then([&](PlayerID targetID) {
+            if (checkAlive(targetID) && numClearedRows >= 2) {
+                // For n (>= 2) rows cleared by the player, his target receives
+                // n-1 penalty rows.
+                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
             }
 
             return std::optional<PlayerID>{};
