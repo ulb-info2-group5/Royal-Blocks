@@ -20,12 +20,6 @@
  *          Private Methods
  * ------------------------------------------------*/
 
-bool GameEngine::checkFeatureEnabled(GameMode gameMode,
-                                     GameModeFeature gameModeFeature) {
-    return featuresBitsets.at(static_cast<size_t>(gameMode))
-        .test(static_cast<size_t>(gameModeFeature));
-}
-
 bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
     return GameEngine::checkFeatureEnabled(pGameState_->getGameMode(),
                                            gameModeFeature);
@@ -458,4 +452,10 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
         sendPenaltyEffect(playerID, penaltyType);
         penaltiesQueue.pop_front();
     }
+}
+
+bool GameEngine::checkFeatureEnabled(GameMode gameMode,
+                                     GameModeFeature gameModeFeature) {
+    return featuresBitsets.at(static_cast<size_t>(gameMode))
+        .test(static_cast<size_t>(gameModeFeature));
 }

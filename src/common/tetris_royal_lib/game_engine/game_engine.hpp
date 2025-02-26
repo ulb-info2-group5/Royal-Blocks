@@ -33,6 +33,10 @@ class GameEngine {
     using FeaturesMap = std::array<FeaturesBitset, numGameMode>;
 
   private:
+    // #### GameState ####
+
+    GameStatePtr pGameState_;
+
     // #### Features-related ####
 
     static constexpr auto genFeaturesBitset =
@@ -79,24 +83,11 @@ class GameEngine {
         return featuresPerGameMode;
     }();
 
-  public:
-    /**
-     * @brief Checks whether the given feature is enabled for the given
-     * GameMode.
-     */
-    static bool checkFeatureEnabled(GameMode gameMode,
-                                    GameModeFeature gameModeFeature);
-
-  private:
     /**
      * @brief Checks whether the given feature is enabled for the current
      * GameMode.
      */
     bool checkFeatureEnabled(GameModeFeature gameModeFeature) const;
-
-    // #### GameState ####
-
-    GameStatePtr pGameState_;
 
     // #### Effects Helpers ####
 
@@ -135,6 +126,48 @@ class GameEngine {
      */
     bool shouldIgnoreTick(const PlayerState &playerState) const;
 
+    /**
+     * @brief Sends the given penalty to the sender's selected target.
+     */
+    void sendPenaltyEffect(const PlayerState &playerStateSender,
+                           PenaltyType penaltyType);
+
+    /**
+     * @brief Makes the sender send penalty rows to its chosen target.
+     */
+    void sendPenaltyRows(const PlayerState &playerStateSender, size_t numRows);
+
+    /**
+     * @brief Returns true if the given player has enough energy to buy the
+     * given effect; false otherwise.
+     */
+    bool checkCanBuyEffect(const PlayerState &playerState,
+                           EffectType effectType);
+
+    /**
+     * @brief Inserts two mini tetrominoes at the front of the given
+     * player's tetrominoes queue.
+     */
+    void handleMiniTetrominoes(Tetris &tetris);
+
+    /**
+     * @brief Destroys a 2x2 block in a random position in the player's grid
+     * if there one was found;otherwise, doesn't do anything.
+     */
+    void handleLightning(Tetris &tetris);
+
+    /**
+     * @brief Returns the number of points awarded for clearing
+     * the given number of rows.
+     */
+    Score calculatePointsClearedRows(size_t numClearedRows);
+
+    /**
+     * @brief Returns the amount of Energy awarded to the player for
+     * clearing the given number of rows.
+     */
+    Energy calculateEnergyClearedRows(size_t numClearedRows);
+
   public:
     /**
      * @brief Constructor
@@ -150,57 +183,6 @@ class GameEngine {
 
     ~GameEngine() = default;
 
-  public:
-    /**
-     * @brief Sends the given penalty to the sender's selected target.
-     */
-    void sendPenaltyEffect(const PlayerState &playerStateSender,
-                           PenaltyType penaltyType);
-
-    /**
-     * @brief Makes the sender send penalty rows to its chosen target.
-     */
-    void sendPenaltyRows(const PlayerState &playerStateSender, size_t numRows);
-
-    /**
-     * @brief Returns the number of points awarded for clearing
-     * the given number of rows.
-     */
-    Score calculatePointsClearedRows(size_t numClearedRows);
-
-    /**
-     * @brief Returns the amount of Energy awarded to the player for
-     * clearing the given number of rows.
-     */
-    Energy calculateEnergyClearedRows(size_t numClearedRows);
-
-    /**
-     * @brief Inserts two mini tetrominoes at the front of the given
-     * player's tetrominoes queue.
-     */
-    void handleMiniTetrominoes(Tetris &tetris);
-
-    /**
-     * @brief Destroys a 2x2 block in a random position in the player's grid
-     * if there one was found;otherwise, doesn't do anything.
-     */
-    void handleLightning(Tetris &tetris);
-
-  public:
-    /**
-     * @brief Changes the given player's target to the new target.
-     * @param playerID The player whose target will be changed.
-     * @param target The new target.
-     */
-    void selectTarget(PlayerID playerID, PlayerID target);
-
-    /**
-     * @brief Returns true if the given player has enough energy to buy the
-     * given effect; false otherwise.
-     */
-    bool checkCanBuyEffect(const PlayerState &playerState,
-                           EffectType effectType);
-
     /**
      * @brief Makes the given player buy the given effect if he has enough
      * energy for it, stashes the effect for later or activates it
@@ -208,6 +190,13 @@ class GameEngine {
      */
     void tryBuyEffect(PlayerID playerID, EffectType effectType,
                       bool stashForLater = false);
+
+    /**
+     * @brief Changes the given player's target to the new target.
+     * @param playerID The player whose target will be changed.
+     * @param target The new target.
+     */
+    void selectTarget(PlayerID playerID, PlayerID target);
 
     /**
      * @brief Makes the given player select the next item in the effect
@@ -253,6 +242,13 @@ class GameEngine {
      * @brief Sends all the penalties that were stashed.
      */
     void emptyPenaltyStash(PlayerID playerID);
+
+    /**
+     * @brief Checks whether the given feature is enabled for the given
+     * GameMode.
+     */
+    static bool checkFeatureEnabled(GameMode gameMode,
+                                    GameModeFeature gameModeFeature);
 };
 
 #endif // GAME_ENGINE_HPP
