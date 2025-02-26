@@ -191,7 +191,7 @@ void GameEngine::sendPenaltyRows(const PlayerState &playerStateSender,
 }
 
 bool GameEngine::checkCanBuyEffect(const PlayerState &playerState,
-                                   EffectType effectType) {
+                                   EffectType effectType) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
@@ -217,12 +217,12 @@ void GameEngine::handleLightning(Tetris &tetris) {
     tetris.destroy2By2Occupied();
 }
 
-Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) {
+Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) const {
     // TODO: Adapt this to what the assistant asked
     return numClearedRows * 100;
 }
 
-Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) {
+Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) const {
     // TODO: Adapt this to what the assistant asked
     return numClearedRows;
 }

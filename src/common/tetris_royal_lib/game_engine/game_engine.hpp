@@ -142,7 +142,7 @@ class GameEngine {
      * given effect; false otherwise.
      */
     bool checkCanBuyEffect(const PlayerState &playerState,
-                           EffectType effectType);
+                           EffectType effectType) const;
 
     /**
      * @brief Inserts two mini tetrominoes at the front of the given
@@ -160,13 +160,13 @@ class GameEngine {
      * @brief Returns the number of points awarded for clearing
      * the given number of rows.
      */
-    Score calculatePointsClearedRows(size_t numClearedRows);
+    Score calculatePointsClearedRows(size_t numClearedRows) const;
 
     /**
      * @brief Returns the amount of Energy awarded to the player for
      * clearing the given number of rows.
      */
-    Energy calculateEnergyClearedRows(size_t numClearedRows);
+    Energy calculateEnergyClearedRows(size_t numClearedRows) const;
 
   public:
     /**
