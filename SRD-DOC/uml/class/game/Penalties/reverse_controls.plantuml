@@ -1,0 +1,13 @@
+@startuml (id=ReverseControls)
+
+class ReverseControls {
+    - {static} constexpr size_t PIECES_NUM = 3
+    + ReverseControls()
+    + ReverseControls(const ReverseControls &) : void
+    + ReverseControls(ReverseControls &&) : void
+    + ReverseControls &operator=(const ReverseControls &) : void
+    + ReverseControls &operator=(ReverseControls &&) : void
+    + ~ReverseControls()
+}
+
+@enduml
