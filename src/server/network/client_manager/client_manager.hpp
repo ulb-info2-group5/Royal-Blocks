@@ -5,6 +5,12 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+//include database
+#include "../../database/database_manager/database_manager.hpp"
+#include "../../database/account_manager/account_manager.hpp"
+#include "../../database/friends_manager/friends_manager.hpp"
+#include "../../database/messages_manager/messages_manager.hpp"
+
 
 using boost::asio::ip::tcp;
 
@@ -12,6 +18,13 @@ using boost::asio::ip::tcp;
 struct FeedBack{
     bool result; 
     std::string subject;
+};
+
+//it's just a structure to bring database classes together
+struct DataBase{
+    std::shared_ptr<AccountManager> accountManager;
+    std::shared_ptr<FriendsManager> friendsManager;
+    std::shared_ptr<MessagesManager> messagesManager;
 };
 
 
@@ -47,13 +60,14 @@ class ClientManager {
         //map => { key : client id , value : the client session } 
         std::unordered_map<int , std::shared_ptr<ClientLink>> connectedClients_;
         std::mutex mutex_;
+        DataBase database_;
 
     public:
-        ClientManager() = default;
+        ClientManager(DataBase database);
         ~ClientManager() = default;
         
         void handlePacket(const std::string& packet);
 
         void addConnection(int clientId, std::shared_ptr<ClientLink> clientSession);
-        
+        bool checkCredentials(const std::string& pseudo, const std::string& password);
 };

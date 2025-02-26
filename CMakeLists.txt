@@ -17,10 +17,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(tetris_royal)
 
 
+# database_lib
+add_subdirectory(src/server/database)
 
 
-
-add_executable(server src/server/network/main.cpp src/server/network/network.cpp src/server/network/network.hpp src/server/network/client_manager/client_manager.cpp src/server/network/client_manager/client_manager.hpp )
+add_executable(server ${database_lib} src/server/network/main.cpp src/server/network/network.cpp src/server/network/network.hpp src/server/network/client_manager/client_manager.cpp 
+src/server/network/client_manager/client_manager.hpp  )
 
 add_executable(client src/client/main.cpp src/client/client.cpp src/client/client.hpp)
 
@@ -34,8 +36,8 @@ endif()
 
 # tetris_lib
 add_subdirectory(src/common/tetris_lib)
-# database_lib
-add_subdirectory(src/server/database)
+
+
 
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
@@ -48,3 +50,5 @@ file(GLOB_RECURSE SOURCES_TETRIS_ROYAL_LIB
 # tetris_royal_lib
 add_library(${PROJECT_NAME}_lib STATIC ${SOURCES_TETRIS_ROYAL_LIB})
 target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(server PRIVATE database_lib)

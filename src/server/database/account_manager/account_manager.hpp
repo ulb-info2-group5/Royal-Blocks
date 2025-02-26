@@ -29,14 +29,7 @@ class AccountManager {
   private:
     std::shared_ptr<DatabaseManager> dbManager_;
 
-    /*
-    * @brief Check if the user already exists
-    *
-    * @param username Username to check
-    * @return true if the user exists
-    */
-    bool checkUsernameExists(const std::string &username) const;
-
+   
     /*
     * @brief Check if a friendship exists between two users
     *
@@ -46,15 +39,7 @@ class AccountManager {
     */
     bool checkFriendshipExists(const std::string &user, const std::string &friendUser) const;
 
-    /*
-    * @brief Check if the password is correct for a user
-    *
-    * @param username Username of the user
-    * @param password Password to check
-    * @return true if the password is correct
-    */
-    bool checkUserPassword(const std::string &username, const std::string &password) const;
-
+    
 
   public:
     /*
@@ -85,6 +70,23 @@ class AccountManager {
     * @return true if the account was deleted successfully
     */
     bool deleteAccount(const int userId);
+
+     /*
+    * @brief Check if the user already exists
+    *
+    * @param username Username to check
+    * @return true if the user exists
+    */
+    bool checkUsernameExists(const std::string &username) const;
+
+    /*
+    * @brief Check if the password is correct for a user
+    *
+    * @param username Username of the user
+    * @param password Password to check
+    * @return true if the password is correct
+    */
+    bool checkUserPassword(const std::string &username, const std::string &password) const;
 
     /*
     * @brief Login to an account

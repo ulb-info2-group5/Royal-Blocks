@@ -24,9 +24,15 @@ void Network::accept(){
 }
 
 bool Network::checkCredentials(std::shared_ptr<std::string> credentials){
-    //for the moment just simulate a verification with the database
     std::cout << "-- ceck credentials --" << std::endl;
-    return true;
+    //i will continue later 
+    nlohmann::json jsonCredentials =  nlohmann::json::parse(*credentials);
+    if (clientManager_.checkCredentials(jsonCredentials.at("pseudo").get<const std::string>(), jsonCredentials.at("password").get<const std::string>())){
+        return true;
+    }else {
+        return false;
+    }
+    //return true;
 }
 
 void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
@@ -50,6 +56,7 @@ void Network::createNewConnection(std::shared_ptr<tcp::socket> socket){
     std::cout << "create new connection " << std::endl;
     std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(*socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
     newLink->start();
+    
 }
 
 

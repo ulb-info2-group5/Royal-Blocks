@@ -5,7 +5,7 @@ file(GLOB_RECURSE SOURCES_DATABASE_LIB
 
 # dependencies
 include(../../../third_party/sqlite3.cmake)
-include(../../../third_party/glaze.cmake)
+#include(../../../third_party/glaze.cmake)
 
 # add database_lib as lib
 add_library(database_lib STATIC ${SOURCES_DATABASE_LIB})

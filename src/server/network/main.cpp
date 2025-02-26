@@ -1,8 +1,15 @@
 #include "network.hpp"
 
+
+
 int main()
 {
-    ClientManager clientManager;
+    
+    auto dbManager = std::make_shared<DatabaseManager>();
+    DataBase database{std::make_shared<AccountManager>(dbManager), std::make_shared<FriendsManager>(dbManager), std::make_shared<MessagesManager>(dbManager)};
+
+
+    ClientManager clientManager(database);
     try{
         boost::asio::io_context io_context;
         Network network(io_context, clientManager);

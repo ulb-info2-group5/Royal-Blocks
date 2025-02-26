@@ -44,6 +44,11 @@ void ClientLink::start(){
 
 
 // ---public ---
+ClientManager::ClientManager(DataBase database) : database_(database) {
+    std::cout << "clientManager construct" << std::endl;
+}
+
+
 void ClientManager::addConnection(int clientId, std::shared_ptr<ClientLink> clientSession){
     std::lock_guard<std::mutex> lock(mutex_);
     connectedClients_[clientId] = clientSession;
@@ -52,4 +57,19 @@ void ClientManager::addConnection(int clientId, std::shared_ptr<ClientLink> clie
 
 void ClientManager::handlePacket(const std::string& packet){
     std::cout << "-- handle Packet call -- " <<std::endl;
+}
+
+
+bool ClientManager::checkCredentials(const std::string& pseudo, const std::string& password){
+    if (!database_.accountManager->checkUsernameExists(pseudo)){
+        std::cout << "username false" << std::endl;
+        return false;
+    }else{
+        if (database_.accountManager->checkUserPassword(pseudo, password)){
+            return true;
+        }else {
+            std::cout <<  "password false" << std::endl;
+            return false; 
+        }
+    }
 }
