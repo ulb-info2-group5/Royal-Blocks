@@ -291,7 +291,7 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
                 if (stashForLater) {
                     pPlayerStateBuyer->stashPenalty(effectType);
                 } else {
-                    sendPenaltyEffect(buyerID, effectType);
+                    sendPenaltyEffect(*pPlayerStateBuyer, effectType);
                 }
             }
         },
