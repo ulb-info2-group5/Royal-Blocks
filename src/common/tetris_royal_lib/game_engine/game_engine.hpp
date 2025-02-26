@@ -200,6 +200,11 @@ class GameEngine {
     void selectTarget(PlayerID playerID, PlayerID target);
 
     /**
+     * @brief Makes the given player select the given effect.
+     */
+    void selectEffect(PlayerID playerID, EffectType effectType);
+
+    /**
      * @brief Makes the given player select the next item in the effect
      * selector.
      */

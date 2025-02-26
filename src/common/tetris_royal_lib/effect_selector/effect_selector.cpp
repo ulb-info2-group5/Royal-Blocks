@@ -3,6 +3,7 @@
 #include "effect/penalty/penalty_type.hpp"
 
 #include <cassert>
+#include <variant>
 
 EffectSelector::EffectSelector() : selectionIdx_{0} {
 
@@ -20,6 +21,24 @@ EffectSelector::EffectSelector() : selectionIdx_{0} {
 
     // TODO: add a message here if assert fails?
     assert(bonuses_.size() > 0 || penalties_.size() > 0);
+}
+
+void EffectSelector::select(EffectType effectType) {
+    std::visit(
+        [&](auto &&effectType) {
+            using T = std::decay_t<decltype(effectType)>;
+            if constexpr (std::is_same_v<T, BonusType>) {
+                auto bonusTypeIt =
+                    std::find(bonuses_.begin(), bonuses_.end(), effectType);
+                selectionIdx_ = bonusTypeIt - bonuses_.begin();
+            } else if constexpr (std::is_same_v<T, PenaltyType>) {
+                auto penaltyTypeIt =
+                    std::find(penalties_.begin(), penalties_.end(), effectType);
+                selectionIdx_ =
+                    bonuses_.size() + penaltyTypeIt - penalties_.begin();
+            }
+        },
+        effectType);
 }
 
 void EffectSelector::next() {

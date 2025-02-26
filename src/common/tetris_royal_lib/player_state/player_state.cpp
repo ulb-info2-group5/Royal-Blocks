@@ -137,6 +137,13 @@ void PlayerState::setActivePenalty(TimedPenaltyPtr pTimedPenalty) {
     pActivePenalty_ = pTimedPenalty;
 }
 
+void PlayerState::selectEffect(EffectType effectType) {
+    effectSelector_.and_then([effectType](EffectSelector &effectSelector) {
+        effectSelector.select(effectType);
+        return std::make_optional<EffectSelector>();
+    });
+}
+
 void PlayerState::setActiveBonus(TimedBonusPtr pTimedBonus) {
     pActiveBonus_ = pTimedBonus;
 }

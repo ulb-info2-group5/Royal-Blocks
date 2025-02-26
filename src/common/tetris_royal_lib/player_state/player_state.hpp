@@ -179,6 +179,11 @@ class PlayerState final : public TetrisObserver {
     void setActivePenalty(TimedPenaltyPtr pTimedPenalty);
 
     /**
+     * @brief Makes player select the given effect.
+     */
+    void selectEffect(EffectType effectType);
+
+    /**
      * @brief Selects the next effect in the effect selector.
      */
     void selectNextEffect();

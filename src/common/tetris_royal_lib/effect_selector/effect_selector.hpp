@@ -35,6 +35,11 @@ class EffectSelector {
     ~EffectSelector() = default;
 
     /**
+     * @brief Selects the given effect.
+     */
+    void select(EffectType effectType);
+
+    /**
      * @brief Selects the next effect.
      */
     void next();

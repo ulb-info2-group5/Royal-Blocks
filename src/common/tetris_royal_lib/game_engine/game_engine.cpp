@@ -12,7 +12,6 @@
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <optional>
 #include <stdexcept>
@@ -299,6 +298,24 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     }
 
     pPlayerStatePlayer->setPenaltyTarget(target);
+}
+
+void GameEngine::selectEffect(PlayerID playerID, EffectType effectType) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return;
+    }
+
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    if (pPlayerState == nullptr) {
+        return;
+    }
+
+    // TODO: add this check in other methods
+    if (!pPlayerState->isAlive()) {
+        return;
+    }
+
+    pPlayerState->selectEffect(effectType);
 }
 
 void GameEngine::selectNextEffect(PlayerID playerID) {
