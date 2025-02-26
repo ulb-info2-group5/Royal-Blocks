@@ -7,223 +7,35 @@
  */
 
 #include "controller.hpp"
-#include <iostream>
-#include <string>
+#include "../network/network_manager.hpp"
+#include "../view/TUI/screen_manager.hpp"
 
 // ### Public methods ###
 
-Controller::Controller() {}
+Controller::Controller() : screenManager_(ScreenManager(this)) {};
 
 Controller::~Controller() {}
 
 void Controller::run() {
     networkManager_.connect();
 
-    screenManager_.drawStartScreen();
-    handleLoginMenu();
-    while (true) { // TODO: check the while true
-        handleMainMenu();
-        if (mainmenuState_ == MainMenuState::EXIT) {
-            break;
-        }
-        handleGame();
-    }
+    screenManager_.run();
 }
 
-// ### Private methods ###
-
-void Controller::handleLoginMenu() {
-    switch (screenManager_.runLoginMenu()) {
-    case LoginState::EXIT:
-        std::exit(0);
-        break;
-
-    case LoginState::LAUNCH_REGISTER: {
-        handleInputMenu(InputType::REGISTER);
-        break;
+bool Controller::verifyRegister(const std::string &username, const std::string &password) const {
+    // TODO: check with the server for the register
+    // TODO: remove this because it's an example
+    if (username == "ethan" && password == "ethan") {
+        return true;
     }
-
-    case LoginState::LAUNCH_LOGIN:
-        handleInputMenu(InputType::LOGIN);
-        break;
-
-    default:
-        throw std::runtime_error("Invalid LoginState");
-    }
+    return false;
 }
 
-void Controller::handleInputMenu(const InputType type) {
-    if (type == InputType::LOGIN) {
-        switch (screenManager_.runLoginInput()) {
-        case InputState::BACK:
-            handleLoginMenu();
-            break;
-
-        case InputState::SUBMIT: {
-            // TODO: add logic with controller and server to check with the
-            // database for the logic
-            LoginInfo info = screenManager_.getLoginInfo();
-            // TODO : It's for the test, must be removed and add logic with
-            // server
-            const std::string username = "ethan";
-            const std::string password = "ethan";
-            if (info.username != username || info.password != password) {
-                screenManager_.addMessageToLoginInput(
-                    "Invalid username or password");
-                handleInputMenu(InputType::LOGIN);
-            }
-            break;
-        }
-
-        default:
-            throw std::runtime_error("Invalid InputState");
-        }
-    } else {
-        switch (screenManager_.runRegisterInput()) {
-        case InputState::BACK:
-            handleLoginMenu();
-            break;
-
-        case InputState::SUBMIT: {
-            // TODO: add logic with controller and server to check with the
-            // database for the register
-            LoginInfo info = screenManager_.getRegisterInfo();
-            // TODO : It's for the test, must be removed and add logic with
-            // server
-            const std::string username = "ethan";
-            const std::string password = "ethan";
-            if (info.username != username || info.password != password) {
-                screenManager_.addMessageToRegisterInput(
-                    "Invalid username or password");
-                handleInputMenu(InputType::REGISTER);
-            } else {
-                screenManager_.addMessageToLoginInput(
-                    "Your account has been created, please login");
-                handleInputMenu(InputType::LOGIN);
-            }
-            break;
-        }
-
-        default:
-            throw std::runtime_error("Invalid InputState");
-        }
+bool Controller::verifyLogin(const std::string &username, const std::string &password) const {
+    // TODO: check with the server if the username and password are correct
+    // TODO: remove this because it's an example
+    if (username == "ethan" && password == "ethan") {
+        return true;
     }
-}
-
-void Controller::handleMainMenu() {
-    mainmenuState_ = MainMenuState::NONE;
-
-    while (mainmenuState_ != MainMenuState::CREATE_GAME
-           && mainmenuState_ != MainMenuState::EXIT
-           && mainmenuState_ != MainMenuState::JOIN_GAME) {
-
-        switch (screenManager_.runMainMenu()) {
-
-        case MainMenuState::CREATE_GAME: {
-            mainmenuState_ = MainMenuState::CREATE_GAME;
-            break;
-        }
-
-        case MainMenuState::JOIN_GAME: {
-            mainmenuState_ = MainMenuState::JOIN_GAME;
-            break;
-        }
-
-        case MainMenuState::EXIT:
-            mainmenuState_ = MainMenuState::EXIT;
-            break;
-
-        case MainMenuState::LOOK_RANKING: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the ranking
-            std::vector<std::tuple<int, std::string, int>> ranking = {};
-            ranking.push_back(std::make_tuple(1, "Player1", 100));
-            ranking.push_back(std::make_tuple(2, "Player2", 90));
-            ranking.push_back(std::make_tuple(3, "Player3", 80));
-            ranking.push_back(std::make_tuple(4, "Player4", 70));
-            ranking.push_back(std::make_tuple(5, "Player5", 60));
-
-            screenManager_.runRankingMenu(ranking);
-            break;
-        }
-
-        case MainMenuState::MANAGE_FRIENDS_LIST: {
-            handleFriendsMenu();
-            break;
-        }
-
-        case MainMenuState::MANAGE_PROFILE: {
-            std::vector<std::string> info = screenManager_.runProfileManager();
-            // TODO: communicate with the server to update the profile
-            if (info.at(0) == "" && info.at(1) == "") {
-                std::cout << "It's back button" << std::endl;
-            } else {
-                std::cout << "New username: " << info.at(0) << std::endl;
-                std::cout << "New password: " << info.at(1) << std::endl;
-            }
-            break;
-        }
-
-        case MainMenuState::SEND_MESSAGES: {
-            // TODO: remove it because it's an example
-            // TODO: communicate with the server to get the friends list
-            std::vector<std::string> friendsList = {"Player1", "Player2",
-                                                    "ethan", "readyPlayerOne",
-                                                    "theBestPlayerOfTheGame"};
-            break;
-        }
-
-        default:
-            throw std::runtime_error("Invalid MainMenuState");
-        }
-    }
-}
-
-void Controller::handleFriendsMenu() {
-    // TODO: remove it because it's an example
-    // TODO: communicate with the server to get the friendsList
-    std::vector<std::string> friendsList = {"Player1", "Player2", "ethan",
-                                            "readyPlayerOne",
-                                            "theBestPlayerOfTheGame"};
-
-    std::string friendName;
-    FriendsManagerState state = screenManager_.runFriendsManager(friendsList);
-
-    while (state != FriendsManagerState::NONE) {
-        // TODO: communicate with the server to add or remove a friend
-        if (state == FriendsManagerState::REMOVE_FRIEND) {
-            friendName = screenManager_.getFriendName();
-            std::cout << "Remove friend: " << friendName
-                      << std::endl; // here to check with server
-
-        } else if (state == FriendsManagerState::ADD_FRIEND) {
-            if (screenManager_.runAddfriendScreen()) {
-                friendName = screenManager_.getFriendName();
-                std::cout << "Add friend: " << friendName
-                          << std::endl; // here to check with server
-            }
-        }
-        state = screenManager_.runFriendsManager(friendsList);
-    }
-}
-
-void Controller::handleGame() {
-    PlayMode mod = PlayMode::NONE;
-
-    if (mainmenuState_ == MainMenuState::CREATE_GAME) {
-        mod = screenManager_.runGameMenuOnlineGames(); // can only create a game
-                                                       // with online games
-        // TODO: launch the game parameters menu for the good mod
-    }
-
-    else if (mainmenuState_ == MainMenuState::JOIN_GAME) {
-        mod = screenManager_.runGameMenuAllGames(); // can join all games
-        // TODO: launch the menu to choice betwenn join a friend or join a
-        // random game
-        // TODO: if join a friend, launch the menu to choice the friend
-        // TODO: if join a random game, launch matchmaking
-        if (mod != PlayMode::NONE) {
-            screenManager_.runGame(mod);
-        }
-    }
+    return false;
 }

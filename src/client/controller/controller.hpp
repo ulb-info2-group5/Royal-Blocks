@@ -11,6 +11,7 @@
 
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
+#include <string>
 
 class Controller {
     private:
@@ -23,38 +24,6 @@ class Controller {
         * @brief The screen manager to manage the screens to show to the user
         */
         ScreenManager screenManager_;
-
-        /*
-        * @brief The state of the main menu
-        */
-        MainMenuState mainmenuState_;
-
-        /*
-        * @brief Handle the login menu to show to the user
-        */
-        void handleLoginMenu();
-
-        /*
-        * @brief Handle the input menu to show to the user
-        *
-        * @param type The type of the input menu
-        */
-        void handleInputMenu(const InputType type);
-
-        /*
-        * @brief Handle the main menu to show to the user
-        */
-        void handleMainMenu();
-
-        /*
-        * @brief Handle the friends menu to show to the user
-        */
-        void handleFriendsMenu();
-
-        /*
-        * @brief Handle the game to show to the user
-        */
-        void handleGame();
 
     public:
 
@@ -72,6 +41,24 @@ class Controller {
         * @brief Run the controller to manage the game
         */
         void run();
+
+        /*
+        * @brief Verify and create the account by communicate with the server
+        *
+        * @param username The username of the user
+        * @param password The password of the user
+        * @return true If the account is created, false otherwise
+        */
+        bool verifyRegister(const std::string &username, const std::string &password) const;
+
+        /*
+        * @brief Verify the username and password of the user is correct
+        *
+        * @param username The username of the user
+        * @param password The password of the user
+        * @return true If the username and password are correct, false otherwise
+        */
+        bool verifyLogin(const std::string &username, const std::string &password) const;
 };
 
 #endif // CONTROLLER_HPP

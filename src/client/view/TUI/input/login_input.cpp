@@ -8,6 +8,8 @@
 
 #include "login_input.hpp"
 
+#include "../../../controller/controller.hpp"
+
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -17,11 +19,8 @@
 #include <string>
 
 // ### Constructor ###
-LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title) : 
-        screen_(screen), title_(title) 
-{
-    userState_ = InputState::NONE;
-}
+LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::string title, LoginType loginType) : 
+        screen_(screen), controller_(controller), title_(title), loginType_(loginType), loginState_(LoginState::NONE) {}
 
 // ### protected methods ###
 
@@ -30,8 +29,7 @@ void LoginInput::displayButtonBack()
     buttonBack_ = ftxui::Button("Back", [&] {
         username_.clear();
         password_.clear();
-        userState_ = InputState::BACK;
-        printf("userState change to Back \n");
+        loginState_ = LoginState::BACK;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 }
@@ -39,14 +37,17 @@ void LoginInput::displayButtonBack()
 void LoginInput::displayButtonSubmit()
 {
     buttonSubmit_ = ftxui::Button("Submit", [&] {
-        if (!username_.empty() && !password_.empty()) {
-            userState_ = InputState::SUBMIT;
+        if (loginType_ == LoginType::REGISTER && controller_->verifyRegister(username_, password_)) {
+            loginState_ = LoginState::SUBMIT;
+            screen_->ExitLoopClosure()();
+        } else if (loginType_ == LoginType::LOGIN && controller_->verifyLogin(username_, password_)) {
+            loginState_ = LoginState::SUBMIT;
             screen_->ExitLoopClosure()();
         } else {
             username_.clear();
             password_.clear();
             message_.clear(); 
-            msg_ = "Please enter a valid username and a valid password";
+            msg_ = "The username or password is incorrect!";
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 }
@@ -82,7 +83,7 @@ void LoginInput::displayWindow()
         elements.push_back(ftxui::separator());
 
         if (!msg_.empty()) {
-            elements.push_back(ftxui::text(msg_));
+            elements.push_back(ftxui::text(msg_) | ftxui::center | ftxui::color(ftxui::Color::Red));
             elements.push_back(ftxui::separator());
         }
         
@@ -100,14 +101,6 @@ void LoginInput::displayWindow()
 }
 
 // ### public methods ###
-InputState LoginInput::render() {
-     
-    displayWindow();
-
-    screen_->Loop(displayWindow_);
-
-    return userState_;
-}
 
 void LoginInput::addInstruction(const std::string_view instruction) {
     instruction_ = instruction;
@@ -117,19 +110,15 @@ void LoginInput::addMessage(const std::string_view message) {
     message_ = message;
 }
 
-std::string LoginInput::getUsername() const {
-    return username_;
-}
-
-std::string LoginInput::getPassword() const {
-    return password_;
-}
-
-InputState LoginInput::getUserState() const {
-    return userState_;
-}
-
 void LoginInput::clearInfo() {
     username_.clear();
     password_.clear();
+}
+
+LoginState LoginInput::render() {
+    displayWindow();
+
+    screen_->Loop(displayWindow_);
+
+    return loginState_;
 }

@@ -1,15 +1,19 @@
 #include "screen_manager.hpp"
-#include "game_display/game_display.hpp"
-#include "game_menu/game_menu.hpp"
-#include "input/login_input.hpp"
-#include "login_menu/login_menu.hpp"
-#include "main_menu/main_menu.hpp"
+#include <memory>
+
 
 // ### Public methods ###
-ScreenManager::ScreenManager() {
-    loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
-    registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
+ScreenManager::ScreenManager(Controller *controller) : controller_(controller), screen_(std::shared_ptr<ftxui::ScreenInteractive>(new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen()))), loginMenu_(LoginMenu(screen_, controller_)), mainMenu_(MainMenu(screen_, controller_)) {}
+
+void ScreenManager::run() {
+    drawStartScreen();
+
+    // Handle the login menu
+    loginMenu_.render();
+    mainMenu_.render();
 }
+
+// ### Private methods ###
 
 void ScreenManager::drawStartScreen() {
 
@@ -37,79 +41,4 @@ void ScreenManager::drawStartScreen() {
     }).detach();
 
     screen_->Loop(title);    
-}
-
-LoginInfo ScreenManager::getLoginInfo() {
-    LoginInfo info;
-    info.username = loginInput_.getUsername();
-    info.password = loginInput_.getPassword();
-    return info;
-}
-
-LoginInfo ScreenManager::getRegisterInfo() {
-    LoginInfo info;
-    info.username = registerInput_.getUsername();
-    info.password = registerInput_.getPassword();
-    return info;
-}
-
-LoginState ScreenManager::runLoginMenu() {
-    return loginMenu_.render();
-}
-
-InputState ScreenManager::runLoginInput() {
-    loginInput_.clearInfo();
-    return loginInput_.render();
-}
-
-InputState ScreenManager::runRegisterInput() {
-    registerInput_.clearInfo();
-    return registerInput_.render();
-}
-
-MainMenuState ScreenManager::runMainMenu() {
-    return mainMenu_.render();
-}
-
-void ScreenManager::runGame(const PlayMode mod) {
-    GameDisplay game(screen_, std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(EXEMPLE_BOARDS), 
-    mod);
-    game.render();
-}
-
-void ScreenManager::addMessageToLoginInput(const std::string_view message) {
-    loginInput_.addMessage(message);
-}
-
-void ScreenManager::addMessageToRegisterInput(const std::string_view message) {
-    registerInput_.addMessage(message);
-}
-
-void ScreenManager::runRankingMenu(std::vector<std::tuple<int, std::string, int>> &ranking) {
-    mainMenu_.renderRanking(ranking);
-}
-
-FriendsManagerState ScreenManager::runFriendsManager(const std::vector<std::string> &friendsList) {
-    return friendsManager_.render(friendsList);
-}
-
-std::string ScreenManager::getFriendName() const {
-    return friendsManager_.getName();
-}
-
-std::vector<std::string> ScreenManager::runProfileManager() {
-    mainMenu_.renderProfileManager();
-    return mainMenu_.getUserNewInput();
-}
-
-bool ScreenManager::runAddfriendScreen() {
-    return friendsManager_.addFriendScreen();
-}
-
-PlayMode ScreenManager::runGameMenuAllGames() {
-    return gameMenu_.renderAllGames();
-}
-
-PlayMode ScreenManager::runGameMenuOnlineGames() {
-    return gameMenu_.renderOnlineGames();
 }

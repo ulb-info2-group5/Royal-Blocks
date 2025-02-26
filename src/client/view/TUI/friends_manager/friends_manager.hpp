@@ -13,6 +13,8 @@
 #include <memory>
 #include <vector>
 
+class Controller; // Forward declaration
+
 enum class FriendsManagerState
 {
     ADD_FRIEND,
@@ -25,8 +27,10 @@ enum class FriendsManagerState
 class FriendsManager {
     private:
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        Controller *controller_;
         FriendsManagerState state_;
         std::string friendName_;
+
 
         /*
         * @brief Render the friends list of the user to display with all friends dislayed is a button
@@ -43,7 +47,7 @@ class FriendsManager {
         /*
         * @brief Construct a new Friends Manager object
         */
-        FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen);
+        FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
 
         /*
         * @brief Destroy the Friends Manager object

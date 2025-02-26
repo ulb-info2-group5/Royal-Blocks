@@ -9,36 +9,33 @@
 #include "game_menu.hpp"
 #include <ftxui/dom/elements.hpp>
 
+#include "../../../controller/controller.hpp"
+
 // ### Public methods ###
 
-GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen) : screen_(screen), gameChoice_(PlayMode::NONE) {
+GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : screen_(screen), controller_(controller) {
     endlessButon_ = ftxui::Button("Endless", [&] { 
-        gameChoice_ = PlayMode::ENDLESS;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     duelButon_ = ftxui::Button("Duel", [&] { 
-        gameChoice_ = PlayMode::DUEL; 
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     classicButon_ = ftxui::Button("Classic", [&] { 
-        gameChoice_ = PlayMode::CLASSIC; 
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
     
     royalButon_ = ftxui::Button("Royal", [&] { 
-        gameChoice_ = PlayMode::ROYAL; 
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     backButton_ = ftxui::Button("Back", [&] {
-        gameChoice_ = PlayMode::NONE;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 }
 
-PlayMode GameMenu::renderAllGames() {
+void GameMenu::renderAllGames() {
     ftxui::Component container = ftxui::Container::Vertical({
         endlessButon_,
         duelButon_,
@@ -62,10 +59,9 @@ PlayMode GameMenu::renderAllGames() {
 
     screen_->Loop(renderer);
 
-    return gameChoice_;
 }
 
-PlayMode GameMenu::renderOnlineGames() {
+void GameMenu::renderOnlineGames() {
     ftxui::Component container = ftxui::Container::Vertical({
         duelButon_,
         classicButon_,
@@ -87,5 +83,4 @@ PlayMode GameMenu::renderOnlineGames() {
 
     screen_->Loop(renderer);
 
-    return gameChoice_;
 }

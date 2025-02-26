@@ -1,5 +1,6 @@
 #include "game_display.hpp"
 
+#include "../../../controller/controller.hpp"
 #include "../game_menu/game_menu.hpp"
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
@@ -36,9 +37,9 @@ ftxui::Color getFTXUIColor(colors color)
 
 // constructor 
 
-GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
                 PlayMode play) :
-                screen_{screen}, playersBoards_{boards}, play_{play}
+                screen_{screen}, controller_(controller), playersBoards_{boards}, play_{play}
 {
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog", 

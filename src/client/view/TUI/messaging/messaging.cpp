@@ -1,8 +1,10 @@
 #include "messaging.hpp"
 
+#include "../../../controller/controller.hpp"
+
 // ### constructor ###
-Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const std::vector<std::string>& friends) : 
-    screen_(screen), friends_(friends) 
+Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : 
+    screen_(screen), controller_(controller)
 {
     userState_ = MessagingState::NONE;
     initMessaging();

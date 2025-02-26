@@ -17,17 +17,19 @@
 
 #include "../../ILogin_Input.hpp"
 
-/**
- * @brief Enum class to represent the state of the input
- * 
- */
-enum class InputState 
-{
+class Controller; // Forward declaration
+
+enum class LoginType {
+    LOGIN,
+    REGISTER,
+    NONE,
+};
+
+enum class LoginState {
     SUBMIT,
     BACK,
     NONE,
 };
-
 
 /**
  * @brief LoginInput class to get the login input or register input from the user
@@ -42,9 +44,21 @@ class LoginInput : public ILogin_Input
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
         /*
+        * @brief The controller to ask for the data to show to the user
+        */
+        Controller *controller_;
+
+        /*
         * @brief The title of the input screen (Login or Register)
         */
         std::string title_;
+
+        /*
+        * @brief The type of the login (Login or Register)
+        */
+        LoginType loginType_;
+
+        LoginState loginState_;
 
         /*
         * @brief The username of the user
@@ -65,8 +79,6 @@ class LoginInput : public ILogin_Input
         * @brief The custom message to show to the user
         */
         std::string message_;
-
-        InputState userState_;
 
         std::string msg_;
 
@@ -91,7 +103,7 @@ class LoginInput : public ILogin_Input
         * @param screen The screen to use to render the components
         * @param title The title of the input screen (Login or Register)
         */
-        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, std::string title);
+        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::string title, LoginType loginType);
 
         /*
         * @brief Destroy the Login Input object
@@ -100,9 +112,8 @@ class LoginInput : public ILogin_Input
 
         /*
         * @brief Render the login input screen with all the components
-        *
         */
-        InputState render();
+        LoginState render();
 
         /*
         * @brief Add an instruction to show to the user
@@ -117,22 +128,6 @@ class LoginInput : public ILogin_Input
         * @param string message the message to show
         */
         void addMessage(const std::string_view message);
-
-        /*
-        * @brief Get the username
-        *
-        * @return string the username
-        */
-        std::string getUsername() const override;
-
-        /*
-        * @brief Get the password
-        *
-        * @return string the password
-        */
-        std::string getPassword() const override;
-
-        InputState getUserState() const;
 
         /*
         * @brief Clear the info of the user input (username and password)

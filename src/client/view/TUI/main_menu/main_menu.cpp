@@ -8,13 +8,15 @@
 
 #include "main_menu.hpp"
 #include "../messaging/messaging.hpp"
+#include "../../../controller/controller.hpp"
+
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
 
 
 // ### Constructor ###
-MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen) : 
-screen_(screen) 
+MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : 
+screen_(screen), controller_(controller)
 {
     userState_ = MainMenuState::NONE;
     userInput_ = {"", "", ""};
@@ -222,7 +224,7 @@ void MainMenu::renderRanking(const std::vector<std::tuple<int, std::string, int>
 
 void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
     // very bad just for the tests
-    Messaging messagingMenue(screen_, friendsList);
+    Messaging messagingMenue(screen_, controller_);
     messagingMenue.render();
 }
 

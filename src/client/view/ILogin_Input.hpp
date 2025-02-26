@@ -1,8 +1,6 @@
 #ifndef ILOGIN_INPUT_HPP
 #define ILOGIN_INPUT_HPP
 
-#include <string>
-
 class ILogin_Input
 {
     protected : 
@@ -12,10 +10,6 @@ class ILogin_Input
     public : 
 
     virtual ~ILogin_Input() = default;
-
-    virtual std::string getPassword() const = 0;
-
-    virtual std::string getUsername() const = 0;
 };
 
 #endif

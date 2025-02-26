@@ -23,6 +23,7 @@
 #include <tuple>
 #include <vector>
 
+class Controller; // Forward declaration
 
 /**
  * @brief Enum class to represent the state of the main menu
@@ -51,6 +52,11 @@ class MainMenu : public IMain_Menu
         * @brief The screen to use to render the components
         */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+
+        /*
+        * @brief The controller to ask for the data to show to the user
+        */
+        Controller *controller_;
 
         MainMenuState userState_;
 
@@ -103,7 +109,7 @@ class MainMenu : public IMain_Menu
          *
          * @param screen The screen to use to render the components
          */
-        MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen);
+        MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
 
         /*
          * @brief Destroy the Main Menu object

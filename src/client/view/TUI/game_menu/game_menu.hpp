@@ -14,14 +14,7 @@
 #include <memory>
 #include <cstdint>
 
-enum class PlayMode : uint8_t 
-{
-    ENDLESS,
-    DUEL   ,
-    CLASSIC,
-    ROYAL,
-    NONE,
-};
+class Controller; // Forward declaration
 
 /**
  * @brief Game menu class to show and selct the game party
@@ -30,8 +23,8 @@ enum class PlayMode : uint8_t
 class GameMenu {
     private:
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+        Controller *controller_;
 
-        PlayMode gameChoice_;
 
         /**
          * @brief The button components that can be in the game menu    
@@ -49,7 +42,7 @@ class GameMenu {
          * 
          * @param screen 
          */
-        GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen);
+        GameMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
 
         /*
          * @brief Destroy the Game Menu object
@@ -61,13 +54,13 @@ class GameMenu {
          *
          * @return PlayMode the game mode selected
          */
-         PlayMode renderAllGames();
+         void renderAllGames();
 
          /*
          * @brief Rend the game menu with just the online games mods
          * @return PlayMode the game mode selected
          */
-         PlayMode renderOnlineGames();
+         void renderOnlineGames();
 };
 
 #endif // GAME_MENU_HPP

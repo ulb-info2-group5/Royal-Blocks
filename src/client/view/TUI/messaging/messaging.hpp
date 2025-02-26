@@ -15,6 +15,8 @@
 
 #include "../../IMessage.hpp"
 
+class Controller; // Forward declaration
+
 /**
  * @brief Enum class to represent the state of the messaging
  * 
@@ -38,6 +40,11 @@ class Messaging : public IMessage
         * @brief The screen to use to render the components
         */
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
+
+        /*
+        * @brief The controller to ask for the data to show to the user
+        */
+        Controller *controller_;
 
         std::map<std::string, std::vector<Message>> conversations;
         std::vector<std::string> friends_;
@@ -86,7 +93,7 @@ class Messaging : public IMessage
         * @param screen The screen to use to render the components
         * @param friends The list of friends to display in the messaging screen
         */
-        Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, const std::vector<std::string>& friends) ; 
+        Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) ; 
 
         /*
         * @brief Destroy the Messaging object

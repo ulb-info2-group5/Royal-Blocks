@@ -30,7 +30,15 @@ const uint32_t WIDTH_PLAYER_CANVAS = 40,
                WIDTH_OP_CANVAS = 20,
                HEIGHT_OP_CANVAS = 40;
 
-enum class PlayMode : uint8_t;
+class Controller; // Forward declaration
+
+enum class PlayMode : uint8_t {
+    CLASSIC,
+    ROYAL,
+    DUEL,
+    ENDLESS,
+    NONE
+};
 
 ftxui::Color getFTXUIColor(colors color);
 
@@ -38,6 +46,7 @@ class GameDisplay : public IGame
 {
     private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    Controller *controller_;
 
     std::vector<std::string> pseudos_;
     std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> playersBoards_;
@@ -85,7 +94,7 @@ class GameDisplay : public IGame
 
     public:
 
-    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
                 PlayMode play);
     
     ~GameDisplay() = default;
