@@ -15,7 +15,8 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/component/component.hpp>
 
-// TODO: add screens for valod or invalid when adding or removing a friend
+// TODO: add screens for valid or invalid when adding or removing a friend
+// TODO: check that the vector of friends is correctly updated when adding or removing a friend
 
 // ### Public methods ###
 

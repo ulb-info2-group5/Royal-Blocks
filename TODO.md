@@ -1,0 +1,3 @@
+- Add screen for say that the profile has been updated
+- add sub menu for create game and join game
+-
