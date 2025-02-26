@@ -1,3 +1,5 @@
+/' authors Ernest Jonas Rafaou '/
+
 @startuml (id=SlowDownClass)
 
 class SlowDownClass {
