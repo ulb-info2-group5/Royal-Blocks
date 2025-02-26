@@ -74,7 +74,7 @@ class LoginMenu : public ILogin_Menu
         *
         * @param screen The screen to use to render the components
         */
-        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
+        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller);
         
         /*
         * @brief Destroy the Login Menu object

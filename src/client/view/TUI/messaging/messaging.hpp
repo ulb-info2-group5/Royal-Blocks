@@ -93,7 +93,7 @@ class Messaging : public IMessage
         * @param screen The screen to use to render the components
         * @param friends The list of friends to display in the messaging screen
         */
-        Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) ; 
+        Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) ; 
 
         /*
         * @brief Destroy the Messaging object

@@ -13,7 +13,7 @@
 
 // ### Public methods ###
 
-GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : screen_(screen), controller_(controller) {
+GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : screen_(screen), controller_(controller) {
     endlessButon_ = ftxui::Button("Endless", [&] { 
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;

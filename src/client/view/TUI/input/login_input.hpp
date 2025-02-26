@@ -103,7 +103,7 @@ class LoginInput : public ILogin_Input
         * @param screen The screen to use to render the components
         * @param title The title of the input screen (Login or Register)
         */
-        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::string title, LoginType loginType);
+        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller, std::string title, LoginType loginType);
 
         /*
         * @brief Destroy the Login Input object

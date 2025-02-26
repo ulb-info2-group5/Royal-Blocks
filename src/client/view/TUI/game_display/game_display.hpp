@@ -94,7 +94,7 @@ class GameDisplay : public IGame
 
     public:
 
-    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
                 PlayMode play);
     
     ~GameDisplay() = default;

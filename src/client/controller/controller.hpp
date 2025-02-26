@@ -59,6 +59,23 @@ class Controller {
         * @return true If the username and password are correct, false otherwise
         */
         bool verifyLogin(const std::string &username, const std::string &password) const;
-};
+
+        /*
+        * @brief Get the ranking of the players of the Endless mode
+        *
+        * @return std::vector<std::tuple<int, std::string, int>> The ranking of the players of the Endless mode
+        */
+        std::vector<std::tuple<int, std::string, int>> getRanking() const;
+
+        /*
+        * @brief Change the profile of the user by changing the username and password
+        *
+        * @param username The new username of the user
+        * @param password The new password of the user
+        * @return true If the profile is changed, false otherwise
+        */
+        bool changeProfile(const std::string &username, const std::string &password) const;
+    };
+
 
 #endif // CONTROLLER_HPP

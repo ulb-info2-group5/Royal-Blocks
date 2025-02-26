@@ -3,7 +3,7 @@
 #include "../../../controller/controller.hpp"
 
 // ### constructor ###
-Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : 
+Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
     screen_(screen), controller_(controller)
 {
     userState_ = MessagingState::NONE;

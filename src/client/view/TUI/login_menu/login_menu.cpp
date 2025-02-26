@@ -17,7 +17,7 @@
 #include <memory>
 
 // ### constructor ###
-LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : 
+LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
         screen_(screen), controller_(controller), loginInput_(LoginInput(screen_, controller_, LOGIN_INPUT_TITLE, LoginType::LOGIN)), registerInput_(LoginInput(screen_, controller_, REGISTER_INPUT_TITLE, LoginType::REGISTER)) {
             loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
             registerInput_.addInstruction(REGISTER_INSTRUCTIONS);

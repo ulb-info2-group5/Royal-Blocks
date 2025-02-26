@@ -12,9 +12,9 @@ class IMain_Menu
 
         virtual void displayMainWindow() = 0;
 
-        virtual void displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
+        virtual void displayRankingList() = 0;
 
-        virtual void displayRankingWindow(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
+        virtual void displayRankingWindow() = 0;
 
         virtual void displayProfileManagerButton() = 0;
 
@@ -24,7 +24,7 @@ class IMain_Menu
 
         virtual ~IMain_Menu() = default;
 
-        virtual void renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) = 0;
+        virtual void renderRanking() = 0;
 
         virtual void renderMessagingMenu(const std::vector<std::string> &friendsList ) = 0;
 

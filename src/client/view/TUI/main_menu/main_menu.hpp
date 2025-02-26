@@ -25,19 +25,16 @@
 
 class Controller; // Forward declaration
 
-/**
- * @brief Enum class to represent the state of the main menu
- * 
- */
-enum class MainMenuState 
+enum class MainMenuState
 {
     CREATE_GAME,
     JOIN_GAME,
-    SEND_MESSAGES,
+    SEND_MESSAGES_TO_FRIENDS,
     LOOK_RANKING,
     MANAGE_PROFILE,
     MANAGE_FRIENDS_LIST,
     EXIT,
+    BACK,
     NONE,
 };
 
@@ -58,7 +55,7 @@ class MainMenu : public IMain_Menu
         */
         Controller *controller_;
 
-        MainMenuState userState_;
+        MainMenuState state_;
 
         ftxui::Component buttonPlay_;
         ftxui::Component buttonJoinGame_;
@@ -76,17 +73,22 @@ class MainMenu : public IMain_Menu
         ftxui::Component buttonAddFriend_;
         ftxui::Component friendsContainer_;
 
-        // idx 0 : username; idx 1 : password; idx2 : msg
-        std::vector<std::string> userInput_;
         ftxui::Component inputChangeUsername_;
         ftxui::Component inputChangePassword_;
         ftxui::Component submitButton_;
+        std::string profileMessage_;
+        std::string username_;
+        std::string password_;
 
         ftxui::Component mainMenuWindow_;
         ftxui::Component rankingWindow_;
         ftxui::Component friendManagerWindow_;
         ftxui::Component profileManagerWindow_;
 
+        /*
+        * @brief Handle the choice of the user in the main menu
+        */
+        void handleChoice();
 
     protected:
 
@@ -94,14 +96,21 @@ class MainMenu : public IMain_Menu
 
         void displayMainWindow() override;
 
-        void displayRankingList(const std::vector<std::tuple<int, std::string, int>> &ranking) override;
+        void displayRankingList() override;
 
-        void displayRankingWindow(const std::vector<std::tuple<int, std::string, int>> &ranking) override;
+        void displayRankingWindow() override;
 
         void displayProfileManagerButton() override;
 
         void displayProfileManagerWindow() override;
 
+        /*
+         * @brief Render the ranking of the players of the Endless mode
+         *
+         * @param ranking The ranking of the players of the Endless mode to display,
+         * the vector has to be already sorted by the score of the players
+         */
+         void renderRanking() override;
 
     public:
         /*
@@ -109,7 +118,7 @@ class MainMenu : public IMain_Menu
          *
          * @param screen The screen to use to render the components
          */
-        MainMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
+        MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller);
 
         /*
          * @brief Destroy the Main Menu object
@@ -118,18 +127,8 @@ class MainMenu : public IMain_Menu
 
         /*
          * @brief Render the main menu screen with all the components
-         *
-         * @return MainMenuState The state of the main menu
          */
-        MainMenuState render();
-
-        /*
-         * @brief Render the ranking of the players of the Endless mode
-         *
-         * @param ranking The ranking of the players of the Endless mode to display,
-         * the vector has to be already sorted by the score of the players
-         */
-         void renderRanking(const std::vector<std::tuple<int, std::string, int>> &ranking) override;
+        void render();
 
         /*
         *@brief Launch and render the messagingMenu
@@ -142,13 +141,6 @@ class MainMenu : public IMain_Menu
         * @brief Render the profile manager of the user
         */
          void renderProfileManager() override;
-
-        /*
-        * @brief Get the user input
-        *
-        * @return std::vector<std::string> The user input
-        */
-         std::vector<std::string> getUserNewInput();
 };
 
 #endif // MAIN_MENU_HPP

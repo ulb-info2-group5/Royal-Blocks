@@ -17,7 +17,7 @@
 
 // ### Public methods ###
 
-FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller) : screen_{screen}, controller_(controller), state_{FriendsManagerState::NONE} {}
+FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : screen_{screen}, controller_(controller), state_{FriendsManagerState::NONE} {}
 
 FriendsManagerState FriendsManager::render(const std::vector<std::string> &friendsList) {
     std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);

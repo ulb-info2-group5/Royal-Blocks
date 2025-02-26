@@ -47,7 +47,7 @@ class FriendsManager {
         /*
         * @brief Construct a new Friends Manager object
         */
-        FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
+        FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller);
 
         /*
         * @brief Destroy the Friends Manager object

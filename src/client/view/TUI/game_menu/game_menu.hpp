@@ -42,7 +42,7 @@ class GameMenu {
          * 
          * @param screen 
          */
-        GameMenu(std::shared_ptr<ftxui::ScreenInteractive> &screen, Controller *controller);
+        GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller);
 
         /*
          * @brief Destroy the Game Menu object
