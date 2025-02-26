@@ -250,13 +250,7 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
         return;
     }
 
-    // Not enough energy to buy the effect
-    if (!checkCanBuyEffect(buyerID, effectType)) {
-        return;
-    }
-
-    // Cannot stash bonuses
-    if (stashForLater && std::holds_alternative<BonusType>(effectType)) {
+    if (!checkAlive(buyerID)) {
         return;
     }
 
@@ -265,8 +259,24 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
         return;
     }
 
-    // The player must have either have a target defined or stash.
-    if (!(pPlayerStateBuyer->getPenaltyTarget().has_value() || stashForLater)) {
+    // Not enough energy to buy the effect
+    if (!checkCanBuyEffect(*pPlayerStateBuyer, effectType)) {
+        return;
+    }
+
+    bool targetAlive = false;
+    std::optional<PlayerID> optTargetID = pPlayerStateBuyer->getPenaltyTarget();
+    if (optTargetID.has_value()) {
+        targetAlive = checkAlive(*optTargetID);
+    }
+
+    // Stash if penalty and no target defined/dead
+    if (std::holds_alternative<PenaltyType>(effectType) && !targetAlive) {
+        stashForLater = true;
+    }
+
+    // Cannot stash bonuses
+    if (stashForLater && std::holds_alternative<BonusType>(effectType)) {
         return;
     }
 
