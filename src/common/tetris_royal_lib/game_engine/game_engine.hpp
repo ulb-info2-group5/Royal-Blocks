@@ -11,6 +11,7 @@
 #include <array>
 #include <bitset>
 #include <memory>
+#include <optional>
 
 using GameStatePtr = std::shared_ptr<GameState>;
 
@@ -242,6 +243,11 @@ class GameEngine {
      * @brief Sends all the penalties that were stashed.
      */
     void emptyPenaltyStash(PlayerID playerID);
+
+    /**
+     * @brief Returns the winner's playerID if there is one, nullopt otherwise.
+     */
+    std::optional<PlayerID> getWinner();
 
     /**
      * @brief Checks whether the given feature is enabled for the given

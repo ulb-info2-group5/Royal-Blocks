@@ -7,10 +7,12 @@
 #include "effect/penalty/timed_penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "player_state/player_state.hpp"
+#include "player_tetris/player_tetris.hpp"
 #include "tetris/tetris.hpp"
 #include "tetromino/tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <optional>
 #include <stdexcept>
@@ -458,4 +460,19 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
                                      GameModeFeature gameModeFeature) {
     return featuresBitsets.at(static_cast<size_t>(gameMode))
         .test(static_cast<size_t>(gameModeFeature));
+}
+
+std::optional<PlayerID> GameEngine::getWinner() {
+    auto alivePlayers = pGameState_->getPlayerToTetris()
+                        | std::views::filter([](const auto &pt) {
+                              return pt.pPlayerState_->isAlive();
+                          });
+
+    assert(std::ranges::distance(alivePlayers) >= 1);
+
+    if (std::ranges::distance(alivePlayers) > 1) {
+        return std::nullopt;
+    }
+
+    return alivePlayers.begin()->pPlayerState_->getPlayerID();
 }
