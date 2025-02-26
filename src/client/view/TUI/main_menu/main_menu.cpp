@@ -12,12 +12,13 @@
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <memory>
 #include <vector>
 
 
 // ### Constructor ###
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
-screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsManager_(std::make_unique<FriendsManager>(screen, controller))
+screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsManager_(std::make_unique<FriendsManager>(screen, controller)), messagingMenu_(std::make_unique<Messaging>(screen, controller))
 {
     buttonBack_ = ftxui::Button("Back", [&] {
         state_ = MainMenuState::BACK;
@@ -39,6 +40,7 @@ void MainMenu::handleChoice() {
             break;
 
         case MainMenuState::SEND_MESSAGES_TO_FRIENDS:
+            messagingMenu_->render();
             break;
 
         case MainMenuState::LOOK_RANKING:
@@ -267,12 +269,6 @@ void MainMenu::renderRanking() {
     displayRankingWindow();
 
     screen_->Loop(rankingWindow_);    
-}
-
-void MainMenu::renderMessagingMenu(const std::vector<std::string>& friendsList){
-    // very bad just for the tests
-    Messaging messagingMenue(screen_, controller_);
-    messagingMenue.render();
 }
 
 void MainMenu::renderProfileManager() {

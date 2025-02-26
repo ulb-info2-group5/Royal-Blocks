@@ -9,6 +9,7 @@
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
+#include "../view/TUI/messaging/messaging.hpp"
 
 // ### Public methods ###
 
@@ -83,4 +84,23 @@ bool Controller::addFriend(const std::string &friendName) const {
 bool Controller::removeFriend(const std::string &friendName) const {
     // TODO: communicate with the server to remove the friend
     return true;
+}
+
+bool Controller::sendMessage(const std::string &friendName, const std::string &message) const {
+    // TODO: communicate with the server to send the message
+    return true;
+}
+
+std::map<std::string, std::vector<Message>> Controller::getMessages() const {
+    // TODO: communicate with the server to get the conversations
+    // TODO: remove this because it's an example
+
+    std::map<std::string, std::vector<Message>> conversations;
+    conversations["friend1"].push_back(Message{1, "message1"});
+    conversations["friend2"].push_back(Message{2, "message2"});
+    conversations["friend3"].push_back(Message{3, "message3"});
+    conversations["friend4"].push_back(Message{4, "message4"});
+    conversations["friend5"].push_back(Message{5, "message5"});
+
+    return conversations;
 }

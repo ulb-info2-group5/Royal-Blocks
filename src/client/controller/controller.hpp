@@ -13,6 +13,9 @@
 #include "../view/TUI/screen_manager.hpp"
 #include <string>
 #include <vector>
+#include <map>
+
+struct Message; // Forward declaration
 
 class Controller {
     private:
@@ -100,7 +103,23 @@ class Controller {
         * @return true If the friend is removed, false otherwise
         */
         bool removeFriend(const std::string &friendName) const;
-    };
+
+        /*
+        * @brief Send a message to a friend
+        *
+        * @param friendName The name of the friend to send the message
+        * @param message The message to send
+        * @return true If the message is sent, false otherwise
+        */
+        bool sendMessage(const std::string &friendName, const std::string &message) const;
+
+        /*
+        * @brief Get the messages of all the conversations of the user
+        *
+        * @return std::map<std::string, std::vector<std::string>> The messages of all the conversations of the user
+        */
+        std::map<std::string, std::vector<Message>> getMessages() const;
+};
 
 
 #endif // CONTROLLER_HPP

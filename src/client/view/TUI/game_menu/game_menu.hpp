@@ -12,7 +12,6 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
 #include <memory>
-#include <cstdint>
 
 class Controller; // Forward declaration
 

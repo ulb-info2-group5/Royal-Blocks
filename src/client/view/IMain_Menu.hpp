@@ -1,10 +1,6 @@
 #ifndef IMAIN_MENU_HPP
 #define IMAIN_MENU_HPP
 
-#include <string>
-#include <tuple>
-#include <vector>
-
 class IMain_Menu
 {
     protected:
@@ -25,8 +21,6 @@ class IMain_Menu
         virtual ~IMain_Menu() = default;
 
         virtual void renderRanking() = 0;
-
-        virtual void renderMessagingMenu(const std::vector<std::string> &friendsList ) = 0;
 
         virtual void renderProfileManager() = 0;
 };

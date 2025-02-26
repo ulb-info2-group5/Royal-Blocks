@@ -11,6 +11,7 @@
 
 #include "../../IMain_Menu.hpp"
 #include "../friends_manager/friends_manager.hpp"
+#include "../messaging/messaging.hpp"
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
@@ -21,8 +22,6 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
-#include <tuple>
-#include <vector>
 
 class Controller; // Forward declaration
 
@@ -59,6 +58,7 @@ class MainMenu : public IMain_Menu
         MainMenuState state_;
 
         std::unique_ptr<FriendsManager> friendsManager_;
+        std::unique_ptr<Messaging> messagingMenu_;
 
         ftxui::Component buttonPlay_;
         ftxui::Component buttonJoinGame_;
@@ -138,13 +138,6 @@ class MainMenu : public IMain_Menu
          * @brief Render the main menu screen with all the components
          */
         void render();
-
-        /*
-        *@brief Launch and render the messagingMenu
-        *
-        *@param friendsList The list of the friends of the user to display
-        */
-        void renderMessagingMenu(const std::vector<std::string> &friendsList ) override;
 };
 
 #endif // MAIN_MENU_HPP

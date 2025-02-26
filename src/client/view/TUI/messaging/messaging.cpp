@@ -2,6 +2,8 @@
 
 #include "../../../controller/controller.hpp"
 
+// TODO: add verification of information when adding a friend, sending a message, etc. with the server. Check if the vector of friends, etc, are updated correctly
+
 // ### constructor ###
 Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
     screen_(screen), controller_(controller)
@@ -14,7 +16,7 @@ Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen, Controlle
 void Messaging::initMessaging(){
     for (const std::string& friend_name : friends_) 
     {
-        conversations[friend_name] = {Message{1, friend_name + " : test bonjour "} };
+        conversations_[friend_name] = {Message{1, friend_name + " : test bonjour "} };
     }
 }
 // ### protected methods ###
@@ -22,15 +24,16 @@ void Messaging::initMessaging(){
 void Messaging::drawButtons()
 {
     addFriendButton_ = ftxui::Button("Ajouter un ami", [&] {
-        if (!newFriend_.empty()) {
+        if (controller_->addFriend(newFriend_)) {
             friends_.push_back(newFriend_);
-            conversations[newFriend_] = {}; 
+            conversations_[newFriend_] = {}; 
             newFriend_.clear();
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
     sendButton_ = ftxui::Button("Envoyer", [&] {
         if (!newMessage_.empty() && !friends_.empty()) { 
+            controller_->sendMessage(friends_[static_cast<size_t>(selectedFriend)], newMessage_); // TODO: check if the message is sent with server, etc
             addMessage(newMessage_);
         }
     }) | ftxui::center;
@@ -45,6 +48,8 @@ void Messaging::drawButtons()
 
 void Messaging::drawInputUSer()
 {
+    newFriend_.clear();
+
     addFriendInput_ = ftxui::Input(&newFriend_, "Nom de l'ami");
     //attempt to send the result when  user press enter
 
@@ -85,7 +90,7 @@ void Messaging::drawDisplay()
     chatDisplay_ = ftxui::Renderer([&] {
         ftxui::Elements chat_elements;
         if (!friends_.empty()) {
-            for (const Message &msg : conversations[friends_[static_cast<size_t>(selectedFriend)]]) {
+            for (const Message &msg : conversations_[friends_[static_cast<size_t>(selectedFriend)]]) {
                 if (msg.idSender != userId){
                     chat_elements.push_back(ftxui::text(msg.message) | ftxui::bold | ftxui::color(ftxui::Color::Yellow));
                 }else {
@@ -148,15 +153,16 @@ void Messaging::drawWindow()
 }
 
 // ### public methods ###
-MessagingState Messaging::render()
+void Messaging::render()
 {
+    friends_ = controller_->getFriendsList(); // TODO: check if the friends list is correctly updated with the server, etc
+    conversations_ = controller_->getMessages(); // TODO: check if the conversations are correctly updated with the server, etc
     drawWindow();
     screen_->Loop(displayWindow_);
-    return userState_;
 }
 
 void Messaging::addMessage(const std::string &message)
 {
-    conversations[friends_[static_cast<size_t>(selectedFriend)]].push_back(Message{userId, message});
+    conversations_[friends_[static_cast<size_t>(selectedFriend)]].push_back(Message{userId, message});
     newMessage_.clear();
 }

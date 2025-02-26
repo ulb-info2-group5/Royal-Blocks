@@ -3,10 +3,7 @@
 
 #include "../../interfaceConstants.hpp"
 #include "../../IGame.hpp"
-#include "../../dataExample.hpp"
 
-#include "ftxui/dom/canvas.hpp"  // for Canvas
-#include "ftxui/dom/node.hpp"    // for Render
 #include "ftxui/screen/color.hpp"  // for Color
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/component_base.hpp"
@@ -16,7 +13,6 @@
 #include <ftxui/screen/screen.hpp>
 
 #include <memory>
-#include <utility>
 #include <string>
 #include <vector>
 #include <array>

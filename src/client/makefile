@@ -1,6 +1,6 @@
 CXX = g++
 
-CXXFLAGS = -Wall -Wextra -std=c++17
+CXXFLAGS = -g -O2 -Wall -Wextra -std=c++17 -fsanitize=address -fsanitize=undefined 
 
 LDFLAGS = -lboost_system -lftxui-component -lftxui-screen -lftxui-dom
 

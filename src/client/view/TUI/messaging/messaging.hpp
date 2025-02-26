@@ -46,7 +46,7 @@ class Messaging : public IMessage
         */
         Controller *controller_;
 
-        std::map<std::string, std::vector<Message>> conversations;
+        std::map<std::string, std::vector<Message>> conversations_;
         std::vector<std::string> friends_;
         int selectedFriend = 0;
         std::string newFriend_;
@@ -102,10 +102,8 @@ class Messaging : public IMessage
 
         /*
         * @brief Render the messaging screen with all the components
-        *
-        * @return MessagingState The state of the messaging screen
         */
-        MessagingState render();
+        void render();
         
         // void addFriends(std::string friendName) override;
         
