@@ -15,85 +15,85 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/component/component.hpp>
 
+// TODO: add screens for valod or invalid when adding or removing a friend
+
 // ### Public methods ###
 
-FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : screen_{screen}, controller_(controller), state_{FriendsManagerState::NONE} {}
+FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : screen_{screen}, controller_(controller) {
+    buttonBack_ = ftxui::Button("Back", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+}
 
-FriendsManagerState FriendsManager::render(const std::vector<std::string> &friendsList) {
-    std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);
+void FriendsManager::render() {
+    bool res = true;
 
-    ftxui::Component friendsContainer = ftxui::Container::Vertical(friendsButton);
+    while (res) {
     
-    for (ftxui::Component &friendButton : friendsButton) {
-        friendsContainer->Add(friendButton);
+        std::vector<std::string> friendsList = controller_->getFriendsList();
+
+        std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);
+
+        ftxui::Component buttonBack = ftxui::Button("Back", [&] {
+            res = false; // Exit the loop
+            screen_->ExitLoopClosure()();
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+        ftxui::Component friendsContainer = ftxui::Container::Vertical(friendsButton);
+        
+        for (ftxui::Component &friendButton : friendsButton) {
+            friendsContainer->Add(friendButton);
+        }
+
+        ftxui::Component buttonAddFriend = ftxui::Button("Add a friend", [&] {
+            addFriendScreen();
+            screen_->ExitLoopClosure()();
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+        ftxui::Component buttonsContainer = ftxui::Container::Vertical({
+            buttonAddFriend,
+            buttonBack,
+        });
+
+        ftxui::Component render = ftxui::Renderer(ftxui::Container::Vertical({friendsContainer, buttonsContainer}), [&] {
+            return ftxui::vbox({
+                ftxui::text("Friends List") | ftxui::bold | ftxui::center,
+                ftxui::separator(),
+                ftxui::text("Your friends") | ftxui::center,
+                friendsContainer->Render() | ftxui::border,
+                ftxui::separator(),
+                buttonAddFriend->Render(),
+                ftxui::separator(),
+                buttonBack->Render(),
+            }) | ftxui::border | ftxui::center;
+        });
+
+        screen_->Loop(render);
     }
-
-    ftxui::Component buttonAddFriend = ftxui::Button("Add a friend", [&] {
-        state_ = FriendsManagerState::ADD_FRIEND;
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
-    ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-        state_ = FriendsManagerState::NONE;
-        screen_->ExitLoopClosure()();
-        screen_->ExitLoopClosure()();
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
-    ftxui::Component buttonsContainer = ftxui::Container::Vertical({
-        buttonAddFriend,
-        buttonBack,
-    });
-
-    ftxui::Component render = ftxui::Renderer(ftxui::Container::Vertical({friendsContainer, buttonsContainer}), [&] {
-        return ftxui::vbox({
-            ftxui::text("Friends List") | ftxui::bold | ftxui::center,
-            ftxui::separator(),
-            ftxui::text("Your friends") | ftxui::center,
-            friendsContainer->Render() | ftxui::border,
-            ftxui::separator(),
-            buttonAddFriend->Render(),
-            ftxui::separator(),
-            buttonBack->Render(),
-        }) | ftxui::border | ftxui::center;
-    });
-
-    screen_->Loop(render);
-
-    return state_;
 }
 
-std::string FriendsManager::getName() const {
-    return friendName_;
-}
 
-bool FriendsManager::addFriendScreen() {
-    bool res;
+// ### Private methods ###
 
+void FriendsManager::addFriendScreen() {
     friendName_.clear(); // Reset the name of the friend
     std::string msg;
 
     ftxui::Component input = ftxui::Input(&friendName_, "Name of friend") | ftxui::border | ftxui::center;
 
     ftxui::Component submitButton = ftxui::Button("Add", [&] {
-        if (friendName_.empty()) {
-            // TODO: add check if name exist with server, etc
-            msg = "Please enter a name";
+        if (!controller_->addFriend(friendName_)) {
+            msg = "Please enter a valid name";
         }
         else {
-            res = true;
             screen_->ExitLoopClosure()();
         }
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
-    ftxui::Component backButton = ftxui::Button("Back", [&] {
-        res = false;
-        screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
     ftxui::Component container = ftxui::Container::Vertical({
         input,
         submitButton,
-        backButton,
+        buttonBack_,
     });
 
     ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({container}), [&] {
@@ -105,16 +105,12 @@ bool FriendsManager::addFriendScreen() {
             ftxui::text(msg) | ftxui::center,
             ftxui::separator(),
             submitButton->Render(),
-            backButton->Render(),
+            buttonBack_->Render(),
         }) | ftxui::border | ftxui::center;
     });
 
     screen_->Loop(component);
-
-    return res;
 }
-
-// ### Private methods ###
 
 std::vector<ftxui::Component> FriendsManager::displayFriendButtons(const std::vector<std:: string> &friendsList)
 {
@@ -132,12 +128,11 @@ std::vector<ftxui::Component> FriendsManager::displayFriendButtons(const std::ve
 void FriendsManager::manageFriendlistScreen(const std::string &friendName) {
 
     ftxui::Component buttonYes = ftxui::Button("Yes", [&] {
-        state_ = FriendsManagerState::REMOVE_FRIEND;
-        friendName_ = friendName;
-        screen_->ExitLoopClosure()();        
+        if (controller_->removeFriend(friendName)) {
+            screen_->ExitLoopClosure()(); 
+        }       
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
     ftxui::Component buttonNo = ftxui::Button("No", [&] {
-        state_ = FriendsManagerState::NO;
         screen_->ExitLoopClosure()();
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)); // Like it's a back button
 

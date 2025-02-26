@@ -28,9 +28,9 @@ class FriendsManager {
     private:
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
         Controller *controller_;
-        FriendsManagerState state_;
         std::string friendName_;
 
+        ftxui::Component buttonBack_;
 
         /*
         * @brief Render the friends list of the user to display with all friends dislayed is a button
@@ -41,6 +41,11 @@ class FriendsManager {
         * @brief Manage the friendlist screen when a friend is clicked
         */
         void manageFriendlistScreen(const std::string &friendName);
+
+        /*
+        * @brief Screen to add a friend
+        */
+        void addFriendScreen();
 
 
     public:
@@ -56,26 +61,8 @@ class FriendsManager {
 
         /*
         * @brief Render the friends manager screen with all the components
-        *
-        * @param friendsList The list of the friends of the user to display
-        * @return FriendsManagerState The state of the friends manager
         */
-        FriendsManagerState render(const std::vector<std::string> &friendsList);
-
-        /*
-        * @brief Get the name of the friend to add
-        *
-        * @return std::string The name of the friend to add
-        */
-        std::string getName() const;
-
-        /*
-        * @brief Screen to add a friend
-        *
-        * @return bool True if the friend will be added, false otherwise
-        */
-        bool addFriendScreen();
-
+        void render();
 };
 
 #endif

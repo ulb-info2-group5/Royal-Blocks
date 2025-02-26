@@ -12,6 +12,7 @@
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
 #include <string>
+#include <vector>
 
 class Controller {
     private:
@@ -75,6 +76,30 @@ class Controller {
         * @return true If the profile is changed, false otherwise
         */
         bool changeProfile(const std::string &username, const std::string &password) const;
+
+        /*
+        * @brief Get the friends list of the user
+        *
+        * @return std::vector<std::string> The friends list of the user
+        */
+        std::vector<std::string> getFriendsList() const;
+
+        /*
+        * @brief Add a friend to the friends list of the user
+        *
+        * @param friendName The name of the friend to add
+        * @return true If the friend is added, false otherwise
+        */
+        bool addFriend(const std::string &friendName) const;
+
+
+        /*
+        * @brief Remove a friend from the friends list of the user
+        *
+        * @param friendName The name of the friend to remove
+        * @return true If the friend is removed, false otherwise
+        */
+        bool removeFriend(const std::string &friendName) const;
     };
 
 

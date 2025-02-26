@@ -61,3 +61,26 @@ bool Controller::changeProfile(const std::string &username, const std::string &p
     }
     return false;
 }
+
+std::vector<std::string> Controller::getFriendsList() const {
+    // TODO: communicate with the server to get the friends list
+    // TODO: remove this because it's an example
+    std::vector<std::string> friendsList;
+    friendsList.push_back("friend1");
+    friendsList.push_back("friend2");
+    friendsList.push_back("friend3");
+    friendsList.push_back("friend4");
+    friendsList.push_back("friend5");
+
+    return friendsList;
+}
+
+bool Controller::addFriend(const std::string &friendName) const {
+    // TODO: communicate with the server to add the friend
+    return true;
+}
+
+bool Controller::removeFriend(const std::string &friendName) const {
+    // TODO: communicate with the server to remove the friend
+    return true;
+}

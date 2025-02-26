@@ -10,6 +10,7 @@
 #define MAIN_MENU_HPP
 
 #include "../../IMain_Menu.hpp"
+#include "../friends_manager/friends_manager.hpp"
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
@@ -57,6 +58,8 @@ class MainMenu : public IMain_Menu
 
         MainMenuState state_;
 
+        std::unique_ptr<FriendsManager> friendsManager_;
+
         ftxui::Component buttonPlay_;
         ftxui::Component buttonJoinGame_;
         ftxui::Component buttonSendMessagesToFriends_;
@@ -66,6 +69,7 @@ class MainMenu : public IMain_Menu
         ftxui::Component buttonExit_;
 
         ftxui::Component buttonBack_;
+        ftxui::Component buttonOK_;
 
         ftxui::Elements rowsRanking_;
 
@@ -112,6 +116,11 @@ class MainMenu : public IMain_Menu
          */
          void renderRanking() override;
 
+         /*
+        * @brief Render the profile manager of the user
+        */
+        void renderProfileManager() override;
+
     public:
         /*
          * @brief Construct a new Main Menu object
@@ -136,11 +145,6 @@ class MainMenu : public IMain_Menu
         *@param friendsList The list of the friends of the user to display
         */
         void renderMessagingMenu(const std::vector<std::string> &friendsList ) override;
-
-        /*
-        * @brief Render the profile manager of the user
-        */
-         void renderProfileManager() override;
 };
 
 #endif // MAIN_MENU_HPP

@@ -17,11 +17,15 @@
 
 // ### Constructor ###
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
-screen_(screen), controller_(controller), state_(MainMenuState::NONE)
+screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsManager_(std::make_unique<FriendsManager>(screen, controller))
 {
     buttonBack_ = ftxui::Button("Back", [&] {
         state_ = MainMenuState::BACK;
         screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonOK_ = ftxui::Button("OK", [&] {
+        state_ = MainMenuState::BACK; // like a back button but with ok title
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 }
 
@@ -46,6 +50,7 @@ void MainMenu::handleChoice() {
             break;
 
         case MainMenuState::MANAGE_FRIENDS_LIST:
+            friendsManager_->render();
             break;
 
         case MainMenuState::EXIT:
@@ -211,7 +216,7 @@ void MainMenu::displayProfileManagerButton()
         if (!controller_->changeProfile(username_, password_)) {
             profileMessage_ = "The change of your profile has failed. Please enter another username or password";
         }
-        else {
+        else {            
             screen_->ExitLoopClosure()();
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
