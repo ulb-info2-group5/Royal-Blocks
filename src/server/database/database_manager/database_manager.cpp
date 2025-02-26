@@ -51,10 +51,10 @@ bool DatabaseManager::executeSqlChangeData(const std::string &sql, const std::ve
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
+        if (std::holds_alternative<int>(params[i])) {
+            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, std::get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 
@@ -79,10 +79,10 @@ bool DatabaseManager::executeSqlRecoveryInt(const std::string &sql, const std::v
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
+        if (std::holds_alternative<int>(params[i])) {
+            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, std::get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 
@@ -111,10 +111,10 @@ bool DatabaseManager::executeSqlRecoveryString(const std::string &sql, const std
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, get<int>(params[i]));
+        if (std::holds_alternative<int>(params[i])) {
+            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1, get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt, i + 1, std::get<std::string>(params[i]).c_str(), -1, SQLITE_STATIC);
         }
     }
 

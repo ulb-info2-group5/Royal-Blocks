@@ -10,19 +10,20 @@
 #include <iostream>
 #include <memory>
 #include <sqlite3.h>
-
+#include <nlohmann/json.hpp>
 #include "../database_manager/database_manager.hpp"
-#include "glaze/glaze.hpp"
+
 
 class MessagesManagerTest;
 
 struct Message {
     int senderId;
     std::string content;
-    // reflect is used to read a json, because Glaze cannot automatically guess
-    // where to put the Json values
-    template <typename T> void reflect(T &t) {
-        t("senderId", senderId, "content", content);
+    nlohmann::json to_json() const {
+        return nlohmann::json{{"senderId", senderId}, {"content", content}};
+    }
+    static Message from_json(const nlohmann::json& j){
+        return Message{{j.at("senderId").get<int>()}, {j.at("content").get<std::string>()}};
     }
 };
 
@@ -30,9 +31,22 @@ struct Discution {
     int idUser1;
     int idUser2;
     std::vector<Message> messages;
+    nlohmann::json to_json() const {
+        nlohmann::json jsonsms = nlohmann::json::array();
+        for (auto &message : messages){
+            jsonsms.push_back(message.to_json());
+        }    
+        return nlohmann::json{{"idUser1", idUser1}, {"idUser2", idUser2},{ "messages", jsonsms}};
+    }
+    static Discution from_json(const nlohmann::json& j){
+        Discution d;
+        d.idUser1 = j.at("idUser1").get<int>();
+        d.idUser2 = j.at("idUser2").get<int>();
 
-    template <typename T> void reflect(T &t) {
-        t("idUser1", idUser1, "idUser2", idUser2, "messages", messages);
+        for (const auto& msg_json : j.at("messages")) {
+            d.messages.push_back(Message::from_json(msg_json));
+        }
+        return d;
     }
 };
 
@@ -89,6 +103,8 @@ class MessagesManager {
      */
      std::string getPathDiscussion(const int &idUser1, const int &idUser2);
 
+
+     
   public:
     /*
      * @brief Construct a new messagesManager object
