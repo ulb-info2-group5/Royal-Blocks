@@ -298,11 +298,8 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
     }
 
     // Stash if penalty and no target defined/dead
-    bool targetAlive = false;
     std::optional<PlayerID> optTargetID = pPlayerStateBuyer->getPenaltyTarget();
-    if (optTargetID.has_value()) {
-        targetAlive = checkAlive(*optTargetID);
-    }
+    bool targetAlive = optTargetID.has_value() && checkAlive(*optTargetID);
     if (std::holds_alternative<PenaltyType>(effectType) && !targetAlive) {
         stashForLater = true;
     }
