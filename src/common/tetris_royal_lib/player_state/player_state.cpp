@@ -210,11 +210,13 @@ void PlayerState::notifyEngineTick() {
 void PlayerState::notifyLost() { isAlive_ = false; }
 
 void PlayerState::notifyActiveTetrominoPlaced() {
-    if (pActiveBonus_ == nullptr) {
-        return;
+    if (pActiveBonus_ != nullptr) {
+        pActiveBonus_->tetrominoPlaced();
     }
 
-    pActiveBonus_->tetrominoPlaced();
+    if (pActivePenalty_ != nullptr) {
+        pActivePenalty_->tetrominoPlaced();
+    }
 }
 
 /* ------------------------------------------------
