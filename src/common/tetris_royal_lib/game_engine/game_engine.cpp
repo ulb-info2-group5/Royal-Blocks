@@ -14,7 +14,6 @@
 
 #include <cassert>
 #include <optional>
-#include <ostream>
 #include <stdexcept>
 #include <variant>
 
@@ -230,7 +229,13 @@ bool GameEngine::checkAlive(PlayerID playerID) const {
     return checkAlive(pPlayerState);
 }
 
-void GameEngine::clockTick(PlayerTetris &playerTetris) {
+void GameEngine::engineTick(PlayerTetris &playerTetris) {
+    playerTetris.pPlayerState_->notifyEngineTick();
+
+    if (!playerTetris.pPlayerState_->isGameTick()) {
+        return;
+    }
+
     if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
         // ignore tick (slowdown bonus)
         if (shouldIgnoreTick(*playerTetris.pPlayerState_)) {
@@ -479,7 +484,7 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
         .test(static_cast<size_t>(gameModeFeature));
 }
 
-void GameEngine::clockTick() {
+void GameEngine::engineTick() {
     auto alivePlayers = pGameState_->getPlayerToTetris()
                         | std::views::filter([](const auto &pt) {
                               return pt.pPlayerState_->isAlive();
@@ -488,11 +493,7 @@ void GameEngine::clockTick() {
     for (auto &playerTetris : alivePlayers) {
         handlePlayerTimedEffect(*playerTetris.pPlayerState_);
 
-        if (playerTetris.pPlayerState_->isGameTick()) {
-            clockTick(playerTetris);
-        }
-
-        playerTetris.pPlayerState_->notifyEngineTick();
+        engineTick(playerTetris);
     }
 }
 

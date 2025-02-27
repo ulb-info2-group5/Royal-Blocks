@@ -173,9 +173,9 @@ class GameEngine {
     bool checkAlive(PlayerID playerID) const;
 
     /**
-     * @brief Makes a clock tick happen for the given player.
+     * @brief Makes an engine tick happen for the given player.
      */
-    void clockTick(PlayerTetris &playerTetris);
+    void engineTick(PlayerTetris &playerTetris);
 
   public:
     /**
@@ -253,9 +253,9 @@ class GameEngine {
     void emptyPenaltyStash(PlayerID playerID);
 
     /**
-     * @brief Sends all the penalties that were stashed.
+     * @brief Creates an engine tick, making everything update.
      */
-    void clockTick();
+    void engineTick();
 
     /**
      * @brief Returns the winner's playerID if there is one, nullopt otherwise.
