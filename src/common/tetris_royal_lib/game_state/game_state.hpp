@@ -56,7 +56,9 @@ class GameState {
      */
     TetrisPtr getTetris(PlayerID playerID);
 
-    // TODO:
+    /**
+     * @brief Returns the playerToTetris vector member.
+     */
     std::vector<PlayerTetris> &getPlayerToTetris();
 
     /* ------------------------------------------------

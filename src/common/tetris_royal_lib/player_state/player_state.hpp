@@ -58,7 +58,6 @@ class PlayerState final : public TetrisObserver {
     TimedBonusPtr pActiveBonus_;
     TimedPenaltyPtr pActivePenalty_;
 
-    // TODO: make this optional
     std::optional<size_t> engineTicksSinceLastTick_;
 
   public:
@@ -206,18 +205,40 @@ class PlayerState final : public TetrisObserver {
      */
     std::deque<PenaltyType> getStashedPenalties();
 
-    // TODO
+    /**
+     * @brief Determines whether the current engine tick corresponds to a game
+     * tick for the player.
+     *
+     * Engine ticks maintain a constant frequency throughout the game and are
+     * used to time effects. However, not every engine tick results in a game
+     * tick for the player's Tetris instance.
+     *
+     * This double-tick mechanism exists due to the SpeedUp penalty, which
+     * requires the player's Tetris instance to speed up dynamically.
+     */
     bool isGameTick();
 
-    // TODO
+    /**
+     * @brief Notifies that a engine tick has occured.
+     *
+     * This doesn't do anything besides updating the
+     * engineTicksSinceLastTick_ member.
+     * This doesn't do anything related to the effects etc.
+     */
     void notifyEngineTick();
 
     /* ------------------------------------------------
      *          TetrisObserver
      * ------------------------------------------------*/
 
+    /**
+     * @brief Notifies that the player has lost.
+     */
     void notifyLost();
 
+    /**
+     * @brief Notifies that a tetromino has been placed.
+     */
     void notifyActiveTetrominoPlaced();
 
   public:
