@@ -15,6 +15,12 @@
 using boost::asio::ip::tcp;
 
 
+enum PacketType :char {
+    MESSAGE = 'M',
+    CONNECTION = 'C',
+    DECONNECTION = 'D'
+};
+
 struct FeedBack{
     bool result; 
     std::string subject;
@@ -31,8 +37,6 @@ struct DataBase{
 /*
 ClientLink : Represents a single client connection. Inherits enable_shared_from_this creates a
 std::shared_ptr from this to avoid premature destruction.
-
-use the Factory method for create a new connection by using shared_ptr
 */
 
 class ClientLink : public std::enable_shared_from_this<ClientLink>{
@@ -67,7 +71,9 @@ class ClientManager {
         ~ClientManager() = default;
         
         void handlePacket(const std::string& packet);
+        void handleMessage(nlohmann::json message);
 
-        void addConnection(int clientId, std::shared_ptr<ClientLink> clientSession);
+        void addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo);
+        void removeConnection(const int & clientId);
         bool checkCredentials(const std::string& pseudo, const std::string& password);
 };

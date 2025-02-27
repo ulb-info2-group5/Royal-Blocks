@@ -32,6 +32,7 @@ void TcpClient::sendAuthentication(const Authentication &authentication){
             //this->readSocket();
         }
     });
+    writeMessage();
 }
 
 void TcpClient::readSocket(){
@@ -43,6 +44,22 @@ void TcpClient::readSocket(){
     }); 
 }
 
+void TcpClient::writeMessage(){
+    std::string content = "tes de message ";
+    int recieverid = 49;
+    int senderid = 50;
+    nlohmann::json j;
+    j["type"] = "message";
+    j["senderId"] = 50;
+    j["reciverId"] = 49;
+    j["content"] = content;
+    buffer_ = j.dump() + "\n";
+    boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t /*length*/){
+        if (!ec){
+            std::cout << "--- *** message send *** ---" << std::endl; 
+        }
+    });
+}
 
 
 void TcpClient::writeSocket(){
@@ -54,7 +71,7 @@ void TcpClient::writeSocket(){
     });
 }
 
-    
+
 TcpClient::TcpClient(boost::asio::io_context& ioContex, const std::string& host, const std::string& port ) : socket_(ioContex) {
     tcp::resolver resolver(ioContex);
     auto endpoints = resolver.resolve(host, port);

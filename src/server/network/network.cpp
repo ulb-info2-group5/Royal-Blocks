@@ -26,13 +26,13 @@ void Network::accept(){
 bool Network::checkCredentials(std::shared_ptr<std::string> credentials){
     std::cout << "-- ceck credentials --" << std::endl;
     //i will continue later 
-    nlohmann::json jsonCredentials =  nlohmann::json::parse(*credentials);
-    if (clientManager_.checkCredentials(jsonCredentials.at("pseudo").get<const std::string>(), jsonCredentials.at("password").get<const std::string>())){
-        return true;
-    }else {
-        return false;
+    if (!(*credentials).empty()){
+        nlohmann::json jsonCredentials =  nlohmann::json::parse(*credentials);
+        if (clientManager_.checkCredentials(jsonCredentials.at("pseudo").get<const std::string>(), jsonCredentials.at("password").get<const std::string>())){
+            return true;
+        }
     }
-    //return true;
+    return false;
 }
 
 void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
@@ -44,18 +44,22 @@ void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
         if (!this->checkCredentials(authenticationBuffer)){
             this->waitForAuthentication(socket);
         }else {
-            this->createNewConnection(socket);
+            this->createNewConnection(socket, authenticationBuffer);
         }
     
     });
   
 }
 
-void Network::createNewConnection(std::shared_ptr<tcp::socket> socket){
+void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, std::shared_ptr<std::string> credentials){
     // pls just use auto  
     std::cout << "create new connection " << std::endl;
     std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(*socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
-    newLink->start();
+    std::string pseudo = nlohmann::json::parse(*credentials).at("pseudo").get<const std::string>();
+    clientManager_.addConnection(std::move(newLink), pseudo);
+    
+
+
     
 }
 

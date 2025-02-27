@@ -25,7 +25,7 @@ class Network{
         void waitForAuthentication(std::shared_ptr<tcp::socket> socket);
         bool checkCredentials(std::shared_ptr<std::string> credentials);
         void accept();
-        void createNewConnection(std::shared_ptr<tcp::socket> socket);
+        void createNewConnection(std::shared_ptr<tcp::socket> socket, std::shared_ptr<std::string> credentials);
     public: 
         Network(boost::asio::io_context& io,ClientManager &clientManager );
 

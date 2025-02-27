@@ -17,8 +17,8 @@ using boost::asio::ip::tcp;
 void ClientLink::read(){
     boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
-            std::cout << "packet:  " << this->buffer_ << std::endl;
-            read();
+            std::cout << "packet:  " << buffer_ << std::endl;
+            packetHandler_(buffer_);
         }
     }); 
 }
@@ -34,6 +34,7 @@ ClientLink::ClientLink(tcp::socket socket, std::function<void (const std::string
 
 void ClientLink::start(){
     std::cout << "start client link" << std::endl;
+    read();
 }
 
 
@@ -45,18 +46,34 @@ void ClientLink::start(){
 
 // ---public ---
 ClientManager::ClientManager(DataBase database) : database_(database) {
-    std::cout << "clientManager construct" << std::endl;
 }
 
 
-void ClientManager::addConnection(int clientId, std::shared_ptr<ClientLink> clientSession){
+void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo){
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[clientId] = clientSession;
-
+    std::cout << "new client id :" << database_.accountManager->getUserId(pseudo) << std::endl;  
+    connectedClients_[database_.accountManager->getUserId(pseudo)] = clientSession;
+    clientSession->start();
 }
 
 void ClientManager::handlePacket(const std::string& packet){
+
     std::cout << "-- handle Packet call -- " <<std::endl;
+    nlohmann::json jPack = nlohmann::json::parse(packet);
+    char type = jPack.at("type").get<char>();
+    switch (type)
+    {
+    case MESSAGE:  
+        handleMessage(jPack);
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void ClientManager::handleMessage(nlohmann::json message){
+    std::cout << message.at("content").get<std::string>() << std::endl;
 }
 
 
