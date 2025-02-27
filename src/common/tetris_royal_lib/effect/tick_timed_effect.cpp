@@ -10,7 +10,11 @@ bool TickTimedEffect::operator==(const TickTimedEffect &other) const {
     return remainingTicks_ == other.remainingTicks_;
 }
 
-void TickTimedEffect::tick() { remainingTicks_--; }
+void TickTimedEffect::tick() {
+    if (remainingTicks_ > 0) {
+        remainingTicks_--;
+    }
+}
 
 bool TickTimedEffect::isFinished() const { return remainingTicks_ <= 0; }
 

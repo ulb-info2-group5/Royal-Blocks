@@ -10,7 +10,11 @@ bool PlacementTimedEffect::operator==(const PlacementTimedEffect &other) const {
     return remainingPlacements_ == other.remainingPlacements_;
 }
 
-void PlacementTimedEffect::tetrominoPlaced() { remainingPlacements_--; }
+void PlacementTimedEffect::tetrominoPlaced() {
+    if (remainingPlacements_ > 0) {
+        remainingPlacements_--;
+    }
+}
 
 bool PlacementTimedEffect::isFinished() const {
     return remainingPlacements_ <= 0;
