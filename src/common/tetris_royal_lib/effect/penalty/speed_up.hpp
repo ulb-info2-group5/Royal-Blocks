@@ -10,6 +10,8 @@ class SpeedUp final : public TimedPenalty, public TickTimedEffect {
     static constexpr size_t TICKS_NUM = 10;
 
   public:
+    static constexpr size_t SpeedUpFactor = 5;
+
     SpeedUp();
     SpeedUp(const SpeedUp &) = delete;
     SpeedUp(SpeedUp &&) = delete;

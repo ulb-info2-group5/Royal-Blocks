@@ -58,6 +58,9 @@ class PlayerState final : public TetrisObserver {
     TimedBonusPtr pActiveBonus_;
     TimedPenaltyPtr pActivePenalty_;
 
+    // TODO: make this optional
+    std::optional<size_t> engineTicksSinceLastTick_;
+
   public:
     PlayerState(PlayerID playerID, Score score = 0);
     PlayerState(const PlayerState &) = default;
@@ -202,6 +205,12 @@ class PlayerState final : public TetrisObserver {
      * @brief Returns the penalties that were stashed and empties the stash.
      */
     std::deque<PenaltyType> getStashedPenalties();
+
+    // TODO
+    bool isGameTick();
+
+    // TODO
+    void notifyEngineTick();
 
     /* ------------------------------------------------
      *          TetrisObserver

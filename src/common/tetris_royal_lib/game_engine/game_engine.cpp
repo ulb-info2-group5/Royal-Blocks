@@ -4,6 +4,7 @@
 #include "../game_mode/game_mode.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
+#include "effect/penalty/speed_up.hpp"
 #include "effect/penalty/timed_penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "player_state/player_state.hpp"
@@ -487,6 +488,23 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
                                      GameModeFeature gameModeFeature) {
     return featuresBitsets.at(static_cast<size_t>(gameMode))
         .test(static_cast<size_t>(gameModeFeature));
+}
+
+void GameEngine::clockTick() {
+    auto alivePlayers = pGameState_->getPlayerToTetris()
+                        | std::views::filter([](const auto &pt) {
+                              return pt.pPlayerState_->isAlive();
+                          });
+
+    handleAllTimedEffects();
+
+    for (auto &playerTetris : alivePlayers) {
+        if (playerTetris.pPlayerState_->isGameTick()) {
+            clockTick(playerTetris);
+        }
+
+        playerTetris.pPlayerState_->notifyEngineTick();
+    }
 }
 
 std::optional<PlayerID> GameEngine::getWinner() {

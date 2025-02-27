@@ -1,6 +1,7 @@
 #include "player_state.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
+#include "effect/penalty/speed_up.hpp"
 #include "effect_selector/effect_selector.hpp"
 
 #include <optional>
@@ -10,7 +11,7 @@ PlayerState::PlayerState(PlayerID playerID, Score score)
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
       receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
       effectSelector_{std::nullopt}, pActiveBonus_{nullptr},
-      pActivePenalty_{nullptr} {}
+      pActivePenalty_{nullptr}, engineTicksSinceLastTick_{0} {}
 
 void PlayerState::toggleEffects(bool activated) {
     if (activated) {
@@ -164,6 +165,30 @@ void PlayerState::stashPenalty(PenaltyType penalty) {
 
 std::deque<PenaltyType> PlayerState::getStashedPenalties() {
     return std::move(stashedPenalties_.value());
+}
+
+bool PlayerState::isGameTick() {
+    if (!engineTicksSinceLastTick_.has_value()) {
+        // Every tick is a game tick if there is no engineTicksSinceLastTick_
+        // member
+        return true;
+    }
+
+    if (getActivePenalty() != nullptr
+        && pActivePenalty_->getPenaltyType() == PenaltyType::SpeedUp) {
+        return true;
+    }
+
+    return *engineTicksSinceLastTick_ % SpeedUp::SpeedUpFactor == 0;
+}
+
+void PlayerState::notifyEngineTick() {
+    if (!engineTicksSinceLastTick_.has_value()) {
+        return;
+    }
+
+    engineTicksSinceLastTick_ =
+        (*engineTicksSinceLastTick_ + 1) % SpeedUp::SpeedUpFactor;
 }
 
 /* ------------------------------------------------

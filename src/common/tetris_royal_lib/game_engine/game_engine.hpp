@@ -258,6 +258,11 @@ class GameEngine {
     void emptyPenaltyStash(PlayerID playerID);
 
     /**
+     * @brief Sends all the penalties that were stashed.
+     */
+    void clockTick();
+
+    /**
      * @brief Returns the winner's playerID if there is one, nullopt otherwise.
      */
     std::optional<PlayerID> getWinner();
