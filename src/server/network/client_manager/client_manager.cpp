@@ -19,7 +19,9 @@ void ClientLink::read(){
         if (!ec) {
             std::cout << "packet:  " << buffer_ << std::endl;
             packetHandler_(buffer_);
+            buffer_.erase(0, length);
         }
+        read();
     }); 
 }
 
@@ -37,6 +39,19 @@ void ClientLink::start(){
     read();
 }
 
+void ClientLink::recieveMessage(const int &senderId , const std::string & content){
+    nlohmann::json j;
+    j["senderId"] = senderId ;
+    j["content"] = content;
+    buffer_ = j.dump() + "\n";
+    boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t length){
+        if (!ec){
+            std::cout << "message send from the server " << std::endl;
+            buffer_.erase(0, length);
+        }
+
+    });
+}
 
 
 // ====== Client manager class ======
@@ -74,6 +89,10 @@ void ClientManager::handlePacket(const std::string& packet){
 
 void ClientManager::handleMessage(nlohmann::json message){
     std::cout << message.at("content").get<std::string>() << std::endl;
+    std::lock_guard<std::mutex> lock(mutex_);
+    connectedClients_[message.at("reciverId").get<int>()]->recieveMessage(message.at("senderId").get<int>(), message.at("content").get<std::string>());
+    
+
 }
 
 

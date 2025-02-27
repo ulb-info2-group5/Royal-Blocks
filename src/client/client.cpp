@@ -39,26 +39,27 @@ void TcpClient::readSocket(){
     boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n', [this](boost::system::error_code ec, std::size_t length){
         if (!ec){
             std::cout << "server has been sent : " << this->buffer_ << std::endl;
-            
+            buffer_.erase(0, length);
+         readSocket();           
         }
     }); 
 }
 
 void TcpClient::writeMessage(){
     std::string content = "tes de message ";
-    int recieverid = 49;
-    int senderid = 50;
     nlohmann::json j;
-    j["type"] = "message";
-    j["senderId"] = 50;
-    j["reciverId"] = 49;
+    j["type"] = 'M';
+    j["senderId"] = 49;
+    j["reciverId"] = 50;
     j["content"] = content;
     buffer_ = j.dump() + "\n";
-    boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t /*length*/){
+    boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t length){
         if (!ec){
             std::cout << "--- *** message send *** ---" << std::endl; 
+            buffer_.erase(0, length);
         }
     });
+    readSocket();
 }
 
 
