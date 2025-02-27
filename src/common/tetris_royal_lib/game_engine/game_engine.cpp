@@ -4,7 +4,6 @@
 #include "../game_mode/game_mode.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
-#include "effect/penalty/speed_up.hpp"
 #include "effect/penalty/timed_penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "player_state/player_state.hpp"
@@ -63,18 +62,6 @@ void GameEngine::handlePlayerTimedEffect(PlayerState &playerState) {
                     TimedPenalty::makePenalty(penaltyType));
                 return std::optional<PenaltyType>{};
             });
-    }
-}
-
-void GameEngine::handleAllTimedEffects() {
-    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
-        return;
-    }
-
-    for (PlayerTetris &playerTetris : pGameState_->getPlayerToTetris()) {
-        if (checkAlive(playerTetris.pPlayerState_)) {
-            handlePlayerTimedEffect(*playerTetris.pPlayerState_);
-        }
     }
 }
 
@@ -496,9 +483,9 @@ void GameEngine::clockTick() {
                               return pt.pPlayerState_->isAlive();
                           });
 
-    handleAllTimedEffects();
-
     for (auto &playerTetris : alivePlayers) {
+        handlePlayerTimedEffect(*playerTetris.pPlayerState_);
+
         if (playerTetris.pPlayerState_->isGameTick()) {
             clockTick(playerTetris);
         }

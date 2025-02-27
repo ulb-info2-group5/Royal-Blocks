@@ -98,11 +98,6 @@ class GameEngine {
     void handlePlayerTimedEffect(PlayerState &playerState);
 
     /**
-     * @brief Handles all the active timed effects in the game.
-     */
-    void handleAllTimedEffects();
-
-    /**
      * @brief Returns true if the given player currently has the inverted
      * controls penalty.
      */
