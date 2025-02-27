@@ -121,7 +121,14 @@ void PlayerState::receivePenalty(PenaltyType penalty) {
 std::optional<BonusType> PlayerState::fetchGrantedBonus() {
     return grantedBonusesQueue_.and_then([](auto &queue) {
         std::optional<BonusType> ret;
-        queue.pop();
+
+        if (queue.empty()) {
+            ret = std::nullopt;
+        } else {
+            ret = queue.front();
+            queue.pop();
+        }
+
         return ret;
     });
 }
@@ -129,7 +136,14 @@ std::optional<BonusType> PlayerState::fetchGrantedBonus() {
 std::optional<PenaltyType> PlayerState::fetchReceivedPenalty() {
     return receivedPenaltiesQueue_.and_then([](auto &queue) {
         std::optional<PenaltyType> ret;
-        queue.pop();
+
+        if (queue.empty()) {
+            ret = std::nullopt;
+        } else {
+            ret = queue.front();
+            queue.pop();
+        }
+
         return ret;
     });
 }
@@ -149,11 +163,9 @@ void PlayerState::setActiveBonus(TimedBonusPtr pTimedBonus) {
     pActiveBonus_ = pTimedBonus;
 }
 
-TimedBonusPtr PlayerState::getActiveBonus() const { return pActiveBonus_; }
+TimedBonusPtr &PlayerState::getActiveBonus() { return pActiveBonus_; }
 
-TimedPenaltyPtr PlayerState::getActivePenalty() const {
-    return pActivePenalty_;
-}
+TimedPenaltyPtr &PlayerState::getActivePenalty() { return pActivePenalty_; }
 
 void PlayerState::selectNextEffect() { effectSelector_->next(); }
 

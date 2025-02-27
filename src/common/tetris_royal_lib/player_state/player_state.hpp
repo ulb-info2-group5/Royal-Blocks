@@ -169,12 +169,12 @@ class PlayerState final : public TetrisObserver {
     /**
      * @brief Returns active bonus.
      */
-    TimedBonusPtr getActiveBonus() const;
+    TimedBonusPtr &getActiveBonus();
 
     /**
      * @brief Returns active penalty.
      */
-    TimedPenaltyPtr getActivePenalty() const;
+    TimedPenaltyPtr &getActivePenalty();
 
     /**
      * @brief Sets the given timed-penalty as active penalty.
