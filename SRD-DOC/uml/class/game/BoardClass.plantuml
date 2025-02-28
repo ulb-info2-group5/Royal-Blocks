@@ -1,26 +1,47 @@
+/' authors Ernest Jonas Rafaou '/
 @startuml (id=Board)
 
 class Board {
-    - {static} width_ : static constexpr size_t
-    - {static} height_ : static constexpr size_t
-    - grid_ : array<array<Gridcell, width_> , height_
+    - {static} width_ : constexpr size_t = 10
+    - {static} height_ : constexpr size_t = 20
+    - grid_ : array<array<GridCell, width_>, height_>
 
-    - getRow( rowIdx : size_t ) : std::array<GridCell, width_>
+    - at(xCol : int, yRow : int) : GridCell&
+    - getRow(yRow : int) : array<GridCell, width_>&
+    - getRow(yRow : int) : const array<GridCell, width_>&
+    - dropRowsAbove(yRow : int) : void
+    - liftRowsFrom(yRow : int) : void
+    - setPenaltyLine(row : array<GridCell, width_>&) : void
+    - setRow(row : const array<GridCell, width_>&, yRow : size_t) : void
+    - checkEmptyRow(yRow : int) : const bool
+    - checkFullRow(yRow : int) : const bool
+    - checkFullCol(xCol : int) : const bool
+    - emptyRow(yRow : int) : void
+    - emptyCol(xCol : int) : void
+    - gravity() : void
+    - check2By2Occupied(x : int, y : int) : bool
+    - empty2By2Square(x : int, y : int) : void
 
-    - at(rowIdx : size_t , colIdx : size_t ) : GridCell 
-    - checkFullRow(rowIdx : size_t ) : const bool
-    - emptyRow( rowIdx : size_t ) : void
+    + Board() = default
+    + Board(const Board&) = default
+    + Board(Board&&) = default
+    + ~Board() = default
     
-    '- checkFullCol( colIdx : size_t ) : const bool
-    '- emptyCol( colIdx : size_t  ) : void
-    '- gravity() : void
-
-    + &get( rowIdx : size_t, colIdx : size_t ) : const GridCell
-    + getWidth() : const size_t
-    + getHeight() : const size_t 
-
-    + placeTetromino (tetromino : unique_ptr<Tetromino> ) : void
-    + checkInGrid( tetromino : Tetromino ) : const bool
-
+    + operator=(const Board&) = default
+    + operator=(Board&&) = default
+    
+    + get(xCol : int, yRow : int) : const GridCell&
+    + {static} getWidth() : constexpr size_t
+    + {static} getHeight() : constexpr size_t
+    + placeTetromino(tetromino : TetrominoPtr) : void
+    + checkInGrid(tetromino : ATetromino&) : bool
+    + check2By2Occupied(x : int, y : int) : bool
+    + empty2By2Square(x : int, y : int) : void
+    + destroy2By2Occupied() : void
+    + receivePenaltyLines(numPenalty : size_t = 1) : bool
     + update() : BoardUpdate
+    + serialize() : nlohmann::json
+    + deserialize(j : const nlohmann::json&) : void
 }
+
+@enduml

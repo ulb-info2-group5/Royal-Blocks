@@ -1,14 +1,23 @@
-@startuml (id = BoardUpdate )
+/' authors Ernest Jonas Rafaou '/
+@startuml (id=BoardUpdate)
 
 class BoardUpdate {
-    - numDestroyedRows : size_t
-    - numDestroyedCols : size_t
+    - numClearedRows_ : size_t
+    - numClearedCols_ : size_t
 
-    + getNumDestroyedRows() : size_t 
-    + getNumDestroyedRowsNumDestroyedColumns() : size_t
-
-    + incrementDestroyedRows() 
-    + incrementDestroyedCols()
+    + BoardUpdate()
+    + BoardUpdate(const BoardUpdate&) = default
+    + BoardUpdate(BoardUpdate&&) = default
+    + ~BoardUpdate() = default
+    
+    + operator=(const BoardUpdate&) = default
+    + operator=(BoardUpdate&&) = default
+    
+    + getNumClearedRows() : size_t const noexcept
+    + getNumClearedColumns() : size_t const noexcept
+    
+    + incrementClearedRows() : void
+    + incrementClearedCols() : void
 }
 
 @enduml
