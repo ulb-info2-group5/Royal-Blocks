@@ -1,0 +1,36 @@
+@startuml MatchMakingUseCase
+
+left to right direction
+actor Utilisateur as user
+
+'#TODO: should we add join as viewer in matchmaking
+together {
+    cloud "Serveur" as server
+
+    rectangle "Matchmaking" as matchmaking {
+        usecase "Créer la file d'attente" as create_queue
+        usecase "Jouer une partie" as play_game
+
+        usecase "Sélectionner un mode de jeu" as select_gamemode
+
+        usecase "Lancer une partie" as start_game
+
+        
+
+        usecase "Ajouter des joueurs dans la file d'attente" as add_players_to_queue
+    }
+}
+start_game <-left. create_queue: <<extend>>
+start_game <-left. add_players_to_queue: <<extend>>
+play_game .-> start_game: <<include>>
+start_game .left-> select_gamemode: <<include>>
+
+
+
+create_queue -- server
+add_players_to_queue -- server
+start_game -- server
+
+user -- play_game
+ 
+@enduml

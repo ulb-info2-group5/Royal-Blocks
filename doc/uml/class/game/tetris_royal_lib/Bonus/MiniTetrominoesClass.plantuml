@@ -1,0 +1,11 @@
+/' authors Ernest Jonas Rafaou '/
+
+@startuml (id=MiniTetrominoes)
+
+class MiniTetrominoes {
+
+    + getAbstractTimedEffect() : virtual AbstractTimedEffectPtr
+
+}
+
+@enduml

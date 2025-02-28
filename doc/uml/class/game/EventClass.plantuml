@@ -1,5 +1,0 @@
-@startuml (id = Event)
-enum EventType {
-
-}
-@enduml

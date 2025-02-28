@@ -1,0 +1,12 @@
+@startuml (id=PenaltyType)
+
+class PenaltyType {
+    ReverseControls
+    InputLock
+    SpeedUp
+    Lightning
+    Blackout
+    NumPenaltyType
+}
+
+@enduml

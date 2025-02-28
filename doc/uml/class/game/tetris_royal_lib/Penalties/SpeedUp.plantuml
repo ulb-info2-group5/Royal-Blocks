@@ -1,0 +1,13 @@
+@startuml (id=SpeedUp)
+
+class SpeedUp {
+    - {static} constexpr size_t TICKS_NUM = 10
+    + SpeedUp()
+    + SpeedUp(const SpeedUp &) : void
+    + SpeedUp(SpeedUp &&) : void
+    + SpeedUp &operator=(const SpeedUp &) : void
+    + SpeedUp &operator=(SpeedUp &&) : void
+    + ~SpeedUp()
+} 
+
+@enduml

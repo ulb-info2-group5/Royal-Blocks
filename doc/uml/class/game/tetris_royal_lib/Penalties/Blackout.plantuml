@@ -1,0 +1,13 @@
+@startuml (id=Blackout)
+
+class Blackout {
+    - {static} constexpr size_t TICKS_NUM = 10
+    + Blackout()
+    + Blackout(const Blackout &) : void
+    + Blackout(Blackout &&) : void
+    + Blackout &operator=(const Blackout &) : void
+    + Blackout &operator=(Blackout &&) : void
+    + ~Blackout()
+}
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml (id=InputLock)
+
+class InputLock {
+    - {static} constexpr size_t PIECES_NUM = 1
+    + InputLock()
+    + InputLock(const InputLock &) : void
+    + InputLock(InputLock &&) : void
+    + InputLock &operator=(const InputLock &) : void
+    + InputLock &operator=(InputLock &&) : void
+    + ~InputLock()
+}
+
+@enduml
