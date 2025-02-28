@@ -266,5 +266,17 @@ nlohmann::json PlayerState::serializeSelf() const {
         j["stashedPenalties"] = nullptr;
     }
 
+    if (pActiveBonus_) {
+        j["activeBonus"] = pActiveBonus_->serialize();
+    } else {
+        j["activeBonus"] = nullptr;
+    }
+
+    if (pActivePenalty_) {
+        j["activePenalty"] = pActivePenalty_->serialize();
+    } else {
+        j["activePenalty"] = nullptr;
+    }
+
     return j;
 }

@@ -1,6 +1,8 @@
 #ifndef CLIENT_PLAYER_STATE_SELF_HPP
 #define CLIENT_PLAYER_STATE_SELF_HPP
 
+#include "../effects/timed_bonus.hpp"
+#include "../effects/timed_penalty.hpp"
 #include "effect_selector/effect_selector.hpp"
 
 #include <nlohmann/json.hpp>
@@ -28,11 +30,8 @@ namespace client {
 
         std::optional<std::deque<PenaltyType>> stashedPenalties_;
 
-        // NOTE: Might want to add these if we want to display something when a
-        // bonus or penalty is being applied on the player.
-        //
-        // TimedBonusPtr pActiveBonus_;
-        // TimedPenaltyPtr pActivePenalty_;
+        std::optional<client::TimedBonus> activeBonus_;
+        std::optional<client::TimedPenalty> activePenalty_;
 
         /* ------------------------------------------------
          *          Serialization

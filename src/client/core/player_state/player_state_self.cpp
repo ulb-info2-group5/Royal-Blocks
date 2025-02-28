@@ -36,6 +36,18 @@ nlohmann::json client::PlayerStateSelf::serialize() const {
         j["stashedPenalties"] = nullptr;
     }
 
+    if (activeBonus_) {
+        j["activeBonus"] = activeBonus_->serialize();
+    } else {
+        j["activeBonus"] = nullptr;
+    }
+
+    if (activePenalty_) {
+        j["activePenalty"] = activePenalty_->serialize();
+    } else {
+        j["activePenalty"] = nullptr;
+    }
+
     return j;
 }
 
@@ -70,5 +82,19 @@ void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
         stashedPenalties_ = j.at("stashedPenalties");
     } else {
         stashedPenalties_ = std::nullopt;
+    }
+
+    if (!j.at("activeBonus").is_null()) {
+        activeBonus_ = std::make_optional(client::TimedBonus{});
+        activeBonus_->deserialize(j.at("activeBonus"));
+    } else {
+        activeBonus_ = std::nullopt;
+    }
+
+    if (!j.at("activePenalty").is_null()) {
+        activePenalty_ = std::make_optional(client::TimedPenalty{});
+        activePenalty_->deserialize(j.at("activePenalty"));
+    } else {
+        activePenalty_ = std::nullopt;
     }
 }
