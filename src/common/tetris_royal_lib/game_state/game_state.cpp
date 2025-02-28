@@ -24,7 +24,7 @@ std::optional<PlayerID> GameState::getWinner() const {
     std::optional<PlayerID> winner;
 
     for (const PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState_->isAlive()) {
+        if (playerStateTetris.pPlayerState->isAlive()) {
             if (winner.has_value()) {
                 // had already found a player that is
                 // still alive -> more than one player
@@ -32,7 +32,7 @@ std::optional<PlayerID> GameState::getWinner() const {
                 return std::nullopt;
             }
 
-            winner = playerStateTetris.pPlayerState_->getPlayerID();
+            winner = playerStateTetris.pPlayerState->getPlayerID();
         }
     }
 
@@ -41,8 +41,8 @@ std::optional<PlayerID> GameState::getWinner() const {
 
 PlayerStatePtr GameState::getPlayerState(PlayerID playerID) {
     for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState_->getPlayerID() == playerID) {
-            return playerStateTetris.pPlayerState_;
+        if (playerStateTetris.pPlayerState->getPlayerID() == playerID) {
+            return playerStateTetris.pPlayerState;
         }
     }
 
@@ -51,8 +51,8 @@ PlayerStatePtr GameState::getPlayerState(PlayerID playerID) {
 
 TetrisPtr GameState::getTetris(PlayerID playerID) {
     for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState_->getPlayerID() == playerID) {
-            return playerStateTetris.pTetris_;
+        if (playerStateTetris.pPlayerState->getPlayerID() == playerID) {
+            return playerStateTetris.pTetris;
         }
     }
 
@@ -75,7 +75,7 @@ nlohmann::json GameState::serializeFor(PlayerID playerID) const {
     j["externals"] = nlohmann::json::array();
 
     for (const auto &playerTetris : playerToTetris_) {
-        if (playerTetris.pPlayerState_->getPlayerID() == playerID) {
+        if (playerTetris.pPlayerState->getPlayerID() == playerID) {
             j["self"] = playerTetris.serializeSelf();
         } else {
             j["externals"].push_back(playerTetris.serializeExternal());

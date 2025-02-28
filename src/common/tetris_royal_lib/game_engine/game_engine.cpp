@@ -229,22 +229,22 @@ bool GameEngine::checkAlive(PlayerID playerID) const {
     return checkAlive(pPlayerState);
 }
 
-void GameEngine::engineTick(PlayerTetris &playerTetris) {
-    playerTetris.pPlayerState_->notifyEngineTick();
+void GameEngine::tick(PlayerTetris &playerTetris) {
+    playerTetris.pPlayerState->notifyEngineTick();
 
-    if (!playerTetris.pPlayerState_->isGameTick()) {
+    if (!playerTetris.pPlayerState->isGameTick()) {
         return;
     }
 
     if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
         // ignore tick (slowdown bonus)
-        if (shouldIgnoreTick(*playerTetris.pPlayerState_)) {
+        if (shouldIgnoreTick(*playerTetris.pPlayerState)) {
             return;
         }
     }
 
-    const TetrisPtr &pTetris = playerTetris.pTetris_;
-    const PlayerStatePtr &pPlayerState = playerTetris.pPlayerState_;
+    const TetrisPtr &pTetris = playerTetris.pTetris;
+    const PlayerStatePtr &pPlayerState = playerTetris.pPlayerState;
 
     size_t numClearedRows = pTetris->eventClockTick();
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
@@ -484,23 +484,23 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
         .test(static_cast<size_t>(gameModeFeature));
 }
 
-void GameEngine::engineTick() {
+void GameEngine::tick() {
     auto alivePlayers = pGameState_->getPlayerToTetris()
                         | std::views::filter([](const auto &pt) {
-                              return pt.pPlayerState_->isAlive();
+                              return pt.pPlayerState->isAlive();
                           });
 
     for (auto &playerTetris : alivePlayers) {
-        handlePlayerTimedEffect(*playerTetris.pPlayerState_);
+        handlePlayerTimedEffect(*playerTetris.pPlayerState);
 
-        engineTick(playerTetris);
+        tick(playerTetris);
     }
 }
 
 std::optional<PlayerID> GameEngine::getWinner() {
     auto alivePlayers = pGameState_->getPlayerToTetris()
                         | std::views::filter([](const auto &pt) {
-                              return pt.pPlayerState_->isAlive();
+                              return pt.pPlayerState->isAlive();
                           });
 
     assert(std::ranges::distance(alivePlayers) >= 1);
@@ -509,5 +509,5 @@ std::optional<PlayerID> GameEngine::getWinner() {
         return std::nullopt;
     }
 
-    return alivePlayers.begin()->pPlayerState_->getPlayerID();
+    return alivePlayers.begin()->pPlayerState->getPlayerID();
 }

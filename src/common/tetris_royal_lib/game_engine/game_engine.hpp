@@ -175,7 +175,7 @@ class GameEngine {
     /**
      * @brief Makes an engine tick happen for the given player.
      */
-    void engineTick(PlayerTetris &playerTetris);
+    void tick(PlayerTetris &playerTetris);
 
   public:
     /**
@@ -255,7 +255,7 @@ class GameEngine {
     /**
      * @brief Creates an engine tick, making everything update.
      */
-    void engineTick();
+    void tick();
 
     /**
      * @brief Returns the winner's playerID if there is one, nullopt otherwise.
