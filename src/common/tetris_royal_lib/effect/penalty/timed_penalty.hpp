@@ -26,12 +26,16 @@ class TimedPenalty : public virtual AbstractTimedEffect {
 
     PenaltyType getPenaltyType() const;
 
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const;
+
   private:
     PenaltyType penaltyType_;
 
     friend PenaltyTest;
 };
-
-std::ostream &operator<<(std::ostream &os, PenaltyType type);
 
 #endif // PENALTY_HPP

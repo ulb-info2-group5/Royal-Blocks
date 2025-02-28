@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include <nlohmann/json.hpp>
+
 class BonusTest;
 
 class TimedBonus;
@@ -35,12 +37,16 @@ class TimedBonus : public virtual AbstractTimedEffect {
      */
     friend std::ostream &operator<<(std::ostream &os, const TimedBonus &bonus);
 
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const;
+
   private:
     BonusType bonusType_;
 
     friend BonusTest;
 };
-
-std::ostream &operator<<(std::ostream &os, BonusType type);
 
 #endif // BONUS_HPP

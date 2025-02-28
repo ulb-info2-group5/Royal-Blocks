@@ -1,5 +1,6 @@
-#include "slow_down.hpp"
 #include "timed_bonus.hpp"
+#include "nlohmann/json_fwd.hpp"
+#include "slow_down.hpp"
 
 #include <memory>
 
@@ -28,17 +29,15 @@ std::ostream &operator<<(std::ostream &os, const TimedBonus &bonus) {
     return os;
 }
 
-std::ostream &operator<<(std::ostream &os, BonusType type) {
-    switch (type) {
-    case BonusType::SlowDown:
-        os << "SlowDown";
-        break;
-    case BonusType::MiniTetrominoes:
-        os << "MiniTetrominoes";
-        break;
-    default:
-        os << "Unknown";
-        break;
-    }
-    return os;
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json TimedBonus::serialize() const {
+    nlohmann::json j;
+
+    j["bonusType"] = getBonusType();
+    j["elapsedTime"] = getElapsedTime();
+
+    return j;
 }
