@@ -1,7 +1,8 @@
 #include "placement_timed_effect.hpp"
 
 PlacementTimedEffect::PlacementTimedEffect(size_t placementsNum)
-    : AbstractTimedEffect(), remainingPlacements_(placementsNum) {}
+    : AbstractTimedEffect(), numPlacements_(placementsNum),
+      remainingPlacements_(placementsNum) {}
 
 PlacementTimedEffect::PlacementTimedEffect(const PlacementTimedEffect &other)
     : PlacementTimedEffect{other.remainingPlacements_} {}
@@ -18,6 +19,12 @@ void PlacementTimedEffect::tetrominoPlaced() {
 
 bool PlacementTimedEffect::isFinished() const {
     return remainingPlacements_ <= 0;
+}
+
+double PlacementTimedEffect::getElapsedTime() const {
+    return 1.0
+           - static_cast<double>(remainingPlacements_)
+                 / static_cast<double>(numPlacements_);
 }
 
 std::ostream &operator<<(std::ostream &os,

@@ -10,7 +10,9 @@ class TickTimedEffectTest;
 
 class TickTimedEffect : public virtual AbstractTimedEffect {
   private:
-    // Number of ticks left before the effect expires (decreases each tick)
+    size_t numTicks_;
+    // Number of ticks left before the effect expires
+    // (decreases each tick)
     size_t remainingTicks_;
 
   protected:
@@ -28,6 +30,8 @@ class TickTimedEffect : public virtual AbstractTimedEffect {
     void tick() override;
 
     bool isFinished() const override;
+
+    double getElapsedTime() const override;
 
     /**
      * @brief Outputs the TickTimedEffect to a stream.

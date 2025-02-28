@@ -10,6 +10,7 @@ class PlacementTimedEffectTest;
 
 class PlacementTimedEffect : public virtual AbstractTimedEffect {
   private:
+    size_t numPlacements_;
     // Number of Tetrominoes left to place before the effect expires (decreases
     // with each placement)
     size_t remainingPlacements_;
@@ -29,6 +30,8 @@ class PlacementTimedEffect : public virtual AbstractTimedEffect {
     void tetrominoPlaced() override;
 
     bool isFinished() const override;
+
+    double getElapsedTime() const override;
 
     /**
      * @brief Outputs the PlacementTimedEffect to a stream.

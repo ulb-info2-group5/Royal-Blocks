@@ -29,6 +29,12 @@ class AbstractTimedEffect {
      * @brief Returns true if the effect isn't active anymore; false otherwise.
      */
     virtual bool isFinished() const = 0;
+
+    /**
+     * @brief Returns a double representing the proportion of the effect's
+     * duration that has elapsed.
+     */
+    virtual double getElapsedTime() const = 0;
 };
 
 using AbstractTimedEffectPtr = std::shared_ptr<AbstractTimedEffect>;
