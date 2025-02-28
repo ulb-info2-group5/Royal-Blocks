@@ -12,6 +12,7 @@
 #include "../../IMain_Menu.hpp"
 #include "../friends_manager/friends_manager.hpp"
 #include "../messaging/messaging.hpp"
+#include "../game_menu/game_menu.hpp"
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
@@ -59,6 +60,7 @@ class MainMenu : public IMain_Menu
 
         std::unique_ptr<FriendsManager> friendsManager_;
         std::unique_ptr<Messaging> messagingMenu_;
+        std::unique_ptr<GameMenu> gameMenu_;
 
         ftxui::Component buttonPlay_;
         ftxui::Component buttonJoinGame_;

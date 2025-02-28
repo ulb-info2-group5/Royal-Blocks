@@ -18,7 +18,7 @@
 
 // ### Constructor ###
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : 
-screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsManager_(std::make_unique<FriendsManager>(screen, controller)), messagingMenu_(std::make_unique<Messaging>(screen, controller))
+screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsManager_(std::make_unique<FriendsManager>(screen, controller)), messagingMenu_(std::make_unique<Messaging>(screen, controller)), gameMenu_(std::make_unique<GameMenu>(screen, controller))
 {
     buttonBack_ = ftxui::Button("Back", [&] {
         state_ = MainMenuState::BACK;
@@ -35,9 +35,11 @@ screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsMa
 void MainMenu::handleChoice() {
     switch (state_) {
         case MainMenuState::CREATE_GAME:
+            gameMenu_->render(TypeGame::CREATE_GAME); // Can only create a game online
             break;
 
         case MainMenuState::JOIN_GAME:
+            gameMenu_->render(TypeGame::JOIN_GAME); // Can join all the games modes
             break;
 
         case MainMenuState::SEND_MESSAGES_TO_FRIENDS:

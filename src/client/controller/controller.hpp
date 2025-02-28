@@ -119,6 +119,20 @@ class Controller {
         * @return std::map<std::string, std::vector<std::string>> The messages of all the conversations of the user
         */
         std::map<std::string, std::vector<Message>> getMessages() const;
+
+        /*
+        * @brief Get the boards of the players
+        *
+        * @return std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> The boards of the players
+        */
+        std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> getBoards() const;
+
+        /*
+        * @brief Get the friends online of the user
+        *
+        * @return std::vector<std::string> The friends online of the user
+        */
+        std::vector<std::string> getFriendsOnline() const;
 };
 
 

@@ -1,5 +1,5 @@
 # TODO
 
-- add sub menu for create game and join game
+- add sub menu for create game when choose a game mode
 - check the good update of asking to controller when adding, deleting,etc
-- catch le ctrl+c (sigint) de ftxui
+- catch the ctrl+c (sigint) of ftxui

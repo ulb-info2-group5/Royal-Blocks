@@ -13,7 +13,23 @@
 #include <ftxui/component/component.hpp>
 #include <memory>
 
+#include "../game_display/game_display.hpp"
+
 class Controller; // Forward declaration
+
+enum class JoinType {
+    FRIEND,
+    RANDOM,
+    ENDLESS,
+    BACK,
+    NONE,
+};
+
+enum class TypeGame {
+    CREATE_GAME,
+    JOIN_GAME,
+    NONE,
+};
 
 /**
  * @brief Game menu class to show and selct the game party
@@ -24,6 +40,11 @@ class GameMenu {
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
         Controller *controller_;
 
+        std::unique_ptr<GameDisplay> gameDisplay_;
+
+        JoinType joinType_;
+
+        TypeGame typeGame_;
 
         /**
          * @brief The button components that can be in the game menu    
@@ -35,6 +56,50 @@ class GameMenu {
         ftxui::Component royalButon_;
         ftxui::Component backButton_;
 
+        /*
+         * @brief Rend the all the game present in the game menu
+         *
+         * @return PlayMode the game mode selected
+         */
+         void renderAllGames();
+
+         /*
+         * @brief Rend the game menu with just the online games mods
+         * @return PlayMode the game mode selected
+         */
+         void renderOnlineGames();
+
+        /*
+         * @brief Screen to choose between joining a friend or a random game
+         */
+        void joinFriendOrRandomScreen();
+
+        /*
+         * @brief Handle the choice of the user in the game menu
+         */
+        void handleChoice();
+
+        /*
+        * @brief Screen when the user is joining a friend, a list of the online friends is displayed and the user can select one
+        */
+        void joinFriendScreen();
+
+        /*
+        * @brief Screen when the is waiting for a random game
+        */
+        void joinRandomScreen();
+
+        /*
+        * @brief Make a button to add a friend
+        * 
+        * @param friendName The name of the friend to add
+        */
+        ftxui::Component makeFriendButton(const std::string &friendName);
+
+        /*
+        * @brief Screen when the user has choosen the friend and now waiting for the start of the game
+        */
+        void waitingFriendScreen();
     public:
         /*
          * @brief Construct a new Game Menu object
@@ -49,17 +114,11 @@ class GameMenu {
         ~GameMenu() = default;
 
         /*
-         * @brief Rend the all the game present in the game menu
+         * @brief Render the game menu
          *
-         * @return PlayMode the game mode selected
+         * @param typeGame The type of the game to render
          */
-         void renderAllGames();
-
-         /*
-         * @brief Rend the game menu with just the online games mods
-         * @return PlayMode the game mode selected
-         */
-         void renderOnlineGames();
+        void render(const TypeGame &typeGame);
 };
 
 #endif // GAME_MENU_HPP
