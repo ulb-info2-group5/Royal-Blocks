@@ -29,8 +29,12 @@ class FriendsManager {
         std::shared_ptr<ftxui::ScreenInteractive> screen_;
         Controller *controller_;
         std::string friendName_;
+        std::string msg_; // Message to display on the adding friends menu
 
         ftxui::Component buttonBack_;
+        ftxui::Component buttonAddFriend_;
+        ftxui::Component input_;
+        ftxui::Component submitButton_;
 
         /*
         * @brief Render the friends list of the user to display with all friends dislayed is a button

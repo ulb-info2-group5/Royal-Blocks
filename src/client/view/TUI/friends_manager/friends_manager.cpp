@@ -21,8 +21,27 @@
 // ### Public methods ###
 
 FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller) : screen_{screen}, controller_(controller) {
+    
+    // Initialize some components like Buttons and Inputs
+
     buttonBack_ = ftxui::Button("Back", [&] {
         screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    buttonAddFriend_ = ftxui::Button("Add a friend", [&] {
+        addFriendScreen();
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    input_ = ftxui::Input(&friendName_, "Name of friend") | ftxui::border | ftxui::center;
+
+    submitButton_ = ftxui::Button("Add", [&] {
+        if (!controller_->addFriend(friendName_)) {
+            msg_ = "Please enter a valid name";
+        }
+        else {
+            screen_->ExitLoopClosure()();
+        }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 }
 
@@ -31,12 +50,12 @@ void FriendsManager::render() {
 
     while (res) {
     
-        std::vector<std::string> friendsList = controller_->getFriendsList();
+        std::vector<std::string> friendsList = controller_->getFriendsList(); // Get the friends list of the user by asking the controller
 
-        std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList);
+        std::vector<ftxui::Component> friendsButton = displayFriendButtons(friendsList); // Display the friends list as buttons
 
         ftxui::Component buttonBack = ftxui::Button("Back", [&] {
-            res = false; // Exit the loop
+            res = false; // Exit the while loop
             screen_->ExitLoopClosure()();
         }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
 
@@ -46,13 +65,8 @@ void FriendsManager::render() {
             friendsContainer->Add(friendButton);
         }
 
-        ftxui::Component buttonAddFriend = ftxui::Button("Add a friend", [&] {
-            addFriendScreen();
-            screen_->ExitLoopClosure()();
-        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
-
         ftxui::Component buttonsContainer = ftxui::Container::Vertical({
-            buttonAddFriend,
+            buttonAddFriend_,
             buttonBack,
         });
 
@@ -63,7 +77,7 @@ void FriendsManager::render() {
                 ftxui::text("Your friends") | ftxui::center,
                 friendsContainer->Render() | ftxui::border,
                 ftxui::separator(),
-                buttonAddFriend->Render(),
+                buttonAddFriend_->Render(),
                 ftxui::separator(),
                 buttonBack->Render(),
             }) | ftxui::border | ftxui::center;
@@ -78,22 +92,11 @@ void FriendsManager::render() {
 
 void FriendsManager::addFriendScreen() {
     friendName_.clear(); // Reset the name of the friend
-    std::string msg;
-
-    ftxui::Component input = ftxui::Input(&friendName_, "Name of friend") | ftxui::border | ftxui::center;
-
-    ftxui::Component submitButton = ftxui::Button("Add", [&] {
-        if (!controller_->addFriend(friendName_)) {
-            msg = "Please enter a valid name";
-        }
-        else {
-            screen_->ExitLoopClosure()();
-        }
-    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+    msg_.clear(); // Reset the message
 
     ftxui::Component container = ftxui::Container::Vertical({
-        input,
-        submitButton,
+        input_,
+        submitButton_,
         buttonBack_,
     });
 
@@ -102,10 +105,10 @@ void FriendsManager::addFriendScreen() {
             ftxui::text("Add a friend") | ftxui::bold | ftxui::center,
             ftxui::separator(),
             ftxui::text(""), // Empty line
-            input->Render(),
-            ftxui::text(msg) | ftxui::center,
+            input_->Render(),
+            ftxui::text(msg_) | ftxui::center,
             ftxui::separator(),
-            submitButton->Render(),
+            submitButton_->Render(),
             buttonBack_->Render(),
         }) | ftxui::border | ftxui::center;
     });
