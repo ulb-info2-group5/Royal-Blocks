@@ -95,7 +95,7 @@ class GameEngine {
     /**
      * @brief Handles the timed effects for the given player (one tick).
      */
-    void handlePlayerTimedEffect(PlayerState &playerState);
+    void handlePlayerTimedEffect(PlayerTetris &playerTetris);
 
     /**
      * @brief Returns true if the given player currently has the inverted

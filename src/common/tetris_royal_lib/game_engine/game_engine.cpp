@@ -26,41 +26,53 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
                                            gameModeFeature);
 }
 
-void GameEngine::handlePlayerTimedEffect(PlayerState &playerState) {
+void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
-    TimedBonusPtr &pActiveBonus = playerState.getActiveBonus();
+    TimedBonusPtr &pActiveBonus = playerTetris.pPlayerState->getActiveBonus();
     if (pActiveBonus != nullptr) {
         // currently has an active bonus
         pActiveBonus->tick();
-        if (playerState.getActiveBonus()->isFinished()) {
-            playerState.getActiveBonus().reset();
+        if (playerTetris.pPlayerState->getActiveBonus()->isFinished()) {
+            playerTetris.pPlayerState->getActiveBonus().reset();
         }
     } else {
         // currently has no active bonus
-        playerState.fetchGrantedBonus().and_then(
-            [&playerState](BonusType bonusType) {
-                playerState.setActiveBonus(TimedBonus::makeBonus(bonusType));
+        playerTetris.pPlayerState->fetchGrantedBonus().and_then(
+            [&playerTetris, this](BonusType bonusType) {
+                if (bonusType == BonusType::MiniTetrominoes) {
+                    handleMiniTetrominoes(*playerTetris.pTetris);
+                } else {
+                    playerTetris.pPlayerState->setActiveBonus(
+                        TimedBonus::makeBonus(bonusType));
+                }
+
                 return std::optional<BonusType>{};
             });
     }
 
-    TimedPenaltyPtr &pActivePenalty = playerState.getActivePenalty();
+    TimedPenaltyPtr &pActivePenalty =
+        playerTetris.pPlayerState->getActivePenalty();
     if (pActivePenalty != nullptr) {
         // currently has an active penalty
         pActivePenalty->tick();
-        if (playerState.getActivePenalty()->isFinished()) {
-            playerState.getActivePenalty().reset();
+        if (playerTetris.pPlayerState->getActivePenalty()->isFinished()) {
+            playerTetris.pPlayerState->getActivePenalty().reset();
         }
     } else {
         // currently has no active penalty
-        playerState.fetchReceivedPenalty().and_then(
-            [&playerState](PenaltyType penaltyType) {
-                playerState.setActivePenalty(
-                    TimedPenalty::makePenalty(penaltyType));
-                return std::optional<PenaltyType>{};
+        playerTetris.pPlayerState->fetchReceivedPenalty().and_then(
+            [&playerTetris, this](PenaltyType penaltyType) {
+                if (penaltyType == PenaltyType::Lightning) {
+                    handleLightning(*playerTetris.pTetris);
+                } else {
+                    playerTetris.pPlayerState->setActivePenalty(
+                        TimedPenalty::makePenalty(penaltyType));
+                }
+
+                return std::optional<PlayerTetris>{};
             });
     }
 }
@@ -137,9 +149,9 @@ void GameEngine::sendPenaltyEffect(const PlayerState &playerStateSender,
     std::optional<PlayerID> target = playerStateSender.getPenaltyTarget();
 
     if (!target.has_value()) {
-        throw std::runtime_error{
-            "sendPenaltyEffect: Player attempted to send penalty effect but "
-            "has no target selected."};
+        throw std::runtime_error{"sendPenaltyEffect: Player attempted to "
+                                 "send penalty effect but "
+                                 "has no target selected."};
     }
 
     PlayerStatePtr pPlayerStateTarget =
@@ -253,8 +265,8 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
         pPlayerState->getPenaltyTarget().and_then([&](PlayerID targetID) {
             if (checkAlive(targetID) && numClearedRows >= 2) {
-                // For n (>= 2) rows cleared by the player, his target receives
-                // n-1 penalty rows.
+                // For n (>= 2) rows cleared by the player, his target
+                // receives n-1 penalty rows.
                 sendPenaltyRows(*pPlayerState, numClearedRows - 1);
             }
 
@@ -491,7 +503,7 @@ void GameEngine::tick() {
                           });
 
     for (auto &playerTetris : alivePlayers) {
-        handlePlayerTimedEffect(*playerTetris.pPlayerState);
+        handlePlayerTimedEffect(playerTetris);
 
         tick(playerTetris);
     }
