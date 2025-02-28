@@ -28,6 +28,7 @@ screen_(screen), controller_(controller), state_(MainMenuState::NONE), friendsMa
     buttonOK_ = ftxui::Button("OK", [&] {
         state_ = MainMenuState::BACK; // like a back button but with ok title
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
 }
 
 // ### Private methods ###
@@ -68,6 +69,22 @@ void MainMenu::handleChoice() {
             throw std::invalid_argument("Invalid state in MainMenu::handleChoice()");
             break;
     }
+}
+
+void MainMenu::confirmUpdateProfileScreen() const {
+    ftxui::Component okButton = ftxui::Button("OK", [&] {
+        screen_->ExitLoopClosure()();
+    }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;
+
+    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({okButton}), [&] {
+        return ftxui::vbox({
+            ftxui::text("Friend added successfully") | ftxui::bold | ftxui::center,
+            ftxui::separator(),
+            okButton->Render() | ftxui::center,
+        }) | ftxui::border | ftxui::center;
+    });
+
+    screen_->Loop(component);
 }
 
 // ### Protected methods ###
@@ -219,6 +236,7 @@ void MainMenu::displayProfileManagerButton()
             profileMessage_ = "The change of your profile has failed. Please enter another username or password";
         }
         else {            
+            confirmUpdateProfileScreen(); // Display the confirm update profile screen
             screen_->ExitLoopClosure()();
         }
     }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0)) | ftxui::border;

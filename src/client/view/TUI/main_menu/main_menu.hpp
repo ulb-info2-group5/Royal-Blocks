@@ -73,6 +73,7 @@ class MainMenu : public IMain_Menu
 
         ftxui::Elements rowsRanking_;
 
+
         ftxui::Components friendButtons_;
         ftxui::Component buttonAddFriend_;
         ftxui::Component friendsContainer_;
@@ -93,6 +94,11 @@ class MainMenu : public IMain_Menu
         * @brief Handle the choice of the user in the main menu
         */
         void handleChoice();
+
+        /*
+        * @brief Create the display of the confirm update profile screen
+        */
+        void confirmUpdateProfileScreen() const ;
 
     protected:
 
