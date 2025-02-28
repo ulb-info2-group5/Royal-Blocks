@@ -8,12 +8,12 @@
 
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
-#include "../view/TUI/screen_manager.hpp"
 #include "../view/TUI/messaging/messaging.hpp"
+#include "../view/TUI/screen_manager.hpp"
 
 // ### Public methods ###
 
-Controller::Controller() : screenManager_(ScreenManager(this)) {};
+Controller::Controller() : screenManager_(ScreenManager(this)){};
 
 Controller::~Controller() {}
 
@@ -23,7 +23,8 @@ void Controller::run() {
     screenManager_.run();
 }
 
-bool Controller::verifyRegister(const std::string &username, const std::string &password) const {
+bool Controller::verifyRegister(const std::string &username,
+                                const std::string &password) const {
     // TODO: check with the server for the register
     // TODO: remove this because it's an example
     if (username == "ethan" && password == "ethan") {
@@ -32,7 +33,8 @@ bool Controller::verifyRegister(const std::string &username, const std::string &
     return false;
 }
 
-bool Controller::verifyLogin(const std::string &username, const std::string &password) const {
+bool Controller::verifyLogin(const std::string &username,
+                             const std::string &password) const {
     // TODO: check with the server if the username and password are correct
     // TODO: remove this because it's an example
     if (username == "ethan" && password == "ethan") {
@@ -50,11 +52,12 @@ std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
     ranking.push_back(std::make_tuple(3, "user3", 80));
     ranking.push_back(std::make_tuple(4, "user4", 70));
     ranking.push_back(std::make_tuple(5, "user5", 60));
-    
+
     return ranking;
 }
 
-bool Controller::changeProfile(const std::string &username, const std::string &password) const {
+bool Controller::changeProfile(const std::string &username,
+                               const std::string &password) const {
     // TODO: communicate with the server to change the profile
     // TODO: remove this because it's an example
     if (username == "ethan" && password == "ethan") {
@@ -86,7 +89,8 @@ bool Controller::removeFriend(const std::string &friendName) const {
     return true;
 }
 
-bool Controller::sendMessage(const std::string &friendName, const std::string &message) const {
+bool Controller::sendMessage(const std::string &friendName,
+                             const std::string &message) const {
     // TODO: communicate with the server to send the message
     return true;
 }
@@ -105,12 +109,14 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
     return conversations;
 }
 
-std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> Controller::getBoards() const {
+std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
+Controller::getBoards() const {
     // TODO: communicate with the server to get the boards
     // TODO: remove this because it's an example
     std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>> boards;
     boards.push_back(std::array<std::array<colors, WIDTH>, HEIGHT>());
-    return std::make_shared<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(boards);
+    return std::make_shared<
+        std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(boards);
 }
 
 std::vector<std::string> Controller::getFriendsOnline() const {
@@ -121,5 +127,5 @@ std::vector<std::string> Controller::getFriendsOnline() const {
     friendsOnline.push_back("friend2");
     friendsOnline.push_back("friend3");
 
-    return friendsOnline;    
+    return friendsOnline;
 }

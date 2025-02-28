@@ -3,7 +3,7 @@
  * @author Ethan Van Ruyskensvelde
  * @brief LoginInput class header file
  * @date 2025-02-12
- * 
+ *
  */
 
 #ifndef LOGIN_INPUT_HPP
@@ -32,107 +32,107 @@ enum class LoginState {
 };
 
 /**
- * @brief LoginInput class to get the login input or register input from the user
- * 
+ * @brief LoginInput class to get the login input or register input from the
+ * user
+ *
  */
-class LoginInput : public ILogin_Input
-{
-    private:
-        /*
-        * @brief The screen to use to render the components
-        */
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+class LoginInput : public ILogin_Input {
+  private:
+    /*
+     * @brief The screen to use to render the components
+     */
+    std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
-        /*
-        * @brief The controller to ask for the data to show to the user
-        */
-        Controller *controller_;
+    /*
+     * @brief The controller to ask for the data to show to the user
+     */
+    Controller *controller_;
 
-        /*
-        * @brief The title of the input screen (Login or Register)
-        */
-        std::string title_;
+    /*
+     * @brief The title of the input screen (Login or Register)
+     */
+    std::string title_;
 
-        /*
-        * @brief The type of the login (Login or Register)
-        */
-        LoginType loginType_;
+    /*
+     * @brief The type of the login (Login or Register)
+     */
+    LoginType loginType_;
 
-        LoginState loginState_;
+    LoginState loginState_;
 
-        /*
-        * @brief The username of the user
-        */
-        std::string username_;
-        
-        /*
-        * @brief The password of the user
-        */
-        std::string password_;
+    /*
+     * @brief The username of the user
+     */
+    std::string username_;
 
-        /*
-        * @brief The instruction to show to the user
-        */
-        std::string instruction_;
+    /*
+     * @brief The password of the user
+     */
+    std::string password_;
 
-        /*
-        * @brief The custom message to show to the user
-        */
-        std::string message_;
+    /*
+     * @brief The instruction to show to the user
+     */
+    std::string instruction_;
 
-        std::string msg_;
+    /*
+     * @brief The custom message to show to the user
+     */
+    std::string message_;
 
-        ftxui::Component buttonSubmit_;
-        ftxui::Component buttonBack_;
-        ftxui::Component inputUsername_;
-        ftxui::Component inputPassword_;
-        ftxui::Component displayWindow_;
+    std::string msg_;
 
-    protected:
+    ftxui::Component buttonSubmit_;
+    ftxui::Component buttonBack_;
+    ftxui::Component inputUsername_;
+    ftxui::Component inputPassword_;
+    ftxui::Component displayWindow_;
 
-        void displayButtonBack();
+  protected:
+    void displayButtonBack();
 
-        void displayButtonSubmit(); 
+    void displayButtonSubmit();
 
-        void displayWindow() override;
+    void displayWindow() override;
 
-    public:
-        /*
-        * @brief Construct a new Login Input object
-        *
-        * @param screen The screen to use to render the components
-        * @param title The title of the input screen (Login or Register)
-        */
-        LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller, std::string title, LoginType loginType);
+  public:
+    /*
+     * @brief Construct a new Login Input object
+     *
+     * @param screen The screen to use to render the components
+     * @param title The title of the input screen (Login or Register)
+     */
+    LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
+               Controller *controller, std::string title, LoginType loginType);
 
-        /*
-        * @brief Destroy the Login Input object
-        */
-        ~LoginInput() = default;
+    /*
+     * @brief Destroy the Login Input object
+     */
+    ~LoginInput() = default;
 
-        /*
-        * @brief Render the login input screen with all the components
-        */
-        LoginState render();
+    /*
+     * @brief Render the login input screen with all the components
+     */
+    LoginState render();
 
-        /*
-        * @brief Add an instruction to show to the user
-        *
-        * @param string instruction the instruction to show
-        */
-        void addInstruction(const std::string_view instruction);
+    /*
+     * @brief Add an instruction to show to the user
+     *
+     * @param string instruction the instruction to show
+     */
+    void addInstruction(const std::string_view instruction);
 
-        /*
-        * @brief Add a message to show to the user
-        *
-        * @param string message the message to show
-        */
-        void addMessage(const std::string_view message);
+    /*
+     * @brief Add a message to show to the user
+     *
+     * @param string message the message to show
+     */
+    void addMessage(const std::string_view message);
 
-        /*
-        * @brief Clear the info of the user input (username and password)
-        */
-        void clearInfo();
+    /*
+     * @brief Clear the info of the user input (username and password)
+     */
+    void clearInfo();
 };
 
 #endif // LOGIN_INPUT_HPP

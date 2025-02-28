@@ -1,10 +1,8 @@
 #ifndef IGAME_HPP
 #define IGAME_HPP
 
-class IGame 
-{
-    protected : 
-
+class IGame {
+  protected:
     virtual void drawPlayerInfo() = 0;
 
     virtual void drawRoyalEffectsEnergy() = 0;
@@ -27,12 +25,10 @@ class IGame
 
     virtual void drawMultiMode() = 0;
 
-    public:
-
+  public:
     virtual ~IGame() = default;
 
     virtual void render() = 0;
-
 };
 
 #endif

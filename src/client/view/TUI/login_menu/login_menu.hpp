@@ -3,7 +3,7 @@
  * @author Ethan Van Ruyskensvelde
  * @brief LoginMenu class header file
  * @date 2025-02-12
- * 
+ *
  */
 
 #ifndef LOGIN_MENU_HPP
@@ -18,9 +18,12 @@
 
 constexpr char LOGIN_INPUT_TITLE[] = "Login";
 constexpr char REGISTER_INPUT_TITLE[] = "Register";
-constexpr std::string_view LOGIN_INSTRUCTIONS = "Please enter your username and password to login.";
-constexpr std::string_view REGISTER_INSTRUCTIONS = "Please enter a username and a password to create an account.";
-constexpr std::string_view LOGIN_MESSAGE = "Your account has been created successfully! You can now login.";
+constexpr std::string_view LOGIN_INSTRUCTIONS =
+    "Please enter your username and password to login.";
+constexpr std::string_view REGISTER_INSTRUCTIONS =
+    "Please enter a username and a password to create an account.";
+constexpr std::string_view LOGIN_MESSAGE =
+    "Your account has been created successfully! You can now login.";
 
 enum class Login {
     LOGGED,
@@ -31,60 +34,60 @@ enum class Login {
 class Controller; // Forward declaration
 
 /**
- * @brief LoginMenu class to show the login menu screen with choices to login or register
- * 
+ * @brief LoginMenu class to show the login menu screen with choices to login or
+ * register
+ *
  */
-class LoginMenu : public ILogin_Menu
-{
-    private:
-        /*
-        * @brief The screen to use to render the components
-        */
-        std::shared_ptr<ftxui::ScreenInteractive> screen_;
+class LoginMenu : public ILogin_Menu {
+  private:
+    /*
+     * @brief The screen to use to render the components
+     */
+    std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
-        /*
-        * @brief The controller to ask for the data to show to the user
-        */
-        Controller *controller_;
+    /*
+     * @brief The controller to ask for the data to show to the user
+     */
+    Controller *controller_;
 
-        LoginInput loginInput_;
+    LoginInput loginInput_;
 
-        LoginInput registerInput_;
+    LoginInput registerInput_;
 
-        Login loginState_;
+    Login loginState_;
 
-        LoginState userState_;
+    LoginState userState_;
 
-        ftxui::Component buttonRegister_;
-        ftxui::Component buttonLogin_;
-        ftxui::Component buttonExit_;
-        // ftxui::Component buttonDisplay_;
+    ftxui::Component buttonRegister_;
+    ftxui::Component buttonLogin_;
+    ftxui::Component buttonExit_;
+    // ftxui::Component buttonDisplay_;
 
-        ftxui::Component displayWindow_;
+    ftxui::Component displayWindow_;
 
-    protected:
+  protected:
+    void displayButtons() override;
 
-        void displayButtons() override;
+    void displayWindow() override;
 
-        void displayWindow() override;
+  public:
+    /*
+     * @brief Construct a new Login Menu object
+     *
+     * @param screen The screen to use to render the components
+     */
+    LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+              Controller *controller);
 
-    public:
-        /*
-        * @brief Construct a new Login Menu object
-        *
-        * @param screen The screen to use to render the components
-        */
-        LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller);
-        
-        /*
-        * @brief Destroy the Login Menu object
-        */
-        ~LoginMenu() = default;
-        
-        /*
-        * @brief Render the login menu screen with all the components
-        */
-        void render();
+    /*
+     * @brief Destroy the Login Menu object
+     */
+    ~LoginMenu() = default;
+
+    /*
+     * @brief Render the login menu screen with all the components
+     */
+    void render();
 };
 
 #endif // LOGIN_MENU_HPP

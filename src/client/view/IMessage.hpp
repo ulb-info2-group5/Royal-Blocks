@@ -3,10 +3,8 @@
 
 #include <string>
 
-class IMessage
-{
-    protected :
-
+class IMessage {
+  protected:
     virtual void drawButtons() = 0;
 
     virtual void drawInputUSer() = 0;
@@ -17,8 +15,7 @@ class IMessage
 
     virtual void drawWindow() = 0;
 
-    public :
-
+  public:
     virtual ~IMessage() = default;
 
     // virtual void addFriend(std::string friendName) = 0;

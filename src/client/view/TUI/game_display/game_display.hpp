@@ -1,51 +1,41 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../interfaceConstants.hpp"
 #include "../../IGame.hpp"
+#include "../../interfaceConstants.hpp"
 
-#include "ftxui/screen/color.hpp"  // for Color
-#include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/component_base.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/screen/color.hpp" // for Color
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
+#include <array>
 #include <memory>
 #include <string>
 #include <vector>
-#include <array>
 
-const uint32_t LENGTH_PLAYER = 4,
-               LENGTH_OPPONENT = 2, 
-               PADDING = 10;
+const uint32_t LENGTH_PLAYER = 4, LENGTH_OPPONENT = 2, PADDING = 10;
 
-const uint32_t WIDTH_PLAYER_CANVAS = 40,
-               HEIGHT_PLAYER_CANVAS = 80,
-               WIDTH_OP_CANVAS = 20,
-               HEIGHT_OP_CANVAS = 40;
+const uint32_t WIDTH_PLAYER_CANVAS = 40, HEIGHT_PLAYER_CANVAS = 80,
+               WIDTH_OP_CANVAS = 20, HEIGHT_OP_CANVAS = 40;
 
 class Controller; // Forward declaration
 
-enum class PlayMode : uint8_t {
-    CLASSIC,
-    ROYAL,
-    DUEL,
-    ENDLESS,
-    NONE
-};
+enum class PlayMode : uint8_t { CLASSIC, ROYAL, DUEL, ENDLESS, NONE };
 
 ftxui::Color getFTXUIColor(colors color);
 
-class GameDisplay : public IGame
-{
-    private:
+class GameDisplay : public IGame {
+  private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
     Controller *controller_;
 
     std::vector<std::string> pseudos_;
-    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> playersBoards_;
+    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
+        playersBoards_;
     uint32_t score_;
     float malusGauge_;
     PlayMode play_;
@@ -64,8 +54,7 @@ class GameDisplay : public IGame
     ftxui::Component displayLeft_;
     ftxui::Component displayWindow_;
 
-    protected:
-
+  protected:
     void drawPlayerInfo() override;
 
     void drawRoyalEffectsEnergy() override;
@@ -88,16 +77,17 @@ class GameDisplay : public IGame
 
     void drawMultiMode() override;
 
-    public:
-
-    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller, std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>> boards,
+  public:
+    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
+                Controller *controller,
+                std::shared_ptr<
+                    std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
+                    boards,
                 PlayMode play);
-    
+
     ~GameDisplay() = default;
 
     void render() override;
-
-
 };
 
 #endif
