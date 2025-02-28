@@ -163,7 +163,7 @@ class PlayerState final : public TetrisObserver {
     /**
      * @brief Sets the given timed-bonus as active bonus.
      */
-    void setActiveBonus(TimedBonusPtr pTimedBonus);
+    void setActiveBonus(const TimedBonusPtr &pTimedBonus);
 
     /**
      * @brief Returns active bonus.
@@ -178,7 +178,7 @@ class PlayerState final : public TetrisObserver {
     /**
      * @brief Sets the given timed-penalty as active penalty.
      */
-    void setActivePenalty(TimedPenaltyPtr pTimedPenalty);
+    void setActivePenalty(const TimedPenaltyPtr &pTimedPenalty);
 
     /**
      * @brief Makes player select the given effect.

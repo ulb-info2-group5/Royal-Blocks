@@ -148,7 +148,7 @@ std::optional<PenaltyType> PlayerState::fetchReceivedPenalty() {
     });
 }
 
-void PlayerState::setActivePenalty(TimedPenaltyPtr pTimedPenalty) {
+void PlayerState::setActivePenalty(const TimedPenaltyPtr &pTimedPenalty) {
     pActivePenalty_ = pTimedPenalty;
 }
 
@@ -159,7 +159,7 @@ void PlayerState::selectEffect(EffectType effectType) {
     });
 }
 
-void PlayerState::setActiveBonus(TimedBonusPtr pTimedBonus) {
+void PlayerState::setActiveBonus(const TimedBonusPtr &pTimedBonus) {
     pActiveBonus_ = pTimedBonus;
 }
 
