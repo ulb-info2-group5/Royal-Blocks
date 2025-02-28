@@ -11,9 +11,19 @@
 #include "../view/TUI/messaging/messaging.hpp"
 #include "../view/TUI/screen_manager.hpp"
 
+// ### Private methods ###
+
+void Controller::handlePacket(const std::string &pack) {
+    // TODO
+}
+
 // ### Public methods ###
 
-Controller::Controller() : screenManager_(ScreenManager(this)){};
+Controller::Controller()
+    : networkManager_{[this](const std::string &packet) {
+          handlePacket(packet);
+      }},
+      screenManager_(ScreenManager(this)) {};
 
 Controller::~Controller() {}
 

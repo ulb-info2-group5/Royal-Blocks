@@ -29,6 +29,11 @@ class Controller {
      */
     ScreenManager screenManager_;
 
+    /**
+     * @brief Handles the received packet
+     */
+    void handlePacket(const std::string &pack);
+
   public:
     /*
      * @brief Construct a new Controller object

@@ -12,12 +12,15 @@
 #include <cstdlib>
 #include <iostream>
 
-#define PORT "1234"    // TODO: Change this to a config file ?
-#define IP "127.0.0.1" // TODO: Change this to a config file ?
+// TODO: Move this to a config file ?
+constexpr std::string_view PORT = "1234";
+constexpr std::string_view IP = "127.0.0.1";
 
 // ### Public methods ###
 
-NetworkManager::NetworkManager() : socket_(io_context_) {}
+NetworkManager::NetworkManager(
+    std::function<void(const std::string &)> packetHandler)
+    : socket_(io_context_), packetHandler_{packetHandler} {}
 
 NetworkManager::~NetworkManager() { disconnect(); }
 
@@ -86,16 +89,15 @@ void NetworkManager::write() {
 }
 
 void NetworkManager::receive() {
+    std::string buf;
+
     boost::asio::async_read_until(
-        socket_, boost::asio::dynamic_buffer(messageReceive_),
+        socket_, boost::asio::dynamic_buffer(buf),
         '\n', // TODO: check the '\n' for the end of the message
-        [this](boost::system::error_code error, std::size_t length) {
+        [this, &buf](boost::system::error_code error, std::size_t length) {
             if (!error) {
-                std::string message(
-                    messageReceive_.substr(0, length - 1)); // Exclude '\n'
-                messageReceive_.erase(0, length);
-                // message_handler_(message); // TODO: Implement the message
-                // handler
+                std::string message(buf.substr(0, length - 1)); // Exclude '\n'
+                packetHandler_(message);
                 receive(); // Continue listening for messages
             } else {
                 std::cerr << "Receive error: " << error.message()

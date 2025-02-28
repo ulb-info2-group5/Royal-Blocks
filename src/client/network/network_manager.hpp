@@ -32,9 +32,9 @@ class NetworkManager {
     std::deque<std::string> messagesToSend_;
 
     /*
-     * @brief The message received from the server
+     * @brief Handles the packets received by the client
      */
-    std::string messageReceive_;
+    std::function<void(const std::string &)> packetHandler_;
 
     /*
      * @brief The thread used to run the io context
@@ -55,7 +55,7 @@ class NetworkManager {
     /*
      * @brief Construct a new Network Manager object
      */
-    NetworkManager();
+    NetworkManager(std::function<void(const std::string &)> packetHandler);
 
     /*
      * @brief Destroy the Network Manager object
