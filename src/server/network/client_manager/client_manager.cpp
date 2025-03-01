@@ -18,7 +18,8 @@ void ClientLink::read(){
     boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
             std::cout << "packet:  " << buffer_ << std::endl;
-            packetHandler_(buffer_);
+            
+            if (buffer_ != "\n") packetHandler_(buffer_);
             buffer_.erase(0, length);
         }
         read();
@@ -39,9 +40,9 @@ void ClientLink::start(){
     read();
 }
 
-void ClientLink::recieveMessage(const int &senderId , const std::string & content){
+void ClientLink::recieveMessage( const std::string & content){
     nlohmann::json j;
-    j["senderId"] = senderId ;
+    //j["senderId"] = senderId ;
     j["content"] = content;
     buffer_ = j.dump() + "\n";
     boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t length){
@@ -90,7 +91,7 @@ void ClientManager::handlePacket(const std::string& packet){
 void ClientManager::handleMessage(nlohmann::json message){
     std::cout << message.at("content").get<std::string>() << std::endl;
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("reciverId").get<int>()]->recieveMessage(message.at("senderId").get<int>(), message.at("content").get<std::string>());
+    connectedClients_[message.at("receiverId").get<int>()]->recieveMessage(message.at("content").get<std::string>());
     
 
 }

@@ -23,15 +23,34 @@ void Network::accept(){
    
 }
 
-bool Network::checkCredentials(std::shared_ptr<std::string> credentials){
-    std::cout << "-- ceck credentials --" << std::endl;
-    //i will continue later 
-    if (!(*credentials).empty()){
-        nlohmann::json jsonCredentials =  nlohmann::json::parse(*credentials);
-        if (clientManager_.checkCredentials(jsonCredentials.at("pseudo").get<const std::string>(), jsonCredentials.at("password").get<const std::string>())){
-            return true;
+
+void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::shared_ptr<std::string> authenticationBuffer){
+    if (!(*authenticationBuffer).empty()){
+        nlohmann::json jbuffer =  nlohmann::json::parse(*authenticationBuffer);
+        std::cout << *authenticationBuffer <<std::endl;
+        const char type =  jbuffer.at("type").get<const char>();
+        switch (type){
+        case CONNECTION :
+            if (checkCredentials(jbuffer)){
+                this->createNewConnection(socket, jbuffer);
+                return;
+            }
+            break;
+
+        default:
+            break;
         }
     }
+    this->waitForAuthentication(socket);
+}
+
+bool Network::checkCredentials(nlohmann::json jcredentials){
+    std::cout << "-- check credentials --" << std::endl;
+    //i will continue later 
+        if (clientManager_.checkCredentials(jcredentials.at("pseudo").get<const std::string>(), jcredentials.at("password").get<const std::string>())){
+            return true;
+        }
+    
     return false;
 }
 
@@ -40,22 +59,19 @@ void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
     boost::asio::async_read_until(*socket, boost::asio::dynamic_buffer(*authenticationBuffer), '\n',[this, socket, authenticationBuffer](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
             std::cout << "packet recieve :  " << *authenticationBuffer << std::endl;
+            this->handleAuthentication(socket, authenticationBuffer);
         }
-        if (!this->checkCredentials(authenticationBuffer)){
-            this->waitForAuthentication(socket);
-        }else {
-            this->createNewConnection(socket, authenticationBuffer);
-        }
+        
     
     });
   
 }
 
-void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, std::shared_ptr<std::string> credentials){
+void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json jcredentials ){
     // pls just use auto  
     std::cout << "create new connection " << std::endl;
     std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(*socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
-    std::string pseudo = nlohmann::json::parse(*credentials).at("pseudo").get<const std::string>();
+    std::string pseudo = jcredentials.at("pseudo").get<const std::string>();
     clientManager_.addConnection(std::move(newLink), pseudo);
     
 

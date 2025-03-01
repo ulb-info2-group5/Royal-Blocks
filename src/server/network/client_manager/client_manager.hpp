@@ -53,7 +53,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         ClientLink(ClientLink && other) = default;
         ClientLink& operator=(ClientLink&& other) =  default;
         void start();
-        void recieveMessage(const int &senderId , const std::string & content );
+        void recieveMessage(const std::string & content );
 
 
    

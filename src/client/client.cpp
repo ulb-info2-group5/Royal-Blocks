@@ -7,71 +7,56 @@ using boost::asio::ip::tcp;
 // ======= class tcpClient =======
 // -- private --
         
-void TcpClient::askForAuthentication(){
-    Authentication authentication;
-    std::cout << "---- authentication ----" << std::endl;
-    std::cout << "pseudo : "<< std::endl;
-    std::cin >> authentication.pseudo;
-    std::cout << "password : " << std::endl;
-    std::cin >> authentication.password;
-    authentication.newCompte = true;
-    sendAuthentication(authentication);
-}
-void TcpClient::sendAuthentication(const Authentication &authentication){
-    nlohmann::json j;
-    j["newCompte"] = authentication.newCompte;
-    j["pseudo"] = authentication.pseudo;
-    j["password"] = authentication.password;
-    std::string authen; 
-    buffer_.erase();
-    authen = j.dump() + "\n";
-    std::cout << authen << std::endl;
-    boost::asio::async_write(socket_, boost::asio::buffer(authen) , [this](boost::system::error_code ec, std::size_t /*length*/){
-        if (!ec){
-            std::cout << "--- *** authentifcation send *** ---" << std::endl; 
-            //this->readSocket();
-        }
-    });
-    writeMessage();
-}
 
-void TcpClient::readSocket(){
-    boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n', [this](boost::system::error_code ec, std::size_t length){
-        if (!ec){
-            std::cout << "server has been sent : " << this->buffer_ << std::endl;
-            buffer_.erase(0, length);
-         readSocket();           
-        }
-    }); 
-}
-
-void TcpClient::writeMessage(){
-    std::string content = "tes de message ";
-    nlohmann::json j;
-    j["type"] = 'M';
-    j["senderId"] = 49;
-    j["reciverId"] = 50;
-    j["content"] = content;
-    buffer_ = j.dump() + "\n";
-    boost::asio::async_write(socket_, boost::asio::buffer(buffer_) , [this](boost::system::error_code ec, std::size_t length){
-        if (!ec){
-            std::cout << "--- *** message send *** ---" << std::endl; 
-            buffer_.erase(0, length);
-        }
-    });
-    readSocket();
+void TcpClient::sendAuthentication(const Login &authentication){
+    std::string authen = authentication.to_json().dump() + "\n";
+    sendPackage(authen);
 }
 
 
-void TcpClient::writeSocket(){
-    std::string message = "ping \n";
-    boost::asio::async_write(socket_, boost::asio::buffer(message), [this](boost::system::error_code ec, std::size_t /*length*/){
-        if (!ec){
-            std::cout << "--- message send ---" << std::endl; 
+
+void TcpClient::startWrite(){
+    std::cout << "start Write" << std::endl;
+    boost::asio::async_write(socket_, boost::asio::buffer(writeQueue_.front()),[this](boost::system::error_code ec, std::size_t) {
+        if (!ec) {
+            writeQueue_.pop_front();
+            if (!writeQueue_.empty()) {
+                startWrite(); 
+            }
         }
     });
 }
 
+void TcpClient::startRead() {
+    boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n',[this](boost::system::error_code ec, std::size_t length) {
+            if (!ec) {
+                std::cout << "Serveur: " << buffer_.substr(0, length);
+                buffer_.erase(0, length);
+                startRead(); 
+            }
+        });
+}
+
+
+// -- public --//
+
+void TcpClient::sendMessage(const std::string& content){
+    int receiverId  = 50;
+    
+    std::string packet = Message{'M', receiverId, content }.to_json().dump() + "\n";
+    sendPackage(packet); 
+}
+
+
+void TcpClient::sendPackage(std::string& message) {
+    boost::asio::post(socket_.get_executor(), [this, message]() {
+            bool is_writing = !writeQueue_.empty();
+            writeQueue_.push_back(message);
+            if (!is_writing) {
+                startWrite();
+            }
+        });
+}
 
 TcpClient::TcpClient(boost::asio::io_context& ioContex, const std::string& host, const std::string& port ) : socket_(ioContex) {
     tcp::resolver resolver(ioContex);
@@ -79,8 +64,18 @@ TcpClient::TcpClient(boost::asio::io_context& ioContex, const std::string& host,
     boost::asio::async_connect(socket_, endpoints,[this](boost::system::error_code ec, tcp::endpoint){
             if (!ec){
                 std::cout << "======== conected to the server ========" << std::endl;
-                //writeSocket();
-                askForAuthentication();
+                this->startRead();
             }
     });
+}
+
+void TcpClient::askForAuthentication(){
+    Login authentication;
+    std::cout << "---- authentication ----" << std::endl;
+    std::cout << "pseudo : "<< std::endl;
+    std::cin >> authentication.pseudo;
+    std::cout << "password : " << std::endl;
+    std::cin >> authentication.password;
+    
+    sendAuthentication(authentication);
 }
