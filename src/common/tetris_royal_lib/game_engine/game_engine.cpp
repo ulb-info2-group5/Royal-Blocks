@@ -421,8 +421,12 @@ void GameEngine::bigDrop(PlayerID playerID) {
 
     size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-
     pPlayerState->increaseScore(earnedPoints);
+
+    if (checkFeatureEnabled(GameModeFeature::Effects)) {
+        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
+        pPlayerState->increaseEnergy(earnedEnergy);
+    }
 }
 
 void GameEngine::holdNextTetromino(PlayerID playerID) {
