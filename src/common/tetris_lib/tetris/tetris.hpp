@@ -35,9 +35,8 @@ class Tetris {
     TetrominoPtr holdTetromino_;
     TetrominoQueue tetrominoQueue_;
 
-    // TODO: move this to constructor ?
-    uint32_t lockDelayTicksNum_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
-    uint32_t ticksSinceLockStart_ = 0;
+    uint32_t lockDelayTicksNum_;
+    uint32_t ticksSinceLockStart_;
 
     /**
      * @brief Updates the preview tetromino.

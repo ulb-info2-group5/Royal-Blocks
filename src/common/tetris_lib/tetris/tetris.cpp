@@ -72,7 +72,11 @@ void Tetris::fetchNewTetromino() {
 
 // #### Constructors ####
 
-Tetris::Tetris() { fetchNewTetromino(); }
+Tetris::Tetris()
+    : lockDelayTicksNum_{DEFAULT_LOCK_DELAY_TICKS_NUM},
+      ticksSinceLockStart_{0} {
+    fetchNewTetromino();
+}
 
 // #### TetrisObserver ####
 
