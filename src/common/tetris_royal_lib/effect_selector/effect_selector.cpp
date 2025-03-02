@@ -6,7 +6,6 @@
 #include <variant>
 
 EffectSelector::EffectSelector() : selectionIdx_{0} {
-
     for (size_t bonusCount = 0;
          bonusCount < static_cast<size_t>(BonusType::NumBonusType);
          bonusCount++) {
@@ -19,7 +18,6 @@ EffectSelector::EffectSelector() : selectionIdx_{0} {
         penalties_.at(penaltyCount) = static_cast<PenaltyType>(penaltyCount);
     }
 
-    // TODO: add a message here if assert fails?
     assert(bonuses_.size() > 0 || penalties_.size() > 0);
 }
 

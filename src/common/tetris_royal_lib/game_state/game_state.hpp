@@ -10,9 +10,6 @@
 
 #include <vector>
 
-// TODO: For getPlayerState and getTetris, might wanna use
-// optional<reference_wrapper> to avoid raw pointers.
-
 class GameState {
   private:
     const GameMode gameMode_;
