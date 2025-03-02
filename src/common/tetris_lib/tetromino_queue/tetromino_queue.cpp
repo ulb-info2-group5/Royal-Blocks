@@ -12,10 +12,9 @@ size_t TetrominoQueue::size() const noexcept { return queue_.size(); };
 TetrominoPtr &TetrominoQueue::front() { return queue_.front(); }
 
 void TetrominoQueue::refill() {
-    // TODO: avoid instantiation of random device at each call
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distrib(
+    static std::uniform_int_distribution<int> distrib(
         0, static_cast<int>(TetrominoShape::NumBasicTetrominoShape) - 1);
 
     while (queue_.size() < MINIMUM_ENQUEUED_NUM) {
