@@ -14,28 +14,15 @@
 #include <memory>
 
 #include "../game_display/game_display.hpp"
+#include "../../IGame_Menu.hpp"
 
 class Controller; // Forward declaration
 
-enum class JoinType {
-    FRIEND,
-    RANDOM,
-    ENDLESS,
-    BACK,
-    NONE,
-};
-
-enum class TypeGame {
-    CREATE_GAME,
-    JOIN_GAME,
-    NONE,
-};
-
 /**
- * @brief Game menu class to show and selct the game party
+ * @brief Game menu class to show and select the game party
  *
  */
-class GameMenu {
+class GameMenu : public IGame_Menu {
   private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
     Controller *controller_;
@@ -61,34 +48,34 @@ class GameMenu {
      *
      * @return PlayMode the game mode selected
      */
-    void renderAllGames();
+    void renderAllGames() override;
 
     /*
      * @brief Rend the game menu with just the online games mods
      * @return PlayMode the game mode selected
      */
-    void renderOnlineGames();
+    void renderOnlineGames() override;
 
     /*
      * @brief Screen to choose between joining a friend or a random game
      */
-    void joinFriendOrRandomScreen();
+    void joinFriendOrRandomScreen() override;
 
     /*
      * @brief Handle the choice of the user in the game menu
      */
-    void handleChoice();
+    void handleChoice() override;
 
     /*
      * @brief Screen when the user is joining a friend, a list of the online
      * friends is displayed and the user can select one
      */
-    void joinFriendScreen();
+    void joinFriendScreen() override;
 
     /*
      * @brief Screen when the is waiting for a random game
      */
-    void joinRandomScreen();
+    void joinRandomScreen() override;
 
     /*
      * @brief Make a button to add a friend
@@ -101,7 +88,7 @@ class GameMenu {
      * @brief Screen when the user has choosen the friend and now waiting for
      * the start of the game
      */
-    void waitingFriendScreen();
+    void waitingFriendScreen() override;
 
   public:
     /*
@@ -122,7 +109,7 @@ class GameMenu {
      *
      * @param typeGame The type of the game to render
      */
-    void render(const TypeGame &typeGame);
+    void render(const TypeGame &typeGame) override;
 };
 
 #endif // GAME_MENU_HPP

@@ -19,18 +19,6 @@
 
 class Controller; // Forward declaration
 
-enum class LoginType {
-    LOGIN,
-    REGISTER,
-    NONE,
-};
-
-enum class LoginState {
-    SUBMIT,
-    BACK,
-    NONE,
-};
-
 /**
  * @brief LoginInput class to get the login input or register input from the
  * user
@@ -89,9 +77,9 @@ class LoginInput : public ILogin_Input {
     ftxui::Component displayWindow_;
 
   protected:
-    void displayButtonBack();
+    void displayButtonBack() override;
 
-    void displayButtonSubmit();
+    void displayButtonSubmit() override;
 
     void displayWindow() override;
 
@@ -113,26 +101,26 @@ class LoginInput : public ILogin_Input {
     /*
      * @brief Render the login input screen with all the components
      */
-    LoginState render();
+    LoginState render() override;
 
     /*
      * @brief Add an instruction to show to the user
      *
      * @param string instruction the instruction to show
      */
-    void addInstruction(const std::string_view instruction);
+    void addInstruction(const std::string_view instruction) override;
 
     /*
      * @brief Add a message to show to the user
      *
      * @param string message the message to show
      */
-    void addMessage(const std::string_view message);
+    void addMessage(const std::string_view message) override;
 
     /*
      * @brief Clear the info of the user input (username and password)
      */
-    void clearInfo();
+    void clearInfo() override;
 };
 
 #endif // LOGIN_INPUT_HPP

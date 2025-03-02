@@ -329,15 +329,6 @@ void MainMenu::displayProfileManagerWindow() {
     });
 }
 
-// ### Public methods ###
-void MainMenu::render() {
-    while (state_ != MainMenuState::EXIT) {
-        displayMainWindow();
-        screen_->Loop(mainMenuWindow_);
-        handleChoice();
-    }
-}
-
 void MainMenu::renderRanking() {
 
     displayRankingWindow();
@@ -351,3 +342,13 @@ void MainMenu::renderProfileManager() {
 
     screen_->Loop(profileManagerWindow_);
 }
+
+// ### Public methods ###
+void MainMenu::render() {
+    while (state_ != MainMenuState::EXIT) {
+        displayMainWindow();
+        screen_->Loop(mainMenuWindow_);
+        handleChoice();
+    }
+}
+

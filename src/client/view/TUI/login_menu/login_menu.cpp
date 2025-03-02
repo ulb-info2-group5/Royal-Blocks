@@ -33,7 +33,6 @@ LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
 // ### protected methods ###
 
 void LoginMenu::displayButtons() {
-    loginState_ = Login::NONE;
 
     buttonRegister_ =
         ftxui::Button(

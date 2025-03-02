@@ -3,6 +3,16 @@
 
 #include <string>
 
+enum class MessagingState {
+    BACK,
+    NONE,
+};
+
+struct Message {
+    int idSender;
+    std::string message;
+};
+
 class IMessage {
   protected:
     virtual void drawButtons() = 0;
@@ -18,7 +28,7 @@ class IMessage {
   public:
     virtual ~IMessage() = default;
 
-    // virtual void addFriend(std::string friendName) = 0;
+    virtual void render() = 0;
 
     virtual void addMessage(const std::string &message) = 0;
 };

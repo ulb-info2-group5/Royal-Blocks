@@ -28,7 +28,7 @@ Controller::Controller()
 Controller::~Controller() {}
 
 void Controller::run() {
-    networkManager_.connect();
+    // networkManager_.connect();
 
     screenManager_.run();
 }

@@ -26,17 +26,17 @@
 
 class Controller; // Forward declaration
 
-enum class MainMenuState {
-    CREATE_GAME,
-    JOIN_GAME,
-    SEND_MESSAGES_TO_FRIENDS,
-    LOOK_RANKING,
-    MANAGE_PROFILE,
-    MANAGE_FRIENDS_LIST,
-    EXIT,
-    BACK,
-    NONE,
-};
+// enum class MainMenuState {
+//     CREATE_GAME,
+//     JOIN_GAME,
+//     SEND_MESSAGES_TO_FRIENDS,
+//     LOOK_RANKING,
+//     MANAGE_PROFILE,
+//     MANAGE_FRIENDS_LIST,
+//     EXIT,
+//     BACK,
+//     NONE,
+// };
 
 /**
  * @brief Main menu of the game that will be displayed to the user
@@ -92,12 +92,12 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief Handle the choice of the user in the main menu
      */
-    void handleChoice();
+    void handleChoice() override;
 
     /*
      * @brief Create the display of the confirm update profile screen
      */
-    void confirmUpdateProfileScreen() const;
+    void confirmUpdateProfileScreen() const override;
 
   protected:
     void displayMainMenuButtons() override;
@@ -142,7 +142,7 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief Render the main menu screen with all the components
      */
-    void render();
+    void render() override;
 };
 
 #endif // MAIN_MENU_HPP

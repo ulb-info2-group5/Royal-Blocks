@@ -25,11 +25,11 @@ constexpr std::string_view REGISTER_INSTRUCTIONS =
 constexpr std::string_view LOGIN_MESSAGE =
     "Your account has been created successfully! You can now login.";
 
-enum class Login {
-    LOGGED,
-    EXIT,
-    NONE,
-};
+// enum class Login {
+//     LOGGED,
+//     EXIT,
+//     NONE,
+// };
 
 class Controller; // Forward declaration
 
@@ -60,8 +60,7 @@ class LoginMenu : public ILogin_Menu {
 
     ftxui::Component buttonRegister_;
     ftxui::Component buttonLogin_;
-    ftxui::Component buttonExit_;
-    // ftxui::Component buttonDisplay_;
+    ftxui::Component buttonExit_;  
 
     ftxui::Component displayWindow_;
 
@@ -87,7 +86,7 @@ class LoginMenu : public ILogin_Menu {
     /*
      * @brief Render the login menu screen with all the components
      */
-    void render();
+    void render() override;
 };
 
 #endif // LOGIN_MENU_HPP

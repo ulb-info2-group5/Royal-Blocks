@@ -24,8 +24,6 @@ const uint32_t WIDTH_PLAYER_CANVAS = 40, HEIGHT_PLAYER_CANVAS = 80,
 
 class Controller; // Forward declaration
 
-enum class PlayMode : uint8_t { CLASSIC, ROYAL, DUEL, ENDLESS, NONE };
-
 ftxui::Color getFTXUIColor(colors color);
 
 class GameDisplay : public IGame {

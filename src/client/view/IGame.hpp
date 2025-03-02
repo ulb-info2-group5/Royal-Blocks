@@ -1,6 +1,14 @@
 #ifndef IGAME_HPP
 #define IGAME_HPP
 
+enum class PlayMode { 
+  CLASSIC, 
+  ROYAL, 
+  DUEL, 
+  ENDLESS, 
+  NONE 
+};
+
 class IGame {
   protected:
     virtual void drawPlayerInfo() = 0;

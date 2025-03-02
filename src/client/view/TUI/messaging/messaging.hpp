@@ -21,15 +21,15 @@ class Controller; // Forward declaration
  * @brief Enum class to represent the state of the messaging
  *
  */
-enum class MessagingState {
-    BACK,
-    NONE,
-};
+// enum class MessagingState {
+//     BACK,
+//     NONE,
+// };
 
-struct Message {
-    int idSender;
-    std::string message;
-};
+// struct Message {
+//     int idSender;
+//     std::string message;
+// };
 
 class Messaging : public IMessage {
   private:
@@ -99,7 +99,7 @@ class Messaging : public IMessage {
     /*
      * @brief Render the messaging screen with all the components
      */
-    void render();
+    void render() override;
 
     // void addFriends(std::string friendName) override;
 
