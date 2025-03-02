@@ -21,8 +21,8 @@ void ClientLink::read(){
             
             if (buffer_ != "\n") packetHandler_(buffer_);
             buffer_.erase(0, length);
+            read();
         }
-        read();
     }); 
 }
 

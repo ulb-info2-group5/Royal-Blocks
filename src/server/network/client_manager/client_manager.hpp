@@ -18,6 +18,7 @@ using boost::asio::ip::tcp;
 enum PacketType :char {
     MESSAGE = 'M',
     CONNECTION = 'C',
+    REGISTER = 'R',
     DECONNECTION = 'D'
 };
 

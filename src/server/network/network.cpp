@@ -36,7 +36,9 @@ void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::sha
                 return;
             }
             break;
-
+        case REGISTER :
+            // TODO : create a new compte and ask for login
+            break;
         default:
             break;
         }

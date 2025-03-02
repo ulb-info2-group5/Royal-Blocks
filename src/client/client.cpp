@@ -19,6 +19,7 @@ void TcpClient::startWrite(){
     std::cout << "start Write" << std::endl;
     boost::asio::async_write(socket_, boost::asio::buffer(writeQueue_.front()),[this](boost::system::error_code ec, std::size_t) {
         if (!ec) {
+            std::cout << writeQueue_.front() << std::endl;
             writeQueue_.pop_front();
             if (!writeQueue_.empty()) {
                 startWrite(); 
@@ -43,7 +44,7 @@ void TcpClient::startRead() {
 void TcpClient::sendMessage(const std::string& content){
     int receiverId  = 50;
     
-    std::string packet = Message{'M', receiverId, content }.to_json().dump() + "\n";
+    std::string packet = Message{'M', receiverId, content }.to_json().dump() + '\n';
     sendPackage(packet); 
 }
 
