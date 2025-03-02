@@ -20,6 +20,9 @@ struct Message; // Forward declaration
 
 class Controller {
   private:
+    boost::asio::io_context context_;
+    std::thread ioThread_;
+
     /*
      * @brief The network manager to manage the connection with the server
      */

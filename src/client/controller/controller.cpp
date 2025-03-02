@@ -13,43 +13,45 @@
 // ### Private methods ###
 
 void Controller::handlePacket(const std::string &pack) {
+    std::cerr << "called with " << pack << std::endl;
+
     // TODO
 }
 
 // ### Public methods ###
 
 Controller::Controller()
-    : networkManager_{[this](const std::string &packet) {
-          handlePacket(packet);
-      }},
-      screenManager_(this) {};
+    : networkManager_{context_,
+                      [this](const std::string &packet) {
+                          handlePacket(packet);
+                      }},
+      screenManager_{this} {};
 
 Controller::~Controller() {}
 
 void Controller::run() {
-    // networkManager_.connect();
+    networkManager_.connect();
+
+    ioThread_ = std::thread([this]() { context_.run(); });
 
     screenManager_.run();
+
+    // TODO: I think this never gets called
+    if (ioThread_.joinable()) {
+        ioThread_.join();
+    }
 }
 
 bool Controller::verifyRegister(const std::string &username,
                                 const std::string &password) const {
-    // TODO: check with the server for the register
-    // TODO: remove this because it's an example
-    if (username == "ethan" && password == "ethan") {
-        return true;
-    }
-    return false;
+    // TODO
+    return true;
 }
 
 bool Controller::verifyLogin(const std::string &username,
                              const std::string &password) const {
-    // TODO: check with the server if the username and password are correct
-    // TODO: remove this because it's an example
-    if (username == "ethan" && password == "ethan") {
-        return true;
-    }
-    return false;
+    // TODO
+    return true;
 }
 
 std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
@@ -67,12 +69,8 @@ std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
 
 bool Controller::changeProfile(const std::string &username,
                                const std::string &password) const {
-    // TODO: communicate with the server to change the profile
-    // TODO: remove this because it's an example
-    if (username == "ethan" && password == "ethan") {
-        return true;
-    }
-    return false;
+    // TODO
+    return true;
 }
 
 std::vector<std::string> Controller::getFriendsList() const {
@@ -89,18 +87,18 @@ std::vector<std::string> Controller::getFriendsList() const {
 }
 
 bool Controller::addFriend(const std::string &friendName) const {
-    // TODO: communicate with the server to add the friend
+    // TODO:
     return true;
 }
 
 bool Controller::removeFriend(const std::string &friendName) const {
-    // TODO: communicate with the server to remove the friend
+    // TODO:
     return true;
 }
 
 bool Controller::sendMessage(const std::string &friendName,
                              const std::string &message) const {
-    // TODO: communicate with the server to send the message
+    // TODO:
     return true;
 }
 

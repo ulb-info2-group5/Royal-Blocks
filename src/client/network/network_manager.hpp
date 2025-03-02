@@ -12,14 +12,15 @@
 #include <boost/asio.hpp>
 #include <boost/asio/io_context.hpp>
 #include <deque>
-#include <thread>
 
 class NetworkManager {
   private:
+    std::string readBuf;
+
     /*
      * @brief The io context used for asynchronous operations
      */
-    boost::asio::io_context io_context_;
+    boost::asio::io_context &context_;
 
     /*
      * @brief The socket used to communicate with the server
@@ -37,11 +38,6 @@ class NetworkManager {
     std::function<void(const std::string &)> packetHandler_;
 
     /*
-     * @brief The thread used to run the io context
-     */
-    std::thread ioThread_;
-
-    /*
      * @brief Function to write and send messages to the server
      */
     void write();
@@ -55,12 +51,13 @@ class NetworkManager {
     /*
      * @brief Construct a new Network Manager object
      */
-    NetworkManager(std::function<void(const std::string &)> packetHandler);
+    NetworkManager(boost::asio::io_context &context,
+                   std::function<void(const std::string &)> packetHandler);
 
     /*
      * @brief Destroy the Network Manager object
      */
-    ~NetworkManager();
+    ~NetworkManager() = default;
 
     /*
      * @brief Connect to the server and start listening for messages
