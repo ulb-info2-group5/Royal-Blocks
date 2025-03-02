@@ -81,8 +81,9 @@ class Board {
      *
      * @param yRow The y-coordinate of the row from which all rows are shifted
      * up.
+     * @param numRows The number of rows to lift.
      */
-    void liftRowsFrom(int yRow);
+    void liftRowsFrom(int yRow, size_t numRows);
 
     /**
      * @brief Sets row at yRow to the given row.

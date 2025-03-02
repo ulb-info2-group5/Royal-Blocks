@@ -36,11 +36,13 @@ void Board::dropRowsAbove(int yRow) {
     emptyRow(getHeight() - 1);
 }
 
-void Board::liftRowsFrom(int yRow) {
+void Board::liftRowsFrom(int yRow, size_t numRows) {
     const int topRow = getHeight() - 1;
 
-    for (int y = topRow; y > static_cast<int>(yRow); y--) {
-        setRow(getRow(y - 1), y);
+    for (size_t lineCount = 0; lineCount < numRows; lineCount++) {
+        for (int y = topRow; y > static_cast<int>(yRow); y--) {
+            setRow(getRow(y - 1), y);
+        }
     }
 
     emptyRow(yRow);
@@ -230,11 +232,7 @@ bool Board::receivePenaltyLines(size_t numPenaltyLines) {
 
     constexpr int bottomRow = 0;
     // Lift rows from the bottom to make room for the penalty lines.
-    // TODO: avoid for-loop and make liftRows take a numRows parameter
-    // (algorithmically better)
-    for (size_t lineCount = 0; lineCount < numPenaltyLines; lineCount++) {
-        liftRowsFrom(static_cast<int>(bottomRow));
-    }
+    liftRowsFrom(bottomRow, numPenaltyLines);
 
     // Fill the newly freed lines with penalty lines.
     for (size_t penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
