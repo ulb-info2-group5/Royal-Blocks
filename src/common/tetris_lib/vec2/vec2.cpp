@@ -81,3 +81,16 @@ std::ostream &operator<<(std::ostream &os, const Vec2 &vec) {
     os << "(" << vec.getX() << ", " << vec.getY() << ")";
     return os;
 }
+
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json Vec2::serialize() const {
+    return nlohmann::json{{"x", x_}, {"y", y_}};
+}
+
+void Vec2::deserialize(const nlohmann::json &j) {
+    j.at("x").get_to(this->x_);
+    j.at("y").get_to(this->y_);
+}

@@ -1,7 +1,8 @@
 #include "test_tetromino.hpp"
 
-#include "../../../../src/common/tetris_lib/tetromino/tetromino_shapes.hpp"
 #include "../../../utils.hpp"
+#include "tetromino/tetromino.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -68,15 +69,15 @@ void TetrominoTest::getWidthAndHeightTest() {
 void TetrominoTest::moveTest() {
     CPPUNIT_ASSERT_EQUAL(Vec2(0, 0), pTetrominoZ->getAnchorPoint());
 
-    pTetrominoZ->move(Direction::Down);
+    pTetrominoZ->move(TetrominoMove::Down);
 
     CPPUNIT_ASSERT_EQUAL(Vec2(0, -1), pTetrominoZ->getAnchorPoint());
 
-    pTetrominoZ->move(Direction::Right);
+    pTetrominoZ->move(TetrominoMove::Right);
 
     CPPUNIT_ASSERT_EQUAL(Vec2(1, -1), pTetrominoZ->getAnchorPoint());
 
-    pTetrominoZ->move(Direction::Left);
+    pTetrominoZ->move(TetrominoMove::Left);
 
     CPPUNIT_ASSERT_EQUAL(Vec2(0, -1), pTetrominoZ->getAnchorPoint());
 }

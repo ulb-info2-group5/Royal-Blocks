@@ -47,11 +47,6 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
     : shape_(shape), anchorPoint_{std::move(anchorPoint)},
       body_{std::move(body)}, offsetData_(offsetData) {
 
-    if (body_.size() != 4) {
-        throw std::invalid_argument(
-            "All Tetrominoes must be composed of 4 blocks");
-    }
-
     int minY = std::numeric_limits<int>::max();
     int maxY = std::numeric_limits<int>::min();
     int minX = std::numeric_limits<int>::max();
@@ -76,9 +71,9 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
 
 TetrominoPtr ATetromino::makeTetromino(TetrominoShape shape,
                                        Vec2 &&anchorPoint) {
-    if (shape == TetrominoShape::NumTetrominoShape) {
+    if (shape == TetrominoShape::NumBasicTetrominoShape) {
         throw std::runtime_error(
-            "shape must be different from NumTetrominoShape");
+            "invalid tetromino shape: NumBasicTetrominoShape");
     }
 
     TetrominoPtr ret;
@@ -163,15 +158,15 @@ void ATetromino::setAnchorPoint(const Vec2 &anchorPoint) {
 
 // #### Tetromino Actions ####
 
-void ATetromino::move(Direction direction, bool reverse) {
-    switch (direction) {
-    case Direction::Down:
+void ATetromino::move(TetrominoMove tetrominoMove, bool reverse) {
+    switch (tetrominoMove) {
+    case TetrominoMove::Down:
         anchorPoint_.moveY(reverse ? +1 : -1);
         break;
-    case Direction::Left:
+    case TetrominoMove::Left:
         anchorPoint_.moveX(reverse ? +1 : -1);
         break;
-    case Direction::Right:
+    case TetrominoMove::Right:
         anchorPoint_.moveX(reverse ? -1 : +1);
         break;
     }

@@ -1,6 +1,8 @@
 #ifndef GRID_CELL_HPP
 #define GRID_CELL_HPP
 
+#include <nlohmann/json.hpp>
+
 #include <optional>
 
 /**
@@ -11,7 +13,7 @@
  *  1. Holds a color, and therefore is not empty.
  *  2. Is empty and therefore has no color assigned.
  */
-class GridCell final {
+class GridCell {
   private:
     std::optional<unsigned> colorId_;
 
@@ -29,7 +31,7 @@ class GridCell final {
 
     // #### Destructor ####
 
-    virtual ~GridCell();
+    ~GridCell();
 
     // #### Getters ####
 
@@ -60,6 +62,28 @@ class GridCell final {
      * @brief Clears the cell's ColorId.
      */
     void setEmpty() noexcept;
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j;
+        if (colorId_) {
+            j["colorId"] = *colorId_;
+        } else {
+            j["colorId"] = nullptr;
+        }
+        return j;
+    }
+
+    void deserialize(const nlohmann::json &j) {
+        if (j.contains("colorId") && !j["colorId"].is_null()) {
+            colorId_ = j.at("colorId").get<unsigned>();
+        } else {
+            colorId_ = std::nullopt;
+        }
+    }
 };
 
 #endif

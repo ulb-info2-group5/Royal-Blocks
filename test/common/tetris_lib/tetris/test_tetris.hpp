@@ -1,6 +1,6 @@
-#include "../../../../src/common/tetris_lib/tetris/tetris.hpp"
+#include "tetris/tetris.hpp"
 
-#include "../../../../src/common/tetris_lib/tetromino/tetromino_shapes.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -17,7 +17,7 @@ class TetrisTest : public CppUnit::TestFixture {
 
   private:
     constexpr static size_t tetrominoShapesNum =
-        static_cast<size_t>(TetrominoShape::NumTetrominoShape);
+        static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
     Tetris tetris;
 };

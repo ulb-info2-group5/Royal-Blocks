@@ -1,0 +1,25 @@
+#ifndef CLIENT_GAME_STATE_HPP
+#define CLIENT_GAME_STATE_HPP
+
+#include "../player_tetris/player_tetris_external.hpp"
+#include "../player_tetris/player_tetris_self.hpp"
+
+#include "game_mode/game_mode.hpp"
+
+#include <vector>
+
+namespace client {
+
+    struct GameState {
+        GameMode gameMode;
+        PlayerTetrisSelf self;
+        std::vector<PlayerTetrisExternal> externals;
+
+        nlohmann::json serialize() const;
+
+        void deserialize(const nlohmann::json &j);
+    };
+
+} // namespace client
+
+#endif // CLIENT_GAME_STATE_HPP

@@ -9,7 +9,7 @@
  * @brief Represents the result of a board update, including the number of rows
  * and columns cleared during the update.
  */
-class BoardUpdate final {
+class BoardUpdate {
   private:
     size_t numClearedRows_;
     size_t numClearedCols_;
@@ -28,7 +28,7 @@ class BoardUpdate final {
 
     // #### Destructor ####
 
-    virtual ~BoardUpdate() = default;
+    ~BoardUpdate() = default;
 
     // #### Getters ####
 

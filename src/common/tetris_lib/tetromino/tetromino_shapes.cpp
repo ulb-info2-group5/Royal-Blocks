@@ -32,8 +32,11 @@ std::ostream &operator<<(std::ostream &os, TetrominoShape shape) {
     case TetrominoShape::T:
         os << "T";
         break;
-    case TetrominoShape::NumTetrominoShape:
+    case TetrominoShape::NumBasicTetrominoShape:
         os << "NumTetrominoShape";
+        break;
+    case TetrominoShape::MiniTetromino:
+        os << "MiniTetromino";
         break;
     default:
         os << "Unknown";
@@ -103,3 +106,10 @@ TetrominoT::TetrominoT(Vec2 &&anchorPoint)
         rotate(true);
     }
 }
+
+// #### MiniTetromino Shape ####
+
+MiniTetromino::MiniTetromino(Vec2 &&anchorPoint)
+    : ATetromino(std::move(anchorPoint), std::vector<Vec2>{{0, 0}},
+                 &ATetromino::ZLSJT_OFFSET_DATA,
+                 TetrominoShape::MiniTetromino) {}

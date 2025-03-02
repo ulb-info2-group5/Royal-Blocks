@@ -4,6 +4,8 @@
 #include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
 
+#include <nlohmann/json.hpp>
+
 #include <concepts>
 #include <cstdint>
 #include <memory>
@@ -15,15 +17,15 @@ class ATetromino;
 using TetrominoPtr = std::unique_ptr<ATetromino>;
 
 /**
- * @enum Direction
+ * @enum TetrominoMove
  *
  * @brief The three directions in which a Tetromino can be moved: left, right,
  * down.
  */
-enum class Direction { Left, Right, Down };
+enum class TetrominoMove { Left, Right, Down };
 
 /**
- * @class Tetromino
+ * @class ATetromino
  *
  * @brief This class represents an abstract Tetromino (piece in Tetris), it
  * supports two rotation algorithms:
@@ -210,10 +212,10 @@ class ATetromino {
     /**
      * @brief Moves the Tetromino in the given direction.
      *
-     * @param direction The direction to move the Tetromino.
+     * @param tetrominoMove The direction to move the Tetromino.
      * @param reverse If true, moves the Tetromino in the opposite direction.
      */
-    void move(Direction direction, bool reverse = false);
+    void move(TetrominoMove tetrominoMove, bool reverse = false);
 
     /**
      * @brief Rotates the Tetromino around it rotation-center (Without SRS).
@@ -257,7 +259,23 @@ class ATetromino {
     friend std::ostream &operator<<(std::ostream &os,
                                     const ATetromino &tetromino);
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j_body = nlohmann::json::array();
+        for (const auto &vec : body_) {
+            j_body.push_back(vec.serialize());
+        }
+
+        return nlohmann::json{{"anchorPoint", anchorPoint_.serialize()},
+                              {"body", j_body}};
+    }
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend TetrominoTest;
 };
