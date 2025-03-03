@@ -11,8 +11,8 @@
 #include <string>
 #include <memory>
 
-#include "../../../client/core/player_tetris/player_tetris_external.hpp"
-#include "../../../client/core/player_tetris/player_tetris_self.hpp"
+// #include "../../../client/core/player_tetris/player_tetris_external.hpp"
+// #include "../../../client/core/player_tetris/player_tetris_self.hpp"
 #include "../../../client/core/game_state/game_state.hpp"
 
 #include "../../../common/tetris_lib/tetris/tetris.hpp"
@@ -22,10 +22,9 @@
 
 #include "../../../common/tetris_lib/tetris/tetris_observer.hpp"
 
-using namespace client;
-
 enum class EVENT_TYPE {
     TETROMINO_MOVE,
+    TETROMINO_BIG_DROP,
     TETROMINO_ROTATE,
     PENALTY_NORMAL, 
     BUY_PENALTY_ROYAL,
@@ -33,9 +32,10 @@ enum class EVENT_TYPE {
     USER_CHANGE_TARGET,
     USER_PREV_EFFECT,
     USER_NEXT_EFFECT,
-    USER_PENALTY_STACK 
+    USER_PENALTY_STACK,
     DISCONNECT,
 };
+
 struct Event
 {
     uint32_t sender;
@@ -67,6 +67,8 @@ class GameServer
     protected:
 
     void applyUserMoveTetris(Event &event);
+    
+    void applyUserBigDrop(Event &event);
 
     void applyUserRotateTetris(Event &event);
 
@@ -100,7 +102,7 @@ class GameServer
 
     void addEvent(Event &event);
 
-    // void update();
+    void update();
     /*
     dequeue all the events and verify validity of all events
     applied the events on the tetris concerned + tetris -> update
