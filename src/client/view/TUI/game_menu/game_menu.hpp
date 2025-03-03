@@ -27,7 +27,7 @@ class GameMenu : public IGame_Menu {
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
     Controller *controller_;
 
-    std::unique_ptr<GameDisplay> gameDisplay_;
+    GameDisplay gameDisplay_;
 
     JoinType joinType_;
 

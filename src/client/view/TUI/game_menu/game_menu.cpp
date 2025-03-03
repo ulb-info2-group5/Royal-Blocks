@@ -17,14 +17,13 @@
 
 GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                    Controller *controller)
-    : screen_(screen), controller_(controller), joinType_(JoinType::NONE),
+    : screen_(screen), controller_(controller), gameDisplay_(
+        screen_, controller_, controller_->getBoards(),
+        PlayMode::ENDLESS), joinType_(JoinType::NONE),
       typeGame_(TypeGame::NONE) {
     endlessButon_ = ftxui::Button(
                         "Endless",
                         [&] {
-                            gameDisplay_ = std::make_unique<GameDisplay>(
-                                screen_, controller_, controller_->getBoards(),
-                                PlayMode::ENDLESS);
                             joinType_ = JoinType::ENDLESS;
                             screen_->ExitLoopClosure()();
                         },
@@ -34,7 +33,7 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     duelButon_ = ftxui::Button(
                      "Duel",
                      [&] {
-                         gameDisplay_ = std::make_unique<GameDisplay>(
+                         gameDisplay_ = GameDisplay(
                              screen_, controller_, controller_->getBoards(),
                              PlayMode::DUEL);
                          joinFriendOrRandomScreen();
@@ -46,7 +45,7 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     classicButon_ = ftxui::Button(
                         "Classic",
                         [&] {
-                            gameDisplay_ = std::make_unique<GameDisplay>(
+                            gameDisplay_ = GameDisplay(
                                 screen_, controller_, controller_->getBoards(),
                                 PlayMode::CLASSIC);
                             joinFriendOrRandomScreen();
@@ -58,7 +57,7 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     royalButon_ = ftxui::Button(
                       "Royal",
                       [&] {
-                          gameDisplay_ = std::make_unique<GameDisplay>(
+                          gameDisplay_ = GameDisplay(
                               screen_, controller_, controller_->getBoards(),
                               PlayMode::ROYAL);
                           joinFriendOrRandomScreen();
@@ -184,7 +183,7 @@ void GameMenu::handleChoice() {
         break;
 
     case JoinType::ENDLESS:
-        gameDisplay_->render(); // Endless mode is directly started without
+        gameDisplay_.render(); // Endless mode is directly started without
                                 // waiting for a friend or a random game
         break;
 

@@ -22,7 +22,7 @@ Controller::Controller()
     : networkManager_{[this](const std::string &packet) {
           handlePacket(packet);
       }},
-      screenManager_(ScreenManager(this)) {};
+      screenManager_(this) {};
 
 Controller::~Controller() {}
 

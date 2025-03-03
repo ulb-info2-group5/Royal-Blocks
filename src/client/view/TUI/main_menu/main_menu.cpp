@@ -19,9 +19,9 @@
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                    Controller *controller)
     : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
-      friendsMenu_(std::make_unique<FriendsMenu>(screen, controller)),
-      messagingMenu_(std::make_unique<Messaging>(screen, controller)),
-      gameMenu_(std::make_unique<GameMenu>(screen, controller)) {
+      friendsMenu_(screen, controller),
+      messagingMenu_(screen, controller),
+      gameMenu_(screen, controller) {
 
     createMainMenuButtons();    
 
@@ -49,16 +49,16 @@ MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
 void MainMenu::handleChoice() {
     switch (state_) {
     case MainMenuState::CREATE_GAME:
-        gameMenu_->render(
+        gameMenu_.render(
             TypeGame::CREATE_GAME); // Can only create a game online
         break;
 
     case MainMenuState::JOIN_GAME:
-        gameMenu_->render(TypeGame::JOIN_GAME); // Can join all the games modes
+        gameMenu_.render(TypeGame::JOIN_GAME); // Can join all the games modes
         break;
 
     case MainMenuState::SEND_MESSAGES_TO_FRIENDS:
-        messagingMenu_->render();
+        messagingMenu_.render();
         break;
 
     case MainMenuState::LOOK_RANKING:
@@ -70,7 +70,7 @@ void MainMenu::handleChoice() {
         break;
 
     case MainMenuState::MANAGE_FRIENDS_LIST:
-        friendsMenu_->render();
+        friendsMenu_.render();
         break;
 
     case MainMenuState::EXIT:

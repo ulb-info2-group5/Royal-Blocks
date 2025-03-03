@@ -11,6 +11,7 @@
 
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>

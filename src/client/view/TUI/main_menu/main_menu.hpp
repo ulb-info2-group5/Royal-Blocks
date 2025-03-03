@@ -56,9 +56,9 @@ class MainMenu : public IMain_Menu {
 
     MainMenuState state_;
 
-    std::unique_ptr<FriendsMenu> friendsMenu_;
-    std::unique_ptr<Messaging> messagingMenu_;
-    std::unique_ptr<GameMenu> gameMenu_;
+    FriendsMenu friendsMenu_;
+    Messaging messagingMenu_;
+    GameMenu gameMenu_;
 
     ftxui::Component buttonPlay_;
     ftxui::Component buttonJoinGame_;
