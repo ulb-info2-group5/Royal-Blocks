@@ -21,12 +21,21 @@ struct Message; // Forward declaration
 
 class Controller {
   public:
+    enum class ConnectionState {
+        Connected,
+        Disconnected,
+    };
+    enum class RegisterState {
+        Unregistered,
+        Registered,
+    };
+
   private:
     boost::asio::io_context context_;
     std::thread ioThread_;
 
-    bool isRegistered_;
-    bool isConnected_;
+    RegisterState registerState_;
+    ConnectionState connectionState_;
 
     std::mutex mutex_;
 
@@ -57,8 +66,8 @@ class Controller {
     ~Controller();
 
     // TODO
-    bool isRegistered() const;
-    bool isConnected() const;
+    RegisterState getRegisterState() const;
+    ConnectionState getConnectionState() const;
 
     /*
      * @brief Run the controller to manage the game

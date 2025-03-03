@@ -51,38 +51,41 @@ void LoginInput::createButtonBack() {
 }
 
 void LoginInput::createButtonSubmit() {
-    buttonSubmit_ = ftxui::Button(
-                        "Submit",
-                        [&] {
-                            if (loginType_ == LoginType::REGISTER) {
-                                controller_->tryRegister(username_, password_);
+    buttonSubmit_ =
+        ftxui::Button(
+            "Submit",
+            [&] {
+                if (loginType_ == LoginType::REGISTER) {
+                    controller_->tryRegister(username_, password_);
 
-                                while (!controller_->isRegistered()) {
-                                    std::this_thread::sleep_for(
-                                        std::chrono::milliseconds{500});
-                                }
+                    while (controller_->getRegisterState()
+                           == Controller::RegisterState::Unregistered) {
+                        std::this_thread::sleep_for(
+                            std::chrono::milliseconds{500});
+                    }
 
-                                loginState_ = LoginState::SUBMIT;
-                                screen_->ExitLoopClosure()();
-                            } else if (loginType_ == LoginType::LOGIN) {
-                                controller_->tryLogin(username_, password_);
+                    loginState_ = LoginState::SUBMIT;
+                    screen_->ExitLoopClosure()();
+                } else if (loginType_ == LoginType::LOGIN) {
+                    controller_->tryLogin(username_, password_);
 
-                                while (!controller_->isConnected()) {
-                                    std::this_thread::sleep_for(
-                                        std::chrono::milliseconds{500});
-                                }
+                    while (controller_->getConnectionState()
+                           == Controller::ConnectionState::Disconnected) {
+                        std::this_thread::sleep_for(
+                            std::chrono::milliseconds{500});
+                    }
 
-                                loginState_ = LoginState::SUBMIT;
-                                screen_->ExitLoopClosure()();
-                            } else {
-                                username_.clear();
-                                password_.clear();
-                                message_.clear();
-                                msg_ = "The username or password is incorrect!";
-                            }
-                        },
-                        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                    | ftxui::border;
+                    loginState_ = LoginState::SUBMIT;
+                    screen_->ExitLoopClosure()();
+                } else {
+                    username_.clear();
+                    password_.clear();
+                    message_.clear();
+                    msg_ = "The username or password is incorrect!";
+                }
+            },
+            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+        | ftxui::border;
 }
 
 void LoginInput::displayWindow() {
