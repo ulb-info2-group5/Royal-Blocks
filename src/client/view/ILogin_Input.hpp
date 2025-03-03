@@ -19,9 +19,9 @@ enum class LoginState {
 class ILogin_Input {
   protected:
 
-    virtual void displayButtonBack() = 0;
+    virtual void createButtonBack() = 0;
 
-    virtual void displayButtonSubmit() = 0;
+    virtual void createButtonSubmit() = 0;
 
     virtual void displayWindow() = 0;
 

@@ -22,6 +22,9 @@ MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
       friendsMenu_(std::make_unique<FriendsMenu>(screen, controller)),
       messagingMenu_(std::make_unique<Messaging>(screen, controller)),
       gameMenu_(std::make_unique<GameMenu>(screen, controller)) {
+
+    createMainMenuButtons();    
+
     buttonBack_ = ftxui::Button(
                       "Back",
                       [&] {
@@ -109,7 +112,7 @@ void MainMenu::confirmUpdateProfileScreen() const {
 
 // ### Protected methods ###
 
-void MainMenu::displayMainMenuButtons() {
+void MainMenu::createMainMenuButtons() {
     buttonPlay_ = ftxui::Button(
                       "Create a game",
                       [&] {
@@ -178,8 +181,6 @@ void MainMenu::displayMainMenuButtons() {
 }
 
 void MainMenu::displayMainWindow() {
-    displayMainMenuButtons();
-
     ftxui::Component buttonDisplay = ftxui::Container::Vertical({
         buttonPlay_,
         buttonJoinGame_,

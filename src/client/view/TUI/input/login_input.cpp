@@ -24,11 +24,17 @@ LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
                        LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
       loginType_(loginType), loginState_(LoginState::NONE) {
-      }
+
+    createButtonBack();
+    createButtonSubmit();
+
+    inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::border;
+    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::border;
+}
 
 // ### protected methods ###
 
-void LoginInput::displayButtonBack() {
+void LoginInput::createButtonBack() {
     buttonBack_ = ftxui::Button(
                       "Back",
                       [&] {
@@ -41,7 +47,7 @@ void LoginInput::displayButtonBack() {
                   | ftxui::border;
 }
 
-void LoginInput::displayButtonSubmit() {
+void LoginInput::createButtonSubmit() {
     buttonSubmit_ =
         ftxui::Button(
             "Submit",
@@ -66,11 +72,6 @@ void LoginInput::displayButtonSubmit() {
 }
 
 void LoginInput::displayWindow() {
-    displayButtonBack();
-    displayButtonSubmit();
-
-    inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::border;
-    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::border;
 
     ftxui::Component displayButtons = ftxui::Container::Vertical({
         inputUsername_,

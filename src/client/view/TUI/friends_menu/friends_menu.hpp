@@ -1,7 +1,7 @@
 /**
  * @file friends_menu.hpp
  * @author Ethan Van Ruyskensvelde
- * @brief FriendsManager class declaration file
+ * @brief FriendsMenu class declaration file
  * @date 2025-02-24
  *
  */

@@ -9,7 +9,7 @@ enum class Login {
 
 class ILogin_Menu {
   protected:
-    virtual void displayButtons() = 0;
+    virtual void createButtons() = 0;
 
     virtual void displayWindow() = 0;
 

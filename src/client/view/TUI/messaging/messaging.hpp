@@ -71,7 +71,7 @@ class Messaging : public IMessage {
     void initMessaging();
 
   protected:
-    void drawButtons() override;
+    void createButtons() override;
 
     void drawInputUSer() override;
 

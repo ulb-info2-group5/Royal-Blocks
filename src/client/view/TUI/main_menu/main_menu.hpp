@@ -100,7 +100,7 @@ class MainMenu : public IMain_Menu {
     void confirmUpdateProfileScreen() const override;
 
   protected:
-    void displayMainMenuButtons() override;
+    void createMainMenuButtons() override;
 
     void displayMainWindow() override;
 

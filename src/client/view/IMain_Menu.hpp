@@ -21,7 +21,7 @@ class IMain_Menu {
     virtual void confirmUpdateProfileScreen() const = 0;
     
   protected:
-    virtual void displayMainMenuButtons() = 0;
+    virtual void createMainMenuButtons() = 0;
 
     virtual void displayMainWindow() = 0;
 

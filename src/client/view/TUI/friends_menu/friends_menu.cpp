@@ -1,7 +1,7 @@
 /**
  * @file friends_menu.cpp
  * @author Ethan Van Ruyskensvelde
- * @brief FriendsManager class definition file
+ * @brief FriendsMenu class definition file
  * @date 2025-02-24
  *
  */

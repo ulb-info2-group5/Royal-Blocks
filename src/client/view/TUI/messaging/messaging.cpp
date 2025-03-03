@@ -12,6 +12,7 @@ Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen,
     : screen_(screen), controller_(controller) {
     userState_ = MessagingState::NONE;
     initMessaging();
+    createButtons();
 }
 
 // ### private methods ###
@@ -23,7 +24,7 @@ void Messaging::initMessaging() {
 }
 // ### protected methods ###
 
-void Messaging::drawButtons() {
+void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
         "Ajouter un ami",
         [&] {
@@ -79,7 +80,6 @@ void Messaging::drawInputUSer() {
 
 void Messaging::drawMenu() {
     drawInputUSer();
-    drawButtons();
 
     friendsMenu_ = ftxui::Menu(&friends_, &selectedFriend);
 

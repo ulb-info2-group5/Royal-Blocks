@@ -28,11 +28,13 @@ LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 
     loginState_ = Login::NONE;
+    
+    createButtons();
 }
 
 // ### protected methods ###
 
-void LoginMenu::displayButtons() {
+void LoginMenu::createButtons() {
 
     buttonRegister_ =
         ftxui::Button(
@@ -71,8 +73,6 @@ void LoginMenu::displayButtons() {
 }
 
 void LoginMenu::displayWindow() {
-    displayButtons();
-
     ftxui::Component component = ftxui::Container::Vertical({
         buttonRegister_,
         buttonLogin_,

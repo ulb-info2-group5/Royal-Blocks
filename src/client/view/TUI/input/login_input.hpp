@@ -78,9 +78,9 @@ class LoginInput : public ILogin_Input {
     ftxui::Component displayWindow_;
 
   protected:
-    void displayButtonBack() override;
+    void createButtonBack() override;
 
-    void displayButtonSubmit() override;
+    void createButtonSubmit() override;
 
     void displayWindow() override;
 

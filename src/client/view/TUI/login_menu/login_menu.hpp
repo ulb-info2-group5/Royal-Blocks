@@ -65,7 +65,7 @@ class LoginMenu : public ILogin_Menu {
     ftxui::Component displayWindow_;
 
   protected:
-    void displayButtons() override;
+    void createButtons() override;
 
     void displayWindow() override;
 

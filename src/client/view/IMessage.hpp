@@ -15,7 +15,7 @@ struct Message {
 
 class IMessage {
   protected:
-    virtual void drawButtons() = 0;
+    virtual void createButtons() = 0;
 
     virtual void drawInputUSer() = 0;
 
