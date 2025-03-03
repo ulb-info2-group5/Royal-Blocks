@@ -43,7 +43,6 @@ void NetworkManager::connect() {
 }
 
 void NetworkManager::disconnect() {
-    context_.stop();
     if (socket_.is_open()) {
         socket_.close();
     }
