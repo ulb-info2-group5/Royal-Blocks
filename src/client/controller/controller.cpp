@@ -17,14 +17,14 @@ void Controller::handlePacket(const std::string &pack) {
     std::cerr << "called with " << pack << std::endl;
 
     mutex_.lock();
-    if (pack == "connected") {
-        connectionState_ = Controller::ConnectionState::Connected;
-    } else if (pack == "disconnected") {
-        connectionState_ = Controller::ConnectionState::Disconnected;
+    if (pack == "connected" || pack == "authenticated") {
+        authState_ = Controller::AuthState::Authenticated;
+    } else if (pack == "disconnected" || pack == "unauthenticated") {
+        authState_ = Controller::AuthState::Unauthenticated;
     } else if (pack == "registered") {
-        registerState_ = Controller::RegisterState::Registered;
+        registrationState_ = Controller::RegistrationState::Registered;
     } else if (pack == "unregistered") {
-        registerState_ = Controller::RegisterState::Unregistered;
+        registrationState_ = Controller::RegistrationState::Unregistered;
     }
     mutex_.unlock();
 }
@@ -32,8 +32,8 @@ void Controller::handlePacket(const std::string &pack) {
 // ### Public methods ###
 
 Controller::Controller()
-    : registerState_{Controller::RegisterState::Unregistered},
-      connectionState_{Controller::ConnectionState::Disconnected},
+    : registrationState_{Controller::RegistrationState::Unregistered},
+      authState_{Controller::AuthState::Unauthenticated},
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
@@ -43,13 +43,11 @@ Controller::~Controller() {
     // TODO: join the iothread
 }
 
-Controller::RegisterState Controller::getRegisterState() const {
-    return registerState_;
+Controller::RegistrationState Controller::getRegistrationState() const {
+    return registrationState_;
 }
 
-Controller::ConnectionState Controller::getConnectionState() const {
-    return connectionState_;
-}
+Controller::AuthState Controller::getAuthState() const { return authState_; }
 
 void Controller::run() {
     networkManager_.connect();

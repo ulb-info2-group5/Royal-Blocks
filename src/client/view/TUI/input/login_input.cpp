@@ -17,7 +17,6 @@
 #include <ftxui/dom/elements.hpp>
 
 #include <memory>
-#include <ratio>
 #include <string>
 #include <thread>
 
@@ -58,8 +57,8 @@ void LoginInput::createButtonSubmit() {
                 if (loginType_ == LoginType::REGISTER) {
                     controller_->tryRegister(username_, password_);
 
-                    while (controller_->getRegisterState()
-                           == Controller::RegisterState::Unregistered) {
+                    while (controller_->getRegistrationState()
+                           == Controller::RegistrationState::Unregistered) {
                         std::this_thread::sleep_for(
                             std::chrono::milliseconds{500});
                     }
@@ -69,8 +68,8 @@ void LoginInput::createButtonSubmit() {
                 } else if (loginType_ == LoginType::LOGIN) {
                     controller_->tryLogin(username_, password_);
 
-                    while (controller_->getConnectionState()
-                           == Controller::ConnectionState::Disconnected) {
+                    while (controller_->getAuthState()
+                           == Controller::AuthState::Unauthenticated) {
                         std::this_thread::sleep_for(
                             std::chrono::milliseconds{500});
                     }

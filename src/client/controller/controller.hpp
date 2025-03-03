@@ -17,25 +17,28 @@
 #include <string>
 #include <vector>
 
-struct Message; // Forward declaration
+struct Message;
 
 class Controller {
   public:
-    enum class ConnectionState {
-        Connected,
-        Disconnected,
+    enum class AuthState {
+        Unauthenticated,
+        Authenticated,
+        Failed,
     };
-    enum class RegisterState {
+
+    enum class RegistrationState {
         Unregistered,
         Registered,
+        Failed,
     };
 
   private:
     boost::asio::io_context context_;
     std::thread ioThread_;
 
-    RegisterState registerState_;
-    ConnectionState connectionState_;
+    RegistrationState registrationState_;
+    AuthState authState_;
 
     std::mutex mutex_;
 
@@ -65,9 +68,15 @@ class Controller {
      */
     ~Controller();
 
-    // TODO
-    RegisterState getRegisterState() const;
-    ConnectionState getConnectionState() const;
+    /**
+     * @brief Returns the registration-state.
+     */
+    RegistrationState getRegistrationState() const;
+
+    /**
+     * @brief Returns the authentication-state.
+     */
+    AuthState getAuthState() const;
 
     /*
      * @brief Run the controller to manage the game
@@ -75,20 +84,18 @@ class Controller {
     void run();
 
     /*
-     * @brief TODO
+     * @brief Makes a registration request to the server.
      *
      * @param username The username of the user
      * @param password The password of the user
-     * @return true If the account is created, false otherwise
      */
     void tryRegister(const std::string &username, const std::string &password);
 
     /*
-     * @brief TODO
+     * @brief Makes a login request to the server.
      *
      * @param username The username of the user
      * @param password The password of the user
-     * @return true If the username and password are correct, false otherwise
      */
     void tryLogin(const std::string &username, const std::string &password);
 
