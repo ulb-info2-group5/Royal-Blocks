@@ -16,19 +16,23 @@
 void Controller::handlePacket(const std::string &pack) {
     std::cerr << "called with " << pack << std::endl;
 
-    stateMutex_.lock();
+    mutex_.lock();
     if (pack == "connected") {
-        state_ = Controller::State::Connected;
+        isConnected_ = true;
     } else if (pack == "disconnected") {
-        state_ = Controller::State::Disconnected;
+        isConnected_ = false;
+    } else if (pack == "registered") {
+        isRegistered_ = true;
+    } else if (pack == "unregistered") {
+        isRegistered_ = false;
     }
-    stateMutex_.unlock();
+    mutex_.unlock();
 }
 
 // ### Public methods ###
 
 Controller::Controller()
-    : state_(Controller::State::Disconnected),
+    : isRegistered_{false}, isConnected_{false},
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
@@ -38,7 +42,9 @@ Controller::~Controller() {
     // TODO: join the iothread
 }
 
-Controller::State Controller::getState() const { return state_; }
+bool Controller::isConnected() const { return isConnected_; }
+
+bool Controller::isRegistered() const { return isRegistered_; }
 
 void Controller::run() {
     networkManager_.connect();

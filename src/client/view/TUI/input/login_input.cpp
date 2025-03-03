@@ -57,15 +57,17 @@ void LoginInput::createButtonSubmit() {
                             if (loginType_ == LoginType::REGISTER) {
                                 controller_->tryRegister(username_, password_);
 
-                                // TODO
+                                while (!controller_->isRegistered()) {
+                                    std::this_thread::sleep_for(
+                                        std::chrono::milliseconds{500});
+                                }
 
                                 loginState_ = LoginState::SUBMIT;
                                 screen_->ExitLoopClosure()();
                             } else if (loginType_ == LoginType::LOGIN) {
                                 controller_->tryLogin(username_, password_);
 
-                                while (controller_->getState()
-                                       != Controller::State::Connected) {
+                                while (!controller_->isConnected()) {
                                     std::this_thread::sleep_for(
                                         std::chrono::milliseconds{500});
                                 }
