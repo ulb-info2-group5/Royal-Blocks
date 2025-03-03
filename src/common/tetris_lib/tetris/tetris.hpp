@@ -3,12 +3,13 @@
 
 #include "../board/board.hpp"
 #include "../tetromino/tetromino.hpp"
-#include "event_type.hpp"
+#include "../tetromino_queue/tetromino_queue.hpp"
+#include "tetris_observer.hpp"
+#include "tetromino/tetromino_shapes.hpp"
 
-#include <mutex>
-#include <pthread.h>
-#include <queue>
-#include <sys/types.h>
+#include <cstddef>
+#include <memory>
+#include <vector>
 
 class TetrisTest;
 
@@ -23,52 +24,29 @@ constexpr uint32_t DEFAULT_LOCK_DELAY_TICKS_NUM = 1;
  * events like rotation, movement, and clockTick, making the Tetromino drop
  * one block down. Events are managed through an event-queue API.
  */
-class Tetris final {
-    size_t score_ = 0;
-    bool isAlive_ = true;
-    Board board_;
+class Tetris {
+  private:
+    std::vector<TetrisObserverPtr> tetrisObservers_;
+
     TetrominoPtr activeTetromino_;
     TetrominoPtr previewTetromino_;
-    std::queue<TetrominoPtr> tetrominoesQueue_;
+    Board board_;
 
-    // TODO: move this to constructor ?
-    uint32_t lock_delay_ticks_num_ = DEFAULT_LOCK_DELAY_TICKS_NUM;
-    uint32_t ticks_since_lock_start_ = 0;
+    TetrominoPtr holdTetromino_;
+    TetrominoQueue tetrominoQueue_;
 
-    std::mutex mutex_;
-
-  private:
-    // #### Tetromino Actions ####
+    uint32_t lockDelayTicksNum_;
+    uint32_t ticksSinceLockStart_;
 
     /**
-     * @brief Rotates the active Tetromino if possible.
-     *
-     * @param rotateClockwise True to rotate clockwise, false for
-     * counter-clockwise.
+     * @brief Updates the preview tetromino.
      */
-    void tryRotateActive(bool rotateClockwise);
+    void updatePreviewTetromino();
 
     /**
-     * @brief Moves the active Tetromino in the given direction if possible.
-     *
-     * @param direction The direction to move the Tetromino.
+     * @brief Resets the lock delay.
      */
-    void tryMoveActive(Direction direction);
-
-    /**
-     * @brief Drops the active Tetromino until it hits the bottom or an occupied
-     * cell.
-     */
-    void bigDrop();
-
-    // #### Preview-Tetromino ####
-
-    /**
-     * @brief Updates the preview-Tetromino's vertical component.
-     */
-    void updatePreviewVertical();
-
-    // #### Tetromino: Placing and checking that it can drop ####
+    void resetLockDelay();
 
     /**
      * @brief Checks whether the given tetromino can be droppped.
@@ -84,80 +62,96 @@ class Tetris final {
      */
     void placeActive();
 
-    // #### Tetrominoes Queue ####
-
     /**
-     * @brief Enqueues 7 new randomly shuffled Tetrominoes.
+     * @brief Checks whether the cell at the given position is empty.
+     *
+     * @param xCol The x-coordinate.
+     * @param yRow The y-coordinate.
      */
-    void fillTetrominoesQueue();
+    bool checkEmptyCell(size_t xCol, size_t yRow) const;
 
     /**
      * @brief Fetches the next tetromino from the queue and sets it as the
      * active tetromino.
-     *
-     * If there are no tetrominoes left in the queue, the queue is re-filled
-     * with 7 new tetrominoes.
      */
     void fetchNewTetromino();
-
-    // #### Grid Checks ####
-
-    /**
-     * @brief Checks whether the cell at rowIdx, colIdx is empty.
-     *
-     * @param rowIdx The row index.
-     * @param colIdx The col index.
-     */
-    bool checkEmptyCell(size_t rowIdx, size_t colIdx) const;
 
   public:
     // #### Constructors ####
 
-    Tetris() = default;
+    Tetris();
     Tetris(const Tetris &) = delete;
-    Tetris(Tetris &&) = delete;
+    Tetris(Tetris &&) = default;
 
     // #### Assignment ####
 
     Tetris &operator=(const Tetris &) = delete;
-    Tetris &operator=(Tetris &&) = delete;
+    Tetris &operator=(Tetris &&) = default;
 
     // #### Destructor ####
 
-    virtual ~Tetris() = default;
+    ~Tetris() = default;
+
+    // #### TetrisObserver ####
+
+    /**
+     * @brief Adds a new TetrisObserver.
+     */
+    void addObserver(TetrisObserverPtr pTetrisObserver);
+
+    /**
+     * @brief Removes the given TetrisObserver.
+     */
+    void removeObserver(TetrisObserverPtr pTetrisObserver);
 
     // #### Event API ####
 
     /**
-     * @brief Handles the given event.
-     * @param event The event to add to the queue.
+     * @brief Makes the active Tetromino go down (and manages the lock delay).
+     * Also updates the board to clear the fullRows and returns how many rows
+     * were cleared.
      */
-    void sendEvent(EventType event);
-
-    // #### Setters ####
+    size_t eventClockTick();
 
     /**
-     * @brief Thread-safe way of setting the isAlive member.
+     * @brief Drops the active Tetromino until it hits the bottom or an occupied
+     * cell.
      *
-     * @param isAlive The new isAlive value.
+     * Also updates the board to clear the fullRows and returns how many rows
+     * were cleared.
      */
-    void setIsAlive(bool isAlive);
+    size_t eventBigDrop();
+
+    /**
+     * @brief Moves the active Tetromino in the given direction if possible.
+     *
+     * @param tetrominoMove The direction to move the Tetromino.
+     */
+    void eventTryMoveActive(TetrominoMove tetrominoMove);
+
+    /**
+     * @brief Rotates the active Tetromino if possible.
+     *
+     * @param rotateClockwise True to rotate clockwise, false for
+     * counter-clockwise.
+     */
+    void eventTryRotateActive(bool rotateClockwise);
+
+    /**
+     * @brief Moves the next Tetromino from the queue to hold.
+     *
+     * If there was no hold tetromino, move the tetromino to hold.
+     * If there was a hold tetromino, swap it with the tetromino to hold.
+     */
+    void eventHoldNextTetromino();
+
+    /**
+     * @brief Adds penalty lines, sets isAlive flag to false if it made the
+     * player lose.
+     */
+    void eventReceivePenaltyLines(int numPenalties);
 
     // #### Getters ####
-
-    /**
-     * @brief Thread-safe way of getting the isAlive member.
-     *
-     * @return False if the game is over; otherwise, true.
-     */
-    bool getIsAlive();
-
-    /**
-     * @brief Returns the current score.
-     *
-     * @return The current score.
-     */
-    size_t getCurrentScore();
 
     /**
      * @brief Returns how many Tetrominoes are waiting in the queue.
@@ -166,9 +160,37 @@ class Tetris final {
      */
     size_t getTetrominoesQueueSize() const;
 
-    // #### Test Fixture Class ####
+    /**
+     * @brief Inserts the given tetromino at the front of the tetrominoes queue.
+     */
+    void insertNextTetromino(TetrominoPtr &&pTetromino);
+
+    /**
+     * @brief Creates an return a new Tetromino located at the top of the board.
+     */
+    static TetrominoPtr createTetromino(TetrominoShape tetrominoShape);
+
+    /**
+     * @brief Destroys a random 2 by 2 square in
+     * which all the cells are occupied in the board if found.
+     */
+    void destroy2By2Occupied();
+
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serializeSelf(bool emptyBoard = false) const;
+
+    nlohmann::json serializeExternal() const;
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend TetrisTest;
 };
+
+using TetrisPtr = std::shared_ptr<Tetris>;
 
 #endif

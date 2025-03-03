@@ -22,8 +22,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(test)
 endif()
 
-# client_lib
 add_subdirectory(src/client)
+add_subdirectory(src/server/database)
+add_subdirectory(src/common)
 
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)

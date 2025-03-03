@@ -2,12 +2,16 @@
 #define BOARD_HPP
 
 #include "../tetromino/tetromino.hpp"
+#include "../tetromino/tetromino_shapes.hpp"
 #include "board_update.hpp"
 #include "grid_cell.hpp"
 #include <array>
 #include <cstddef>
 
 class BoardTest;
+
+constexpr int PenaltyBlocksColor =
+    static_cast<int>(TetrominoShape::NumTetrominoShape);
 
 /**
  * @class Board
@@ -19,7 +23,7 @@ class BoardTest;
  * place them. It does not store Tetrominoes but updates its GridCell objects
  * based on the Tetromino's shape, position, and color.
  */
-class Board final {
+class Board {
   private:
     static constexpr size_t width_ = 10;
     static constexpr size_t height_ = 20;
@@ -70,6 +74,42 @@ class Board final {
     void dropRowsAbove(int yRow);
 
     /**
+     * @brief Moves all rows from the specified row up by a one position.
+     *
+     * This method ignores the fact that some tiles from the top row could go
+     * out of the grid.
+     *
+     * @param yRow The y-coordinate of the row from which all rows are shifted
+     * up.
+     * @param numRows The number of rows to lift.
+     */
+    void liftRowsFrom(int yRow, size_t numRows);
+
+    /**
+     * @brief Sets row at yRow to the given row.
+     *
+     * @param row The new row.
+     * @param yRow The y-coordinate of the row to set.
+     */
+    void setRow(const std::array<GridCell, width_> &row, size_t yRow);
+
+    /**
+     * @brief Sets the given row to a penalty line.
+     * Doesn't check whether the line was empty before doing so.
+     */
+    void setPenaltyLine(std::array<GridCell, width_> &row);
+
+    /**
+     * @brief Checks whether the row at the given y-coordinate is empty.
+     *
+     * @param yRow The row's y-coordinate.
+     *
+     * @return True if the row is empty, meaning it has only empty GridCells;
+     * otherwise, false.
+     */
+    bool checkEmptyRow(int yRow) const;
+
+    /**
      * @brief Checks whether the row at the given y-coordinate is full.
      *
      * @param yRow The row's y-coordinate.
@@ -116,6 +156,18 @@ class Board final {
      */
     void gravity();
 
+    /**
+     * @brief Returns true if all cells in the 2 by 2 square whose bottom left
+     * corner is in x,y are occupied.
+     */
+    bool check2By2Occupied(int x, int y);
+
+    /**
+     * @brief Empties all the cells in the 2 by 2 square
+     * whose bottom left corner is in x,y.
+     */
+    void empty2By2Square(int x, int y);
+
   public:
     // #### Constructors ####
 
@@ -130,7 +182,7 @@ class Board final {
 
     // #### Destructor ####
 
-    virtual ~Board() = default;
+    ~Board() = default;
 
     // #### Getters ####
 
@@ -151,14 +203,14 @@ class Board final {
      *
      * @return The width of the grid.
      */
-    size_t getWidth() const noexcept;
+    static constexpr size_t getWidth() noexcept { return width_; }
 
     /**
      * @brief Returns the height of the grid.
      *
      * @return The height of the grid.
      */
-    size_t getHeight() const noexcept;
+    static constexpr size_t getHeight() noexcept { return height_; }
 
     // #### Board Actions ####
 
@@ -167,8 +219,9 @@ class Board final {
      *
      * @param tetromino A unique pointer to the tetromino to be placed.
      *
-     * @note The Tetromino will no longer be accessible after this function gets
-     * called, ensuring it cannot be moved after being placed in the grid.
+     * @note The Tetromino will no longer be accessible after this function
+     * gets called, ensuring it cannot be moved after being placed in the
+     * grid.
      */
     void placeTetromino(TetrominoPtr tetromino);
 
@@ -182,17 +235,60 @@ class Board final {
      */
     bool checkInGrid(ATetromino &tetromino) const;
 
+    /**
+     * @brief Destroys a random 2 by 2 square in
+     * which all the cells are occupied in the board if found.
+     */
+    void destroy2By2Occupied();
+
+    // #### Penalty Lines ####
+
+    /**
+     * Adds penalty lines, making all rows go up.
+     * If it causes blocks to go outside the Board, doesn't do anything and
+     * returns false (meaning the player has lost).
+     *
+     * @return False if any occupied tile goes out of the board
+     */
+    bool receivePenaltyLines(size_t numPenalty = 1);
+
     // #### Update Board State ####
 
     /**
-     * @brief Clears/Empties full rows, makes rows above the cleared row drop
-     * one row down and returns a BoardUpdate object.
+     * @brief Clears/Empties full rows, makes rows above the cleared row
+     * drop one row down and returns a BoardUpdate object.
      *
      * @return A BoardUpdate object.
      */
     BoardUpdate update();
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const {
+        nlohmann::json j_grid = nlohmann::json::array();
+        for (const auto &row : grid_) {
+            nlohmann::json j_row = nlohmann::json::array();
+            for (const auto &cell : row) {
+                j_row.push_back(cell.serialize());
+            }
+            j_grid.push_back(j_row);
+        }
+        return j_grid;
+    }
+
+    void deserialize(const nlohmann::json &j) {
+        for (size_t y = 0; y < height_; ++y) {
+            for (size_t x = 0; x < width_; ++x) {
+                grid_.at(y).at(x).deserialize(j[y][x]);
+            }
+        }
+    }
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend BoardTest;
 };
