@@ -10,13 +10,16 @@
 
 #include "../../../controller/controller.hpp"
 
+#include <chrono>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
 #include <memory>
+#include <ratio>
 #include <string>
+#include <thread>
 
 // ### Constructor ###
 LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
@@ -48,27 +51,36 @@ void LoginInput::createButtonBack() {
 }
 
 void LoginInput::createButtonSubmit() {
-    buttonSubmit_ =
-        ftxui::Button(
-            "Submit",
-            [&] {
-                if (loginType_ == LoginType::REGISTER
-                    && controller_->verifyRegister(username_, password_)) {
-                    loginState_ = LoginState::SUBMIT;
-                    screen_->ExitLoopClosure()();
-                } else if (loginType_ == LoginType::LOGIN
-                           && controller_->verifyLogin(username_, password_)) {
-                    loginState_ = LoginState::SUBMIT;
-                    screen_->ExitLoopClosure()();
-                } else {
-                    username_.clear();
-                    password_.clear();
-                    message_.clear();
-                    msg_ = "The username or password is incorrect!";
-                }
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+    buttonSubmit_ = ftxui::Button(
+                        "Submit",
+                        [&] {
+                            if (loginType_ == LoginType::REGISTER) {
+                                controller_->tryRegister(username_, password_);
+
+                                // TODO
+
+                                loginState_ = LoginState::SUBMIT;
+                                screen_->ExitLoopClosure()();
+                            } else if (loginType_ == LoginType::LOGIN) {
+                                controller_->tryLogin(username_, password_);
+
+                                while (controller_->getState()
+                                       != Controller::State::Connected) {
+                                    std::this_thread::sleep_for(
+                                        std::chrono::milliseconds{500});
+                                }
+
+                                loginState_ = LoginState::SUBMIT;
+                                screen_->ExitLoopClosure()();
+                            } else {
+                                username_.clear();
+                                password_.clear();
+                                message_.clear();
+                                msg_ = "The username or password is incorrect!";
+                            }
+                        },
+                        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+                    | ftxui::border;
 }
 
 void LoginInput::displayWindow() {

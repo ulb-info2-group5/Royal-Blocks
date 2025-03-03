@@ -9,25 +9,36 @@
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
+#include <mutex>
 
 // ### Private methods ###
 
 void Controller::handlePacket(const std::string &pack) {
     std::cerr << "called with " << pack << std::endl;
 
-    // TODO
+    stateMutex_.lock();
+    if (pack == "connected") {
+        state_ = Controller::State::Connected;
+    } else if (pack == "disconnected") {
+        state_ = Controller::State::Disconnected;
+    }
+    stateMutex_.unlock();
 }
 
 // ### Public methods ###
 
 Controller::Controller()
-    : networkManager_{context_,
-                      [this](const std::string &packet) {
-                          handlePacket(packet);
-                      }},
+    : state_(Controller::State::Disconnected),
+      networkManager_{
+          context_,
+          [this](const std::string &packet) { handlePacket(packet); }},
       screenManager_{this} {};
 
-Controller::~Controller() {}
+Controller::~Controller() {
+    // TODO: join the iothread
+}
+
+Controller::State Controller::getState() const { return state_; }
 
 void Controller::run() {
     networkManager_.connect();
@@ -36,22 +47,32 @@ void Controller::run() {
 
     screenManager_.run();
 
-    // TODO: I think this never gets called
+    std::cerr << "before join" << std::endl;
+
+    context_.stop();
     if (ioThread_.joinable()) {
+        std::cerr << "joining" << std::endl;
         ioThread_.join();
     }
+
+    std::cerr << "after joining" << std::endl;
 }
 
-bool Controller::verifyRegister(const std::string &username,
-                                const std::string &password) const {
+void Controller::tryRegister(const std::string &username,
+                             const std::string &password) {
     // TODO
-    return true;
+
+    // create some json here and send it
+    networkManager_.send("trying to register");
 }
 
-bool Controller::verifyLogin(const std::string &username,
-                             const std::string &password) const {
+void Controller::tryLogin(const std::string &username,
+                          const std::string &password) { // TODO
+
     // TODO
-    return true;
+
+    // create some json here and send it
+    networkManager_.send("trying to login");
 }
 
 std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {

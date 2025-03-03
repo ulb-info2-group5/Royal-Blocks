@@ -11,17 +11,27 @@
 
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
-#include <algorithm>
+
 #include <map>
+#include <mutex>
 #include <string>
 #include <vector>
 
 struct Message; // Forward declaration
 
 class Controller {
+  public:
+    enum class State {
+        Connected,
+        Disconnected,
+    };
+
   private:
     boost::asio::io_context context_;
     std::thread ioThread_;
+
+    State state_;
+    std::mutex stateMutex_;
 
     /*
      * @brief The network manager to manage the connection with the server
@@ -49,30 +59,31 @@ class Controller {
      */
     ~Controller();
 
+    // TODO
+    State getState() const;
+
     /*
      * @brief Run the controller to manage the game
      */
     void run();
 
     /*
-     * @brief Verify and create the account by communicate with the server
+     * @brief TODO
      *
      * @param username The username of the user
      * @param password The password of the user
      * @return true If the account is created, false otherwise
      */
-    bool verifyRegister(const std::string &username,
-                        const std::string &password) const;
+    void tryRegister(const std::string &username, const std::string &password);
 
     /*
-     * @brief Verify the username and password of the user is correct
+     * @brief TODO
      *
      * @param username The username of the user
      * @param password The password of the user
      * @return true If the username and password are correct, false otherwise
      */
-    bool verifyLogin(const std::string &username,
-                     const std::string &password) const;
+    void tryLogin(const std::string &username, const std::string &password);
 
     /*
      * @brief Get the ranking of the players of the Endless mode
