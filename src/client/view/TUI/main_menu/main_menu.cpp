@@ -19,7 +19,7 @@
 MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                    Controller *controller)
     : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
-      friendsManager_(std::make_unique<FriendsManager>(screen, controller)),
+      friendsMenu_(std::make_unique<FriendsMenu>(screen, controller)),
       messagingMenu_(std::make_unique<Messaging>(screen, controller)),
       gameMenu_(std::make_unique<GameMenu>(screen, controller)) {
     buttonBack_ = ftxui::Button(
@@ -67,7 +67,7 @@ void MainMenu::handleChoice() {
         break;
 
     case MainMenuState::MANAGE_FRIENDS_LIST:
-        friendsManager_->render();
+        friendsMenu_->render();
         break;
 
     case MainMenuState::EXIT:

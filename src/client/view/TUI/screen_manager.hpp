@@ -1,10 +1,6 @@
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 
-#include "friends_manager/friends_manager.hpp"
-#include "game_display/game_display.hpp"
-#include "game_menu/game_menu.hpp"
-#include "input/login_input.hpp"
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
 

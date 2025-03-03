@@ -10,6 +10,7 @@
 #define LOGIN_INPUT_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
 
 #include <memory>
 #include <string>

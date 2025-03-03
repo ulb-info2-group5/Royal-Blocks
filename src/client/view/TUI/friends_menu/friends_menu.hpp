@@ -1,13 +1,13 @@
 /**
- * @file friends_manager.hpp
+ * @file friends_menu.hpp
  * @author Ethan Van Ruyskensvelde
  * @brief FriendsManager class declaration file
  * @date 2025-02-24
  *
  */
 
-#ifndef FRIENDS_MANAGER_HPP
-#define FRIENDS_MANAGER_HPP
+#ifndef FRIENDS_MENU_HPP
+#define FRIENDS_MENU_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
 #include <memory>
@@ -23,7 +23,7 @@ enum class FriendsManagerState {
     BACK,
 };
 
-class FriendsManager {
+class FriendsMenu {
   private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
     Controller *controller_;
@@ -56,13 +56,13 @@ class FriendsManager {
     /*
      * @brief Construct a new Friends Manager object
      */
-    FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen,
+     FriendsMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                    Controller *controller);
 
     /*
      * @brief Destroy the Friends Manager object
      */
-    ~FriendsManager() = default;
+    ~FriendsMenu() = default;
 
     /*
      * @brief Render the friends manager screen with all the components

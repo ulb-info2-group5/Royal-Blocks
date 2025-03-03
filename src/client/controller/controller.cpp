@@ -8,7 +8,6 @@
 
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
-#include "../view/TUI/messaging/messaging.hpp"
 #include "../view/TUI/screen_manager.hpp"
 
 // ### Private methods ###

@@ -23,7 +23,8 @@ LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
                        Controller *controller, std::string title,
                        LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
-      loginType_(loginType), loginState_(LoginState::NONE) {}
+      loginType_(loginType), loginState_(LoginState::NONE) {
+      }
 
 // ### protected methods ###
 

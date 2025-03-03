@@ -1,12 +1,12 @@
 /**
- * @file friends_manager.cpp
+ * @file friends_menu.cpp
  * @author Ethan Van Ruyskensvelde
  * @brief FriendsManager class definition file
  * @date 2025-02-24
  *
  */
 
-#include "friends_manager.hpp"
+#include "friends_menu.hpp"
 
 #include "../../../controller/controller.hpp"
 
@@ -21,7 +21,7 @@
 
 // ### Public methods ###
 
-FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen,
+FriendsMenu::FriendsMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                                Controller *controller)
     : screen_{screen}, controller_(controller) {
 
@@ -57,7 +57,7 @@ FriendsManager::FriendsManager(std::shared_ptr<ftxui::ScreenInteractive> screen,
                     | ftxui::border;
 }
 
-void FriendsManager::render() {
+void FriendsMenu::render() {
     bool res = true;
 
     while (res) {
@@ -114,7 +114,7 @@ void FriendsManager::render() {
 
 // ### Private methods ###
 
-void FriendsManager::addFriendScreen() {
+void FriendsMenu::addFriendScreen() {
     friendName_.clear(); // Reset the name of the friend
     msg_.clear();        // Reset the message
 
@@ -143,7 +143,7 @@ void FriendsManager::addFriendScreen() {
     screen_->Loop(component);
 }
 
-std::vector<ftxui::Component> FriendsManager::displayFriendButtons(
+std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     const std::vector<std::string> &friendsList) {
     std::vector<ftxui::Component> friendButtons;
     for (const std::string &friendName : friendsList) {
@@ -159,7 +159,7 @@ std::vector<ftxui::Component> FriendsManager::displayFriendButtons(
     return friendButtons;
 }
 
-void FriendsManager::manageFriendlistScreen(const std::string &friendName) {
+void FriendsMenu::manageFriendlistScreen(const std::string &friendName) {
 
     ftxui::Component buttonYes = ftxui::Button(
         "Yes",
