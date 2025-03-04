@@ -1,6 +1,8 @@
 #ifndef AUTHENTICATION_RESPONSE_HPP
 #define AUTHENTICATION_RESPONSE_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 
 using PlayerID = size_t;
@@ -12,13 +14,13 @@ namespace bindings {
 
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", "authenticationResponse"},
+                {"type", BindingType::AuthenticationResponse},
                 {"data", {{"success", success}}},
             };
         }
 
         static AuthenticationResponse from_json(const nlohmann::json &j) {
-            if (j.at("type") != "authenticationResponse") {
+            if (j.at("type") != BindingType::AuthenticationResponse) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

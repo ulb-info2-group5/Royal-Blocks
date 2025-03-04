@@ -1,6 +1,8 @@
 #ifndef FRIEND_REQUEST_HPP
 #define FRIEND_REQUEST_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 
 using PlayerID = size_t;
@@ -15,7 +17,7 @@ namespace bindings {
         FriendRequestType friendRequestType;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", "friendRequest"},
+            return nlohmann::json{{"type", BindingType::FriendRequest},
                                   {"data",
                                    {
                                        {"requesterId", requesterId},
@@ -25,7 +27,7 @@ namespace bindings {
         }
 
         static FriendRequest from_json(const nlohmann::json &j) {
-            if (j.at("type") != "friendRequest") {
+            if (j.at("type") != BindingType::FriendRequest) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
