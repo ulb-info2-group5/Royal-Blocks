@@ -87,7 +87,7 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};
-    malusGauge_ = 0.5;
+    // penaltyGauge_ = 0.5;
 
     effects_ = {"bonus0", "bonus1", "bonus2", "bonus3", "bonus4",
                 "bonus5", "bonus6", "bonus7", "bonus8"};
@@ -357,15 +357,15 @@ void GameDisplay::displayMultiRightWindow() {
         displayOpponentBoardDuel();
     else displayOppponentsBoard();
 
-    ftxui::Component malusDisplay = ftxui::Renderer([&] {
-        return ftxui::vbox({
-            ftxui::gaugeRight(malusGauge_),
-            ftxui::text("malus to come") | ftxui::borderDashed,
-        });
-    });
+    // ftxui::Component penaltyDisplay = ftxui::Renderer([&] {
+    //     return ftxui::vbox({
+    //         ftxui::gaugeRight(penaltyGauge_),
+    //         ftxui::text("penalty to come") | ftxui::borderDashed,
+    //     });
+    // });
 
     displayRight_ = ftxui::Container::Vertical({
-        malusDisplay,
+        // penaltyDisplay,
         opBoardDisplay_,
     });
 }

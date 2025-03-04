@@ -34,7 +34,7 @@ class GameDisplay : public IGame {
 
     // TODO: remove this
     std::vector<std::string> pseudos_;
-    float malusGauge_;
+    // float penaltyGauge_;
     std::vector<std::string> effects_ = {};
 
     ftxui::Component playerInfo_;
