@@ -14,18 +14,18 @@ constexpr uint32_t WIDTH = 10, HEIGHT = 20;
 
 const uint8_t NB_BLOCKS_PER_PIECE = 4;
 
-enum colors {
-    BLACK,
-    WHITE,
-    GREY,
-    DARK_BLUE,
-    LIGHT_BLUE,
-    PURPLE,
-    RED,
-    ORANGE,
-    PINK,
-    GREEN,
-    YELLOW
+enum class Color {
+    Black,
+    White,
+    Grey,
+    DarkBlue,
+    LightBlue,
+    Purple,
+    Red,
+    Orange,
+    Pink,
+    Green,
+    Yellow
 };
 
 struct vec2Int {
@@ -36,7 +36,7 @@ struct vec2Int {
 struct pieceDetails {
     unsigned char type;
     std::vector<vec2Int> coordinates;
-    colors color;
+    Color color;
 };
 
 struct pieces {
@@ -56,45 +56,45 @@ const pieces piece =
                                  {.x = 1, .y = 1},
                                  {.x = 1, .y = 2},
                                  {.x = 2, .y = 2}},
-                 .color = colors::RED},
+                 .color = Color::Red},
      .PIECE_L = {.type = 'L',
                  .coordinates = {{.x = 1, .y = 2},
                                  {.x = 2, .y = 2},
                                  {.x = 3, .y = 2},
                                  {.x = 3, .y = 1}},
-                 .color = colors::ORANGE},
+                 .color = Color::Orange},
      .PIECE_O = {.type = 'O',
                  .coordinates = {{.x = 1, .y = 2},
                                  {.x = 1, .y = 1},
                                  {.x = 2, .y = 1},
                                  {.x = 2, .y = 2}},
-                 .color = colors::YELLOW},
+                 .color = Color::Yellow},
      .PIECE_S = {.type = 'S',
                  .coordinates = {{.x = 1, .y = 2},
                                  {.x = 2, .y = 1},
                                  {.x = 3, .y = 1},
                                  {.x = 2, .y = 2}},
-                 .color = colors::GREEN},
+                 .color = Color::Green},
      .PIECE_I = {.type = 'I',
                  .coordinates = {{.x = 0, .y = 2},
                                  {.x = 1, .y = 2},
                                  {.x = 3, .y = 2},
                                  {.x = 2, .y = 2}},
-                 .color = colors::LIGHT_BLUE},
+                 .color = Color::LightBlue},
      .PIECE_J = {.type = 'J',
                  .coordinates = {{.x = 0, .y = 1},
                                  {.x = 1, .y = 2},
                                  {.x = 0, .y = 2},
                                  {.x = 2, .y = 2}},
-                 .color = colors::DARK_BLUE},
+                 .color = Color::DarkBlue},
      .PIECE_T = {.type = 'T',
                  .coordinates = {{.x = 3, .y = 1},
                                  {.x = 1, .y = 1},
                                  {.x = 1, .y = 1},
                                  {.x = 2, .y = 2}},
-                 .color = colors::PURPLE}};
+                 .color = Color::Purple}};
 
-enum effects {
+enum class Effect {
     INVERT,
     BLOC,
     SPEED_SLOWER,

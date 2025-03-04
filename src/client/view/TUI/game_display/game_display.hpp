@@ -13,7 +13,6 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
-#include <array>
 #include <memory>
 #include <string>
 #include <vector>
@@ -25,22 +24,17 @@ const uint32_t WIDTH_PLAYER_CANVAS = 40, HEIGHT_PLAYER_CANVAS = 80,
 
 class Controller; // Forward declaration
 
-ftxui::Color getFTXUIColor(colors color);
+ftxui::Color getFTXUIColor(Color color);
 
 class GameDisplay : public IGame {
   private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
-    Controller *controller_;
 
     std::shared_ptr<client::GameStateWrapper> pGameState;
 
     // TODO: remove this
     std::vector<std::string> pseudos_;
-    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
-        playersBoards_;
-    uint32_t score_;
     float malusGauge_;
-    PlayMode play_;
     float energyGauge_;
     std::vector<std::string> effects_ = {};
 

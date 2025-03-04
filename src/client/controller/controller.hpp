@@ -42,7 +42,7 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    std::shared_ptr<client::GameStateWrapper> pGameState;
+    std::shared_ptr<client::GameStateWrapper> pGameState_;
 
     std::mutex mutex_;
 
@@ -172,8 +172,8 @@ class Controller {
      * @return std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
      * HEIGHT>>> The boards of the players
      */
-    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
-    getBoards() const;
+    // std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
+    // HEIGHT>>> getBoards() const;
 
     /*
      * @brief Get the friends online of the user

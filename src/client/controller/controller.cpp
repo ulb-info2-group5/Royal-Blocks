@@ -9,7 +9,12 @@
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
+#include "game_state/game_state.hpp"
+
+#include <chrono>
 #include <mutex>
+#include <thread>
+#include <vector>
 
 // ### Private methods ###
 
@@ -34,10 +39,20 @@ void Controller::handlePacket(const std::string &pack) {
 Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
+      pGameState_{std::make_shared<client::GameStateWrapper>()},
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
-      screenManager_{this} {};
+
+      screenManager_{this} {
+
+    // ---------------------------------
+    // TODO: remove this
+    GameState gameState{GameMode::Endless, {PlayerState{0}}};
+
+    pGameState_->gameState.deserialize(gameState.serializeFor(0));
+    // ---------------------------------
+};
 
 Controller::~Controller() {
     // TODO: join the iothread
@@ -50,7 +65,7 @@ Controller::RegistrationState Controller::getRegistrationState() const {
 Controller::AuthState Controller::getAuthState() const { return authState_; }
 
 std::shared_ptr<client::GameStateWrapper> &Controller::getGameState() {
-    return pGameState;
+    return pGameState_;
 }
 
 void Controller::run() {
@@ -60,15 +75,10 @@ void Controller::run() {
 
     screenManager_.run();
 
-    std::cerr << "before join" << std::endl;
-
     context_.stop();
     if (ioThread_.joinable()) {
-        std::cerr << "joining" << std::endl;
         ioThread_.join();
     }
-
-    std::cerr << "after joining" << std::endl;
 }
 
 void Controller::tryRegister(const std::string &username,
@@ -150,15 +160,15 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
     return conversations;
 }
 
-std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
-Controller::getBoards() const {
-    // TODO: communicate with the server to get the boards
-    // TODO: remove this because it's an example
-    std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>> boards;
-    boards.push_back(std::array<std::array<colors, WIDTH>, HEIGHT>());
-    return std::make_shared<
-        std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>(boards);
-}
+// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>>>
+// Controller::getBoards() const {
+//     // TODO: communicate with the server to get the boards
+//     // TODO: remove this because it's an example
+//     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
+//     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
+//     return std::make_shared<
+//         std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>>>(boards);
+// }
 
 std::vector<std::string> Controller::getFriendsOnline() const {
     // TODO: communicate with the server to get the friends online

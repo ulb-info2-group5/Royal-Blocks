@@ -1,53 +1,77 @@
 #include "game_display.hpp"
 
-#include "../../../controller/controller.hpp"
-#include "../game_menu/game_menu.hpp"
-
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/canvas.hpp" // for Canvas
 #include "ftxui/dom/node.hpp"   // for Render
 #include "ftxui/screen/color.hpp" // for Color, Color::Red, Color::Blue, Color::Green, ftxui
+#include "game_mode/game_mode.hpp"
+#include "view/interfaceConstants.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
-ftxui::Color getFTXUIColor(colors color) {
+// TODO: this should defo go somewhere else
+#include <stdexcept>
+Color colorIdToColor(unsigned colorID) {
+    // TODO: add missing colorID's such as penalty lines
+
+    switch (colorID) {
+    case 0:
+        return Color::Red;
+    case 1:
+        return Color::Orange;
+    case 2:
+        return Color::Yellow;
+    case 3:
+        return Color::Green;
+    case 4:
+        return Color::LightBlue;
+    case 5:
+        return Color::DarkBlue;
+    case 6:
+        return Color::Purple;
+    default:
+        throw std::runtime_error{"unknown shape"};
+    };
+}
+
+ftxui::Color getFTXUIColor(Color color) {
     ftxui::Color returnValue = ftxui::Color::Blue;
 
     switch (color) {
-    case BLACK:
+    case Color::Black:
         returnValue = ftxui::Color::Black;
         break;
-    case WHITE:
+    case Color::White:
         returnValue = ftxui::Color::White;
         break;
-    case GREY:
+    case Color::Grey:
         returnValue = ftxui::Color::Grey0;
         break;
-    case DARK_BLUE:
+    case Color::DarkBlue:
         returnValue = ftxui::Color::Blue3;
         break;
-    case LIGHT_BLUE:
+    case Color::LightBlue:
         returnValue = ftxui::Color::Blue1;
         break;
-    case PURPLE:
+    case Color::Purple:
         returnValue = ftxui::Color::Purple3;
         break;
-    case RED:
+    case Color::Red:
         returnValue = ftxui::Color::Red;
         break;
-    case ORANGE:
+    case Color::Orange:
         returnValue = ftxui::Color::Orange1;
         break;
-    case PINK:
+    case Color::Pink:
         returnValue = ftxui::Color::Pink1;
         break;
-    case GREEN:
+    case Color::Green:
         returnValue = ftxui::Color::Green1;
         break;
-    case YELLOW:
+    case Color::Yellow:
         returnValue = ftxui::Color::Yellow1;
         break;
     };
@@ -63,7 +87,6 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};
-    score_ = 10000;
     malusGauge_ = 0.5;
     energyGauge_ = 0.5;
 
@@ -75,8 +98,10 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
 
 void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
-        return ftxui::vbox({ftxui::text(std::to_string(score_)),
-                            ftxui::text(pseudos_.at(0))})
+        return ftxui::vbox(
+                   {ftxui::text(std::to_string(
+                        pGameState->gameState.self.playerState_.score_)),
+                    ftxui::text(pseudos_.at(0))})
                | ftxui::borderDashed;
     });
 }
@@ -115,7 +140,7 @@ void GameDisplay::displayLeftWindow() {
         "Quit Game", [&] { screen_->ExitLoopClosure()(); },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
-    if (play_ == PlayMode::ROYAL) {
+    if (pGameState->gameState.gameMode == GameMode::RoyalCompetition) {
         drawPlayerInfo();
         drawRoyalEffectsEnergy();
 
@@ -142,8 +167,13 @@ void GameDisplay::drawPlayerBoard() {
 
         for (uint32_t x = 0; x < WIDTH; ++x) {
             for (uint32_t y = 0; y < HEIGHT; ++y) {
-                pixel.background_color =
-                    getFTXUIColor(playersBoards_->at(0).at(y).at(x));
+
+                auto &boardToDraw = pGameState->gameState.self.tetris_.board_;
+
+                pixel.background_color = getFTXUIColor(
+                    (boardToDraw.get(x, y).isEmpty())
+                        ? Color::Black
+                        : colorIdToColor(boardToDraw.get(x, y).getColorId()));
 
                 for (uint32_t i = 0; i < LENGTH_PLAYER; ++i) {
                     playerCanvas.DrawBlockCircleFilled(
@@ -202,7 +232,8 @@ void GameDisplay::drawOpponentsBoard() {
     opBoards_ = {};
     ftxui::Component opDisplay;
 
-    for (uint32_t index = 1; index < playersBoards_->size(); ++index) {
+    for (uint32_t index = 1; index < pGameState->gameState.externals.size();
+         ++index) {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&](uint32_t index) {
             ftxui::Canvas opCanvas =
                 ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
@@ -211,11 +242,19 @@ void GameDisplay::drawOpponentsBoard() {
                 for (uint32_t y = 0; y < HEIGHT; ++y) {
 
                     for (uint32_t i = 0; i < LENGTH_OPPONENT; ++i) {
+
+                        auto &boardToDraw =
+                            pGameState->gameState.externals.at(index)
+                                .tetris_.board_;
+
                         opCanvas.DrawBlock(
                             x * LENGTH_OPPONENT + i, y * LENGTH_OPPONENT + i,
                             true,
                             getFTXUIColor(
-                                playersBoards_->at(index).at(y).at(x)));
+                                boardToDraw.get(x, y).isEmpty()
+                                    ? Color::Black
+                                    : colorIdToColor(
+                                        boardToDraw.get(x, y).getColorId())));
                     }
                 }
             }
@@ -239,7 +278,8 @@ void GameDisplay::displayOppponentsBoard() {
     drawOpponentsBoard();
 
     ftxui::Components rows = {};
-    uint32_t totalPlayers = playersBoards_->size();
+    uint32_t totalPlayers =
+        pGameState->gameState.externals.size() + 1; // +1 for the self board
 
     for (uint32_t i = 0; i < 3; ++i) {
         ftxui::Component line;
@@ -287,8 +327,14 @@ void GameDisplay::displayOpponentBoardDuel() {
 
         for (uint32_t x = 0; x < WIDTH; ++x) {
             for (uint32_t y = 0; y < HEIGHT; ++y) {
-                pixel.background_color =
-                    getFTXUIColor(playersBoards_->at(1).at(y).at(x));
+
+                auto &boardToDraw =
+                    pGameState->gameState.externals.at(0).tetris_.board_;
+
+                pixel.background_color = getFTXUIColor(
+                    boardToDraw.get(x, y).isEmpty()
+                        ? (Color::Black)
+                        : colorIdToColor(boardToDraw.get(x, y).getColorId()));
 
                 for (uint32_t i = 0; i < LENGTH_PLAYER; ++i) {
                     playerCanvas.DrawBlockCircleFilled(
@@ -306,7 +352,8 @@ void GameDisplay::displayOpponentBoardDuel() {
 }
 
 void GameDisplay::displayMultiRightWindow() {
-    if (play_ == PlayMode::DUEL) displayOpponentBoardDuel();
+    if (pGameState->gameState.gameMode == GameMode::Dual)
+        displayOpponentBoardDuel();
     else displayOppponentsBoard();
 
     ftxui::Component malusDisplay = ftxui::Renderer([&] {
@@ -347,7 +394,7 @@ void GameDisplay::drawMultiMode() {
 // public methods
 
 void GameDisplay::render() {
-    if (play_ == PlayMode::ENDLESS) drawEndlessMode();
+    if (pGameState->gameState.gameMode == GameMode::Endless) drawEndlessMode();
     else drawMultiMode();
 
     screen_->Loop(displayWindow_);
