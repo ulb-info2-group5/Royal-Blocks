@@ -1,6 +1,8 @@
 #ifndef REGISTRATION_HPP
 #define REGISTRATION_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -14,7 +16,7 @@ namespace bindings {
 
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", "registration"},
+                {"type", BindingType::Registration},
                 {"data",
                  {
                      {"nickname", nickname},
@@ -24,7 +26,7 @@ namespace bindings {
         }
 
         static Registration from_json(const nlohmann::json &j) {
-            if (j.at("type") != "registration") {
+            if (j.at("type") != BindingType::Registration) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

@@ -1,6 +1,8 @@
 #ifndef REGISTRATION_RESPONSE_HPP
 #define REGISTRATION_RESPONSE_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 
 using PlayerID = size_t;
@@ -12,13 +14,13 @@ namespace bindings {
 
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", "registrationResponse"},
+                {"type", BindingType::RegistrationResponse},
                 {"data", {{"success", success}}},
             };
         }
 
         static RegistrationResponse from_json(const nlohmann::json &j) {
-            if (j.at("type") != "registrationResponse") {
+            if (j.at("type") != BindingType::RegistrationResponse) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

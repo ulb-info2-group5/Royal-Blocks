@@ -1,6 +1,8 @@
 #ifndef AUTHENTICATION_HPP
 #define AUTHENTICATION_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -14,13 +16,13 @@ namespace bindings {
 
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", "authentication"},
+                {"type", BindingType::Authentication},
                 {"data", {{"nickname", nickname}, {"password", password}}},
             };
         }
 
         static Authentication from_json(const nlohmann::json &j) {
-            if (j.at("type") != "authentication") {
+            if (j.at("type") != BindingType::Authentication) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

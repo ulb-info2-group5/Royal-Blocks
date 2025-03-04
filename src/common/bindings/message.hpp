@@ -1,6 +1,8 @@
 #ifndef MESSAGE_HPP
 #define MESSAGE_HPP
 
+#include "binding_type.hpp"
+
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -15,7 +17,7 @@ namespace bindings {
 
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", "message"},
+                {"type", BindingType::Message},
                 {"data",
                  {{"senderId", senderId},
                   {"recipientId", recipientId},
@@ -24,7 +26,7 @@ namespace bindings {
         }
 
         static Message from_json(const nlohmann::json &j) {
-            if (j.at("type") != "message") {
+            if (j.at("type") != BindingType::Message) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
