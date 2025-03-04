@@ -9,6 +9,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "../core/game_state/game_state.hpp"
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
 
@@ -41,6 +42,8 @@ class Controller {
     AuthState authState_;
 
     std::mutex mutex_;
+
+    client::GameState gameState;
 
     /*
      * @brief The network manager to manage the connection with the server
