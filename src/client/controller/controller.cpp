@@ -49,6 +49,10 @@ Controller::RegistrationState Controller::getRegistrationState() const {
 
 Controller::AuthState Controller::getAuthState() const { return authState_; }
 
+std::shared_ptr<client::GameStateWrapper> &Controller::getGameState() {
+    return pGameState;
+}
+
 void Controller::run() {
     networkManager_.connect();
 

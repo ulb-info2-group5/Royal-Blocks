@@ -57,13 +57,9 @@ ftxui::Color getFTXUIColor(colors color) {
 
 // constructor
 
-GameDisplay::GameDisplay(
-    std::shared_ptr<ftxui::ScreenInteractive> screen, Controller *controller,
-    std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
-        boards,
-    PlayMode play)
-    : screen_{screen}, controller_(controller), playersBoards_{boards},
-      play_{play} {
+GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
+                         std::shared_ptr<client::GameStateWrapper> &pGameState)
+    : screen_{screen}, pGameState(pGameState) {
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};

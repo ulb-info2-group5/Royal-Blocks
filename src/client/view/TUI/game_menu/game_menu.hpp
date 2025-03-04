@@ -13,8 +13,8 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <memory>
 
-#include "../game_display/game_display.hpp"
 #include "../../IGame_Menu.hpp"
+#include "../game_display/game_display.hpp"
 
 class Controller; // Forward declaration
 

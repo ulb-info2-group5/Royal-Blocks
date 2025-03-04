@@ -9,11 +9,12 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../core/game_state/game_state.hpp"
+#include "../core/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
 #include "../view/TUI/screen_manager.hpp"
 
 #include <map>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <vector>
@@ -41,9 +42,9 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    std::mutex mutex_;
+    std::shared_ptr<client::GameStateWrapper> pGameState;
 
-    client::GameState gameState;
+    std::mutex mutex_;
 
     /*
      * @brief The network manager to manage the connection with the server
@@ -80,6 +81,9 @@ class Controller {
      * @brief Returns the authentication-state.
      */
     AuthState getAuthState() const;
+
+    // TODO
+    std::shared_ptr<client::GameStateWrapper> &getGameState();
 
     /*
      * @brief Run the controller to manage the game

@@ -17,10 +17,9 @@
 
 GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                    Controller *controller)
-    : screen_(screen), controller_(controller), gameDisplay_(
-        screen_, controller_, controller_->getBoards(),
-        PlayMode::ENDLESS), joinType_(JoinType::NONE),
-      typeGame_(TypeGame::NONE) {
+    : screen_(screen), controller_(controller),
+      gameDisplay_(screen_, controller_->getGameState()),
+      joinType_(JoinType::NONE), typeGame_(TypeGame::NONE) {
     endlessButon_ = ftxui::Button(
                         "Endless",
                         [&] {
@@ -33,9 +32,8 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     duelButon_ = ftxui::Button(
                      "Duel",
                      [&] {
-                         gameDisplay_ = GameDisplay(
-                             screen_, controller_, controller_->getBoards(),
-                             PlayMode::DUEL);
+                         gameDisplay_ =
+                             GameDisplay(screen_, controller_->getGameState());
                          joinFriendOrRandomScreen();
                          screen_->ExitLoopClosure()();
                      },
@@ -46,8 +44,7 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                         "Classic",
                         [&] {
                             gameDisplay_ = GameDisplay(
-                                screen_, controller_, controller_->getBoards(),
-                                PlayMode::CLASSIC);
+                                screen_, controller_->getGameState());
                             joinFriendOrRandomScreen();
                             screen_->ExitLoopClosure()();
                         },
@@ -57,9 +54,8 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     royalButon_ = ftxui::Button(
                       "Royal",
                       [&] {
-                          gameDisplay_ = GameDisplay(
-                              screen_, controller_, controller_->getBoards(),
-                              PlayMode::ROYAL);
+                          gameDisplay_ =
+                              GameDisplay(screen_, controller_->getGameState());
                           joinFriendOrRandomScreen();
                           screen_->ExitLoopClosure()();
                       },
@@ -184,7 +180,7 @@ void GameMenu::handleChoice() {
 
     case JoinType::ENDLESS:
         gameDisplay_.render(); // Endless mode is directly started without
-                                // waiting for a friend or a random game
+                               // waiting for a friend or a random game
         break;
 
     case JoinType::BACK: // Do nothing because the user pressed the back button

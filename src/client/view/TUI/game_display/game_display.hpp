@@ -1,6 +1,7 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
+#include "../../../core/game_state_wrapper.hpp"
 #include "../../IGame.hpp"
 #include "../../interfaceConstants.hpp"
 
@@ -31,13 +32,15 @@ class GameDisplay : public IGame {
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
     Controller *controller_;
 
+    std::shared_ptr<client::GameStateWrapper> pGameState;
+
+    // TODO: remove this
     std::vector<std::string> pseudos_;
     std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
         playersBoards_;
     uint32_t score_;
     float malusGauge_;
     PlayMode play_;
-
     float energyGauge_;
     std::vector<std::string> effects_ = {};
 
@@ -77,11 +80,7 @@ class GameDisplay : public IGame {
 
   public:
     GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
-                Controller *controller,
-                std::shared_ptr<
-                    std::vector<std::array<std::array<colors, WIDTH>, HEIGHT>>>
-                    boards,
-                PlayMode play);
+                std::shared_ptr<client::GameStateWrapper> &pGameState);
 
     ~GameDisplay() = default;
 
