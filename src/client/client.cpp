@@ -43,7 +43,7 @@ void TcpClient::startRead() {
 
 void TcpClient::sendMessage(const std::string& content){
     int receiverId  = 50;
-    
+    if (content.empty() || content == "\n") return ;
     std::string packet = Message{'M', receiverId, content }.to_json().dump() + '\n';
     sendPackage(packet); 
 }

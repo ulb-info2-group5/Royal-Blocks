@@ -15,12 +15,14 @@ using boost::asio::ip::tcp;
 // --- private ---
 
 void ClientLink::read(){
-    boost::asio::async_read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n',[this](boost::system::error_code ec, std::size_t length) {
+    std::cout << "Buffer avant lecture : [" << buffer_ << "]" << std::endl;
+    boost::asio::async_read_until(socket_, streamBuffer_, '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
-            std::cout << "packet:  " << buffer_ << std::endl;
-            
-            if (buffer_ != "\n") packetHandler_(buffer_);
-            buffer_.erase(0, length);
+            std::istream is(&streamBuffer_);
+            std::string packet;
+            std::getline(is, packet);
+            std::cout << "packet : " << packet << std::endl;
+            packetHandler_(packet);
             read();
         }
     }); 

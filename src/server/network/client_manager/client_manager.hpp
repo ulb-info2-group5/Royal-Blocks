@@ -44,6 +44,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
     private: 
         tcp::socket socket_;
         std::string buffer_;
+        boost::asio::streambuf streamBuffer_;
         std::function<void (const std::string& )> packetHandler_;
         void read();
 
