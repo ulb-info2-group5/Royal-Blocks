@@ -97,6 +97,8 @@ GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
 
 void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
+        std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
         return ftxui::vbox(
                    {ftxui::text(std::to_string(
                         pGameState_->gameState.self.playerState_.score_)),
@@ -128,6 +130,8 @@ void GameDisplay::drawRoyalEffectsEnergy() {
         {effectsButton.at(0), effectsButton.at(1), effectsButton.at(2)});
 
     effectsDisplay_ = ftxui::Renderer([&] {
+        std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
         return ftxui::vbox(
             {ftxui::gaugeRight(
                  // TODO: check that whether this must be below 1.
@@ -162,6 +166,8 @@ void GameDisplay::displayLeftWindow() {
 
 void GameDisplay::drawPlayerBoard() {
     playerBoard_ = ftxui::Renderer([&] {
+        std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
         ftxui::Canvas playerCanvas =
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
@@ -236,6 +242,8 @@ void GameDisplay::drawOpponentsBoard() {
     for (uint32_t index = 1; index < pGameState_->gameState.externals.size();
          ++index) {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&](uint32_t index) {
+            std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
             ftxui::Canvas opCanvas =
                 ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
 
@@ -322,6 +330,8 @@ void GameDisplay::displayOppponentsBoard() {
 
 void GameDisplay::displayOpponentBoardDuel() {
     opBoardDisplay_ = ftxui::Renderer([&] {
+        std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
         ftxui::Canvas playerCanvas =
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
@@ -358,6 +368,8 @@ void GameDisplay::displayMultiRightWindow() {
     else displayOppponentsBoard();
 
     // ftxui::Component penaltyDisplay = ftxui::Renderer([&] {
+    //     std::lock_guard<std::mutex> guard(pGameState_->mutex);
+    //
     //     return ftxui::vbox({
     //         ftxui::gaugeRight(penaltyGauge_),
     //         ftxui::text("penalty to come") | ftxui::borderDashed,
@@ -395,8 +407,11 @@ void GameDisplay::drawMultiMode() {
 // public methods
 
 void GameDisplay::render() {
-    if (pGameState_->gameState.gameMode == GameMode::Endless) drawEndlessMode();
-    else drawMultiMode();
+    if (pGameState_->gameState.gameMode == GameMode::Endless) {
+        drawEndlessMode();
+    } else {
+        drawMultiMode();
+    }
 
     screen_->Loop(displayWindow_);
 }
