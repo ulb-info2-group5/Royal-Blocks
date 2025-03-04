@@ -30,12 +30,11 @@ class GameDisplay : public IGame {
   private:
     std::shared_ptr<ftxui::ScreenInteractive> screen_;
 
-    std::shared_ptr<client::GameStateWrapper> pGameState;
+    std::shared_ptr<client::GameStateWrapper> pGameState_;
 
     // TODO: remove this
     std::vector<std::string> pseudos_;
     float malusGauge_;
-    float energyGauge_;
     std::vector<std::string> effects_ = {};
 
     ftxui::Component playerInfo_;

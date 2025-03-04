@@ -83,12 +83,11 @@ ftxui::Color getFTXUIColor(Color color) {
 
 GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
                          std::shared_ptr<client::GameStateWrapper> &pGameState)
-    : screen_{screen}, pGameState(pGameState) {
+    : screen_{screen}, pGameState_(pGameState) {
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};
     malusGauge_ = 0.5;
-    energyGauge_ = 0.5;
 
     effects_ = {"bonus0", "bonus1", "bonus2", "bonus3", "bonus4",
                 "bonus5", "bonus6", "bonus7", "bonus8"};
@@ -100,7 +99,7 @@ void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
         return ftxui::vbox(
                    {ftxui::text(std::to_string(
-                        pGameState->gameState.self.playerState_.score_)),
+                        pGameState_->gameState.self.playerState_.score_)),
                     ftxui::text(pseudos_.at(0))})
                | ftxui::borderDashed;
     });
@@ -130,7 +129,9 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 
     effectsDisplay_ = ftxui::Renderer([&] {
         return ftxui::vbox(
-            {ftxui::gaugeRight(energyGauge_),
+            {ftxui::gaugeRight(
+                 // TODO: check that whether this must be below 1.
+                 pGameState_->gameState.self.playerState_.energy_.value()),
              ftxui::text("energy power") | ftxui::borderRounded});
     });
 }
@@ -140,7 +141,7 @@ void GameDisplay::displayLeftWindow() {
         "Quit Game", [&] { screen_->ExitLoopClosure()(); },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
-    if (pGameState->gameState.gameMode == GameMode::RoyalCompetition) {
+    if (pGameState_->gameState.gameMode == GameMode::RoyalCompetition) {
         drawPlayerInfo();
         drawRoyalEffectsEnergy();
 
@@ -168,7 +169,7 @@ void GameDisplay::drawPlayerBoard() {
         for (uint32_t x = 0; x < WIDTH; ++x) {
             for (uint32_t y = 0; y < HEIGHT; ++y) {
 
-                auto &boardToDraw = pGameState->gameState.self.tetris_.board_;
+                auto &boardToDraw = pGameState_->gameState.self.tetris_.board_;
 
                 pixel.background_color = getFTXUIColor(
                     (boardToDraw.get(x, y).isEmpty())
@@ -232,7 +233,7 @@ void GameDisplay::drawOpponentsBoard() {
     opBoards_ = {};
     ftxui::Component opDisplay;
 
-    for (uint32_t index = 1; index < pGameState->gameState.externals.size();
+    for (uint32_t index = 1; index < pGameState_->gameState.externals.size();
          ++index) {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&](uint32_t index) {
             ftxui::Canvas opCanvas =
@@ -244,7 +245,7 @@ void GameDisplay::drawOpponentsBoard() {
                     for (uint32_t i = 0; i < LENGTH_OPPONENT; ++i) {
 
                         auto &boardToDraw =
-                            pGameState->gameState.externals.at(index)
+                            pGameState_->gameState.externals.at(index)
                                 .tetris_.board_;
 
                         opCanvas.DrawBlock(
@@ -279,7 +280,7 @@ void GameDisplay::displayOppponentsBoard() {
 
     ftxui::Components rows = {};
     uint32_t totalPlayers =
-        pGameState->gameState.externals.size() + 1; // +1 for the self board
+        pGameState_->gameState.externals.size() + 1; // +1 for the self board
 
     for (uint32_t i = 0; i < 3; ++i) {
         ftxui::Component line;
@@ -329,7 +330,7 @@ void GameDisplay::displayOpponentBoardDuel() {
             for (uint32_t y = 0; y < HEIGHT; ++y) {
 
                 auto &boardToDraw =
-                    pGameState->gameState.externals.at(0).tetris_.board_;
+                    pGameState_->gameState.externals.at(0).tetris_.board_;
 
                 pixel.background_color = getFTXUIColor(
                     boardToDraw.get(x, y).isEmpty()
@@ -352,7 +353,7 @@ void GameDisplay::displayOpponentBoardDuel() {
 }
 
 void GameDisplay::displayMultiRightWindow() {
-    if (pGameState->gameState.gameMode == GameMode::Dual)
+    if (pGameState_->gameState.gameMode == GameMode::Dual)
         displayOpponentBoardDuel();
     else displayOppponentsBoard();
 
@@ -394,7 +395,7 @@ void GameDisplay::drawMultiMode() {
 // public methods
 
 void GameDisplay::render() {
-    if (pGameState->gameState.gameMode == GameMode::Endless) drawEndlessMode();
+    if (pGameState_->gameState.gameMode == GameMode::Endless) drawEndlessMode();
     else drawMultiMode();
 
     screen_->Loop(displayWindow_);
