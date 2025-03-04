@@ -28,15 +28,16 @@ void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::sha
     if (!(*authenticationBuffer).empty()){
         nlohmann::json jbuffer =  nlohmann::json::parse(*authenticationBuffer);
         std::cout << *authenticationBuffer <<std::endl;
-        const char type =  jbuffer.at("type").get<const char>();
+        bindings::BindingType type =  jbuffer.at("type").get<bindings::BindingType>();
+        nlohmann::json data = jbuffer.at("data").get<nlohmann::json>();
         switch (type){
-        case CONNECTION :
-            if (checkCredentials(jbuffer)){
-                this->createNewConnection(socket, jbuffer);
+        case bindings::BindingType::Authentication :
+            if (checkCredentials(data)){
+                this->createNewConnection(socket, data);
                 return;
             }
             break;
-        case REGISTER :
+        case bindings::BindingType::Registration :
             // TODO : create a new compte and ask for login
             break;
         default:
@@ -46,10 +47,9 @@ void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::sha
     this->waitForAuthentication(socket);
 }
 
-bool Network::checkCredentials(nlohmann::json jcredentials){
+bool Network::checkCredentials(nlohmann::json data){
     std::cout << "-- check credentials --" << std::endl;
-    //i will continue later 
-        if (clientManager_.checkCredentials(jcredentials.at("pseudo").get<const std::string>(), jcredentials.at("password").get<const std::string>())){
+        if (clientManager_.checkCredentials(data.at("nickname").get<std::string>(), data.at("password").get<std::string>())){
             return true;
         }
     
@@ -69,11 +69,11 @@ void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
   
 }
 
-void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json jcredentials ){
+void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json data ){
     // pls just use auto  
     std::cout << "create new connection " << std::endl;
     std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(*socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
-    std::string pseudo = jcredentials.at("pseudo").get<const std::string>();
+    std::string pseudo = data.at("nickname").get<std::string>();
     clientManager_.addConnection(std::move(newLink), pseudo);
     
 

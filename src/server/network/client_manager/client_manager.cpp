@@ -15,7 +15,6 @@ using boost::asio::ip::tcp;
 // --- private ---
 
 void ClientLink::read(){
-    std::cout << "Buffer avant lecture : [" << buffer_ << "]" << std::endl;
     boost::asio::async_read_until(socket_, streamBuffer_, '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
             std::istream is(&streamBuffer_);
@@ -78,11 +77,13 @@ void ClientManager::handlePacket(const std::string& packet){
 
     std::cout << "-- handle Packet call -- " <<std::endl;
     nlohmann::json jPack = nlohmann::json::parse(packet);
-    char type = jPack.at("type").get<char>();
+    bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
+    nlohmann::json data = jPack.at("data").get<nlohmann::json>();
+
     switch (type)
     {
-    case MESSAGE:  
-        handleMessage(jPack);
+    case bindings::BindingType::Message:  
+        handleMessage(data);
         break;
     
     default:
@@ -93,7 +94,7 @@ void ClientManager::handlePacket(const std::string& packet){
 void ClientManager::handleMessage(nlohmann::json message){
     std::cout << message.at("content").get<std::string>() << std::endl;
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("receiverId").get<int>()]->recieveMessage(message.at("content").get<std::string>());
+    connectedClients_[message.at("recipientId").get<int>()]->recieveMessage(message.at("content").get<std::string>());
     
 
 }

@@ -8,7 +8,7 @@ using boost::asio::ip::tcp;
 // -- private --
         
 
-void TcpClient::sendAuthentication(const Login &authentication){
+void TcpClient::sendAuthentication(const bindings::Authentication &authentication){
     std::string authen = authentication.to_json().dump() + "\n";
     sendPackage(authen);
 }
@@ -44,7 +44,7 @@ void TcpClient::startRead() {
 void TcpClient::sendMessage(const std::string& content){
     int receiverId  = 50;
     if (content.empty() || content == "\n") return ;
-    std::string packet = Message{'M', receiverId, content }.to_json().dump() + '\n';
+    std::string packet = bindings::Message{50, receiverId, content }.to_json().dump() + '\n';
     sendPackage(packet); 
 }
 
@@ -71,10 +71,10 @@ TcpClient::TcpClient(boost::asio::io_context& ioContex, const std::string& host,
 }
 
 void TcpClient::askForAuthentication(){
-    Login authentication;
+    bindings::Authentication authentication;
     std::cout << "---- authentication ----" << std::endl;
     std::cout << "pseudo : "<< std::endl;
-    std::cin >> authentication.pseudo;
+    std::cin >> authentication.nickname;
     std::cout << "password : " << std::endl;
     std::cin >> authentication.password;
     

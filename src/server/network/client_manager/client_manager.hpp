@@ -11,21 +11,16 @@
 #include "../../database/friends_manager/friends_manager.hpp"
 #include "../../database/messages_manager/messages_manager.hpp"
 
+#include "../../../common/bindings/authentication.hpp"
+#include "../../../common/bindings/authentication_response.hpp"
+#include "../../../common/bindings/message.hpp"
+#include "../../../common/bindings/registration.hpp"
+#include "../../../common/bindings/registration_response.hpp"
+#include "../../../common/bindings/binding_type.hpp"
 
 using boost::asio::ip::tcp;
 
 
-enum PacketType :char {
-    MESSAGE = 'M',
-    CONNECTION = 'C',
-    REGISTER = 'R',
-    DECONNECTION = 'D'
-};
-
-struct FeedBack{
-    bool result; 
-    std::string subject;
-};
 
 //it's just a structure to bring database classes together
 struct DataBase{

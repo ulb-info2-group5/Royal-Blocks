@@ -30,9 +30,9 @@ class Network{
         * @param authenticationBuffer : buffer which contains the packet
         */
         void handleAuthentication(std::shared_ptr<tcp::socket> socket, std::shared_ptr<std::string> authenticationBuffer);
-        bool checkCredentials(nlohmann::json jcredentials);
+        bool checkCredentials(nlohmann::json data);
         void accept();
-        void createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json jcredentials);
+        void createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json data);
     public: 
         Network(boost::asio::io_context& io,ClientManager &clientManager );
 
