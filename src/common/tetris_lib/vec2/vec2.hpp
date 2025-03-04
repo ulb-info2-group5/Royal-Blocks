@@ -1,6 +1,9 @@
 #ifndef VEC2_HPP
 #define VEC2_HPP
 
+#include "nlohmann/json_fwd.hpp"
+#include <nlohmann/json.hpp>
+
 #include <iostream>
 
 class Vec2Test;
@@ -10,7 +13,7 @@ class Vec2Test;
  *
  * @brief Represents a 2D vector.
  */
-class Vec2 final {
+class Vec2 {
   private:
     int x_;
     int y_;
@@ -36,7 +39,7 @@ class Vec2 final {
 
     // #### Destructor ####
 
-    virtual ~Vec2() = default;
+    ~Vec2() = default;
 
     // #### Getters ####
 
@@ -166,7 +169,17 @@ class Vec2 final {
      */
     friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 
-    // #### Test Fixture Class ####
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
+
+    nlohmann::json serialize() const;
+
+    void deserialize(const nlohmann::json &j);
+
+    /* ------------------------------------------------
+     *          Test Fixture Class
+     * ------------------------------------------------*/
 
     friend Vec2Test;
 };

@@ -3,9 +3,12 @@
 #include "../tetromino/tetromino.hpp"
 #include "../vec2/vec2.hpp"
 #include "board_update.hpp"
+#include "grid_cell.hpp"
 
+#include <array>
 #include <cstddef>
 #include <memory>
+#include <random>
 
 /*--------------------------------------------------
                     PRIVATE
@@ -24,11 +27,60 @@ const std::array<GridCell, Board::width_> &Board::getRow(int yRow) const {
 }
 
 void Board::dropRowsAbove(int yRow) {
-    for (int y = yRow; y < static_cast<int>(getHeight()) - 1; y++) {
-        getRow(y) = getRow(y + 1);
+    const int topRow = getHeight() - 1;
+
+    for (int y = yRow; y < static_cast<int>(topRow); y++) {
+        setRow(getRow(y + 1), y);
     }
 
     emptyRow(getHeight() - 1);
+}
+
+void Board::liftRowsFrom(int yRow, size_t numRows) {
+    const int topRow = getHeight() - 1;
+
+    for (size_t lineCount = 0; lineCount < numRows; lineCount++) {
+        for (int y = topRow; y > static_cast<int>(yRow); y--) {
+            setRow(getRow(y - 1), y);
+        }
+    }
+
+    emptyRow(yRow);
+}
+
+void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
+    constexpr int firstCol = 0;
+    const int lastCol = getWidth() - 1;
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(firstCol, lastCol);
+
+    // The empty block in the row
+    size_t emptyIndex = distrib(gen);
+
+    // Fill all the GridCell with PenaltyBlocksColor except one (empty state)
+    for (size_t xCol = 0; xCol < getWidth(); xCol++) {
+        if (xCol == emptyIndex) {
+            row.at(xCol).setEmpty();
+        } else {
+            row.at(xCol).setColorId(PenaltyBlocksColor);
+        }
+    }
+}
+
+void Board::setRow(const std::array<GridCell, width_> &row, size_t yRow) {
+    getRow(yRow) = row;
+}
+
+bool Board::checkEmptyRow(int yRow) const {
+    for (const GridCell &gridCell : getRow(yRow)) {
+        if (!gridCell.isEmpty()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Board::checkFullRow(int yRow) const {
@@ -89,10 +141,6 @@ const GridCell &Board::get(int xCol, int yRow) const {
     return getRow(yRow).at(xCol);
 }
 
-size_t Board::getWidth() const noexcept { return width_; }
-
-size_t Board::getHeight() const noexcept { return height_; }
-
 // #### Board Actions ####
 
 void Board::placeTetromino(TetrominoPtr tetromino) {
@@ -117,6 +165,79 @@ bool Board::checkInGrid(ATetromino &tetromino) const {
 
             return false;
         }
+    }
+
+    return true;
+}
+
+bool Board::check2By2Occupied(int x, int y) {
+    constexpr int SQUARE_WIDTH = 2;
+
+    bool ret = true;
+    for (int xOffset = 0; xOffset < SQUARE_WIDTH; xOffset++)
+        for (int yOffset = 0; yOffset < SQUARE_WIDTH; yOffset++) {
+            if (get(x + xOffset, y + yOffset).isEmpty()) {
+                ret = false;
+            }
+        };
+    return ret;
+}
+
+void Board::empty2By2Square(int x, int y) {
+    constexpr int SQUARE_WIDTH = 2;
+
+    for (int xOffset = 0; xOffset < SQUARE_WIDTH; xOffset++)
+        for (int yOffset = 0; yOffset < SQUARE_WIDTH; yOffset++) {
+            at(x + xOffset, y + yOffset).setEmpty();
+        }
+}
+
+void Board::destroy2By2Occupied() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(0, Board::getHeight()
+                                                      * Board::getWidth());
+    int tmp = distrib(gen);
+    int startY = tmp / Board::getHeight();
+    int startX = tmp % Board::getWidth();
+
+    bool found2By2 = false;
+
+    for (int yOffset = 0;
+         yOffset < static_cast<int>(Board::getHeight() - 1) && !found2By2;
+         yOffset++) {
+        for (int xOffset = 0;
+             xOffset < static_cast<int>(Board::getWidth() - 1) && !found2By2;
+             xOffset++) {
+
+            int x =
+                (startX + xOffset) % static_cast<int>(Board::getWidth() - 1);
+            int y =
+                (startY + yOffset) % static_cast<int>(Board::getHeight() - 1);
+
+            if (check2By2Occupied(x, y)) {
+                found2By2 = true;
+                empty2By2Square(x, y);
+            }
+        }
+    }
+}
+
+// #### Penalty Lines ####
+
+bool Board::receivePenaltyLines(size_t numPenaltyLines) {
+    if (!checkEmptyRow(getHeight() - numPenaltyLines)) {
+        return false;
+    }
+
+    constexpr int bottomRow = 0;
+    // Lift rows from the bottom to make room for the penalty lines.
+    liftRowsFrom(bottomRow, numPenaltyLines);
+
+    // Fill the newly freed lines with penalty lines.
+    for (size_t penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
+         penaltyLinesCount++) {
+        setPenaltyLine(getRow(penaltyLinesCount));
     }
 
     return true;

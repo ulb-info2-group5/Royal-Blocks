@@ -1,0 +1,21 @@
+#ifndef CLIENT_TETROMINO_HPP
+#define CLIENT_TETROMINO_HPP
+
+#include "vec2/vec2.hpp"
+
+#include <vector>
+
+namespace client {
+
+    struct Tetromino {
+        Vec2 anchorPoint_;
+        std::vector<Vec2> body_;
+
+        nlohmann::json serialize() const;
+
+        void deserialize(const nlohmann::json &j);
+    };
+
+} // namespace client
+
+#endif // CLIENT_TETROMINO_HPP

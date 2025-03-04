@@ -8,7 +8,7 @@
  * @brief Represents a rotation index for objects that can be rotated in
  * 90-degree increments, e.g. Tetrominoes.
  */
-class RotationIndex final {
+class RotationIndex {
   private:
     int8_t index_;
 
@@ -26,7 +26,7 @@ class RotationIndex final {
 
     // #### Destructor ####
 
-    virtual ~RotationIndex() = default;
+    ~RotationIndex() = default;
 
     // #### Operators ####
 
