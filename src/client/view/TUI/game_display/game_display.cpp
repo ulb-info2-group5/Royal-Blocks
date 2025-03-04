@@ -33,7 +33,7 @@ Color colorIdToColor(unsigned colorID) {
     case 6:
         return Color::Purple;
     default:
-        throw std::runtime_error{"unknown shape"};
+        throw std::runtime_error{"unknown color"};
     };
 }
 
