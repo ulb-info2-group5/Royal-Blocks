@@ -11,6 +11,16 @@ namespace bindings {
         Registration,
         RegistrationResponse,
         User,
+
+        // in game
+        BigDrop,
+        BuyBonus,
+        BuyPenalty,
+        EmptyPenaltyStash,
+        HoldNextTetromino,
+        MoveActive,
+        RotateActive,
+        SelectTarget,
     };
 
 } // namespace bindings
