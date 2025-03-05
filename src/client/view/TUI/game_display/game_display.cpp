@@ -81,7 +81,7 @@ ftxui::Color getFTXUIColor(Color color) {
 
 // constructor
 
-GameDisplay::GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
+GameDisplay::GameDisplay(ftxui::ScreenInteractive &screen,
                          std::shared_ptr<client::GameStateWrapper> &pGameState)
     : screen_{screen}, pGameState_(pGameState) {
     // initialise for preview
@@ -142,7 +142,7 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 
 void GameDisplay::displayLeftWindow() {
     ftxui::Component menuDisplay = ftxui::Button(
-        "Quit Game", [&] { screen_->ExitLoopClosure()(); },
+        "Quit Game", [&] { screen_.ExitLoopClosure()(); },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
     if (pGameState_->gameState.gameMode == GameMode::RoyalCompetition) {
@@ -413,5 +413,5 @@ void GameDisplay::render() {
         drawMultiMode();
     }
 
-    screen_->Loop(displayWindow_);
+    screen_.Loop(displayWindow_);
 }

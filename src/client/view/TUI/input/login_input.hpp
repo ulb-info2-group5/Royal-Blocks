@@ -12,7 +12,6 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
-#include <memory>
 #include <string>
 #include <string_view>
 
@@ -30,7 +29,7 @@ class LoginInput : public ILogin_Input {
     /*
      * @brief The screen to use to render the components
      */
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive &screen_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -91,7 +90,7 @@ class LoginInput : public ILogin_Input {
      * @param screen The screen to use to render the components
      * @param title The title of the input screen (Login or Register)
      */
-    LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
+    LoginInput(ftxui::ScreenInteractive &screen,
                Controller *controller, std::string title, LoginType loginType);
 
     /*

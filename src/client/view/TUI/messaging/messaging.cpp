@@ -7,7 +7,7 @@
 // updated correctly
 
 // ### constructor ###
-Messaging::Messaging(std::shared_ptr<ftxui::ScreenInteractive> screen,
+Messaging::Messaging(ftxui::ScreenInteractive &screen,
                      Controller *controller)
     : screen_(screen), controller_(controller) {
     userState_ = MessagingState::NONE;
@@ -55,7 +55,7 @@ void Messaging::createButtons() {
             newMessage_.clear();
             newFriend_.clear();
             userState_ = MessagingState::BACK;
-            screen_->ExitLoopClosure()();
+            screen_.ExitLoopClosure()();
         },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 }
@@ -180,7 +180,7 @@ void Messaging::render() {
         controller_->getMessages(); // TODO: check if the conversations are
                                     // correctly updated with the server, etc
     drawWindow();
-    screen_->Loop(displayWindow_);
+    screen_.Loop(displayWindow_);
 }
 
 void Messaging::addMessage(const std::string &message) {

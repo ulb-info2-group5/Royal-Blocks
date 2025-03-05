@@ -24,10 +24,10 @@ class Controller; // Forward declaration
  */
 class GameMenu : public IGame_Menu {
   private:
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive &screen_;
     Controller *controller_;
 
-    GameDisplay gameDisplay_;
+    std::unique_ptr<GameDisplay> gameDisplay_;
 
     JoinType joinType_;
 
@@ -96,7 +96,7 @@ class GameMenu : public IGame_Menu {
      *
      * @param screen
      */
-    GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+    GameMenu(ftxui::ScreenInteractive &screen,
              Controller *controller);
 
     /*

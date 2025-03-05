@@ -1,14 +1,36 @@
 #include "screen_manager.hpp"
-#include <memory>
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/component/screen_interactive.hpp>
 
 // ### Public methods ###
 ScreenManager::ScreenManager(Controller *controller)
-    : controller_(controller),
-      screen_(std::shared_ptr<ftxui::ScreenInteractive>(
-          new ftxui::ScreenInteractive(
-              ftxui::ScreenInteractive::Fullscreen()))),
+    : controller_(controller), screen_(ftxui::ScreenInteractive::Fullscreen()),
       loginMenu_(LoginMenu(screen_, controller_)),
       mainMenu_(MainMenu(screen_, controller_)) {}
+
+ScreenManager::~ScreenManager() {
+    bool exit = false;
+
+    ftxui::Component title =
+        ftxui::Renderer([&] {
+            return ftxui::vbox({
+                ftxui::text("Goodbye!"),
+            });
+        })
+        | ftxui::border | ftxui::center;
+
+    std::thread([&] {
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        exit = true;
+        screen_.PostEvent(ftxui::Event::Custom); // Refresh the screen to exit
+                                                    // the display after 2 seconds
+        screen_.ExitLoopClosure()();
+    }).detach();
+
+    screen_.Loop(title);
+
+    std::cout << "Screen Manager destroyed" << std::endl;
+}
 
 void ScreenManager::run() {
     drawStartScreen();
@@ -53,10 +75,10 @@ void ScreenManager::drawStartScreen() {
     std::thread([&] {
         std::this_thread::sleep_for(std::chrono::seconds(3));
         exit = true;
-        screen_->PostEvent(ftxui::Event::Custom); // Refresh the screen to exit
+        screen_.PostEvent(ftxui::Event::Custom); // Refresh the screen to exit
                                                   // the display after 2 seconds
-        screen_->ExitLoopClosure()();
+        screen_.ExitLoopClosure()();
     }).detach();
 
-    screen_->Loop(title);
+    screen_.Loop(title);
 }

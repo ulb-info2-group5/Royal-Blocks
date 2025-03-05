@@ -43,9 +43,9 @@ class LoginMenu : public ILogin_Menu {
     /*
      * @brief The screen to use to render the components
      */
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
-
-    /*
+    ftxui::ScreenInteractive &screen_;
+    
+     /*
      * @brief The controller to ask for the data to show to the user
      */
     Controller *controller_;
@@ -75,7 +75,7 @@ class LoginMenu : public ILogin_Menu {
      *
      * @param screen The screen to use to render the components
      */
-    LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+    LoginMenu(ftxui::ScreenInteractive &screen,
               Controller *controller);
 
     /*

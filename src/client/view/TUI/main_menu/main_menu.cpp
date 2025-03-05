@@ -12,11 +12,10 @@
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <memory>
 #include <vector>
 
 // ### Constructor ###
-MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+MainMenu::MainMenu(ftxui::ScreenInteractive &screen,
                    Controller *controller)
     : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
       friendsMenu_(screen, controller),
@@ -29,7 +28,7 @@ MainMenu::MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                       "Back",
                       [&] {
                           state_ = MainMenuState::BACK;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -92,7 +91,7 @@ void MainMenu::handleChoice() {
 void MainMenu::confirmUpdateProfileScreen() const {
     ftxui::Component okButton =
         ftxui::Button(
-            "OK", [&] { screen_->ExitLoopClosure()(); },
+            "OK", [&] { screen_.ExitLoopClosure()(); },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
 
@@ -107,7 +106,7 @@ void MainMenu::confirmUpdateProfileScreen() const {
                    | ftxui::border | ftxui::center;
         });
 
-    screen_->Loop(component);
+    screen_.Loop(component);
 }
 
 // ### Protected methods ###
@@ -117,7 +116,7 @@ void MainMenu::createMainMenuButtons() {
                       "Create a game",
                       [&] {
                           state_ = MainMenuState::CREATE_GAME;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -126,7 +125,7 @@ void MainMenu::createMainMenuButtons() {
                           "Join a game",
                           [&] {
                               state_ = MainMenuState::JOIN_GAME;
-                              screen_->ExitLoopClosure()();
+                              screen_.ExitLoopClosure()();
                           },
                           ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                       | ftxui::border;
@@ -136,7 +135,7 @@ void MainMenu::createMainMenuButtons() {
             "Send messages to friends",
             [&] {
                 state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -145,7 +144,7 @@ void MainMenu::createMainMenuButtons() {
                              "Look at ranking",
                              [&] {
                                  state_ = MainMenuState::LOOK_RANKING;
-                                 screen_->ExitLoopClosure()();
+                                 screen_.ExitLoopClosure()();
                              },
                              ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                          | ftxui::border;
@@ -155,7 +154,7 @@ void MainMenu::createMainMenuButtons() {
             "Manage profile",
             [&] {
                 state_ = MainMenuState::MANAGE_PROFILE;
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -165,7 +164,7 @@ void MainMenu::createMainMenuButtons() {
             "Manage friends list",
             [&] {
                 state_ = MainMenuState::MANAGE_FRIENDS_LIST;
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -174,7 +173,7 @@ void MainMenu::createMainMenuButtons() {
                       "Exit",
                       [&] {
                           state_ = MainMenuState::EXIT;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -294,7 +293,7 @@ void MainMenu::displayProfileManagerButton() {
                 } else {
                     confirmUpdateProfileScreen(); // Display the confirm update
                                                   // profile screen
-                    screen_->ExitLoopClosure()();
+                    screen_.ExitLoopClosure()();
                 }
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
@@ -334,21 +333,21 @@ void MainMenu::renderRanking() {
 
     displayRankingWindow();
 
-    screen_->Loop(rankingWindow_);
+    screen_.Loop(rankingWindow_);
 }
 
 void MainMenu::renderProfileManager() {
 
     displayProfileManagerWindow();
 
-    screen_->Loop(profileManagerWindow_);
+    screen_.Loop(profileManagerWindow_);
 }
 
 // ### Public methods ###
 void MainMenu::render() {
     while (state_ != MainMenuState::EXIT) {
         displayMainWindow();
-        screen_->Loop(mainMenuWindow_);
+        screen_.Loop(mainMenuWindow_);
         handleChoice();
     }
 }

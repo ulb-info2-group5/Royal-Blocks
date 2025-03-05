@@ -8,8 +8,6 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
-#include <memory>
-
 class Controller; // Forward declaration
 
 class ScreenManager {
@@ -23,7 +21,7 @@ class ScreenManager {
      * @brief The screen to use to render the components in the terminal user
      * interface
      */
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive screen_;
 
     /*
      * @brief The login menu to show to the user
@@ -51,7 +49,7 @@ class ScreenManager {
     /*
      * @brief Destroy the Screen Manager object
      */
-    ~ScreenManager() = default;
+    ~ScreenManager();
 
     /*
      * @brief Run the screen manager to manage the screens to show to the user

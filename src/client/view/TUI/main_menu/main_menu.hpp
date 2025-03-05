@@ -21,7 +21,6 @@
 #include <ftxui/dom/elements.hpp>
 
 #include <cstdlib>
-#include <memory>
 #include <string>
 
 class Controller; // Forward declaration
@@ -47,8 +46,8 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief The screen to use to render the components
      */
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
-
+    ftxui::ScreenInteractive &screen_;
+    
     /*
      * @brief The controller to ask for the data to show to the user
      */
@@ -131,7 +130,7 @@ class MainMenu : public IMain_Menu {
      *
      * @param screen The screen to use to render the components
      */
-    MainMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+    MainMenu(ftxui::ScreenInteractive &screen,
              Controller *controller);
 
     /*

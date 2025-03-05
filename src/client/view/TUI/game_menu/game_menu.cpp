@@ -15,16 +15,19 @@
 
 // ### Constructor ###
 
-GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+GameMenu::GameMenu(ftxui::ScreenInteractive &screen,
                    Controller *controller)
     : screen_(screen), controller_(controller),
-      gameDisplay_(screen_, controller_->getGameState()),
       joinType_(JoinType::NONE), typeGame_(TypeGame::NONE) {
+     
+    gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
+    
+
     endlessButon_ = ftxui::Button(
                         "Endless",
                         [&] {
                             joinType_ = JoinType::ENDLESS;
-                            screen_->ExitLoopClosure()();
+                            screen_.ExitLoopClosure()();
                         },
                         ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                     | ftxui::border;
@@ -32,10 +35,9 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     duelButon_ = ftxui::Button(
                      "Duel",
                      [&] {
-                         gameDisplay_ =
-                             GameDisplay(screen_, controller_->getGameState());
+                         gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
                          joinFriendOrRandomScreen();
-                         screen_->ExitLoopClosure()();
+                         screen_.ExitLoopClosure()();
                      },
                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                  | ftxui::border;
@@ -43,10 +45,9 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     classicButon_ = ftxui::Button(
                         "Classic",
                         [&] {
-                            gameDisplay_ = GameDisplay(
-                                screen_, controller_->getGameState());
+                            gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
                             joinFriendOrRandomScreen();
-                            screen_->ExitLoopClosure()();
+                            screen_.ExitLoopClosure()();
                         },
                         ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                     | ftxui::border;
@@ -54,10 +55,9 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
     royalButon_ = ftxui::Button(
                       "Royal",
                       [&] {
-                          gameDisplay_ =
-                              GameDisplay(screen_, controller_->getGameState());
+                          gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
                           joinFriendOrRandomScreen();
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -66,7 +66,7 @@ GameMenu::GameMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
                       "Back",
                       [&] {
                           joinType_ = JoinType::BACK;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -99,7 +99,7 @@ void GameMenu::renderAllGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 void GameMenu::renderOnlineGames() {
@@ -125,7 +125,7 @@ void GameMenu::renderOnlineGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 void GameMenu::joinFriendOrRandomScreen() {
@@ -134,7 +134,7 @@ void GameMenu::joinFriendOrRandomScreen() {
             "Join a friend",
             [&] {
                 joinType_ = JoinType::FRIEND;
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -143,7 +143,7 @@ void GameMenu::joinFriendOrRandomScreen() {
             "Join a random game",
             [&] {
                 joinType_ = JoinType::RANDOM;
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -165,7 +165,7 @@ void GameMenu::joinFriendOrRandomScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 void GameMenu::handleChoice() {
@@ -179,7 +179,7 @@ void GameMenu::handleChoice() {
         break;
 
     case JoinType::ENDLESS:
-        gameDisplay_.render(); // Endless mode is directly started without
+        gameDisplay_->render(); // Endless mode is directly started without
                                // waiting for a friend or a random game
         break;
 
@@ -225,7 +225,7 @@ void GameMenu::joinFriendScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 void GameMenu::joinRandomScreen() {
@@ -241,7 +241,7 @@ void GameMenu::joinRandomScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 ftxui::Component GameMenu::makeFriendButton(const std::string &friendName) {
@@ -250,7 +250,7 @@ ftxui::Component GameMenu::makeFriendButton(const std::string &friendName) {
         [&] {
             // TODO: communicate with the server to join the friend here ?
             waitingFriendScreen();
-            screen_->ExitLoopClosure()();
+            screen_.ExitLoopClosure()();
         },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 }
@@ -269,7 +269,7 @@ void GameMenu::waitingFriendScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_->Loop(renderer);
+    screen_.Loop(renderer);
 }
 
 // ### Public methods ###

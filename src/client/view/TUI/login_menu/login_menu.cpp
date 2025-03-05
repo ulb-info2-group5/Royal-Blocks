@@ -14,10 +14,9 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <memory>
 
 // ### constructor ###
-LoginMenu::LoginMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen,
                      Controller *controller)
     : screen_(screen), controller_(controller),
       loginInput_(LoginInput(screen_, controller_, LOGIN_INPUT_TITLE,
@@ -46,7 +45,7 @@ void LoginMenu::createButtons() {
                         loginState_ = Login::LOGGED;
                     }
                 }
-                screen_->ExitLoopClosure()();
+                screen_.ExitLoopClosure()();
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -57,7 +56,7 @@ void LoginMenu::createButtons() {
                            if (loginInput_.render() == LoginState::SUBMIT) {
                                loginState_ = Login::LOGGED;
                            }
-                           screen_->ExitLoopClosure()();
+                           screen_.ExitLoopClosure()();
                        },
                        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                    | ftxui::border;
@@ -66,7 +65,7 @@ void LoginMenu::createButtons() {
                       "Exit",
                       [&] {
                           loginState_ = Login::EXIT;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -102,7 +101,7 @@ void LoginMenu::displayWindow() {
 void LoginMenu::render() {
     while (loginState_ == Login::NONE) {
         displayWindow();
-        screen_->Loop(displayWindow_);
+        screen_.Loop(displayWindow_);
     }
     if (loginState_ == Login::EXIT) {
         std::exit(0); // TODO: check the exit

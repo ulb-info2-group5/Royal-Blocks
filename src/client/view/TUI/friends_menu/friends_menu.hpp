@@ -10,7 +10,6 @@
 #define FRIENDS_MENU_HPP
 
 #include <ftxui/component/screen_interactive.hpp>
-#include <memory>
 #include <vector>
 
 class Controller; // Forward declaration
@@ -25,7 +24,7 @@ enum class FriendsManagerState {
 
 class FriendsMenu {
   private:
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive &screen_;
     Controller *controller_;
     std::string friendName_;
     std::string msg_; // Message to display on the adding friends menu
@@ -56,7 +55,7 @@ class FriendsMenu {
     /*
      * @brief Construct a new Friends Manager object
      */
-     FriendsMenu(std::shared_ptr<ftxui::ScreenInteractive> screen,
+     FriendsMenu(ftxui::ScreenInteractive &screen,
                    Controller *controller);
 
     /*

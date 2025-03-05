@@ -16,12 +16,11 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
-#include <memory>
 #include <string>
 #include <thread>
 
 // ### Constructor ###
-LoginInput::LoginInput(std::shared_ptr<ftxui::ScreenInteractive> screen,
+LoginInput::LoginInput(ftxui::ScreenInteractive &screen,
                        Controller *controller, std::string title,
                        LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
@@ -43,7 +42,7 @@ void LoginInput::createButtonBack() {
                           username_.clear();
                           password_.clear();
                           loginState_ = LoginState::BACK;
-                          screen_->ExitLoopClosure()();
+                          screen_.ExitLoopClosure()();
                       },
                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
                   | ftxui::border;
@@ -64,7 +63,7 @@ void LoginInput::createButtonSubmit() {
                     }
 
                     loginState_ = LoginState::SUBMIT;
-                    screen_->ExitLoopClosure()();
+                    screen_.ExitLoopClosure()();
                 } else if (loginType_ == LoginType::LOGIN) {
                     controller_->tryLogin(username_, password_);
 
@@ -75,7 +74,7 @@ void LoginInput::createButtonSubmit() {
                     }
 
                     loginState_ = LoginState::SUBMIT;
-                    screen_->ExitLoopClosure()();
+                    screen_.ExitLoopClosure()();
                 } else {
                     username_.clear();
                     password_.clear();
@@ -149,7 +148,7 @@ void LoginInput::clearInfo() {
 LoginState LoginInput::render() {
     displayWindow();
 
-    screen_->Loop(displayWindow_);
+    screen_.Loop(displayWindow_);
 
     return loginState_;
 }

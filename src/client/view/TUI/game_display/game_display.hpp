@@ -28,7 +28,7 @@ ftxui::Color getFTXUIColor(Color color);
 
 class GameDisplay : public IGame {
   private:
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive &screen_;
 
     std::shared_ptr<client::GameStateWrapper> pGameState_;
 
@@ -72,7 +72,7 @@ class GameDisplay : public IGame {
     void drawMultiMode() override;
 
   public:
-    GameDisplay(std::shared_ptr<ftxui::ScreenInteractive> screen,
+    GameDisplay(ftxui::ScreenInteractive &screen,
                 std::shared_ptr<client::GameStateWrapper> &pGameState);
 
     ~GameDisplay() = default;
