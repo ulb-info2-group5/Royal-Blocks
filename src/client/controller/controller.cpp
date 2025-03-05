@@ -11,7 +11,8 @@
 #include "../view/TUI/screen_manager.hpp"
 #include "game_state/game_state.hpp"
 
-#include <chrono>
+#include "../../common/bindings/bindings.hpp"
+
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -19,19 +20,26 @@
 // ### Private methods ###
 
 void Controller::handlePacket(const std::string &pack) {
-    std::cerr << "called with " << pack << std::endl;
+    nlohmann::json j = nlohmann::json::parse(pack);
 
-    mutex_.lock();
-    if (pack == "connected" || pack == "authenticated") {
-        authState_ = Controller::AuthState::Authenticated;
-    } else if (pack == "disconnected" || pack == "unauthenticated") {
-        authState_ = Controller::AuthState::Unauthenticated;
-    } else if (pack == "registered") {
-        registrationState_ = Controller::RegistrationState::Registered;
-    } else if (pack == "unregistered") {
-        registrationState_ = Controller::RegistrationState::Unregistered;
+    std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
+    if (j.at("type") == bindings::BindingType::AuthenticationResponse) {
+        bindings::AuthenticationResponse authResponse{
+            bindings::AuthenticationResponse::from_json(j)};
+
+        authState_ = authResponse.success
+                         ? Controller::AuthState::Authenticated
+                         : Controller::AuthState::Unauthenticated;
+
+    } else if (j.at("type") == bindings::BindingType::RegistrationResponse) {
+        bindings::RegistrationResponse registrationResponse{
+            bindings::RegistrationResponse::from_json(j)};
+
+        registrationState_ = registrationResponse.success
+                                 ? Controller::RegistrationState::Registered
+                                 : Controller::RegistrationState::Unregistered;
     }
-    mutex_.unlock();
 }
 
 // ### Public methods ###
@@ -160,14 +168,15 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
     return conversations;
 }
 
-// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>>>
-// Controller::getBoards() const {
+// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>,
+// HEIGHT>>> Controller::getBoards() const {
 //     // TODO: communicate with the server to get the boards
 //     // TODO: remove this because it's an example
 //     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
 //     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
 //     return std::make_shared<
-//         std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>>>(boards);
+//         std::vector<std::array<std::array<Color, WIDTH>,
+//         HEIGHT>>>(boards);
 // }
 
 std::vector<std::string> Controller::getFriendsOnline() const {
