@@ -14,6 +14,7 @@
 #include "../../common/bindings/bindings.hpp"
 
 #include <mutex>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -91,19 +92,14 @@ void Controller::run() {
 
 void Controller::tryRegister(const std::string &username,
                              const std::string &password) {
-    // TODO
-
-    // create some json here and send it
-    networkManager_.send("trying to register");
+    networkManager_.send(
+        bindings::Registration{username, password}.to_json().dump());
 }
 
 void Controller::tryLogin(const std::string &username,
-                          const std::string &password) { // TODO
-
-    // TODO
-
-    // create some json here and send it
-    networkManager_.send("trying to login");
+                          const std::string &password) {
+    networkManager_.send(
+        bindings::Authentication{username, password}.to_json().dump());
 }
 
 std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
