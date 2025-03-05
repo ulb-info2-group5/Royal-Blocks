@@ -7,6 +7,9 @@ class GridCell {
     + getColorId() : const unsigned
     + setColorId( colorId : unsigned ) : void
     + setEmpty() : void 
+
+    + serialize() : const nlohmann::json
+    + deserialize( &j : const nlohmann::json) : void 
     
 }
 @enduml

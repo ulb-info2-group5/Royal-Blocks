@@ -4,6 +4,21 @@ classUMLDIR="../../doc/uml/class/"
 seqUMLDIR="../../doc/uml/sequence/"
 useCaseUMLDIR="../../doc/uml/usecase/"
 
+classUMLDiag=("game/tetris_lib/GameClass" 
+              "connexion/ConnexionClass")
+
+seqUMLDiag=("connexion/ConnexionSequence" 
+            "inscription/InscriptionSequence")
+
+useCaseUMLDiag=("connexion/ConnexionUseCase"
+                "en-jeu/ClassicUseCase" 
+                "en-jeu/DualUseCase"
+                "en-jeu/EndlessUseCase" 
+                "en-jeu/RoyalUseCase" 
+                "matchmaking/MatchMakingUseCase" 
+                "menu-principal/MenuPrincipalUseCase" 
+                "system-besoins-fonctionnels/SystemBesoinsFonctionnelsUseCase")
+
 
 function exportFileClass()
 {
@@ -32,26 +47,20 @@ function exportFileUseCase()
 
 for dir in */; do 
   if [ "$dir" = "class/" ]; then
-   exportFileClass "game/tetris_lib/GameClass"
-   exportFileClass "connexion/ConnexionClass"
+    for (( i = 0; i<${#classUMLDiag[@]}; i++ )); do
+      exportFileClass ${classUMLDiag[$i]}
+    done
 
   elif [ "$dir" = "sequence/" ]; then
-    exportFileSeq "connexion/ConnexionSequence"
-    exportFileSeq "inscription/InscriptionSequence"
+    for (( i = 0; i<${#SeqUMLDiag[@]}; i++ )); do
+      exportFileSeq ${SeqUMLDiag[$i]}
+    done
 
   elif [ "$dir" = "usecase/" ]; then
-    exportFileUseCase "connexion/ConnexionUseCase"
+    for (( i = 0; i<${#useCaseUMLDiag[@]}; i++ )); do
+      exportFileUseCase ${useCaseUMLDiag[$i]}
+    done
 
-    exportFileUseCase "en-jeu/ClassicUseCase"
-    exportFileUseCase "en-jeu/DualUseCase"
-    exportFileUseCase "en-jeu/EndlessUseCase"
-    exportFileUseCase "en-jeu/RoyalUseCase"
-
-    exportFileUseCase "matchmaking/MatchMakingUseCase"
-    
-    exportFileUseCase "menu-principal/MenuPrincipalUseCase"
-
-    exportFileUseCase "system-besoins-fonctionnels/SystemBesoinsFonctionnelsUseCase"
   fi
 
 done

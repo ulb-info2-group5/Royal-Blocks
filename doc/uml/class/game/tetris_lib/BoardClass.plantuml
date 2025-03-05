@@ -18,7 +18,7 @@ class Board {
     - checkFullCol(xCol : int) : const bool
     - emptyRow(yRow : int) : void
     - emptyCol(xCol : int) : void
-    - gravity() : void
+    ' - gravity() : void
     - check2By2Occupied(x : int, y : int) : bool
     - empty2By2Square(x : int, y : int) : void
 

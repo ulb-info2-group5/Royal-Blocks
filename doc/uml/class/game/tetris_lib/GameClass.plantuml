@@ -9,13 +9,13 @@ skinparam class {
 
 !include BoardUpdateClass.plantuml!0
 
-!include CoordinateClass.plantuml!0
+!include Vec2Class.plantuml!0
 
 !include EventClass.plantuml!0
 
 !include GridCellClass.plantuml!0
 
-!include RotationStateClass.plantuml!0
+!include RotationIndexClass.plantuml!0
 
 !include TetrisClass.plantuml!0
 
@@ -35,7 +35,7 @@ TetrominoShape"1"- Tetromino
  
 Tetromino  - "1" RotationIndex : have  >
 Tetromino *--"4" Vec2 : have > 
-Tetromino - "1" RotationState
+Tetromino - "1" RotationIndex
 
 
 

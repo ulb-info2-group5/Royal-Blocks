@@ -1,0 +1,16 @@
+@startuml (id=RotationIndex)
+
+class RotationIndex {
+    - index_ : int8_t
+
+    + RotationIndex(rotationIdx : uint8_t = 0)
+    + RotationIndex(rotationIdx : const &RotationIndex) = default
+    + RotationIndex(rotationIdx : &&RotationIndex) = default;
+
+    + &operator=(rotationIdx : const &RotationIndex) : RotationIndex = default;
+    + &operator=(rotationIdx : &&RotationIndex) : RotationIndex = default;
+
+    + operator() ++
+    + operator() +=
+}
+@enduml

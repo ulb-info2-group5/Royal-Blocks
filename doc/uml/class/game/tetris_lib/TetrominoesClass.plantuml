@@ -1,59 +1,65 @@
-@startuml (id=Tetromino)
+@startuml (id=ATetromino)
 
 ' skinparam class {
     '     BackgroundColor AntiqueWhite
     '}
 
 
-abstract class Tetromino {
-    - width_ : size_t
-    - height_ : size_t
-    - shape_ : TetraminoShape
-    - anchorPoint_ : Coordinate
-    - body_ : vector<Coordinate>
-
+abstract class ATetromino {
+    - width_ : size_t = 0
+    - height_ : size_t = 0
+    - shape_ : TetrominoShape
+    - anchorPoint_ : Vec2
+    - body_ : vector<Vec2>
     '----SRS----'
     -rotationIdx_ : RotationIdex
-    -prevRotationIdx : RotationIndex
-    -offsetData_ : const <vector<vector<Coordinate>>&
+    -prevRotationIdx_ : RotationIndex
+    -*offsetData_ : const vector<vector<Vec2>>
 
     '----kick data----'
-    # {static} O_OFFSET_DATA : const vector<vector<Coordinate>>
-    # {static} I_OFFSET_DATA : const vector<vector<Coordinate>>
-    # {static} ZLSJT_OFFSET_DATA : const vector<vector<Coordinate>>
+    # {static} O_OFFSET_DATA : const vector<vector<Vecc2>>
+    # {static} I_OFFSET_DATA : const vector<vector<Vec2>>
+    # {static} ZLSJT_OFFSET_DATA : const vector<vector<Vec2>>
 
-    '----Constructor----'
-    # Tetromino(anchorPoint : Coordinate&&, body : vector<Coordinate>&&, offsetData : vector<vector<Coordinate>>&, shape : TetrominoShape )
-    # Tetromino(other : Tetromino&&)
-    + Tetromino(other : const Tetromino&)
+
+    # ATetromino(anchorPoint : &&Vec2, body : &&vector<Vec2>, offsetData : * const vector<vector<Vec2>>, shape : TetrominoShape)
+    # {static} make_clone(tetromino : const &ATetromino) : shared_ptr<ATetromino>
+
+    + ATetromino() = delete
+    + ATetromino(other : ATetromino&&) = default
+    + ATetromino(other : const ATetromino&) = default
 
     '----Destructor----'
-    + ~Tetromino()
+    + <<virtual>> ~ATetromino() = default
 
     '----Factory----'
-    + {static} makeTetromino(shape : TetrominoShape, anchorPoint : Coordinate&&) : unique_ptr<Tetromino>
+    + {static} makeTetromino(shape : TetrominoShape, anchorPoint : &&Vec2) : shared_ptr<ATetromino>
 
     '----Getters----'
-    + getWidth() : const int
-    + getHeight() : const int
-    + getShape() : TetrominoShape
-    + getAnchorPoint() : const Coordinate&
-    + getBody() : const vector<Coordinate>>&
-    + getRotationIndex() : const RotationIndex&
-    + getPrevRotationIndex() : const RotationIndex&
-    '+ getNumOfTests() : uint8_t'
-    + getNthOffset(kickIndex : uint8_t) : const unique_ptr<Tetromino>
-    + getColorId() : const unsigned
+    + getWidth() : const size_t
+    + getHeight() : const size_t
+    + getShape() : const TetrominoShape
+    + getAnchorPoint() : const &Vec2   
+    + getBody() : const &vector<Vec2>
+    + getRotationIndex() : const &RotationIndex
+    + getPrevRotationIndex() : const &RotationIndex
+
+    + getNumOfTests() : const uint8_t
+    + getNthOffset(kickIndex : uint8_t) : const unique_ptr<ATetromino>
 
     '----Setters----'
-    + setAnchorPoint(anchorPoint : const Coordinate&)
+    + setAnchorPoint(anchorPoint : const &Vec2) : void
+    + move(tetrominoMove : TetrominoMove, reverse : bool = false) : void
+    + rotate(rotateClockwise : bool) : void
 
     '----Action----'
-    + rotate(rotateClockwise : bool)
-    + move(direction : Direction, reverse : bool = false)
 
     '----Comparisons----'
-    + operator==(other : const Tetromino&) : bool
+    + operator==(other : const ATetromino&) : bool
+
+    + <<virtual>> clone() : const shared_ptr<Tetromino> = 0
+
+    + serialize() : const nlohmann::json
     
 }
 
@@ -69,53 +75,58 @@ enum TetrominoShape {
     NUM_TETROMINOSHAPE
 }
 
-' enum Direction {
-'     left
-'     right
-'     down
-' }
+class TetrominoI extends ATetromino {
 
+    +TetrominoI(anchorPoint : &&Vec2 )
 
-enum Color {
+    + clone() : const shared_ptr<ATetromino>
+}
+class TetrominoO extends ATetromino {
+
+    +TetrominoO(anchorPoint : &&Vec2 )
+
+    + clone() : const shared_ptr<ATetromino>
 
 }
+class TetrominoT extends ATetromino {
 
+    +TetrominoT(anchorPoint : &&Vec2)
 
-class TetrominoI extends Tetromino {
-
-    +TetrominoI(anchorPoint : Coordinate&& )
-}
-class TetrominoO extends Tetromino {
-
-    +TetrominoO(anchorPoint : Coordinate&& )
-
-}
-class TetrominoT extends Tetromino {
-
-    +TetrominoT(anchorPoint : Coordinate&&)
+    + clone() : const shared_ptr<ATetromino>
 }
 
-class TetrominoS extends Tetromino {
+class TetrominoS extends ATetromino {
 
-    +TetrominoS(anchorPoint : Coordinate&& )
+    +TetrominoS(anchorPoint : &&Vec2 )
+
+    + clone() : const shared_ptr<ATetromino>
 }
 
-class TetrominoZ extends Tetromino {
+class TetrominoZ extends ATetromino {
 
-    +TetrominoZ(anchorPoint : Coordinate&&)
+    +TetrominoZ(anchorPoint : &&Vec2)
+
+    + clone() : const shared_ptr<ATetromino>
 }
 
-class TetrominoL extends Tetromino {
+class TetrominoL extends ATetromino {
 
-    +TetrominoL(anchorPoint : Coordinate&&)
+    +TetrominoL(anchorPoint : &&Vec2)
+
+    + clone() : const shared_ptr<ATetromino>
 }
 
-class TetrominoJ extends Tetromino {
+class TetrominoJ extends ATetromino {
 
-    +TetrominoZ(anchorPoint : Coordinate&&)
+    +TetrominoZ(anchorPoint : &&Vec2)
+
+    + clone() : const shared_ptr<ATetromino>
 }
 
-' Tetromino.-> TetrominoShape : uses
-' Tetromino .-> Direction : uses
+class MiniTetromino extends ATetromino {
+    + MiniTetromino(anchorPoint : &&Vec2)
+
+    + clone() : const shared_ptr<ATetromino>
+}
 
 @enduml
