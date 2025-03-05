@@ -10,6 +10,7 @@ namespace bindings {
         Message,
         Registration,
         RegistrationResponse,
+        User,
     };
 
 } // namespace bindings
