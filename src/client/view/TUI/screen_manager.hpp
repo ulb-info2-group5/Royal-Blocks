@@ -54,7 +54,7 @@ class ScreenManager {
     /*
      * @brief Destroy the Screen Manager object
      */
-    ~ScreenManager();
+    ~ScreenManager() = default;
 
     /*
      * @brief Run the screen manager to manage the screens to show to the user

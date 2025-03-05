@@ -2,6 +2,7 @@
 #include "handle_ctrl/handle_ctrl.hpp"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
 
 // ### Public methods ###
 ScreenManager::ScreenManager(Controller *controller)
@@ -12,10 +13,6 @@ ScreenManager::ScreenManager(Controller *controller)
         screen_.ForceHandleCtrlZ(false);
       }
 
-ScreenManager::~ScreenManager() {
-    drawEndScreen();
-}
-
 void ScreenManager::run() {
     drawStartScreen();
 
@@ -23,6 +20,7 @@ void ScreenManager::run() {
     if (loginMenu_.render() == LoginResult::SUCCESS) {
         mainMenu_.render();
     }
+    drawEndScreen();
 }
 
 // ### Private methods ###
@@ -53,8 +51,7 @@ void ScreenManager::drawStartScreen() {
                            ftxui::text(
                                R"(                                                                    |___/                                        )"),
                        });
-        })
-        | ftxui::border | ftxui::center;
+        }) | ftxui::center;
 
     // Use a thread to exit this display after 2 seconds
     std::thread([&] {
@@ -73,11 +70,18 @@ void ScreenManager::drawEndScreen() {
 
     ftxui::Component title =
         ftxui::Renderer([&] {
-            return ftxui::vbox({
-                ftxui::text("Goodbye!"),
+            return exit
+                       ? ftxui::text("")
+                       : ftxui::vbox({
+                        ftxui::text(R"(  ______                 _ _                    _ )"),
+                        ftxui::text(R"( / _____)               | | |                  | |)"),
+                        ftxui::text(R"(| /  ___  ___   ___   _ | | | _  _   _  ____   | |)"),
+                        ftxui::text(R"(| | (___)/ _ \ / _ \ / || | || \| | | |/ _  )  |_|)"),
+                        ftxui::text(R"(| \____/| |_| | |_| ( (_| | |_) ) |_| ( (/ /    _ )"),
+                        ftxui::text(R"( \_____/ \___/ \___/ \____|____/ \__  |\____)  |_|)"),
+                        ftxui::text(R"(                                (____/            )"),
             });
-        })
-        | ftxui::border | ftxui::center;
+        }) | ftxui::center;
 
     std::thread([&] {
         std::this_thread::sleep_for(std::chrono::seconds(2));
