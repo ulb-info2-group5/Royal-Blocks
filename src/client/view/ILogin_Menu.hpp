@@ -1,6 +1,11 @@
 #ifndef ILOGIN_MENU_HPP
 #define ILOGIN_MENU_HPP
 
+enum class LoginResult {
+  SUCCESS,
+  EXIT,
+};
+
 enum class Login {
     LOGGED,
     EXIT,
@@ -16,7 +21,7 @@ class ILogin_Menu {
   public:
     virtual ~ILogin_Menu() = default;
 
-    virtual void render() = 0;
+    virtual LoginResult render() = 0;
 };
 
 #endif

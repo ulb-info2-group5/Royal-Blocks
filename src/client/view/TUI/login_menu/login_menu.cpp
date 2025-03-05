@@ -9,6 +9,7 @@
 #include "login_menu.hpp"
 
 #include "../../../controller/controller.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
@@ -98,12 +99,14 @@ void LoginMenu::displayWindow() {
 }
 
 // ### public methods ###
-void LoginMenu::render() {
+LoginResult LoginMenu::render() {
     while (loginState_ == Login::NONE) {
         displayWindow();
-        screen_.Loop(displayWindow_);
+        screen_.Loop(handleCtrl(displayWindow_));
     }
     if (loginState_ == Login::EXIT) {
-        std::exit(0); // TODO: check the exit
+        return LoginResult::EXIT;
     }
+
+    return LoginResult::SUCCESS;
 }

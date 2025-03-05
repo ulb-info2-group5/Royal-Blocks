@@ -38,6 +38,11 @@ class ScreenManager {
      */
     void drawStartScreen();
 
+    /*
+     * @brief Draw the end screen of the game with a goodbye message
+     */
+    void drawEndScreen();
+
   public:
     /*
      * @brief Construct a new Screen Manager object

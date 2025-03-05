@@ -9,6 +9,7 @@
 #include "login_input.hpp"
 
 #include "../../../controller/controller.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 
 #include <chrono>
 #include <ftxui/component/component.hpp>
@@ -148,7 +149,7 @@ void LoginInput::clearInfo() {
 LoginState LoginInput::render() {
     displayWindow();
 
-    screen_.Loop(displayWindow_);
+    screen_.Loop(handleCtrl(displayWindow_));
 
     return loginState_;
 }

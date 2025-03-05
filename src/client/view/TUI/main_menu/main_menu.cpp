@@ -9,6 +9,7 @@
 #include "main_menu.hpp"
 #include "../../../controller/controller.hpp"
 #include "../messaging/messaging.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -106,7 +107,7 @@ void MainMenu::confirmUpdateProfileScreen() const {
                    | ftxui::border | ftxui::center;
         });
 
-    screen_.Loop(component);
+    screen_.Loop(handleCtrl(component));
 }
 
 // ### Protected methods ###
@@ -333,21 +334,21 @@ void MainMenu::renderRanking() {
 
     displayRankingWindow();
 
-    screen_.Loop(rankingWindow_);
+    screen_.Loop(handleCtrl(rankingWindow_));
 }
 
 void MainMenu::renderProfileManager() {
 
     displayProfileManagerWindow();
 
-    screen_.Loop(profileManagerWindow_);
+    screen_.Loop(handleCtrl(profileManagerWindow_));
 }
 
 // ### Public methods ###
 void MainMenu::render() {
     while (state_ != MainMenuState::EXIT) {
         displayMainWindow();
-        screen_.Loop(mainMenuWindow_);
+        screen_.Loop(handleCtrl(mainMenuWindow_));
         handleChoice();
     }
 }

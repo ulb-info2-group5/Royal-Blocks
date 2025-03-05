@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "../../../controller/controller.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 #include "ftxui/component/component.hpp"
 
 // ### Constructor ###
@@ -99,7 +100,7 @@ void GameMenu::renderAllGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 void GameMenu::renderOnlineGames() {
@@ -125,7 +126,7 @@ void GameMenu::renderOnlineGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 void GameMenu::joinFriendOrRandomScreen() {
@@ -165,7 +166,7 @@ void GameMenu::joinFriendOrRandomScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 void GameMenu::handleChoice() {
@@ -225,7 +226,7 @@ void GameMenu::joinFriendScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 void GameMenu::joinRandomScreen() {
@@ -241,7 +242,7 @@ void GameMenu::joinRandomScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 ftxui::Component GameMenu::makeFriendButton(const std::string &friendName) {
@@ -269,7 +270,7 @@ void GameMenu::waitingFriendScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_.Loop(renderer);
+    screen_.Loop(handleCtrl(renderer));
 }
 
 // ### Public methods ###

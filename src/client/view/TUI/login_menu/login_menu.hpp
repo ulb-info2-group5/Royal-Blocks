@@ -25,12 +25,6 @@ constexpr std::string_view REGISTER_INSTRUCTIONS =
 constexpr std::string_view LOGIN_MESSAGE =
     "Your account has been created successfully! You can now login.";
 
-// enum class Login {
-//     LOGGED,
-//     EXIT,
-//     NONE,
-// };
-
 class Controller; // Forward declaration
 
 /**
@@ -85,8 +79,10 @@ class LoginMenu : public ILogin_Menu {
 
     /*
      * @brief Render the login menu screen with all the components
+     *
+     * @return LoginResult The result if login succeed or want to exit the program
      */
-    void render() override;
+    LoginResult render() override;
 };
 
 #endif // LOGIN_MENU_HPP

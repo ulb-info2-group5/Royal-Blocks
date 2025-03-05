@@ -1,6 +1,7 @@
 #include "messaging.hpp"
 
 #include "../../../controller/controller.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server. Check if the vector of friends, etc, are
@@ -180,7 +181,7 @@ void Messaging::render() {
         controller_->getMessages(); // TODO: check if the conversations are
                                     // correctly updated with the server, etc
     drawWindow();
-    screen_.Loop(displayWindow_);
+    screen_.Loop(handleCtrl(displayWindow_));
 }
 
 void Messaging::addMessage(const std::string &message) {

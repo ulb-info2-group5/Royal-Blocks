@@ -12,6 +12,9 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
+#include "../handle_ctrl/handle_ctrl.hpp"
+
+
 // TODO: this should defo go somewhere else
 #include <stdexcept>
 Color colorIdToColor(unsigned colorID) {
@@ -413,5 +416,5 @@ void GameDisplay::render() {
         drawMultiMode();
     }
 
-    screen_.Loop(displayWindow_);
+    screen_.Loop(handleCtrl(displayWindow_));
 }

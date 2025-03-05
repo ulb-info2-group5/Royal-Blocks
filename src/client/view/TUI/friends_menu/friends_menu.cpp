@@ -9,6 +9,7 @@
 #include "friends_menu.hpp"
 
 #include "../../../controller/controller.hpp"
+#include "../handle_ctrl/handle_ctrl.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -108,7 +109,7 @@ void FriendsMenu::render() {
                        | ftxui::border | ftxui::center;
             });
 
-        screen_.Loop(render);
+        screen_.Loop(handleCtrl(render));
     }
 }
 
@@ -140,7 +141,7 @@ void FriendsMenu::addFriendScreen() {
                    | ftxui::border | ftxui::center;
         });
 
-    screen_.Loop(component);
+    screen_.Loop(handleCtrl(component));
 }
 
 std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
@@ -191,5 +192,5 @@ void FriendsMenu::manageFriendlistScreen(const std::string &friendName) {
                | ftxui::border | ftxui::center;
     });
 
-    screen_.Loop(component);
+    screen_.Loop(handleCtrl(component));
 }
