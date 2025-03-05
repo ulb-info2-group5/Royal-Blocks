@@ -26,7 +26,6 @@ enum class EVENT_TYPE {
     TETROMINO_MOVE,
     TETROMINO_BIG_DROP,
     TETROMINO_ROTATE,
-    PENALTY_NORMAL, 
     BUY_PENALTY_ROYAL,
     TETROMINO_HOLD,
     USER_CHANGE_TARGET,
@@ -58,7 +57,7 @@ class GameServer
     std::vector<PlayerTetris> players_;
     std::vector<uint32_t> viewers_;
 
-    std::shared_ptr<GameEngine> gameEngine_;
+    GameEngine gameEngine_;
     GameStatePtr gameStatePtr_;
 
     // will be initialise in constructor; not sure of the type

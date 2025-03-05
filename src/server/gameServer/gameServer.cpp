@@ -16,55 +16,54 @@ GameServer::GameServer(std::vector<PlayerState> players, GameMode gameMode) :
 
 void GameServer::applyUserMoveTetris(Event &event)
 {
-    // if (event == EVENT::TetromiMoveBigDrop) gameEngine_->bigDrop(player);
-    gameEngine_->tryMoveActive(event.sender, event.TetrominoMove);
+    gameEngine_.tryMoveActive(event.sender, event.TetrominoMove);
 }
 
 void GameServer::applyUserBigDrop(Event &event)
 {
-    gameEngine_->bigDrop(event.sender);
+    gameEngine_.bigDrop(event.sender);
 }
 
 void GameServer::applyUserRotateTetris(Event &event)
 {
    
-    gameEngine_->tryRotateActive(event.sender, event.rotateClockWise);
+    gameEngine_.tryRotateActive(event.sender, event.rotateClockWise);
     
 }
 
 void GameServer::applyUserHoldTetromino(Event &event)
 {
-    gameEngine_->holdNextTetromino(event.sender);
+    gameEngine_.holdNextTetromino(event.sender);
 }
 
 void GameServer::applyUserBuyEffect(Event &event)
 {
-    gameEngine_->tryBuyEffect(event.sender, event.effect, event.isStackingEffect);
+    gameEngine_.tryBuyEffect(event.sender, event.effect, event.isStackingEffect);
 }
 
 void GameServer::applyUserNextEffect(Event &event)
 {
-    gameEngine_->selectNextEffect(event.sender);
+    gameEngine_.selectNextEffect(event.sender);
 }
 
 void GameServer::applyUserPrevEffect(Event &event)
 {
-    gameEngine_->selectPrevEffect(event.sender);
+    gameEngine_.selectPrevEffect(event.sender);
 }
 
 void GameServer::changeUserTarget(Event &event)
 {
-    gameEngine_->selectTarget(event.sender, event.receiver);
+    gameEngine_.selectTarget(event.sender, event.receiver);
 }
 
 void GameServer::applyUserPenaltyStash(Event &event)
 {
-    gameEngine_->emptyPenaltyStash(event.sender);
+    gameEngine_.emptyPenaltyStash(event.sender);
 }
 
 void GameServer::tetrisTick()
 {
-    gameEngine_->tick();
+    gameEngine_.tick();
 }
 
 void GameServer::applyUserMove(Event &event)
@@ -74,7 +73,6 @@ void GameServer::applyUserMove(Event &event)
         case EVENT_TYPE::TETROMINO_MOVE : applyUserMoveTetris(event); break;
         case EVENT_TYPE::TETROMINO_ROTATE : applyUserRotateTetris(event) ; break;
         case EVENT_TYPE::TETROMINO_BIG_DROP : applyUserBigDrop(event); break; 
-        case EVENT_TYPE::PENALTY_NORMAL :  break;
         case EVENT_TYPE::BUY_PENALTY_ROYAL :applyUserBuyEffect(event); break;
         case EVENT_TYPE::TETROMINO_HOLD : applyUserHoldTetromino(event) ; break;
         case EVENT_TYPE::USER_CHANGE_TARGET : applyUserTarger(event); break;
