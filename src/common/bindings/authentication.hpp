@@ -15,10 +15,12 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::Authentication},
-                {"data", {{"nickname", nickname}, {"password", password}}},
-            };
+            return nlohmann::json{{"type", BindingType::Authentication},
+                                  {"data",
+                                   {
+                                       {"nickname", nickname},
+                                       {"password", password},
+                                   }}};
         }
 
         static Authentication from_json(const nlohmann::json &j) {

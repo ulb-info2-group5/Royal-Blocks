@@ -13,10 +13,11 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::AuthenticationResponse},
-                {"data", {{"success", success}}},
-            };
+            return nlohmann::json{{"type", BindingType::AuthenticationResponse},
+                                  {"data",
+                                   {
+                                       {"success", success},
+                                   }}};
         }
 
         static AuthenticationResponse from_json(const nlohmann::json &j) {
