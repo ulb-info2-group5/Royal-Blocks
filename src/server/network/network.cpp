@@ -30,13 +30,16 @@ void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::sha
         std::cout << *authenticationBuffer <<std::endl;
         bindings::BindingType type =  jbuffer.at("type").get<bindings::BindingType>();
         nlohmann::json data = jbuffer.at("data").get<nlohmann::json>();
+        nlohmann::json response;
+        
         switch (type){
         case bindings::BindingType::Authentication :
-            if (checkCredentials(data)){
+            response = checkCredentials(data);
+            sendResponse(socket, response);
+            if (response.at("data").at("success").get<bool>()){
                 this->createNewConnection(socket, data);
-                return;
             }
-            break;
+            return;
         case bindings::BindingType::Registration :
             // TODO : create a new compte and ask for login
             break;
@@ -47,14 +50,22 @@ void Network::handleAuthentication(std::shared_ptr<tcp::socket> socket, std::sha
     this->waitForAuthentication(socket);
 }
 
-bool Network::checkCredentials(nlohmann::json data){
+nlohmann::json Network::checkCredentials(nlohmann::json data){
+    bindings::AuthenticationResponse response;
     std::cout << "-- check credentials --" << std::endl;
         if (clientManager_.checkCredentials(data.at("nickname").get<std::string>(), data.at("password").get<std::string>())){
-            return true;
+            response.success = true;
+            return response.to_json();
         }
-    
-    return false;
+    response.success = false;
+    return response.to_json();
 }
+
+nlohmann::json Network::attemptToCreateAnAccount(nlohmann::json data){
+    
+}
+
+
 
 void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
     auto authenticationBuffer = std::make_shared<std::string>();
@@ -63,25 +74,26 @@ void Network::waitForAuthentication(std::shared_ptr<tcp::socket> socket){
             std::cout << "packet recieve :  " << *authenticationBuffer << std::endl;
             this->handleAuthentication(socket, authenticationBuffer);
         }
-        
-    
     });
   
 }
 
 void Network::createNewConnection(std::shared_ptr<tcp::socket> socket, nlohmann::json data ){
-    // pls just use auto  
     std::cout << "create new connection " << std::endl;
+    // pls just use auto  
     std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(*socket), [this](const std::string& packet){ clientManager_.handlePacket(packet); });
     std::string pseudo = data.at("nickname").get<std::string>();
     clientManager_.addConnection(std::move(newLink), pseudo);
-    
-
-
-    
 }
 
 
+void Network::sendResponse(std::shared_ptr<tcp::socket> socket, nlohmann::json packet ){
+    boost::asio::async_write(*socket, boost::asio::buffer(packet.dump() + "\n") , [this](boost::system::error_code ec, std::size_t){
+        if (!ec){
+            std::cout << "response sent ! " << std::endl;
+        }
+    });
+}
 
 
 
