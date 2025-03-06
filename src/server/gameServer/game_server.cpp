@@ -83,22 +83,29 @@ void GameServer::handleNextEvent() {
                 engine.bigDrop(playerID);
                 // handle BigDrop
             } else if constexpr (std::is_same_v<T, bindings::BuyBonus>) {
+                engine.tryBuyEffect(playerID, static_cast<BonusType>(arg.bonusType));
                 // handle BuyBonus
             } else if constexpr (std::is_same_v<T, bindings::BuyPenalty>) {
+                engine.tryBuyEffect(playerID, static_cast<EffectType>(arg.penalyType), arg.stashForLater);
                 // handle BuyPenalty
             } else if constexpr (std::is_same_v<T,
                                                 bindings::EmptyPenaltyStash>) {
                 // handle EmptyPenaltyStash
+                engine.emptyPenaltyStash(playerID);
             } else if constexpr (std::is_same_v<T,
                                                 bindings::HoldNextTetromino>) {
+                engine.holdNextTetromino(playerID);
                 // handle HoldNextTetromino
             } else if constexpr (std::is_same_v<T, bindings::MoveActive>) {
+                engine.tryMoveActive(playerID, arg.tetrominoMove);
                 // handle MoveActive
             } else if constexpr (std::is_same_v<T, bindings::RotateActive>) {
+                engine.tryRotateActive(playerID, arg.rotateClockwise);
                 // handle RotateActive
-            } else if constexpr (std::is_same_v<T, bindings::SelectTarget>) {
-                // handle SelectTarget
             }
+            //} else if constexpr (std::is_same_v<T, bindings::SelectTarget>) {
+                // handle SelectTarget
+            //}
         },
         event);
 }
