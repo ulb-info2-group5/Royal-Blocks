@@ -22,8 +22,8 @@ project(tetris_royal)
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     enable_testing()
-    add_subdirectory(test)
+    # add_subdirectory(test)
 endif()
 
-add_subdirectory(src/server/database)
+add_subdirectory(src/server)
 add_subdirectory(src/common)

@@ -77,6 +77,7 @@ void GameServer::handleNextEvent() {
     std::visit(
         [playerID](auto &&arg) {
             using T = std::decay_t<decltype(arg)>;
+            // TODO: handle each event
             if constexpr (std::is_same_v<T, bindings::BigDrop>) {
                 // handle BigDrop
             } else if constexpr (std::is_same_v<T, bindings::BuyBonus>) {
