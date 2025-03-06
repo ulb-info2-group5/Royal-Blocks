@@ -73,6 +73,7 @@ void GameServer::handleNextEvent() {
 
     // Destructure the playerID and the event from the queue's front
     auto [playerID, event] = queue_.front();
+    queue_.pop();
 
     std::visit(
         [this, playerID](auto &&arg) {
