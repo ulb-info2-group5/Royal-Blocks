@@ -1,6 +1,3 @@
-#include "gameServer.hpp"
-#include <boost/asio.hpp>
+#include "game_server.hpp"
 
-int main(){
-
-}
+int main() {}

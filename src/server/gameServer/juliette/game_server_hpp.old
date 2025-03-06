@@ -1,5 +1,5 @@
-#ifndef GAMESERVER_HPP
-#define GAMESERVER_HPP
+#ifndef GAME_SERVER_HPP
+#define GAME_SERVER_HPP
 
 #include <vector>
 #include <thread>
@@ -13,14 +13,13 @@
 
 // #include "../../../client/core/player_tetris/player_tetris_external.hpp"
 // #include "../../../client/core/player_tetris/player_tetris_self.hpp"
-#include "../../../client/core/game_state/game_state.hpp"
 
-#include "../../../common/tetris_lib/tetris/tetris.hpp"
-#include "../../../common/tetris_lib/tetris/tetris_observer.hpp"
+#include "tetris/tetris.hpp"
+#include "tetris/tetris_observer.hpp"
 
-#include "../../../common/tetris_royal_lib/game_engine/game_engine.hpp"
+#include "game_engine/game_engine.hpp"
 
-#include "../../../common/tetris_lib/tetris/tetris_observer.hpp"
+#include "tetris/tetris_observer.hpp"
 
 enum class EVENT_TYPE {
     TETROMINO_MOVE,

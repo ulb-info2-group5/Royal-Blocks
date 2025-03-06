@@ -1,4 +1,4 @@
-#include "gameServer.hpp"
+#include "game_server.hpp"
 
 // constructor
 GameServer::GameServer(std::vector<PlayerState> players, GameMode gameMode) : 
