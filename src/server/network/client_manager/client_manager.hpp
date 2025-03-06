@@ -22,6 +22,8 @@ using boost::asio::ip::tcp;
 
 
 
+class ClientLink;
+
 //it's just a structure to bring database classes together
 struct DataBase{
     std::shared_ptr<AccountManager> accountManager;
@@ -36,24 +38,36 @@ std::shared_ptr from this to avoid premature destruction.
 */
 
 class ClientLink : public std::enable_shared_from_this<ClientLink>{
+    using PacketHandler = std::function<void (const std::string& )>;
+    using AuthPacketHandler  = std::function<nlohmann::json (bindings::BindingType , nlohmann::json)>;
+    using AuthSuccessCallback = std::function<void(std::shared_ptr<ClientLink>, nlohmann::json)>;
+
     private: 
         tcp::socket socket_;
         std::string buffer_;
         boost::asio::streambuf streamBuffer_;
-        std::function<void (const std::string& )> packetHandler_;
+        bool identify_ = false;
+        PacketHandler packetHandler_;
+        AuthPacketHandler authPacketHandler_;
+        AuthSuccessCallback authSuccessCallback_;
+        void waitForAuthentication();
+        void handleAuthentication(std::string & packet);
         void read();
-
-        
-
-    public :
-        explicit ClientLink(tcp::socket socket, std::function<void (const std::string& )> packetHandler);
-        ClientLink(ClientLink && other) = default;
-        ClientLink& operator=(ClientLink&& other) =  default;
-        void start();
-        void recieveMessage(const std::string & content );
-
+        void writeSocket(std::string& content);
+    
 
    
+    public :
+       
+        explicit ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback);
+
+        void sendResponse(nlohmann::json response);
+        void start();
+        void recieveMessage(const std::string & content );
+        bool isIdentify();
+
+
+    
 };
 
 
@@ -63,15 +77,25 @@ class ClientManager {
         std::unordered_map<int , std::shared_ptr<ClientLink>> connectedClients_;
         std::mutex mutex_;
         DataBase database_;
+        std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
+
+        void updateWaitingClient();
 
     public:
         ClientManager(DataBase database);
         ~ClientManager() = default;
         
+
+        void authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData);
         void handlePacket(const std::string& packet);
+        nlohmann::json authPacketHandler(bindings::BindingType type, nlohmann::json data);
+
         void handleMessage(nlohmann::json message);
+        
+        void addClientInWaitingForAuth(std::shared_ptr<ClientLink> clientLink);
 
         void addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo);
+
         void removeConnection(const int & clientId);
-        bool checkCredentials(const std::string& pseudo, const std::string& password);
+        bool checkCredentials(nlohmann::json data);
 };
