@@ -17,7 +17,6 @@ using boost::asio::ip::tcp;
 void ClientLink::read(){
     boost::asio::async_read_until(socket_, streamBuffer_, '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
-            
             std::istream is(&streamBuffer_);
             std::string packet;
             std::getline(is, packet);
@@ -37,7 +36,7 @@ void ClientLink::handleAuthentication(std::string & packet){
     nlohmann::json response = authPacketHandler_(jsonPacket.at("type").get<bindings::BindingType>(),jsonPacket.at("data"));
     sendResponse(response);
     std::cout << response.dump() << std::endl;
-    if (response.at("type").get<bindings::BindingType>() == bindings::BindingType::AuthenticationResponse){
+    if (response.at("type").get<bindings::BindingType>() == bindings::BindingType::AuthenticationResponse && response.at("data").at("success").get<bool>()){
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
         identify_ = true;
     }
@@ -68,11 +67,8 @@ bool ClientLink::isIdentify(){
     return identify_;
 }
 
-void ClientLink::recieveMessage( const std::string & content){
-    nlohmann::json j;
-    //j["senderId"] = senderId ;
-    j["content"] = content;
-    buffer_ = j.dump() + "\n";
+void ClientLink::recieveMessage(nlohmann::json message){
+    buffer_ = message.dump() + "\n";
     writeSocket(buffer_);
 }
 
@@ -85,8 +81,6 @@ void ClientLink::sendResponse(nlohmann::json response){
 // ====== Client manager class ======
 // ---private ---
 
-
-
 void ClientManager::removeAuthClients(){
     auto ne = remove_if(waitingForAuthClient.begin(), waitingForAuthClient.end(),
     [](std::shared_ptr<ClientLink> x) {
@@ -94,6 +88,13 @@ void ClientManager::removeAuthClients(){
     });
     waitingForAuthClient.erase(ne, waitingForAuthClient.end());
 }
+
+bool ClientManager::attemptCreateAccount(nlohmann::json data){
+    CreateAccountStatus status = database_.accountManager->createAccount(data.at("nickname").get<std::string>(), data.at("password").get<std::string>());
+    if (status == CreateAccountStatus::SUCCESS) return true;
+    return false;
+}
+
 
 // ---public ---
 ClientManager::ClientManager(DataBase database) : database_(database) {
@@ -120,10 +121,17 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
     case bindings::BindingType::Authentication :
         if (checkCredentials(data)){
             response = bindings::AuthenticationResponse{true}.to_json();
+        }else {
+            response = bindings::AuthenticationResponse{false}.to_json(); 
         }
         break;
     case bindings::BindingType::Registration :
-        // TODO : create a new compte and ask for login
+        if (attemptCreateAccount(data)){
+            response = bindings::RegistrationResponse{true}.to_json(); 
+        }else {
+            response = bindings::RegistrationResponse{false}.to_json();
+        }
+            
         break;
     default:
         break;
@@ -136,13 +144,14 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
 void ClientManager::handlePacket(const std::string& packet){
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " <<std::endl;
+
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
     nlohmann::json data = jPack.at("data").get<nlohmann::json>();
 
     switch (type)
     {
     case bindings::BindingType::Message:  
-        handleMessage(data);
+        handleMessage(jPack);
         break;
     default:
         break;
@@ -154,11 +163,8 @@ void ClientManager::addClientInWaitingForAuth(std::shared_ptr<ClientLink> client
 }
 
 void ClientManager::handleMessage(nlohmann::json message){
-    std::cout << message.at("content").get<std::string>() << std::endl;
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("recipientId").get<int>()]->recieveMessage(message.at("content").get<std::string>());
-    
-
+    connectedClients_[message.at("data").at("recipientId").get<int>()]->recieveMessage(message);
 }
 
 

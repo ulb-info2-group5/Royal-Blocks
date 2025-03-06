@@ -72,9 +72,12 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
        
         explicit ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback);
 
+        /*
+        * @brief : use for send Response after a operations 
+        */
         void sendResponse(nlohmann::json response);
         void start();
-        void recieveMessage(const std::string & content );
+        void recieveMessage(nlohmann::json message);
         /*
         *@brief : return true if the client is authenticated
         */
@@ -94,9 +97,15 @@ class ClientManager {
 
         // contains client who are not yet authenticated
         std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
-        //remove authenticated clients from the vector waitingForAuthClient
+        /*
+        * @brief : remove authenticated clients from the vector waitingForAuthClient 
+        */
         void removeAuthClients();
-
+        /*
+        * @brief : try to create a account 
+        * @return : true if success else false 
+        */
+        bool attemptCreateAccount(nlohmann::json data);
     public:
         ClientManager(DataBase database);
         ~ClientManager() = default;
