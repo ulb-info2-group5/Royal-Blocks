@@ -1,7 +1,7 @@
-#ifndef EMPTY_PENALTY_STASH_HPP
-#define EMPTY_PENALTY_STASH_HPP
+#ifndef BINDINGS_EMPTY_PENALTY_STASH_HPP
+#define BINDINGS_EMPTY_PENALTY_STASH_HPP
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -25,4 +25,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // EMPTY_PENALTY_STASH_HPP
+#endif // BINDINGS_EMPTY_PENALTY_STASH_HPP

@@ -1,7 +1,7 @@
-#ifndef BIG_DROP_HPP
-#define BIG_DROP_HPP
+#ifndef BINDINGS_BIG_DROP_HPP
+#define BINDINGS_BIG_DROP_HPP
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -25,4 +25,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // BIG_DROP_HPP
+#endif // BINDINGS_BIG_DROP_HPP

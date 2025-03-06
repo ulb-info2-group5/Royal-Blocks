@@ -1,7 +1,7 @@
-#ifndef ROTATE_ACTIVE_HPP
-#define ROTATE_ACTIVE_HPP
+#ifndef BINDINGS_ROTATE_ACTIVE_HPP
+#define BINDINGS_ROTATE_ACTIVE_HPP
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -30,4 +30,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // ROTATE_ACTIVE_HPP
+#endif // BINDINGS_ROTATE_ACTIVE_HPP

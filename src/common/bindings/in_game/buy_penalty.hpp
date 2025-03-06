@@ -1,9 +1,9 @@
-#ifndef BUY_PENALTY_HPP
-#define BUY_PENALTY_HPP
+#ifndef BINDINGS_BUY_PENALTY_HPP
+#define BINDINGS_BUY_PENALTY_HPP
 
 #include "../../tetris_royal_lib/effect/penalty/penalty_type.hpp"
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -35,4 +35,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // BUY_PENALTY_HPP
+#endif // BINDINGS_BUY_PENALTY_HPP

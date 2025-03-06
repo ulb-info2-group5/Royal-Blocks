@@ -1,5 +1,5 @@
-#ifndef MESSAGE_HPP
-#define MESSAGE_HPP
+#ifndef BINDINGS_MESSAGE_HPP
+#define BINDINGS_MESSAGE_HPP
 
 #include "binding_type.hpp"
 
@@ -36,4 +36,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // MESSAGE_HPP
+#endif // BINDINGS_MESSAGE_HPP

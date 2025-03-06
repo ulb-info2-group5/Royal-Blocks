@@ -1,5 +1,5 @@
-#ifndef AUTHENTICATION_RESPONSE_HPP
-#define AUTHENTICATION_RESPONSE_HPP
+#ifndef BINDINGS_AUTHENTICATION_RESPONSE_HPP
+#define BINDINGS_AUTHENTICATION_RESPONSE_HPP
 
 #include "binding_type.hpp"
 
@@ -32,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // AUTHENTICATION_RESPONSE_HPP
+#endif // BINDINGS_AUTHENTICATION_RESPONSE_HPP

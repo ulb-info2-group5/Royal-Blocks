@@ -1,5 +1,5 @@
-#ifndef REGISTRATION_HPP
-#define REGISTRATION_HPP
+#ifndef BINDINGS_REGISTRATION_HPP
+#define BINDINGS_REGISTRATION_HPP
 
 #include "binding_type.hpp"
 
@@ -36,4 +36,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // REGISTRATION_HPP
+#endif // BINDINGS_REGISTRATION_HPP

@@ -1,9 +1,9 @@
-#ifndef MOVE_ACTIVE_HPP
-#define MOVE_ACTIVE_HPP
+#ifndef BINDINGS_MOVE_ACTIVE_HPP
+#define BINDINGS_MOVE_ACTIVE_HPP
 
 #include "../../tetris_lib/tetromino/tetromino.hpp"
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -32,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // MOVE_ACTIVE_HPP
+#endif // BINDINGS_MOVE_ACTIVE_HPP

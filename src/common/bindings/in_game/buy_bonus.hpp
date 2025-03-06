@@ -1,9 +1,9 @@
-#ifndef BUY_BONUS_HPP
-#define BUY_BONUS_HPP
+#ifndef BINDINGS_BUY_BONUS_HPP
+#define BINDINGS_BUY_BONUS_HPP
 
 #include "../../tetris_royal_lib/effect/bonus/bonus_type.hpp"
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -32,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // BUY_BONUS_HPP
+#endif // BINDINGS_BUY_BONUS_HPP

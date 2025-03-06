@@ -1,5 +1,5 @@
-#ifndef REGISTRATION_RESPONSE_HPP
-#define REGISTRATION_RESPONSE_HPP
+#ifndef BINDINGS_REGISTRATION_RESPONSE_HPP
+#define BINDINGS_REGISTRATION_RESPONSE_HPP
 
 #include "binding_type.hpp"
 
@@ -32,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // REGISTRATION_RESPONSE_HPP
+#endif // BINDINGS_REGISTRATION_RESPONSE_HPP

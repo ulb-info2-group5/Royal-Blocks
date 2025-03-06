@@ -1,5 +1,5 @@
-#ifndef BINDING_TYPE_HPP
-#define BINDING_TYPE_HPP
+#ifndef BINDINGS_BINDING_TYPE_HPP
+#define BINDINGS_BINDING_TYPE_HPP
 
 namespace bindings {
 
@@ -13,6 +13,7 @@ namespace bindings {
         User,
 
         // in game
+        GameState,
         BigDrop,
         BuyBonus,
         BuyPenalty,
@@ -25,4 +26,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // BINDING_TYPE_HPP
+#endif // BINDINGS_BINDING_TYPE_HPP

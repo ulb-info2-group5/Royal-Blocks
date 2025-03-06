@@ -1,5 +1,5 @@
-#ifndef AUTHENTICATION_HPP
-#define AUTHENTICATION_HPP
+#ifndef BINDINGS_AUTHENTICATION_HPP
+#define BINDINGS_AUTHENTICATION_HPP
 
 #include "binding_type.hpp"
 
@@ -36,4 +36,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // AUTHENTICATION_HPP
+#endif // BINDINGS_AUTHENTICATION_HPP

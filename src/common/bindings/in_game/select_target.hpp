@@ -1,9 +1,9 @@
-#ifndef SELECT_TARGET_HPP
-#define SELECT_TARGET_HPP
+#ifndef BINDINGS_SELECT_TARGET_HPP
+#define BINDINGS_SELECT_TARGET_HPP
 
 #include "../../tetris_lib/tetromino/tetromino.hpp"
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <cstddef>
 
@@ -34,4 +34,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // SELECT_TARGET_HPP
+#endif // BINDINGS_SELECT_TARGET_HPP

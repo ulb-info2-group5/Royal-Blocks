@@ -1,7 +1,7 @@
-#ifndef HOLD_NEXT_TETROMINO_HPP
-#define HOLD_NEXT_TETROMINO_HPP
+#ifndef BINDINGS_HOLD_NEXT_TETROMINO_HPP
+#define BINDINGS_HOLD_NEXT_TETROMINO_HPP
 
-#include "../bindings.hpp"
+#include "../binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -25,4 +25,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // HOLD_NEXT_TETROMINO_HPP
+#endif // BINDINGS_HOLD_NEXT_TETROMINO_HPP

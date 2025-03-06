@@ -1,5 +1,5 @@
-#ifndef USER_HPP
-#define USER_HPP
+#ifndef BINDINGS_USER_HPP
+#define BINDINGS_USER_HPP
 
 #include "binding_type.hpp"
 
@@ -36,4 +36,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // USER_HPP
+#endif // BINDINGS_USER_HPP

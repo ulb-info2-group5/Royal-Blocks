@@ -1,5 +1,5 @@
-#ifndef FRIEND_REQUEST_HPP
-#define FRIEND_REQUEST_HPP
+#ifndef BINDINGS_FRIEND_REQUEST_HPP
+#define BINDINGS_FRIEND_REQUEST_HPP
 
 #include "binding_type.hpp"
 
@@ -38,4 +38,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // FRIEND_REQUEST_HPP
+#endif // BINDINGS_FRIEND_REQUEST_HPP
