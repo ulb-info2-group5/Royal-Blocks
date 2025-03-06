@@ -38,6 +38,7 @@ std::shared_ptr from this to avoid premature destruction.
 */
 
 class ClientLink : public std::enable_shared_from_this<ClientLink>{
+
     using PacketHandler = std::function<void (const std::string& )>;
     using AuthPacketHandler  = std::function<nlohmann::json (bindings::BindingType , nlohmann::json)>;
     using AuthSuccessCallback = std::function<void(std::shared_ptr<ClientLink>, nlohmann::json)>;
@@ -47,16 +48,26 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         std::string buffer_;
         boost::asio::streambuf streamBuffer_;
         bool identify_ = false;
-        PacketHandler packetHandler_;
-        AuthPacketHandler authPacketHandler_;
-        AuthSuccessCallback authSuccessCallback_;
-        void waitForAuthentication();
-        void handleAuthentication(std::string & packet);
-        void read();
-        void writeSocket(std::string& content);
-    
 
-   
+        // std function to manage packages
+        PacketHandler packetHandler_;
+        //std function to manage authentication packages  
+        AuthPacketHandler authPacketHandler_;
+        //callback to notify clientManager that the client is authenticated  
+        AuthSuccessCallback authSuccessCallback_;
+        /*
+        *@brief : call if client is not logged in, send package to ClientManager and wait for a response
+        *@param packet : string wich contains the package 
+        */
+        void handleAuthentication(std::string & packet);
+        /*
+        *@brief : read the socket 
+        */
+        void read();
+        /*
+        *@brief : write package in the socket 
+        */
+        void writeSocket(std::string& content);
     public :
        
         explicit ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback);
@@ -64,6 +75,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         void sendResponse(nlohmann::json response);
         void start();
         void recieveMessage(const std::string & content );
+        /*
+        *@brief : return true if the client is authenticated
+        */
         bool isIdentify();
 
 
@@ -77,25 +91,43 @@ class ClientManager {
         std::unordered_map<int , std::shared_ptr<ClientLink>> connectedClients_;
         std::mutex mutex_;
         DataBase database_;
-        std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
 
-        void updateWaitingClient();
+        // contains client who are not yet authenticated
+        std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
+        //remove authenticated clients from the vector waitingForAuthClient
+        void removeAuthClients();
 
     public:
         ClientManager(DataBase database);
         ~ClientManager() = default;
         
-
+        /*
+        * @brief : call by ClientLink when the client is logged in 
+        * @param clientLink : shared_ptr of the clientLink
+        * @param clientData : client data 
+        */
         void authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData);
+        /*
+        * @brief : manage of the packet received by the clientLink
+        */
         void handlePacket(const std::string& packet);
+        /*
+        * @brief : manage package when the client is not yet logged in
+        * @return : the response of the package 
+        */
         nlohmann::json authPacketHandler(bindings::BindingType type, nlohmann::json data);
 
         void handleMessage(nlohmann::json message);
-        
+        /*
+        * @brief:  add client to the waitingForAuthCLient list 
+        */
         void addClientInWaitingForAuth(std::shared_ptr<ClientLink> clientLink);
-
+        /*
+        * @brief : add client in the unordered_map 
+        */
         void addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo);
 
         void removeConnection(const int & clientId);
+        
         bool checkCredentials(nlohmann::json data);
 };

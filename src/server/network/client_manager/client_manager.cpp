@@ -87,7 +87,7 @@ void ClientLink::sendResponse(nlohmann::json response){
 
 
 
-void ClientManager::updateWaitingClient(){
+void ClientManager::removeAuthClients(){
     auto ne = remove_if(waitingForAuthClient.begin(), waitingForAuthClient.end(),
     [](std::shared_ptr<ClientLink> x) {
       return x->isIdentify();
@@ -109,7 +109,7 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, con
     std::lock_guard<std::mutex> lock(mutex_);
     std::cout << "new client id :" << database_.accountManager->getUserId(pseudo) << std::endl;  
     connectedClients_[database_.accountManager->getUserId(pseudo)] = clientSession;
-    updateWaitingClient();
+    removeAuthClients();
 }
 
 
