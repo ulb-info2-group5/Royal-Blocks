@@ -24,7 +24,7 @@
 
 FriendsMenu::FriendsMenu(ftxui::ScreenInteractive &screen,
                                Controller &controller)
-    : screen_{screen}, controller_(controller) {
+    : screen_{screen}, controller_(controller), exit_(false) {
     createButtons();
 }
 
@@ -69,6 +69,8 @@ void FriendsMenu::render() {
 
         screen_.Loop(handleCtrl(render));
     }
+    exit_ = false; // Reset the exit_ variable for the next time we open the
+                   // screen
 }
 
 // ### Private methods ###
