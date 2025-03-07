@@ -9,6 +9,7 @@
 #ifndef FRIENDS_MENU_HPP
 #define FRIENDS_MENU_HPP
 
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <vector>
 
@@ -28,11 +29,13 @@ class FriendsMenu {
     Controller *controller_;
     std::string friendName_;
     std::string msg_; // Message to display on the adding friends menu
+    bool exit_;       // Boolean to exit the friends menu
 
     ftxui::Component buttonBack_;
     ftxui::Component buttonAddFriend_;
     ftxui::Component input_;
     ftxui::Component submitButton_;
+    ftxui::Component buttonBackToMainMenu_;
 
     /*
      * @brief Render the friends list of the user to display with all friends
@@ -50,6 +53,11 @@ class FriendsMenu {
      * @brief Screen to add a friend
      */
     void addFriendScreen();
+
+    /*
+     * @brief Create the buttons of the friends manager
+     */
+    void createButtons();
 
   public:
     /*

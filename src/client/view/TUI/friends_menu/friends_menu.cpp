@@ -25,43 +25,11 @@
 FriendsMenu::FriendsMenu(ftxui::ScreenInteractive &screen,
                                Controller *controller)
     : screen_{screen}, controller_(controller) {
-
-    // Initialize some components like Buttons and Inputs
-
-    buttonBack_ = ftxui::Button(
-                      "Back", [&] { screen_.ExitLoopClosure()(); },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
-
-    buttonAddFriend_ = ftxui::Button(
-                           "Add a friend",
-                           [&] {
-                               addFriendScreen();
-                               screen_.ExitLoopClosure()();
-                           },
-                           ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                       | ftxui::border;
-
-    input_ = ftxui::Input(&friendName_, "Name of friend") | ftxui::border
-             | ftxui::center;
-
-    submitButton_ = ftxui::Button(
-                        "Add",
-                        [&] {
-                            if (!controller_->addFriend(friendName_)) {
-                                msg_ = "Please enter a valid name";
-                            } else {
-                                screen_.ExitLoopClosure()();
-                            }
-                        },
-                        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                    | ftxui::border;
+    createButtons();
 }
 
 void FriendsMenu::render() {
-    bool res = true;
-
-    while (res) {
+    while (!exit_) {
 
         std::vector<std::string> friendsList =
             controller_->getFriendsList(); // Get the friends list of the user
@@ -69,16 +37,6 @@ void FriendsMenu::render() {
 
         std::vector<ftxui::Component> friendsButton = displayFriendButtons(
             friendsList); // Display the friends list as buttons
-
-        ftxui::Component buttonBack =
-            ftxui::Button(
-                "Back",
-                [&] {
-                    res = false; // Exit the while loop
-                    screen_.ExitLoopClosure()();
-                },
-                ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-            | ftxui::border;
 
         ftxui::Component friendsContainer =
             ftxui::Container::Vertical(friendsButton);
@@ -89,7 +47,7 @@ void FriendsMenu::render() {
 
         ftxui::Component buttonsContainer = ftxui::Container::Vertical({
             buttonAddFriend_,
-            buttonBack,
+            buttonBackToMainMenu_,
         });
 
         ftxui::Component render = ftxui::Renderer(
@@ -104,7 +62,7 @@ void FriendsMenu::render() {
                            ftxui::separator(),
                            buttonAddFriend_->Render(),
                            ftxui::separator(),
-                           buttonBack->Render(),
+                           buttonBackToMainMenu_->Render(),
                        })
                        | ftxui::border | ftxui::center;
             });
@@ -116,8 +74,8 @@ void FriendsMenu::render() {
 // ### Private methods ###
 
 void FriendsMenu::addFriendScreen() {
-    friendName_.clear(); // Reset the name of the friend
-    msg_.clear();        // Reset the message
+    friendName_.clear(); // Reset the name of the friend when we (re)oprn the screen
+    msg_.clear();        // Reset the message when we (re)open the screen
 
     ftxui::Component container = ftxui::Container::Vertical({
         input_,
@@ -161,21 +119,20 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
 }
 
 void FriendsMenu::manageFriendlistScreen(const std::string &friendName) {
-
     ftxui::Component buttonYes = ftxui::Button(
         "Yes",
         [&] {
             if (controller_->removeFriend(friendName)) {
                 screen_.ExitLoopClosure()();
             }
-        },
-        ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+        }, ftxui::ButtonOption::Animated(ftxui::Color::Grey0))| ftxui::border;
+
     ftxui::Component buttonNo = ftxui::Button(
         "No", [&] { screen_.ExitLoopClosure()(); },
         ftxui::ButtonOption::Animated(
-            ftxui::Color::Grey0)); // Like it's a back button
+            ftxui::Color::Grey0)) | ftxui::border; // Like it's a back button
 
-    ftxui::Component container = ftxui::Container::Vertical({
+    ftxui::Component container = ftxui::Container::Horizontal({
         buttonYes,
         buttonNo,
     });
@@ -184,13 +141,53 @@ void FriendsMenu::manageFriendlistScreen(const std::string &friendName) {
         return ftxui::vbox({
                    ftxui::text("Do you want to remove " + friendName
                                + " from your friends list ?")
-                       | ftxui::bold | ftxui::center,
-                   ftxui::separator(),
-                   buttonYes->Render(),
-                   buttonNo->Render(),
-               })
-               | ftxui::border | ftxui::center;
+                        | ftxui::bold | ftxui::center,
+                    ftxui::separator(),
+                    buttonYes->Render() | ftxui::flex,
+                    buttonNo->Render() | ftxui::flex,
+               }) | ftxui::border | ftxui::center;
     });
 
     screen_.Loop(handleCtrl(component));
+}
+
+void FriendsMenu::createButtons() {
+    buttonBack_ = ftxui::Button(
+        "Back", [&] { screen_.ExitLoopClosure()(); },
+        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+        | ftxui::border;
+
+    buttonAddFriend_ = ftxui::Button(
+                "Add a friend",
+                [&] {
+                    addFriendScreen();
+                    screen_.ExitLoopClosure()();
+                },
+                ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+            | ftxui::border;
+
+    input_ = ftxui::Input(&friendName_, "Name of friend") | ftxui::border
+        | ftxui::center;
+
+    submitButton_ = ftxui::Button(
+            "Add",
+            [&] {
+                if (!controller_->addFriend(friendName_)) {
+                    msg_ = "Please enter a valid name";
+                } else {
+                    screen_.ExitLoopClosure()();
+                }
+            },
+            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+        | ftxui::border;
+
+    buttonBackToMainMenu_ =
+        ftxui::Button(
+            "Back to main menu",
+            [&] {
+                exit_ = true; // Exit the while loop
+                screen_.ExitLoopClosure()();
+            },
+            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
+        | ftxui::border;
 }
