@@ -1,11 +1,10 @@
 #ifndef BINDINGS_SELECT_TARGET_HPP
 #define BINDINGS_SELECT_TARGET_HPP
 
-#include "../../tetris_lib/tetromino/tetromino.hpp"
-
 #include "../binding_type.hpp"
 
 #include <cstddef>
+#include <nlohmann/json.hpp>
 
 using PlayerID = size_t;
 

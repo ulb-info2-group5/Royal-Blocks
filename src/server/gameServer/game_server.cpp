@@ -78,34 +78,26 @@ void GameServer::handleNextEvent() {
     std::visit(
         [this, playerID](auto &&arg) {
             using T = std::decay_t<decltype(arg)>;
-            // TODO: handle each event
             if constexpr (std::is_same_v<T, bindings::BigDrop>) {
                 engine.bigDrop(playerID);
-                // handle BigDrop
             } else if constexpr (std::is_same_v<T, bindings::BuyBonus>) {
-                engine.tryBuyEffect(playerID, static_cast<BonusType>(arg.bonusType));
-                // handle BuyBonus
+                engine.tryBuyEffect(playerID, arg.bonusType);
             } else if constexpr (std::is_same_v<T, bindings::BuyPenalty>) {
-                engine.tryBuyEffect(playerID, static_cast<EffectType>(arg.penalyType), arg.stashForLater);
-                // handle BuyPenalty
+                engine.tryBuyEffect(playerID, arg.penaltyType,
+                                    arg.stashForLater);
             } else if constexpr (std::is_same_v<T,
                                                 bindings::EmptyPenaltyStash>) {
-                // handle EmptyPenaltyStash
                 engine.emptyPenaltyStash(playerID);
             } else if constexpr (std::is_same_v<T,
                                                 bindings::HoldNextTetromino>) {
                 engine.holdNextTetromino(playerID);
-                // handle HoldNextTetromino
             } else if constexpr (std::is_same_v<T, bindings::MoveActive>) {
                 engine.tryMoveActive(playerID, arg.tetrominoMove);
-                // handle MoveActive
             } else if constexpr (std::is_same_v<T, bindings::RotateActive>) {
                 engine.tryRotateActive(playerID, arg.rotateClockwise);
-                // handle RotateActive
+            } else if constexpr (std::is_same_v<T, bindings::SelectTarget>) {
+                engine.selectTarget(playerID, arg.targetId);
             }
-            //} else if constexpr (std::is_same_v<T, bindings::SelectTarget>) {
-                // handle SelectTarget
-            //}
         },
         event);
 }

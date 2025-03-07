@@ -4,8 +4,6 @@
 #include "../../client/core/game_state/game_state.hpp"
 
 #include "../binding_type.hpp"
-#include "nlohmann/json_fwd.hpp"
-#include "player_state/player_state.hpp"
 
 #include <nlohmann/json.hpp>
 
