@@ -60,7 +60,7 @@ Pour lancer Tetris, exécutez :
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
 Tetris :
 
-- **Rotation sens horlorique**  
+- **Rotation sens horlogique**  
   `g` ou `espace`
 
 - **Rotation sens anti-horlogique**  
