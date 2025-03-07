@@ -1,0 +1,23 @@
+@startuml (id = EffectSelector)
+
+class EffectSelector {
+	+EffectSelector()
+	+EffectSelector(const EffectSelector &)
+	+EffectSelector(EffectSelector& &)
+	+~EffectSelector()
+	+operator=(const EffectSelector &) : EffectSelector&
+	+operator=(EffectSelector& &) : EffectSelector&
+	+getSelectedEffect() : EffectType {query}
+	+serialize() : nlohmann::json {query}
+	+getNumEffects() : size_t {query}
+	+getSelectedIdx() : size_t {query}
+	-selectionIdx_ : size_t
+	->(BonusType:: NumBonusType) : std::array<BonusType , static_cast<size_t
+	->(PenaltyType:: NumPenaltyType) : std::array<PenaltyType , static_cast<size_t
+	+deserialize(const nlohmann::json& j) : void
+	+next() : void
+	+prev() : void
+	+select(EffectType effectType) : void
+}
+
+@enduml

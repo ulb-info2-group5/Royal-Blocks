@@ -1,0 +1,123 @@
+@startuml (id = BindingType)
+
+class PlayerTetris {
+	+PlayerTetris(PlayerStatePtr&& pPlayerState)
+	+pPlayerState : PlayerStatePtr
+	+pTetris : TetrisPtr
+	+serializeExternal() : nlohmann::json {query}
+	+serializeSelf() : nlohmann::json {query}
+}
+
+
+abstract class TetrisObserver {
+	+TetrisObserver()
+	+TetrisObserver(const TetrisObserver &)
+	+TetrisObserver(TetrisObserver& &)
+	+~TetrisObserver()
+	+operator=(const TetrisObserver &) : TetrisObserver&
+	+operator=(TetrisObserver& &) : TetrisObserver&
+	+{abstract} notifyActiveTetrominoPlaced() : void
+	+{abstract} notifyLost() : void
+}
+
+
+namespace bindings {
+	class BindingType {
+	}
+
+	class Authentication {
+		+{static} from_json(const nlohmann::json& j) : Authentication
+		+to_json() : nlohmann::json {query}
+		+nickname : std::string
+		+password : std::string
+	}
+
+	class AuthenticationResponse {
+		+{static} from_json(const nlohmann::json& j) : AuthenticationResponse
+		+success : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class BigDrop {
+		+{static} from_json(const nlohmann::json& j) : BigDrop
+		+to_json() : nlohmann::json {query}
+	}
+
+	class BuyBonus {
+		+bonusType : BonusType
+		+{static} from_json(const nlohmann::json& j) : BuyBonus
+		+to_json() : nlohmann::json {query}
+	}
+
+	class BuyPenalty {
+		+{static} from_json(const nlohmann::json& j) : BuyPenalty
+		+penaltyType : PenaltyType
+		+stashForLater : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class EmptyPenaltyStash {
+		+{static} from_json(const nlohmann::json& j) : EmptyPenaltyStash
+		+to_json() : nlohmann::json {query}
+	}
+
+	class FriendRequest {
+		+{static} from_json(const nlohmann::json& j) : FriendRequest
+		+friendRequestType : FriendRequestType
+		+targetId : PlayerID
+		+to_json() : nlohmann::json {query}
+	}
+
+	class HoldNextTetromino {
+		+{static} from_json(const nlohmann::json& j) : HoldNextTetromino
+		+to_json() : nlohmann::json {query}
+	}
+
+	class Message {
+		+{static} from_json(const nlohmann::json& j) : Message
+		+recipientId : PlayerID
+		+to_json() : nlohmann::json {query}
+		+content : std::string
+	}
+
+	class MoveActive {
+		+{static} from_json(const nlohmann::json& j) : MoveActive
+		+tetrominoMove : TetrominoMove
+		+to_json() : nlohmann::json {query}
+	}
+
+	class Registration {
+		+{static} from_json(const nlohmann::json& j) : Registration
+		+to_json() : nlohmann::json {query}
+		+nickname : std::string
+		+password : std::string
+	}
+
+	class RegistrationResponse {
+		+{static} from_json(const nlohmann::json& j) : RegistrationResponse
+		+success : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class RotateActive {
+		+{static} from_json(const nlohmann::json& j) : RotateActive
+		+rotateClockwise : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class SelectTarget {
+		+targetId : PlayerID
+		+{static} from_json(const nlohmann::json& j) : SelectTarget
+		+to_json() : nlohmann::json {query}
+	}
+
+	class User {
+		+playerId : PlayerID
+		+{static} from_json(const nlohmann::json& j) : User
+		+to_json() : nlohmann::json {query}
+		+username : std::string
+	}
+}
+
+
+@enduml

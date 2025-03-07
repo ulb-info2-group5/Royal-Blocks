@@ -21,31 +21,25 @@ skinparam class {
 
 !include TetrominoesClass.plantuml!0
 
-' class GameEngine{
-    
-' }
+enum TetrominoMove {
+    Left,
+    Right,
+    Down,
+}
 
-' class Player {
-'     -isPlaying_ : bool
-'     +isPlaying() : bool
-    
-' }
-
-TetrominoShape"1"- Tetromino
+TetrominoShape"1"- ATetromino
  
-Tetromino  - "1" RotationIndex : have  >
-Tetromino *--"4" Vec2 : have > 
-Tetromino - "1" RotationIndex
+ATetromino  - "2" RotationIndex : have  >
+ATetromino *--"4" Vec2 : have > 
+ATetromino - "1" RotationIndex
 
 
 
 
 Board *--"width_* height_" GridCell
 
-'there's not a clear enough link between Board and Tetromino '
-' Board <- Tetromino
 
 Tetris ->"1" Board
-Tetris --> "1..*" Tetromino
+Tetris --> "1..*" ATetromino
 
 @enduml

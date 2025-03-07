@@ -1,0 +1,17 @@
+@startuml (id= TimedBonus)
+
+class TimedBonus {
+	#TimedBonus(BonusType bonusType)
+	#TimedBonus(const TimedBonus &)
+	#TimedBonus(TimedBonus& &)
+	+~TimedBonus()
+	-bonusType_ : BonusType
+	+getBonusType() : BonusType {query}
+	#operator=(const TimedBonus &) : TimedBonus&
+	#operator=(TimedBonus& &) : TimedBonus&
+	+{static} makeBonus(BonusType bonusType) : TimedBonusPtr
+	+serialize() : nlohmann::json {query}
+	+operator<<(std::ostream& os, const TimedBonus& bonus) : std : : ostream&
+}
+
+@enduml

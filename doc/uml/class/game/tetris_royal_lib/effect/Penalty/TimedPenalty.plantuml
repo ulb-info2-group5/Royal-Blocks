@@ -1,12 +1,6 @@
 @startuml (id=TimedPenalty)
 
 
-class AbstractTimedEffect {  /'recommandé par IA Microsoft Copilot'/
-}
-
-class PenaltyTest {  /'recommandé par IA Microsoft Copilot'/
-}
-
 class TimedPenalty {
     - PenaltyType penaltyType_
     # TimedPenalty(PenaltyType penaltyType)
@@ -19,7 +13,5 @@ class TimedPenalty {
     + getPenaltyType() const : PenaltyType
 } 
 
-TimedPenalty ..> AbstractTimedEffect : extends  /'recommandé par IA Microsoft Copilot'/
-TimedPenalty ..> PenaltyTest : friend  /'recommandé par IA Microsoft Copilot'/
 
 @enduml

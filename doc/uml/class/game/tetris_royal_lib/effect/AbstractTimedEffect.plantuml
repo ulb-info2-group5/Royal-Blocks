@@ -1,0 +1,18 @@
+@startuml (id = AbstractTimedEffect)
+
+abstract class AbstractTimedEffect {
+	#AbstractTimedEffect()
+	#AbstractTimedEffect(const AbstractTimedEffect &)
+	#AbstractTimedEffect(AbstractTimedEffect& &)
+	+~AbstractTimedEffect()
+	#operator=(const AbstractTimedEffect &) : AbstractTimedEffect&
+	#operator=(AbstractTimedEffect& &) : AbstractTimedEffect&
+	+{abstract} isFinished() : bool {query}
+	+{abstract} getElapsedTime() : double {query}
+	+{abstract} serialize() : nlohmann::json {query}
+	+tetrominoPlaced() : void
+	+tick() : void
+}
+
+
+@enduml

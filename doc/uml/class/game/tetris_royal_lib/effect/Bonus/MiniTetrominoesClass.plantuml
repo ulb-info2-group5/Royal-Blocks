@@ -1,11 +1,10 @@
 /' authors Ernest Jonas Rafaou '/
 
-@startuml (id=MiniTetrominoes)
+@startuml (id=MiniTetromino)
 
-class MiniTetrominoes {
-
-    + getAbstractTimedEffect() : virtual AbstractTimedEffectPtr
-
+class MiniTetromino {
+	+MiniTetromino(Vec2&& anchorPoint)
+	+clone() : TetrominoPtr {query}
 }
 
 @enduml

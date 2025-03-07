@@ -1,0 +1,64 @@
+@startuml (id = GameEngine)
+
+class GameEngine {
+	+GameEngine(const GameStatePtr& pGameState)
+	+GameEngine(const GameEngine &)
+	+GameEngine(GameEngine& &)
+	-for(GameEngine::GameModeFeature features: enabledFeatures)
+	-}()
+	+~GameEngine()
+	-calculateEnergyClearedRows(size_t numClearedRows) : Energy {query}
+	+operator=(const GameEngine &) : GameEngine&
+	+operator=(GameEngine& &) : GameEngine&
+	-bitset : GameEngine::FeaturesBitset
+	-featuresPerGameMode : GameEngine::FeaturesMap
+	-pGameState_ : std::shared_ptr<GameState>
+	-calculatePointsClearedRows(size_t numClearedRows) : Score {query}
+	-invertTetrominoMove(TetrominoMove tetrominoMove) : TetrominoMove {query}
+	-checkAlive(const PlayerStatePtr& pPlayerState) : bool {query}
+	-checkAlive(PlayerID playerID) : bool {query}
+	-checkCanBuyEffect(const PlayerState& playerState, EffectType effectType) : bool {query}
+	-checkFeatureEnabled(GameModeFeature gameModeFeature) : bool {query}
+	+{static} checkFeatureEnabled(GameMode gameMode, GameModeFeature gameModeFeature) : bool
+	-shouldIgnoreTick(PlayerState& playerState) : bool
+	-shouldLockInput(PlayerState& playerState) : bool
+	-shouldReverseControls(PlayerState& playerState) : bool
+	-at(static_cast<size_t >(GameMode::Endless)) : featuresPerGameMode
+	-at(static_cast<size_t >(GameMode::Dual)) : featuresPerGameMode
+	-at(static_cast<size_t >(GameMode::Classic)) : featuresPerGameMode
+	-at(static_cast<size_t >(GameMode::RoyalCompetition)) : featuresPerGameMode
+	-bitset : return
+	-featuresPerGameMode : return
+	+{static} numFeatures : static constexpr size_t
+	+{static} numGameMode : static constexpr size_t
+	+getWinner() : std::optional<PlayerID>
+	+FeaturesBitset : using
+	+FeaturesMap : using
+	+bigDrop(PlayerID playerID) : void
+	+emptyPenaltyStash(PlayerID playerID) : void
+	-handleLightning(Tetris& tetris) : void
+	-handleMiniTetrominoes(Tetris& tetris) : void
+	-handlePlayerTimedEffect(PlayerTetris& playerTetris) : void
+	+holdNextTetromino(PlayerID playerID) : void
+	+selectEffect(PlayerID playerID, EffectType effectType) : void
+	+selectNextEffect(PlayerID playerID) : void
+	+selectPrevEffect(PlayerID playerID) : void
+	+selectTarget(PlayerID playerID, PlayerID target) : void
+	-sendPenaltyEffect(const PlayerState& playerStateSender, PenaltyType penaltyType) : void
+	-sendPenaltyRows(const PlayerState& playerStateSender, size_t numRows) : void
+	-tick(PlayerTetris& playerTetris) : void
+	+tick() : void
+	+tryBuyEffect(PlayerID playerID, EffectType effectType, bool stashForLater) : void
+	+tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) : void
+	+tryRotateActive(PlayerID playerID, bool rotateClockwise) : void
+}
+
+enum class GameModeFeature{
+	PenaltyRows,
+    Effects,
+    SelectPenaltyTarget,
+    NumGameModeFeature,
+}
+
+
+@enduml

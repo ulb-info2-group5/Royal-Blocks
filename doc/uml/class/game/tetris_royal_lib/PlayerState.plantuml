@@ -1,0 +1,55 @@
+@startuml (id = PlayerState)
+
+class PlayerState {
+	+PlayerState(PlayerID playerID, Score score)
+	+PlayerState(const PlayerState &)
+	+PlayerState(PlayerState& &)
+	+~PlayerState()
+	+getPlayerID() : PlayerID {query}
+	-playerID_ : PlayerID
+	+operator=(const PlayerState &) : PlayerState&
+	+operator=(PlayerState& &) : PlayerState&
+	+getScore() : Score {query}
+	-score_ : Score
+	-pActiveBonus_ : TimedBonusPtr
+	+getActiveBonus() : TimedBonusPtr&
+	-pActivePenalty_ : TimedPenaltyPtr
+	+getActivePenalty() : TimedPenaltyPtr&
+	+isAlive() : bool {query}
+	-isAlive_ : bool
+	+isGameTick() : bool
+	+serializeExternal() : nlohmann::json {query}
+	+serializeSelf() : nlohmann::json {query}
+	+getStashedPenalties() : std::deque<PenaltyType>
+	+fetchGrantedBonus() : std::optional<BonusType>
+	-effectSelector_ : std::optional<EffectSelector>
+	+getSelectedEffect() : std::optional<EffectType>
+	-energy_ : std::optional<Energy>
+	+getEnergy() : std::optional<Energy> {query}
+	+fetchReceivedPenalty() : std::optional<PenaltyType>
+	+getPenaltyTarget() : std::optional<PlayerID> {query}
+	-penaltyTarget_ : std::optional<PlayerID>
+	-engineTicksSinceLastTick_ : std::optional<size_t>
+	-stashedPenalties_ : std::optional<std::deque<PenaltyType>>
+	-grantedBonusesQueue_ : std::optional<std::queue<BonusType>>
+	-receivedPenaltiesQueue_ : std::optional<std::queue<PenaltyType>>
+	+decreaseEnergy(Energy amount) : void
+	+grantBonus(BonusType bonus) : void
+	+increaseEnergy(Energy amount) : void
+	+increaseScore(Score val) : void
+	+notifyActiveTetrominoPlaced() : void
+	+notifyEngineTick() : void
+	+notifyLost() : void
+	+receivePenalty(PenaltyType penalty) : void
+	+selectEffect(EffectType effectType) : void
+	+selectNextEffect() : void
+	+selectPrevEffect() : void
+	+setActiveBonus(const TimedBonusPtr& pTimedBonus) : void
+	+setActivePenalty(const TimedPenaltyPtr& pTimedPenalty) : void
+	+setAlive(bool isAlive) : void
+	+setPenaltyTarget(PlayerID playerID) : void
+	+stashPenalty(PenaltyType penalty) : void
+	+toggleEffects(bool activated) : void
+}
+
+@enduml
