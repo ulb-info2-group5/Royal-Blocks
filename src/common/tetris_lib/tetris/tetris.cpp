@@ -193,7 +193,8 @@ TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
     // I & T tetromino should have its anchorPoint one row above compared to
     // the others when spawned
     int spawnRow = (tetrominoShape == TetrominoShape::I
-                    || tetrominoShape == TetrominoShape::T)
+                    || tetrominoShape == TetrominoShape::T
+                    || tetrominoShape == TetrominoShape::MiniTetromino)
                        ? Board::getHeight() - 1
                        : Board::getHeight() - 2;
 
