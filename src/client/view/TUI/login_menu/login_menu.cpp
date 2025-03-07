@@ -18,7 +18,7 @@
 
 // ### constructor ###
 LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen,
-                     Controller *controller)
+                     Controller &controller)
     : screen_(screen), controller_(controller),
       loginInput_(LoginInput(screen_, controller_, LOGIN_INPUT_TITLE,
                              LoginType::LOGIN)),

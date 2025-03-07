@@ -51,7 +51,7 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief The controller to ask for the data to show to the user
      */
-    Controller *controller_;
+     Controller &controller_;
 
     MainMenuState state_;
 
@@ -79,7 +79,6 @@ class MainMenu : public IMain_Menu {
     ftxui::Component inputChangeUsername_;
     ftxui::Component inputChangePassword_;
     ftxui::Component submitButton_;
-    std::string profileMessage_;
     std::string username_;
     std::string password_;
 
@@ -92,11 +91,6 @@ class MainMenu : public IMain_Menu {
      * @brief Handle the choice of the user in the main menu
      */
     void handleChoice() override;
-
-    /*
-     * @brief Create the display of the confirm update profile screen
-     */
-    void confirmUpdateProfileScreen() const override;
 
   protected:
     void createMainMenuButtons() override;
@@ -131,7 +125,7 @@ class MainMenu : public IMain_Menu {
      * @param screen The screen to use to render the components
      */
     MainMenu(ftxui::ScreenInteractive &screen,
-             Controller *controller);
+             Controller &controller);
 
     /*
      * @brief Destroy the Main Menu object

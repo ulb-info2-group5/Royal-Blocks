@@ -40,7 +40,7 @@ class Messaging : public IMessage {
     /*
      * @brief The controller to ask for the data to show to the user
      */
-    Controller *controller_;
+     Controller &controller_;
 
     std::map<std::string, std::vector<Message>> conversations_;
     std::vector<std::string> friends_;
@@ -88,7 +88,7 @@ class Messaging : public IMessage {
      * @param friends The list of friends to display in the messaging screen
      */
     Messaging(ftxui::ScreenInteractive &screen,
-              Controller *controller);
+          Controller &controller);
 
     /*
      * @brief Destroy the Messaging object

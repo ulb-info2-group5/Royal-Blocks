@@ -25,7 +25,7 @@ class Controller; // Forward declaration
 class GameMenu : public IGame_Menu {
   private:
     ftxui::ScreenInteractive &screen_;
-    Controller *controller_;
+    Controller &controller_;
 
     std::unique_ptr<GameDisplay> gameDisplay_;
 
@@ -97,7 +97,7 @@ class GameMenu : public IGame_Menu {
      * @param screen
      */
     GameMenu(ftxui::ScreenInteractive &screen,
-             Controller *controller);
+             Controller &controller);
 
     /*
      * @brief Destroy the Game Menu object

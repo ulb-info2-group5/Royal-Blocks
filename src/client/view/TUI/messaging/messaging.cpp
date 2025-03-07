@@ -9,7 +9,7 @@
 
 // ### constructor ###
 Messaging::Messaging(ftxui::ScreenInteractive &screen,
-                     Controller *controller)
+                        Controller &controller)
     : screen_(screen), controller_(controller) {
     userState_ = MessagingState::NONE;
     initMessaging();
@@ -29,11 +29,10 @@ void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
         "Ajouter un ami",
         [&] {
-            if (controller_->addFriend(newFriend_)) {
-                friends_.push_back(newFriend_);
-                conversations_[newFriend_] = {};
-                newFriend_.clear();
-            }
+            controller_.addFriend(newFriend_);
+            friends_.push_back(newFriend_);
+            conversations_[newFriend_] = {};
+            newFriend_.clear();
         },
         ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
 
@@ -41,7 +40,7 @@ void Messaging::createButtons() {
         ftxui::Button("Envoyer",
                       [&] {
                           if (!newMessage_.empty() && !friends_.empty()) {
-                              controller_->sendMessage(
+                              controller_.sendMessage(
                                   friends_[static_cast<size_t>(selectedFriend)],
                                   newMessage_); // TODO: check if the message is
                                                 // sent with server, etc
@@ -175,10 +174,10 @@ void Messaging::drawWindow() {
 // ### public methods ###
 void Messaging::render() {
     friends_ =
-        controller_->getFriendsList(); // TODO: check if the friends list is
+        controller_.getFriendsList(); // TODO: check if the friends list is
                                        // correctly updated with the server, etc
     conversations_ =
-        controller_->getMessages(); // TODO: check if the conversations are
+        controller_.getMessages(); // TODO: check if the conversations are
                                     // correctly updated with the server, etc
     drawWindow();
     screen_.Loop(handleCtrl(displayWindow_));

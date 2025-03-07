@@ -17,7 +17,7 @@
 
 // ### Constructor ###
 MainMenu::MainMenu(ftxui::ScreenInteractive &screen,
-                   Controller *controller)
+                   Controller &controller)
     : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
       friendsMenu_(screen, controller),
       messagingMenu_(screen, controller),
@@ -87,27 +87,6 @@ void MainMenu::handleChoice() {
             "Invalid state in MainMenu::handleChoice()");
         break;
     }
-}
-
-void MainMenu::confirmUpdateProfileScreen() const {
-    ftxui::Component okButton =
-        ftxui::Button(
-            "OK", [&] { screen_.ExitLoopClosure()(); },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
-
-    ftxui::Component component =
-        ftxui::Renderer(ftxui::Container::Vertical({okButton}), [&] {
-            return ftxui::vbox({
-                       ftxui::text("Friend added successfully") | ftxui::bold
-                           | ftxui::center,
-                       ftxui::separator(),
-                       okButton->Render() | ftxui::center,
-                   })
-                   | ftxui::border | ftxui::center;
-        });
-
-    screen_.Loop(handleCtrl(component));
 }
 
 // ### Protected methods ###
@@ -214,7 +193,7 @@ void MainMenu::displayRankingList() {
 
     // Get the ranking from the controller
     const std::vector<std::tuple<int, std::string, int>> ranking =
-        controller_->getRanking();
+        controller_.getRanking();
 
     // Clear the rows of the ranking table to avoid duplicates
     rowsRanking_.clear();
@@ -273,7 +252,6 @@ void MainMenu::displayRankingWindow() {
 }
 
 void MainMenu::displayProfileManagerButton() {
-    profileMessage_ = ""; // Empty message
     username_.clear();    // Empty username
     password_.clear();    // Empty password
 
@@ -287,15 +265,9 @@ void MainMenu::displayProfileManagerButton() {
         ftxui::Button(
             "Submit",
             [&] {
-                if (!controller_->changeProfile(username_, password_)) {
-                    profileMessage_ =
-                        "The change of your profile has failed. Please enter "
-                        "another username or password";
-                } else {
-                    confirmUpdateProfileScreen(); // Display the confirm update
-                                                  // profile screen
-                    screen_.ExitLoopClosure()();
-                }
+                controller_.changeProfile(username_, password_);                                                  // profile screen
+                screen_.ExitLoopClosure()();
+                
             },
             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
         | ftxui::border;
@@ -319,8 +291,6 @@ void MainMenu::displayProfileManagerWindow() {
                    ftxui::text(""), // Empty line
                    inputChangeUsername_->Render(),
                    inputChangePassword_->Render(),
-                   ftxui::text(profileMessage_) | ftxui::center
-                       | ftxui::color(ftxui::Color::Red),
                    ftxui::separator(),
                    submitButton_->Render(),
                    ftxui::separator(),

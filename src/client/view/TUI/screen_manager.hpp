@@ -15,7 +15,7 @@ class ScreenManager {
     /*
      *
      */
-    Controller *controller_;
+    Controller &controller_;
 
     /*
      * @brief The screen to use to render the components in the terminal user
@@ -49,7 +49,7 @@ class ScreenManager {
      *
      * @param controller The controller to ask for the data to show to the user
      */
-    ScreenManager(Controller *controller);
+    ScreenManager(Controller &controller);
 
     /*
      * @brief Destroy the Screen Manager object

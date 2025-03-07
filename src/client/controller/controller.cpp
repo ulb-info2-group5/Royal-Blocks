@@ -53,7 +53,7 @@ Controller::Controller()
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
 
-      screenManager_{this} {
+      screenManager_{*this} {
 
     // ---------------------------------
     // TODO: remove this
@@ -115,10 +115,9 @@ std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
     return ranking;
 }
 
-bool Controller::changeProfile(const std::string &username,
+void Controller::changeProfile(const std::string &username,
                                const std::string &password) const {
     // TODO
-    return true;
 }
 
 std::vector<std::string> Controller::getFriendsList() const {
@@ -134,14 +133,12 @@ std::vector<std::string> Controller::getFriendsList() const {
     return friendsList;
 }
 
-bool Controller::addFriend(const std::string &friendName) const {
+void Controller::addFriend(const std::string &friendName) const {
     // TODO:
-    return true;
 }
 
-bool Controller::removeFriend(const std::string &friendName) const {
+void Controller::removeFriend(const std::string &friendName) const {
     // TODO:
-    return true;
 }
 
 bool Controller::sendMessage(const std::string &friendName,

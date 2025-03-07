@@ -42,7 +42,7 @@ class LoginMenu : public ILogin_Menu {
      /*
      * @brief The controller to ask for the data to show to the user
      */
-    Controller *controller_;
+    Controller &controller_;
 
     LoginInput loginInput_;
 
@@ -70,7 +70,7 @@ class LoginMenu : public ILogin_Menu {
      * @param screen The screen to use to render the components
      */
     LoginMenu(ftxui::ScreenInteractive &screen,
-              Controller *controller);
+              Controller &controller);
 
     /*
      * @brief Destroy the Login Menu object

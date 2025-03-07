@@ -26,9 +26,8 @@ enum class FriendsManagerState {
 class FriendsMenu {
   private:
     ftxui::ScreenInteractive &screen_;
-    Controller *controller_;
+    Controller &controller_;
     std::string friendName_;
-    std::string msg_; // Message to display on the adding friends menu
     bool exit_;       // Boolean to exit the friends menu
 
     ftxui::Component buttonBack_;
@@ -64,7 +63,7 @@ class FriendsMenu {
      * @brief Construct a new Friends Manager object
      */
      FriendsMenu(ftxui::ScreenInteractive &screen,
-                   Controller *controller);
+                   Controller &controller);
 
     /*
      * @brief Destroy the Friends Manager object

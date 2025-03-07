@@ -22,7 +22,7 @@
 
 // ### Constructor ###
 LoginInput::LoginInput(ftxui::ScreenInteractive &screen,
-                       Controller *controller, std::string title,
+                       Controller &controller, std::string title,
                        LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
       loginType_(loginType), loginState_(LoginState::NONE) {
@@ -55,9 +55,9 @@ void LoginInput::createButtonSubmit() {
             "Submit",
             [&] {
                 if (loginType_ == LoginType::REGISTER) {
-                    controller_->tryRegister(username_, password_);
+                    controller_.tryRegister(username_, password_);
 
-                    while (controller_->getRegistrationState()
+                    while (controller_.getRegistrationState()
                            == Controller::RegistrationState::Unregistered) {
                         std::this_thread::sleep_for(
                             std::chrono::milliseconds{500});
@@ -66,9 +66,9 @@ void LoginInput::createButtonSubmit() {
                     loginState_ = LoginState::SUBMIT;
                     screen_.ExitLoopClosure()();
                 } else if (loginType_ == LoginType::LOGIN) {
-                    controller_->tryLogin(username_, password_);
+                    controller_.tryLogin(username_, password_);
 
-                    while (controller_->getAuthState()
+                    while (controller_.getAuthState()
                            == Controller::AuthState::Unauthenticated) {
                         std::this_thread::sleep_for(
                             std::chrono::milliseconds{500});

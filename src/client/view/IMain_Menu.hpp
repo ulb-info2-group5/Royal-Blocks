@@ -17,8 +17,6 @@ class IMain_Menu {
 
   private : 
     virtual void handleChoice() = 0;
-
-    virtual void confirmUpdateProfileScreen() const = 0;
     
   protected:
     virtual void createMainMenuButtons() = 0;

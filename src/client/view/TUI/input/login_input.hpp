@@ -34,7 +34,7 @@ class LoginInput : public ILogin_Input {
     /*
      * @brief The controller to ask for the data to show to the user
      */
-    Controller *controller_;
+    Controller &controller_;
 
     /*
      * @brief The title of the input screen (Login or Register)
@@ -91,7 +91,7 @@ class LoginInput : public ILogin_Input {
      * @param title The title of the input screen (Login or Register)
      */
     LoginInput(ftxui::ScreenInteractive &screen,
-               Controller *controller, std::string title, LoginType loginType);
+               Controller &controller, std::string title, LoginType loginType);
 
     /*
      * @brief Destroy the Login Input object

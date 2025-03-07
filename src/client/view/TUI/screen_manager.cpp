@@ -5,7 +5,7 @@
 #include <ftxui/dom/elements.hpp>
 
 // ### Public methods ###
-ScreenManager::ScreenManager(Controller *controller)
+ScreenManager::ScreenManager(Controller &controller)
     : controller_(controller), screen_(ftxui::ScreenInteractive::Fullscreen()),
       loginMenu_(LoginMenu(screen_, controller_)),
       mainMenu_(MainMenu(screen_, controller_)) {

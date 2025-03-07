@@ -120,9 +120,8 @@ class Controller {
      *
      * @param username The new username of the user
      * @param password The new password of the user
-     * @return true If the profile is changed, false otherwise
      */
-    bool changeProfile(const std::string &username,
+    void changeProfile(const std::string &username,
                        const std::string &password) const;
 
     /*
@@ -136,17 +135,15 @@ class Controller {
      * @brief Add a friend to the friends list of the user
      *
      * @param friendName The name of the friend to add
-     * @return true If the friend is added, false otherwise
      */
-    bool addFriend(const std::string &friendName) const;
+    void addFriend(const std::string &friendName) const;
 
     /*
      * @brief Remove a friend from the friends list of the user
      *
      * @param friendName The name of the friend to remove
-     * @return true If the friend is removed, false otherwise
      */
-    bool removeFriend(const std::string &friendName) const;
+    void removeFriend(const std::string &friendName) const;
 
     /*
      * @brief Send a message to a friend

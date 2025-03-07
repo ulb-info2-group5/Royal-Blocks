@@ -17,11 +17,11 @@
 // ### Constructor ###
 
 GameMenu::GameMenu(ftxui::ScreenInteractive &screen,
-                   Controller *controller)
+                   Controller &controller)
     : screen_(screen), controller_(controller),
       joinType_(JoinType::NONE), typeGame_(TypeGame::NONE) {
      
-    gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
+    gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_.getGameState());
     
 
     endlessButon_ = ftxui::Button(
@@ -36,7 +36,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen,
     duelButon_ = ftxui::Button(
                      "Duel",
                      [&] {
-                         gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
+                         gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_.getGameState());
                          joinFriendOrRandomScreen();
                          screen_.ExitLoopClosure()();
                      },
@@ -46,7 +46,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen,
     classicButon_ = ftxui::Button(
                         "Classic",
                         [&] {
-                            gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
+                            gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_.getGameState());
                             joinFriendOrRandomScreen();
                             screen_.ExitLoopClosure()();
                         },
@@ -56,7 +56,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen,
     royalButon_ = ftxui::Button(
                       "Royal",
                       [&] {
-                          gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_->getGameState());
+                          gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_.getGameState());
                           joinFriendOrRandomScreen();
                           screen_.ExitLoopClosure()();
                       },
@@ -196,7 +196,7 @@ void GameMenu::handleChoice() {
 
 void GameMenu::joinFriendScreen() {
     const std::vector<std::string> friendsList =
-        controller_->getFriendsOnline();
+        controller_.getFriendsOnline();
 
     std::vector<ftxui::Component> friendButtons;
 
