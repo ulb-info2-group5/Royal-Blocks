@@ -79,22 +79,23 @@ void GameServer::enqueueBinding(PlayerID playerId,
         break;
 
     case bindings::BindingType::BuyBonus: {
-        bindings::BuyBonus buyBonus = bindings::BuyBonus::from_json(j);
-        boost::asio::post(context_, [this, playerId, buyBonus]() {
-            engine.tryBuyEffect(playerId, buyBonus.bonusType);
-            sendGameStates();
-        });
+        boost::asio::post(
+            context_,
+            [this, playerId, buyBonus = bindings::BuyBonus::from_json(j)]() {
+                engine.tryBuyEffect(playerId, buyBonus.bonusType);
+                sendGameStates();
+            });
         break;
     }
 
     case bindings::BindingType::BuyPenalty: {
-        bindings::BuyPenalty buyPenalty = bindings::BuyPenalty::from_json(j);
-
-        boost::asio::post(context_, [this, playerId, buyPenalty]() {
-            engine.tryBuyEffect(playerId, buyPenalty.penaltyType,
-                                buyPenalty.stashForLater);
-            sendGameStates();
-        });
+        boost::asio::post(
+            context_, [this, playerId,
+                       buyPenalty = bindings::BuyPenalty::from_json(j)]() {
+                engine.tryBuyEffect(playerId, buyPenalty.penaltyType,
+                                    buyPenalty.stashForLater);
+                sendGameStates();
+            });
         break;
     }
 
@@ -113,31 +114,32 @@ void GameServer::enqueueBinding(PlayerID playerId,
         break;
 
     case bindings::BindingType::MoveActive: {
-        bindings::MoveActive moveActive = bindings::MoveActive::from_json(j);
-        boost::asio::post(context_, [this, playerId, moveActive]() {
-            engine.tryMoveActive(playerId, moveActive.tetrominoMove);
-            sendGameStates();
-        });
+        boost::asio::post(
+            context_, [this, playerId,
+                       moveActive = bindings::MoveActive::from_json(j)]() {
+                engine.tryMoveActive(playerId, moveActive.tetrominoMove);
+                sendGameStates();
+            });
         break;
     }
 
     case bindings::BindingType::RotateActive: {
-        bindings::RotateActive rotateActive =
-            bindings::RotateActive::from_json(j);
-        boost::asio::post(context_, [this, playerId, rotateActive]() {
-            engine.tryRotateActive(playerId, rotateActive.rotateClockwise);
-            sendGameStates();
-        });
+        boost::asio::post(
+            context_, [this, playerId,
+                       rotateActive = bindings::RotateActive::from_json(j)]() {
+                engine.tryRotateActive(playerId, rotateActive.rotateClockwise);
+                sendGameStates();
+            });
         break;
     }
 
     case bindings::BindingType::SelectTarget: {
-        bindings::SelectTarget selectTarget =
-            bindings::SelectTarget::from_json(j);
-        boost::asio::post(context_, [this, playerId, selectTarget]() {
-            engine.tryRotateActive(playerId, selectTarget.targetId);
-            sendGameStates();
-        });
+        boost::asio::post(
+            context_, [this, playerId,
+                       selectTarget = bindings::SelectTarget::from_json(j)]() {
+                engine.tryRotateActive(playerId, selectTarget.targetId);
+                sendGameStates();
+            });
         break;
     }
 
