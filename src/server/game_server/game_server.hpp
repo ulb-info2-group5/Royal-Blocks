@@ -5,7 +5,6 @@
 #include "../../common/bindings/in_game/buy_bonus.hpp"
 #include "../../common/bindings/in_game/buy_penalty.hpp"
 #include "../../common/bindings/in_game/empty_penalty_stash.hpp"
-#include "../../common/bindings/in_game/game_state_server.hpp"
 #include "../../common/bindings/in_game/hold_next_tetromino.hpp"
 #include "../../common/bindings/in_game/move_active.hpp"
 #include "../../common/bindings/in_game/rotate_active.hpp"
@@ -15,10 +14,8 @@
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
+#include <boost/asio.hpp>
 #include <memory>
-#include <mutex>
-#include <queue>
-#include <utility>
 #include <variant>
 
 using PlayerID = size_t;
@@ -32,26 +29,46 @@ using EventVariant =
                  bindings::MoveActive, bindings::RotateActive,
                  bindings::SelectTarget>;
 
-using PlayerEvent = std::pair<PlayerID, EventVariant>;
-
 class GameServer {
   private:
-    std::queue<PlayerEvent> queue_;
-    std::mutex mutex_;
+    boost::asio::io_context context_;
+    boost::asio::steady_timer tickTimer_;
 
     GameStatePtr pGameState_;
     GameEngine engine;
 
+    /**
+     * @brief Sends the GameState to all the connected people in the game
+     * include viewers. TODO: (not implemented yet)
+     */
+    void sendGameStates();
+
+    /**
+     * @brief Signals the engine that an engine tick occured. Resets the timer
+     * for the next tick.
+     */
+    void onTimerTick();
+
   public:
+    /**
+     * @brief Constructor.
+     */
     GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;
     GameServer &operator=(GameServer &&) = delete;
 
+    /**
+     * @brief Enqueues a new binding as a string (json).
+     */
     void enqueueBinding(PlayerID playerId, const std::string &bindingStr);
 
-    void handleNextEvent();
+    /**
+     * @brief Runs the server. This function returns as soon as the game is
+     * finished.
+     */
+    void run();
 };
 
 #endif // GAME_SERVER_HPP

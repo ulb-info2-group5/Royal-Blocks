@@ -1,103 +1,149 @@
 #include "game_server.hpp"
+#include "../../common/bindings/in_game/game_state_server.hpp"
 #include "game_engine/game_engine.hpp"
 #include "game_mode/game_mode.hpp"
 #include "game_state/game_state.hpp"
+#include "player_state/player_state.hpp"
 
 #include <memory>
-#include <mutex>
+#include <ostream>
 #include <vector>
 
+constexpr size_t SECONDS_BETWEEN_TICKS = 1;
+
+// ----------------------------------------------------------------------------
+//                          PRIVATE METHODS
+// ----------------------------------------------------------------------------
+
+void GameServer::sendGameStates() {
+    // for (each PlayerID) {
+    // send bindings::GameStateMessage::serializeForPlayer(*pGameState_,
+    // playerID);
+    // }
+}
+
+void GameServer::onTimerTick() {
+    if (engine.gameIsFinished()) {
+        context_.stop();
+        return;
+    }
+
+    std::cout << "ticking" << std::endl;
+    engine.tick();
+
+    tickTimer_.expires_at(
+        tickTimer_.expiry()
+        + boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS});
+
+    tickTimer_.async_wait([this](const boost::system::error_code &ec) {
+        if (!ec) {
+            onTimerTick();
+        }
+    });
+}
+
+// ----------------------------------------------------------------------------
+//                          PUBLIC METHODS
+// ----------------------------------------------------------------------------
+
 GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds)
-    : pGameState_{std::make_shared<GameState>(
-        gameMode,
-        [&] {
-            std::vector<PlayerState> playerStates;
-            playerStates.reserve(playerIds.size());
-            std::transform(playerIds.begin(), playerIds.end(),
-                           std::back_inserter(playerStates),
-                           [](PlayerID id) { return PlayerState(id); });
-            return playerStates;
-        }())},
+    : context_{},
+      tickTimer_{context_, boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS}},
+      pGameState_{std::make_shared<GameState>(
+          gameMode,
+          [&] {
+              std::vector<PlayerState> playerStates;
+              playerStates.reserve(playerIds.size());
+              std::transform(playerIds.begin(), playerIds.end(),
+                             std::back_inserter(playerStates),
+                             [](PlayerID id) { return PlayerState(id); });
+              return playerStates;
+          }())},
       engine{pGameState_} {}
 
 void GameServer::enqueueBinding(PlayerID playerId,
                                 const std::string &bindingStr) {
+
     // Translate bindingStr to nlohmann::json
     nlohmann::json j = nlohmann::json::parse(bindingStr);
 
-    // Lock the GameServer's mutex for the following reasons:
-    // 1. Another thread could enqueue at the same.
-    // 2. The GameServer's thread could pop to handle the next event.
-    std::lock_guard<std::mutex> guard(mutex_);
-
     // BigDrop
     if (j.at("type") == bindings::BindingType::BigDrop) {
-        queue_.push({playerId, bindings::BigDrop::from_json(j)});
+        std::cout << "bigDrop" << std::endl;
+        boost::asio::post(context_,
+                          [this, playerId]() { engine.bigDrop(playerId); });
     }
     // BuyBonus
     else if (j.at("type") == bindings::BindingType::BuyBonus) {
-        queue_.push({playerId, bindings::BuyBonus::from_json(j)});
+        std::cout << "buyBonus" << std::endl;
+        bindings::BuyBonus buyBonus = bindings::BuyBonus::from_json(j);
+        boost::asio::post(context_, [this, playerId, buyBonus]() {
+            engine.tryBuyEffect(playerId, buyBonus.bonusType);
+        });
     }
     // BuyPenalty
     else if (j.at("type") == bindings::BindingType::BuyPenalty) {
-        queue_.push({playerId, bindings::BuyPenalty::from_json(j)});
+        std::cout << "buyPenalty" << std::endl;
+        bindings::BuyPenalty buyPenalty = bindings::BuyPenalty::from_json(j);
+
+        boost::asio::post(context_, [this, playerId, buyPenalty]() {
+            engine.tryBuyEffect(playerId, buyPenalty.penaltyType,
+                                buyPenalty.stashForLater);
+        });
     }
     // EmptyPenaltyStash
     else if (j.at("type") == bindings::BindingType::EmptyPenaltyStash) {
-        queue_.push({playerId, bindings::EmptyPenaltyStash::from_json(j)});
+        std::cout << "emptyPenaltyStash" << std::endl;
+        boost::asio::post(context_, [this, playerId]() {
+            engine.emptyPenaltyStash(playerId);
+        });
     }
     // HoldNextTetromino
     else if (j.at("type") == bindings::BindingType::HoldNextTetromino) {
-        queue_.push({playerId, bindings::HoldNextTetromino::from_json(j)});
+        std::cout << "holdNextTetromino" << std::endl;
+        boost::asio::post(context_, [this, playerId]() {
+            engine.holdNextTetromino(playerId);
+        });
     }
     // MoveActive
     else if (j.at("type") == bindings::BindingType::MoveActive) {
-        queue_.push({playerId, bindings::MoveActive::from_json(j)});
+        std::cout << "moveActive" << std::endl;
+        bindings::MoveActive moveActive = bindings::MoveActive::from_json(j);
+        boost::asio::post(context_, [this, playerId, moveActive]() {
+            engine.tryMoveActive(playerId, moveActive.tetrominoMove);
+        });
     }
     // RotateActive
     else if (j.at("type") == bindings::BindingType::RotateActive) {
-        queue_.push({playerId, bindings::RotateActive::from_json(j)});
+        std::cout << "rotateActive" << std::endl;
+        bindings::RotateActive rotateActive =
+            bindings::RotateActive::from_json(j);
+        boost::asio::post(context_, [this, playerId, rotateActive]() {
+            engine.tryRotateActive(playerId, rotateActive.rotateClockwise);
+        });
     }
     // SelectTarget
     else if (j.at("type") == bindings::BindingType::SelectTarget) {
-        queue_.push({playerId, bindings::SelectTarget::from_json(j)});
+        std::cout << "selectTarget" << std::endl;
+        bindings::SelectTarget selectTarget =
+            bindings::SelectTarget::from_json(j);
+        boost::asio::post(context_, [this, playerId, selectTarget]() {
+            engine.tryRotateActive(playerId, selectTarget.targetId);
+        });
     }
+
+    boost::asio::post(context_, [this]() { sendGameStates(); });
 }
 
-void GameServer::handleNextEvent() {
-    std::lock_guard<std::mutex> guard(mutex_);
+void GameServer::run() {
+    // Setup or async engine-tick-clock
+    tickTimer_.async_wait([this](const boost::system::error_code &ec) {
+        if (!ec) {
+            onTimerTick();
+        }
+    });
 
-    if (queue_.empty()) {
-        return;
-    }
+    context_.run();
 
-    // Destructure the playerID and the event from the queue's front
-    auto [playerID, event] = queue_.front();
-    queue_.pop();
-
-    std::visit(
-        [this, playerID](auto &&arg) {
-            using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_same_v<T, bindings::BigDrop>) {
-                engine.bigDrop(playerID);
-            } else if constexpr (std::is_same_v<T, bindings::BuyBonus>) {
-                engine.tryBuyEffect(playerID, arg.bonusType);
-            } else if constexpr (std::is_same_v<T, bindings::BuyPenalty>) {
-                engine.tryBuyEffect(playerID, arg.penaltyType,
-                                    arg.stashForLater);
-            } else if constexpr (std::is_same_v<T,
-                                                bindings::EmptyPenaltyStash>) {
-                engine.emptyPenaltyStash(playerID);
-            } else if constexpr (std::is_same_v<T,
-                                                bindings::HoldNextTetromino>) {
-                engine.holdNextTetromino(playerID);
-            } else if constexpr (std::is_same_v<T, bindings::MoveActive>) {
-                engine.tryMoveActive(playerID, arg.tetrominoMove);
-            } else if constexpr (std::is_same_v<T, bindings::RotateActive>) {
-                engine.tryRotateActive(playerID, arg.rotateClockwise);
-            } else if constexpr (std::is_same_v<T, bindings::SelectTarget>) {
-                engine.selectTarget(playerID, arg.targetId);
-            }
-        },
-        event);
+    // End of context_.run() means the game is finished
 }
