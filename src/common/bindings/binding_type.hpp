@@ -14,6 +14,7 @@ namespace bindings {
 
         // in game
         GameState,
+        QuitGame,
         BigDrop,
         BuyBonus,
         BuyPenalty,
