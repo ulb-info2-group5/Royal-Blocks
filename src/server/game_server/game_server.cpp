@@ -67,72 +67,88 @@ void GameServer::enqueueBinding(PlayerID playerId,
     // Translate bindingStr to nlohmann::json
     nlohmann::json j = nlohmann::json::parse(bindingStr);
 
-    // BigDrop
-    if (j.at("type") == bindings::BindingType::BigDrop) {
-        std::cout << "bigDrop" << std::endl;
-        boost::asio::post(context_,
-                          [this, playerId]() { engine.bigDrop(playerId); });
-    }
-    // BuyBonus
-    else if (j.at("type") == bindings::BindingType::BuyBonus) {
-        std::cout << "buyBonus" << std::endl;
+    bindings::BindingType bindingType = j.at("type");
+
+    switch (bindingType) {
+
+    case bindings::BindingType::BigDrop:
+        boost::asio::post(context_, [this, playerId]() {
+            engine.bigDrop(playerId);
+            sendGameStates();
+        });
+        break;
+
+    case bindings::BindingType::BuyBonus: {
         bindings::BuyBonus buyBonus = bindings::BuyBonus::from_json(j);
         boost::asio::post(context_, [this, playerId, buyBonus]() {
             engine.tryBuyEffect(playerId, buyBonus.bonusType);
+            sendGameStates();
         });
+        break;
     }
-    // BuyPenalty
-    else if (j.at("type") == bindings::BindingType::BuyPenalty) {
-        std::cout << "buyPenalty" << std::endl;
+
+    case bindings::BindingType::BuyPenalty: {
         bindings::BuyPenalty buyPenalty = bindings::BuyPenalty::from_json(j);
 
         boost::asio::post(context_, [this, playerId, buyPenalty]() {
             engine.tryBuyEffect(playerId, buyPenalty.penaltyType,
                                 buyPenalty.stashForLater);
+            sendGameStates();
         });
+        break;
     }
-    // EmptyPenaltyStash
-    else if (j.at("type") == bindings::BindingType::EmptyPenaltyStash) {
-        std::cout << "emptyPenaltyStash" << std::endl;
+
+    case bindings::BindingType::EmptyPenaltyStash:
         boost::asio::post(context_, [this, playerId]() {
             engine.emptyPenaltyStash(playerId);
+            sendGameStates();
         });
-    }
-    // HoldNextTetromino
-    else if (j.at("type") == bindings::BindingType::HoldNextTetromino) {
-        std::cout << "holdNextTetromino" << std::endl;
+        break;
+
+    case bindings::BindingType::HoldNextTetromino:
         boost::asio::post(context_, [this, playerId]() {
             engine.holdNextTetromino(playerId);
+            sendGameStates();
         });
-    }
-    // MoveActive
-    else if (j.at("type") == bindings::BindingType::MoveActive) {
-        std::cout << "moveActive" << std::endl;
+        break;
+
+    case bindings::BindingType::MoveActive: {
         bindings::MoveActive moveActive = bindings::MoveActive::from_json(j);
         boost::asio::post(context_, [this, playerId, moveActive]() {
             engine.tryMoveActive(playerId, moveActive.tetrominoMove);
+            sendGameStates();
         });
+        break;
     }
-    // RotateActive
-    else if (j.at("type") == bindings::BindingType::RotateActive) {
-        std::cout << "rotateActive" << std::endl;
+
+    case bindings::BindingType::RotateActive: {
         bindings::RotateActive rotateActive =
             bindings::RotateActive::from_json(j);
         boost::asio::post(context_, [this, playerId, rotateActive]() {
             engine.tryRotateActive(playerId, rotateActive.rotateClockwise);
+            sendGameStates();
         });
+        break;
     }
-    // SelectTarget
-    else if (j.at("type") == bindings::BindingType::SelectTarget) {
-        std::cout << "selectTarget" << std::endl;
+
+    case bindings::BindingType::SelectTarget: {
         bindings::SelectTarget selectTarget =
             bindings::SelectTarget::from_json(j);
         boost::asio::post(context_, [this, playerId, selectTarget]() {
             engine.tryRotateActive(playerId, selectTarget.targetId);
+            sendGameStates();
         });
+        break;
     }
 
-    boost::asio::post(context_, [this]() { sendGameStates(); });
+    case bindings::BindingType::QuitGame:
+        // TODO
+        break;
+
+    default:
+        std::cerr << "unkown binding" << std::endl;
+        break;
+    }
 }
 
 void GameServer::run() {
