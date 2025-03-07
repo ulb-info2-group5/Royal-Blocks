@@ -236,11 +236,6 @@ bool GameEngine::checkAlive(const PlayerStatePtr &pPlayerState) const {
     return pPlayerState->isAlive();
 }
 
-bool GameEngine::checkAlive(PlayerID playerID) const {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    return checkAlive(pPlayerState);
-}
-
 void GameEngine::tick(PlayerTetris &playerTetris) {
     playerTetris.pPlayerState->notifyEngineTick();
 
@@ -513,7 +508,16 @@ void GameEngine::tick() {
     }
 }
 
-std::optional<PlayerID> GameEngine::getWinner() {
+bool GameEngine::checkAlive(PlayerID playerID) const {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    return checkAlive(pPlayerState);
+}
+
+std::optional<PlayerID> GameEngine::getWinner() const {
+    if (pGameState_->getGameMode() == GameMode::Endless) {
+        return std::nullopt;
+    }
+
     auto alivePlayers = pGameState_->getPlayerToTetris()
                         | std::views::filter([](const auto &pt) {
                               return pt.pPlayerState->isAlive();
@@ -526,4 +530,13 @@ std::optional<PlayerID> GameEngine::getWinner() {
     }
 
     return alivePlayers.begin()->pPlayerState->getPlayerID();
+}
+
+bool GameEngine::gameIsFinished() const {
+    if (pGameState_->getGameMode() == GameMode::Endless) {
+        // Return whether the single player is alive
+        return !pGameState_->getPlayerToTetris().at(0).pPlayerState->isAlive();
+    } else {
+        return getWinner() != std::nullopt;
+    }
 }

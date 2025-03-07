@@ -1,5 +1,5 @@
-#ifndef AUTHENTICATION_RESPONSE_HPP
-#define AUTHENTICATION_RESPONSE_HPP
+#ifndef BINDINGS_AUTHENTICATION_RESPONSE_HPP
+#define BINDINGS_AUTHENTICATION_RESPONSE_HPP
 
 #include "binding_type.hpp"
 
@@ -13,10 +13,11 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::AuthenticationResponse},
-                {"data", {{"success", success}}},
-            };
+            return nlohmann::json{{"type", BindingType::AuthenticationResponse},
+                                  {"data",
+                                   {
+                                       {"success", success},
+                                   }}};
         }
 
         static AuthenticationResponse from_json(const nlohmann::json &j) {
@@ -31,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // AUTHENTICATION_RESPONSE_HPP
+#endif // BINDINGS_AUTHENTICATION_RESPONSE_HPP

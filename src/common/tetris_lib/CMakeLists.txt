@@ -1,3 +1,6 @@
+# Make lsp's aware of libraries
+set(CMAKE_EXPORT_COMPILE_COMMANDS True)
+
 # tetris_lib source files
 file(GLOB_RECURSE SOURCES_TETRIS_LIB
     *.cpp
@@ -13,6 +16,3 @@ target_link_libraries(tetris_lib
 )
 
 target_include_directories(tetris_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Make lsp's aware of libraries
-set(CMAKE_EXPORT_COMPILE_COMMANDS True)

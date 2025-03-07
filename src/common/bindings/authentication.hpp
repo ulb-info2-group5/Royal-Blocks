@@ -1,5 +1,5 @@
-#ifndef AUTHENTICATION_HPP
-#define AUTHENTICATION_HPP
+#ifndef BINDINGS_AUTHENTICATION_HPP
+#define BINDINGS_AUTHENTICATION_HPP
 
 #include "binding_type.hpp"
 
@@ -15,10 +15,12 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::Authentication},
-                {"data", {{"nickname", nickname}, {"password", password}}},
-            };
+            return nlohmann::json{{"type", BindingType::Authentication},
+                                  {"data",
+                                   {
+                                       {"nickname", nickname},
+                                       {"password", password},
+                                   }}};
         }
 
         static Authentication from_json(const nlohmann::json &j) {
@@ -34,4 +36,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // AUTHENTICATION_HPP
+#endif // BINDINGS_AUTHENTICATION_HPP

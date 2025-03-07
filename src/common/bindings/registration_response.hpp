@@ -1,5 +1,5 @@
-#ifndef REGISTRATION_RESPONSE_HPP
-#define REGISTRATION_RESPONSE_HPP
+#ifndef BINDINGS_REGISTRATION_RESPONSE_HPP
+#define BINDINGS_REGISTRATION_RESPONSE_HPP
 
 #include "binding_type.hpp"
 
@@ -13,10 +13,11 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::RegistrationResponse},
-                {"data", {{"success", success}}},
-            };
+            return nlohmann::json{{"type", BindingType::RegistrationResponse},
+                                  {"data",
+                                   {
+                                       {"success", success},
+                                   }}};
         }
 
         static RegistrationResponse from_json(const nlohmann::json &j) {
@@ -31,4 +32,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // REGISTRATION_RESPONSE_HPP
+#endif // BINDINGS_REGISTRATION_RESPONSE_HPP

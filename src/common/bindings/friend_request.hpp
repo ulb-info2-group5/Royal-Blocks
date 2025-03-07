@@ -1,5 +1,5 @@
-#ifndef FRIEND_REQUEST_HPP
-#define FRIEND_REQUEST_HPP
+#ifndef BINDINGS_FRIEND_REQUEST_HPP
+#define BINDINGS_FRIEND_REQUEST_HPP
 
 #include "binding_type.hpp"
 
@@ -12,7 +12,6 @@ namespace bindings {
     struct FriendRequest {
         enum class FriendRequestType { Add, Remove };
 
-        PlayerID requesterId;
         PlayerID targetId;
         FriendRequestType friendRequestType;
 
@@ -20,7 +19,6 @@ namespace bindings {
             return nlohmann::json{{"type", BindingType::FriendRequest},
                                   {"data",
                                    {
-                                       {"requesterId", requesterId},
                                        {"targetId", targetId},
                                        {"friendRequestType", friendRequestType},
                                    }}};
@@ -33,7 +31,6 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return FriendRequest{
-                data.at("requesterId").get<PlayerID>(),
                 data.at("targetId").get<PlayerID>(),
                 data.at("friendRequestType").get<FriendRequestType>()};
         }
@@ -41,4 +38,4 @@ namespace bindings {
 
 } // namespace bindings
 
-#endif // FRIEND_REQUEST_HPP
+#endif // BINDINGS_FRIEND_REQUEST_HPP
