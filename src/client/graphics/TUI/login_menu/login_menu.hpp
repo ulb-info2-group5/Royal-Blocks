@@ -59,8 +59,6 @@ class LoginMenu : public ILogin_Menu {
 
     ftxui::Component displayWindow_;
 
-    ftxui::ButtonOption buttonStyle_;
-
   protected:
     void createButtons() override;
 

@@ -20,7 +20,7 @@
 MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
     : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
       friendsMenu_(screen, controller), messagingMenu_(screen, controller),
-      gameMenu_(screen, controller), buttonStyle_(GlobalButtonStyle()) {
+      gameMenu_(screen, controller) {
 
     createMainMenuButtons();
 
@@ -29,7 +29,7 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                       [&] {
                           state_ = MainMenuState::BACK;
                           screen_.ExitLoopClosure()();
-                      },  buttonStyle_);
+                      },  GlobalButtonStyle());
 
     buttonOK_ =
         ftxui::Button(
@@ -37,7 +37,7 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
             [&] {
                 state_ =
                     MainMenuState::BACK; // like a back button but with ok title
-            },  buttonStyle_);
+            },  GlobalButtonStyle());
 }
 
 // ### Private methods ###
@@ -92,14 +92,14 @@ void MainMenu::createMainMenuButtons() {
                       [&] {
                           state_ = MainMenuState::CREATE_GAME;
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 
     buttonJoinGame_ = ftxui::Button(
                           "▶ Join a game",
                           [&] {
                               state_ = MainMenuState::JOIN_GAME;
                               screen_.ExitLoopClosure()();
-                          }, buttonStyle_);
+                          }, GlobalButtonStyle());
 
     buttonSendMessagesToFriends_ =
         ftxui::Button(
@@ -107,14 +107,14 @@ void MainMenu::createMainMenuButtons() {
             [&] {
                 state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
 
     buttonLookRanking_ = ftxui::Button(
                              "🏆 Leaderboard",
                              [&] {
                                  state_ = MainMenuState::LOOK_RANKING;
                                  screen_.ExitLoopClosure()();
-                             }, buttonStyle_);
+                             }, GlobalButtonStyle());
 
     buttonManageProfile_ =
         ftxui::Button(
@@ -122,7 +122,7 @@ void MainMenu::createMainMenuButtons() {
             [&] {
                 state_ = MainMenuState::MANAGE_PROFILE;
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
 
     buttonManageFriendsList_ =
         ftxui::Button(
@@ -130,14 +130,14 @@ void MainMenu::createMainMenuButtons() {
             [&] {
                 state_ = MainMenuState::MANAGE_FRIENDS_LIST;
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
                       "Quit the game",
                       [&] {
                           state_ = MainMenuState::EXIT;
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 }
 
 void MainMenu::displayMainWindow() {
@@ -248,7 +248,7 @@ void MainMenu::displayProfileManagerButton() {
                             controller_.changeProfile(
                                 username_, password_); // profile screen
                             screen_.ExitLoopClosure()();
-                        }, buttonStyle_);
+                        }, GlobalButtonStyle());
 }
 
 void MainMenu::displayProfileManagerWindow() {

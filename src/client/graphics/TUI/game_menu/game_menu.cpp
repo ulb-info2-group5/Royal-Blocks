@@ -18,7 +18,7 @@
 
 GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
     : screen_(screen), controller_(controller), joinType_(JoinType::NONE),
-      typeGame_(TypeGame::NONE), buttonStyle_(GlobalButtonStyle()) {
+      typeGame_(TypeGame::NONE) {
 
     gameDisplay_ =
         std::make_unique<GameDisplay>(screen_, controller_.getGameState());
@@ -28,7 +28,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                         [&] {
                             joinType_ = JoinType::ENDLESS;
                             screen_.ExitLoopClosure()();
-                        }, buttonStyle_);
+                        }, GlobalButtonStyle());
 
     duelButon_ = ftxui::Button(
                      "Duel",
@@ -37,7 +37,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                              screen_, controller_.getGameState());
                          joinFriendOrRandomScreen();
                          screen_.ExitLoopClosure()();
-                     }, buttonStyle_);
+                     }, GlobalButtonStyle());
 
     classicButon_ = ftxui::Button(
                         "Classic",
@@ -46,7 +46,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                                 screen_, controller_.getGameState());
                             joinFriendOrRandomScreen();
                             screen_.ExitLoopClosure()();
-                        }, buttonStyle_);
+                        }, GlobalButtonStyle());
 
     royalButon_ = ftxui::Button(
                       "Royal",
@@ -55,14 +55,14 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                               screen_, controller_.getGameState());
                           joinFriendOrRandomScreen();
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 
     backButton_ = ftxui::Button(
                       "Back",
                       [&] {
                           joinType_ = JoinType::BACK;
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 }
 
 // ### Private methods ###
@@ -128,14 +128,14 @@ void GameMenu::joinFriendOrRandomScreen() {
             [&] {
                 joinType_ = JoinType::FRIEND;
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
     ftxui::Component joinRandomButton =
         ftxui::Button(
             "Join a random game",
             [&] {
                 joinType_ = JoinType::RANDOM;
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
 
     ftxui::Component container = ftxui::Container::Vertical(
         {joinFriendButton, joinRandomButton, backButton_});
@@ -239,7 +239,7 @@ ftxui::Component GameMenu::makeFriendButton(const std::string &friendName) {
             // TODO: communicate with the server to join the friend here ?
             waitingFriendScreen();
             screen_.ExitLoopClosure()();
-        }, buttonStyle_);
+        }, GlobalButtonStyle());
 }
 
 void GameMenu::waitingFriendScreen() {

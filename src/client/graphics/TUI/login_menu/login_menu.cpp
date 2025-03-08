@@ -22,7 +22,7 @@ LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen, Controller &controller)
       loginInput_(LoginInput(screen_, controller_, LOGIN_INPUT_TITLE,
                              LoginType::LOGIN)),
       registerInput_(LoginInput(screen_, controller_, REGISTER_INPUT_TITLE,
-                                LoginType::REGISTER)), buttonStyle_(GlobalButtonStyle()) {
+                                LoginType::REGISTER)) {
     loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 
@@ -45,7 +45,7 @@ void LoginMenu::createButtons() {
                     }
                 }
                 screen_.ExitLoopClosure()();
-            }, buttonStyle_);
+            }, GlobalButtonStyle());
 
     buttonLogin_ = ftxui::Button(
                        "Login",
@@ -54,14 +54,14 @@ void LoginMenu::createButtons() {
                                loginState_ = Login::LOGGED;
                            }
                            screen_.ExitLoopClosure()();
-                       }, buttonStyle_);
+                       }, GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
                       "Exit",
                       [&] {
                           loginState_ = Login::EXIT;
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 }
 
 void LoginMenu::displayWindow() {

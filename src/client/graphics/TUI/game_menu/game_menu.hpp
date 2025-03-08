@@ -44,8 +44,6 @@ class GameMenu : public IGame_Menu {
     ftxui::Component royalButon_;
     ftxui::Component backButton_;
 
-    ftxui::ButtonOption buttonStyle_;
-
     /*
      * @brief Rend the all the game present in the game menu
      *

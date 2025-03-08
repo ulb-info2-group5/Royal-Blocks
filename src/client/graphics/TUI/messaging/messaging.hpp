@@ -66,8 +66,6 @@ class Messaging : public IMessage {
 
     ftxui::Component displayWindow_;
 
-    ftxui::ButtonOption buttonStyle_;
-
     // just to simulate a user ID
     int userId = 5;
     void initMessaging();

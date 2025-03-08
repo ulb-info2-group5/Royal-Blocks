@@ -24,7 +24,7 @@
 LoginInput::LoginInput(ftxui::ScreenInteractive &screen, Controller &controller,
                        std::string title, LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
-      loginType_(loginType), loginState_(LoginState::NONE), buttonStyle_(GlobalButtonStyle()) {
+      loginType_(loginType), loginState_(LoginState::NONE) {
 
     createButtonBack();
     createButtonSubmit();
@@ -44,7 +44,7 @@ void LoginInput::createButtonBack() {
                           password_.clear();
                           loginState_ = LoginState::BACK;
                           screen_.ExitLoopClosure()();
-                      }, buttonStyle_);
+                      }, GlobalButtonStyle());
 }
 
 void LoginInput::createButtonSubmit() {
@@ -80,7 +80,7 @@ void LoginInput::createButtonSubmit() {
                     message_.clear();
                     msg_ = "The username or password is incorrect!";
                 }
-            },buttonStyle_);
+            }, GlobalButtonStyle());
 }
 
 void LoginInput::displayWindow() {

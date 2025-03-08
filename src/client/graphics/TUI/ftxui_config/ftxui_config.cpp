@@ -1,6 +1,7 @@
 #include "ftxui_config.hpp"
 
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
 ftxui::Component handleCtrlC(ftxui::Component &component) {
@@ -29,7 +30,7 @@ ftxui::ButtonOption GlobalButtonStyle() {
     buttonStyle.transform = [](const ftxui::EntryState& state) {
         return ftxui::hbox({
                    ftxui::filler(),
-                   ftxui::text(state.label) | ftxui::center,
+                   ftxui::text(state.label) | ftxui::center | ftxui::bold,
                    ftxui::filler()
                }) 
             | ftxui::xflex

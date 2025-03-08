@@ -78,8 +78,6 @@ class LoginInput : public ILogin_Input {
     ftxui::Component inputPassword_;
     ftxui::Component displayWindow_;
 
-    ftxui::ButtonOption buttonStyle_;
-
   protected:
     void createButtonBack() override;
 

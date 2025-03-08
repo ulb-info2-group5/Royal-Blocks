@@ -9,7 +9,7 @@
 
 // ### constructor ###
 Messaging::Messaging(ftxui::ScreenInteractive &screen, Controller &controller)
-    : screen_(screen), controller_(controller), buttonStyle_(GlobalButtonStyle()) {
+    : screen_(screen), controller_(controller) {
     userState_ = MessagingState::NONE;
     initMessaging();
     createButtons();
@@ -32,7 +32,7 @@ void Messaging::createButtons() {
             friends_.push_back(newFriend_);
             conversations_[newFriend_] = {};
             newFriend_.clear();
-        }, buttonStyle_);
+        }, GlobalButtonStyle());
 
     sendButton_ =
         ftxui::Button("Send",
@@ -44,7 +44,7 @@ void Messaging::createButtons() {
                                                 // sent with server, etc
                               addMessage(newMessage_);
                           }
-                      }, buttonStyle_)
+                      }, GlobalButtonStyle())
         | ftxui::center;
 
     backButton_ = ftxui::Button(
@@ -54,13 +54,13 @@ void Messaging::createButtons() {
             newFriend_.clear();
             userState_ = MessagingState::BACK;
             screen_.ExitLoopClosure()();
-        }, buttonStyle_);
+        }, GlobalButtonStyle());
 }
 
 void Messaging::drawInputUSer() {
     newFriend_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriend_, "Nom de l'ami");
+    addFriendInput_ = ftxui::Input(&newFriend_, "Name of the friend");
     // attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
@@ -71,7 +71,7 @@ void Messaging::drawInputUSer() {
     //     }
     // });
 
-    messageInput_ = ftxui::Input(&newMessage_, "Écrire un message...")
+    messageInput_ = ftxui::Input(&newMessage_, "Write a message...")
                     | ftxui::center | ftxui::borderHeavy;
 }
 
@@ -131,7 +131,7 @@ void Messaging::drawWindow() {
     displayWindow_ = ftxui::Renderer(mainContainer, [&] {
         return ftxui::hbox({
                    ftxui::vbox({
-                       ftxui::text(" --- LISTE AMIS --- ") | ftxui::bold
+                       ftxui::text(" --- FRIENDS LIST --- ") | ftxui::bold
                            | ftxui::color(ftxui::Color::Green) | ftxui::center,
                        ftxui::separator(),
                        friendsMenu_->Render(),
@@ -151,7 +151,7 @@ void Messaging::drawWindow() {
                        | ftxui::flex,
 
                    ftxui::vbox({
-                       ftxui::text("-- Ajouter un ami --") | ftxui::bold
+                       ftxui::text("-- Add a friend --") | ftxui::bold
                            | ftxui::color(ftxui::Color::Green) | ftxui::center,
                        ftxui::separator(),
                        addFriendInput_->Render(),
