@@ -6,6 +6,7 @@ namespace bindings {
     enum class BindingType {
         Authentication,
         AuthenticationResponse,
+        FriendsList,
         FriendRequest,
         Message,
         Registration,
