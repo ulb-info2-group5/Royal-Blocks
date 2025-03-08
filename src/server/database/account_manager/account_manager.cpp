@@ -23,17 +23,6 @@ AccountManager::AccountManager(std::shared_ptr<DatabaseManager> &db) : dbManager
 }
 
 // ### Private methods ###
-bool AccountManager::checkUsernameExists(const std::string &username) const {
-    std::string query = "SELECT COUNT(*) FROM users WHERE username = ?";
-    int count = 0;
-    return dbManager_->executeSqlRecoveryInt(query, {username}, count) && count > 0;
-}
-
-bool AccountManager::checkUserPassword(const std::string &username, const std::string &password) const {
-    std::string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
-    int count = 0;
-    return dbManager_->executeSqlRecoveryInt(sql, {username, password}, count) && count > 0;
-}
 
 
 // ### Public methods ###
@@ -66,6 +55,21 @@ bool AccountManager::deleteAccount(const int userId) {
 
     return dbManager_->executeSqlChangeData("DELETE FROM users WHERE id = ?", {userId});
 }
+
+bool AccountManager::checkUserPassword(const std::string &username, const std::string &password) const {
+    std::string sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ?";
+    int count = 0;
+    return dbManager_->executeSqlRecoveryInt(sql, {username, password}, count) && count > 0;
+}
+
+
+
+bool AccountManager::checkUsernameExists(const std::string &username) const {
+    std::string query = "SELECT COUNT(*) FROM users WHERE username = ?";
+    int count = 0;
+    return dbManager_->executeSqlRecoveryInt(query, {username}, count) && count > 0;
+}
+
 
 bool AccountManager::login(const std::string &username, const std::string &password) const {
     return checkUserPassword(username, password);

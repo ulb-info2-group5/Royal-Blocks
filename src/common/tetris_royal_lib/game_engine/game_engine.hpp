@@ -168,11 +168,6 @@ class GameEngine {
     bool checkAlive(const PlayerStatePtr &pPlayerState) const;
 
     /**
-     * @brief Checks that the given player is alive.
-     */
-    bool checkAlive(PlayerID playerID) const;
-
-    /**
      * @brief Makes an engine tick happen for the given player.
      */
     void tick(PlayerTetris &playerTetris);
@@ -260,7 +255,15 @@ class GameEngine {
     /**
      * @brief Returns the winner's playerID if there is one, nullopt otherwise.
      */
-    std::optional<PlayerID> getWinner();
+    std::optional<PlayerID> getWinner() const;
+
+    /**
+     * @brief Checks that the given player is alive.
+     */
+    bool checkAlive(PlayerID playerID) const;
+
+    // TODO
+    bool gameIsFinished() const;
 
     /**
      * @brief Checks whether the given feature is enabled for the given
