@@ -4,8 +4,7 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 // TODO: add verification of information when adding a friend, sending a
-// message, etc. with the server. Check if the vector of friends, etc, are
-// updated correctly
+// message, etc. with the server.
 
 // ### constructor ###
 Messaging::Messaging(ftxui::ScreenInteractive &screen, Controller &controller)
@@ -174,9 +173,12 @@ void Messaging::drawWindow() {
 
 // ### public methods ###
 void Messaging::render() {
-    friends_ =
-        controller_.getFriendsList(); // TODO: check if the friends list is
-                                      // correctly updated with the server, etc
+    // TODO: this doesn't work anymore because we changed getFriendsList()
+    //
+    // friends_ = controller_.getFriendsList(); // TODO: check if the friends
+    // list is
+    //                                   // correctly updated with the server,
+    //                                   etc
     conversations_ =
         controller_.getMessages(); // TODO: check if the conversations are
                                    // correctly updated with the server, etc

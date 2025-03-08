@@ -131,10 +131,8 @@ class Controller {
 
     /*
      * @brief Get the friends list of the user
-     *
-     * @return std::vector<std::string> The friends list of the user
      */
-    std::vector<std::string> getFriendsList() const;
+    const bindings::FriendsList &getFriendsList() const;
 
     /*
      * @brief Add a friend to the friends list of the user

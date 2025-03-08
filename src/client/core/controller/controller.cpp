@@ -144,17 +144,8 @@ void Controller::changeProfile(const std::string &username,
     // TODO
 }
 
-std::vector<std::string> Controller::getFriendsList() const {
-    // TODO: communicate with the server to get the friends list
-    // TODO: remove this because it's an example
-    std::vector<std::string> friendsList;
-    friendsList.push_back("friend1");
-    friendsList.push_back("friend2");
-    friendsList.push_back("friend3");
-    friendsList.push_back("friend4");
-    friendsList.push_back("friend5");
-
-    return friendsList;
+const bindings::FriendsList &Controller::getFriendsList() const {
+    return friendsList_;
 }
 
 void Controller::sendFriendRequest(const std::string &username) {

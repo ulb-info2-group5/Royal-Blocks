@@ -1,3 +1,2 @@
 add_subdirectory(tetris_lib)
 add_subdirectory(tetris_royal_lib)
-add_subdirectory(bindings)

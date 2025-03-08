@@ -31,12 +31,17 @@ FriendsMenu::FriendsMenu(ftxui::ScreenInteractive &screen,
 void FriendsMenu::render() {
     while (!exit_) {
 
-        std::vector<std::string> friendsList =
-            controller_.getFriendsList(); // Get the friends list of the user
-                                          // by asking the controller
+        // std::vector<std::string> friendsList;
+
+        const bindings::FriendsList &friendsList = controller_.getFriendsList();
+        std::vector<std::string> friendsName(friendsList.friendsList.size());
+        std::transform(
+            friendsList.friendsList.begin(), friendsList.friendsList.end(),
+            friendsName.begin(),
+            [](const bindings::User &user) { return user.username; });
 
         std::vector<ftxui::Component> friendsButton = displayFriendButtons(
-            friendsList); // Display the friends list as buttons
+            friendsName); // Display the friends list as buttons
 
         ftxui::Component friendsContainer =
             ftxui::Container::Vertical(friendsButton);
