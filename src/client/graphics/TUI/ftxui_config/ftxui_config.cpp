@@ -1,4 +1,4 @@
-#include "handle_ctrl.hpp"
+#include "ftxui_config.hpp"
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -22,4 +22,19 @@ ftxui::Component handleCtrl(ftxui::Component &component) {
                       == ftxui::Event::Character(
                           '\x03'); // Ctrl+Z or Ctrl+C event
     });
+}
+
+ftxui::ButtonOption GlobalButtonStyle() {
+    ftxui::ButtonOption buttonStyle;
+    buttonStyle.transform = [](const ftxui::EntryState& state) {
+        return ftxui::hbox({
+                   ftxui::filler(),
+                   ftxui::text(state.label) | ftxui::center,
+                   ftxui::filler()
+               }) 
+            | ftxui::xflex
+            | (state.active ? ftxui::color(ftxui::Color::Yellow) : ftxui::color(ftxui::Color::White)) 
+            | (state.focused ? ftxui::borderDouble : ftxui::border);
+    };
+    return buttonStyle;
 }

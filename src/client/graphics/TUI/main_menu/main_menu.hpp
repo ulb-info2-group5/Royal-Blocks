@@ -87,6 +87,8 @@ class MainMenu : public IMain_Menu {
     ftxui::Component friendManagerWindow_;
     ftxui::Component profileManagerWindow_;
 
+    ftxui::ButtonOption buttonStyle_;
+
     /*
      * @brief Handle the choice of the user in the main menu
      */

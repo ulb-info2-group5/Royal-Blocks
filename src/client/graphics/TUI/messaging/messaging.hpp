@@ -3,6 +3,7 @@
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/mouse.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -64,6 +65,8 @@ class Messaging : public IMessage {
     ftxui::Component chatDisplay_;
 
     ftxui::Component displayWindow_;
+
+    ftxui::ButtonOption buttonStyle_;
 
     // just to simulate a user ID
     int userId = 5;

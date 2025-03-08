@@ -10,6 +10,7 @@
 #define GAME_MENU_HPP
 
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <memory>
 
@@ -42,6 +43,8 @@ class GameMenu : public IGame_Menu {
     ftxui::Component classicButon_;
     ftxui::Component royalButon_;
     ftxui::Component backButton_;
+
+    ftxui::ButtonOption buttonStyle_;
 
     /*
      * @brief Rend the all the game present in the game menu

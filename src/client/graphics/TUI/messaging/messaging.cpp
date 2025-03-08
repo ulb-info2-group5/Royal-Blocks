@@ -1,7 +1,7 @@
 #include "messaging.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../handle_ctrl/handle_ctrl.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server. Check if the vector of friends, etc, are
@@ -9,7 +9,7 @@
 
 // ### constructor ###
 Messaging::Messaging(ftxui::ScreenInteractive &screen, Controller &controller)
-    : screen_(screen), controller_(controller) {
+    : screen_(screen), controller_(controller), buttonStyle_(GlobalButtonStyle()) {
     userState_ = MessagingState::NONE;
     initMessaging();
     createButtons();
@@ -26,17 +26,16 @@ void Messaging::initMessaging() {
 
 void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
-        "Ajouter un ami",
+        "Add a friend",
         [&] {
             controller_.addFriend(newFriend_);
             friends_.push_back(newFriend_);
             conversations_[newFriend_] = {};
             newFriend_.clear();
-        },
-        ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+        }, buttonStyle_);
 
     sendButton_ =
-        ftxui::Button("Envoyer",
+        ftxui::Button("Send",
                       [&] {
                           if (!newMessage_.empty() && !friends_.empty()) {
                               controller_.sendMessage(
@@ -45,7 +44,7 @@ void Messaging::createButtons() {
                                                 // sent with server, etc
                               addMessage(newMessage_);
                           }
-                      })
+                      }, buttonStyle_)
         | ftxui::center;
 
     backButton_ = ftxui::Button(
@@ -55,8 +54,7 @@ void Messaging::createButtons() {
             newFriend_.clear();
             userState_ = MessagingState::BACK;
             screen_.ExitLoopClosure()();
-        },
-        ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+        }, buttonStyle_);
 }
 
 void Messaging::drawInputUSer() {
@@ -74,7 +72,7 @@ void Messaging::drawInputUSer() {
     // });
 
     messageInput_ = ftxui::Input(&newMessage_, "Écrire un message...")
-                    | ftxui::center | ftxui::border;
+                    | ftxui::center | ftxui::borderHeavy;
 }
 
 void Messaging::drawMenu() {
@@ -138,7 +136,7 @@ void Messaging::drawWindow() {
                        ftxui::separator(),
                        friendsMenu_->Render(),
 
-                   }) | ftxui::border,
+                   }) | ftxui::borderHeavy,
 
                    ftxui::vbox({
                        ftxui::text(" --- CONVERSATION --- ") | ftxui::bold
@@ -149,7 +147,7 @@ void Messaging::drawWindow() {
                        messageInput_->Render(),
                        ftxui::separator(),
                        sendButton_->Render(),
-                   }) | ftxui::border
+                   }) | ftxui::borderHeavy
                        | ftxui::flex,
 
                    ftxui::vbox({
@@ -163,10 +161,10 @@ void Messaging::drawWindow() {
 
                        backButton_->Render(),
                        ftxui::separator(),
-                   }) | ftxui::border,
+                   }) | ftxui::borderHeavy,
 
                })
-               | ftxui::border;
+               | ftxui::borderHeavy;
     });
 }
 

@@ -10,6 +10,7 @@
 #define FRIENDS_MENU_HPP
 
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <vector>
 
@@ -35,6 +36,8 @@ class FriendsMenu {
     ftxui::Component input_;
     ftxui::Component submitButton_;
     ftxui::Component buttonBackToMainMenu_;
+
+    ftxui::ButtonOption buttonStyle_;
 
     /*
      * @brief Render the friends list of the user to display with all friends

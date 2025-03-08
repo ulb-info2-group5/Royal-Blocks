@@ -9,7 +9,7 @@
 #include "login_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../handle_ctrl/handle_ctrl.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
 
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
@@ -22,7 +22,7 @@ LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen, Controller &controller)
       loginInput_(LoginInput(screen_, controller_, LOGIN_INPUT_TITLE,
                              LoginType::LOGIN)),
       registerInput_(LoginInput(screen_, controller_, REGISTER_INPUT_TITLE,
-                                LoginType::REGISTER)) {
+                                LoginType::REGISTER)), buttonStyle_(GlobalButtonStyle()) {
     loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 
@@ -34,7 +34,6 @@ LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen, Controller &controller)
 // ### protected methods ###
 
 void LoginMenu::createButtons() {
-
     buttonRegister_ =
         ftxui::Button(
             "Register",
@@ -46,9 +45,7 @@ void LoginMenu::createButtons() {
                     }
                 }
                 screen_.ExitLoopClosure()();
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            }, buttonStyle_);
 
     buttonLogin_ = ftxui::Button(
                        "Login",
@@ -57,18 +54,14 @@ void LoginMenu::createButtons() {
                                loginState_ = Login::LOGGED;
                            }
                            screen_.ExitLoopClosure()();
-                       },
-                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                   | ftxui::border;
+                       }, buttonStyle_);
 
     buttonExit_ = ftxui::Button(
                       "Exit",
                       [&] {
                           loginState_ = Login::EXIT;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      }, buttonStyle_);
 }
 
 void LoginMenu::displayWindow() {
@@ -92,7 +85,7 @@ void LoginMenu::displayWindow() {
                    buttonLogin_->Render() | ftxui::bgcolor(ftxui::Color::Black),
                    buttonExit_->Render() | ftxui::bgcolor(ftxui::Color::Black),
                })
-               | ftxui::border | ftxui::center
+               | ftxui::borderHeavy | ftxui::center
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 }

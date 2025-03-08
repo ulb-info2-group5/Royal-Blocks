@@ -1,5 +1,5 @@
 #include "screen_manager.hpp"
-#include "handle_ctrl/handle_ctrl.hpp"
+#include "ftxui_config/ftxui_config.hpp"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>

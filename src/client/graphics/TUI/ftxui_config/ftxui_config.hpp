@@ -25,3 +25,10 @@ ftxui::Component handleCtrlZ(ftxui::Component &component);
  * handled
  */
 ftxui::Component handleCtrl(ftxui::Component &component);
+
+/*
+ * @brief Global style for the buttons
+ * 
+ * @return ftxui::ButtonOption The global style for the buttons 
+ */
+ftxui::ButtonOption GlobalButtonStyle();

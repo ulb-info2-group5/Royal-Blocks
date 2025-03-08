@@ -11,6 +11,7 @@
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
 #include <string_view>
 
 #include "../../ILogin_Menu.hpp"
@@ -57,6 +58,8 @@ class LoginMenu : public ILogin_Menu {
     ftxui::Component buttonExit_;
 
     ftxui::Component displayWindow_;
+
+    ftxui::ButtonOption buttonStyle_;
 
   protected:
     void createButtons() override;

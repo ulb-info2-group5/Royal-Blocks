@@ -9,7 +9,7 @@
 #include "login_input.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../handle_ctrl/handle_ctrl.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
 
 #include <chrono>
 #include <ftxui/component/component.hpp>
@@ -24,13 +24,13 @@
 LoginInput::LoginInput(ftxui::ScreenInteractive &screen, Controller &controller,
                        std::string title, LoginType loginType)
     : screen_(screen), controller_(controller), title_(title),
-      loginType_(loginType), loginState_(LoginState::NONE) {
+      loginType_(loginType), loginState_(LoginState::NONE), buttonStyle_(GlobalButtonStyle()) {
 
     createButtonBack();
     createButtonSubmit();
 
-    inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::border;
-    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::border;
+    inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::borderHeavy;
+    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::borderHeavy;
 }
 
 // ### protected methods ###
@@ -43,9 +43,7 @@ void LoginInput::createButtonBack() {
                           password_.clear();
                           loginState_ = LoginState::BACK;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      }, buttonStyle_);
 }
 
 void LoginInput::createButtonSubmit() {
@@ -81,9 +79,7 @@ void LoginInput::createButtonSubmit() {
                     message_.clear();
                     msg_ = "The username or password is incorrect!";
                 }
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            },buttonStyle_);
 }
 
 void LoginInput::displayWindow() {
@@ -126,7 +122,7 @@ void LoginInput::displayWindow() {
         elements.push_back(buttonSubmit_->Render());
         elements.push_back(buttonBack_->Render());
 
-        return ftxui::vbox(elements) | ftxui::border | ftxui::center;
+        return ftxui::vbox(elements) | ftxui::borderHeavy | ftxui::center;
     });
 }
 
