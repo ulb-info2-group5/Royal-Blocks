@@ -6,7 +6,7 @@
 #include "ftxui/dom/node.hpp"   // for Render
 #include "ftxui/screen/color.hpp" // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 #include "game_mode/game_mode.hpp"
-#include "view/interfaceConstants.hpp"
+#include "../../interfaceConstants.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>

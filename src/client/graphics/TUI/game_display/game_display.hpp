@@ -1,7 +1,7 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../../core/game_state_wrapper.hpp"
+#include "../../../core/in_game/game_state_wrapper.hpp"
 #include "../../IGame.hpp"
 #include "../../interfaceConstants.hpp"
 

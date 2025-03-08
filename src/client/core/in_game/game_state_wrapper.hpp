@@ -1,7 +1,7 @@
 #ifndef GAME_STATE_WRAPPER_HPP
 #define GAME_STATE_WRAPPER_HPP
 
-#include "core/game_state/game_state.hpp"
+#include "game_state/game_state.hpp"
 
 #include <mutex>
 

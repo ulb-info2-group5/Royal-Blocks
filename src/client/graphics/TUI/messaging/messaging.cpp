@@ -1,6 +1,6 @@
 #include "messaging.hpp"
 
-#include "../../../controller/controller.hpp"
+#include "../../../core/controller/controller.hpp"
 #include "../handle_ctrl/handle_ctrl.hpp"
 
 // TODO: add verification of information when adding a friend, sending a

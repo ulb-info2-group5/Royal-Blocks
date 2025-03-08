@@ -4,10 +4,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 # client lib
 file(GLOB_RECURSE SOURCES_CLIENT_LIB
-    controller/*.cpp
-    network/*.cpp
-    core/*.cpp
-    view/*.cpp
+    *.cpp
 )
 
 add_library(client_lib STATIC ${SOURCES_CLIENT_LIB})

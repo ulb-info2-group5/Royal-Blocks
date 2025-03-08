@@ -9,9 +9,9 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../core/game_state_wrapper.hpp"
+#include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
-#include "../view/TUI/screen_manager.hpp"
+#include "../../graphics/TUI/screen_manager.hpp"
 
 #include <map>
 #include <memory>

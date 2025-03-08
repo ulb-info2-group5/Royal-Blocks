@@ -8,7 +8,7 @@
 
 #include "login_menu.hpp"
 
-#include "../../../controller/controller.hpp"
+#include "../../../core/controller/controller.hpp"
 #include "../handle_ctrl/handle_ctrl.hpp"
 
 #include <cstdlib>

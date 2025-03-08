@@ -10,7 +10,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <vector>
 
-#include "../../../controller/controller.hpp"
+#include "../../../core/controller/controller.hpp"
 #include "../handle_ctrl/handle_ctrl.hpp"
 #include "ftxui/component/component.hpp"
 

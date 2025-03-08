@@ -8,7 +8,7 @@
 
 #include "controller.hpp"
 #include "../network/network_manager.hpp"
-#include "../view/TUI/screen_manager.hpp"
+#include "../../graphics/TUI/screen_manager.hpp"
 #include "game_state/game_state.hpp"
 
 #include "../../common/bindings/bindings.hpp"
