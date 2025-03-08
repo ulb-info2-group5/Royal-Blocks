@@ -7,11 +7,14 @@
  */
 
 #include "controller.hpp"
-#include "../network/network_manager.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
+#include "../network/network_manager.hpp"
 #include "game_state/game_state.hpp"
 
-#include "../../common/bindings/bindings.hpp"
+#include "../../common/bindings/authentication.hpp"
+#include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/registration.hpp"
+#include "../../common/bindings/registration_response.hpp"
 
 #include <mutex>
 #include <string>
