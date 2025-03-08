@@ -139,16 +139,16 @@ class Controller {
     /*
      * @brief Add a friend to the friends list of the user
      *
-     * @param friendName The name of the friend to add
+     * @param username The name of the friend to add
      */
-    void addFriend(const std::string &friendName) const;
+    void sendFriendRequest(const std::string &username);
 
     /*
      * @brief Remove a friend from the friends list of the user
      *
-     * @param friendName The name of the friend to remove
+     * @param username The name of the friend to remove
      */
-    void removeFriend(const std::string &friendName) const;
+    void removeFriend(const std::string &username);
 
     /*
      * @brief Send a message to a friend

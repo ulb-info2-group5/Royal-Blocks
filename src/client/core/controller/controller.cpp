@@ -13,9 +13,11 @@
 
 #include "../../common/bindings/authentication.hpp"
 #include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/friend_request.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
 #include "../../common/bindings/registration.hpp"
 #include "../../common/bindings/registration_response.hpp"
+#include "player_state/player_state.hpp"
 
 #include <mutex>
 #include <string>
@@ -153,12 +155,18 @@ std::vector<std::string> Controller::getFriendsList() const {
     return friendsList;
 }
 
-void Controller::addFriend(const std::string &friendName) const {
-    // TODO:
+void Controller::sendFriendRequest(const std::string &username) {
+    networkManager_.send(bindings::FriendRequest{
+        username, bindings::FriendRequest::FriendRequestType::Add}
+                             .to_json()
+                             .dump());
 }
 
-void Controller::removeFriend(const std::string &friendName) const {
-    // TODO:
+void Controller::removeFriend(const std::string &username) {
+    networkManager_.send(bindings::FriendRequest{
+        username, bindings::FriendRequest::FriendRequestType::Remove}
+                             .to_json()
+                             .dump());
 }
 
 bool Controller::sendMessage(const std::string &friendName,

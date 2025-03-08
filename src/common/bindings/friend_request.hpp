@@ -12,14 +12,14 @@ namespace bindings {
     struct FriendRequest {
         enum class FriendRequestType { Add, Remove };
 
-        PlayerID targetId;
+        std::string targetName;
         FriendRequestType friendRequestType;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::FriendRequest},
                                   {"data",
                                    {
-                                       {"targetId", targetId},
+                                       {"targetName", targetName},
                                        {"friendRequestType", friendRequestType},
                                    }}};
         }
@@ -31,7 +31,7 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return FriendRequest{
-                data.at("targetId").get<PlayerID>(),
+                data.at("targetName").get<std::string>(),
                 data.at("friendRequestType").get<FriendRequestType>()};
         }
     };

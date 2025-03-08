@@ -28,14 +28,15 @@ void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
         "Add a friend",
         [&] {
-            controller_.addFriend(newFriend_);
+            controller_.sendFriendRequest(newFriend_);
             friends_.push_back(newFriend_);
             conversations_[newFriend_] = {};
             newFriend_.clear();
-        }, GlobalButtonStyle());
+        },
+        GlobalButtonStyle());
 
-    sendButton_ =
-        ftxui::Button("Send",
+    sendButton_ = ftxui::Button(
+                      "Send",
                       [&] {
                           if (!newMessage_.empty() && !friends_.empty()) {
                               controller_.sendMessage(
@@ -44,8 +45,9 @@ void Messaging::createButtons() {
                                                 // sent with server, etc
                               addMessage(newMessage_);
                           }
-                      }, GlobalButtonStyle())
-        | ftxui::center;
+                      },
+                      GlobalButtonStyle())
+                  | ftxui::center;
 
     backButton_ = ftxui::Button(
         "Back",
@@ -54,7 +56,8 @@ void Messaging::createButtons() {
             newFriend_.clear();
             userState_ = MessagingState::BACK;
             screen_.ExitLoopClosure()();
-        }, GlobalButtonStyle());
+        },
+        GlobalButtonStyle());
 }
 
 void Messaging::drawInputUSer() {

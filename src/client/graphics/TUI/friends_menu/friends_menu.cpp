@@ -169,7 +169,7 @@ void FriendsMenu::createButtons() {
     submitButton_ = ftxui::Button(
         "Add",
         [&] {
-            controller_.addFriend(friendNameBuffer_);
+            controller_.sendFriendRequest(friendNameBuffer_);
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());
