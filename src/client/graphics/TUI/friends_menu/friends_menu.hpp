@@ -28,7 +28,7 @@ class FriendsMenu {
   private:
     ftxui::ScreenInteractive &screen_;
     Controller &controller_;
-    std::string friendName_;
+    std::string friendNameBuffer_;
     bool exit_; // Boolean to exit the friends menu
 
     ftxui::Component buttonBack_;
