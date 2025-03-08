@@ -29,8 +29,9 @@ LoginInput::LoginInput(ftxui::ScreenInteractive &screen, Controller &controller,
     createButtonBack();
     createButtonSubmit();
 
+
     inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::borderHeavy;
-    inputPassword_ = ftxui::Input(&password_, "Enter password") | ftxui::borderHeavy;
+    inputPassword_ = ftxui::Input(&password_, "Enter password", PasswordInputOption()) | ftxui::borderHeavy;
 }
 
 // ### protected methods ###

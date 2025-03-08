@@ -101,9 +101,8 @@ void Controller::tryRegister(const std::string &username,
 
 void Controller::tryLogin(const std::string &username,
                           const std::string &password) {
-    //networkManager_.send(
-    //    bindings::Authentication{username, password}.to_json().dump());
-    authState_ = Controller::AuthState::Authenticated;
+    networkManager_.send(
+        bindings::Authentication{username, password}.to_json().dump());
 }
 
 std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {

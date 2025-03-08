@@ -9,3 +9,5 @@ tetris_royal_client
 ./game_server
 auth
 *.o
+game_server
+network

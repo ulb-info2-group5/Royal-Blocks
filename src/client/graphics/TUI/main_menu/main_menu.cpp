@@ -240,7 +240,7 @@ void MainMenu::displayProfileManagerButton() {
         ftxui::Input(&username_, "New username") | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, "New password") | ftxui::borderHeavy;
+        ftxui::Input(&password_, "New password", PasswordInputOption()) | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
                         "Submit",

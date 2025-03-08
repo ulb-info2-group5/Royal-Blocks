@@ -38,3 +38,9 @@ ftxui::ButtonOption GlobalButtonStyle() {
     };
     return buttonStyle;
 }
+
+ftxui::InputOption PasswordInputOption() {
+    ftxui::InputOption passwordOption;
+    passwordOption.password = true;
+    return passwordOption;
+}
