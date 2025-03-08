@@ -28,21 +28,24 @@ void Controller::handlePacket(const std::string &pack) {
 
     std::lock_guard<std::mutex> guard(pGameState_->mutex);
 
-    if (j.at("type") == bindings::BindingType::AuthenticationResponse) {
-        bindings::AuthenticationResponse authResponse{
-            bindings::AuthenticationResponse::from_json(j)};
+    switch (static_cast<bindings::BindingType>(j.at("type"))) {
+    case bindings::BindingType::AuthenticationResponse: {
+        bool success = bindings::AuthenticationResponse::from_json(j).success;
+        authState_ = success ? Controller::AuthState::Authenticated
+                             : Controller::AuthState::Unauthenticated;
+        break;
+    }
 
-        authState_ = authResponse.success
-                         ? Controller::AuthState::Authenticated
-                         : Controller::AuthState::Unauthenticated;
-
-    } else if (j.at("type") == bindings::BindingType::RegistrationResponse) {
-        bindings::RegistrationResponse registrationResponse{
-            bindings::RegistrationResponse::from_json(j)};
-
-        registrationState_ = registrationResponse.success
+    case bindings::BindingType::RegistrationResponse: {
+        bool success = bindings::RegistrationResponse::from_json(j).success;
+        registrationState_ = success
                                  ? Controller::RegistrationState::Registered
                                  : Controller::RegistrationState::Unregistered;
+        break;
+    }
+
+    default:
+        std::cout << "unknown bindingType" << std::endl;
     }
 }
 
