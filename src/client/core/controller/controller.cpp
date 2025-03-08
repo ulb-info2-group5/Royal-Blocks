@@ -13,6 +13,7 @@
 
 #include "../../common/bindings/authentication.hpp"
 #include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/in_game/game_state_client.hpp"
 #include "../../common/bindings/registration.hpp"
 #include "../../common/bindings/registration_response.hpp"
 
@@ -26,7 +27,7 @@
 void Controller::handlePacket(const std::string &pack) {
     nlohmann::json j = nlohmann::json::parse(pack);
 
-    std::lock_guard<std::mutex> guard(pGameState_->mutex);
+    std::lock_guard<std::mutex> guard(mutex_);
 
     switch (static_cast<bindings::BindingType>(j.at("type"))) {
     case bindings::BindingType::AuthenticationResponse: {
@@ -42,6 +43,15 @@ void Controller::handlePacket(const std::string &pack) {
                                  ? Controller::RegistrationState::Registered
                                  : Controller::RegistrationState::Unregistered;
         break;
+    }
+
+    case bindings::BindingType::FriendsList: {
+        friendsList_ = bindings::FriendsList::from_json(j);
+    }
+
+    case bindings::BindingType::GameState: {
+        std::lock_guard<std::mutex> guard(pGameState_->mutex);
+        pGameState_->gameState = bindings::GameStateMessage::deserialize(j);
     }
 
     default:

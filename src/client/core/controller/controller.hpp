@@ -9,9 +9,10 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "../../graphics/TUI/screen_manager.hpp"
+#include "../common/bindings/friends_list.hpp"
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
-#include "../../graphics/TUI/screen_manager.hpp"
 
 #include <map>
 #include <memory>
@@ -45,6 +46,8 @@ class Controller {
     std::shared_ptr<client::GameStateWrapper> pGameState_;
 
     std::mutex mutex_;
+
+    bindings::FriendsList friendsList_;
 
     /*
      * @brief The network manager to manage the connection with the server
