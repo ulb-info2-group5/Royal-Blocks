@@ -49,13 +49,17 @@ void Controller::handlePacket(const std::string &pack) {
         friendsList_ = bindings::FriendsList::from_json(j);
     }
 
+    case bindings::BindingType::Conversations: {
+        conversations_ = bindings::Conversations::from_json(j);
+    }
+
     case bindings::BindingType::GameState: {
         std::lock_guard<std::mutex> guard(pGameState_->mutex);
         pGameState_->gameState = bindings::GameStateMessage::deserialize(j);
     }
 
     default:
-        std::cout << "unknown bindingType" << std::endl;
+        std::cerr << "unknown bindingType" << std::endl;
     }
 }
 

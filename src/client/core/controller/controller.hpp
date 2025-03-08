@@ -10,6 +10,7 @@
 #define CONTROLLER_HPP
 
 #include "../../graphics/TUI/screen_manager.hpp"
+#include "../common/bindings/conversations.hpp"
 #include "../common/bindings/friends_list.hpp"
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
@@ -48,6 +49,7 @@ class Controller {
     std::mutex mutex_;
 
     bindings::FriendsList friendsList_;
+    bindings::Conversations conversations_;
 
     /*
      * @brief The network manager to manage the connection with the server
