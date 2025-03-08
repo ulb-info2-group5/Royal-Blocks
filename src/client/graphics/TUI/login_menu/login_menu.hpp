@@ -11,6 +11,7 @@
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
 #include <string_view>
 
 #include "../../ILogin_Menu.hpp"

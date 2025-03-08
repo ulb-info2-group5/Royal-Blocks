@@ -9,7 +9,7 @@
 #include "login_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../handle_ctrl/handle_ctrl.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
 
 #include <cstdlib>
 #include <ftxui/component/component.hpp>
@@ -34,7 +34,6 @@ LoginMenu::LoginMenu(ftxui::ScreenInteractive &screen, Controller &controller)
 // ### protected methods ###
 
 void LoginMenu::createButtons() {
-
     buttonRegister_ =
         ftxui::Button(
             "Register",
@@ -46,9 +45,7 @@ void LoginMenu::createButtons() {
                     }
                 }
                 screen_.ExitLoopClosure()();
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            }, GlobalButtonStyle());
 
     buttonLogin_ = ftxui::Button(
                        "Login",
@@ -57,18 +54,14 @@ void LoginMenu::createButtons() {
                                loginState_ = Login::LOGGED;
                            }
                            screen_.ExitLoopClosure()();
-                       },
-                       ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                   | ftxui::border;
+                       }, GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
                       "Exit",
                       [&] {
                           loginState_ = Login::EXIT;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      }, GlobalButtonStyle());
 }
 
 void LoginMenu::displayWindow() {
@@ -92,7 +85,7 @@ void LoginMenu::displayWindow() {
                    buttonLogin_->Render() | ftxui::bgcolor(ftxui::Color::Black),
                    buttonExit_->Render() | ftxui::bgcolor(ftxui::Color::Black),
                })
-               | ftxui::border | ftxui::center
+               | ftxui::borderHeavy | ftxui::center
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 }

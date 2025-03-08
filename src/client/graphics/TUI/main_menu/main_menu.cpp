@@ -8,10 +8,11 @@
 
 #include "main_menu.hpp"
 #include "../../../core/controller/controller.hpp"
-#include "../handle_ctrl/handle_ctrl.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
 #include "../messaging/messaging.hpp"
 
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <vector>
 
@@ -28,9 +29,7 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
                       [&] {
                           state_ = MainMenuState::BACK;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      },  GlobalButtonStyle());
 
     buttonOK_ =
         ftxui::Button(
@@ -38,9 +37,7 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
             [&] {
                 state_ =
                     MainMenuState::BACK; // like a back button but with ok title
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            },  GlobalButtonStyle());
 }
 
 // ### Private methods ###
@@ -91,70 +88,56 @@ void MainMenu::handleChoice() {
 
 void MainMenu::createMainMenuButtons() {
     buttonPlay_ = ftxui::Button(
-                      "Create a game",
+                      "▶ Create a game",
                       [&] {
                           state_ = MainMenuState::CREATE_GAME;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      }, GlobalButtonStyle());
 
     buttonJoinGame_ = ftxui::Button(
-                          "Join a game",
+                          "▶ Join a game",
                           [&] {
                               state_ = MainMenuState::JOIN_GAME;
                               screen_.ExitLoopClosure()();
-                          },
-                          ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                      | ftxui::border;
+                          }, GlobalButtonStyle());
 
     buttonSendMessagesToFriends_ =
         ftxui::Button(
-            "Send messages to friends",
+            "💬 Messages",
             [&] {
                 state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
                 screen_.ExitLoopClosure()();
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            }, GlobalButtonStyle());
 
     buttonLookRanking_ = ftxui::Button(
-                             "Look at ranking",
+                             "🏆 Leaderboard",
                              [&] {
                                  state_ = MainMenuState::LOOK_RANKING;
                                  screen_.ExitLoopClosure()();
-                             },
-                             ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                         | ftxui::border;
+                             }, GlobalButtonStyle());
 
     buttonManageProfile_ =
         ftxui::Button(
-            "Manage profile",
+            "⚙ Manage Profile",
             [&] {
                 state_ = MainMenuState::MANAGE_PROFILE;
                 screen_.ExitLoopClosure()();
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            }, GlobalButtonStyle());
 
     buttonManageFriendsList_ =
         ftxui::Button(
-            "Manage friends list",
+            "👥 Manage friends list",
             [&] {
                 state_ = MainMenuState::MANAGE_FRIENDS_LIST;
                 screen_.ExitLoopClosure()();
-            },
-            ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-        | ftxui::border;
+            }, GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
-                      "Exit",
+                      "Quit the game",
                       [&] {
                           state_ = MainMenuState::EXIT;
                           screen_.ExitLoopClosure()();
-                      },
-                      ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                  | ftxui::border;
+                      }, GlobalButtonStyle());
 }
 
 void MainMenu::displayMainWindow() {
@@ -170,9 +153,9 @@ void MainMenu::displayMainWindow() {
 
     mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
-                   ftxui::text("Main Menu") | ftxui::bold | ftxui::center,
+                   ftxui::text("🎮 Main Menu 🎮") | ftxui::bold | ftxui::center | ftxui::color(ftxui::Color::Cyan),
                    ftxui::separator(),
-                   ftxui::text("Welcome to the main menu of Tetris Royal !")
+                   ftxui::text("Welcome to the game menu of Tetris Royal !")
                        | ftxui::center,
                    ftxui::separator(),
                    buttonPlay_->Render(),
@@ -183,7 +166,7 @@ void MainMenu::displayMainWindow() {
                    buttonManageFriendsList_->Render(),
                    buttonExit_->Render(),
                })
-               | ftxui::border | ftxui::center;
+               | ftxui::borderHeavy | ftxui::center;
     });
 }
 
@@ -241,11 +224,11 @@ void MainMenu::displayRankingWindow() {
                    ftxui::text("Endless mod Ranking") | ftxui::bold
                        | ftxui::center,
                    ftxui::separator(),
-                   ftxui::vbox(rowsRanking_) | ftxui::border,
+                   ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
                    ftxui::separator(),
                    buttonBack_->Render(),
                })
-               | ftxui::border | ftxui::center;
+               | ftxui::borderHeavy | ftxui::center;
     });
 }
 
@@ -254,10 +237,10 @@ void MainMenu::displayProfileManagerButton() {
     password_.clear(); // Empty password
 
     inputChangeUsername_ =
-        ftxui::Input(&username_, "New username") | ftxui::border;
+        ftxui::Input(&username_, "New username") | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, "New password") | ftxui::border;
+        ftxui::Input(&password_, "New password", PasswordInputOption()) | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
                         "Submit",
@@ -265,9 +248,7 @@ void MainMenu::displayProfileManagerButton() {
                             controller_.changeProfile(
                                 username_, password_); // profile screen
                             screen_.ExitLoopClosure()();
-                        },
-                        ftxui::ButtonOption::Animated(ftxui::Color::Grey0))
-                    | ftxui::border;
+                        }, GlobalButtonStyle());
 }
 
 void MainMenu::displayProfileManagerWindow() {
@@ -293,7 +274,7 @@ void MainMenu::displayProfileManagerWindow() {
                    ftxui::separator(),
                    buttonBack_->Render(),
                })
-               | ftxui::border | ftxui::center;
+               | ftxui::borderHeavy | ftxui::center;
     });
 }
 

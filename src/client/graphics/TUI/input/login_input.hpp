@@ -9,6 +9,8 @@
 #ifndef LOGIN_INPUT_HPP
 #define LOGIN_INPUT_HPP
 
+#include <ftxui/component/component_options.hpp>
+#include <ftxui/component/event.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
