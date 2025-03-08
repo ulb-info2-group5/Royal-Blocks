@@ -12,6 +12,8 @@ namespace bindings {
         Registration,
         RegistrationResponse,
         User,
+        Conversation,
+        Conversations,
 
         // in game
         GameState,

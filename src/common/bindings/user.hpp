@@ -32,8 +32,20 @@ namespace bindings {
             return User{data.at("playerId").get<PlayerID>(),
                         data.at("username").get<std::string>()};
         }
+
+        bool operator==(const User &other) const {
+            return playerId == other.playerId;
+        }
     };
 
 } // namespace bindings
+
+namespace std {
+    template <> struct hash<bindings::User> {
+        std::size_t operator()(const bindings::User &user) const noexcept {
+            return std::hash<PlayerID>{}(user.playerId);
+        }
+    };
+} // namespace std
 
 #endif // BINDINGS_USER_HPP
