@@ -49,38 +49,16 @@ void NetworkManager::disconnect() {
 }
 
 void NetworkManager::send(const std::string &message) {
-    boost::asio::post(context_, [this, message]() {
-        bool writing = !messagesToSend_.empty();
-        messagesToSend_.push_back(message);
-        if (!writing) {
-            write();
-        }
-    });
-}
-
-// ### Private methods ###
-
-void NetworkManager::write() {
     boost::asio::async_write(
-        socket_, boost::asio::buffer(messagesToSend_.front() + "\n"),
-        [this](
-            boost::system::error_code error,
-            std::size_t /*length*/) { // Error code and number of bytes written
-            if (!error) {
-                messagesToSend_.pop_front();
-                if (!messagesToSend_.empty()) {
-                    // write until all messages are sent
-                    write();
-                }
-            } else {
-                std::cerr << "Write error: " << error.message() << std::endl;
-                // do not call disconnect here because we are already in the
-                // io_thread so it will wait on the thread itself
-                //
-                // disconnect();
+        socket_, boost::asio::buffer(message + "\n"),
+        [this](boost::system::error_code ec, std::size_t /*length*/) {
+            if (ec) {
+                std::cerr << "error while sending packet: " << ec << std::endl;
             }
         });
 }
+
+// ### Private methods ###
 
 void NetworkManager::receive() {
     boost::asio::async_read_until(

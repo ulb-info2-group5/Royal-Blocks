@@ -28,11 +28,6 @@ class NetworkManager {
     boost::asio::ip::tcp::socket socket_;
 
     /*
-     * @brief The messages to send to the server
-     */
-    std::deque<std::string> messagesToSend_;
-
-    /*
      * @brief Handles the packets received by the client
      */
     std::function<void(const std::string &)> packetHandler_;
