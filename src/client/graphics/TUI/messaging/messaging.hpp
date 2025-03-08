@@ -47,7 +47,7 @@ class Messaging : public IMessage {
     std::vector<std::string> friends_;
     int selectedFriend = 0;
     std::string newFriend_;
-    std::string newMessage_;
+    std::string newMessageBuffer_;
 
     MessagingState userState_;
 

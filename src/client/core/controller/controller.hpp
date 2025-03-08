@@ -153,12 +153,11 @@ class Controller {
     /*
      * @brief Send a message to a friend
      *
-     * @param friendName The name of the friend to send the message
+     * @param recipientName The name of the friend to send the message
      * @param message The message to send
-     * @return true If the message is sent, false otherwise
      */
-    bool sendMessage(const std::string &friendName,
-                     const std::string &message) const;
+    void sendMessage(const std::string &recipientName,
+                     const std::string &message);
 
     /*
      * @brief Get the messages of all the conversations of the user

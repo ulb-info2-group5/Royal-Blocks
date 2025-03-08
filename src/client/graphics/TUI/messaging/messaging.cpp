@@ -35,24 +35,25 @@ void Messaging::createButtons() {
         },
         GlobalButtonStyle());
 
-    sendButton_ = ftxui::Button(
-                      "Send",
-                      [&] {
-                          if (!newMessage_.empty() && !friends_.empty()) {
-                              controller_.sendMessage(
-                                  friends_[static_cast<size_t>(selectedFriend)],
-                                  newMessage_); // TODO: check if the message is
-                                                // sent with server, etc
-                              addMessage(newMessage_);
-                          }
-                      },
-                      GlobalButtonStyle())
-                  | ftxui::center;
+    sendButton_ =
+        ftxui::Button(
+            "Send",
+            [&] {
+                if (!newMessageBuffer_.empty() && !friends_.empty()) {
+                    controller_.sendMessage(
+                        friends_[static_cast<size_t>(selectedFriend)],
+                        newMessageBuffer_); // TODO: check if the message is
+                                            // sent with server, etc
+                    addMessage(newMessageBuffer_);
+                }
+            },
+            GlobalButtonStyle())
+        | ftxui::center;
 
     backButton_ = ftxui::Button(
         "Back",
         [&] {
-            newMessage_.clear();
+            newMessageBuffer_.clear();
             newFriend_.clear();
             userState_ = MessagingState::BACK;
             screen_.ExitLoopClosure()();
@@ -74,7 +75,7 @@ void Messaging::drawInputUSer() {
     //     }
     // });
 
-    messageInput_ = ftxui::Input(&newMessage_, "Write a message...")
+    messageInput_ = ftxui::Input(&newMessageBuffer_, "Write a message...")
                     | ftxui::center | ftxui::borderHeavy;
 }
 
@@ -186,5 +187,5 @@ void Messaging::render() {
 void Messaging::addMessage(const std::string &message) {
     conversations_[friends_[static_cast<size_t>(selectedFriend)]].push_back(
         Message{userId, message});
-    newMessage_.clear();
+    newMessageBuffer_.clear();
 }

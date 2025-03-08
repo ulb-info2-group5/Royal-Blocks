@@ -15,10 +15,12 @@
 #include "../../common/bindings/authentication_response.hpp"
 #include "../../common/bindings/friend_request.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
+#include "../../common/bindings/message.hpp"
 #include "../../common/bindings/registration.hpp"
 #include "../../common/bindings/registration_response.hpp"
 #include "player_state/player_state.hpp"
 
+#include <algorithm>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -169,10 +171,21 @@ void Controller::removeFriend(const std::string &username) {
                              .dump());
 }
 
-bool Controller::sendMessage(const std::string &friendName,
-                             const std::string &message) const {
-    // TODO:
-    return true;
+void Controller::sendMessage(const std::string &recipientName,
+                             const std::string &message) {
+    auto recipientIt = std::find_if(
+        friendsList_.friendsList.begin(), friendsList_.friendsList.end(),
+        [&](bindings::User &user) { return user.username == recipientName; });
+
+    // Return there isn't any friend with this name.
+    if (recipientIt == friendsList_.friendsList.end()) {
+        return;
+    }
+
+    PlayerID recipientId = recipientIt->playerId;
+
+    networkManager_.send(
+        bindings::Message{recipientId, message}.to_json().dump());
 }
 
 std::map<std::string, std::vector<Message>> Controller::getMessages() const {
