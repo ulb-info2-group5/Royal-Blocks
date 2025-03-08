@@ -1,0 +1,183 @@
+/**
+ * @file controller.hpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief Controller class header file
+ * @date 2025-02-24
+ *
+ */
+
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
+
+#include "../core/game_state_wrapper.hpp"
+#include "../network/network_manager.hpp"
+#include "../view/TUI/screen_manager.hpp"
+
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <vector>
+
+struct Message;
+
+class Controller {
+  public:
+    enum class AuthState {
+        Unauthenticated,
+        Authenticated,
+        Failed,
+    };
+
+    enum class RegistrationState {
+        Unregistered,
+        Registered,
+        Failed,
+    };
+
+  private:
+    boost::asio::io_context context_;
+    std::thread ioThread_;
+
+    RegistrationState registrationState_;
+    AuthState authState_;
+
+    std::shared_ptr<client::GameStateWrapper> pGameState_;
+
+    std::mutex mutex_;
+
+    /*
+     * @brief The network manager to manage the connection with the server
+     */
+    NetworkManager networkManager_;
+
+    /*
+     * @brief The screen manager to manage the screens to show to the user
+     */
+    ScreenManager screenManager_;
+
+    /**
+     * @brief Handles the received packet
+     */
+    void handlePacket(const std::string &pack);
+
+  public:
+    /*
+     * @brief Construct a new Controller object
+     */
+    Controller();
+
+    /*
+     * @brief Destroy the Controller object
+     */
+    ~Controller();
+
+    /**
+     * @brief Returns the registration-state.
+     */
+    RegistrationState getRegistrationState() const;
+
+    /**
+     * @brief Returns the authentication-state.
+     */
+    AuthState getAuthState() const;
+
+    // TODO
+    std::shared_ptr<client::GameStateWrapper> &getGameState();
+
+    /*
+     * @brief Run the controller to manage the game
+     */
+    void run();
+
+    /*
+     * @brief Makes a registration request to the server.
+     *
+     * @param username The username of the user
+     * @param password The password of the user
+     */
+    void tryRegister(const std::string &username, const std::string &password);
+
+    /*
+     * @brief Makes a login request to the server.
+     *
+     * @param username The username of the user
+     * @param password The password of the user
+     */
+    void tryLogin(const std::string &username, const std::string &password);
+
+    /*
+     * @brief Get the ranking of the players of the Endless mode
+     *
+     * @return std::vector<std::tuple<int, std::string, int>> The ranking of the
+     * players of the Endless mode
+     */
+    std::vector<std::tuple<int, std::string, int>> getRanking() const;
+
+    /*
+     * @brief Change the profile of the user by changing the username and
+     * password
+     *
+     * @param username The new username of the user
+     * @param password The new password of the user
+     */
+    void changeProfile(const std::string &username,
+                       const std::string &password) const;
+
+    /*
+     * @brief Get the friends list of the user
+     *
+     * @return std::vector<std::string> The friends list of the user
+     */
+    std::vector<std::string> getFriendsList() const;
+
+    /*
+     * @brief Add a friend to the friends list of the user
+     *
+     * @param friendName The name of the friend to add
+     */
+    void addFriend(const std::string &friendName) const;
+
+    /*
+     * @brief Remove a friend from the friends list of the user
+     *
+     * @param friendName The name of the friend to remove
+     */
+    void removeFriend(const std::string &friendName) const;
+
+    /*
+     * @brief Send a message to a friend
+     *
+     * @param friendName The name of the friend to send the message
+     * @param message The message to send
+     * @return true If the message is sent, false otherwise
+     */
+    bool sendMessage(const std::string &friendName,
+                     const std::string &message) const;
+
+    /*
+     * @brief Get the messages of all the conversations of the user
+     *
+     * @return std::map<std::string, std::vector<std::string>> The messages of
+     * all the conversations of the user
+     */
+    std::map<std::string, std::vector<Message>> getMessages() const;
+
+    /*
+     * @brief Get the boards of the players
+     *
+     * @return std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
+     * HEIGHT>>> The boards of the players
+     */
+    // std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
+    // HEIGHT>>> getBoards() const;
+
+    /*
+     * @brief Get the friends online of the user
+     *
+     * @return std::vector<std::string> The friends online of the user
+     */
+    std::vector<std::string> getFriendsOnline() const;
+};
+
+#endif // CONTROLLER_HPP

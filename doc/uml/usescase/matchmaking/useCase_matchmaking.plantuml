@@ -3,7 +3,6 @@
 left to right direction
 actor Utilisateur as user
 
-'#TODO: should we add join as viewer in matchmaking
 together {
     cloud "Serveur" as server
 

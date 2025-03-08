@@ -1,0 +1,184 @@
+/**
+ * @file controller.cpp
+ * @author Ethan Van Ruyskensvelde
+ * @brief Controller class definition file
+ * @date 2025-02-24
+ *
+ */
+
+#include "controller.hpp"
+#include "../network/network_manager.hpp"
+#include "../view/TUI/screen_manager.hpp"
+#include "game_state/game_state.hpp"
+
+#include "../../common/bindings/bindings.hpp"
+
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+// ### Private methods ###
+
+void Controller::handlePacket(const std::string &pack) {
+    nlohmann::json j = nlohmann::json::parse(pack);
+
+    std::lock_guard<std::mutex> guard(pGameState_->mutex);
+
+    if (j.at("type") == bindings::BindingType::AuthenticationResponse) {
+        bindings::AuthenticationResponse authResponse{
+            bindings::AuthenticationResponse::from_json(j)};
+
+        authState_ = authResponse.success
+                         ? Controller::AuthState::Authenticated
+                         : Controller::AuthState::Unauthenticated;
+
+    } else if (j.at("type") == bindings::BindingType::RegistrationResponse) {
+        bindings::RegistrationResponse registrationResponse{
+            bindings::RegistrationResponse::from_json(j)};
+
+        registrationState_ = registrationResponse.success
+                                 ? Controller::RegistrationState::Registered
+                                 : Controller::RegistrationState::Unregistered;
+    }
+}
+
+// ### Public methods ###
+
+Controller::Controller()
+    : registrationState_{Controller::RegistrationState::Unregistered},
+      authState_{Controller::AuthState::Unauthenticated},
+      pGameState_{std::make_shared<client::GameStateWrapper>()},
+      networkManager_{
+          context_,
+          [this](const std::string &packet) { handlePacket(packet); }},
+
+      screenManager_{*this} {
+
+    // ---------------------------------
+    // TODO: remove this
+    GameState gameState{GameMode::Endless, {PlayerState{0}}};
+
+    pGameState_->gameState.deserialize(gameState.serializeFor(0));
+    // ---------------------------------
+};
+
+Controller::~Controller() {
+    // TODO: join the iothread
+}
+
+Controller::RegistrationState Controller::getRegistrationState() const {
+    return registrationState_;
+}
+
+Controller::AuthState Controller::getAuthState() const { return authState_; }
+
+std::shared_ptr<client::GameStateWrapper> &Controller::getGameState() {
+    return pGameState_;
+}
+
+void Controller::run() {
+    networkManager_.connect();
+
+    ioThread_ = std::thread([this]() { context_.run(); });
+
+    screenManager_.run();
+
+    context_.stop();
+    if (ioThread_.joinable()) {
+        ioThread_.join();
+    }
+}
+
+void Controller::tryRegister(const std::string &username,
+                             const std::string &password) {
+    networkManager_.send(
+        bindings::Registration{username, password}.to_json().dump());
+}
+
+void Controller::tryLogin(const std::string &username,
+                          const std::string &password) {
+    networkManager_.send(
+        bindings::Authentication{username, password}.to_json().dump());
+}
+
+std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
+    // TODO: communicate with the server to get the ranking
+    // TODO: remove this because it's an example
+    std::vector<std::tuple<int, std::string, int>> ranking;
+    ranking.push_back(std::make_tuple(1, "user1", 100));
+    ranking.push_back(std::make_tuple(2, "user2", 90));
+    ranking.push_back(std::make_tuple(3, "user3", 80));
+    ranking.push_back(std::make_tuple(4, "user4", 70));
+    ranking.push_back(std::make_tuple(5, "user5", 60));
+
+    return ranking;
+}
+
+void Controller::changeProfile(const std::string &username,
+                               const std::string &password) const {
+    // TODO
+}
+
+std::vector<std::string> Controller::getFriendsList() const {
+    // TODO: communicate with the server to get the friends list
+    // TODO: remove this because it's an example
+    std::vector<std::string> friendsList;
+    friendsList.push_back("friend1");
+    friendsList.push_back("friend2");
+    friendsList.push_back("friend3");
+    friendsList.push_back("friend4");
+    friendsList.push_back("friend5");
+
+    return friendsList;
+}
+
+void Controller::addFriend(const std::string &friendName) const {
+    // TODO:
+}
+
+void Controller::removeFriend(const std::string &friendName) const {
+    // TODO:
+}
+
+bool Controller::sendMessage(const std::string &friendName,
+                             const std::string &message) const {
+    // TODO:
+    return true;
+}
+
+std::map<std::string, std::vector<Message>> Controller::getMessages() const {
+    // TODO: communicate with the server to get the conversations
+    // TODO: remove this because it's an example
+
+    std::map<std::string, std::vector<Message>> conversations;
+    conversations["friend1"].push_back(Message{1, "message1"});
+    conversations["friend2"].push_back(Message{2, "message2"});
+    conversations["friend3"].push_back(Message{3, "message3"});
+    conversations["friend4"].push_back(Message{4, "message4"});
+    conversations["friend5"].push_back(Message{5, "message5"});
+
+    return conversations;
+}
+
+// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>,
+// HEIGHT>>> Controller::getBoards() const {
+//     // TODO: communicate with the server to get the boards
+//     // TODO: remove this because it's an example
+//     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
+//     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
+//     return std::make_shared<
+//         std::vector<std::array<std::array<Color, WIDTH>,
+//         HEIGHT>>>(boards);
+// }
+
+std::vector<std::string> Controller::getFriendsOnline() const {
+    // TODO: communicate with the server to get the friends online
+    // TODO: remove this because it's an example
+    std::vector<std::string> friendsOnline;
+    friendsOnline.push_back("friend1");
+    friendsOnline.push_back("friend2");
+    friendsOnline.push_back("friend3");
+
+    return friendsOnline;
+}

@@ -7,8 +7,8 @@
 #ifndef FRIENDS_MANAGER_TEST_HPP
 #define FRIENDS_MANAGER_TEST_HPP
 
-#include "../../../../src/server/database/friends_manager/friends_manager.hpp"
 #include "../../../../src/server/database/account_manager/account_manager.hpp"
+#include "../../../../src/server/database/friends_manager/friends_manager.hpp"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/ui/text/TestRunner.h>
@@ -24,7 +24,6 @@ class FriendsManagerTest : public CppUnit::TestFixture {
     std::shared_ptr<DatabaseManager> dbManager;
     std::shared_ptr<AccountManager> accountManager;
     std::shared_ptr<FriendsManager> friendsManager;
-
 
   public:
     // Setup and teardown for the tests

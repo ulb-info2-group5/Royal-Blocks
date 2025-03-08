@@ -46,14 +46,14 @@ void FriendsManagerTest::testRemoveFriend() {
      * @brief Test case for removing a friend
      * Verifies that removing a friend from the database works.
      */
-     int userId1 = accountManager->getUserId("friend1");
-     int userId2 = accountManager->getUserId("friend2");
+    int userId1 = accountManager->getUserId("friend1");
+    int userId2 = accountManager->getUserId("friend2");
 
-     bool addFrienship = friendsManager->addFriend(userId1, userId2);
-     CPPUNIT_ASSERT(addFrienship);
- 
-     bool result = friendsManager->removeFriend(userId1, userId2);
-     CPPUNIT_ASSERT(result);
+    bool addFrienship = friendsManager->addFriend(userId1, userId2);
+    CPPUNIT_ASSERT(addFrienship);
+
+    bool result = friendsManager->removeFriend(userId1, userId2);
+    CPPUNIT_ASSERT(result);
 }
 
 void FriendsManagerTest::testGetFriends() {
@@ -77,6 +77,7 @@ void FriendsManagerTest::testGetFriends() {
     CPPUNIT_ASSERT(friends[0] == friendUserId1 || friends[0] == friendUserId2);
     CPPUNIT_ASSERT(friends[1] == friendUserId1 || friends[1] == friendUserId2);
 
-    // Delete the account after the test so that this account no longer exists after the test
+    // Delete the account after the test so that this account no longer exists
+    // after the test
     accountManager->deleteAccount(userId);
 }
