@@ -4,12 +4,16 @@
 #include "binding_type.hpp"
 
 #include <nlohmann/json.hpp>
+#include <utility>
 #include <vector>
 
 namespace bindings {
 
     struct Ranking {
-        std::vector<std::string> ranking;
+        using Score = size_t;
+        using PlayerScore = std::pair<std::string, Score>;
+
+        std::vector<PlayerScore> ranking;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::Ranking},
@@ -25,7 +29,7 @@ namespace bindings {
             }
 
             const auto &data = j.at("data");
-            return Ranking{data.at("ranking").get<std::vector<std::string>>()};
+            return Ranking{data.at("ranking").get<std::vector<PlayerScore>>()};
         }
     };
 
