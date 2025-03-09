@@ -1,0 +1,91 @@
+@startuml NetworkClass
+
+
+
+
+
+/' Objects '/
+
+class ClientLink {
+	+ClientLink(tcp::socket socket, function<void ( const std::string& )> packetHandler, function<nlohmann::json ( bindings::BindingType, nlohmann::json )> authPacketHandler, function<void ( std::shared_ptr<ClientLink>, nlohmann::json )> authSuccessCallback)
+	-identify_ : bool
+	+isIdentify() : bool
+	-streamBuffer_ : boost::asio::streambuf
+	-authPacketHandler_ : function<nlohmann::json ( bindings::BindingType, nlohmann::json )>
+	-packetHandler_ : function<void ( const std::string& )>
+	-authSuccessCallback_ : function<void ( std::shared_ptr<ClientLink>, nlohmann::json )>
+	-buffer_ : std::string
+	-socket_ : tcp::socket
+	-handleAuthentication(std::string& packet) : void
+	-read() : void
+	+recieveMessage(nlohmann::json message) : void
+	+sendResponse(nlohmann::json response) : void
+	+start() : void
+	-writeSocket(std::string& content) : void
+}
+
+
+class ClientManager {
+	+ClientManager(DataBase database)
+	+~ClientManager()
+	-database_ : DataBase
+	-attemptCreateAccount(nlohmann::json data) : bool
+	+checkCredentials(nlohmann::json data) : bool
+	+authPacketHandler(bindings::BindingType type, nlohmann::json data) : nlohmann::json
+	-mutex_ : std::mutex
+	-connectedClients_ : std::unordered_map<int, std::shared_ptr<ClientLink>>
+	-waitingForAuthClient : std::vector<std::shared_ptr<ClientLink>>
+	+addClientInWaitingForAuth(std::shared_ptr<ClientLink> clientLink) : void
+	+addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo) : void
+	+authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData) : void
+	+handleMessage(nlohmann::json message) : void
+	+handlePacket(const std::string& packet) : void
+	-removeAuthClients() : void
+	+removeConnection(const int& clientId) : void
+}
+
+
+class Network {
+	+Network(boost::asio::io_context& io, ClientManager& clientManager)
+	-clientManager_ : ClientManager&
+	-io_ : boost::asio::io_context&
+	-acceptor_ : tcp::acceptor
+	-accept() : void
+}
+
+
+class DataBase {
+	+accountManager : std::shared_ptr<AccountManager>
+	+friendsManager : std::shared_ptr<FriendsManager>
+	+messagesManager : std::shared_ptr<MessagesManager>
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+ClientManager "2" o-- ClientLink
+
+
+ClientManager *-- DataBase
+
+
+Network *-- ClientManager
+
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

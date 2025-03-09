@@ -1,0 +1,78 @@
+@startuml ControllerClass
+
+
+
+
+
+/' Objects '/
+
+class Controller {
+	+Controller()
+	+~Controller()
+	-authState_ : AuthState
+	-networkManager_ : NetworkManager
+	-registrationState_ : RegistrationState
+	-screenManager_ : ScreenManager
+	-conversations_ : bindings::Conversations
+	-friendsList_ : bindings::FriendsList
+	+getFriendsList() : bindings::FriendsList& {query}
+	-context_ : boost::asio::io_context
+	+getAuthState() : int {query}
+	+getRegistrationState() : int {query}
+	+getMessages() : std::map<std::string , std::vector<Message>> {query}
+	-mutex_ : std::mutex
+	-pGameState_ : std::shared_ptr<client::GameStateWrapper>
+	+getGameState() : std::shared_ptr<client::GameStateWrapper>&
+	-ioThread_ : std::thread
+	+getFriendsOnline() : std::vector<std::string> {query}
+	+getRanking() : std::vector<std::tuple<int , std::string , int>> {query}
+	+changeProfile(const std::string& username, const std::string& password) : void {query}
+	-handlePacket(const std::string& pack) : void
+	+removeFriend(const std::string& username) : void
+	+run() : void
+	+sendFriendRequest(const std::string& username) : void
+	+sendMessage(const std::string& recipientName, const std::string& message) : void
+	+tryLogin(const std::string& username, const std::string& password) : void
+	+tryRegister(const std::string& username, const std::string& password) : void
+}
+
+
+enum Controller::AuthState {
+	Authenticated
+	Failed
+	Unauthenticated
+}
+
+
+enum Controller::RegistrationState {
+	Failed
+	Registered
+	Unregistered
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+Controller +-- Controller::AuthState
+
+
+Controller +-- Controller::RegistrationState
+
+
+
+
+@enduml

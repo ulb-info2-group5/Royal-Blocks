@@ -1,0 +1,141 @@
+@startuml BindingClass
+
+
+!include BindingType.plantuml!0
+!include inGameBindings.plantuml!0
+
+
+/' Objects '/
+
+namespace std {
+	class hashbindings::User <template<>> {
+		+operator()(const bindings::User& user) : std :: size_t {query}
+	}
+}
+
+
+namespace bindings {
+	enum BindingType {
+		Authentication
+		AuthenticationResponse
+		BigDrop
+		BuyBonus
+		BuyPenalty
+		Conversation
+		Conversations
+		EmptyPenaltyStash
+		FriendRequest
+		FriendsList
+		GameState
+		HoldNextTetromino
+		Message
+		MoveActive
+		QuitGame
+		Registration
+		RegistrationResponse
+		RotateActive
+		SelectTarget
+		User
+	}
+
+	enum FriendRequest::FriendRequestType {
+		Add
+		Remove
+	}
+
+	class Authentication {
+		+{static} from_json(const nlohmann::json& j) : Authentication
+		+to_json() : nlohmann::json {query}
+		+nickname : std::string
+		+password : std::string
+	}
+
+	class AuthenticationResponse {
+		+{static} from_json(const nlohmann::json& j) : AuthenticationResponse
+		+success : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class Conversation {
+		+{static} from_json(const nlohmann::json& j) : Conversation
+		+to_json() : nlohmann::json {query}
+		+senderMessages : std::vector<SenderMessage>
+	}
+
+	class Conversations {
+		+{static} from_json(const nlohmann::json& j) : Conversations
+		+to_json() : nlohmann::json {query}
+		+userConv : std::unordered_map<User, Conversation>
+	}
+
+	class FriendRequest {
+		+{static} from_json(const nlohmann::json& j) : FriendRequest
+		+friendRequestType : FriendRequestType
+		+to_json() : nlohmann::json {query}
+		+targetName : std::string
+	}
+
+	class FriendsList {
+		+{static} from_json(const nlohmann::json& j) : FriendsList
+		+to_json() : nlohmann::json {query}
+		+friendsList : std::vector<User>
+	}
+
+	class Message {
+		+{static} from_json(const nlohmann::json& j) : Message
+		+to_json() : nlohmann::json {query}
+		+recipientId : size_t
+		+content : std::string
+	}
+
+	class Registration {
+		+{static} from_json(const nlohmann::json& j) : Registration
+		+to_json() : nlohmann::json {query}
+		+nickname : std::string
+		+password : std::string
+	}
+
+	class RegistrationResponse {
+		+{static} from_json(const nlohmann::json& j) : RegistrationResponse
+		+success : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class User {
+		+{static} from_json(const nlohmann::json& j) : User
+		+operator==(const User& other) : bool {query}
+		+to_json() : nlohmann::json {query}
+		+playerId : size_t
+		+username : std::string
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+bindings.Conversations *-- bindings.User
+
+
+bindings.FriendsList *-- bindings.User
+
+
+
+
+
+
+/' Nested objects '/
+
+bindings.FriendRequest +-- bindings.FriendRequest.FriendRequestType
+
+
+
+
+@enduml

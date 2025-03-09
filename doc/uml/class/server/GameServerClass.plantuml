@@ -1,0 +1,40 @@
+@startuml GameServerClass
+
+
+
+
+
+/' Objects '/
+
+class GameServer {
+	+GameServer(GameMode gameMode, std::vector<PlayerID>&& playerIds)
+	-engine : GameEngine
+	-pGameState_ : GameStatePtr
+	-context_ : boost::asio::io_context
+	-tickTimer_ : boost::asio::steady_timer
+	+enqueueBinding(PlayerID playerId, const std::string& bindingStr) : void
+	-onTimerTick() : void
+	+run() : void
+	-sendGameStates() : void
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

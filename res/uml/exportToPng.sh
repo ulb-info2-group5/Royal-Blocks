@@ -5,7 +5,15 @@ seqUMLDIR="../../doc/uml/sequence/"
 useCaseUMLDIR="../../doc/uml/usecase/"
 
 classUMLDiag=("game/tetris_lib/GameClass" 
-              "connexion/ConnexionClass")
+              "connexion/ConnexionClass"
+              "common/bindings/BindingClass"
+              "common/ControllerClass"
+              "common/coreInGameClass"
+              "server/DatabaseClass"
+              "server/GameServerClass"
+              "server/NetworkClass"
+              "server/NetworkManagerClass")
+            
 
 seqUMLDiag=("connexion/ConnexionSequence" 
             "inscription/InscriptionSequence")
