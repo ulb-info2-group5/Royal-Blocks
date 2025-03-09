@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+using Score = size_t;
+
 struct Message;
 
 class Controller {
@@ -115,11 +117,8 @@ class Controller {
 
     /*
      * @brief Get the ranking of the players of the Endless mode
-     *
-     * @return std::vector<std::tuple<int, std::string, int>> The ranking of the
-     * players of the Endless mode
      */
-    std::vector<std::tuple<int, std::string, int>> getRanking() const;
+    const bindings::Ranking &getRanking() const;
 
     /*
      * @brief Change the profile of the user by changing the username and

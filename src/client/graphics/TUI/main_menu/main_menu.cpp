@@ -25,19 +25,20 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
     createMainMenuButtons();
 
     buttonBack_ = ftxui::Button(
-                      "Back",
-                      [&] {
-                          state_ = MainMenuState::BACK;
-                          screen_.ExitLoopClosure()();
-                      },  GlobalButtonStyle());
+        "Back",
+        [&] {
+            state_ = MainMenuState::BACK;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
-    buttonOK_ =
-        ftxui::Button(
-            "OK",
-            [&] {
-                state_ =
-                    MainMenuState::BACK; // like a back button but with ok title
-            },  GlobalButtonStyle());
+    buttonOK_ = ftxui::Button(
+        "OK",
+        [&] {
+            state_ =
+                MainMenuState::BACK; // like a back button but with ok title
+        },
+        GlobalButtonStyle());
 }
 
 // ### Private methods ###
@@ -88,56 +89,60 @@ void MainMenu::handleChoice() {
 
 void MainMenu::createMainMenuButtons() {
     buttonPlay_ = ftxui::Button(
-                      "▶ Create a game",
-                      [&] {
-                          state_ = MainMenuState::CREATE_GAME;
-                          screen_.ExitLoopClosure()();
-                      }, GlobalButtonStyle());
+        "▶ Create a game",
+        [&] {
+            state_ = MainMenuState::CREATE_GAME;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
     buttonJoinGame_ = ftxui::Button(
-                          "▶ Join a game",
-                          [&] {
-                              state_ = MainMenuState::JOIN_GAME;
-                              screen_.ExitLoopClosure()();
-                          }, GlobalButtonStyle());
+        "▶ Join a game",
+        [&] {
+            state_ = MainMenuState::JOIN_GAME;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
-    buttonSendMessagesToFriends_ =
-        ftxui::Button(
-            "💬 Messages",
-            [&] {
-                state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
-                screen_.ExitLoopClosure()();
-            }, GlobalButtonStyle());
+    buttonSendMessagesToFriends_ = ftxui::Button(
+        "💬 Messages",
+        [&] {
+            state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
     buttonLookRanking_ = ftxui::Button(
-                             "🏆 Leaderboard",
-                             [&] {
-                                 state_ = MainMenuState::LOOK_RANKING;
-                                 screen_.ExitLoopClosure()();
-                             }, GlobalButtonStyle());
+        "🏆 Leaderboard",
+        [&] {
+            state_ = MainMenuState::LOOK_RANKING;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
-    buttonManageProfile_ =
-        ftxui::Button(
-            "⚙ Manage Profile",
-            [&] {
-                state_ = MainMenuState::MANAGE_PROFILE;
-                screen_.ExitLoopClosure()();
-            }, GlobalButtonStyle());
+    buttonManageProfile_ = ftxui::Button(
+        "⚙ Manage Profile",
+        [&] {
+            state_ = MainMenuState::MANAGE_PROFILE;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
-    buttonManageFriendsList_ =
-        ftxui::Button(
-            "👥 Manage friends list",
-            [&] {
-                state_ = MainMenuState::MANAGE_FRIENDS_LIST;
-                screen_.ExitLoopClosure()();
-            }, GlobalButtonStyle());
+    buttonManageFriendsList_ = ftxui::Button(
+        "👥 Manage friends list",
+        [&] {
+            state_ = MainMenuState::MANAGE_FRIENDS_LIST;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
-                      "Quit the game",
-                      [&] {
-                          state_ = MainMenuState::EXIT;
-                          screen_.ExitLoopClosure()();
-                      }, GlobalButtonStyle());
+        "Quit the game",
+        [&] {
+            state_ = MainMenuState::EXIT;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 }
 
 void MainMenu::displayMainWindow() {
@@ -153,7 +158,8 @@ void MainMenu::displayMainWindow() {
 
     mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
-                   ftxui::text("🎮 Main Menu 🎮") | ftxui::bold | ftxui::center | ftxui::color(ftxui::Color::Cyan),
+                   ftxui::text("🎮 Main Menu 🎮") | ftxui::bold | ftxui::center
+                       | ftxui::color(ftxui::Color::Cyan),
                    ftxui::separator(),
                    ftxui::text("Welcome to the game menu of Tetris Royal !")
                        | ftxui::center,
@@ -171,20 +177,14 @@ void MainMenu::displayMainWindow() {
 }
 
 void MainMenu::displayRankingList() {
-
-    // Get the ranking from the controller
-    const std::vector<std::tuple<int, std::string, int>> ranking =
-        controller_.getRanking();
-
-    // Clear the rows of the ranking table to avoid duplicates
     rowsRanking_.clear();
 
-    // Width of the columns
-    const int widthRanking = 10;
-    const int widthUser = 30;
-    const int widthScore = 10;
+    // column width
+    constexpr int widthRanking = 10;
+    constexpr int widthUser = 30;
+    constexpr int widthScore = 10;
 
-    // Title of the table
+    // table titles
     rowsRanking_.push_back(ftxui::hbox({
         ftxui::text("Ranking") | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking) | ftxui::center,
@@ -195,17 +195,16 @@ void MainMenu::displayRankingList() {
     }));
     rowsRanking_.push_back(ftxui::separator());
 
-    // infos of the ranking table (Ranking, User, Score) with the ranking vector
-    for (const auto &[rank, user, score] : ranking) {
+    const auto &ranking = controller_.getRanking().ranking;
+    for (auto [rank, player] : std::views::enumerate(ranking)) {
+        const auto &[user, score] = player;
+
         rowsRanking_.push_back(ftxui::hbox({
-            // Ranging on the left
-            ftxui::text(std::to_string(rank))
+            ftxui::text(std::to_string(rank + 1))
                 | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking),
 
-            // User in the middle
             ftxui::text(user) | size(ftxui::WIDTH, ftxui::EQUAL, widthUser),
 
-            // Score on the right
             ftxui::text(std::to_string(score))
                 | size(ftxui::WIDTH, ftxui::EQUAL, widthScore),
         }));
@@ -240,15 +239,16 @@ void MainMenu::displayProfileManagerButton() {
         ftxui::Input(&username_, "New username") | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, "New password", PasswordInputOption()) | ftxui::borderHeavy;
+        ftxui::Input(&password_, "New password", PasswordInputOption())
+        | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
-                        "Submit",
-                        [&] {
-                            controller_.changeProfile(
-                                username_, password_); // profile screen
-                            screen_.ExitLoopClosure()();
-                        }, GlobalButtonStyle());
+        "Submit",
+        [&] {
+            controller_.changeProfile(username_, password_); // profile screen
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 }
 
 void MainMenu::displayProfileManagerWindow() {

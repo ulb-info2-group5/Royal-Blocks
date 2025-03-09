@@ -134,18 +134,7 @@ void Controller::tryLogin(const std::string &username,
         bindings::Authentication{username, password}.to_json().dump());
 }
 
-std::vector<std::tuple<int, std::string, int>> Controller::getRanking() const {
-    // TODO: communicate with the server to get the ranking
-    // TODO: remove this because it's an example
-    std::vector<std::tuple<int, std::string, int>> ranking;
-    ranking.push_back(std::make_tuple(1, "user1", 100));
-    ranking.push_back(std::make_tuple(2, "user2", 90));
-    ranking.push_back(std::make_tuple(3, "user3", 80));
-    ranking.push_back(std::make_tuple(4, "user4", 70));
-    ranking.push_back(std::make_tuple(5, "user5", 60));
-
-    return ranking;
-}
+const bindings::Ranking &Controller::getRanking() const { return ranking_; }
 
 void Controller::changeProfile(const std::string &username,
                                const std::string &password) const {
