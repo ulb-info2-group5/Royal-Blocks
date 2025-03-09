@@ -15,12 +15,16 @@ namespace bindings {
     struct User {
         PlayerID playerId;
         std::string username;
+        bool online;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{
-                {"type", BindingType::User},
-                {"data", {{"playerId", playerId}, {"username", username}}},
-            };
+            return nlohmann::json{{"type", BindingType::User},
+                                  {"data",
+                                   {
+                                       {"playerId", playerId},
+                                       {"username", username},
+                                       {"online", online},
+                                   }}};
         }
 
         static User from_json(const nlohmann::json &j) {
@@ -30,7 +34,8 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return User{data.at("playerId").get<PlayerID>(),
-                        data.at("username").get<std::string>()};
+                        data.at("username").get<std::string>(),
+                        data.at("online").get<bool>()};
         }
 
         bool operator==(const User &other) const {
