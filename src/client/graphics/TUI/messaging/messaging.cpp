@@ -63,7 +63,7 @@ void Messaging::createButtons() {
         GlobalButtonStyle());
 }
 
-void Messaging::drawInputUSer() {
+void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
 
     addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend");
@@ -82,7 +82,7 @@ void Messaging::drawInputUSer() {
 }
 
 void Messaging::drawMenu() {
-    drawInputUSer();
+    drawInputUser();
 
     // TODO: lulu ask controller for the friendsList, extract the names and pass
     // them to the Menu. (done)
@@ -112,13 +112,10 @@ void Messaging::drawDisplay() {
     chatDisplay_ = ftxui::Renderer([&] {
         ftxui::Elements chat_elements;
 
-        const NameConversation &nameConversation =
+        auto &[name, conversation] =
             controller_.getConversationWith(getSelectedFriendId());
 
-        // for each message in the conversation with the selectedFriend and
-        // us
-        for (auto &[senderId, message] :
-             nameConversation.second.senderMessages) {
+        for (auto &[senderId, message] : conversation.senderMessages) {
 
             // TODO: display our own messages with a different color
             chat_elements.push_back(ftxui::text(message) | ftxui::bold

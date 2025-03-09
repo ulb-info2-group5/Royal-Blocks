@@ -9,7 +9,6 @@
 #include <ftxui/dom/elements.hpp>
 
 #include <cstdlib>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -72,7 +71,7 @@ class Messaging final : public IMessage {
 
     void createButtons() override;
 
-    void drawInputUSer() override;
+    void drawInputUser() override;
 
     void drawMenu() override;
 

@@ -17,7 +17,7 @@ class IMessage {
   protected:
     virtual void createButtons() = 0;
 
-    virtual void drawInputUSer() = 0;
+    virtual void drawInputUser() = 0;
 
     virtual void drawMenu() = 0;
 
