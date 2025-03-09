@@ -159,24 +159,8 @@ class Controller {
      */
     void sendMessage(PlayerID recipientId, const std::string &message);
 
-    std::map<std::string, std::vector<Message>> getMessages() const;
-
     // TODO
     const NameConversation &getConversationWith(PlayerID playerID);
-
-    // TODO
-    // Not sure whether this is useful anymore
-    std::optional<PlayerID>
-    getFriendPlayerID(const std::string &friendName) const;
-
-    /*
-     * @brief Get the boards of the players
-     *
-     * @return std::shared_ptr<std::vector<std::array<std::array<colors,
-     * WIDTH>, HEIGHT>>> The boards of the players
-     */
-    // std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
-    // HEIGHT>>> getBoards() const;
 
     /*
      * @brief Get the friends online of the user

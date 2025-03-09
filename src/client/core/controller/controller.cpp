@@ -21,9 +21,7 @@
 #include "../../common/bindings/registration_response.hpp"
 #include "player_state/player_state.hpp"
 
-#include <algorithm>
 #include <mutex>
-#include <optional>
 #include <string>
 #include <thread>
 #include <vector>
@@ -166,31 +164,6 @@ void Controller::sendMessage(PlayerID recipientId, const std::string &message) {
     networkManager_.send(
         bindings::Message{recipientId, message}.to_json().dump());
 }
-
-std::map<std::string, std::vector<Message>> Controller::getMessages() const {
-    // TODO: communicate with the server to get the conversations
-    // TODO: remove this because it's an example
-
-    std::map<std::string, std::vector<Message>> conversations;
-    conversations["friend1"].push_back(Message{1, "message1"});
-    conversations["friend2"].push_back(Message{2, "message2"});
-    conversations["friend3"].push_back(Message{3, "message3"});
-    conversations["friend4"].push_back(Message{4, "message4"});
-    conversations["friend5"].push_back(Message{5, "message5"});
-
-    return conversations;
-}
-
-// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>,
-// HEIGHT>>> Controller::getBoards() const {
-//     // TODO: communicate with the server to get the boards
-//     // TODO: remove this because it's an example
-//     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
-//     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
-//     return std::make_shared<
-//         std::vector<std::array<std::array<Color, WIDTH>,
-//         HEIGHT>>>(boards);
-// }
 
 const NameConversation &Controller::getConversationWith(PlayerID playerID) {
     if (!conversations_.conversationsById.contains(playerID)) {
