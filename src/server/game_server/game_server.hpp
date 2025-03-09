@@ -15,14 +15,17 @@
 #include "player_state/player_state.hpp"
 
 #include <boost/asio.hpp>
+using UpdateGameStates = std::function<void (std::vector<int>, nlohmann::json)>;
+
 
 class GameServer {
+  
   private:
     boost::asio::io_context context_;
     boost::asio::steady_timer tickTimer_;
-
     GameStatePtr pGameState_;
     GameEngine engine;
+    UpdateGameStates updateGameStates_;
 
     /**
      * @brief Sends the GameState to all the connected people in the game
@@ -56,6 +59,10 @@ class GameServer {
      * finished.
      */
     void run();
+
+    // === getters ===
+    
+    boost::asio::io_context& getIoContext();
 };
 
 #endif // GAME_SERVER_HPP

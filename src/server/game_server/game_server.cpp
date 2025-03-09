@@ -165,3 +165,11 @@ void GameServer::run() {
 
     // End of context_.run() means the game is finished
 }
+
+
+// ==== getters ====
+
+boost::asio::io_context& GameServer::getIoContext() {
+    return  context_;
+}
+

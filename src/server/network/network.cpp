@@ -18,7 +18,7 @@ void Network::accept(){
     if (!ec ){
 
         std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(socket), 
-                [this](const std::string& packet){ clientManager_.handlePacket(packet); }, 
+                [this](const std::string& packet, const int clientId){ clientManager_.handlePacket(packet, clientId); }, 
                 [this](bindings::BindingType type, nlohmann::json data) -> nlohmann::json  {
                     return clientManager_.authPacketHandler(type, data);  
                     

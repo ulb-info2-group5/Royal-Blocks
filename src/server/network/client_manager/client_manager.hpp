@@ -18,6 +18,9 @@
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/binding_type.hpp"
 
+#include "../games_manager/games_manager.hpp"
+
+
 using boost::asio::ip::tcp;
 
 
@@ -39,7 +42,7 @@ std::shared_ptr from this to avoid premature destruction.
 
 class ClientLink : public std::enable_shared_from_this<ClientLink>{
 
-    using PacketHandler = std::function<void (const std::string& )>;
+    using PacketHandler = std::function<void (const std::string&, const int clientId )>;
     using AuthPacketHandler  = std::function<nlohmann::json (bindings::BindingType , nlohmann::json)>;
     using AuthSuccessCallback = std::function<void(std::shared_ptr<ClientLink>, nlohmann::json)>;
 
@@ -48,13 +51,13 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         std::string buffer_;
         boost::asio::streambuf streamBuffer_;
         bool identify_ = false;
-
+        std::optional<int> clientId;
         // std function to manage packages
         PacketHandler packetHandler_;
         //std function to manage authentication packages  
         AuthPacketHandler authPacketHandler_;
         //callback to notify clientManager that the client is authenticated  
-        AuthSuccessCallback authSuccessCallback_;
+        AuthSuccessCallback authSuccessCallback_;        
         /*
         *@brief : call if client is not logged in, send package to ClientManager and wait for a response
         *@param packet : string wich contains the package 
@@ -71,20 +74,16 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
     public :
        
         explicit ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback);
-
-        /*
-        * @brief : use for send Response after a operations 
-        */
-        void sendResponse(nlohmann::json response);
         void start();
-        void recieveMessage(nlohmann::json message);
+
+        void sendPackage(nlohmann::json gameState);
+
         /*
         *@brief : return true if the client is authenticated
         */
         bool isIdentify();
 
-
-    
+        void setClientId(const int id);
 };
 
 
@@ -94,6 +93,8 @@ class ClientManager {
         std::unordered_map<int , std::shared_ptr<ClientLink>> connectedClients_;
         std::mutex mutex_;
         DataBase database_;
+
+        GamesManager gamesManager_;
 
         // contains client who are not yet authenticated
         std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
@@ -119,7 +120,7 @@ class ClientManager {
         /*
         * @brief : manage of the packet received by the clientLink
         */
-        void handlePacket(const std::string& packet);
+        void handlePacket(const std::string& packet, const int clientId);
         /*
         * @brief : manage package when the client is not yet logged in
         * @return : the response of the package 
@@ -139,4 +140,6 @@ class ClientManager {
         void removeConnection(const int & clientId);
         
         bool checkCredentials(nlohmann::json data);
+
+        void updateGameStates(std::vector<int> playerIds, nlohmann::json gameState);
 };

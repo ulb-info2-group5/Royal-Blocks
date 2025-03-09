@@ -24,7 +24,7 @@ void ClientLink::read(){
             if (!identify_) {
                 handleAuthentication(packet);
             }else {
-                packetHandler_(packet);
+                packetHandler_(packet, clientId.value());
             }
             read();
         }
@@ -34,7 +34,7 @@ void ClientLink::read(){
 void ClientLink::handleAuthentication(std::string & packet){
     nlohmann::json jsonPacket = nlohmann::json::parse(packet);
     nlohmann::json response = authPacketHandler_(jsonPacket.at("type").get<bindings::BindingType>(),jsonPacket.at("data"));
-    sendResponse(response);
+    sendPackage(response);
     std::cout << response.dump() << std::endl;
     if (response.at("type").get<bindings::BindingType>() == bindings::BindingType::AuthenticationResponse && response.at("data").at("success").get<bool>()){
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
@@ -53,7 +53,7 @@ void ClientLink::writeSocket(std::string &content){
 
 // --- public ---
 ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback) 
-: socket_(std::move(socket)), packetHandler_(packetHandler), authPacketHandler_(authPacketHandler), authSuccessCallback_(authSuccessCallback) {
+: socket_(std::move(socket)), packetHandler_(packetHandler), authPacketHandler_(authPacketHandler), authSuccessCallback_(authSuccessCallback), clientId(std::nullopt) {
     start();
 }
 
@@ -67,15 +67,17 @@ bool ClientLink::isIdentify(){
     return identify_;
 }
 
-void ClientLink::recieveMessage(nlohmann::json message){
-    buffer_ = message.dump() + "\n";
+
+void ClientLink::sendPackage(nlohmann::json gameState){
+    buffer_ = gameState.dump() + "\n";
     writeSocket(buffer_);
 }
 
-void ClientLink::sendResponse(nlohmann::json response){
-    buffer_ = response.dump() + "\n";
-    writeSocket(buffer_);
+
+void ClientLink::setClientId(const int id){
+    clientId = id;
 }
+
 
 
 // ====== Client manager class ======
@@ -97,8 +99,12 @@ bool ClientManager::attemptCreateAccount(nlohmann::json data){
 
 
 // ---public ---
-ClientManager::ClientManager(DataBase database) : database_(database) {
-}
+ClientManager::ClientManager(DataBase database) : 
+database_(database), gamesManager_([this](std::vector<int> playerIds, nlohmann::json gameState){ 
+                updateGameStates(playerIds, gameState);
+    })
+    {
+    }
 
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData){
@@ -108,8 +114,10 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink, nloh
 
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo){
     std::lock_guard<std::mutex> lock(mutex_);
-    std::cout << "new client id :" << database_.accountManager->getUserId(pseudo) << std::endl;  
-    connectedClients_[database_.accountManager->getUserId(pseudo)] = clientSession;
+    const int id = database_.accountManager->getUserId(pseudo);
+    std::cout << "new client id :" <<id << std::endl;
+    clientSession->setClientId(id);  
+    connectedClients_[id] = clientSession;
     removeAuthClients();
 }
 
@@ -141,15 +149,14 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
 
 
 
-void ClientManager::handlePacket(const std::string& packet){
+void ClientManager::handlePacket(const std::string& packet, const int clientId){
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " <<std::endl;
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
     nlohmann::json data = jPack.at("data").get<nlohmann::json>();
 
-    switch (type)
-    {
+    switch (type){
     case bindings::BindingType::Message:  
         handleMessage(jPack);
         break;
@@ -164,7 +171,7 @@ void ClientManager::addClientInWaitingForAuth(std::shared_ptr<ClientLink> client
 
 void ClientManager::handleMessage(nlohmann::json message){
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("data").at("recipientId").get<int>()]->recieveMessage(message);
+    connectedClients_[message.at("data").at("recipientId").get<int>()]->sendPackage(message);
 }
 
 
@@ -179,5 +186,11 @@ bool ClientManager::checkCredentials(nlohmann::json data ){
             std::cout <<  "password false" << std::endl;
             return false; 
         }
+    }
+}
+
+void ClientManager::updateGameStates(std::vector<int> playerIds, nlohmann::json gameState){
+    for (int id : playerIds){
+        connectedClients_[id]->sendPackage(gameState);
     }
 }
