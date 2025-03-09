@@ -95,6 +95,8 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 	 \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
 	
 	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
+	
+	\item \textbf{Effect} : terme regroupant les pénalités et les bonus utilisés dans le mode royal
 
 \end{itemize}
 
@@ -639,7 +641,7 @@ Au lancement d'une partie sur l'application, chaque joueur possède un objet de 
 
 \subsubsection{Partie multijoueur}
 
-Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Pour l'ensemble de la partie, nous aurons un objet GameState qui contient toutes les informations nécessaires pour connaitre l'évolution de la partie en cours. Puis l'objet GameEngine utilisera les informations de ce dernier pour les actualiser selon les actions valides demandées par les joueurs. 
+Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Pour l'ensemble de la partie, nous aurons un objet GameState qui contient toutes les informations nécessaires pour connaitre la situation de la partie en cours. Puis l'objet GameEngine permettra de valider ou non les actions demandées par les joueurs (\textit{ex. changer le tetromino de rotation}).
 
 \newpage
 
@@ -649,6 +651,22 @@ Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons
 	 \caption{Diagramme de classes de Game}
 	 \label{fig:main-menu}
 \end{figure}
+
+\subsubsection{Partie multijoueur en mode royal}
+
+Au lancement d'une partie mulitjoueurs dans le mode royal, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Contrairement aux autres modes, le PlayerState contient des informations supplémentaires tel que le niveau de la barre d'énergie et une queue de penalités à venir sur le joueur en question. Pour l'ensemble de la partie, GameEngine permettra de valider les actions demandées par les joueurs comprenant également les conditions pour acheter un effect en particulier selon le niveau de la barre d'énergie du joueur. 
+
+\subsubsection*{Les effects}
+
+Pour l'implémentation des effects, nous avons distinguer deux grandes familles, les effects qui s'écoulent sur une période de temps et les effects qui s'écoulent au bout d'un nombre de mouvements du joueur. 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/class/ConnexionClass.png}
+    \caption{Diagramme de classe des effects}
+    \label{fig:Royal-Competition}
+\end{figure}
+
 
 \subsection{Architecture du serveur}
 

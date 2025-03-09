@@ -1,6 +1,6 @@
 @startuml (id=PenaltyType)
 
-class PenaltyType {
+enum PenaltyType {
     ReverseControls
     InputLock
     SpeedUp
