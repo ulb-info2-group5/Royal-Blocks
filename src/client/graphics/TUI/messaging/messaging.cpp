@@ -27,10 +27,10 @@ void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
         "Add a friend",
         [&] {
-            controller_.sendFriendRequest(newFriend_);
-            friends_.push_back(newFriend_);
-            conversations_[newFriend_] = {};
-            newFriend_.clear();
+            controller_.sendFriendRequest(newFriendBuffer_);
+            friends_.push_back(newFriendBuffer_);
+            conversations_[newFriendBuffer_] = {};
+            newFriendBuffer_.clear();
         },
         GlobalButtonStyle());
 
@@ -53,7 +53,7 @@ void Messaging::createButtons() {
         "Back",
         [&] {
             newMessageBuffer_.clear();
-            newFriend_.clear();
+            newFriendBuffer_.clear();
             userState_ = MessagingState::BACK;
             screen_.ExitLoopClosure()();
         },
@@ -61,9 +61,9 @@ void Messaging::createButtons() {
 }
 
 void Messaging::drawInputUSer() {
-    newFriend_.clear();
+    newFriendBuffer_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriend_, "Name of the friend");
+    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend");
     // attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
