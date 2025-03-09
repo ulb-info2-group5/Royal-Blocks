@@ -9,6 +9,7 @@
 #include "controller.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../network/network_manager.hpp"
+#include "core/in_game/player_state/player_state_external.hpp"
 #include "game_state/game_state.hpp"
 
 #include "../../common/bindings/authentication.hpp"
@@ -22,6 +23,7 @@
 
 #include <algorithm>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <thread>
 #include <vector>
@@ -159,19 +161,7 @@ void Controller::removeFriend(const std::string &username) {
                              .dump());
 }
 
-void Controller::sendMessage(const std::string &recipientName,
-                             const std::string &message) {
-    auto recipientIt = std::find_if(
-        friendsList_.friendsList.begin(), friendsList_.friendsList.end(),
-        [&](bindings::User &user) { return user.username == recipientName; });
-
-    // Return there isn't any friend with this name.
-    if (recipientIt == friendsList_.friendsList.end()) {
-        return;
-    }
-
-    PlayerID recipientId = recipientIt->playerId;
-
+void Controller::sendMessage(PlayerID recipientId, const std::string &message) {
     networkManager_.send(
         bindings::Message{recipientId, message}.to_json().dump());
 }
@@ -188,6 +178,22 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
     conversations["friend5"].push_back(Message{5, "message5"});
 
     return conversations;
+}
+
+// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>,
+// HEIGHT>>> Controller::getBoards() const {
+//     // TODO: communicate with the server to get the boards
+//     // TODO: remove this because it's an example
+//     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
+//     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
+//     return std::make_shared<
+//         std::vector<std::array<std::array<Color, WIDTH>,
+//         HEIGHT>>>(boards);
+// }
+
+const NameConversation &
+Controller::getConversationWith(PlayerID playerID) const {
+    return conversations_.conversationsById.at(playerID);
 }
 
 std::vector<std::string> Controller::getFriendsOnline() const {

@@ -9,14 +9,17 @@
 namespace bindings {
 
     struct Conversations {
-        std::unordered_map<User, Conversation> userConv;
+        using NameConversation = std::pair<std::string, Conversation>;
+
+        std::unordered_map<PlayerID, NameConversation> conversationsById;
 
         nlohmann::json to_json() const {
             nlohmann::json j_userConv = nlohmann::json::array();
 
-            for (const auto &[user, conversation] : userConv) {
-                j_userConv.push_back(
-                    {user.playerId, user.username, conversation.to_json()});
+            for (const auto &[playerId, nameWithConversation] :
+                 conversationsById) {
+                const auto &[name, conversation] = nameWithConversation;
+                j_userConv.push_back({playerId, name, conversation.to_json()});
             }
 
             return nlohmann::json{{"type", BindingType::Conversations},
@@ -31,18 +34,19 @@ namespace bindings {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
-            Conversations convs;
-            const auto &j_userConv = j.at("data").at("userConv");
+            Conversations conversations;
 
-            for (const auto &entry : j_userConv) {
-                User user{entry.at(0).get<PlayerID>(),
-                          entry.at(1).get<std::string>()};
-                Conversation conv = Conversation::from_json(entry.at(2));
+            for (const auto &entry : j.at("data").at("userConv")) {
+                PlayerID playerId = entry.at(0).get<PlayerID>();
+                std::string name = entry.at(1).get<std::string>();
+                Conversation conversation =
+                    Conversation::from_json(entry.at(2));
 
-                convs.userConv[user] = conv;
+                conversations.conversationsById[playerId] =
+                    std::make_pair(std::move(name), std::move(conversation));
             }
 
-            return convs;
+            return conversations;
         }
     };
 

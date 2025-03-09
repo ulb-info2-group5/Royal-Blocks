@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "../../IMessage.hpp"
+#include "core/in_game/player_state/player_state_external.hpp"
 
 class Controller; // Forward declaration
 
@@ -31,7 +32,7 @@ class Controller; // Forward declaration
 //     std::string message;
 // };
 
-class Messaging : public IMessage {
+class Messaging final : public IMessage {
   private:
     /*
      * @brief The screen to use to render the components
@@ -43,8 +44,8 @@ class Messaging : public IMessage {
      */
     Controller &controller_;
 
-    std::map<std::string, std::vector<Message>> conversations_;
-    std::vector<std::string> friends_;
+    // std::map<std::string, std::vector<Message>> conversations_;
+    // std::vector<std::string> friends_;
     int selectedFriend = 0;
     std::string newFriendBuffer_;
     std::string newMessageBuffer_;
@@ -68,9 +69,7 @@ class Messaging : public IMessage {
 
     // just to simulate a user ID
     int userId = 5;
-    void initMessaging();
 
-  protected:
     void createButtons() override;
 
     void drawInputUSer() override;
@@ -80,6 +79,8 @@ class Messaging : public IMessage {
     void drawDisplay() override;
 
     void drawWindow() override;
+
+    PlayerID getSelectedFriendId();
 
   public:
     /*
@@ -101,11 +102,6 @@ class Messaging : public IMessage {
     void render() override;
 
     // void addFriends(std::string friendName) override;
-
-    /*
-     * @brief add a message to a discussion
-     */
-    void addMessage(const std::string &message) override;
 };
 
 #endif

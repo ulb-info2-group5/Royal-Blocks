@@ -29,8 +29,6 @@ class IMessage {
     virtual ~IMessage() = default;
 
     virtual void render() = 0;
-
-    virtual void addMessage(const std::string &message) = 0;
 };
 
 #endif // IMESSAGE_HPP

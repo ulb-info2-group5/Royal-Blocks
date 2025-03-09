@@ -15,6 +15,7 @@
 #include "../common/bindings/ranking.hpp"
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
+#include "core/in_game/player_state/player_state_external.hpp"
 
 #include <map>
 #include <memory>
@@ -23,6 +24,8 @@
 #include <vector>
 
 using Score = size_t;
+
+using NameConversation = std::pair<std::string, bindings::Conversation>;
 
 struct Message;
 
@@ -152,19 +155,29 @@ class Controller {
     /*
      * @brief Send a message to a friend
      *
-     * @param recipientName The name of the friend to send the message
+     * @param recipientId The PlayerID of the friend to send the message
      * @param message The message to send
      */
-    void sendMessage(const std::string &recipientName,
-                     const std::string &message);
+    void sendMessage(PlayerID recipientId, const std::string &message);
+
+    std::map<std::string, std::vector<Message>> getMessages() const;
+
+    // TODO
+    const NameConversation &getConversationWith(PlayerID playerID) const;
+
+    // TODO
+    // Not sure whether this is useful anymore
+    std::optional<PlayerID>
+    getFriendPlayerID(const std::string &friendName) const;
 
     /*
-     * @brief Get the messages of all the conversations of the user
+     * @brief Get the boards of the players
      *
-     * @return std::map<std::string, std::vector<std::string>> The messages of
-     * all the conversations of the user
+     * @return std::shared_ptr<std::vector<std::array<std::array<colors,
+     * WIDTH>, HEIGHT>>> The boards of the players
      */
-    std::map<std::string, std::vector<Message>> getMessages() const;
+    // std::shared_ptr<std::vector<std::array<std::array<colors, WIDTH>,
+    // HEIGHT>>> getBoards() const;
 
     /*
      * @brief Get the friends online of the user

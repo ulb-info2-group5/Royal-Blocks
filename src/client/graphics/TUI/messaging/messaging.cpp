@@ -2,6 +2,9 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include "core/in_game/player_state/player_state_external.hpp"
+
+#include "../../../../common/bindings/message.hpp"
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server.
@@ -10,17 +13,9 @@
 Messaging::Messaging(ftxui::ScreenInteractive &screen, Controller &controller)
     : screen_(screen), controller_(controller) {
     userState_ = MessagingState::NONE;
-    initMessaging();
     createButtons();
 }
 
-// ### private methods ###
-void Messaging::initMessaging() {
-    for (const std::string &friend_name : friends_) {
-        conversations_[friend_name] = {
-            Message{1, friend_name + " : test bonjour "}};
-    }
-}
 // ### protected methods ###
 
 void Messaging::createButtons() {
@@ -28,26 +23,34 @@ void Messaging::createButtons() {
         "Add a friend",
         [&] {
             controller_.sendFriendRequest(newFriendBuffer_);
-            friends_.push_back(newFriendBuffer_);
-            conversations_[newFriendBuffer_] = {};
+
+            // TODO: lulu Controller -> add Friend (done)
+            controller_.sendFriendRequest(newFriendBuffer_);
+
             newFriendBuffer_.clear();
         },
         GlobalButtonStyle());
 
-    sendButton_ =
-        ftxui::Button(
-            "Send",
-            [&] {
-                if (!newMessageBuffer_.empty() && !friends_.empty()) {
-                    controller_.sendMessage(
-                        friends_[static_cast<size_t>(selectedFriend)],
-                        newMessageBuffer_); // TODO: check if the message is
-                                            // sent with server, etc
-                    addMessage(newMessageBuffer_);
-                }
-            },
-            GlobalButtonStyle())
-        | ftxui::center;
+    sendButton_ = ftxui::Button(
+                      "Send",
+                      [&] {
+                          if (!newMessageBuffer_.empty()
+                              // && TODO: lulu check valid friend (at least one)
+                          ) {
+                              controller_.sendMessage(getSelectedFriendId(),
+                                                      newMessageBuffer_);
+
+                              // TODO: lulu controller -> sendMessage (done)
+                              // Old code:
+                              // (selectedFriend) controller_.sendMessage(
+                              //     friends_[static_cast<size_t>(selectedFriend)],
+                              //     newMessageBuffer_);
+
+                              newMessageBuffer_.clear();
+                          }
+                      },
+                      GlobalButtonStyle())
+                  | ftxui::center;
 
     backButton_ = ftxui::Button(
         "Back",
@@ -81,7 +84,17 @@ void Messaging::drawInputUSer() {
 void Messaging::drawMenu() {
     drawInputUSer();
 
-    friendsMenu_ = ftxui::Menu(&friends_, &selectedFriend);
+    // TODO: lulu ask controller for the friendsList, extract the names and pass
+    // them to the Menu. (done)
+
+    std::vector<std::string> friendsName(
+        controller_.getFriendsList().friendsList.size());
+    std::transform(controller_.getFriendsList().friendsList.begin(),
+                   controller_.getFriendsList().friendsList.end(),
+                   friendsName.begin(),
+                   [](const bindings::User &user) { return user.username; });
+
+    friendsMenu_ = ftxui::Menu(&friendsName, &selectedFriend);
 
     addMenu_ = ftxui::Container::Vertical({
         addFriendInput_,
@@ -99,21 +112,20 @@ void Messaging::drawDisplay() {
 
     chatDisplay_ = ftxui::Renderer([&] {
         ftxui::Elements chat_elements;
-        if (!friends_.empty()) {
-            for (const Message &msg :
-                 conversations_[friends_[static_cast<size_t>(
-                     selectedFriend)]]) {
-                if (msg.idSender != userId) {
-                    chat_elements.push_back(
-                        ftxui::text(msg.message) | ftxui::bold
-                        | ftxui::color(ftxui::Color::Yellow));
-                } else {
-                    chat_elements.push_back(
-                        ftxui::text(msg.message) | ftxui::bold
-                        | ftxui::color(ftxui::Color::DarkCyan));
-                }
-            }
+
+        const NameConversation &nameConversation =
+            controller_.getConversationWith(getSelectedFriendId());
+
+        // for each message in the conversation with the selectedFriend and
+        // us
+        for (auto &[senderId, message] :
+             nameConversation.second.senderMessages) {
+
+            // TODO: display our own messages with a different color
+            chat_elements.push_back(ftxui::text(message) | ftxui::bold
+                                    | ftxui::color(ftxui::Color::Yellow));
         }
+
         return ftxui::vbox(chat_elements) | ftxui::flex;
     });
 }
@@ -171,23 +183,12 @@ void Messaging::drawWindow() {
     });
 }
 
-// ### public methods ###
-void Messaging::render() {
-    // TODO: this doesn't work anymore because we changed getFriendsList()
-    //
-    // friends_ = controller_.getFriendsList(); // TODO: check if the friends
-    // list is
-    //                                   // correctly updated with the server,
-    //                                   etc
-    conversations_ =
-        controller_.getMessages(); // TODO: check if the conversations are
-                                   // correctly updated with the server, etc
-    drawWindow();
-    screen_.Loop(handleCtrl(displayWindow_));
+PlayerID Messaging::getSelectedFriendId() {
+    return controller_.getFriendsList().friendsList.at(selectedFriend).playerId;
 }
 
-void Messaging::addMessage(const std::string &message) {
-    conversations_[friends_[static_cast<size_t>(selectedFriend)]].push_back(
-        Message{userId, message});
-    newMessageBuffer_.clear();
+// ### public methods ###
+void Messaging::render() {
+    drawWindow();
+    screen_.Loop(handleCtrl(displayWindow_));
 }
