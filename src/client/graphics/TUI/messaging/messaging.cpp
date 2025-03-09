@@ -87,14 +87,13 @@ void Messaging::drawMenu() {
     // TODO: lulu ask controller for the friendsList, extract the names and pass
     // them to the Menu. (done)
 
-    std::vector<std::string> friendsName(
-        controller_.getFriendsList().friendsList.size());
+    friendNames_.reserve(controller_.getFriendsList().friendsList.size());
     std::transform(controller_.getFriendsList().friendsList.begin(),
                    controller_.getFriendsList().friendsList.end(),
-                   friendsName.begin(),
+                   friendNames_.begin(),
                    [](const bindings::User &user) { return user.username; });
 
-    friendsMenu_ = ftxui::Menu(&friendsName, &selectedFriend);
+    friendsMenu_ = ftxui::Menu(&friendNames_, &selectedFriend_);
 
     addMenu_ = ftxui::Container::Vertical({
         addFriendInput_,
@@ -184,11 +183,15 @@ void Messaging::drawWindow() {
 }
 
 PlayerID Messaging::getSelectedFriendId() {
-    return controller_.getFriendsList().friendsList.at(selectedFriend).playerId;
+    return controller_.getFriendsList()
+        .friendsList.at(selectedFriend_)
+        .playerId;
 }
 
 // ### public methods ###
 void Messaging::render() {
-    drawWindow();
-    screen_.Loop(handleCtrl(displayWindow_));
+    if (controller_.getFriendsList().friendsList.size() > 0) {
+        drawWindow();
+        screen_.Loop(handleCtrl(displayWindow_));
+    }
 }

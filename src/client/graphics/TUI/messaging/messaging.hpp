@@ -45,8 +45,8 @@ class Messaging final : public IMessage {
     Controller &controller_;
 
     // std::map<std::string, std::vector<Message>> conversations_;
-    // std::vector<std::string> friends_;
-    int selectedFriend = 0;
+    std::vector<std::string> friendNames_;
+    int selectedFriend_ = 0;
     std::string newFriendBuffer_;
     std::string newMessageBuffer_;
 
