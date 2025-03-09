@@ -15,7 +15,7 @@
 #include "player_state/player_state.hpp"
 
 #include <boost/asio.hpp>
-using UpdateGameStates = std::function<void (std::vector<int>, nlohmann::json)>;
+using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
 
 
 class GameServer {
@@ -43,7 +43,7 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds);
+    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameState);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;

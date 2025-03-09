@@ -141,5 +141,5 @@ class ClientManager {
         
         bool checkCredentials(nlohmann::json data);
 
-        void updateGameStates(std::vector<int> playerIds, nlohmann::json gameState);
+        void updateGameStates(PlayerID playerIds, nlohmann::json gameState);
 };

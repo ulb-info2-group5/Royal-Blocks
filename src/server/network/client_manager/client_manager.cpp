@@ -100,11 +100,9 @@ bool ClientManager::attemptCreateAccount(nlohmann::json data){
 
 // ---public ---
 ClientManager::ClientManager(DataBase database) : 
-database_(database), gamesManager_([this](std::vector<int> playerIds, nlohmann::json gameState){ 
-                updateGameStates(playerIds, gameState);
-    })
-    {
-    }
+database_(database), gamesManager_([this](PlayerID playerId, nlohmann::json gameState){ 
+                updateGameStates(playerId, gameState);
+    })  {}
 
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData){
@@ -127,19 +125,10 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
     nlohmann::json response;
     switch (type){
     case bindings::BindingType::Authentication :
-        if (checkCredentials(data)){
-            response = bindings::AuthenticationResponse{true}.to_json();
-        }else {
-            response = bindings::AuthenticationResponse{false}.to_json(); 
-        }
+        response = (checkCredentials(data)) ? bindings::AuthenticationResponse{true}.to_json() : bindings::AuthenticationResponse{false}.to_json(); 
         break;
     case bindings::BindingType::Registration :
-        if (attemptCreateAccount(data)){
-            response = bindings::RegistrationResponse{true}.to_json(); 
-        }else {
-            response = bindings::RegistrationResponse{false}.to_json();
-        }
-            
+        response = (checkCredentials(data)) ? bindings::RegistrationResponse{true}.to_json() : bindings::RegistrationResponse{false}.to_json();
         break;
     default:
         break;
@@ -155,7 +144,7 @@ void ClientManager::handlePacket(const std::string& packet, const int clientId){
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
     nlohmann::json data = jPack.at("data").get<nlohmann::json>();
-
+    // TODO : if client is in game then send the packet to GamesManager using enqueueGameBinding
     switch (type){
     case bindings::BindingType::Message:  
         handleMessage(jPack);
@@ -189,8 +178,7 @@ bool ClientManager::checkCredentials(nlohmann::json data ){
     }
 }
 
-void ClientManager::updateGameStates(std::vector<int> playerIds, nlohmann::json gameState){
-    for (int id : playerIds){
-        connectedClients_[id]->sendPackage(gameState);
-    }
+void ClientManager::updateGameStates(PlayerID playerIds, nlohmann::json gameState){
+    
+        connectedClients_[static_cast<int>(playerIds)]->sendPackage(gameState);
 }

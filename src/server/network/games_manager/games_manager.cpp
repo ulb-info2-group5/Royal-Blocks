@@ -15,7 +15,7 @@ void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> pla
     for (PlayerID id : playerIds){
         clientToGame_[id] = nextGameId;
     }
-    std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(gameMode , std::move(playerIds)); 
+    std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(gameMode , std::move(playerIds), updateGameStates_); 
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] = std::thread([gameServer]() {gameServer->run(); });
     std::cout << " ==<< create a new game >>== gameServer id : " << nextGameId << std::endl; 

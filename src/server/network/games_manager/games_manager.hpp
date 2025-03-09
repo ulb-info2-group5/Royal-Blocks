@@ -12,7 +12,7 @@
 
 #include "../../game_server/game_server.hpp"
 
-using UpdateGameStates = std::function<void (std::vector<int>, nlohmann::json)>;
+using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
 
 class GamesManager {
     

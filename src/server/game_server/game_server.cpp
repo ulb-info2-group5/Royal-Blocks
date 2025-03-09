@@ -16,10 +16,9 @@ constexpr size_t SECONDS_BETWEEN_TICKS = 1;
 // ----------------------------------------------------------------------------
 
 void GameServer::sendGameStates() {
-    // for (each PlayerID) {
-    // send bindings::GameStateMessage::serializeForPlayer(*pGameState_,
-    // playerID);
-    // }
+    for (auto player : pGameState_->getPlayerToTetris()){
+        updateGameStates_(player.pPlayerState->getPlayerID(), pGameState_->serializeFor(player.pPlayerState->getPlayerID()));
+    }
 }
 
 void GameServer::onTimerTick() {
@@ -46,7 +45,7 @@ void GameServer::onTimerTick() {
 //                          PUBLIC METHODS
 // ----------------------------------------------------------------------------
 
-GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds)
+GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameStates)
     : context_{},
       tickTimer_{context_, boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS}},
       pGameState_{std::make_shared<GameState>(
@@ -59,7 +58,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds)
                              [](PlayerID id) { return PlayerState(id); });
               return playerStates;
           }())},
-      engine{pGameState_} {}
+      engine{pGameState_}, updateGameStates_{updateGameStates} {}
 
 void GameServer::enqueueBinding(PlayerID playerId,
                                 const std::string &bindingStr) {
