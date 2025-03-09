@@ -5,6 +5,8 @@
 #include "core/in_game/player_state/player_state_external.hpp"
 
 #include "../../../../common/bindings/message.hpp"
+#include <ftxui/dom/elements.hpp>
+#include <optional>
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server.
@@ -31,26 +33,29 @@ void Messaging::createButtons() {
         },
         GlobalButtonStyle());
 
-    sendButton_ = ftxui::Button(
-                      "Send",
-                      [&] {
-                          if (!newMessageBuffer_.empty()
-                              // && TODO: lulu check valid friend (at least one)
-                          ) {
-                              controller_.sendMessage(getSelectedFriendId(),
-                                                      newMessageBuffer_);
+    sendButton_ =
+        ftxui::Button(
+            "Send",
+            [&] {
+                if (!newMessageBuffer_.empty()
+                    // && TODO: lulu check valid friend (at least one)
+                ) {
+                    getSelectedFriendId().and_then([&](PlayerID playerId) {
+                        controller_.sendMessage(playerId, newMessageBuffer_);
+                        return std::optional<PlayerID>{};
+                    });
 
-                              // TODO: lulu controller -> sendMessage (done)
-                              // Old code:
-                              // (selectedFriend) controller_.sendMessage(
-                              //     friends_[static_cast<size_t>(selectedFriend)],
-                              //     newMessageBuffer_);
+                    // TODO: lulu controller -> sendMessage (done)
+                    // Old code:
+                    // (selectedFriend) controller_.sendMessage(
+                    //     friends_[static_cast<size_t>(selectedFriend)],
+                    //     newMessageBuffer_);
 
-                              newMessageBuffer_.clear();
-                          }
-                      },
-                      GlobalButtonStyle())
-                  | ftxui::center;
+                    newMessageBuffer_.clear();
+                }
+            },
+            GlobalButtonStyle())
+        | ftxui::center;
 
     backButton_ = ftxui::Button(
         "Back",
@@ -116,19 +121,25 @@ void Messaging::drawDisplay() {
     });
 
     chatDisplay_ = ftxui::Renderer([&] {
-        ftxui::Elements chat_elements;
+        std::optional<PlayerID> optSelectedFriendId = getSelectedFriendId();
+        return optSelectedFriendId
+            .and_then([this](auto id) -> std::optional<ftxui::Element> {
+                ftxui::Elements chat_elements;
 
-        auto &[name, conversation] =
-            controller_.getConversationWith(getSelectedFriendId());
+                auto &[name, conversation] =
+                    controller_.getConversationWith(id);
 
-        for (auto &[senderId, message] : conversation.senderMessages) {
+                for (auto &[senderId, message] : conversation.senderMessages) {
 
-            // TODO: display our own messages with a different color
-            chat_elements.push_back(ftxui::text(message) | ftxui::bold
-                                    | ftxui::color(ftxui::Color::Yellow));
-        }
+                    // TODO: display our own messages with a different color
+                    chat_elements.push_back(
+                        ftxui::text(message) | ftxui::bold
+                        | ftxui::color(ftxui::Color::Yellow));
+                }
 
-        return ftxui::vbox(chat_elements) | ftxui::flex;
+                return ftxui::vbox(chat_elements) | ftxui::flex;
+            })
+            .value_or(ftxui::text("No conversation"));
     });
 }
 
@@ -185,10 +196,12 @@ void Messaging::drawWindow() {
     });
 }
 
-PlayerID Messaging::getSelectedFriendId() {
-    return controller_.getFriendsList()
-        .friendsList.at(selectedFriend_)
-        .playerId;
+std::optional<PlayerID> Messaging::getSelectedFriendId() {
+    return (controller_.getFriendsList().friendsList.empty())
+               ? std::nullopt
+               : std::make_optional(controller_.getFriendsList()
+                                        .friendsList.at(selectedFriend_)
+                                        .playerId);
 }
 
 // ### public methods ###

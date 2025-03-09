@@ -9,6 +9,7 @@
 #include <ftxui/dom/elements.hpp>
 
 #include <cstdlib>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -79,7 +80,7 @@ class Messaging final : public IMessage {
 
     void drawWindow() override;
 
-    PlayerID getSelectedFriendId();
+    std::optional<PlayerID> getSelectedFriendId();
 
   public:
     /*

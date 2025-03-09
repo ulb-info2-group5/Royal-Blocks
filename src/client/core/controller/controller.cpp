@@ -86,7 +86,6 @@ Controller::Controller()
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
-
       screenManager_{*this}
 
 {
