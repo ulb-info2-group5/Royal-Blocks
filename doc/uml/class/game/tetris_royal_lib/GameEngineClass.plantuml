@@ -1,4 +1,4 @@
-@startuml (id = GameEngine)
+@startuml GameEngineClass
 
 class GameEngine {
 	+GameEngine(const GameStatePtr& pGameState)

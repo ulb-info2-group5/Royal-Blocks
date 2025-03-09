@@ -1,4 +1,4 @@
-@startuml (id = GameStateView)
+@startuml GameStateViewClass
 
 abstract class GameStateView {
 	+GameStateView()

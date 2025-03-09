@@ -1,0 +1,210 @@
+@startuml EffectClass
+
+
+/' Objects '/
+
+abstract class AbstractTimedEffect {
+	#AbstractTimedEffect()
+	+~AbstractTimedEffect()
+	+{abstract} isFinished() : bool {query}
+	+{abstract} getElapsedTime() : double {query}
+	+{abstract} serialize() : nlohmann::json {query}
+	+tetrominoPlaced() : void
+	+tick() : void
+}
+
+
+class Blackout {
+	+Blackout()
+	+~Blackout()
+	-{static} TICKS_NUM : static constexpr size_t
+}
+
+
+class EffectSelector {
+	+EffectSelector()
+	+EffectSelector(const EffectSelector &)
+	+EffectSelector(EffectSelector& &)
+	+~EffectSelector()
+	+operator=(const EffectSelector &) : EffectSelector&
+	+operator=(EffectSelector& &) : EffectSelector&
+	+getSelectedEffect() : EffectType {query}
+	+serialize() : nlohmann::json {query}
+	+getNumEffects() : size_t {query}
+	+getSelectedIdx() : size_t {query}
+	-selectionIdx_ : size_t
+	->(BonusType::NumBonusType) : std::array<BonusType , static_cast<size_t
+	->(PenaltyType::NumPenaltyType) : std::array<PenaltyType , static_cast<size_t
+	+deserialize(const nlohmann::json& j) : void
+	+next() : void
+	+prev() : void
+	+select(variant<BonusType, PenaltyType> effectType) : void
+}
+
+
+class InputLock {
+	+InputLock()
+	+~InputLock()
+	-{static} PIECES_NUM : static constexpr size_t
+}
+
+
+class PlacementTimedEffect {
+	#PlacementTimedEffect(size_t placementsNum)
+	#PlacementTimedEffect(const PlacementTimedEffect &)
+	+~PlacementTimedEffect()
+	+isFinished() : bool {query}
+	+operator==(const PlacementTimedEffect& other) : bool {query}
+	+getElapsedTime() : double {query}
+	-numPlacements_ : size_t
+	-remainingPlacements_ : size_t
+	+operator<<(std::ostream& os, const PlacementTimedEffect& placementTimedEffect) : std :: ostream&
+	+tetrominoPlaced() : void
+}
+
+
+class ReverseControls {
+	+ReverseControls()
+	+~ReverseControls()
+	-{static} PIECES_NUM : static constexpr size_t
+}
+
+
+class SlowDown {
+	+SlowDown()
+	+~SlowDown()
+	+shouldIgnoreTick() : bool
+	-{static} SLOW_DOWN_FACTOR : static constexpr size_t
+	-{static} TICKS_NUM : static constexpr size_t
+}
+
+
+class SpeedUp {
+	+SpeedUp()
+	+~SpeedUp()
+	+{static} SpeedUpFactor : static constexpr size_t
+	-{static} TICKS_NUM : static constexpr size_t
+}
+
+
+class TickTimedEffect {
+	#TickTimedEffect(size_t ticksNum)
+	#TickTimedEffect(const TickTimedEffect &)
+	+~TickTimedEffect()
+	+isFinished() : bool {query}
+	+operator==(const TickTimedEffect& other) : bool {query}
+	+getElapsedTime() : double {query}
+	-numTicks_ : size_t
+	-remainingTicks_ : size_t
+	+operator<<(std::ostream& os, const TickTimedEffect& tickTimedEffect) : std :: ostream&
+	+tick() : void
+}
+
+
+class TimedBonus {
+	#TimedBonus(BonusType bonusType)
+	#TimedBonus(const TimedBonus &)
+	#TimedBonus(TimedBonus& &)
+	+~TimedBonus()
+	-bonusType_ : BonusType
+	+getBonusType() : BonusType {query}
+	+{static} makeBonus(BonusType bonusType) : TimedBonusPtr
+	+serialize() : nlohmann::json {query}
+	+operator<<(std::ostream& os, const TimedBonus& bonus) : std :: ostream&
+}
+
+
+class TimedPenalty {
+	#TimedPenalty(PenaltyType penaltyType)
+	+~TimedPenalty()
+	+getPenaltyType() : PenaltyType {query}
+	-penaltyType_ : PenaltyType
+	+{static} makePenalty(PenaltyType bonusType) : TimedPenaltyPtr
+	+serialize() : nlohmann::json {query}
+}
+
+
+enum BonusType {
+	MiniTetrominoes
+	NumBonusType
+	SlowDown
+}
+
+
+enum PenaltyType {
+	Blackout
+	InputLock
+	Lightning
+	NumPenaltyType
+	ReverseControls
+	SpeedUp
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+AbstractTimedEffect <|-- PlacementTimedEffect
+
+
+AbstractTimedEffect <|-- TickTimedEffect
+
+
+AbstractTimedEffect <|-- TimedBonus
+
+
+AbstractTimedEffect <|-- TimedPenalty
+
+
+PlacementTimedEffect <|-- InputLock
+
+
+PlacementTimedEffect <|-- ReverseControls
+
+
+TickTimedEffect <|-- Blackout
+
+
+TickTimedEffect <|-- SlowDown
+
+
+TickTimedEffect <|-- SpeedUp
+
+
+TimedBonus <|-- SlowDown
+
+
+TimedPenalty <|-- Blackout
+
+
+TimedPenalty <|-- InputLock
+
+
+TimedPenalty <|-- ReverseControls
+
+
+TimedPenalty <|-- SpeedUp
+
+
+
+
+
+/' Aggregation relationships '/
+
+TimedBonus *-- BonusType
+
+
+TimedPenalty *-- PenaltyType
+
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml
