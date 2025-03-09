@@ -199,9 +199,9 @@ void GameDisplay::drawPlayerBoard() {
 void GameDisplay::displayMiddleWindow() {
     drawPlayerBoard();
 
-    // need to modify this for different game mode
+    // need to modify this for different game modes
     ftxui::Component modeDisplay = ftxui::Renderer(
-        [&] { return ftxui::text("Royal") | ftxui::borderRounded; });
+        [&] { return ftxui::text(toString(pGameState_->gameState.gameMode)) | ftxui::center | ftxui::borderRounded; });
 
     ftxui::Component playButtonsDisplay = ftxui::Container::Horizontal({
         ftxui::Button(
