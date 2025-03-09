@@ -1,5 +1,9 @@
 @startuml EffectClass
 
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor AliceBlue
+}
 
 /' Objects '/
 
