@@ -51,15 +51,18 @@ void Controller::handlePacket(const std::string &pack) {
 
     case bindings::BindingType::FriendsList: {
         friendsList_ = bindings::FriendsList::from_json(j);
+        break;
     }
 
     case bindings::BindingType::Conversations: {
         conversations_ = bindings::Conversations::from_json(j);
+        break;
     }
 
     case bindings::BindingType::GameState: {
         std::lock_guard<std::mutex> guard(pGameState_->mutex);
         pGameState_->gameState = bindings::GameStateMessage::deserialize(j);
+        break;
     }
 
     default:
