@@ -190,17 +190,6 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
     return conversations;
 }
 
-// std::shared_ptr<std::vector<std::array<std::array<Color, WIDTH>,
-// HEIGHT>>> Controller::getBoards() const {
-//     // TODO: communicate with the server to get the boards
-//     // TODO: remove this because it's an example
-//     std::vector<std::array<std::array<Color, WIDTH>, HEIGHT>> boards;
-//     boards.push_back(std::array<std::array<Color, WIDTH>, HEIGHT>());
-//     return std::make_shared<
-//         std::vector<std::array<std::array<Color, WIDTH>,
-//         HEIGHT>>>(boards);
-// }
-
 std::vector<std::string> Controller::getFriendsOnline() const {
     // TODO: communicate with the server to get the friends online
     // TODO: remove this because it's an example
