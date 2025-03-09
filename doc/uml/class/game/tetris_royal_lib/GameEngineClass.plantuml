@@ -53,7 +53,7 @@ class GameEngine {
 	+tryRotateActive(PlayerID playerID, bool rotateClockwise) : void
 }
 
-enum class GameModeFeature{
+enum GameModeFeature{
 	PenaltyRows,
     Effects,
     SelectPenaltyTarget,
