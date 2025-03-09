@@ -65,6 +65,11 @@ void Controller::handlePacket(const std::string &pack) {
         break;
     }
 
+    case bindings::BindingType::Ranking: {
+        ranking_ = bindings::Ranking::from_json(j);
+        break;
+    }
+
     default:
         std::cerr << "unknown bindingType" << std::endl;
     }

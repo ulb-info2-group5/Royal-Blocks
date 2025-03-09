@@ -12,6 +12,7 @@
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../common/bindings/conversations.hpp"
 #include "../common/bindings/friends_list.hpp"
+#include "../common/bindings/ranking.hpp"
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
 
@@ -50,6 +51,7 @@ class Controller {
 
     bindings::FriendsList friendsList_;
     bindings::Conversations conversations_;
+    bindings::Ranking ranking_;
 
     /*
      * @brief The network manager to manage the connection with the server
