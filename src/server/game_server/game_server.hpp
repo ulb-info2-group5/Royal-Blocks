@@ -15,7 +15,13 @@
 #include "player_state/player_state.hpp"
 
 #include <boost/asio.hpp>
+
+using GameID = size_t;
+
 using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
+using CallBackFinishGame = std::function<void (GameID)>; 
+
+
 
 
 class GameServer {
@@ -25,8 +31,12 @@ class GameServer {
     boost::asio::steady_timer tickTimer_;
     GameStatePtr pGameState_;
     GameEngine engine;
-    UpdateGameStates updateGameStates_;
+    GameID gameId_;
 
+
+    UpdateGameStates updateGameStates_;
+    CallBackFinishGame callBackFinishGame_;
+    
     /**
      * @brief Sends the GameState to all the connected people in the game
      * include viewers. TODO: (not implemented yet)
@@ -43,7 +53,7 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameState);
+    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameState, GameID id, CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;

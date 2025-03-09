@@ -11,24 +11,26 @@
 #include <memory>
 
 #include "../../game_server/game_server.hpp"
-
+// TODO : rename to sendGameState 
 using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
 
 class GamesManager {
     
     private:
-        std::unordered_map<PlayerID , int > clientToGame_;
-        std::unordered_map<int , std::shared_ptr<GameServer> > gameSessions_;
-        std::unordered_map<int , std::thread> gamethreads_; 
+        std::unordered_map<PlayerID , GameID > clientToGame_;
+        std::unordered_map<GameID , std::shared_ptr<GameServer> > gameSessions_;
+        std::unordered_map<GameID , std::thread> gamethreads_; 
 
         UpdateGameStates updateGameStates_;
-        int nextGameId = 1;
+        GameID nextGameId = 1;
 
-        void stopGame(int gameId);
+        void deleteGame(GameID gameId);
     public: 
         GamesManager(UpdateGameStates updateGameStates);
         void enqueueGameBinding(int clientId, const std::string& strBindings);
         void startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds );
+
+        void callBackFinishGame(GameID gameId);
 
 };
 

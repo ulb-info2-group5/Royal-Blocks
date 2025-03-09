@@ -3,7 +3,10 @@
 
 
 // ======== private methode ========
-
+void GamesManager::deleteGame(GameID gameId){
+    //TODO : update clientTOGame_ , gameThreads and gameSessions 
+    //to avoid storing the finished games 
+}
 
 
 // ======== public methode ========
@@ -15,7 +18,8 @@ void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> pla
     for (PlayerID id : playerIds){
         clientToGame_[id] = nextGameId;
     }
-    std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(gameMode , std::move(playerIds), updateGameStates_); 
+    std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(gameMode , std::move(playerIds),updateGameStates_, nextGameId, 
+        [this](GameID gameId) {callBackFinishGame(gameId); }); 
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] = std::thread([gameServer]() {gameServer->run(); });
     std::cout << " ==<< create a new game >>== gameServer id : " << nextGameId << std::endl; 
@@ -24,7 +28,7 @@ void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> pla
 
 void GamesManager::enqueueGameBinding(int clientId, const std::string& strBindings){
 
-    int gameId = clientToGame_[clientId];
+    GameID gameId = clientToGame_[clientId];
     auto gameServer = gameSessions_[gameId]; 
     boost::asio::post(gameServer->getIoContext(), [gameServer, clientId, strBindings](){
         gameServer->enqueueBinding(clientId, strBindings);
@@ -32,3 +36,8 @@ void GamesManager::enqueueGameBinding(int clientId, const std::string& strBindin
     std::cout << "player id : " << clientId << " game id : " << gameId << " add : " << strBindings << std::endl;
 }
 
+void GamesManager::callBackFinishGame(GameID gameId ){
+    
+    // TODO :  for all clients who participated -> send the game score  
+    deleteGame(gameId);
+}
