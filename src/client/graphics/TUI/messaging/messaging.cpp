@@ -121,8 +121,7 @@ void Messaging::drawDisplay() {
     });
 
     chatDisplay_ = ftxui::Renderer([&] {
-        std::optional<PlayerID> optSelectedFriendId = getSelectedFriendId();
-        return optSelectedFriendId
+        return getSelectedFriendId()
             .and_then([this](auto id) -> std::optional<ftxui::Element> {
                 ftxui::Elements chat_elements;
 
