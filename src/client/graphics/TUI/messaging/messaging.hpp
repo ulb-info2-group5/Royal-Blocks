@@ -100,8 +100,6 @@ class Messaging final : public IMessage {
      * @brief Render the messaging screen with all the components
      */
     void render() override;
-
-    // void addFriends(std::string friendName) override;
 };
 
 #endif
