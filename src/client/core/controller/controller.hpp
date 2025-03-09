@@ -162,7 +162,7 @@ class Controller {
     std::map<std::string, std::vector<Message>> getMessages() const;
 
     // TODO
-    const NameConversation &getConversationWith(PlayerID playerID) const;
+    const NameConversation &getConversationWith(PlayerID playerID);
 
     // TODO
     // Not sure whether this is useful anymore

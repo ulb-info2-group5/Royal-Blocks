@@ -87,7 +87,9 @@ Controller::Controller()
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
 
-      screenManager_{*this} {
+      screenManager_{*this}
+
+{
 
     // ---------------------------------
     // TODO: remove this
@@ -191,8 +193,11 @@ std::map<std::string, std::vector<Message>> Controller::getMessages() const {
 //         HEIGHT>>>(boards);
 // }
 
-const NameConversation &
-Controller::getConversationWith(PlayerID playerID) const {
+const NameConversation &Controller::getConversationWith(PlayerID playerID) {
+    if (!conversations_.conversationsById.contains(playerID)) {
+        conversations_.conversationsById[playerID] = {};
+    }
+
     return conversations_.conversationsById.at(playerID);
 }
 
