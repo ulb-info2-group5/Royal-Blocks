@@ -34,6 +34,8 @@ class GameMenu : public IGame_Menu {
 
     TypeGame typeGame_;
 
+    bool quitMenu_;
+
     /**
      * @brief The button components that can be in the game menu
      *
@@ -43,7 +45,7 @@ class GameMenu : public IGame_Menu {
     ftxui::Component classicButon_;
     ftxui::Component royalButon_;
     ftxui::Component backButton_;
-
+    ftxui::Component quitMenuButton_;
     /*
      * @brief Rend the all the game present in the game menu
      *

@@ -18,7 +18,7 @@
 
 GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
     : screen_(screen), controller_(controller), joinType_(JoinType::NONE),
-      typeGame_(TypeGame::NONE) {
+      typeGame_(TypeGame::NONE), quitMenu_(false) {
 
     gameDisplay_ =
         std::make_unique<GameDisplay>(screen_, controller_.getGameState());
@@ -68,36 +68,47 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());
+
+    quitMenuButton_ = ftxui::Button(
+        "Back",
+        [&] {
+            quitMenu_ = true;
+            joinType_ = JoinType::BACK;
+            screen_.ExitLoopClosure()();
+        },
+        GlobalButtonStyle());
 }
 
 // ### Private methods ###
 
 void GameMenu::renderAllGames() {
+        
     ftxui::Component container = ftxui::Container::Vertical({
         endlessButon_,
         duelButon_,
         classicButon_,
         royalButon_,
-        backButton_,
+        quitMenuButton_,
     });
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text("Select a game mode") | ftxui::center
-                       | ftxui::bold,
-                   ftxui::separator(),
-                   endlessButon_->Render(),
-                   duelButon_->Render(),
-                   classicButon_->Render(),
-                   royalButon_->Render(),
-                   ftxui::separator(),
-                   backButton_->Render(),
-               })
-               | ftxui::borderHeavy | ftxui::center
-               | ftxui::bgcolor(ftxui::Color::Black);
+                ftxui::text("Select a game mode") | ftxui::center
+                    | ftxui::bold,
+                ftxui::separator(),
+                endlessButon_->Render(),
+                duelButon_->Render(),
+                classicButon_->Render(),
+                royalButon_->Render(),
+                ftxui::separator(),
+                quitMenuButton_->Render(),
+            })
+            | ftxui::borderHeavy | ftxui::center
+            | ftxui::bgcolor(ftxui::Color::Black);
     });
 
     screen_.Loop(handleCtrl(renderer));
+
 }
 
 void GameMenu::renderOnlineGames() {
@@ -105,22 +116,22 @@ void GameMenu::renderOnlineGames() {
         duelButon_,
         classicButon_,
         royalButon_,
-        backButton_,
+        quitMenuButton_,
     });
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text("Select a game mode") | ftxui::center
-                       | ftxui::bold,
-                   ftxui::separator(),
-                   duelButon_->Render(),
-                   classicButon_->Render(),
-                   royalButon_->Render(),
-                   ftxui::separator(),
-                   backButton_->Render(),
-               })
-               | ftxui::borderHeavy | ftxui::center
-               | ftxui::bgcolor(ftxui::Color::Black);
+                ftxui::text("Select a game mode") | ftxui::center
+                    | ftxui::bold,
+                ftxui::separator(),
+                duelButon_->Render(),
+                classicButon_->Render(),
+                royalButon_->Render(),
+                ftxui::separator(),
+                quitMenuButton_->Render(),
+            })
+            | ftxui::borderHeavy | ftxui::center
+            | ftxui::bgcolor(ftxui::Color::Black);
     });
 
     screen_.Loop(handleCtrl(renderer));
@@ -163,27 +174,31 @@ void GameMenu::joinFriendOrRandomScreen() {
 }
 
 void GameMenu::handleChoice() {
-    switch (joinType_) {
-    case JoinType::FRIEND:
-        joinFriendScreen();
-        break;
+    while (joinType_ != JoinType::BACK) {
 
-    case JoinType::RANDOM:
-        joinRandomScreen();
-        break;
+        switch (joinType_) {
+            case JoinType::FRIEND:
+                joinFriendScreen();
+                break;
 
-    case JoinType::ENDLESS:
-        gameDisplay_->render(); // Endless mode is directly started without
-                                // waiting for a friend or a random game
-        break;
+            case JoinType::RANDOM:
+                joinRandomScreen();
+                break;
 
-    case JoinType::BACK: // Do nothing because the user pressed the back button
-        break;
+            case JoinType::ENDLESS:
+                gameDisplay_->render(); // Endless mode is directly started without
+                                        // waiting for a friend or a random game
+                break;
 
-    default:
-        throw std::invalid_argument(
-            "Invalid state in GameMenu::handleChoice()");
-        break;
+            case JoinType::BACK: // Do nothing because the user pressed the back button
+                break;
+
+            default:
+                throw std::invalid_argument(
+                    "Invalid state in GameMenu::handleChoice()");
+                break;
+        }
+        joinFriendOrRandomScreen();
     }
 }
 
@@ -203,10 +218,14 @@ void GameMenu::joinFriendScreen() {
     ftxui::Component friendsContainer =
         ftxui::Container::Vertical(friendButtons);
 
+    ftxui::Component mainContainer = ftxui::Container::Vertical(
+        {friendsContainer, backButton_}
+    );
+
     // TODO: do we need this
     // friendsContainer->Add(backButton_);
 
-    ftxui::Component renderer = ftxui::Renderer(friendsContainer, [&] {
+    ftxui::Component renderer = ftxui::Renderer(mainContainer, [&] {
         return ftxui::vbox({
                    ftxui::text("Select a friend to join") | ftxui::center
                        | ftxui::bold,
@@ -272,14 +291,19 @@ void GameMenu::waitingFriendScreen() {
 // ### Public methods ###
 void GameMenu::render(const TypeGame &typeGame) {
     typeGame_ = typeGame;
+        
     switch (typeGame_) {
     case TypeGame::JOIN_GAME:
-        renderAllGames();
-        handleChoice();
+        while (!quitMenu_) {
+            renderAllGames();
+            handleChoice();
+        }
         break;
 
     case TypeGame::CREATE_GAME:
-        renderOnlineGames();
+        while (!quitMenu_) {
+            renderOnlineGames();
+        }
         break;
 
     default:
@@ -287,4 +311,6 @@ void GameMenu::render(const TypeGame &typeGame) {
             "Invalid type of game in GameMenu::render()");
         break;
     }
+    quitMenu_ = false; // Reset the quitMenu_ variable for the next time we open
+                       // the screen
 }
