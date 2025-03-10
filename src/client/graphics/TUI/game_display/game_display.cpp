@@ -174,25 +174,27 @@ void GameDisplay::drawPlayerBoard() {
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        for (uint32_t x = 0; x < WIDTH; ++x) {
-            for (uint32_t y = 0; y < HEIGHT; ++y) {
-
+        for (uint32_t y = 0; y < HEIGHT; ++y) {
+            for (uint32_t x = 0; x < WIDTH; ++x) {
+        
                 auto &boardToDraw = pGameState_->gameState.self.tetris_.board_;
-
+        
                 pixel.background_color = getFTXUIColor(
                     (boardToDraw.get(x, y).isEmpty())
                         ? Color::Black
                         : colorIdToColor(boardToDraw.get(x, y).getColorId()));
-
-                for (uint32_t i = 0; i < LENGTH_PLAYER; ++i) {
-                    playerCanvas.DrawBlockCircleFilled(
-                        x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i,
-                        LENGTH_PLAYER, pixel.background_color);
+                
+                for (uint32_t dy = 0; dy < LENGTH_PLAYER; ++dy) {
+                    for (uint32_t dx = 0; dx < LENGTH_PLAYER; ++dx) {
+                        playerCanvas.DrawBlock(
+                            x * LENGTH_PLAYER + dx, (HEIGHT - 1 - y) * LENGTH_PLAYER + dy, true,
+                            pixel.background_color);
+                    }
                 }
             }
-        }
+        }        
 
-        return ftxui::canvas(playerCanvas) | ftxui::border;
+        return ftxui::canvas(playerCanvas) | ftxui::border | ftxui::center;
     });
 }
 
@@ -238,34 +240,29 @@ void GameDisplay::displayMiddleWindow() {
 }
 
 void GameDisplay::drawOpponentsBoard() {
-    opBoards_ = {};
-    ftxui::Component opDisplay;
-
-    for (uint32_t index = 1; index < pGameState_->gameState.externals.size();
-         ++index) {
-        ftxui::Component opBoardDisplay = ftxui::Renderer([&](uint32_t index) {
+    opBoards_.clear();
+    
+    for (uint32_t index = 1; index < pGameState_->gameState.externals.size(); ++index) {
+        ftxui::Component opBoardDisplay = ftxui::Renderer([&, index] {
             std::lock_guard<std::mutex> guard(pGameState_->mutex);
 
-            ftxui::Canvas opCanvas =
-                ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
+            ftxui::Canvas opCanvas = ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
+            ftxui::Pixel pixel;
 
-            for (uint32_t x = 0; x < WIDTH; ++x) {
-                for (uint32_t y = 0; y < HEIGHT; ++y) {
+            for (uint32_t y = 0; y < HEIGHT; ++y) {
+                for (uint32_t x = 0; x < WIDTH; ++x) {
 
-                    for (uint32_t i = 0; i < LENGTH_OPPONENT; ++i) {
+                    auto &boardToDraw = pGameState_->gameState.externals.at(index).tetris_.board_;
 
-                        auto &boardToDraw =
-                            pGameState_->gameState.externals.at(index)
-                                .tetris_.board_;
+                    pixel.background_color = getFTXUIColor(
+                        boardToDraw.get(x, y).isEmpty() ? Color::Black : colorIdToColor(boardToDraw.get(x, y).getColorId()));
 
-                        opCanvas.DrawBlock(
-                            x * LENGTH_OPPONENT + i, y * LENGTH_OPPONENT + i,
-                            true,
-                            getFTXUIColor(
-                                boardToDraw.get(x, y).isEmpty()
-                                    ? Color::Black
-                                    : colorIdToColor(
-                                        boardToDraw.get(x, y).getColorId())));
+                    for (uint32_t dy = 0; dy < LENGTH_OPPONENT; ++dy) {
+                        for (uint32_t dx = 0; dx < LENGTH_OPPONENT; ++dx) {
+                            opCanvas.DrawBlock(
+                                x * LENGTH_OPPONENT + dx, (HEIGHT - 1 - y) * LENGTH_OPPONENT + dy, true,
+                                pixel.background_color);
+                        }
                     }
                 }
             }
@@ -273,7 +270,7 @@ void GameDisplay::drawOpponentsBoard() {
             return ftxui::canvas(opCanvas) | ftxui::border;
         });
 
-        opDisplay = ftxui::Container::Vertical({
+        ftxui::Component opDisplay = ftxui::Container::Vertical({
             opBoardDisplay,
             ftxui::Button(
                 pseudos_.at(index), [&] { /* function to call */ },
@@ -338,8 +335,8 @@ void GameDisplay::displayOpponentBoardDuel() {
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        for (uint32_t x = 0; x < WIDTH; ++x) {
-            for (uint32_t y = 0; y < HEIGHT; ++y) {
+        for (uint32_t y = 0; y < HEIGHT; ++y) {
+            for (uint32_t x = 0; x < WIDTH; ++x) {
 
                 auto &boardToDraw =
                     pGameState_->gameState.externals.at(0).tetris_.board_;
@@ -349,10 +346,12 @@ void GameDisplay::displayOpponentBoardDuel() {
                         ? (Color::Black)
                         : colorIdToColor(boardToDraw.get(x, y).getColorId()));
 
-                for (uint32_t i = 0; i < LENGTH_PLAYER; ++i) {
-                    playerCanvas.DrawBlockCircleFilled(
-                        x * LENGTH_PLAYER + i, y * LENGTH_PLAYER + i,
-                        LENGTH_PLAYER, pixel.background_color);
+                for (uint32_t dy = 0; dy < LENGTH_OPPONENT; ++dy) {
+                    for (uint32_t dx = 0; dx < LENGTH_OPPONENT; ++dx) {
+                        playerCanvas.DrawBlock(
+                            x * LENGTH_OPPONENT + dx, (HEIGHT - 1 - y) * LENGTH_OPPONENT + dy, true,
+                            pixel.background_color);
+                    }
                 }
             }
         }
