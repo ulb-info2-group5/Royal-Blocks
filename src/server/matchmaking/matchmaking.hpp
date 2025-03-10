@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-
+#include "../../common/bindings/join_game.hpp"
+#include "../../common/bindings/create_game.hpp"
 #include "../network/games_manager/games_manager.hpp"
 
 
@@ -20,26 +21,39 @@ class Loby {
         NumberOfPlayers numberOfPlayers_;
 
     public: 
-        Loby(); 
+        Loby();
+        void addFriend(bindings::JoinGame joinGame); 
 }; 
 
 class GameCandidate{
     private: 
-        
         NumberOfPlayers numberOfPlayerTotale_;
-        NumberOfPlayers numberOfPlayersTargeted_; 
-    public: 
-
-        
+        NumberOfPlayers numberOfPlayersMax_; 
+        std::vector<Loby> lobys_;
+    public:
+        GameCandidate(NumberOfPlayers numberOfPlayersMax); 
+        ~GameCandidate() = default;
+        bool isThisPartyReady();
+        bool isthisPlayerInThisGame(PlayerID playerId);
+        bool tryToAddPlayer(bindings::JoinGame joinGame);
+        std::optional<bindings::JoinGame> joinFriend(bindings::JoinGame joinGame);        
 }; 
 
 class Matchmaking {
     private:
-        std::vector<GameCandidate> gamesCanditates_;
+        std::vector<GameCandidate> gamesCanditatesClassic_;
+        std::vector<GameCandidate> gamesCanditatesDuel_;
+        std::vector<GameCandidate> gamesCanditatesRoyalCompetition_;
+        
+        void createNewGameCandidate(bindings::JoinGame joinGame);
+        std::vector<GameCandidate>& getGame(GameMode gameMode);
+
     public: 
-        Matchmaking(); 
-        void addLoby(Loby newLoby); 
-        void createNewGameCandidate(Loby newLoby);
+        Matchmaking() = default;
+        ~Matchmaking() = default; 
+        void addPlayer(bindings::JoinGame joinGame); 
+        void findaGame(std::vector<GameCandidate>& games, bindings::JoinGame joinGame);
+        void createAGame(bindings::CreateGame createGame);
 
 }; 
 
