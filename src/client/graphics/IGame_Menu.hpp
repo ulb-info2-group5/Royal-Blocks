@@ -4,7 +4,6 @@
 enum class JoinType {
     FRIEND,
     RANDOM,
-    ENDLESS,
     BACK,
     NONE,
 };
@@ -47,6 +46,9 @@ class IGame_Menu {
     virtual void joinRandomScreen() = 0;
 
     virtual void waitingFriendScreen() = 0;
+
+    virtual void matchmakingScreen() = 0;
+
 
   public:
     virtual ~IGame_Menu() = default;

@@ -16,6 +16,7 @@
 
 #include "../../IGame_Menu.hpp"
 #include "../game_display/game_display.hpp"
+#include "game_mode/game_mode.hpp"
 
 class Controller; // Forward declaration
 
@@ -31,6 +32,8 @@ class GameMenu : public IGame_Menu {
     std::unique_ptr<GameDisplay> gameDisplay_;
 
     JoinType joinType_;
+
+    GameMode gameMode_;
 
     TypeGame typeGame_;
 
@@ -81,6 +84,11 @@ class GameMenu : public IGame_Menu {
     void joinRandomScreen() override;
 
     /*
+     * @brief Screen when the user is waiting for the matchmaking
+     */
+    void matchmakingScreen() override;
+
+    /*
      * @brief Make a button to add a friend
      */
     ftxui::Component makeFriendButton(PlayerID playerId,
@@ -91,6 +99,11 @@ class GameMenu : public IGame_Menu {
      * the start of the game
      */
     void waitingFriendScreen() override;
+
+    /*
+     * @brief The screen to select the number of player for the game
+     */
+    void selectPlayerCountScreen();
 
   public:
     /*
