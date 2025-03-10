@@ -228,10 +228,22 @@ void GameMenu::joinFriendScreen() {
 
     std::vector<ftxui::Component> friendButtons;
 
-    for (const bindings::User &friendUser : friendsList) {
-        if (friendUser.online) {
-            friendButtons.push_back(
-                makeFriendButton(friendUser.playerId, friendUser.username));
+    if (friendsList.empty()) {
+        ftxui::Component renderNoFriends = ftxui::Renderer(
+            ftxui::Container::Vertical({}), [&] {
+                return ftxui::vbox({
+                            ftxui::text("You don't have friends yet"),
+                        });
+            });
+        friendButtons.push_back(renderNoFriends);
+    } 
+
+    else {
+        for (const bindings::User &friendUser : friendsList) {
+            if (friendUser.online) {
+                friendButtons.push_back(
+                    makeFriendButton(friendUser.playerId, friendUser.username));
+            }
         }
     }
 

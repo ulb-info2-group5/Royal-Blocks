@@ -145,7 +145,7 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 void GameDisplay::displayLeftWindow() {
     ftxui::Component menuDisplay = ftxui::Button(
         "Quit Game", [&] { screen_.ExitLoopClosure()(); },
-        ftxui::ButtonOption::Animated(ftxui::Color::Grey0));
+        GlobalButtonStyle());
 
     if (pGameState_->gameState.gameMode == GameMode::RoyalCompetition) {
         drawPlayerInfo();
