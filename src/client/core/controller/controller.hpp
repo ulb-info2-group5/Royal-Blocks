@@ -16,6 +16,7 @@
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
 #include "core/in_game/player_state/player_state_external.hpp"
+#include "effect/bonus/bonus_type.hpp"
 #include "game_mode/game_mode.hpp"
 
 #include <memory>
@@ -166,6 +167,20 @@ class Controller {
 
     // TODO
     const NameConversation &getConversationWith(PlayerID playerID);
+
+    void bigDrop();
+
+    void moveActive(TetrominoMove tetrominoMove);
+
+    void rotateActive(bool clockwise);
+
+    void emptyPenaltyStash();
+
+    void holdNextTetromino();
+
+    void quitGame();
+
+    void handleKeypress(const std::string &pressedKey);
 };
 
 #endif // CONTROLLER_HPP

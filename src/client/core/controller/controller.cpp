@@ -17,12 +17,19 @@
 #include "../../common/bindings/authentication_response.hpp"
 #include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/friend_request.hpp"
+#include "../../common/bindings/in_game/big_drop.hpp"
+#include "../../common/bindings/in_game/empty_penalty_stash.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
+#include "../../common/bindings/in_game/hold_next_tetromino.hpp"
+#include "../../common/bindings/in_game/move_active.hpp"
+#include "../../common/bindings/in_game/quit_game.hpp"
+#include "../../common/bindings/in_game/rotate_active.hpp"
 #include "../../common/bindings/join_game.hpp"
 #include "../../common/bindings/message.hpp"
 #include "../../common/bindings/registration.hpp"
 #include "../../common/bindings/registration_response.hpp"
 #include "player_state/player_state.hpp"
+#include "tetromino/tetromino.hpp"
 
 #include <mutex>
 #include <optional>
@@ -185,4 +192,34 @@ void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
 void Controller::joinGame(GameMode gameMode, std::optional<PlayerID> friendID) {
     networkManager_.send(
         bindings::JoinGame{gameMode, friendID}.to_json().dump());
+}
+
+void Controller::bigDrop() {
+    networkManager_.send(bindings::BigDrop{}.to_json().dump());
+}
+
+void Controller::moveActive(TetrominoMove tetrominoMove) {
+    networkManager_.send(bindings::MoveActive{tetrominoMove}.to_json().dump());
+}
+
+void Controller::rotateActive(bool clockwise) {
+    networkManager_.send(bindings::RotateActive{clockwise}.to_json().dump());
+}
+
+void Controller::emptyPenaltyStash() {
+    networkManager_.send(bindings::EmptyPenaltyStash{}.to_json().dump());
+}
+
+void Controller::holdNextTetromino() {
+    networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
+}
+
+void Controller::quitGame() {
+    networkManager_.send(bindings::QuitGame{}.to_json().dump());
+}
+
+void Controller::handleKeypress(const std::string &pressedKey) {
+    if (pressedKey == "q") {
+        quitGame();
+    }
 }
