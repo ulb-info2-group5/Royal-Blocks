@@ -229,18 +229,16 @@ void GameMenu::joinFriendScreen() {
     std::vector<ftxui::Component> friendButtons;
 
     if (friendsList.empty()) {
-        ftxui::Component renderNoFriends = ftxui::Renderer(
-            ftxui::Container::Vertical({}), [&] {
+        ftxui::Component renderNoFriends =
+            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                 return ftxui::vbox({
-                            ftxui::text("You don't have friends yet"),
-                        });
+                    ftxui::text("You don't have friends yet"),
+                });
             });
         friendButtons.push_back(renderNoFriends);
-    } 
-
-    else {
+    } else {
         for (const bindings::User &friendUser : friendsList) {
-            if (friendUser.online) {
+            if (friendUser.isJoinable()) {
                 friendButtons.push_back(
                     makeFriendButton(friendUser.playerId, friendUser.username));
             }
@@ -310,8 +308,7 @@ ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,
     return ftxui::Button(
         friendName,
         [&] {
-            // TODO: Ask the controller to send the join request to the server
-            // using the playerId
+            controller_.joinGame(gameMode_, playerId);
             waitingFriendScreen();
             screen_.ExitLoopClosure()();
         },
@@ -357,8 +354,8 @@ void GameMenu::render(const TypeGame &typeGame) {
             "Invalid type of game in GameMenu::render()");
         break;
     }
-    quitMenu_ = false; // Reset the quitMenu_ variable for the next time we open
-                       // the screen
+    quitMenu_ = false; // Reset the quitMenu_ variable for the next time we
+                       // open the screen
 }
 
 void GameMenu::selectPlayerCountScreen() {

@@ -13,9 +13,18 @@ using PlayerID = size_t;
 namespace bindings {
 
     struct User {
+        enum class State {
+            Offline,
+            Menu,
+            Matchmaking,
+            InGame,
+        };
+
         PlayerID playerId;
         std::string username;
-        bool online;
+        State state;
+
+        bool isJoinable() const { return state == State::Matchmaking; }
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::User},
@@ -23,7 +32,7 @@ namespace bindings {
                                    {
                                        {"playerId", playerId},
                                        {"username", username},
-                                       {"online", online},
+                                       {"state", state},
                                    }}};
         }
 
@@ -35,7 +44,7 @@ namespace bindings {
             const auto &data = j.at("data");
             return User{data.at("playerId").get<PlayerID>(),
                         data.at("username").get<std::string>(),
-                        data.at("online").get<bool>()};
+                        data.at("state").get<State>()};
         }
 
         bool operator==(const User &other) const {
@@ -44,13 +53,5 @@ namespace bindings {
     };
 
 } // namespace bindings
-
-namespace std {
-    template <> struct hash<bindings::User> {
-        std::size_t operator()(const bindings::User &user) const noexcept {
-            return std::hash<PlayerID>{}(user.playerId);
-        }
-    };
-} // namespace std
 
 #endif // BINDINGS_USER_HPP
