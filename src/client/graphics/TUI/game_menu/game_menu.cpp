@@ -238,7 +238,7 @@ void GameMenu::joinFriendScreen() {
         friendButtons.push_back(renderNoFriends);
     } else {
         for (const bindings::User &friendUser : friendsList) {
-            if (friendUser.isJoinable()) {
+            if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
                 friendButtons.push_back(
                     makeFriendButton(friendUser.playerId, friendUser.username));
             }
