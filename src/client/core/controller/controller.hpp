@@ -16,6 +16,7 @@
 #include "../in_game/game_state_wrapper.hpp"
 #include "../network/network_manager.hpp"
 #include "core/in_game/player_state/player_state_external.hpp"
+#include "game_mode/game_mode.hpp"
 
 #include <memory>
 #include <mutex>
@@ -158,6 +159,8 @@ class Controller {
      * @param message The message to send
      */
     void sendMessage(PlayerID recipientId, const std::string &message);
+
+    void createGame(GameMode gameMode, size_t targetNumPlayers);
 
     // TODO
     const NameConversation &getConversationWith(PlayerID playerID);

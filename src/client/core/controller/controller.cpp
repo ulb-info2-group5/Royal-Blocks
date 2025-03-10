@@ -10,10 +10,12 @@
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../network/network_manager.hpp"
 #include "core/in_game/player_state/player_state_external.hpp"
+#include "game_mode/game_mode.hpp"
 #include "game_state/game_state.hpp"
 
 #include "../../common/bindings/authentication.hpp"
 #include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/friend_request.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
 #include "../../common/bindings/message.hpp"
@@ -171,6 +173,11 @@ const NameConversation &Controller::getConversationWith(PlayerID playerID) {
     }
 
     return conversations_.conversationsById.at(playerID);
+}
+
+void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
+    networkManager_.send(
+        bindings::CreateGame{gameMode, targetNumPlayers}.to_json().dump());
 }
 
 std::vector<std::string> Controller::getFriendsOnline() const {
