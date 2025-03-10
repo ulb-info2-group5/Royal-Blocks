@@ -13,6 +13,7 @@ namespace bindings {
         RegistrationResponse,
         User,
         Ranking,
+        JoinFriend,
         Conversation,
         Conversations,
 
