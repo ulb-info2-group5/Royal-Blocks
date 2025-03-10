@@ -16,6 +16,7 @@ namespace bindings {
         JoinFriend,
         Conversation,
         Conversations,
+        CreateGame,
 
         // in game
         GameState,
