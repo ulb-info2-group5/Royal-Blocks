@@ -80,10 +80,9 @@ class GameMenu : public IGame_Menu {
 
     /*
      * @brief Make a button to add a friend
-     *
-     * @param friendName The name of the friend to add
      */
-    ftxui::Component makeFriendButton(const std::string &friendName);
+    ftxui::Component makeFriendButton(PlayerID playerId,
+                                      const std::string &friendName);
 
     /*
      * @brief Screen when the user has choosen the friend and now waiting for

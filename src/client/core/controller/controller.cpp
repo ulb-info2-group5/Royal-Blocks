@@ -186,14 +186,3 @@ void Controller::joinGame(GameMode gameMode, std::optional<PlayerID> friendID) {
     networkManager_.send(
         bindings::JoinGame{gameMode, friendID}.to_json().dump());
 }
-
-std::vector<std::string> Controller::getFriendsOnline() const {
-    // TODO: communicate with the server to get the friends online
-    // TODO: remove this because it's an example
-    std::vector<std::string> friendsOnline;
-    friendsOnline.push_back("friend1");
-    friendsOnline.push_back("friend2");
-    friendsOnline.push_back("friend3");
-
-    return friendsOnline;
-}

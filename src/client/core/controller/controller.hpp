@@ -166,13 +166,6 @@ class Controller {
 
     // TODO
     const NameConversation &getConversationWith(PlayerID playerID);
-
-    /*
-     * @brief Get the friends online of the user
-     *
-     * @return std::vector<std::string> The friends online of the user
-     */
-    std::vector<std::string> getFriendsOnline() const;
 };
 
 #endif // CONTROLLER_HPP
