@@ -729,8 +729,6 @@ La base de données permet de stocker des informations sur les différents utili
 
 \subsubsection{Le network}
 
-La partie Network du serveur permet de recevoir et envoyer les paquets à l'objet correspondant qui traite ces derniers.
-
 \subsubsection*{Les bindings}
 
 Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'avoir un standard des paquets que le serveur peut recevoir.
@@ -742,7 +740,18 @@ Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'av
 	 \label{fig:BindingDiagram}
 \end{figure}
 
-\subsubsection*{NetworkManager}
+\subsubsection*{Structure de Network}
+
+La partie Network du serveur permet de recevoir et envoyer les paquets à l'objet correspondant qui traite ces derniers.
+
+La classe Network possède une instance de ClientManager. Cette dernière s'occupe de l'inscription, l'authentification d'un utlisateur. Après la connexion établie entre le client et le serveur, le ClientManager s'occupe de l'envoi et la réception des messages si l'utilisateur authentifié a recours à la messagerie de l'application. 
+
+\begin{figure}[!ht]
+	\centering
+	 \includegraphics[scale=0.5]{../res/uml/class/NetworkClass.png}
+	 \caption{Diagramme de classes de Network}
+	 \label{fig:NetworkDiagram}
+\end{figure}
 
 \subsubsection{Le matching Pool}
 
@@ -750,22 +759,50 @@ Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'av
 
 \subsubsection{MainServer}
 
-\subsubsection*{Connexion et Création d'un compte}
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=1\textwidth]{../res/uml/class/ConnexionClass.png}
-    \caption{Connexion et Création d'un compte}
-    \label{fig:Royal-Competition}
-\end{figure}
+%\subsubsection*{Connexion et Création d'un compte}
+%
+%\begin{figure}[!ht]
+%    \centering
+%    \includegraphics[width=1\textwidth]{../res/uml/class/ConnexionClass.png}
+%    \caption{Connexion et Création d'un compte}
+%    \label{fig:Royal-Competition}
+%\end{figure}
 
 \subsection{Architecture du client}
 
-\subsubsection{le Controller}
-
-\subsubsection{le Network}
+L'architecture du client possède plusieurs parties qui permettent de communiquer avec le serveur et de plus afficher les informations sur l'écran de l'utilisateur.
 
 \subsubsection{le Graphisme}
+
+La disposition sur l'écran des informations reçues du serveur est séparée par les interfaces et une classe ScreenManager.
+
+\subsubsection*{les interfaces}
+
+Les interfaces permettent de donner une direction de comment afficher sur l'écran en ne faisant pas de différences entre GUI et TUI.
+
+
+
+\subsubsection*{le ScreenManager}
+
+\subsubsection{le NetworkManager}
+
+La partie Network du Client est faite par la classe NetworkManager. Elle établit et met fin correctement la connexion avec le serveur. De plus, elle reçoit du serveur tous types de paquets. Le traitement de ces paquets sera fait à un autre moment. 
+
+\begin{figure}[!ht]
+	\centering
+	 \includegraphics[scale=0.5]{../res/uml/class/NetworkManagerClass.png}
+	 \caption{Diagramme de classe de NetworkManager}
+	 \label{fig:NetworkManagerDiagram}
+\end{figure}
+
+\subsubsection{le Controller}
+
+\begin{figure}[!ht]
+	\centering
+	 \includegraphics[scale=0.5]{../res/uml/class/ControllerClass.png}
+	 \caption{Diagramme de classe de Network}
+	 \label{fig:ControllerDiagram}
+\end{figure}
 
 \section{Fonctionnement du système}
 
