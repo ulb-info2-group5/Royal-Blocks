@@ -18,12 +18,14 @@
 #include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/friend_request.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
+#include "../../common/bindings/join_game.hpp"
 #include "../../common/bindings/message.hpp"
 #include "../../common/bindings/registration.hpp"
 #include "../../common/bindings/registration_response.hpp"
 #include "player_state/player_state.hpp"
 
 #include <mutex>
+#include <optional>
 #include <string>
 #include <thread>
 #include <vector>
@@ -178,6 +180,11 @@ const NameConversation &Controller::getConversationWith(PlayerID playerID) {
 void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
     networkManager_.send(
         bindings::CreateGame{gameMode, targetNumPlayers}.to_json().dump());
+}
+
+void Controller::joinGame(GameMode gameMode, std::optional<PlayerID> friendID) {
+    networkManager_.send(
+        bindings::JoinGame{gameMode, friendID}.to_json().dump());
 }
 
 std::vector<std::string> Controller::getFriendsOnline() const {

@@ -162,6 +162,8 @@ class Controller {
 
     void createGame(GameMode gameMode, size_t targetNumPlayers);
 
+    void joinGame(GameMode gameMode, std::optional<PlayerID> friendID);
+
     // TODO
     const NameConversation &getConversationWith(PlayerID playerID);
 
