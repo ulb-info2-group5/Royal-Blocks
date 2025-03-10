@@ -10,6 +10,7 @@
 namespace bindings {
 
     struct JoinGame {
+        // friendId = nullopt means "join any game in this GameMode"
         GameMode gameMode;
         std::optional<PlayerID> friendId;
 
