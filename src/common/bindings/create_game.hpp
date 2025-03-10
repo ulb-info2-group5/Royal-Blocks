@@ -10,12 +10,14 @@ namespace bindings {
 
     struct CreateGame {
         GameMode gameMode;
+        size_t targetNumPlayers;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::CreateGame},
                                   {"data",
                                    {
                                        {"gameMode", gameMode},
+                                       {"targetNumPlayers", targetNumPlayers},
                                    }}};
         }
 
@@ -25,7 +27,8 @@ namespace bindings {
             }
 
             const auto &data = j.at("data");
-            return CreateGame{data.at("gameMode").get<GameMode>()};
+            return CreateGame{data.at("gameMode").get<GameMode>(),
+                              data.at("targetNumPlayers").get<size_t>()};
         }
     };
 
