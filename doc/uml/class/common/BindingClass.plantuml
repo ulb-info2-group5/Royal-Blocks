@@ -1,18 +1,10 @@
 @startuml BindingClass
 
 
-!include BindingType.plantuml!0
-!include inGameBindings.plantuml!0
+
 
 
 /' Objects '/
-
-namespace std {
-	class hashbindings::User <template<>> {
-		+operator()(const bindings::User& user) : std :: size_t {query}
-	}
-}
-
 
 namespace bindings {
 	enum BindingType {
@@ -23,14 +15,17 @@ namespace bindings {
 		BuyPenalty
 		Conversation
 		Conversations
+		CreateGame
 		EmptyPenaltyStash
 		FriendRequest
 		FriendsList
 		GameState
 		HoldNextTetromino
+		JoinGame
 		Message
 		MoveActive
 		QuitGame
+		Ranking
 		Registration
 		RegistrationResponse
 		RotateActive
@@ -41,6 +36,13 @@ namespace bindings {
 	enum FriendRequest::FriendRequestType {
 		Add
 		Remove
+	}
+
+	enum User::State {
+		InGame
+		Matchmaking
+		Menu
+		Offline
 	}
 
 	class Authentication {
@@ -56,6 +58,24 @@ namespace bindings {
 		+to_json() : nlohmann::json {query}
 	}
 
+	class BigDrop {
+		+{static} from_json(const nlohmann::json& j) : BigDrop
+		+to_json() : nlohmann::json {query}
+	}
+
+	class BuyBonus {
+		+bonusType : BonusType
+		+{static} from_json(const nlohmann::json& j) : BuyBonus
+		+to_json() : nlohmann::json {query}
+	}
+
+	class BuyPenalty {
+		+{static} from_json(const nlohmann::json& j) : BuyPenalty
+		+penaltyType : PenaltyType
+		+stashForLater : bool
+		+to_json() : nlohmann::json {query}
+	}
+
 	class Conversation {
 		+{static} from_json(const nlohmann::json& j) : Conversation
 		+to_json() : nlohmann::json {query}
@@ -65,7 +85,19 @@ namespace bindings {
 	class Conversations {
 		+{static} from_json(const nlohmann::json& j) : Conversations
 		+to_json() : nlohmann::json {query}
-		+userConv : std::unordered_map<User, Conversation>
+		+conversationsById : std::unordered_map<PlayerID, NameConversation>
+	}
+
+	class CreateGame {
+		+{static} from_json(const nlohmann::json& j) : CreateGame
+		+gameMode : GameMode
+		+to_json() : nlohmann::json {query}
+		+targetNumPlayers : size_t
+	}
+
+	class EmptyPenaltyStash {
+		+{static} from_json(const nlohmann::json& j) : EmptyPenaltyStash
+		+to_json() : nlohmann::json {query}
 	}
 
 	class FriendRequest {
@@ -81,11 +113,40 @@ namespace bindings {
 		+friendsList : std::vector<User>
 	}
 
+	class HoldNextTetromino {
+		+{static} from_json(const nlohmann::json& j) : HoldNextTetromino
+		+to_json() : nlohmann::json {query}
+	}
+
+	class JoinGame {
+		+gameMode : GameMode
+		+{static} from_json(const nlohmann::json& j) : JoinGame
+		+to_json() : nlohmann::json {query}
+		+friendId : std::optional<PlayerID>
+	}
+
 	class Message {
 		+{static} from_json(const nlohmann::json& j) : Message
 		+to_json() : nlohmann::json {query}
 		+recipientId : size_t
 		+content : std::string
+	}
+
+	class MoveActive {
+		+{static} from_json(const nlohmann::json& j) : MoveActive
+		+tetrominoMove : TetrominoMove
+		+to_json() : nlohmann::json {query}
+	}
+
+	class QuitGame {
+		+{static} from_json(const nlohmann::json& j) : QuitGame
+		+to_json() : nlohmann::json {query}
+	}
+
+	class Ranking {
+		+{static} from_json(const nlohmann::json& j) : Ranking
+		+to_json() : nlohmann::json {query}
+		+ranking : std::vector<PlayerScore>
 	}
 
 	class Registration {
@@ -101,11 +162,25 @@ namespace bindings {
 		+to_json() : nlohmann::json {query}
 	}
 
+	class RotateActive {
+		+{static} from_json(const nlohmann::json& j) : RotateActive
+		+rotateClockwise : bool
+		+to_json() : nlohmann::json {query}
+	}
+
+	class SelectTarget {
+		+{static} from_json(const nlohmann::json& j) : SelectTarget
+		+to_json() : nlohmann::json {query}
+		+targetId : size_t
+	}
+
 	class User {
+		+state : State
 		+{static} from_json(const nlohmann::json& j) : User
-		+operator==(const User& other) : bool {query}
+		+isJoinable() : bool {query}
 		+to_json() : nlohmann::json {query}
 		+playerId : size_t
+		+gameMode : std::optional<GameMode>
 		+username : std::string
 	}
 }
@@ -121,9 +196,6 @@ namespace bindings {
 
 /' Aggregation relationships '/
 
-bindings.Conversations *-- bindings.User
-
-
 bindings.FriendsList *-- bindings.User
 
 
@@ -134,6 +206,9 @@ bindings.FriendsList *-- bindings.User
 /' Nested objects '/
 
 bindings.FriendRequest +-- bindings.FriendRequest.FriendRequestType
+
+
+bindings.User +-- bindings.User.State
 
 
 
