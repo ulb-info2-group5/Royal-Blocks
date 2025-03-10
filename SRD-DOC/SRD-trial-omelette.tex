@@ -665,13 +665,24 @@ Le PlayerState permet d'associer le joueur, ses informations sur son avancemment
 	 \label{fig:PlayerStateDiagram}
 \end{figure}
 
+\subsubsection*{PlayerTetris}
+
+Le PlayerTetris permet d'associer un PlayerState et un Tetris.
+
+\begin{figure}[!h]
+	\centering
+	 \includegraphics[scale=0.6]{../res/uml/class/PlayerTetrisClass.png}
+	 \caption{Diagramme de classe de PlayerTetris}
+	 \label{fig:PlayerTetrisDiagram}
+\end{figure}
+
 \subsubsection*{GameState}
 
 Le GameState permet d'associer à une partie multijoueur ou non, un vecteur de PlayerState selon le nombre de participants. Il permet également d'accéder à un PlayerState selon l'identifiant du joueur pour pouvoir appliquer des actions dessus.
 
 \begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.6]{../res/uml/class/GameStateViewClass.png}
+	 \includegraphics[scale=0.6]{../res/uml/class/GameStateClass.png}
 	 \caption{Diagramme de classe de GameState}
 	 \label{fig:GameStateDiagram}
 \end{figure}
@@ -681,9 +692,9 @@ Le GameState permet d'associer à une partie multijoueur ou non, un vecteur de P
 
 Le GameEngine permet de changer l'état de GameState selon les méthodes appélées pour faire des actions sur la grille du joueur (\textit{ex. changer la roation du tetromino active}) ou entre eux (\textit{ex. envoyer une pénalité à un adversaire}). 
 
-\begin{figure}[!h]
+\begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.6]{../res/uml/class/GameEngineClass.png}
+	 \includegraphics[scale=0.5]{../res/uml/class/GameEngineClass.png}
 	 \caption{Diagramme de classe de GameEngine}
 	 \label{fig:GameEngine}
 \end{figure}
@@ -704,6 +715,8 @@ Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps �
     \caption{Diagramme de classes des effects}
     \label{fig:Royal-Competition}
 \end{figure}
+
+\subsubsection{Diagramme complet du jeu}
 
 
 \subsection{Architecture du serveur}
@@ -733,22 +746,22 @@ La base de données permet de stocker des informations sur les différents utili
 
 Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'avoir un standard des paquets que le serveur peut recevoir.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.5]{../res/uml/class/BindingClass.png}
+	 \includegraphics[scale=0.1, angle=90]{../res/uml/class/BindingClass.png}
 	 \caption{L'espace de nommage de \textit{bindings}}
 	 \label{fig:BindingDiagram}
 \end{figure}
 
 \subsubsection*{Structure de Network}
 
-La partie Network du serveur permet de recevoir et envoyer les paquets à l'objet correspondant qui traite ces derniers.
+Pour chaque utilisateur qui se connecte au réseau, une instance de ClientLink est créée avec son socket. Au fil de l'état de l'utilisateur, le ClientManager le rajoute ou non dans le vecteur d'utilisateur authentifiés. 
 
-La classe Network possède une instance de ClientManager. Cette dernière s'occupe de l'inscription, l'authentification d'un utlisateur. Après la connexion établie entre le client et le serveur, le ClientManager s'occupe de l'envoi et la réception des messages si l'utilisateur authentifié a recours à la messagerie de l'application. 
+Nous pouvons voir le ClientLink comme une méthode pour transmettre les paquets reçus d'un utilisateur en question puis ils sont traités dans ClientManager pour que le serveur prenne en compte un événement.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.5]{../res/uml/class/NetworkClass.png}
+	 \includegraphics[scale=0.2]{../res/uml/class/NetworkClass.png}
 	 \caption{Diagramme de classes de Network}
 	 \label{fig:NetworkDiagram}
 \end{figure}
@@ -768,9 +781,11 @@ La classe Network possède une instance de ClientManager. Cette dernière s'occu
 %    \label{fig:Royal-Competition}
 %\end{figure}
 
+\subsubsection{Diagramme complet du serveur}
+
 \subsection{Architecture du client}
 
-L'architecture du client possède plusieurs parties qui permettent de communiquer avec le serveur et de plus afficher les informations sur l'écran de l'utilisateur.
+L'architecture du client possède plusieurs parties qui permettent de communiquer avec le serveur et de plus afficher les informations sur l'écran de l'utilisateur. Il possède également tous les éléments nécessaires pour avoir localement la logique de Tetris dans tous les modes.
 
 \subsubsection{le Graphisme}
 
@@ -780,13 +795,28 @@ La disposition sur l'écran des informations reçues du serveur est séparée pa
 
 Les interfaces permettent de donner une direction de comment afficher sur l'écran en ne faisant pas de différences entre GUI et TUI.
 
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{../res/uml/class/InterfaceClass.png}
+    \caption{Diagramme de classes des interfaces}
+    \label{fig:InterfaceDiagram}
+\end{figure}
 
 \subsubsection*{le ScreenManager}
 
+%cgviojlhgvhkhgukiohjlkjmoipojopjojopjopjopkopjopjiphiohio
+%cacacacacacacaca
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.4]{../res/uml/class/ScreenManagerClass.png}
+    \caption{Diagramme de classe de ScreenManager}
+    \label{fig:ScreenManagerDiagram}
+\end{figure}
+
 \subsubsection{le NetworkManager}
 
-La partie Network du Client est faite par la classe NetworkManager. Elle établit et met fin correctement la connexion avec le serveur. De plus, elle reçoit du serveur tous types de paquets. Le traitement de ces paquets sera fait à un autre moment. 
+La partie réseau du client est faite par la classe NetworkManager. Elle établit et met fin correctement la connexion avec le serveur. De plus, elle reçoit du serveur tous types de paquets. Le traitement de ces paquets est fait dans une autre instance de classe.
 
 \begin{figure}[!ht]
 	\centering
@@ -797,6 +827,10 @@ La partie Network du Client est faite par la classe NetworkManager. Elle établi
 
 \subsubsection{le Controller}
 
+Le Controller réunit la partie réseau et l'affichage des informations à l'utilisateur. Il possède une instance de chaque partie et d'autres informations que nous aurions besoin d'afficher à l'utilisateur (\textit{ex. la liste d'amis de l'utilisateur pour pouvoir lui afficher}). 
+
+Le Controller permet également de traiter les paquets reçus de NetworkManager pour changer les informations que possède l'utilisateur jusque lors. Quand le client veut envoyer une information au serveur, le paquet est créé dans Controller et puis, NetworkManager l'envoie au serveur.
+
 \begin{figure}[!ht]
 	\centering
 	 \includegraphics[scale=0.5]{../res/uml/class/ControllerClass.png}
@@ -804,11 +838,13 @@ La partie Network du Client est faite par la classe NetworkManager. Elle établi
 	 \label{fig:ControllerDiagram}
 \end{figure}
 
+\subsubsection{Diagramme complet du client}
+
 \section{Fonctionnement du système}
 
 \subsection{Création d'un compte}
 
-
+et savoir également 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}

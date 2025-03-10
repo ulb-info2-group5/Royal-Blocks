@@ -1,0 +1,23 @@
+@startuml GameStructureClass
+
+skinparam linetype ortho
+
+!include tetris_lib/GameClass.plantuml!0
+!include tetris_royal_lib/EffectClass.plantuml!0
+!include tetris_royal_lib/PlayerStateClass.plantuml!0
+!include tetris_royal_lib/PlayerTetrisClass.plantuml!0
+!include tetris_royal_lib/GameEngineClass.plantuml!0
+!include tetris_royal_lib/GameStateClass.plantuml!0
+
+PlayerState <- "0..1" EffectSelector
+PlayerState <- "0..n" BonusType
+PlayerState <- "0..n" PenaltyType
+
+PlayerTetris *-- "1" PlayerState
+PlayerTetris *-- "1" Tetris
+
+GameState *-- "1..9" PlayerTetris
+
+GameEngine *-- "1" GameState
+
+@enduml

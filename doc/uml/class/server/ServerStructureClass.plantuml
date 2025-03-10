@@ -1,0 +1,9 @@
+@startuml ServerStructureClass
+
+skinparam linetype ortho
+
+!include DatabaseClass.plantuml!0
+!include GameServerClass.plantuml!0
+!include NetworkClass.plantuml!0
+
+@enduml

@@ -10,28 +10,37 @@ class Controller {
 	+Controller()
 	+~Controller()
 	-authState_ : AuthState
+	+getConversationWith(PlayerID playerID) : NameConversation&
 	-networkManager_ : NetworkManager
 	-registrationState_ : RegistrationState
 	-screenManager_ : ScreenManager
 	-conversations_ : bindings::Conversations
 	-friendsList_ : bindings::FriendsList
 	+getFriendsList() : bindings::FriendsList& {query}
+	-ranking_ : bindings::Ranking
+	+getRanking() : bindings::Ranking& {query}
 	-context_ : boost::asio::io_context
 	+getAuthState() : int {query}
 	+getRegistrationState() : int {query}
-	+getMessages() : std::map<std::string , std::vector<Message>> {query}
 	-mutex_ : std::mutex
 	-pGameState_ : std::shared_ptr<client::GameStateWrapper>
 	+getGameState() : std::shared_ptr<client::GameStateWrapper>&
 	-ioThread_ : std::thread
-	+getFriendsOnline() : std::vector<std::string> {query}
-	+getRanking() : std::vector<std::tuple<int , std::string , int>> {query}
+	+bigDrop() : void
 	+changeProfile(const std::string& username, const std::string& password) : void {query}
+	+createGame(GameMode gameMode, size_t targetNumPlayers) : void
+	+emptyPenaltyStash() : void
+	+handleKeypress(const std::string& pressedKey) : void
 	-handlePacket(const std::string& pack) : void
+	+holdNextTetromino() : void
+	+joinGame(GameMode gameMode, std::optional<PlayerID> friendID) : void
+	+moveActive(TetrominoMove tetrominoMove) : void
+	+quitGame() : void
 	+removeFriend(const std::string& username) : void
+	+rotateActive(bool clockwise) : void
 	+run() : void
 	+sendFriendRequest(const std::string& username) : void
-	+sendMessage(const std::string& recipientName, const std::string& message) : void
+	+sendMessage(PlayerID recipientId, const std::string& message) : void
 	+tryLogin(const std::string& username, const std::string& password) : void
 	+tryRegister(const std::string& username, const std::string& password) : void
 }

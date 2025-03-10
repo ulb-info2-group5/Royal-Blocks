@@ -1,16 +1,20 @@
 @startuml PlayerStateClass
 
+
+
+
+
+/' Objects '/
+
 class PlayerState {
-	+PlayerState(PlayerID playerID, Score score)
+	+PlayerState(size_t playerID, size_t score)
 	+PlayerState(const PlayerState &)
 	+PlayerState(PlayerState& &)
 	+~PlayerState()
 	+getPlayerID() : PlayerID {query}
-	-playerID_ : PlayerID
 	+operator=(const PlayerState &) : PlayerState&
 	+operator=(PlayerState& &) : PlayerState&
 	+getScore() : Score {query}
-	-score_ : Score
 	-pActiveBonus_ : shared_ptr<TimedBonus>
 	+getActiveBonus() : shared_ptr<TimedBonus>&
 	-pActivePenalty_ : shared_ptr<TimedPenalty>
@@ -20,6 +24,8 @@ class PlayerState {
 	+isGameTick() : bool
 	+serializeExternal() : nlohmann::json {query}
 	+serializeSelf() : nlohmann::json {query}
+	-playerID_ : size_t
+	-score_ : size_t
 	+getStashedPenalties() : std::deque<PenaltyType>
 	+fetchGrantedBonus() : std::optional<BonusType>
 	-effectSelector_ : std::optional<EffectSelector>
@@ -33,10 +39,10 @@ class PlayerState {
 	-stashedPenalties_ : std::optional<std::deque<PenaltyType>>
 	-grantedBonusesQueue_ : std::optional<std::queue<BonusType>>
 	-receivedPenaltiesQueue_ : std::optional<std::queue<PenaltyType>>
-	+decreaseEnergy(Energy amount) : void
+	+decreaseEnergy(size_t amount) : void
 	+grantBonus(BonusType bonus) : void
-	+increaseEnergy(Energy amount) : void
-	+increaseScore(Score val) : void
+	+increaseEnergy(size_t amount) : void
+	+increaseScore(size_t val) : void
 	+notifyActiveTetrominoPlaced() : void
 	+notifyEngineTick() : void
 	+notifyLost() : void
@@ -47,9 +53,28 @@ class PlayerState {
 	+setActiveBonus(const shared_ptr<TimedBonus>& pTimedBonus) : void
 	+setActivePenalty(const shared_ptr<TimedPenalty>& pTimedPenalty) : void
 	+setAlive(bool isAlive) : void
-	+setPenaltyTarget(PlayerID playerID) : void
+	+setPenaltyTarget(size_t playerID) : void
 	+stashPenalty(PenaltyType penalty) : void
 	+toggleEffects(bool activated) : void
 }
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
 
 @enduml
