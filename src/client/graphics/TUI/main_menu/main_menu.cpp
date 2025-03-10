@@ -266,7 +266,6 @@ void MainMenu::displayProfileManagerWindow() {
                    ftxui::text("You can change your username and password here")
                        | ftxui::center,
                    ftxui::separator(),
-                   ftxui::text(""), // Empty line
                    inputChangeUsername_->Render(),
                    inputChangePassword_->Render(),
                    ftxui::separator(),

@@ -110,6 +110,18 @@ void FriendsMenu::addFriendScreen() {
 std::vector<ftxui::Component>
 FriendsMenu::displayFriendButtons(const std::vector<std::string> &friendsList) {
     std::vector<ftxui::Component> friendButtons;
+
+    if (friendsList.empty()) {
+        ftxui::Component renderNoFriends = ftxui::Renderer(
+            ftxui::Container::Vertical({}), [&] {
+                return ftxui::vbox({
+                            ftxui::text("You don't have friends yet"),
+                        });
+            });
+        friendButtons.push_back(renderNoFriends);
+        return friendButtons;
+    }
+
     for (const std::string &friendName : friendsList) {
         friendButtons.push_back(ftxui::Button(
             friendName,

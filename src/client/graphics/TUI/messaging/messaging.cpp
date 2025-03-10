@@ -71,7 +71,7 @@ void Messaging::createButtons() {
 void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend");
+    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend") | ftxui::center | ftxui::borderHeavy;
     // attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
@@ -138,7 +138,7 @@ void Messaging::drawDisplay() {
 
                 return ftxui::vbox(chat_elements) | ftxui::flex;
             })
-            .value_or(ftxui::text("No conversation"));
+            .value_or(ftxui::text("No conversation")) | ftxui::bold | ftxui::center;
     });
 }
 
