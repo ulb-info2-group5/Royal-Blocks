@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{graphicx} %for inserting image
+\usepackage{float}
 \setlength{\parindent}{20pt}
 \usepackage[a4paper, margin=3cm]{geometry}
 \usepackage[utf8]{inputenc}
@@ -645,22 +646,23 @@ Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons
 
 \newpage
 
-\begin{figure}[!h]
+\begin{figure}[H]
 	\centering
 	 \includegraphics[scale=0.2, angle=90]{../res/uml/class/GameClass.png}
 	 \caption{Diagramme de classes de Game}
-	 \label{fig:main-menu}
+	 \label{fig:GameClassDiagram}
 \end{figure}
+
 
 \subsubsection*{PlayerState}
 
 Le PlayerState permet d'associer le joueur, ses informations sur son avancemment durant la partie, celles de son profil et un Tetris.
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.3]{../res/uml/class/PlayerStateClass.png}
+	 \includegraphics[scale=0.6]{../res/uml/class/PlayerStateClass.png}
 	 \caption{Diagramme de classe de PlayerState}
-	 \label{fig:main-menu}
+	 \label{fig:PlayerStateDiagram}
 \end{figure}
 
 \subsubsection*{GameState}
@@ -669,9 +671,9 @@ Le GameState permet d'associer à une partie multijoueur ou non, un vecteur de P
 
 \begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.3]{../res/uml/class/GameStateViewClass.png}
+	 \includegraphics[scale=0.6]{../res/uml/class/GameStateViewClass.png}
 	 \caption{Diagramme de classe de GameState}
-	 \label{fig:main-menu}
+	 \label{fig:GameStateDiagram}
 \end{figure}
 
 
@@ -679,11 +681,11 @@ Le GameState permet d'associer à une partie multijoueur ou non, un vecteur de P
 
 Le GameEngine permet de changer l'état de GameState selon les méthodes appélées pour faire des actions sur la grille du joueur (\textit{ex. changer la roation du tetromino active}) ou entre eux (\textit{ex. envoyer une pénalité à un adversaire}). 
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.3]{../res/uml/class/GameEngineClass.png}
+	 \includegraphics[scale=0.6]{../res/uml/class/GameEngineClass.png}
 	 \caption{Diagramme de classe de GameEngine}
-	 \label{fig:main-menu}
+	 \label{fig:GameEngine}
 \end{figure}
 
 \subsubsection{Partie multijoueur en mode royal}
@@ -694,17 +696,19 @@ Au lancement d'une partie mulitjoueurs dans le mode royal, pour chaque joueur, n
 
 Pour l'implémentation des effects, nous avons distinguer deux grandes familles, les effects qui s'écoulent sur une période de temps et les effects qui s'écoulent au bout d'un nombre de mouvements du joueur.
 
-Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps écoulés et le le nombre de mouvements du joueur. Ces méthodes sont concrétisées dans l'implémentation de deux classes héritantes, une pour les nombres d'actions restantes avant que l'effet se termine et une autre pour la durée restante de l'effet. Puis les effects sont séparées en deux catégories, des bonus ou des penalités regroupées dans leur enumération respective. 
+Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps écoulés et le le nombre de mouvements du joueur. Ces méthodes sont concrétisées dans l'implémentation de deux classes héritantes, une pour les nombres d'actions restantes avant que l'effet se termine et une autre pour la durée restante de l'effet. Puis les effects sont séparées en deux catégories, des bonus ou des penalités regroupées dans leur enumération de type respective. 
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.2]{../res/uml/class/EffectClass.png}
-    \caption{Diagramme de classe des effects}
+    \includegraphics[scale=0.3, angle=90]{../res/uml/class/EffectClass.png}
+    \caption{Diagramme de classes des effects}
     \label{fig:Royal-Competition}
 \end{figure}
 
 
 \subsection{Architecture du serveur}
+
+Le serveur est composé de quatre parties différentes. Chacune a un but précis pour permettre d'utiliser l'application entre différents utilisateurs.
 
 \subsubsection{La base de données}
 
@@ -712,17 +716,41 @@ La base de données permet de stocker des informations sur les différents utili
 \begin{itemize}
 	\item AccountManager regroupe les informations du profil d'un utilisateur et permet de les modifier.
 	\item FriendsManager permet de modifier ou de regarder la liste d'amis selon l'identifiant de l'utilisateur
-	\item MessagesManager 
+	\item MessagesManager gère le stockage de la messagerie de tous les utilisateurs et permet d'ajouter des messages à un fil de discussion existante ou qui va être créée sous certaines conditions. 
+	\item DatabaseManager permet de faire des redirections de requêtes pour les objets extérieurs qui vont faire une demande indirecte de changement de contenu de la base de données.
 \end{itemize}
 
 \begin{figure}[!ht]
 	\centering
 	 \includegraphics[scale=0.2]{../res/uml/class/DatabaseClass.png}
 	 \caption{Diagramme de classes de la base de données}
-	 \label{fig:main-menu}
+	 \label{fig:DatabaseDiagram}
 \end{figure}
 
-\subsubsection{Connexion et Création d'un compte}
+\subsubsection{Le network}
+
+La partie Network du serveur permet de recevoir et envoyer les paquets à l'objet correspondant qui traite ces derniers.
+
+\subsubsection*{Les bindings}
+
+Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'avoir un standard des paquets que le serveur peut recevoir.
+
+\begin{figure}[!ht]
+	\centering
+	 \includegraphics[scale=0.5]{../res/uml/class/BindingClass.png}
+	 \caption{L'espace de nommage de \textit{bindings}}
+	 \label{fig:BindingDiagram}
+\end{figure}
+
+\subsubsection*{NetworkManager}
+
+\subsubsection{Le matching Pool}
+
+\subsubsection{GameServer}
+
+\subsubsection{MainServer}
+
+\subsubsection*{Connexion et Création d'un compte}
 
 \begin{figure}[!ht]
     \centering
@@ -732,6 +760,12 @@ La base de données permet de stocker des informations sur les différents utili
 \end{figure}
 
 \subsection{Architecture du client}
+
+\subsubsection{le Controller}
+
+\subsubsection{le Network}
+
+\subsubsection{le Graphisme}
 
 \section{Fonctionnement du système}
 
