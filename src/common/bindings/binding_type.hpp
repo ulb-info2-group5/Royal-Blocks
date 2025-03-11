@@ -18,6 +18,7 @@ namespace bindings {
         Conversation,
         Conversations,
         CreateGame,
+        HandleFriendRequest,
 
         // in game
         GameState,
