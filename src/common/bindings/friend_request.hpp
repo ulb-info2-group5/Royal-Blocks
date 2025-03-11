@@ -10,17 +10,13 @@ using PlayerID = size_t;
 namespace bindings {
 
     struct FriendRequest {
-        enum class FriendRequestType { Add, Remove };
-
         std::string targetName;
-        FriendRequestType friendRequestType;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::FriendRequest},
                                   {"data",
                                    {
                                        {"targetName", targetName},
-                                       {"friendRequestType", friendRequestType},
                                    }}};
         }
 
@@ -32,7 +28,7 @@ namespace bindings {
             const auto &data = j.at("data");
             return FriendRequest{
                 data.at("targetName").get<std::string>(),
-                data.at("friendRequestType").get<FriendRequestType>()};
+            };
         }
     };
 

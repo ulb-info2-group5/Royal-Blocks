@@ -8,6 +8,7 @@ namespace bindings {
         AuthenticationResponse,
         FriendsList,
         FriendRequest,
+        RemoveFriend,
         Message,
         Registration,
         RegistrationResponse,
