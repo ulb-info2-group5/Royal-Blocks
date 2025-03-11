@@ -201,9 +201,8 @@ void GameDisplay::drawPlayerBoard() {
 void GameDisplay::displayMiddleWindow() {
     drawPlayerBoard();
 
-    // need to modify this for different game modes
     ftxui::Component modeDisplay = ftxui::Renderer(
-        [&] { return ftxui::text(toString(pGameState_->gameState.gameMode)) | ftxui::center | ftxui::borderRounded; });
+        [&] { return ftxui::text(toString(pGameState_->gameState.gameMode)) | ftxui::center | ftxui::border;});
 
     ftxui::Component playButtonsDisplay = ftxui::Container::Horizontal({
         ftxui::Button(
@@ -233,7 +232,7 @@ void GameDisplay::displayMiddleWindow() {
     });
 
     displayMiddle_ = ftxui::Container::Vertical({
-        modeDisplay,
+        modeDisplay | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, WIDTH_PLAYER_CANVAS / 2) | ftxui::center,
         playerBoard_,
         playButtonsDisplay,
     });
@@ -414,5 +413,10 @@ void GameDisplay::render() {
         drawMultiMode();
     }
 
-    screen_.Loop(handleCtrl(displayWindow_));
+    // Center the displayWindow_
+    ftxui::Component finalDisplay = ftxui::Renderer(displayWindow_, [&] {
+        return ftxui::vbox({displayWindow_->Render()}) | ftxui::center;
+    });
+
+    screen_.Loop(handleCtrl(finalDisplay));
 }
