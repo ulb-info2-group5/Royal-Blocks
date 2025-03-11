@@ -62,6 +62,7 @@ class Matchmaking {
         std::vector<GameCandidate> gamesCanditatesRoyalCompetition_;
         
         void createNewGameCandidate(std::vector<GameCandidate>& games, RequestJoinGame joinGame);
+        void startGame(GameCandidate &&gameCandidate, GamesManager& gamesManager);
         std::vector<GameCandidate>& getGame(GameMode gameMode);
 
     public: 

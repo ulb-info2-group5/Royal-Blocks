@@ -87,7 +87,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate>& games, RequestJoinGame j
             findGame = it->tryToAddPlayer(joinGame);
         }
         if (it->isThisPartyReady()){
-            //gamesManager.createGameFromGameCandidate(std::move(*it));
+            startGame(std::move(*it), gamesManager);
             it = games.erase(it);
         }else {
             ++it;
@@ -103,4 +103,8 @@ void Matchmaking::createNewGameCandidate(std::vector<GameCandidate>& games, Requ
 
 void Matchmaking::createAGame(RequestCreateGame createGame){
     getGame(createGame.bindCreateGame.gameMode).push_back(GameCandidate{createGame});
+}
+
+void Matchmaking::startGame(GameCandidate &&gameCandidate, GamesManager& gamesManager){
+    gamesManager.startGameServeur(gameCandidate.getGameMode(), gameCandidate.getPlayers());
 }
