@@ -19,6 +19,7 @@ namespace bindings {
         Conversations,
         CreateGame,
         HandleFriendRequest,
+        PendingFriendRequests,
 
         // in game
         GameState,
