@@ -9,6 +9,8 @@
 #ifndef FRIENDS_MENU_HPP
 #define FRIENDS_MENU_HPP
 
+#include "../../../../common/bindings/user.hpp"
+
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -42,12 +44,12 @@ class FriendsMenu {
      * dislayed is a button
      */
     std::vector<ftxui::Component>
-    displayFriendButtons(const std::vector<std::string> &friendsList);
+    displayFriendButtons(const std::vector<bindings::User> &friendsList);
 
     /*
      * @brief Manage the friendlist screen when a friend is clicked
      */
-    void manageFriendlistScreen(const std::string &friendName);
+    void manageFriendlistScreen(const bindings::User &friendUser);
 
     /*
      * @brief Screen to add a friend
