@@ -149,9 +149,9 @@ class Controller {
     /*
      * @brief Remove a friend from the friends list of the user
      *
-     * @param username The name of the friend to remove
+     * @param playerID The id of the player to remove.
      */
-    void removeFriend(const std::string &username);
+    void removeFriend(PlayerID playerID);
 
     /*
      * @brief Send a message to a friend
