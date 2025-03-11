@@ -1,0 +1,5 @@
+@startuml LaunchGameSequence
+
+skinparam style strictuml
+
+@enduml

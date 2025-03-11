@@ -24,8 +24,8 @@ classUMLDiag=("game/tetris_lib/GameClass"
               "server/NetworkClass")
             
 
-seqUMLDiag=("connexion/ConnexionSequence" 
-            "inscription/InscriptionSequence")
+seqUMLDiag=("ConnexionSequence" 
+            "InscriptionSequence")
 
 useCaseUMLDiag=("connexion/ConnexionUseCase"
                 "en-jeu/ClassicUseCase" 

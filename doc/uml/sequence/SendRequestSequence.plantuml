@@ -1,0 +1,5 @@
+@startuml SendRequestSequence
+
+skinparam style strictuml
+
+@enduml

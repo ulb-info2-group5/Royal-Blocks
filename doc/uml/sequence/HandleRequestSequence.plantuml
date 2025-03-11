@@ -1,0 +1,3 @@
+@startuml HandleRequestSequence
+skinparam style strictuml
+@enduml

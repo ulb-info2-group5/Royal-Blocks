@@ -1,0 +1,31 @@
+@startuml ConnexionSequence
+
+skinparam style strictuml
+actor User
+participant Controller
+participant ClientLink
+participant ClientManager
+
+activate ClientManager
+activate User
+User -> Controller : run()
+activate Controller
+Controller -> Network : connect()
+Network -> ClientLink : <<create>> 
+activate ClientLink
+ClientLink -> ClientManager : addClientInWaitingForAuth(<<self>>)
+
+User -> Controller : tryLogin(username, password)
+Controller -> ClientLink : send(data)
+ClientLink -> ClientManager : authPacketHandler(self, data)
+ClientManager -> ClientLink : idk bitch 
+ClientLink -> Controller : writeSocket(isIdentify)
+Controller -> Controller : handlePacket(isIdentify)
+alt isIdentify == false
+    Controller -> Controller : authenticationState = Unauthenticated
+else 
+    Controller -> Controller : authenticationState = Authenticated
+    ClientLink -> ClientManager : authSuccessCallBack
+    ClientManager -> ClientManager : addConnection(ClientLink, username)
+end 
+@enduml

@@ -1,0 +1,30 @@
+@startuml InscriptionSequence
+
+skinparam style strictuml
+actor User
+participant Controller
+participant ClientLink
+participant ClientManager
+
+activate ClientManager
+activate User
+User -> Controller : run()
+activate Controller
+Controller -> Network : connect()
+Network -> ClientLink : <<create>> 
+activate ClientLink
+ClientLink -> ClientManager : addClientInWaitingForAuth(<<self>>)
+
+User -> Controller : tryRegister(username, password)
+Controller -> ClientLink : send(data)
+
+ClientManager -> ClientManager : attemptCreateAccount(data)
+ClientManager -> ClientLink : idk bitch 
+ClientLink -> Controller : writeSocket(attemptCreateAccount)
+Controller -> Controller : handlePacket(attemptCreateAccount)
+alt attemptCreateAccount == false
+    Controller -> Controller : registrationState = Unregistered
+else 
+    Controller -> Controller : registrationState = Registered
+end 
+@enduml
