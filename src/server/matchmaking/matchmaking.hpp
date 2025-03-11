@@ -14,6 +14,16 @@
 using NumberOfPlayers = unsigned int ;
 
 
+struct RequestJoinGame{
+    PlayerID playerId;
+    bindings::JoinGame bindGame;
+};
+
+struct RequestCreateGame{
+    PlayerID playerId;
+    bindings::CreateGame bindCreateGame;
+};
+
 class Loby {
     private: 
         GameMode gameMode_;
@@ -21,7 +31,7 @@ class Loby {
         NumberOfPlayers numberOfPlayers_;
 
     public: 
-        Loby();
+        Loby(bindings::JoinGame joinGame);
         void addFriend(bindings::JoinGame joinGame); 
 }; 
 
@@ -29,14 +39,18 @@ class GameCandidate{
     private: 
         NumberOfPlayers numberOfPlayerTotale_;
         NumberOfPlayers numberOfPlayersMax_; 
-        std::vector<Loby> lobys_;
+        GameMode gameMode;
+        std::vector<PlayerID> players_;
     public:
-        GameCandidate(NumberOfPlayers numberOfPlayersMax); 
+        GameCandidate(RequestJoinGame joinGame);
+        GameCandidate(RequestCreateGame createGame);
+        
         ~GameCandidate() = default;
         bool isThisPartyReady();
         bool isthisPlayerInThisGame(PlayerID playerId);
-        bool tryToAddPlayer(bindings::JoinGame joinGame);
-        std::optional<bindings::JoinGame> joinFriend(bindings::JoinGame joinGame);        
+        bool tryToAddPlayer(RequestJoinGame joinGame);
+        bool isThereRoomInThisGame();
+        //std::optional<bindings::JoinGame> joinFriend(bindings::JoinGame joinGame);        
 }; 
 
 class Matchmaking {
@@ -45,15 +59,15 @@ class Matchmaking {
         std::vector<GameCandidate> gamesCanditatesDuel_;
         std::vector<GameCandidate> gamesCanditatesRoyalCompetition_;
         
-        void createNewGameCandidate(bindings::JoinGame joinGame);
+        void createNewGameCandidate(std::vector<GameCandidate>& games, RequestJoinGame joinGame);
         std::vector<GameCandidate>& getGame(GameMode gameMode);
 
     public: 
         Matchmaking() = default;
         ~Matchmaking() = default; 
-        void addPlayer(bindings::JoinGame joinGame); 
-        void findaGame(std::vector<GameCandidate>& games, bindings::JoinGame joinGame);
-        void createAGame(bindings::CreateGame createGame);
+        void addPlayer(RequestJoinGame joinGame); 
+        void findaGame(std::vector<GameCandidate>& games,RequestJoinGame joinGame);
+        void createAGame(RequestCreateGame createGame);
 
 }; 
 
