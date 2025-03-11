@@ -4,11 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../common/bindings/join_game.hpp"
-#include "../../common/bindings/create_game.hpp"
-#include "../network/games_manager/games_manager.hpp"
-
+#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../../common/bindings/join_game.hpp"
+#include "../../../common/bindings/create_game.hpp"
+#include "../games_manager/games_manager.hpp"
 
 
 using NumberOfPlayers = unsigned int ;
@@ -50,7 +49,10 @@ class GameCandidate{
         bool isthisPlayerInThisGame(PlayerID playerId);
         bool tryToAddPlayer(RequestJoinGame joinGame);
         bool isThereRoomInThisGame();
-        //std::optional<bindings::JoinGame> joinFriend(bindings::JoinGame joinGame);        
+
+        std::vector<PlayerID>& getPlayers();
+        GameMode getGameMode();
+
 }; 
 
 class Matchmaking {
@@ -65,8 +67,8 @@ class Matchmaking {
     public: 
         Matchmaking() = default;
         ~Matchmaking() = default; 
-        void addPlayer(RequestJoinGame joinGame); 
-        void findaGame(std::vector<GameCandidate>& games,RequestJoinGame joinGame);
+        void addPlayer(RequestJoinGame joinGame, GamesManager& gamesManager); 
+        void findaGame(std::vector<GameCandidate>& games,RequestJoinGame joinGame, GamesManager& gamesManager);
         void createAGame(RequestCreateGame createGame);
 
 }; 

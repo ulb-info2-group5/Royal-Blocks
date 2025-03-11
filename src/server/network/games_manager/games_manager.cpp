@@ -36,6 +36,12 @@ void GamesManager::enqueueGameBinding(int clientId, const std::string& strBindin
     std::cout << "player id : " << clientId << " game id : " << gameId << " add : " << strBindings << std::endl;
 }
 
+// void GamesManager::createGameFromGameCandidate(GameCandidate&& GameCandidate){
+//     startGameServeur(GameCandidate.getGameMode(), GameCandidate.getPlayers());
+// }
+
+
+
 void GamesManager::callBackFinishGame(GameID gameId ){
     
     // TODO :  for all clients who participated -> send the game score  

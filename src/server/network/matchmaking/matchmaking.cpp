@@ -41,11 +41,20 @@ bool GameCandidate::isthisPlayerInThisGame(PlayerID playerId){
     return false;
 }
 
+
+std::vector<PlayerID>& GameCandidate::getPlayers(){
+    return players_;
+}
+
+GameMode GameCandidate::getGameMode(){
+    return gameMode;
+}
+
 // ======= matchmaking class =======
 
 
-void Matchmaking::addPlayer(RequestJoinGame joinGame){
-    findaGame(getGame(joinGame.bindGame.gameMode), joinGame);
+void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager& gamesManager){
+    findaGame(getGame(joinGame.bindGame.gameMode), joinGame, gamesManager);
 }
 
 std::vector<GameCandidate>& Matchmaking::getGame(GameMode gameMode){
@@ -66,20 +75,22 @@ std::vector<GameCandidate>& Matchmaking::getGame(GameMode gameMode){
     }
 }
 
-void Matchmaking::findaGame(std::vector<GameCandidate>& games, RequestJoinGame joinGame){
-    bool joinFriend = joinGame.bindGame.friendId.has_value();
-    int size = games.size(), idx = 0;
-    bool findGame = false;
-    while (idx < size && !findGame){
+void Matchmaking::findaGame(std::vector<GameCandidate>& games, RequestJoinGame joinGame, GamesManager& gamesManager){
+    bool joinFriend = joinGame.bindGame.friendId.has_value(), findGame = false;
+    auto it = games.begin();
+    while (it != games.end() && !findGame){
         if (joinFriend){
-            if (games[idx].isthisPlayerInThisGame(joinGame.bindGame.friendId.value())){
-                findGame = games[idx].tryToAddPlayer(joinGame);
+            if (it->isthisPlayerInThisGame(joinGame.bindGame.friendId.value())){
+                findGame = it->tryToAddPlayer(joinGame);
             }
         }else {
-            findGame = games[idx].tryToAddPlayer(joinGame);
+            findGame = it->tryToAddPlayer(joinGame);
         }
-        if (games[idx].isThisPartyReady()){
-            //create a game from gameCandidate
+        if (it->isThisPartyReady()){
+            //gamesManager.createGameFromGameCandidate(std::move(*it));
+            it = games.erase(it);
+        }else {
+            ++it;
         }
     }
     if (!findGame) createNewGameCandidate(games, joinGame);

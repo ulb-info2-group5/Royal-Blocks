@@ -11,6 +11,9 @@
 #include <memory>
 
 #include "../../game_server/game_server.hpp"
+
+
+
 // TODO : rename to sendGameState 
 using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
 
@@ -29,7 +32,7 @@ class GamesManager {
         GamesManager(UpdateGameStates updateGameStates);
         void enqueueGameBinding(int clientId, const std::string& strBindings);
         void startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds );
-
+        //void createGameFromGameCandidate(GameCandidate &&gameCandidate);
         void callBackFinishGame(GameID gameId);
 
 };
