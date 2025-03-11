@@ -34,8 +34,6 @@ ATetromino *--"4" Vec2 : have >
 ATetromino - "1" RotationIndex
 
 
-
-
 Board *--"width_* height_" GridCell
 
 

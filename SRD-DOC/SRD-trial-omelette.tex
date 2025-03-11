@@ -713,10 +713,19 @@ Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps �
     \centering
     \includegraphics[scale=0.3, angle=90]{../res/uml/class/EffectClass.png}
     \caption{Diagramme de classes des effects}
-    \label{fig:Royal-Competition}
+    \label{fig:EffectDiagramm}
 \end{figure}
 
 \subsubsection{Diagramme complet du jeu}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3, angle=90]{../res/uml/class/GameStructureClass.png}
+    \caption{Diagramme de classes du jeu}
+    \label{fig:WholeGameDiagramm}
+\end{figure}
+
+\newpage
 
 
 \subsection{Architecture du serveur}
@@ -804,10 +813,9 @@ Les interfaces permettent de donner une direction de comment afficher sur l'écr
 
 \subsubsection*{le ScreenManager}
 
-%cgviojlhgvhkhgukiohjlkjmoipojopjojopjopjopkopjopjiphiohio
-%cacacacacacacaca
+Le ScreenManager permet de séquencer l'ordre d'affichage des menus sur l'écran de l'utilisateur.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{../res/uml/class/ScreenManagerClass.png}
     \caption{Diagramme de classe de ScreenManager}
@@ -831,35 +839,43 @@ Le Controller réunit la partie réseau et l'affichage des informations à l'uti
 
 Le Controller permet également de traiter les paquets reçus de NetworkManager pour changer les informations que possède l'utilisateur jusque lors. Quand le client veut envoyer une information au serveur, le paquet est créé dans Controller et puis, NetworkManager l'envoie au serveur.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.5]{../res/uml/class/ControllerClass.png}
+	 \includegraphics[scale=0.3]{../res/uml/class/ControllerClass.png}
 	 \caption{Diagramme de classe de Network}
 	 \label{fig:ControllerDiagram}
 \end{figure}
 
 \subsubsection{Diagramme complet du client}
 
+\begin{figure}[H]
+	\centering
+	 \includegraphics[scale=0.3]{../res/uml/class/ClientStructureClass.png}
+	 \caption{Diagramme de classes du client}
+	 \label{fig:WholeClientDiagram}
+\end{figure}
+
+\newpage
+
 \section{Fonctionnement du système}
 
 \subsection{Création d'un compte}
 
-et savoir également 
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
-    \caption{Diagramme de séquence de connexion}
-    \label{fig:Royal-Competition}
-\end{figure}
+%\begin{figure}[!h]
+%    \centering
+%    \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
+%    \caption{Diagramme de séquence de connexion}
+%    \label{fig:Royal-Competition}
+%\end{figure}
 
 \subsection{Connexion}
 
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
-    \caption{Diagramme de séquence de connexion}
-    \label{fig:Royal-Competition}
-\end{figure}
+%\begin{figure}[!h]
+%    \centering
+%    \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
+%    \caption{Diagramme de séquence de connexion}
+%    \label{fig:Royal-Competition}
+%\end{figure}
 
 \subsection{Envoi d'une requête}
 
