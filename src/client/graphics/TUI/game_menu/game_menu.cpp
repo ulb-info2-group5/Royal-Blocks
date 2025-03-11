@@ -9,6 +9,7 @@
 #include "game_menu.hpp"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <optional>
 #include <vector>
 
 #include "../../../core/controller/controller.hpp"
@@ -164,6 +165,7 @@ void GameMenu::joinFriendOrRandomScreen() {
         "Join a random game",
         [&] {
             joinType_ = JoinType::RANDOM;
+            controller_.joinGame(gameMode_, std::nullopt);
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());
@@ -307,7 +309,7 @@ ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,
                                             const std::string &friendName) {
     return ftxui::Button(
         friendName,
-        [&] {
+        [this, playerId] {
             controller_.joinGame(gameMode_, playerId);
             waitingFriendScreen();
             screen_.ExitLoopClosure()();
