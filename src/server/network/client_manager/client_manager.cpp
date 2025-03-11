@@ -128,7 +128,7 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
         response = (checkCredentials(data)) ? bindings::AuthenticationResponse{true}.to_json() : bindings::AuthenticationResponse{false}.to_json(); 
         break;
     case bindings::BindingType::Registration :
-        response = (checkCredentials(data)) ? bindings::RegistrationResponse{true}.to_json() : bindings::RegistrationResponse{false}.to_json();
+        response = (attemptCreateAccount(data)) ? bindings::RegistrationResponse{true}.to_json() : bindings::RegistrationResponse{false}.to_json();
         break;
     default:
         break;

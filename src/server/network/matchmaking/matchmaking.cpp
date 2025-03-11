@@ -9,16 +9,18 @@
 
 GameCandidate::GameCandidate(RequestJoinGame joinGame) 
 :  numberOfPlayersMax_{(joinGame.bindGame.gameMode == GameMode::Dual) ?  MAXPLAYERDUAL : MAXPLAYERCLASSICANDROYAL }, gameMode{joinGame.bindGame.gameMode} {
+    std::cout << "gameCandidate create (RequestJoinGame)" << std::endl;
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame) : numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers}, gameMode{createGame.bindCreateGame.gameMode} {
-
+    std::cout << "gameCandidate create (RequestCreateGame)" << std::endl;
 }
 
 bool GameCandidate::tryToAddPlayer(RequestJoinGame joinGame ){
     if (isThereRoomInThisGame()){
         players_.push_back(joinGame.playerId);
         numberOfPlayersMax_ ++;
+        std::cout << "add player " << std::endl;
         return true;
     }
     return false;
@@ -87,6 +89,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate>& games, RequestJoinGame j
             findGame = it->tryToAddPlayer(joinGame);
         }
         if (it->isThisPartyReady()){
+            std::cout << "game ready" << std::endl;
             startGame(std::move(*it), gamesManager);
             it = games.erase(it);
         }else {
