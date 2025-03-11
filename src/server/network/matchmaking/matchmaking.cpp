@@ -8,7 +8,7 @@
 // ====== GameCandidate class ======
 
 GameCandidate::GameCandidate(RequestJoinGame joinGame) 
-:  numberOfPlayersMax_{(joinGame.bindGame.gameMode == GameMode::Dual) ? numberOfPlayersMax_ = 2 :numberOfPlayersMax_ = 9 }, gameMode{joinGame.bindGame.gameMode} {
+:  numberOfPlayersMax_{(joinGame.bindGame.gameMode == GameMode::Dual) ?  MAXPLAYERDUAL : MAXPLAYERCLASSICANDROYAL }, gameMode{joinGame.bindGame.gameMode} {
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame) : numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers}, gameMode{createGame.bindCreateGame.gameMode} {

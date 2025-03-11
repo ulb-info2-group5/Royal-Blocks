@@ -32,7 +32,6 @@ class GamesManager {
         GamesManager(UpdateGameStates updateGameStates);
         void enqueueGameBinding(int clientId, const std::string& strBindings);
         void startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds );
-        //void createGameFromGameCandidate(GameCandidate &&gameCandidate);
         void callBackFinishGame(GameID gameId);
 
 };

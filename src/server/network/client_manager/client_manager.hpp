@@ -18,10 +18,11 @@
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/binding_type.hpp"
 
-#include "../games_manager/games_manager.hpp"
+#include "../matchmaking/matchmaking.hpp"
 
 
 using boost::asio::ip::tcp;
+
 
 
 
@@ -51,7 +52,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         std::string buffer_;
         boost::asio::streambuf streamBuffer_;
         bool identify_ = false;
-        std::optional<int> clientId;
+        std::optional<PlayerID> clientId;
         // std function to manage packages
         PacketHandler packetHandler_;
         //std function to manage authentication packages  
@@ -90,11 +91,12 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
 class ClientManager {
     private: 
         //map => { key : client id , value : the client session } 
-        std::unordered_map<int , std::shared_ptr<ClientLink>> connectedClients_;
+        std::unordered_map<PlayerID , std::shared_ptr<ClientLink>> connectedClients_;
         std::mutex mutex_;
         DataBase database_;
 
         GamesManager gamesManager_;
+        Matchmaking matchmaking_;
 
         // contains client who are not yet authenticated
         std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
@@ -120,7 +122,7 @@ class ClientManager {
         /*
         * @brief : manage of the packet received by the clientLink
         */
-        void handlePacket(const std::string& packet, const int clientId);
+        void handlePacket(const std::string& packet, const PlayerID& clientId);
         /*
         * @brief : manage package when the client is not yet logged in
         * @return : the response of the package 
@@ -137,7 +139,7 @@ class ClientManager {
         */
         void addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo);
 
-        void removeConnection(const int & clientId);
+        void removeConnection(const int & PlayerID);
         
         bool checkCredentials(nlohmann::json data);
 

@@ -112,7 +112,7 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink, nloh
 
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo){
     std::lock_guard<std::mutex> lock(mutex_);
-    const int id = database_.accountManager->getUserId(pseudo);
+    const PlayerID id = database_.accountManager->getUserId(pseudo);
     std::cout << "new client id :" <<id << std::endl;
     clientSession->setClientId(id);  
     connectedClients_[id] = clientSession;
@@ -138,7 +138,7 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
 
 
 
-void ClientManager::handlePacket(const std::string& packet, const int clientId){
+void ClientManager::handlePacket(const std::string& packet, const PlayerID& clientId){
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " <<std::endl;
 
@@ -148,6 +148,12 @@ void ClientManager::handlePacket(const std::string& packet, const int clientId){
     switch (type){
     case bindings::BindingType::Message:  
         handleMessage(jPack);
+        break;
+    case bindings::BindingType::JoinGame:
+        matchmaking_.addPlayer(RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)}, gamesManager_);
+        break;
+    case bindings::BindingType::CreateGame:
+        matchmaking_.createAGame(RequestCreateGame{clientId, bindings::CreateGame::from_json(jPack)});
         break;
     default:
         break;

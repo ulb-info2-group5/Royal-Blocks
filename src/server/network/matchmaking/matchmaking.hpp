@@ -10,8 +10,10 @@
 #include "../games_manager/games_manager.hpp"
 
 
-using NumberOfPlayers = unsigned int ;
+using NumberOfPlayers = size_t ;
 
+constexpr NumberOfPlayers MAXPLAYERDUAL = 2;
+constexpr NumberOfPlayers MAXPLAYERCLASSICANDROYAL = 9;
 
 struct RequestJoinGame{
     PlayerID playerId;
