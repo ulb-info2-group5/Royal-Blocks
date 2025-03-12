@@ -6,7 +6,7 @@
 
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/color.hpp" // for Color
+#include "ftxui/screen/color.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -26,7 +26,7 @@ class ScreenManager; // Forward declaration
 
 ftxui::Color getFTXUIColor(Color color);
 
-class GameDisplay : public IGame {
+class GameDisplay final : public IGame {
   private:
     ScreenManager &screenManager_;
 
@@ -48,7 +48,6 @@ class GameDisplay : public IGame {
     ftxui::Component displayLeft_;
     ftxui::Component displayWindow_;
 
-  protected:
     void drawPlayerInfo() override;
 
     void drawRoyalEffectsEnergy() override;

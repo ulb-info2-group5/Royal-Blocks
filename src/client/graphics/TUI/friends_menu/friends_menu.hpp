@@ -28,7 +28,7 @@ enum class FriendsManagerState {
     BACK,
 };
 
-class FriendsMenu {
+class FriendsMenu final {
   private:
     ScreenManager &screenManager_;
     Controller &controller_;
@@ -66,6 +66,9 @@ class FriendsMenu {
   public:
     /*
      * @brief Construct a new Friends Manager object
+     *
+     * @param screenManager The screen manager for asking to render the components
+     * @param controller The controller to interact with the server
      */
     FriendsMenu(ScreenManager &screenManager, Controller &controller);
 

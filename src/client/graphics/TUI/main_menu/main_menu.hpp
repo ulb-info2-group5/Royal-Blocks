@@ -27,23 +27,11 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
-// enum class MainMenuState {
-//     CREATE_GAME,
-//     JOIN_GAME,
-//     SEND_MESSAGES_TO_FRIENDS,
-//     LOOK_RANKING,
-//     MANAGE_PROFILE,
-//     MANAGE_FRIENDS_LIST,
-//     EXIT,
-//     BACK,
-//     NONE,
-// };
-
 /**
  * @brief Main menu of the game that will be displayed to the user
  *
  */
-class MainMenu : public IMain_Menu {
+class MainMenu final : public IMain_Menu {
   private:
     /*
      * @brief The screen to use to render the components
@@ -94,7 +82,6 @@ class MainMenu : public IMain_Menu {
      */
     void handleChoice() override;
 
-  protected:
     void createMainMenuButtons() override;
 
     void displayMainWindow() override;
@@ -109,9 +96,6 @@ class MainMenu : public IMain_Menu {
 
     /*
      * @brief Render the ranking of the players of the Endless mode
-     *
-     * @param ranking The ranking of the players of the Endless mode to display,
-     * the vector has to be already sorted by the score of the players
      */
     void renderRanking() override;
 
@@ -124,7 +108,8 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief Construct a new Main Menu object
      *
-     * @param screen The screen to use to render the components
+     * @param screenManager The screen manager for asking to render the components
+     * @param controller The controller to interact with the server
      */
     MainMenu(ScreenManager &screenManager, Controller &controller);
 

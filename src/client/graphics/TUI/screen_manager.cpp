@@ -1,4 +1,7 @@
 #include "screen_manager.hpp"
+
+#include "ftxui_config/ftxui_config.hpp"
+
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -45,28 +48,8 @@ void ScreenManager::drawStartScreen() {
 
     ftxui::Component title =
         ftxui::Renderer([&] {
-            return exit
-                       ? ftxui::text("")
-                       : ftxui::vbox({
-                           ftxui::text(
-                               R"(__          __  _                            _          _____                   _   _______   _        _       _ )"),
-                           ftxui::text(
-                               R"(\ \        / / | |                          | |        |  __ \                 | | |__   __| | |      (_)     | |)"),
-                           ftxui::text(
-                               R"( \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |__) |___  _   _  __ _| |    | | ___| |_ _ __ _ ___  | |)"),
-                           ftxui::text(
-                               R"(  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  _  // _ \| | | |/ _` | |    | |/ _ \ __| '__| / __| | |)"),
-                           ftxui::text(
-                               R"(   \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | | \ \ (_) | |_| | (_| | |    | |  __/ |_| |  | \__ \ |_|)"),
-                           ftxui::text(
-                               R"(    \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_|  \_\___/ \__, |\__,_|_|    |_|\___|\__|_|  |_|___/ (_))"),
-                           ftxui::text(
-                               R"(                                                                     __/ |                                       )"),
-                           ftxui::text(
-                               R"(                                                                    |___/                                        )"),
-                       });
-        })
-        | ftxui::center;
+            return exit ? ftxui::text("") : WELCOME_TITLE;
+        }) | ftxui::center;
 
     // Use a thread to exit this display after 2 seconds
     std::thread([&] {
@@ -85,26 +68,7 @@ void ScreenManager::drawEndScreen() {
 
     ftxui::Component title =
         ftxui::Renderer([&] {
-            return exit
-                       ? ftxui::text("")
-                       : ftxui::vbox({
-                           ftxui::text(
-                               R"(  ______                 _ _                    _ )"),
-                           ftxui::text(
-                               R"( / _____)               | | |                  | |)"),
-                           ftxui::text(
-                               R"(| /  ___  ___   ___   _ | | | _  _   _  ____   | |)"),
-                           ftxui::text(
-                               R"(| | (___)/ _ \ / _ \ / || | || \| | | |/ _  )  |_|)"),
-                           ftxui::text(
-                               R"(| \____/| |_| | |_| ( (_| | |_) ) |_| ( (/ /    _ )"),
-                           ftxui::text(
-                               R"( \_____/ \___/ \___/ \____|____/ \__  |\____)  |_|)"),
-                           ftxui::text(
-                               R"(                                (____/            )"),
-                       });
-        })
-        | ftxui::center;
+            return exit ? ftxui::text("") : GOODBYE_TITLE;}) | ftxui::center;
 
     std::thread([&] {
         std::this_thread::sleep_for(std::chrono::seconds(2));

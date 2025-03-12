@@ -30,7 +30,7 @@
      createButtonSubmit();
  
  
-     inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::borderHeavy | 
+     inputUsername_ = ftxui::Input(&username_, STR_ENTER_USERNAME) | ftxui::borderHeavy | 
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
             screenManager_.simulateTab(); // Move to the next input
@@ -39,7 +39,7 @@
         return false;
     });
 
-     inputPassword_ = ftxui::Input(&password_, "Enter password", PasswordInputOption()) | ftxui::borderHeavy |
+     inputPassword_ = ftxui::Input(&password_, STR_ENTER_PASSWORD, PasswordInputOption()) | ftxui::borderHeavy |
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
             buttonSubmit_->OnEvent(event); // Submit the username and password
@@ -53,7 +53,7 @@
  
  void LoginInput::createButtonBack() {
      buttonBack_ = ftxui::Button(
-                       "Back",
+                       STR_BACK,
                        [&] {
                            clearInfo();
                            loginState_ = LoginState::BACK;
@@ -63,7 +63,7 @@
  
  void LoginInput::createButtonSubmit() {
      buttonSubmit_ = ftxui::Button(
-         "Submit",
+        STR_SUBMIT,
          [&] {
              if (loginType_ == LoginType::REGISTER) {
                  controller_.tryRegister(username_, password_);
@@ -79,7 +79,7 @@
                          }
                      }
                      clearInfo();
-                     msg_ = "Registration failed! Try again.";
+                     msg_ = STR_REGISTRATION_FAILED;
                      screenManager_.forceRefresh(); // Post event to update screen
                  }).detach();
  
@@ -97,7 +97,7 @@
                          }
                      }
                      clearInfo();
-                     msg_ = "Incorrect username or password!";
+                     msg_ = STR_INCORRECT;
                      screenManager_.forceRefresh(); // Post event to update screen
                  }).detach();
              }

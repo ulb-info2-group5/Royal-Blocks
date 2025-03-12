@@ -28,7 +28,7 @@ class ScreenManager; // Forward declaration
  * @brief Game menu class to show and select the game party
  *
  */
-class GameMenu : public IGame_Menu {
+class GameMenu final : public IGame_Menu {
   private:
     ScreenManager &screenManager_;
     Controller &controller_;
@@ -53,16 +53,14 @@ class GameMenu : public IGame_Menu {
     ftxui::Component royalButon_;
     ftxui::Component backButton_;
     ftxui::Component quitMenuButton_;
+
     /*
      * @brief Rend the all the game present in the game menu
-     *
-     * @return PlayMode the game mode selected
      */
     void renderAllGames() override;
 
     /*
      * @brief Rend the game menu with just the online games mods
-     * @return PlayMode the game mode selected
      */
     void renderOnlineGames() override;
 
@@ -94,6 +92,10 @@ class GameMenu : public IGame_Menu {
 
     /*
      * @brief Make a button to add a friend
+     *
+     * @param playerId The id of the player to add as a friend
+     * @param friendName The name of the friend to add
+     * @return ftxui::Component The button to add a friend
      */
     ftxui::Component makeFriendButton(PlayerID playerId,
                                       const std::string &friendName);
@@ -107,13 +109,14 @@ class GameMenu : public IGame_Menu {
     /*
      * @brief The screen to select the number of player for the game
      */
-    void selectPlayerCountScreen();
+    void selectPlayerCountScreen() override;
 
   public:
     /*
      * @brief Construct a new Game Menu object
      *
-     * @param screen
+     * @param screenManager The screen manager for asking to render the components
+     * @param controller The controller to interact with the server
      */
     GameMenu(ScreenManager &screenManager, Controller &controller);
 

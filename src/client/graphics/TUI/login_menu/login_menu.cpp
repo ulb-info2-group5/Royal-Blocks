@@ -36,7 +36,7 @@ LoginMenu::LoginMenu(ScreenManager &screenManager, Controller &controller)
 void LoginMenu::createButtons() {
     buttonRegister_ =
         ftxui::Button(
-            "Register",
+            STR_REGISTER,
             [&] {
                 if (registerInput_.render() == LoginState::SUBMIT) {
                     loginInput_.addMessage(LOGIN_MESSAGE);
@@ -48,7 +48,7 @@ void LoginMenu::createButtons() {
             }, GlobalButtonStyle());
 
     buttonLogin_ = ftxui::Button(
-                       "Login",
+                       STR_LOGIN,
                        [&] {
                            if (loginInput_.render() == LoginState::SUBMIT) {
                                loginState_ = Login::LOGGED;
@@ -57,7 +57,7 @@ void LoginMenu::createButtons() {
                        }, GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
-                      "Exit",
+                      STR_EXIT,
                       [&] {
                           loginState_ = Login::EXIT;
                           screenManager_.stopRender();
@@ -73,11 +73,10 @@ void LoginMenu::displayWindow() {
 
     displayWindow_ = ftxui::Renderer(component, [&] {
         return ftxui::vbox({
-                   ftxui::text("Login Menu") | ftxui::bold | ftxui::center
+                   ftxui::text(STR_LOGIN_MENU) | ftxui::bold | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black),
                    ftxui::separator(),
-                   ftxui::text("Please login to your account or create one to "
-                               "enter the game")
+                   ftxui::text(STR_INSTRUCTION_LOGIN)
                        | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
                    ftxui::separator(),
                    buttonRegister_->Render()

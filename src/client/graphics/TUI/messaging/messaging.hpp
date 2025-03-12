@@ -20,20 +20,6 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
-/**
- * @brief Enum class to represent the state of the messaging
- *
- */
-// enum class MessagingState {
-//     BACK,
-//     NONE,
-// };
-
-// struct Message {
-//     int idSender;
-//     std::string message;
-// };
-
 class Messaging final : public IMessage {
   private:
     /*
@@ -88,8 +74,8 @@ class Messaging final : public IMessage {
     /*
      * @brief Construct a new Messaging object
      *
-     * @param screen The screen to use to render the components
-     * @param friends The list of friends to display in the messaging screen
+     * @param screenManager The screen manager for asking to render the components
+     * @param controller The controller to interact with the server
      */
     Messaging(ScreenManager &screenManager, Controller &controller);
 

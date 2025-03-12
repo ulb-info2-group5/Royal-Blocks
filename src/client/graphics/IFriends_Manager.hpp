@@ -2,15 +2,6 @@
 #define IFRIENDS_MANAGER_HPP
 
 #include <string>
-#include <vector>
-
-// enum class FriendsManagerState {
-//     ADD_FRIEND,
-//     REMOVE_FRIEND,
-//     NONE,
-//     NO,
-//     BACK,
-// };
 
 class IFriends_Manager {
   private:

@@ -28,7 +28,7 @@ class ScreenManager; // Forward declaration
  * user
  *
  */
-class LoginInput : public ILogin_Input {
+class LoginInput final : public ILogin_Input {
   private:
     /*
      * @brief The screen to use to render the components
@@ -83,7 +83,6 @@ class LoginInput : public ILogin_Input {
     ftxui::Component inputPassword_;
     ftxui::Component displayWindow_;
 
-  protected:
     void createButtonBack() override;
 
     void createButtonSubmit() override;
@@ -94,8 +93,10 @@ class LoginInput : public ILogin_Input {
     /*
      * @brief Construct a new Login Input object
      *
-     * @param screen The screen to use to render the components
+     * @param screenManager The screen manager for asking to render the components
+     * @param controller The controller to interact with the server
      * @param title The title of the input screen (Login or Register)
+      * @param loginType The type of the login (Login or Register)
      */
     LoginInput(ScreenManager &screenManager, Controller &controller,
                std::string title, LoginType loginType);
@@ -107,6 +108,8 @@ class LoginInput : public ILogin_Input {
 
     /*
      * @brief Render the login input screen with all the components
+     * 
+     * @return LoginState The state of the login input
      */
     LoginState render() override;
 

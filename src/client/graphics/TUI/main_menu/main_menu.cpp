@@ -25,7 +25,7 @@ MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
     createMainMenuButtons();
 
     buttonBack_ = ftxui::Button(
-        "Back",
+        STR_BACK,
         [&] {
             state_ = MainMenuState::BACK;
             screenManager_.stopRender();
@@ -33,7 +33,7 @@ MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     buttonOK_ = ftxui::Button(
-        "OK",
+        STR_OK,
         [&] {
             state_ =
                 MainMenuState::BACK; // like a back button but with ok title
@@ -89,7 +89,7 @@ void MainMenu::handleChoice() {
 
 void MainMenu::createMainMenuButtons() {
     buttonPlay_ = ftxui::Button(
-        "▶ Create a game",
+        STR_CREATE_GAME,
         [&] {
             state_ = MainMenuState::CREATE_GAME;
             screenManager_.stopRender();
@@ -97,7 +97,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonJoinGame_ = ftxui::Button(
-        "▶ Join a game",
+        STR_JOIN_GAME,
         [&] {
             state_ = MainMenuState::JOIN_GAME;
             screenManager_.stopRender();
@@ -105,7 +105,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonSendMessagesToFriends_ = ftxui::Button(
-        "💬 Messages",
+        STR_MESSAGES,
         [&] {
             state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
             screenManager_.stopRender();
@@ -113,7 +113,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonLookRanking_ = ftxui::Button(
-        "🏆 Leaderboard",
+        STR_RANKING,
         [&] {
             state_ = MainMenuState::LOOK_RANKING;
             screenManager_.stopRender();
@@ -121,7 +121,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonManageProfile_ = ftxui::Button(
-        "⚙ Manage Profile",
+        STR_MANAGE_PROFILE,
         [&] {
             state_ = MainMenuState::MANAGE_PROFILE;
             screenManager_.stopRender();
@@ -129,7 +129,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonManageFriendsList_ = ftxui::Button(
-        "👥 Manage friends list",
+        STR_MANAGE_FRIENDS_LIST,
         [&] {
             state_ = MainMenuState::MANAGE_FRIENDS_LIST;
             screenManager_.stopRender();
@@ -137,7 +137,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
-        "Quit the game",
+        STR_QUIT_GAME,
         [&] {
             state_ = MainMenuState::EXIT;
             screenManager_.stopRender();
@@ -158,11 +158,10 @@ void MainMenu::displayMainWindow() {
 
     mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
-                   ftxui::text("🎮 Main Menu 🎮") | ftxui::bold | ftxui::center
+                   ftxui::text(STR_MAIN_MENU) | ftxui::bold | ftxui::center
                        | ftxui::color(ftxui::Color::Cyan),
                    ftxui::separator(),
-                   ftxui::text("Welcome to the game menu of Tetris Royal !")
-                       | ftxui::center,
+                   ftxui::text(STR_WELCOME) | ftxui::center,
                    ftxui::separator(),
                    buttonPlay_->Render(),
                    buttonJoinGame_->Render(),
@@ -186,11 +185,11 @@ void MainMenu::displayRankingList() {
 
     // table titles
     rowsRanking_.push_back(ftxui::hbox({
-        ftxui::text("Ranking") | ftxui::bold
+        ftxui::text(STR_RANKING) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking) | ftxui::center,
-        ftxui::text("User") | ftxui::bold
+        ftxui::text(STR_USER) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthUser) | ftxui::center,
-        ftxui::text("Score") | ftxui::bold
+        ftxui::text(STR_SCORE) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthScore) | ftxui::center,
     }));
     rowsRanking_.push_back(ftxui::separator());
@@ -220,7 +219,7 @@ void MainMenu::displayRankingWindow() {
 
     rankingWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text("Endless mod Ranking") | ftxui::bold
+                   ftxui::text(STR_ENDLESS_RANKING) | ftxui::bold
                        | ftxui::center,
                    ftxui::separator(),
                    ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
@@ -236,14 +235,14 @@ void MainMenu::displayProfileManagerButton() {
     password_.clear(); // Empty password
 
     inputChangeUsername_ =
-        ftxui::Input(&username_, "New username") | ftxui::borderHeavy;
+        ftxui::Input(&username_, STR_NEW_USERNAME) | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, "New password", PasswordInputOption())
+        ftxui::Input(&password_, STR_NEW_PASSWORD, PasswordInputOption())
         | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
-        "Submit",
+        STR_SUBMIT,
         [&] {
             controller_.changeProfile(username_, password_); // profile screen
             screenManager_.stopRender();
@@ -261,10 +260,9 @@ void MainMenu::displayProfileManagerWindow() {
 
     profileManagerWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text("Profile Manager") | ftxui::bold | ftxui::center,
+                   ftxui::text(STR_PROFILE_MANAGER) | ftxui::bold | ftxui::center,
                    ftxui::separator(),
-                   ftxui::text("You can change your username and password here")
-                       | ftxui::center,
+                   ftxui::text(STR_CHANGE_INFO) | ftxui::center,
                    ftxui::separator(),
                    inputChangeUsername_->Render(),
                    inputChangePassword_->Render(),

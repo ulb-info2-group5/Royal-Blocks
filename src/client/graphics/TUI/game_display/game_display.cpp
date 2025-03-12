@@ -143,7 +143,7 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 
 void GameDisplay::displayLeftWindow() {
     ftxui::Component menuDisplay = ftxui::Button(
-        "Quit Game", [&] { screenManager_.stopRender(); },
+        STR_QUIT_GAME, [&] { screenManager_.stopRender(); },
         GlobalButtonStyle());
 
     if (controller_.getGameMode() == GameMode::RoyalCompetition) {

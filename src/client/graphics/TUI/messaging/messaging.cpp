@@ -23,7 +23,7 @@ Messaging::Messaging(ScreenManager &screenManager, Controller &controller)
 
 void Messaging::createButtons() {
     addFriendButton_ = ftxui::Button(
-        "Add a friend",
+        STR_ADD_A_FRIEND,
         [&] {
             controller_.sendFriendRequest(newFriendBuffer_);
             newFriendBuffer_.clear();
@@ -32,7 +32,7 @@ void Messaging::createButtons() {
 
     sendButton_ =
         ftxui::Button(
-            "Send",
+            STR_SEND,
             [&] {
                 if (!newMessageBuffer_.empty()
                     // && TODO: lulu check valid friend (at least one)
@@ -48,7 +48,7 @@ void Messaging::createButtons() {
         | ftxui::center;
 
     backButton_ = ftxui::Button(
-        "Back",
+        STR_BACK,
         [&] {
             newMessageBuffer_.clear();
             newFriendBuffer_.clear();
@@ -61,7 +61,7 @@ void Messaging::createButtons() {
 void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend")
+    addFriendInput_ = ftxui::Input(&newFriendBuffer_, STR_NAME_OF_FRIEND)
                       | ftxui::center | ftxui::borderHeavy;
     // attempt to send the result when  user press enter
 
@@ -73,7 +73,7 @@ void Messaging::drawInputUser() {
     //     }
     // });
 
-    messageInput_ = ftxui::Input(&newMessageBuffer_, "Write a message...")
+    messageInput_ = ftxui::Input(&newMessageBuffer_, STR_WRITE_MESSAGE)
                     | ftxui::center | ftxui::borderHeavy;
 }
 
@@ -127,7 +127,7 @@ void Messaging::drawDisplay() {
 
                        return ftxui::vbox(chat_elements) | ftxui::flex;
                    })
-                   .value_or(ftxui::text("No conversation"))
+                   .value_or(ftxui::text(STR_NO_CONVERSATION))
                | ftxui::bold | ftxui::center;
     });
 }
@@ -148,7 +148,7 @@ void Messaging::drawWindow() {
     displayWindow_ = ftxui::Renderer(mainContainer, [&] {
         return ftxui::hbox({
                    ftxui::vbox({
-                       ftxui::text(" --- FRIENDS LIST --- ") | ftxui::bold
+                       ftxui::text(STR_FRIENDS_LIST_TITLE) | ftxui::bold
                            | ftxui::color(ftxui::Color::Green) | ftxui::center,
                        ftxui::separator(),
                        friendsMenu_->Render(),
@@ -156,7 +156,7 @@ void Messaging::drawWindow() {
                    }) | ftxui::borderHeavy,
 
                    ftxui::vbox({
-                       ftxui::text(" --- CONVERSATION --- ") | ftxui::bold
+                       ftxui::text(STR_CONVERSATION_TITLE) | ftxui::bold
                            | ftxui::color(ftxui::Color::Green) | ftxui::center,
                        ftxui::separator(),
                        chatDisplay_->Render() | ftxui::flex,
@@ -168,7 +168,7 @@ void Messaging::drawWindow() {
                        | ftxui::flex,
 
                    ftxui::vbox({
-                       ftxui::text("-- Add a friend --") | ftxui::bold
+                       ftxui::text(STR_ADD_FRIEND_TITLE) | ftxui::bold
                            | ftxui::color(ftxui::Color::Green) | ftxui::center,
                        ftxui::separator(),
                        addFriendInput_->Render(),

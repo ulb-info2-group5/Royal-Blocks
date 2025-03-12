@@ -49,6 +49,8 @@ class IGame_Menu {
 
     virtual void matchmakingScreen() = 0;
 
+    virtual void selectPlayerCountScreen() = 0;
+
 
   public:
     virtual ~IGame_Menu() = default;

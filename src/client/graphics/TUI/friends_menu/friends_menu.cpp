@@ -16,9 +16,6 @@
 #include <ftxui/dom/elements.hpp>
 #include <vector>
 
-// TODO: add screens for valid or invalid when adding or removing a friend
-// TODO: check that the vector of friends is correctly updated when adding or
-// removing a friend
 
 // ### Public methods ###
 
@@ -52,10 +49,10 @@ void FriendsMenu::render() {
             ftxui::Container::Vertical({friendsContainer, buttonsContainer}),
             [&] {
                 return ftxui::vbox({
-                           ftxui::text("Friends List") | ftxui::bold
+                           ftxui::text(STR_FRIENDS_LIST) | ftxui::bold
                                | ftxui::center,
                            ftxui::separator(),
-                           ftxui::text("Your friends") | ftxui::center,
+                           ftxui::text(STR_FRIENDS) | ftxui::center,
                            friendsContainer->Render() | ftxui::borderHeavy,
                            ftxui::separator(),
                            buttonAddFriend_->Render(),
@@ -85,7 +82,7 @@ void FriendsMenu::addFriendScreen() {
     ftxui::Component component =
         ftxui::Renderer(ftxui::Container::Vertical({container}), [&] {
             return ftxui::vbox({
-                       ftxui::text("Add a friend") | ftxui::bold
+                       ftxui::text(STR_ADD_A_FRIEND) | ftxui::bold
                            | ftxui::center,
                        ftxui::separator(),
                        ftxui::text(""), // Empty line
@@ -108,7 +105,7 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
         ftxui::Component renderNoFriends =
             ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                 return ftxui::vbox({
-                    ftxui::text("You don't have friends yet"),
+                    ftxui::text(STR_NO_FRIEND),
                 });
             });
         friendButtons.push_back(renderNoFriends);
@@ -130,7 +127,7 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
 
 void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
     ftxui::Component buttonYes = ftxui::Button(
-        "Yes",
+        STR_YES,
         [&] {
             controller_.removeFriend(friendUser.playerId);
             screenManager_.stopRender();
@@ -138,7 +135,7 @@ void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
         GlobalButtonStyle());
 
     ftxui::Component buttonNo = ftxui::Button(
-        "No", [&] { screenManager_.stopRender(); },
+        STR_NO, [&] { screenManager_.stopRender(); },
         GlobalButtonStyle()); // Like it's a back button
 
     ftxui::Component container = ftxui::Container::Vertical({
@@ -163,21 +160,21 @@ void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
 
 void FriendsMenu::createButtons() {
     buttonBack_ = ftxui::Button(
-        "Back", [&] { screenManager_.stopRender(); }, GlobalButtonStyle());
+        STR_BACK, [&] { screenManager_.stopRender(); }, GlobalButtonStyle());
 
     buttonAddFriend_ = ftxui::Button(
-        "Add a friend",
+        STR_ADD_A_FRIEND,
         [&] {
             addFriendScreen();
             screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
-    input_ = ftxui::Input(&friendNameBuffer_, "Name of friend")
+    input_ = ftxui::Input(&friendNameBuffer_, STR_NAME_OF_FRIEND)
              | ftxui::borderHeavy | ftxui::center;
 
     submitButton_ = ftxui::Button(
-        "Add",
+        STR_ADD,
         [&] {
             controller_.sendFriendRequest(friendNameBuffer_);
             screenManager_.stopRender();
@@ -185,7 +182,7 @@ void FriendsMenu::createButtons() {
         GlobalButtonStyle());
 
     buttonBackToMainMenu_ = ftxui::Button(
-        "Back to main menu",
+        STR_BACK_TO_MAIN_MENU,
         [&] {
             exit_ = true; // Exit the while loop
             screenManager_.stopRender();

@@ -1,13 +1,9 @@
 #ifndef INTERFACECONSTANTS_HPP
 #define INTERFACECONSTANTS_HPP
 
-#include <array>
 #include <cstdlib>
-#include <iostream>
-#include <optional>
 #include <stdint.h>
-#include <string>
-#include <utility>
+
 #include <vector>
 
 constexpr uint32_t WIDTH = 10, HEIGHT = 20;

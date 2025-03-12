@@ -33,7 +33,7 @@ class Controller; // Forward declaration
  * register
  *
  */
-class LoginMenu : public ILogin_Menu {
+class LoginMenu final : public ILogin_Menu {
   private:
     /*
      * @brief The screen to use to render the components
@@ -59,7 +59,6 @@ class LoginMenu : public ILogin_Menu {
 
     ftxui::Component displayWindow_;
 
-  protected:
     void createButtons() override;
 
     void displayWindow() override;
@@ -68,7 +67,8 @@ class LoginMenu : public ILogin_Menu {
     /*
      * @brief Construct a new Login Menu object
      *
-     * @param screen The screen to use to render the components
+     * @param screenManager The screen manager for asking to render the components
+      * @param controller The controller to interact with the server
      */
     LoginMenu(ScreenManager &screenManager, Controller &controller);
 
