@@ -241,7 +241,7 @@ void GameDisplay::displayMiddleWindow() {
 void GameDisplay::drawOpponentsBoard() {
     opBoards_.clear();
     
-    for (uint32_t index = 1; index < pGameState_->gameState.externals.size(); ++index) {
+    for (uint32_t index = 0; index < pGameState_->gameState.externals.size(); ++index) {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&, index] {
             std::lock_guard<std::mutex> guard(pGameState_->mutex);
 
@@ -285,34 +285,20 @@ void GameDisplay::displayOppponentsBoard() {
     drawOpponentsBoard();
 
     ftxui::Components rows = {};
-    uint32_t totalPlayers =
-        pGameState_->gameState.externals.size();
+    uint32_t totalOpponentsPlayers = pGameState_->gameState.externals.size();
 
     for (uint32_t i = 0; i < 2; ++i) { // 2 rows
         ftxui::Component line;
-        uint32_t leftPlayers = totalPlayers - (i * 4 + 1); // 4 players per row
+        uint32_t leftPlayers = (totalOpponentsPlayers > i * 4) ? totalOpponentsPlayers - (i * 4) : 0; // 4 players per row max
 
         if (leftPlayers <= 0) break;
 
-        switch (leftPlayers) {
-            case 1:
-                line = ftxui::Container::Horizontal({opBoards_.at(i * 4)});
-                break;
-            case 2:
-                line = ftxui::Container::Horizontal(
-                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4)});
-                break;
-            case 3:
-                line = ftxui::Container::Horizontal(
-                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4), opBoards_.at(2 + i * 4)});
-                break;
-            default:
-                line = ftxui::Container::Horizontal(
-                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4), 
-                     opBoards_.at(2 + i * 4), opBoards_.at(3 + i * 4)});
-                break;
+        std::vector<ftxui::Component> components;
+        for (uint32_t j = 0; j < std::min(leftPlayers, 4u) && (i * 4 + j) < opBoards_.size(); ++j) {
+            components.push_back(opBoards_.at(i * 4 + j));
         }
-        
+
+        line = ftxui::Container::Horizontal(components);
         rows.push_back(line);
     }
 
