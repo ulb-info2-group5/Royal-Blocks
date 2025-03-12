@@ -1,7 +1,5 @@
 #include "effect_price.hpp"
 
-#include "effect/bonus/bonus_type.hpp"
-
 #include <unordered_map>
 
 std::unordered_map<EffectType, Energy> effectPriceMap{

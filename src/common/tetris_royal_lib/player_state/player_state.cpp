@@ -2,7 +2,6 @@
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect/penalty/speed_up.hpp"
-#include "effect_selector/effect_selector.hpp"
 
 #include <optional>
 
@@ -10,8 +9,8 @@ PlayerState::PlayerState(PlayerID playerID, Score score)
     : TetrisObserver{}, playerID_{playerID}, score_{score}, isAlive_{true},
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
       receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
-      effectSelector_{std::nullopt}, pActiveBonus_{nullptr},
-      pActivePenalty_{nullptr}, engineTicksSinceLastTick_{0} {}
+      pActiveBonus_{nullptr}, pActivePenalty_{nullptr},
+      engineTicksSinceLastTick_{0} {}
 
 void PlayerState::toggleEffects(bool activated) {
     if (activated) {
@@ -26,12 +25,6 @@ void PlayerState::toggleEffects(bool activated) {
     } else {
         receivedPenaltiesQueue_ = std::nullopt;
         grantedBonusesQueue_ = std::nullopt;
-    }
-
-    if (activated) {
-        effectSelector_ = EffectSelector{};
-    } else {
-        effectSelector_ = std::nullopt;
     }
 
     if (activated) {
@@ -95,13 +88,6 @@ void PlayerState::decreaseEnergy(Energy amount) {
     energy_.value() -= amount;
 }
 
-std::optional<EffectType> PlayerState::getSelectedEffect() {
-    return effectSelector_.and_then(
-        [](auto &selector) -> std::optional<EffectType> {
-            return selector.getSelectedEffect();
-        });
-}
-
 void PlayerState::grantBonus(BonusType bonus) {
     if (!grantedBonusesQueue_.has_value()) {
         return;
@@ -152,13 +138,6 @@ void PlayerState::setActivePenalty(const TimedPenaltyPtr &pTimedPenalty) {
     pActivePenalty_ = pTimedPenalty;
 }
 
-void PlayerState::selectEffect(EffectType effectType) {
-    effectSelector_.and_then([effectType](EffectSelector &effectSelector) {
-        effectSelector.select(effectType);
-        return std::make_optional<EffectSelector>();
-    });
-}
-
 void PlayerState::setActiveBonus(const TimedBonusPtr &pTimedBonus) {
     pActiveBonus_ = pTimedBonus;
 }
@@ -166,10 +145,6 @@ void PlayerState::setActiveBonus(const TimedBonusPtr &pTimedBonus) {
 TimedBonusPtr &PlayerState::getActiveBonus() { return pActiveBonus_; }
 
 TimedPenaltyPtr &PlayerState::getActivePenalty() { return pActivePenalty_; }
-
-void PlayerState::selectNextEffect() { effectSelector_->next(); }
-
-void PlayerState::selectPrevEffect() { effectSelector_->prev(); }
 
 void PlayerState::stashPenalty(PenaltyType penalty) {
     stashedPenalties_->push_back(penalty);
@@ -248,12 +223,6 @@ nlohmann::json PlayerState::serializeSelf() const {
         j["energy"] = *energy_;
     } else {
         j["energy"] = nullptr;
-    }
-
-    if (effectSelector_) {
-        j["effectSelector"] = effectSelector_->serialize();
-    } else {
-        j["effectSelector"] = nullptr;
     }
 
     if (stashedPenalties_) {

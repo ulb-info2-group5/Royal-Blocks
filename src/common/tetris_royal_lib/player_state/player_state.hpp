@@ -4,14 +4,16 @@
 #include "../effect/bonus/timed_bonus.hpp"
 #include "../effect/penalty/penalty_type.hpp"
 #include "../effect/penalty/timed_penalty.hpp"
-#include "../effect_selector/effect_selector.hpp"
 #include "effect/bonus/timed_bonus.hpp"
+#include "effect_price/effect_price.hpp"
 #include "tetris/tetris_observer.hpp"
 
 #include <cstddef>
 #include <optional>
 #include <queue>
 #include <sys/types.h>
+#include <utility>
+#include <vector>
 
 using PlayerID = size_t;
 using Score = size_t;
@@ -19,6 +21,8 @@ using Energy = size_t;
 
 class PlayerState;
 using PlayerStatePtr = std::shared_ptr<PlayerState>;
+
+using EffectPrice = std::pair<EffectType, Energy>;
 
 class PlayerState final : public TetrisObserver {
   private:
@@ -47,8 +51,8 @@ class PlayerState final : public TetrisObserver {
     std::optional<std::queue<PenaltyType>> receivedPenaltiesQueue_;
     std::optional<std::queue<BonusType>> grantedBonusesQueue_;
 
-    // Penalties/Bonuses the player can send/grant himself
-    std::optional<EffectSelector> effectSelector_;
+    // Penalties/Bonuses the player can buy
+    std::vector<EffectPrice> effectsPrice;
 
     // Store stacked effects
     std::optional<std::deque<PenaltyType>> stashedPenalties_;
@@ -134,11 +138,6 @@ class PlayerState final : public TetrisObserver {
     void decreaseEnergy(Energy amount);
 
     /**
-     * @brief Returns effect selected by the player.
-     */
-    std::optional<EffectType> getSelectedEffect();
-
-    /**
      * @brief Adds the bonus to the grantedBonusQueue.
      */
     void grantBonus(BonusType bonus);
@@ -179,21 +178,6 @@ class PlayerState final : public TetrisObserver {
      * @brief Sets the given timed-penalty as active penalty.
      */
     void setActivePenalty(const TimedPenaltyPtr &pTimedPenalty);
-
-    /**
-     * @brief Makes player select the given effect.
-     */
-    void selectEffect(EffectType effectType);
-
-    /**
-     * @brief Selects the next effect in the effect selector.
-     */
-    void selectNextEffect();
-
-    /**
-     * @brief Selects the previous effect in the effect selector.
-     */
-    void selectPrevEffect();
 
     /**
      * @brief Stashes the penalty for later.

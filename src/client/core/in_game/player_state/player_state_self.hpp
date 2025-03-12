@@ -3,7 +3,6 @@
 
 #include "../effects/timed_bonus.hpp"
 #include "../effects/timed_penalty.hpp"
-#include "effect_selector/effect_selector.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -14,6 +13,9 @@
 using PlayerID = size_t;
 using Score = size_t;
 using Energy = size_t;
+
+using EffectType = std::variant<BonusType, PenaltyType>;
+using EffectPrice = std::pair<EffectType, Energy>;
 
 namespace client {
 
@@ -26,7 +28,7 @@ namespace client {
 
         std::optional<Energy> energy_;
 
-        std::optional<EffectSelector> effectSelector_;
+        std::vector<EffectPrice> effectsPrice;
 
         std::optional<std::deque<PenaltyType>> stashedPenalties_;
 

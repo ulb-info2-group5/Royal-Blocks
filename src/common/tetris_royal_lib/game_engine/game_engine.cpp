@@ -345,45 +345,6 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     pPlayerStatePlayer->setPenaltyTarget(target);
 }
 
-void GameEngine::selectEffect(PlayerID playerID, EffectType effectType) {
-    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
-        return;
-    }
-
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (!checkAlive(pPlayerState)) {
-        return;
-    }
-
-    pPlayerState->selectEffect(effectType);
-}
-
-void GameEngine::selectNextEffect(PlayerID playerID) {
-    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
-        return;
-    }
-
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (!checkAlive(pPlayerState)) {
-        return;
-    }
-
-    pPlayerState->selectNextEffect();
-}
-
-void GameEngine::selectPrevEffect(PlayerID playerID) {
-    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
-        return;
-    }
-
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
-    if (!checkAlive(pPlayerState)) {
-        return;
-    }
-
-    pPlayerState->selectPrevEffect();
-}
-
 void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
     if (!checkAlive(pPlayerState)) {

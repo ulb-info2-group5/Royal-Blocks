@@ -20,12 +20,6 @@ nlohmann::json client::PlayerStateSelf::serialize() const {
         j["energy"] = nullptr;
     }
 
-    if (effectSelector_) {
-        j["effectSelector"] = effectSelector_->serialize();
-    } else {
-        j["effectSelector"] = nullptr;
-    }
-
     if (stashedPenalties_) {
         nlohmann::json j_stashedPenalties = nlohmann::json::array();
         for (const auto &stashedPenalty : *stashedPenalties_) {
@@ -68,13 +62,6 @@ void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
         energy_ = j.at("energy").get<Energy>();
     } else {
         energy_ = std::nullopt;
-    }
-
-    if (!j.at("effectSelector").is_null()) {
-        effectSelector_ = std::make_optional(EffectSelector{});
-        effectSelector_->deserialize(j.at("effectSelector"));
-    } else {
-        effectSelector_ = std::nullopt;
     }
 
     if (!j.at("stashedPenalties").is_null()) {
