@@ -88,6 +88,7 @@ void Controller::handlePacket(const std::string &pack) {
     default:
         std::cerr << "unknown bindingType" << std::endl;
     }
+    screenManager_.forceRefresh();
 }
 
 // ### Public methods ###

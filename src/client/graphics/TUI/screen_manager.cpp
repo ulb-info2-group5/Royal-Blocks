@@ -70,24 +70,15 @@ void ScreenManager::drawEndScreen() {
     render(title);
 }
 
-ftxui::Component ScreenManager::handleCtrlC(ftxui::Component &component) {
-    return ftxui::CatchEvent(component, [&](ftxui::Event event) {
-        forceRefresh();
-        return event == ftxui::Event::Character('\x03'); // Ctrl+C event
-    });
-}
-
-ftxui::Component ScreenManager::handleCtrlZ(ftxui::Component &component) {
-    return ftxui::CatchEvent(component, [](ftxui::Event event) {
-        return event == ftxui::Event::Character('\x1A'); // Ctrl+Z event
-    });
-}
-
 ftxui::Component ScreenManager::handleCtrl(ftxui::Component &component) {
-    return ftxui::CatchEvent(component, [](ftxui::Event event) {
-        return event == ftxui::Event::Character('\x1A')
-               || event
-                      == ftxui::Event::Character(
-                          '\x03'); // Ctrl+Z or Ctrl+C event
+    return ftxui::CatchEvent(component, [&](ftxui::Event event) {
+        if (event == ftxui::Event::Custom) {
+            return true;
+        } else if (event == ftxui::Event::Character('\x03')
+                   || event == ftxui::Event::Character('\x1A')) {
+            forceRefresh();
+            return true;
+        }
+        return false;
     });
 }

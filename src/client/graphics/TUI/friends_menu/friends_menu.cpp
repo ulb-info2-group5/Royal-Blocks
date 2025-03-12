@@ -20,27 +20,21 @@ FriendsMenu::FriendsMenu(ScreenManager &screenManager, Controller &controller)
 
 void FriendsMenu::render() {
     while (!exit_) {
-        const std::vector<bindings::User> &friendsList =
-            controller_.getFriendsList();
-
-        std::vector<ftxui::Component> friendsButton = displayFriendButtons(
-            friendsList); // Display the friends list as buttons
-
-        ftxui::Component friendsContainer =
-            ftxui::Container::Vertical(friendsButton);
-
-        for (ftxui::Component &friendButton : friendsButton) {
-            friendsContainer->Add(friendButton);
-        }
-
-        ftxui::Component buttonsContainer = ftxui::Container::Vertical({
-            buttonAddFriend_,
-            buttonBackToMainMenu_,
-        });
-
         ftxui::Component render = ftxui::Renderer(
-            ftxui::Container::Vertical({friendsContainer, buttonsContainer}),
+            ftxui::Container::Vertical({ftxui::Container::Vertical({
+                buttonAddFriend_,
+                buttonBackToMainMenu_,
+            })}),
             [&] {
+                const std::vector<bindings::User> &friendsList =
+                    controller_.getFriendsList();
+                ftxui::Component friendsContainer =
+                    ftxui::Container::Vertical({});
+                for (const auto &friendButton :
+                     displayFriendButtons(friendsList)) {
+                    friendsContainer->Add(friendButton);
+                }
+
                 return ftxui::vbox({
                            ftxui::text(std::string(STR_FRIENDS_LIST))
                                | ftxui::bold | ftxui::center,
@@ -58,8 +52,7 @@ void FriendsMenu::render() {
 
         screenManager_.render(render);
     }
-    exit_ = false; // Reset the exit_ variable for the next time we open the
-                   // screen
+    exit_ = false;
 }
 
 // ### Private methods ###
