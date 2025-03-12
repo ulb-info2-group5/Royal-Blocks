@@ -25,7 +25,7 @@ MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
     createMainMenuButtons();
 
     buttonBack_ = ftxui::Button(
-        STR_BACK,
+        std::string(STR_BACK),
         [&] {
             state_ = MainMenuState::BACK;
             screenManager_.stopRender();
@@ -33,7 +33,7 @@ MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     buttonOK_ = ftxui::Button(
-        STR_OK,
+        std::string(STR_OK),
         [&] {
             state_ =
                 MainMenuState::BACK; // like a back button but with ok title
@@ -89,7 +89,7 @@ void MainMenu::handleChoice() {
 
 void MainMenu::createMainMenuButtons() {
     buttonPlay_ = ftxui::Button(
-        STR_CREATE_GAME,
+        std::string(STR_CREATE_GAME),
         [&] {
             state_ = MainMenuState::CREATE_GAME;
             screenManager_.stopRender();
@@ -97,7 +97,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonJoinGame_ = ftxui::Button(
-        STR_JOIN_GAME,
+        std::string(STR_JOIN_GAME),
         [&] {
             state_ = MainMenuState::JOIN_GAME;
             screenManager_.stopRender();
@@ -105,7 +105,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonSendMessagesToFriends_ = ftxui::Button(
-        STR_MESSAGES,
+        std::string(STR_MESSAGES),
         [&] {
             state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
             screenManager_.stopRender();
@@ -113,7 +113,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonLookRanking_ = ftxui::Button(
-        STR_RANKING,
+        std::string(STR_RANKING),
         [&] {
             state_ = MainMenuState::LOOK_RANKING;
             screenManager_.stopRender();
@@ -121,7 +121,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonManageProfile_ = ftxui::Button(
-        STR_MANAGE_PROFILE,
+        std::string(STR_MANAGE_PROFILE),
         [&] {
             state_ = MainMenuState::MANAGE_PROFILE;
             screenManager_.stopRender();
@@ -129,7 +129,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonManageFriendsList_ = ftxui::Button(
-        STR_MANAGE_FRIENDS_LIST,
+        std::string(STR_MANAGE_FRIENDS_LIST),
         [&] {
             state_ = MainMenuState::MANAGE_FRIENDS_LIST;
             screenManager_.stopRender();
@@ -137,7 +137,7 @@ void MainMenu::createMainMenuButtons() {
         GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
-        STR_QUIT_GAME,
+        std::string(STR_QUIT_GAME),
         [&] {
             state_ = MainMenuState::EXIT;
             screenManager_.stopRender();
@@ -158,10 +158,10 @@ void MainMenu::displayMainWindow() {
 
     mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_MAIN_MENU) | ftxui::bold | ftxui::center
+                   ftxui::text(std::string(STR_MAIN_MENU)) | ftxui::bold | ftxui::center
                        | ftxui::color(ftxui::Color::Cyan),
                    ftxui::separator(),
-                   ftxui::text(STR_WELCOME) | ftxui::center,
+                   ftxui::text(std::string(STR_WELCOME)) | ftxui::center,
                    ftxui::separator(),
                    buttonPlay_->Render(),
                    buttonJoinGame_->Render(),
@@ -185,11 +185,11 @@ void MainMenu::displayRankingList() {
 
     // table titles
     rowsRanking_.push_back(ftxui::hbox({
-        ftxui::text(STR_RANKING) | ftxui::bold
+        ftxui::text(std::string(STR_RANKING)) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking) | ftxui::center,
-        ftxui::text(STR_USER) | ftxui::bold
+        ftxui::text(std::string(STR_USER)) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthUser) | ftxui::center,
-        ftxui::text(STR_SCORE) | ftxui::bold
+        ftxui::text(std::string(STR_SCORE)) | ftxui::bold
             | size(ftxui::WIDTH, ftxui::EQUAL, widthScore) | ftxui::center,
     }));
     rowsRanking_.push_back(ftxui::separator());
@@ -219,7 +219,7 @@ void MainMenu::displayRankingWindow() {
 
     rankingWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_ENDLESS_RANKING) | ftxui::bold
+                   ftxui::text(std::string(STR_ENDLESS_RANKING)) | ftxui::bold
                        | ftxui::center,
                    ftxui::separator(),
                    ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
@@ -235,14 +235,14 @@ void MainMenu::displayProfileManagerButton() {
     password_.clear(); // Empty password
 
     inputChangeUsername_ =
-        ftxui::Input(&username_, STR_NEW_USERNAME) | ftxui::borderHeavy;
+        ftxui::Input(&username_, std::string(STR_NEW_USERNAME)) | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, STR_NEW_PASSWORD, PasswordInputOption())
+        ftxui::Input(&password_, std::string(STR_NEW_PASSWORD), PasswordInputOption())
         | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
-        STR_SUBMIT,
+        std::string(STR_SUBMIT),
         [&] {
             controller_.changeProfile(username_, password_); // profile screen
             screenManager_.stopRender();
@@ -260,9 +260,9 @@ void MainMenu::displayProfileManagerWindow() {
 
     profileManagerWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_PROFILE_MANAGER) | ftxui::bold | ftxui::center,
+                   ftxui::text(std::string(STR_PROFILE_MANAGER)) | ftxui::bold | ftxui::center,
                    ftxui::separator(),
-                   ftxui::text(STR_CHANGE_INFO) | ftxui::center,
+                   ftxui::text(std::string(STR_CHANGE_INFO)) | ftxui::center,
                    ftxui::separator(),
                    inputChangeUsername_->Render(),
                    inputChangePassword_->Render(),

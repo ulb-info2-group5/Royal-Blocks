@@ -30,7 +30,7 @@
      createButtonSubmit();
  
  
-     inputUsername_ = ftxui::Input(&username_, STR_ENTER_USERNAME) | ftxui::borderHeavy | 
+     inputUsername_ = ftxui::Input(&username_, std::string(STR_ENTER_USERNAME)) | ftxui::borderHeavy | 
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
             screenManager_.simulateTab(); // Move to the next input
@@ -39,7 +39,7 @@
         return false;
     });
 
-     inputPassword_ = ftxui::Input(&password_, STR_ENTER_PASSWORD, PasswordInputOption()) | ftxui::borderHeavy |
+     inputPassword_ = ftxui::Input(&password_, std::string(STR_ENTER_PASSWORD), PasswordInputOption()) | ftxui::borderHeavy |
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
             buttonSubmit_->OnEvent(event); // Submit the username and password
@@ -53,7 +53,7 @@
  
  void LoginInput::createButtonBack() {
      buttonBack_ = ftxui::Button(
-                       STR_BACK,
+        std::string(STR_BACK),
                        [&] {
                            clearInfo();
                            loginState_ = LoginState::BACK;
@@ -63,7 +63,7 @@
  
  void LoginInput::createButtonSubmit() {
      buttonSubmit_ = ftxui::Button(
-        STR_SUBMIT,
+        std::string(STR_SUBMIT),
          [&] {
              if (loginType_ == LoginType::REGISTER) {
                  controller_.tryRegister(username_, password_);

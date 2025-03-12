@@ -24,7 +24,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
     gameDisplay_ = std::make_unique<GameDisplay>(screenManager_, controller_);
 
     endlessButon_ = ftxui::Button(
-        STR_ENDLESS,
+        std::string(STR_ENDLESS),
         [&] {
             gameMode_ = GameMode::Endless;
             screenManager_.stopRender();
@@ -32,7 +32,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     duelButon_ = ftxui::Button(
-        STR_DUAL,
+        std::string(STR_DUAL),
         [&] {
             gameMode_ = GameMode::Dual;
             screenManager_.stopRender();
@@ -40,7 +40,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     classicButon_ = ftxui::Button(
-        STR_CLASSIC,
+        std::string(STR_CLASSIC),
         [&] {
             gameMode_ = GameMode::Classic;
             screenManager_.stopRender();
@@ -48,7 +48,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     royalButon_ = ftxui::Button(
-        STR_ROYAL,
+        std::string(STR_ROYAL),
         [&] {
             gameMode_ = GameMode::RoyalCompetition;
             screenManager_.stopRender();
@@ -56,7 +56,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     backButton_ = ftxui::Button(
-        STR_BACK,
+        std::string(STR_BACK),
         [&] {
             joinType_ = JoinType::BACK;
             screenManager_.stopRender();
@@ -64,7 +64,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         GlobalButtonStyle());
 
     quitMenuButton_ = ftxui::Button(
-        STR_BACK,
+        std::string(STR_BACK),
         [&] {
             quitMenu_ = true;
             joinType_ = JoinType::BACK;
@@ -87,7 +87,7 @@ void GameMenu::renderAllGames() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_SELECT_MOD) | ftxui::center
+                   ftxui::text(std::string(STR_SELECT_MOD)) | ftxui::center
                        | ftxui::bold,
                    ftxui::separator(),
                    endlessButon_->Render(),
@@ -119,7 +119,7 @@ void GameMenu::renderOnlineGames() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_SELECT_MOD) | ftxui::center
+                   ftxui::text(std::string(STR_SELECT_MOD)) | ftxui::center
                        | ftxui::bold,
                    ftxui::separator(),
                    duelButon_->Render(),
@@ -146,14 +146,14 @@ void GameMenu::joinFriendOrRandomScreen() {
     }
 
     ftxui::Component joinFriendButton = ftxui::Button(
-        STR_JOIN_FRIEND,
+        std::string(STR_JOIN_FRIEND),
         [&] {
             joinType_ = JoinType::FRIEND;
             screenManager_.stopRender();
         },
         GlobalButtonStyle());
     ftxui::Component joinRandomButton = ftxui::Button(
-        STR_JOIN_RANDOM,
+        std::string(STR_JOIN_RANDOM),
         [&] {
             joinType_ = JoinType::RANDOM;
             controller_.joinGame(gameMode_, std::nullopt);
@@ -166,7 +166,7 @@ void GameMenu::joinFriendOrRandomScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_JOIN_FRIEND_OR_RANDOM) | ftxui::center
+                   ftxui::text(std::string(STR_JOIN_FRIEND_OR_RANDOM)) | ftxui::center
                        | ftxui::bold,
                    ftxui::separator(),
                    joinFriendButton->Render(),
@@ -225,7 +225,7 @@ void GameMenu::joinFriendScreen() {
         ftxui::Component renderNoFriends =
             ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                 return ftxui::vbox({
-                    ftxui::text(STR_NO_FRIEND),
+                    ftxui::text(std::string(STR_NO_FRIEND)),
                 });
             });
         friendButtons.push_back(renderNoFriends);
@@ -249,7 +249,7 @@ void GameMenu::joinFriendScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(mainContainer, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_SELECT_FRIEND_TO_JOIN) | ftxui::center
+                   ftxui::text(std::string(STR_SELECT_FRIEND_TO_JOIN)) | ftxui::center
                        | ftxui::bold,
                    ftxui::separator(),
                    friendsContainer->Render() | ftxui::borderHeavy,
@@ -313,10 +313,10 @@ void GameMenu::waitingFriendScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
             return ftxui::vbox({
-                       ftxui::text(STR_WAITING_FRIEND)
+                       ftxui::text(std::string(STR_WAITING_FRIEND))
                            | ftxui::center | ftxui::bold,
                        ftxui::separator(),
-                       ftxui::text(STR_WAIT) | ftxui::center,
+                       ftxui::text(std::string(STR_WAIT)) | ftxui::center,
                    })
                    | ftxui::borderHeavy | ftxui::center
                    | ftxui::bgcolor(ftxui::Color::Black);
@@ -377,7 +377,7 @@ void GameMenu::selectPlayerCountScreen() {
         GlobalButtonStyle());
 
     ftxui::Component confirmButton = ftxui::Button(
-        STR_CONFIRM,
+        std::string(STR_CONFIRM),
         [&] {
             controller_.createGame(gameMode_, playerCount);
             matchmakingScreen();
@@ -403,7 +403,7 @@ void GameMenu::selectPlayerCountScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(STR_SELECT_NUM_PLAYERS) | ftxui::center
+                   ftxui::text(std::string(STR_SELECT_NUM_PLAYERS)) | ftxui::center
                        | ftxui::bold,
                    ftxui::separator(),
                    horizontalContainer->Render() | ftxui::center,
