@@ -32,10 +32,7 @@ void ScreenManager::forceRefresh() { screen_.PostEvent(ftxui::Event::Custom); }
 
 void ScreenManager::simulateTab() { screen_.PostEvent(ftxui::Event::Tab); }
 
-void ScreenManager::updateScreen() {
-    screen_.ExitLoopClosure()();
-    screen_.Loop(handleCtrl(currentWindow_));
-}
+void ScreenManager::updateScreen() {}
 
 // ### Private methods ###
 
