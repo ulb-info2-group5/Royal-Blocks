@@ -20,6 +20,8 @@ namespace bindings {
         CreateGame,
         HandleFriendRequest,
         PendingFriendRequests,
+        ChangeUsername,
+        ChangePassword,
 
         // in game
         GameState,

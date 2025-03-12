@@ -1,0 +1,34 @@
+#ifndef BINDINGS_CHANGE_PASSWORD_HPP
+#define BINDINGS_CHANGE_PASSWORD_HPP
+
+#include "binding_type.hpp"
+
+#include <nlohmann/json.hpp>
+#include <string>
+
+namespace bindings {
+
+    struct ChangePassword {
+        std::string password;
+
+        nlohmann::json to_json() const {
+            return nlohmann::json{{"type", BindingType::ChangePassword},
+                                  {"data",
+                                   {
+                                       {"password", password},
+                                   }}};
+        }
+
+        static ChangePassword from_json(const nlohmann::json &j) {
+            if (j.at("type") != BindingType::ChangePassword) {
+                throw std::runtime_error("Invalid type field in JSON");
+            }
+
+            const auto &data = j.at("data");
+            return ChangePassword{data.at("password").get<std::string>()};
+        }
+    };
+
+} // namespace bindings
+
+#endif // BINDINGS_CHANGE_PASSWORD_HPP
