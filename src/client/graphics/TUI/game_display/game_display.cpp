@@ -84,10 +84,10 @@ ftxui::Color getFTXUIColor(Color color) {
     return returnValue;
 }
 
-// constructor
-GameDisplay::GameDisplay(ftxui::ScreenInteractive &screen,
-                         Controller &controller)
-    : screen_{screen}, controller_(controller) {
+// constructor 
+
+GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
+    : screenManager_(screenManager), controller_(controller) {
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};
@@ -143,7 +143,8 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 
 void GameDisplay::displayLeftWindow() {
     ftxui::Component menuDisplay = ftxui::Button(
-        "Quit Game", [&] { screen_.ExitLoopClosure()(); }, GlobalButtonStyle());
+        "Quit Game", [&] { screenManager_.stopRender(); },
+        GlobalButtonStyle());
 
     if (controller_.getGameMode() == GameMode::RoyalCompetition) {
         drawPlayerInfo();
@@ -438,5 +439,5 @@ void GameDisplay::render() {
         return ftxui::vbox({displayWindow_->Render()}) | ftxui::center;
     });
 
-    screen_.Loop(handleCtrl(finalDisplay));
+    screenManager_.render(finalDisplay);
 }

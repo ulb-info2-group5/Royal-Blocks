@@ -21,9 +21,9 @@
  #include <thread>
  
  // ### Constructor ###
- LoginInput::LoginInput(ftxui::ScreenInteractive &screen, Controller &controller,
+ LoginInput::LoginInput(ScreenManager &screenManager, Controller &controller,
                         std::string title, LoginType loginType)
-     : screen_(screen), controller_(controller), title_(title),
+     : screenManager_(screenManager), controller_(controller), title_(title),
        loginType_(loginType), loginState_(LoginState::NONE) {
  
      createButtonBack();
@@ -33,8 +33,8 @@
      inputUsername_ = ftxui::Input(&username_, "Enter username") | ftxui::borderHeavy | 
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
-            screen_.PostEvent(ftxui::Event::Tab); // Simule un Tab pour passer au champ suivant
-            return true; // Empêche l'entrée d'une nouvelle ligne
+            screenManager_.simulateTab(); // Move to the next input
+            return true;
         }
         return false;
     });
@@ -42,8 +42,8 @@
      inputPassword_ = ftxui::Input(&password_, "Enter password", PasswordInputOption()) | ftxui::borderHeavy |
      ftxui::CatchEvent([this](const ftxui::Event& event) {
         if (event == ftxui::Event::Return) {
-            buttonSubmit_->OnEvent(event); // Simuler un clic sur "Submit"
-            return true; // Empêcher le retour à la ligne
+            buttonSubmit_->OnEvent(event); // Submit the username and password
+            return true;
         }
         return false;
     });
@@ -57,7 +57,7 @@
                        [&] {
                            clearInfo();
                            loginState_ = LoginState::BACK;
-                           screen_.ExitLoopClosure()();
+                           screenManager_.stopRender();
                        }, GlobalButtonStyle());
  }
  
@@ -74,13 +74,13 @@
                          std::this_thread::sleep_for(std::chrono::milliseconds(100));
                          if (controller_.getRegistrationState() == Controller::RegistrationState::Registered) {
                              loginState_ = LoginState::SUBMIT;
-                             screen_.ExitLoopClosure()();
+                             screenManager_.stopRender();
                              return;
                          }
                      }
                      clearInfo();
                      msg_ = "Registration failed! Try again.";
-                     screen_.PostEvent(ftxui::Event::Custom); // Post event to update screen
+                     screenManager_.forceRefresh(); // Post event to update screen
                  }).detach();
  
              } else if (loginType_ == LoginType::LOGIN) {
@@ -92,13 +92,13 @@
                          std::this_thread::sleep_for(std::chrono::milliseconds(100));
                          if (controller_.getAuthState() == Controller::AuthState::Authenticated) {
                              loginState_ = LoginState::SUBMIT;
-                             screen_.ExitLoopClosure()();
+                             screenManager_.stopRender();
                              return;
                          }
                      }
                      clearInfo();
                      msg_ = "Incorrect username or password!";
-                     screen_.PostEvent(ftxui::Event::Custom); // Post event to update screen
+                     screenManager_.forceRefresh(); // Post event to update screen
                  }).detach();
              }
              clearInfo();
@@ -172,7 +172,7 @@
  LoginState LoginInput::render() {
      displayWindow();
  
-     screen_.Loop(handleCtrl(displayWindow_));
+     screenManager_.render(displayWindow_);
  
      return loginState_;
  }

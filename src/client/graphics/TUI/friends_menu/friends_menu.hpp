@@ -18,6 +18,8 @@
 
 class Controller; // Forward declaration
 
+class ScreenManager; // Forward declaration
+
 enum class FriendsManagerState {
     ADD_FRIEND,
     REMOVE_FRIEND,
@@ -28,7 +30,7 @@ enum class FriendsManagerState {
 
 class FriendsMenu {
   private:
-    ftxui::ScreenInteractive &screen_;
+    ScreenManager &screenManager_;
     Controller &controller_;
     std::string friendNameBuffer_;
     bool exit_; // Boolean to exit the friends menu
@@ -65,7 +67,7 @@ class FriendsMenu {
     /*
      * @brief Construct a new Friends Manager object
      */
-    FriendsMenu(ftxui::ScreenInteractive &screen, Controller &controller);
+    FriendsMenu(ScreenManager &screenManager, Controller &controller);
 
     /*
      * @brief Destroy the Friends Manager object

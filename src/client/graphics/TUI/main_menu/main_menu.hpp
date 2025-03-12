@@ -25,6 +25,8 @@
 
 class Controller; // Forward declaration
 
+class ScreenManager; // Forward declaration
+
 // enum class MainMenuState {
 //     CREATE_GAME,
 //     JOIN_GAME,
@@ -46,7 +48,7 @@ class MainMenu : public IMain_Menu {
     /*
      * @brief The screen to use to render the components
      */
-    ftxui::ScreenInteractive &screen_;
+    ScreenManager &screenManager_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -124,7 +126,7 @@ class MainMenu : public IMain_Menu {
      *
      * @param screen The screen to use to render the components
      */
-    MainMenu(ftxui::ScreenInteractive &screen, Controller &controller);
+    MainMenu(ScreenManager &screenManager, Controller &controller);
 
     /*
      * @brief Destroy the Main Menu object

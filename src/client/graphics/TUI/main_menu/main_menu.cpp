@@ -10,16 +10,17 @@
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../messaging/messaging.hpp"
+#include "graphics/TUI/screen_manager.hpp"
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/dom/elements.hpp>
 
 // ### Constructor ###
-MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
-    : screen_(screen), controller_(controller), state_(MainMenuState::NONE),
-      friendsMenu_(screen, controller), messagingMenu_(screen, controller),
-      gameMenu_(screen, controller) {
+MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
+    : screenManager_(screenManager), controller_(controller), state_(MainMenuState::NONE),
+      friendsMenu_(screenManager_, controller), messagingMenu_(screenManager_, controller),
+      gameMenu_(screenManager, controller) {
 
     createMainMenuButtons();
 
@@ -27,7 +28,7 @@ MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         "Back",
         [&] {
             state_ = MainMenuState::BACK;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -91,7 +92,7 @@ void MainMenu::createMainMenuButtons() {
         "▶ Create a game",
         [&] {
             state_ = MainMenuState::CREATE_GAME;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -99,7 +100,7 @@ void MainMenu::createMainMenuButtons() {
         "▶ Join a game",
         [&] {
             state_ = MainMenuState::JOIN_GAME;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -107,7 +108,7 @@ void MainMenu::createMainMenuButtons() {
         "💬 Messages",
         [&] {
             state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -115,7 +116,7 @@ void MainMenu::createMainMenuButtons() {
         "🏆 Leaderboard",
         [&] {
             state_ = MainMenuState::LOOK_RANKING;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -123,7 +124,7 @@ void MainMenu::createMainMenuButtons() {
         "⚙ Manage Profile",
         [&] {
             state_ = MainMenuState::MANAGE_PROFILE;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -131,7 +132,7 @@ void MainMenu::createMainMenuButtons() {
         "👥 Manage friends list",
         [&] {
             state_ = MainMenuState::MANAGE_FRIENDS_LIST;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -139,7 +140,7 @@ void MainMenu::createMainMenuButtons() {
         "Quit the game",
         [&] {
             state_ = MainMenuState::EXIT;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -245,7 +246,7 @@ void MainMenu::displayProfileManagerButton() {
         "Submit",
         [&] {
             controller_.changeProfile(username_, password_); // profile screen
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -280,21 +281,21 @@ void MainMenu::renderRanking() {
 
     displayRankingWindow();
 
-    screen_.Loop(handleCtrl(rankingWindow_));
+    screenManager_.render(rankingWindow_);
 }
 
 void MainMenu::renderProfileManager() {
 
     displayProfileManagerWindow();
 
-    screen_.Loop(handleCtrl(profileManagerWindow_));
+    screenManager_.render(profileManagerWindow_);
 }
 
 // ### Public methods ###
 void MainMenu::render() {
     while (state_ != MainMenuState::EXIT) {
         displayMainWindow();
-        screen_.Loop(handleCtrl(mainMenuWindow_));
+        screenManager_.render(mainMenuWindow_);
         handleChoice();
     }
 }

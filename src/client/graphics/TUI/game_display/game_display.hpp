@@ -22,11 +22,13 @@ constexpr uint32_t WIDTH_PLAYER_CANVAS = 70, HEIGHT_PLAYER_CANVAS = 140,
 
 class Controller; // Forward declaration
 
+class ScreenManager; // Forward declaration
+
 ftxui::Color getFTXUIColor(Color color);
 
 class GameDisplay : public IGame {
   private:
-    ftxui::ScreenInteractive &screen_;
+    ScreenManager &screenManager_;
 
     Controller &controller_;
 
@@ -72,7 +74,7 @@ class GameDisplay : public IGame {
     void handleKeys() override;
 
   public:
-    GameDisplay(ftxui::ScreenInteractive &screen, Controller &controller);
+    GameDisplay(ScreenManager &screenManager, Controller &controller);
 
     ~GameDisplay() = default;
 

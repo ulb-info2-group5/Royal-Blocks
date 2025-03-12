@@ -21,6 +21,8 @@
 
 class Controller; // Forward declaration
 
+class ScreenManager; // Forward declaration
+
 /**
  * @brief LoginInput class to get the login input or register input from the
  * user
@@ -31,7 +33,7 @@ class LoginInput : public ILogin_Input {
     /*
      * @brief The screen to use to render the components
      */
-    ftxui::ScreenInteractive &screen_;
+     ScreenManager &screenManager_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -48,6 +50,9 @@ class LoginInput : public ILogin_Input {
      */
     LoginType loginType_;
 
+    /*
+     * @brief The state of the login input
+     */
     LoginState loginState_;
 
     /*
@@ -92,7 +97,7 @@ class LoginInput : public ILogin_Input {
      * @param screen The screen to use to render the components
      * @param title The title of the input screen (Login or Register)
      */
-    LoginInput(ftxui::ScreenInteractive &screen, Controller &controller,
+    LoginInput(ScreenManager &screenManager, Controller &controller,
                std::string title, LoginType loginType);
 
     /*

@@ -14,9 +14,11 @@
 #include <vector>
 
 #include "../../IMessage.hpp"
-#include "core/in_game/player_state/player_state_external.hpp"
+#include "../../../core/in_game/player_state/player_state_external.hpp"
 
 class Controller; // Forward declaration
+
+class ScreenManager; // Forward declaration
 
 /**
  * @brief Enum class to represent the state of the messaging
@@ -37,7 +39,7 @@ class Messaging final : public IMessage {
     /*
      * @brief The screen to use to render the components
      */
-    ftxui::ScreenInteractive &screen_;
+    ScreenManager &screenManager_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -89,7 +91,7 @@ class Messaging final : public IMessage {
      * @param screen The screen to use to render the components
      * @param friends The list of friends to display in the messaging screen
      */
-    Messaging(ftxui::ScreenInteractive &screen, Controller &controller);
+    Messaging(ScreenManager &screenManager, Controller &controller);
 
     /*
      * @brief Destroy the Messaging object

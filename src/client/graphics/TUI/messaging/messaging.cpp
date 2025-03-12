@@ -5,6 +5,7 @@
 #include "core/in_game/player_state/player_state_external.hpp"
 
 #include "../../../../common/bindings/message.hpp"
+#include "graphics/TUI/screen_manager.hpp"
 #include <ftxui/dom/elements.hpp>
 #include <optional>
 
@@ -12,8 +13,8 @@
 // message, etc. with the server.
 
 // ### constructor ###
-Messaging::Messaging(ftxui::ScreenInteractive &screen, Controller &controller)
-    : screen_(screen), controller_(controller) {
+Messaging::Messaging(ScreenManager &screenManager, Controller &controller)
+    : screenManager_(screenManager), controller_(controller) {
     userState_ = MessagingState::NONE;
     createButtons();
 }
@@ -52,7 +53,7 @@ void Messaging::createButtons() {
             newMessageBuffer_.clear();
             newFriendBuffer_.clear();
             userState_ = MessagingState::BACK;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -196,5 +197,5 @@ std::optional<PlayerID> Messaging::getSelectedFriendId() {
 // ### public methods ###
 void Messaging::render() {
     drawWindow();
-    screen_.Loop(handleCtrl(displayWindow_));
+    screenManager_.render(displayWindow_);
 }

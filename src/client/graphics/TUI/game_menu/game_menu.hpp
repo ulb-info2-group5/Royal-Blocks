@@ -15,12 +15,14 @@
 #include <memory>
 
 #include "../../IGame_Menu.hpp"
-#include "../game_display/game_display.hpp"
+#include "../game_display/game_display.hpp" 
 #include "game_mode/game_mode.hpp"
 
 using PlayerID = size_t;
 
 class Controller; // Forward declaration
+
+class ScreenManager; // Forward declaration
 
 /**
  * @brief Game menu class to show and select the game party
@@ -28,7 +30,7 @@ class Controller; // Forward declaration
  */
 class GameMenu : public IGame_Menu {
   private:
-    ftxui::ScreenInteractive &screen_;
+    ScreenManager &screenManager_;
     Controller &controller_;
 
     std::unique_ptr<GameDisplay> gameDisplay_;
@@ -113,7 +115,7 @@ class GameMenu : public IGame_Menu {
      *
      * @param screen
      */
-    GameMenu(ftxui::ScreenInteractive &screen, Controller &controller);
+    GameMenu(ScreenManager &screenManager, Controller &controller);
 
     /*
      * @brief Destroy the Game Menu object

@@ -9,27 +9,25 @@
 #include "game_menu.hpp"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <optional>
-#include <vector>
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 #include "ftxui/component/component.hpp"
-#include "game_mode/game_mode.hpp"
+#include "graphics/TUI/screen_manager.hpp"
 
 // ### Constructor ###
 
-GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
-    : screen_(screen), controller_(controller), joinType_(JoinType::NONE),
+GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
+    : screenManager_(screenManager), controller_(controller), joinType_(JoinType::NONE),
       typeGame_(TypeGame::NONE), quitMenu_(false) {
 
-    gameDisplay_ = std::make_unique<GameDisplay>(screen_, controller_);
+    gameDisplay_ = std::make_unique<GameDisplay>(screenManager_, controller_);
 
     endlessButon_ = ftxui::Button(
         "Endless",
         [&] {
             gameMode_ = GameMode::Endless;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -37,7 +35,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         "Duel",
         [&] {
             gameMode_ = GameMode::Dual;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -45,7 +43,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         "Classic",
         [&] {
             gameMode_ = GameMode::Classic;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -53,7 +51,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         "Royal",
         [&] {
             gameMode_ = GameMode::RoyalCompetition;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -61,7 +59,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         "Back",
         [&] {
             joinType_ = JoinType::BACK;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -70,7 +68,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         [&] {
             quitMenu_ = true;
             joinType_ = JoinType::BACK;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -103,7 +101,7 @@ void GameMenu::renderAllGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 
     if (!quitMenu_) {
         joinFriendOrRandomScreen();
@@ -134,7 +132,7 @@ void GameMenu::renderOnlineGames() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 
     if (!quitMenu_) {
         selectPlayerCountScreen();
@@ -151,7 +149,7 @@ void GameMenu::joinFriendOrRandomScreen() {
         "Join a friend",
         [&] {
             joinType_ = JoinType::FRIEND;
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
     ftxui::Component joinRandomButton = ftxui::Button(
@@ -159,7 +157,7 @@ void GameMenu::joinFriendOrRandomScreen() {
         [&] {
             joinType_ = JoinType::RANDOM;
             controller_.joinGame(gameMode_, std::nullopt);
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -180,14 +178,14 @@ void GameMenu::joinFriendOrRandomScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
 
 void GameMenu::handleChoice() {
     if (gameMode_ == GameMode::Endless) {
         quitMenu_ = true; // Set the quitMenu_ variable to true to exit the menu
                           // loop when the game is finished
-        screen_.ExitLoopClosure()();
+        screenManager_.stopRender();
         gameDisplay_->render(); // Endless mode is directly started without
                                 // waiting for a friend or a random game
         return;
@@ -263,7 +261,7 @@ void GameMenu::joinFriendScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
 
 void GameMenu::joinRandomScreen() {
@@ -279,7 +277,7 @@ void GameMenu::joinRandomScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
 
 void GameMenu::matchmakingScreen() {
@@ -295,7 +293,7 @@ void GameMenu::matchmakingScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
 
 ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,
@@ -305,7 +303,7 @@ ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,
         [this, playerId] {
             controller_.joinGame(gameMode_, playerId);
             waitingFriendScreen();
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -324,7 +322,7 @@ void GameMenu::waitingFriendScreen() {
                    | ftxui::bgcolor(ftxui::Color::Black);
         });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
 
 // ### Public methods ###
@@ -357,7 +355,7 @@ void GameMenu::selectPlayerCountScreen() {
     if (gameMode_ == GameMode::Dual) {
         controller_.createGame(gameMode_, 2);
         matchmakingScreen();
-        screen_.ExitLoopClosure()();
+        screenManager_.stopRender();
         return;
     }
     const int minPlayers = 3;
@@ -383,7 +381,7 @@ void GameMenu::selectPlayerCountScreen() {
         [&] {
             controller_.createGame(gameMode_, playerCount);
             matchmakingScreen();
-            screen_.ExitLoopClosure()();
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -417,5 +415,5 @@ void GameMenu::selectPlayerCountScreen() {
                | ftxui::bgcolor(ftxui::Color::Black);
     });
 
-    screen_.Loop(handleCtrl(renderer));
+    screenManager_.render(renderer);
 }
