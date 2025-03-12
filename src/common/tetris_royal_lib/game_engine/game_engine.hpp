@@ -3,9 +3,13 @@
 
 #include "../game_state/game_state.hpp"
 
+#include "../effect_price/effect_price.hpp"
+#include "../game_mode/game_mode.hpp"
 #include "effect/penalty/penalty_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "player_state/player_state.hpp"
+#include "player_tetris/player_tetris.hpp"
+#include "tetris/tetris.hpp"
 #include "tetromino/tetromino.hpp"
 
 #include <array>

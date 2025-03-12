@@ -1,6 +1,5 @@
 #include "game_engine.hpp"
 #include "../effect/bonus/slow_down.hpp"
-#include "../effect_price/effect_price.cpp"
 #include "../game_mode/game_mode.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "effect/penalty/penalty_type.hpp"

@@ -1,4 +1,5 @@
 #include "game_state.hpp"
+#include "effect/bonus/bonus_type.hpp"
 #include "game_engine/game_engine.hpp"
 #include "nlohmann/json_fwd.hpp"
 #include "player_tetris/player_tetris.hpp"
@@ -79,6 +80,26 @@ nlohmann::json GameState::serializeFor(PlayerID playerID) const {
             j["self"] = playerTetris.serializeSelf();
         } else {
             j["externals"].push_back(playerTetris.serializeExternal());
+        }
+    }
+
+    // add the effects that the players can buy with their price
+    j["bonusToPrice"] = nlohmann::json::array();
+    j["bonusToPrice"] = nlohmann::json::array();
+    if (GameEngine::checkFeatureEnabled(gameMode_,
+                                        GameEngine::GameModeFeature::Effects)) {
+        // bonuses
+        for (size_t i = 0; i < static_cast<size_t>(BonusType::NumBonusType);
+             i++) {
+            BonusType bonusType = static_cast<BonusType>(i);
+            j["bonusToPrice"].push_back({bonusType, getEffectPrice(bonusType)});
+        }
+        // penalties
+        for (size_t i = 0; i < static_cast<size_t>(PenaltyType::NumPenaltyType);
+             i++) {
+            PenaltyType penaltyType = static_cast<PenaltyType>(i);
+            j["penaltyToPrice"].push_back(
+                {penaltyType, getEffectPrice(penaltyType)});
         }
     }
 
