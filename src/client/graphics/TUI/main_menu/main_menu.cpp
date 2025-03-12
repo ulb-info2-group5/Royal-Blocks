@@ -142,33 +142,33 @@ void MainMenu::createMainMenuButtons() {
 }
 
 void MainMenu::displayMainWindow() {
-    ftxui::Component buttonDisplay = ftxui::Container::Vertical({
-        buttonPlay_,
-        buttonJoinGame_,
-        buttonSendMessagesToFriends_,
-        buttonLookRanking_,
-        buttonManageProfile_,
-        buttonManageFriendsList_,
-        buttonExit_,
-    });
-
-    mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
-        return ftxui::vbox({
-                   ftxui::text(std::string(STR_MAIN_MENU)) | ftxui::bold
-                       | ftxui::center | ftxui::color(ftxui::Color::Cyan),
-                   ftxui::separator(),
-                   ftxui::text(std::string(STR_WELCOME)) | ftxui::center,
-                   ftxui::separator(),
-                   buttonPlay_->Render(),
-                   buttonJoinGame_->Render(),
-                   buttonSendMessagesToFriends_->Render(),
-                   buttonLookRanking_->Render(),
-                   buttonManageProfile_->Render(),
-                   buttonManageFriendsList_->Render(),
-                   buttonExit_->Render(),
-               })
-               | ftxui::borderHeavy | ftxui::center;
-    });
+    mainMenuWindow_ = ftxui::Renderer(
+        ftxui::Container::Vertical({
+            buttonPlay_,
+            buttonJoinGame_,
+            buttonSendMessagesToFriends_,
+            buttonLookRanking_,
+            buttonManageProfile_,
+            buttonManageFriendsList_,
+            buttonExit_,
+        }),
+        [&] {
+            return ftxui::vbox({
+                       ftxui::text(std::string(STR_MAIN_MENU)) | ftxui::bold
+                           | ftxui::center | ftxui::color(ftxui::Color::Cyan),
+                       ftxui::separator(),
+                       ftxui::text(std::string(STR_WELCOME)) | ftxui::center,
+                       ftxui::separator(),
+                       buttonPlay_->Render(),
+                       buttonJoinGame_->Render(),
+                       buttonSendMessagesToFriends_->Render(),
+                       buttonLookRanking_->Render(),
+                       buttonManageProfile_->Render(),
+                       buttonManageFriendsList_->Render(),
+                       buttonExit_->Render(),
+                   })
+                   | ftxui::borderHeavy | ftxui::center;
+        });
 }
 
 void MainMenu::displayRankingList() {
@@ -209,21 +209,21 @@ void MainMenu::displayRankingList() {
 void MainMenu::displayRankingWindow() {
     displayRankingList();
 
-    ftxui::Component container = ftxui::Container::Vertical({
-        buttonBack_,
-    });
-
-    rankingWindow_ = ftxui::Renderer(container, [&] {
-        return ftxui::vbox({
-                   ftxui::text(std::string(STR_ENDLESS_RANKING)) | ftxui::bold
-                       | ftxui::center,
-                   ftxui::separator(),
-                   ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
-                   ftxui::separator(),
-                   buttonBack_->Render(),
-               })
-               | ftxui::borderHeavy | ftxui::center;
-    });
+    rankingWindow_ = ftxui::Renderer(
+        ftxui::Container::Vertical({
+            buttonBack_,
+        }),
+        [&] {
+            return ftxui::vbox({
+                       ftxui::text(std::string(STR_ENDLESS_RANKING))
+                           | ftxui::bold | ftxui::center,
+                       ftxui::separator(),
+                       ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
+                       ftxui::separator(),
+                       buttonBack_->Render(),
+                   })
+                   | ftxui::borderHeavy | ftxui::center;
+        });
 }
 
 void MainMenu::displayProfileManagerButton() {
@@ -249,29 +249,28 @@ void MainMenu::displayProfileManagerButton() {
 }
 
 void MainMenu::displayProfileManagerWindow() {
-
     displayProfileManagerButton();
 
-    ftxui::Component container =
+    profileManagerWindow_ = ftxui::Renderer(
         ftxui::Container::Vertical({inputChangeUsername_, inputChangePassword_,
-                                    submitButton_, buttonBack_});
-
-    profileManagerWindow_ = ftxui::Renderer(container, [&] {
-        return ftxui::vbox({
-                   ftxui::text(std::string(STR_PROFILE_MANAGER)) | ftxui::bold
-                       | ftxui::center,
-                   ftxui::separator(),
-                   ftxui::text(std::string(STR_CHANGE_INFO)) | ftxui::center,
-                   ftxui::separator(),
-                   inputChangeUsername_->Render(),
-                   inputChangePassword_->Render(),
-                   ftxui::separator(),
-                   submitButton_->Render(),
-                   ftxui::separator(),
-                   buttonBack_->Render(),
-               })
-               | ftxui::borderHeavy | ftxui::center;
-    });
+                                    submitButton_, buttonBack_}),
+        [&] {
+            return ftxui::vbox({
+                       ftxui::text(std::string(STR_PROFILE_MANAGER))
+                           | ftxui::bold | ftxui::center,
+                       ftxui::separator(),
+                       ftxui::text(std::string(STR_CHANGE_INFO))
+                           | ftxui::center,
+                       ftxui::separator(),
+                       inputChangeUsername_->Render(),
+                       inputChangePassword_->Render(),
+                       ftxui::separator(),
+                       submitButton_->Render(),
+                       ftxui::separator(),
+                       buttonBack_->Render(),
+                   })
+                   | ftxui::borderHeavy | ftxui::center;
+        });
 }
 
 void MainMenu::renderRanking() {
