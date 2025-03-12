@@ -394,11 +394,14 @@ void GameDisplay::drawMultiMode() {
 }
 
 void GameDisplay::handleKeys() {
-
     displayWindow_ = ftxui::CatchEvent(displayWindow_, [&](ftxui::Event event) {
         if (event == ftxui::Event::Return) { // Keep Enter key for his original action
             return false;
         } 
+
+        else if (event.is_mouse()) { // Do not handle mouse events
+            return false;
+        }
         
         else { // Handle other keys
             std::string keyPressed;
