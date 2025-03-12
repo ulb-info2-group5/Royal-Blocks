@@ -24,7 +24,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
       typeGame_(TypeGame::NONE), quitMenu_(false) {
 
     gameDisplay_ =
-        std::make_unique<GameDisplay>(screen_, controller_.getGameState());
+        std::make_unique<GameDisplay>(screen_, controller_, controller_.getGameState());
 
     endlessButon_ = ftxui::Button(
         "Endless",
@@ -39,7 +39,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         [&] {
             gameMode_ = GameMode::Dual;
             gameDisplay_ = std::make_unique<GameDisplay>(
-                screen_, controller_.getGameState());
+                screen_,controller_, controller_.getGameState());
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());
@@ -49,7 +49,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         [&] {
             gameMode_ = GameMode::Classic;
             gameDisplay_ = std::make_unique<GameDisplay>(
-                screen_, controller_.getGameState());
+                screen_,  controller_,controller_.getGameState());
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());
@@ -59,7 +59,7 @@ GameMenu::GameMenu(ftxui::ScreenInteractive &screen, Controller &controller)
         [&] {
             gameMode_ = GameMode::RoyalCompetition;
             gameDisplay_ = std::make_unique<GameDisplay>(
-                screen_, controller_.getGameState());
+                screen_,  controller_,controller_.getGameState());
             screen_.ExitLoopClosure()();
         },
         GlobalButtonStyle());

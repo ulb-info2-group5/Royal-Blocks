@@ -1,5 +1,6 @@
 #include "game_display.hpp"
 
+#include "core/controller/controller.hpp"
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/canvas.hpp" // for Canvas
@@ -8,7 +9,9 @@
 #include "game_mode/game_mode.hpp"
 #include "../../interfaceConstants.hpp"
 
+#include <cstdlib>
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/event.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
@@ -82,10 +85,10 @@ ftxui::Color getFTXUIColor(Color color) {
 }
 
 // constructor
-
-GameDisplay::GameDisplay(ftxui::ScreenInteractive &screen,
+ 
+GameDisplay::GameDisplay(ftxui::ScreenInteractive &screen, Controller &controller,
                          std::shared_ptr<client::GameStateWrapper> &pGameState)
-    : screen_{screen}, pGameState_(pGameState) {
+    : screen_{screen}, controller_(controller), pGameState_(pGameState) {
     // initialise for preview
     pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
                 "rafaou",   "jonas", "ernest",  "vanilla"};
@@ -390,6 +393,32 @@ void GameDisplay::drawMultiMode() {
     });
 }
 
+void GameDisplay::handleKeys() {
+
+    displayWindow_ = ftxui::CatchEvent(displayWindow_, [&](ftxui::Event event) {
+        if (event == ftxui::Event::Return) { // Keep Enter key for his original action
+            return false;
+        } 
+        
+        else { // Handle other keys
+            std::string keyPressed;
+            if (event == ftxui::Event::ArrowLeft) {
+                keyPressed = "ArrowLeft";
+            } else if (event == ftxui::Event::ArrowRight) {
+                keyPressed = "ArrowRight";
+            } else if (event == ftxui::Event::ArrowUp) {
+                keyPressed = "ArrowUp";
+            } else if (event == ftxui::Event::ArrowDown) {
+                keyPressed = "ArrowDown";
+            } else if (!event.character().empty()) {
+                keyPressed = event.input();
+            }
+            controller_.handleKeypress(keyPressed);
+            return true;
+        }
+    });
+}
+
 // public methods
 
 void GameDisplay::render() {
@@ -398,6 +427,8 @@ void GameDisplay::render() {
     } else {
         drawMultiMode();
     }
+
+    handleKeys();
 
     // Center the displayWindow_
     ftxui::Component finalDisplay = ftxui::Renderer(displayWindow_, [&] {

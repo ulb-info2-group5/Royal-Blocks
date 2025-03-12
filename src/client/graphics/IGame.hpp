@@ -27,6 +27,8 @@ class IGame {
 
     virtual void drawMultiMode() = 0;
 
+    virtual void handleKeys() = 0;
+
   public:
     virtual ~IGame() = default;
 

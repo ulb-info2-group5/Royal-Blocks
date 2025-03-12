@@ -30,6 +30,8 @@ class GameDisplay : public IGame {
   private:
     ftxui::ScreenInteractive &screen_;
 
+    Controller &controller_;
+
     std::shared_ptr<client::GameStateWrapper> pGameState_;
 
     // TODO: remove this
@@ -71,8 +73,10 @@ class GameDisplay : public IGame {
 
     void drawMultiMode() override;
 
+    void handleKeys() override;
+
   public:
-    GameDisplay(ftxui::ScreenInteractive &screen,
+    GameDisplay(ftxui::ScreenInteractive &screen, Controller &controller,
                 std::shared_ptr<client::GameStateWrapper> &pGameState);
 
     ~GameDisplay() = default;
