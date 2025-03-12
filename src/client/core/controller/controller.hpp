@@ -9,6 +9,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "../../common/bindings/ranking.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../common/bindings/conversations.hpp"
 #include "../common/bindings/friends_list.hpp"
@@ -22,6 +23,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <vector>
 
 using Score = size_t;
@@ -55,9 +57,9 @@ class Controller {
 
     std::mutex mutex_;
 
-    bindings::FriendsList friendsList_;
-    bindings::Conversations conversations_;
-    bindings::Ranking ranking_;
+    std::vector<bindings::User> friendsList_;
+    std::unordered_map<PlayerID, NameConversation> conversationsById_;
+    std::vector<std::pair<std::string, Score>> ranking_;
 
     /*
      * @brief The network manager to manage the connection with the server
@@ -122,7 +124,7 @@ class Controller {
     /*
      * @brief Get the ranking of the players of the Endless mode
      */
-    const bindings::Ranking &getRanking() const;
+    const std::vector<std::pair<std::string, Score>> &getRanking() const;
 
     /*
      * @brief Change the profile of the user by changing the username and
@@ -137,7 +139,7 @@ class Controller {
     /*
      * @brief Get the friends list of the user
      */
-    const bindings::FriendsList &getFriendsList() const;
+    const std::vector<bindings::User> &getFriendsList() const;
 
     /*
      * @brief Add a friend to the friends list of the user

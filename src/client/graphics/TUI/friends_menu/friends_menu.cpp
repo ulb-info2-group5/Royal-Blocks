@@ -31,7 +31,7 @@ FriendsMenu::FriendsMenu(ftxui::ScreenInteractive &screen,
 void FriendsMenu::render() {
     while (!exit_) {
         const std::vector<bindings::User> &friendsList =
-            controller_.getFriendsList().friendsList;
+            controller_.getFriendsList();
 
         std::vector<ftxui::Component> friendsButton = displayFriendButtons(
             friendsList); // Display the friends list as buttons

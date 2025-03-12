@@ -71,7 +71,8 @@ void Messaging::createButtons() {
 void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend") | ftxui::center | ftxui::borderHeavy;
+    addFriendInput_ = ftxui::Input(&newFriendBuffer_, "Name of the friend")
+                      | ftxui::center | ftxui::borderHeavy;
     // attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
@@ -94,7 +95,7 @@ void Messaging::drawMenu() {
 
     friendNames_.clear();
 
-    auto &friendsList = controller_.getFriendsList().friendsList;
+    auto &friendsList = controller_.getFriendsList();
 
     // NOTE: if we do not resize first, it will insert out of the vector ->
     // memory problems
@@ -122,23 +123,26 @@ void Messaging::drawDisplay() {
 
     chatDisplay_ = ftxui::Renderer([&] {
         return getSelectedFriendId()
-            .and_then([this](auto id) -> std::optional<ftxui::Element> {
-                ftxui::Elements chat_elements;
+                   .and_then([this](auto id) -> std::optional<ftxui::Element> {
+                       ftxui::Elements chat_elements;
 
-                auto &[name, conversation] =
-                    controller_.getConversationWith(id);
+                       auto &[name, conversation] =
+                           controller_.getConversationWith(id);
 
-                for (auto &[senderId, message] : conversation.senderMessages) {
+                       for (auto &[senderId, message] :
+                            conversation.senderMessages) {
 
-                    // TODO: display our own messages with a different color
-                    chat_elements.push_back(
-                        ftxui::text(message) | ftxui::bold
-                        | ftxui::color(ftxui::Color::Yellow));
-                }
+                           // TODO: display our own messages with a different
+                           // color
+                           chat_elements.push_back(
+                               ftxui::text(message) | ftxui::bold
+                               | ftxui::color(ftxui::Color::Yellow));
+                       }
 
-                return ftxui::vbox(chat_elements) | ftxui::flex;
-            })
-            .value_or(ftxui::text("No conversation")) | ftxui::bold | ftxui::center;
+                       return ftxui::vbox(chat_elements) | ftxui::flex;
+                   })
+                   .value_or(ftxui::text("No conversation"))
+               | ftxui::bold | ftxui::center;
     });
 }
 
@@ -196,11 +200,12 @@ void Messaging::drawWindow() {
 }
 
 std::optional<PlayerID> Messaging::getSelectedFriendId() {
-    return (controller_.getFriendsList().friendsList.empty())
+    const std::vector<bindings::User> &friendsList =
+        controller_.getFriendsList();
+
+    return (friendsList.empty())
                ? std::nullopt
-               : std::make_optional(controller_.getFriendsList()
-                                        .friendsList.at(selectedFriend_)
-                                        .playerId);
+               : std::make_optional(friendsList.at(selectedFriend_).playerId);
 }
 
 // ### public methods ###

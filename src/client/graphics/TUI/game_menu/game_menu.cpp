@@ -226,7 +226,7 @@ void GameMenu::handleChoice() {
 
 void GameMenu::joinFriendScreen() {
     const std::vector<bindings::User> &friendsList =
-        controller_.getFriendsList().friendsList;
+        controller_.getFriendsList();
 
     std::vector<ftxui::Component> friendButtons;
 

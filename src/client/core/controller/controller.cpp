@@ -62,12 +62,13 @@ void Controller::handlePacket(const std::string &pack) {
     }
 
     case bindings::BindingType::FriendsList: {
-        friendsList_ = bindings::FriendsList::from_json(j);
+        friendsList_ = bindings::FriendsList::from_json(j).friendsList;
         break;
     }
 
     case bindings::BindingType::Conversations: {
-        conversations_ = bindings::Conversations::from_json(j);
+        conversationsById_ =
+            bindings::Conversations::from_json(j).conversationsById;
         break;
     }
 
@@ -78,7 +79,7 @@ void Controller::handlePacket(const std::string &pack) {
     }
 
     case bindings::BindingType::Ranking: {
-        ranking_ = bindings::Ranking::from_json(j);
+        ranking_ = bindings::Ranking::from_json(j).ranking;
         break;
     }
 
@@ -147,14 +148,17 @@ void Controller::tryLogin(const std::string &username,
         bindings::Authentication{username, password}.to_json().dump());
 }
 
-const bindings::Ranking &Controller::getRanking() const { return ranking_; }
+const std::vector<std::pair<std::string, Score>> &
+Controller::getRanking() const {
+    return ranking_;
+}
 
 void Controller::changeProfile(const std::string &username,
                                const std::string &password) const {
     // TODO
 }
 
-const bindings::FriendsList &Controller::getFriendsList() const {
+const std::vector<bindings::User> &Controller::getFriendsList() const {
     return friendsList_;
 }
 
@@ -172,11 +176,11 @@ void Controller::sendMessage(PlayerID recipientId, const std::string &message) {
 }
 
 const NameConversation &Controller::getConversationWith(PlayerID playerID) {
-    if (!conversations_.conversationsById.contains(playerID)) {
-        conversations_.conversationsById[playerID] = {};
+    if (!conversationsById_.contains(playerID)) {
+        conversationsById_[playerID] = {};
     }
 
-    return conversations_.conversationsById.at(playerID);
+    return conversationsById_.at(playerID);
 }
 
 void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {

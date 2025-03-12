@@ -14,7 +14,6 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <vector>
 
 // ### Constructor ###
 MainMenu::MainMenu(ftxui::ScreenInteractive &screen, Controller &controller)
@@ -195,8 +194,8 @@ void MainMenu::displayRankingList() {
     }));
     rowsRanking_.push_back(ftxui::separator());
 
-    const auto &ranking = controller_.getRanking().ranking;
-    for (auto [rank, player] : std::views::enumerate(ranking)) {
+    for (auto [rank, player] :
+         std::views::enumerate(controller_.getRanking())) {
         const auto &[user, score] = player;
 
         rowsRanking_.push_back(ftxui::hbox({
