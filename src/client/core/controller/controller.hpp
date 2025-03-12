@@ -134,7 +134,7 @@ class Controller {
      * @param password The new password of the user
      */
     void changeProfile(const std::string &username,
-                       const std::string &password) const;
+                       const std::string &password);
 
     /*
      * @brief Get the friends list of the user

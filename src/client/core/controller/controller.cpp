@@ -15,6 +15,8 @@
 
 #include "../../common/bindings/authentication.hpp"
 #include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/change_password.hpp"
+#include "../../common/bindings/change_username.hpp"
 #include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/friend_request.hpp"
 #include "../../common/bindings/in_game/big_drop.hpp"
@@ -154,8 +156,9 @@ Controller::getRanking() const {
 }
 
 void Controller::changeProfile(const std::string &username,
-                               const std::string &password) const {
-    // TODO
+                               const std::string &password) {
+    networkManager_.send(bindings::ChangeUsername{username}.to_json().dump());
+    networkManager_.send(bindings::ChangePassword{password}.to_json().dump());
 }
 
 const std::vector<bindings::User> &Controller::getFriendsList() const {
