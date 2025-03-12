@@ -79,11 +79,10 @@ void Messaging::drawInputUser() {
 void Messaging::drawMenu() {
     drawInputUser();
 
-    friendNames_.clear();
-
     auto &friendsList = controller_.getFriendsList();
 
-    // NOTE: if we do not resize first, it will insert out of the vector ->
+    friendNames_.clear();
+    // NOTE: if we do not resize first, it will push_back out of the vector ->
     // memory problems
     friendNames_.resize(friendsList.size());
     std::transform(friendsList.begin(), friendsList.end(), friendNames_.begin(),
