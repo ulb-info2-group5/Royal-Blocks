@@ -85,7 +85,7 @@ nlohmann::json GameState::serializeFor(PlayerID playerID) const {
 
     // add the effects that the players can buy with their price
     j["bonusToPrice"] = nlohmann::json::array();
-    j["bonusToPrice"] = nlohmann::json::array();
+    j["penaltyToPrice"] = nlohmann::json::array();
     if (GameEngine::checkFeatureEnabled(gameMode_,
                                         GameEngine::GameModeFeature::Effects)) {
         // bonuses
