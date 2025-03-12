@@ -17,9 +17,9 @@
 #include <string>
 #include <vector>
 
-const uint32_t LENGTH_PLAYER = 4, LENGTH_OPPONENT = 2, PADDING = 10;
+const uint32_t LENGTH_PLAYER = 7, LENGTH_OPPONENT = 2, PADDING = 10;
 
-const uint32_t WIDTH_PLAYER_CANVAS = 40, HEIGHT_PLAYER_CANVAS = 80,
+const uint32_t WIDTH_PLAYER_CANVAS = 70, HEIGHT_PLAYER_CANVAS = 140,
                WIDTH_OP_CANVAS = 20, HEIGHT_OP_CANVAS = 40;
 
 class Controller; // Forward declaration

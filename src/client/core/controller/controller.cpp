@@ -105,7 +105,7 @@ Controller::Controller()
 
     // ---------------------------------
     // TODO: remove this
-    GameState gameState{GameMode::Endless, {PlayerState{0}}};
+    GameState gameState{GameMode::Classic, {PlayerState{0}, PlayerState{1}, PlayerState{2}, PlayerState{3}, PlayerState{4}, PlayerState{5}, PlayerState{6}, PlayerState{7}, PlayerState{8}}};
 
     pGameState_->gameState.deserialize(gameState.serializeFor(0));
     // ---------------------------------

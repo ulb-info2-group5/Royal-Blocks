@@ -286,7 +286,7 @@ void GameDisplay::displayOppponentsBoard() {
 
     ftxui::Components rows = {};
     uint32_t totalPlayers =
-        pGameState_->gameState.externals.size() + 1; // +1 for the self board
+        pGameState_->gameState.externals.size(); // +1 for the self board
 
     for (uint32_t i = 0; i < 3; ++i) {
         ftxui::Component line;
