@@ -22,7 +22,8 @@ void ScreenManager::run() {
 }
 
 void ScreenManager::render(ftxui::Component &component) {
-    screen_.Loop(handleCtrl(component));
+    currentWindow_ = component;
+    screen_.Loop(handleCtrl(currentWindow_));
 }
 
 void ScreenManager::stopRender() { screen_.ExitLoopClosure()(); }
@@ -30,6 +31,11 @@ void ScreenManager::stopRender() { screen_.ExitLoopClosure()(); }
 void ScreenManager::forceRefresh() { screen_.PostEvent(ftxui::Event::Custom); }
 
 void ScreenManager::simulateTab() { screen_.PostEvent(ftxui::Event::Tab); }
+
+void ScreenManager::updateScreen() {
+    screen_.ExitLoopClosure()();
+    screen_.Loop(handleCtrl(currentWindow_));
+}
 
 // ### Private methods ###
 

@@ -4,6 +4,7 @@
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
 
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
 class Controller; // Forward declaration
@@ -30,6 +31,11 @@ class ScreenManager {
      * @brief The main menu to show to the user
      */
     MainMenu mainMenu_;
+
+    /*
+     * @brief The current window to show to the user
+     */
+    ftxui::Component currentWindow_;
 
     /*
      * @brief Draw the start screen of the game with the title of the game
@@ -90,6 +96,11 @@ class ScreenManager {
      * @brief Simulate the tab key press
      */
     void simulateTab();
+
+    /*
+     * @brief Update the screen
+     */
+    void updateScreen();
 };
 
 #endif // SCREEN_MANAGER_HPP
