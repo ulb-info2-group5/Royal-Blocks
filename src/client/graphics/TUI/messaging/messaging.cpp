@@ -25,10 +25,6 @@ void Messaging::createButtons() {
         "Add a friend",
         [&] {
             controller_.sendFriendRequest(newFriendBuffer_);
-
-            // TODO: lulu Controller -> add Friend (done)
-            controller_.sendFriendRequest(newFriendBuffer_);
-
             newFriendBuffer_.clear();
         },
         GlobalButtonStyle());
@@ -44,13 +40,6 @@ void Messaging::createButtons() {
                         controller_.sendMessage(playerId, newMessageBuffer_);
                         return std::optional<PlayerID>{};
                     });
-
-                    // TODO: lulu controller -> sendMessage (done)
-                    // Old code:
-                    // (selectedFriend) controller_.sendMessage(
-                    //     friends_[static_cast<size_t>(selectedFriend)],
-                    //     newMessageBuffer_);
-
                     newMessageBuffer_.clear();
                 }
             },
@@ -89,9 +78,6 @@ void Messaging::drawInputUser() {
 
 void Messaging::drawMenu() {
     drawInputUser();
-
-    // TODO: lulu ask controller for the friendsList, extract the names and pass
-    // them to the Menu. (done)
 
     friendNames_.clear();
 
