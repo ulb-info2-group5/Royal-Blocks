@@ -55,7 +55,7 @@ class Controller {
 
     client::GameState gameState_;
 
-    std::mutex mutex_;
+    mutable std::mutex mutex_;
 
     std::vector<bindings::User> friendsList_;
     std::unordered_map<PlayerID, NameConversation> conversationsById_;
@@ -181,18 +181,18 @@ class Controller {
 
     void handleKeypress(const std::string &pressedKey);
 
-    Score getSelfScore();
+    Score getSelfScore() const;
 
-    Score getSelfEnergy();
+    Score getSelfEnergy() const;
 
-    GameMode getGameMode();
+    GameMode getGameMode() const;
 
-    std::optional<unsigned> selfBoardGetColorIdAt(int x, int y);
+    std::optional<unsigned> selfBoardGetColorIdAt(int x, int y) const;
 
     std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
-                                                       int x, int y);
+                                                       int x, int y) const;
 
-    size_t getNumOpponents();
+    size_t getNumOpponents() const;
 };
 
 #endif // CONTROLLER_HPP

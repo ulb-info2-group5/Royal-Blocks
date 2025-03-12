@@ -115,10 +115,14 @@ Controller::~Controller() {
 }
 
 Controller::RegistrationState Controller::getRegistrationState() const {
+    std::lock_guard<std::mutex> guard(mutex_);
     return registrationState_;
 }
 
-Controller::AuthState Controller::getAuthState() const { return authState_; }
+Controller::AuthState Controller::getAuthState() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return authState_;
+}
 
 void Controller::run() {
     networkManager_.connect();
@@ -147,6 +151,7 @@ void Controller::tryLogin(const std::string &username,
 
 const std::vector<std::pair<std::string, Score>> &
 Controller::getRanking() const {
+    std::lock_guard<std::mutex> guard(mutex_);
     return ranking_;
 }
 
@@ -157,6 +162,7 @@ void Controller::changeProfile(const std::string &username,
 }
 
 const std::vector<bindings::User> &Controller::getFriendsList() const {
+    std::lock_guard<std::mutex> guard(mutex_);
     return friendsList_;
 }
 
@@ -174,6 +180,7 @@ void Controller::sendMessage(PlayerID recipientId, const std::string &message) {
 }
 
 const NameConversation &Controller::getConversationWith(PlayerID playerID) {
+    std::lock_guard<std::mutex> guard(mutex_);
     if (!conversationsById_.contains(playerID)) {
         conversationsById_[playerID] = {};
     }
@@ -221,35 +228,35 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     }
 }
 
-Score Controller::getSelfScore() {
+Score Controller::getSelfScore() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.self.playerState_.score_;
 }
 
-Score Controller::getSelfEnergy() {
+Score Controller::getSelfEnergy() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.self.playerState_.energy_.value_or(0);
 }
 
-GameMode Controller::getGameMode() {
+GameMode Controller::getGameMode() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.gameMode;
 }
 
-std::optional<unsigned> Controller::selfBoardGetColorIdAt(int x, int y) {
+std::optional<unsigned> Controller::selfBoardGetColorIdAt(int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.self.tetris_.board_.get(x, y).getColorId();
 }
 
 std::optional<unsigned>
-Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) {
+Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.externals.at(opponentIdx)
         .tetris_.board_.get(x, y)
         .getColorId();
 }
 
-size_t Controller::getNumOpponents() {
+size_t Controller::getNumOpponents() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.externals.size();
 }
