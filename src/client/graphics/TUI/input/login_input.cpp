@@ -61,11 +61,13 @@ void LoginInput::createButtonSubmit() {
     buttonSubmit_ = ftxui::Button(
         std::string(STR_SUBMIT),
         [&] {
+            std::thread loginThread;
+
             if (loginType_ == LoginType::REGISTER) {
                 controller_.tryRegister(username_, password_);
 
                 // Thread to check if registration is successful
-                std::thread([this]() {
+                loginThread = std::thread([this]() {
                     for (int i = 0; i < 20;
                          ++i) { // 2 seconds limit (20 * 100ms)
                         std::this_thread::sleep_for(
@@ -77,17 +79,16 @@ void LoginInput::createButtonSubmit() {
                             return;
                         }
                     }
-                    clearInfo();
                     msg_ = STR_REGISTRATION_FAILED;
                     screenManager_
                         .forceRefresh(); // Post event to update screen
-                }).detach();
+                });
 
             } else if (loginType_ == LoginType::LOGIN) {
                 controller_.tryLogin(username_, password_);
 
-                // Thread to check if registration is successful
-                std::thread([this]() {
+                // Thread to check if authentication is successful
+                loginThread = std::thread([this]() {
                     for (int i = 0; i < 20;
                          ++i) { // 2 seconds limit (20 * 100ms)
                         std::this_thread::sleep_for(
@@ -99,12 +100,17 @@ void LoginInput::createButtonSubmit() {
                             return;
                         }
                     }
-                    clearInfo();
                     msg_ = STR_INCORRECT;
                     screenManager_
                         .forceRefresh(); // Post event to update screen
-                }).detach();
+                });
             }
+
+            // Attendre la fin du thread avant de clear les inputs
+            if (loginThread.joinable()) {
+                loginThread.join();
+            }
+
             clearInfo();
         },
         GlobalButtonStyle());
@@ -167,11 +173,12 @@ void LoginInput::addMessage(const std::string_view message) {
 void LoginInput::clearInfo() {
     username_.clear();
     password_.clear();
-    msg_.clear();
-    message_.clear();
 }
 
 LoginState LoginInput::render() {
+    message_.clear();
+    msg_.clear();
+
     displayWindow();
 
     screenManager_.render(displayWindow_);
