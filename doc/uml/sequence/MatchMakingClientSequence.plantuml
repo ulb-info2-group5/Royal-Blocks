@@ -1,0 +1,5 @@
+@startuml MatchMakingClientSequence
+
+skinparam style strictuml
+
+@enduml

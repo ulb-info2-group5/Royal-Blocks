@@ -1,5 +1,0 @@
-@startuml JoinLobbySequence
-
-skinparam style strictuml
-
-@enduml

@@ -5,7 +5,9 @@ actor User
 participant Controller
 participant ClientLink
 participant ClientManager
+participant Network
 
+activate Network
 activate ClientManager
 activate User
 User -> Controller : run()
@@ -13,19 +15,21 @@ activate Controller
 Controller -> Network : connect()
 Network -> ClientLink : <<create>> 
 activate ClientLink
-ClientLink -> ClientManager : addClientInWaitingForAuth(<<self>>)
+ClientLink -> ClientManager : authPacketHandler(BindingType, data) 
+ClientManager -> ClientManager : addClientInWaitingForAuth(ClientLink)
 
 User -> Controller : tryLogin(username, password)
 Controller -> ClientLink : send(data)
-ClientLink -> ClientManager : authPacketHandler(self, data)
-ClientManager -> ClientLink : idk bitch 
+ClientLink -> ClientManager : authPacketHandler(BindingType, data)
+ClientManager -> ClientManager : checkCredentials(data)
+ClientManager -> ClientLink : handleMessage(checkCredentials(data))
 ClientLink -> Controller : writeSocket(isIdentify)
 Controller -> Controller : handlePacket(isIdentify)
 alt isIdentify == false
     Controller -> Controller : authenticationState = Unauthenticated
 else 
     Controller -> Controller : authenticationState = Authenticated
-    ClientLink -> ClientManager : authSuccessCallBack
+    ClientLink --> ClientManager : authSuccessCallBack
     ClientManager -> ClientManager : addConnection(ClientLink, username)
 end 
 @enduml

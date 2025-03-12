@@ -5,7 +5,9 @@ actor User
 participant Controller
 participant ClientLink
 participant ClientManager
+participant Network
 
+activate Network
 activate ClientManager
 activate User
 User -> Controller : run()
@@ -13,13 +15,14 @@ activate Controller
 Controller -> Network : connect()
 Network -> ClientLink : <<create>> 
 activate ClientLink
-ClientLink -> ClientManager : addClientInWaitingForAuth(<<self>>)
+ClientLink -> ClientManager : authPacketHandler(BindingType, data)
+ClientManager -> ClientManager : addClientInWaitingForAuth(ClientLink)
 
 User -> Controller : tryRegister(username, password)
 Controller -> ClientLink : send(data)
-
+ClientLink -> ClientManager : authPacketHandler(BindingType, data)
 ClientManager -> ClientManager : attemptCreateAccount(data)
-ClientManager -> ClientLink : idk bitch 
+ClientManager -> ClientLink : handleMessage(attemptCreateAccount)
 ClientLink -> Controller : writeSocket(attemptCreateAccount)
 Controller -> Controller : handlePacket(attemptCreateAccount)
 alt attemptCreateAccount == false
