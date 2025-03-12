@@ -7,19 +7,15 @@
  */
 
 #include "game_menu.hpp"
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/dom/elements.hpp>
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
-#include "ftxui/component/component.hpp"
-#include "graphics/TUI/screen_manager.hpp"
 
 // ### Constructor ###
 
 GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller), joinType_(JoinType::NONE),
-      typeGame_(TypeGame::NONE), quitMenu_(false) {
+    : screenManager_(screenManager), controller_(controller),
+      joinType_(JoinType::NONE), typeGame_(TypeGame::NONE), quitMenu_(false) {
 
     gameDisplay_ = std::make_unique<GameDisplay>(screenManager_, controller_);
 
@@ -166,8 +162,8 @@ void GameMenu::joinFriendOrRandomScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_JOIN_FRIEND_OR_RANDOM)) | ftxui::center
-                       | ftxui::bold,
+                   ftxui::text(std::string(STR_JOIN_FRIEND_OR_RANDOM))
+                       | ftxui::center | ftxui::bold,
                    ftxui::separator(),
                    joinFriendButton->Render(),
                    joinRandomButton->Render(),
@@ -249,8 +245,8 @@ void GameMenu::joinFriendScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(mainContainer, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_SELECT_FRIEND_TO_JOIN)) | ftxui::center
-                       | ftxui::bold,
+                   ftxui::text(std::string(STR_SELECT_FRIEND_TO_JOIN))
+                       | ftxui::center | ftxui::bold,
                    ftxui::separator(),
                    friendsContainer->Render() | ftxui::borderHeavy,
                    ftxui::separator(),
@@ -403,8 +399,8 @@ void GameMenu::selectPlayerCountScreen() {
 
     ftxui::Component renderer = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_SELECT_NUM_PLAYERS)) | ftxui::center
-                       | ftxui::bold,
+                   ftxui::text(std::string(STR_SELECT_NUM_PLAYERS))
+                       | ftxui::center | ftxui::bold,
                    ftxui::separator(),
                    horizontalContainer->Render() | ftxui::center,
                    confirmButton->Render() | ftxui::center,

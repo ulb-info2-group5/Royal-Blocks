@@ -9,8 +9,6 @@
 #ifndef LOGIN_MENU_HPP
 #define LOGIN_MENU_HPP
 
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
 #include <string_view>
 
@@ -67,8 +65,9 @@ class LoginMenu final : public ILogin_Menu {
     /*
      * @brief Construct a new Login Menu object
      *
-     * @param screenManager The screen manager for asking to render the components
-      * @param controller The controller to interact with the server
+     * @param screenManager The screen manager for asking to render the
+     * components
+     * @param controller The controller to interact with the server
      */
     LoginMenu(ScreenManager &screenManager, Controller &controller);
 

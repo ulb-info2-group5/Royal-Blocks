@@ -1,21 +1,8 @@
 #include "game_display.hpp"
 
-#include "../../../core/controller/controller.hpp"
-#include "../../interfaceConstants.hpp"
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/dom/canvas.hpp" // for Canvas
-#include "ftxui/dom/node.hpp"   // for Render
-#include "ftxui/screen/color.hpp" // for Color, Color::Red, Color::Blue, Color::Green, ftxui
-#include "game_mode/game_mode.hpp"
-
-#include <cstdlib>
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/event.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-
 #include "../ftxui_config/ftxui_config.hpp"
+
+#include "../../../core/controller/controller.hpp"
 
 // TODO: this should defo go somewhere else
 #include <stdexcept>

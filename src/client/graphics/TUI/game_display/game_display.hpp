@@ -4,13 +4,7 @@
 #include "../../IGame.hpp"
 #include "../../interfaceConstants.hpp"
 
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/color.hpp"
-
 #include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
 
 #include <string>
 #include <vector>

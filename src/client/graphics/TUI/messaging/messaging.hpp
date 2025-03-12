@@ -1,20 +1,12 @@
 #ifndef MESSAGING_HPP
 #define MESSAGING_HPP
 
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/component_options.hpp>
-#include <ftxui/component/mouse.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
+#include "../../../core/in_game/player_state/player_state_external.hpp"
+#include "../../IMessage.hpp"
 
-#include <cstdlib>
-#include <optional>
+#include <ftxui/component/component.hpp>
 #include <string>
 #include <vector>
-
-#include "../../IMessage.hpp"
-#include "../../../core/in_game/player_state/player_state_external.hpp"
 
 class Controller; // Forward declaration
 
@@ -74,7 +66,8 @@ class Messaging final : public IMessage {
     /*
      * @brief Construct a new Messaging object
      *
-     * @param screenManager The screen manager for asking to render the components
+     * @param screenManager The screen manager for asking to render the
+     * components
      * @param controller The controller to interact with the server
      */
     Messaging(ScreenManager &screenManager, Controller &controller);

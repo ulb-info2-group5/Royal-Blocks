@@ -11,18 +11,13 @@
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
-#include <cstdlib>
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
-
 // ### constructor ###
 LoginMenu::LoginMenu(ScreenManager &screenManager, Controller &controller)
     : screenManager_(screenManager), controller_(controller),
       loginInput_(LoginInput(screenManager_, controller_, LOGIN_INPUT_TITLE,
                              LoginType::LOGIN)),
-      registerInput_(LoginInput(screenManager_, controller_, REGISTER_INPUT_TITLE,
-                                LoginType::REGISTER)) {
+      registerInput_(LoginInput(screenManager_, controller_,
+                                REGISTER_INPUT_TITLE, LoginType::REGISTER)) {
     loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
 
@@ -34,34 +29,36 @@ LoginMenu::LoginMenu(ScreenManager &screenManager, Controller &controller)
 // ### protected methods ###
 
 void LoginMenu::createButtons() {
-    buttonRegister_ =
-        ftxui::Button(
-            std::string(STR_REGISTER),
-            [&] {
-                if (registerInput_.render() == LoginState::SUBMIT) {
-                    loginInput_.addMessage(LOGIN_MESSAGE);
-                    if (loginInput_.render() == LoginState::SUBMIT) {
-                        loginState_ = Login::LOGGED;
-                    }
+    buttonRegister_ = ftxui::Button(
+        std::string(STR_REGISTER),
+        [&] {
+            if (registerInput_.render() == LoginState::SUBMIT) {
+                loginInput_.addMessage(LOGIN_MESSAGE);
+                if (loginInput_.render() == LoginState::SUBMIT) {
+                    loginState_ = Login::LOGGED;
                 }
-                screenManager_.stopRender();
-            }, GlobalButtonStyle());
+            }
+            screenManager_.stopRender();
+        },
+        GlobalButtonStyle());
 
     buttonLogin_ = ftxui::Button(
         std::string(STR_LOGIN),
-                       [&] {
-                           if (loginInput_.render() == LoginState::SUBMIT) {
-                               loginState_ = Login::LOGGED;
-                           }
-                           screenManager_.stopRender();
-                       }, GlobalButtonStyle());
+        [&] {
+            if (loginInput_.render() == LoginState::SUBMIT) {
+                loginState_ = Login::LOGGED;
+            }
+            screenManager_.stopRender();
+        },
+        GlobalButtonStyle());
 
     buttonExit_ = ftxui::Button(
         std::string(STR_EXIT),
-                      [&] {
-                          loginState_ = Login::EXIT;
-                          screenManager_.stopRender();
-                      }, GlobalButtonStyle());
+        [&] {
+            loginState_ = Login::EXIT;
+            screenManager_.stopRender();
+        },
+        GlobalButtonStyle());
 }
 
 void LoginMenu::displayWindow() {
@@ -73,8 +70,8 @@ void LoginMenu::displayWindow() {
 
     displayWindow_ = ftxui::Renderer(component, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_LOGIN_MENU)) | ftxui::bold | ftxui::center
-                       | ftxui::bgcolor(ftxui::Color::Black),
+                   ftxui::text(std::string(STR_LOGIN_MENU)) | ftxui::bold
+                       | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
                    ftxui::separator(),
                    ftxui::text(std::string(STR_INSTRUCTION_LOGIN))
                        | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),

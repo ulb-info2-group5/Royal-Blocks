@@ -11,9 +11,7 @@
 
 #include "../../../../common/bindings/user.hpp"
 
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/component_options.hpp>
-#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
 #include <vector>
 
 class Controller; // Forward declaration
@@ -67,7 +65,8 @@ class FriendsMenu final {
     /*
      * @brief Construct a new Friends Manager object
      *
-     * @param screenManager The screen manager for asking to render the components
+     * @param screenManager The screen manager for asking to render the
+     * components
      * @param controller The controller to interact with the server
      */
     FriendsMenu(ScreenManager &screenManager, Controller &controller);

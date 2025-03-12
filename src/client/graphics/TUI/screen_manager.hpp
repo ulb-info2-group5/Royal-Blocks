@@ -4,9 +4,7 @@
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
 
-#include <boost/asio/detail/std_fenced_block.hpp>
 #include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
 
 class Controller; // Forward declaration
 
@@ -44,31 +42,30 @@ class ScreenManager {
     void drawEndScreen();
 
     /*
-    * @brief Handle the Ctrl+C event to prevent the application from closing
-    *
-    * @param component The component to handle the Ctrl+C event
-    * @return ftxui::Component The component with the Ctrl+C event handled
-    */
+     * @brief Handle the Ctrl+C event to prevent the application from closing
+     *
+     * @param component The component to handle the Ctrl+C event
+     * @return ftxui::Component The component with the Ctrl+C event handled
+     */
     ftxui::Component handleCtrlC(ftxui::Component &component);
-  
-    /*
-    * @brief Handle the Ctrl+Z event to prevent the application from closing
-    *
-    * @param component The component to handle the Ctrl+Z event
-    * @return ftxui::Component The component with the Ctrl+Z event handled
-    */
-    ftxui::Component handleCtrlZ(ftxui::Component &component);
-    
-    /*
-    * @brief Handle the Ctrl+C and Ctrl+Z event to prevent the application from
-    * closing
-    *
-    * @param component The component to handle the Ctrl+C and Ctrl+Z event
-    * @return ftxui::Component The component with the Ctrl+C and Ctrl+Z event
-    * handled
-    */
-    ftxui::Component handleCtrl(ftxui::Component &component);
 
+    /*
+     * @brief Handle the Ctrl+Z event to prevent the application from closing
+     *
+     * @param component The component to handle the Ctrl+Z event
+     * @return ftxui::Component The component with the Ctrl+Z event handled
+     */
+    ftxui::Component handleCtrlZ(ftxui::Component &component);
+
+    /*
+     * @brief Handle the Ctrl+C and Ctrl+Z event to prevent the application from
+     * closing
+     *
+     * @param component The component to handle the Ctrl+C and Ctrl+Z event
+     * @return ftxui::Component The component with the Ctrl+C and Ctrl+Z event
+     * handled
+     */
+    ftxui::Component handleCtrl(ftxui::Component &component);
 
   public:
     /*
@@ -103,12 +100,12 @@ class ScreenManager {
     /*
      * @brief Force the screen to refresh
      */
-     void forceRefresh();
+    void forceRefresh();
 
     /*
      * @brief Simulate the tab key press
      */
-     void simulateTab();
+    void simulateTab();
 };
 
 #endif // SCREEN_MANAGER_HPP

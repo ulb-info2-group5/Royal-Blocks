@@ -2,12 +2,6 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
-#include "core/in_game/player_state/player_state_external.hpp"
-
-#include "../../../../common/bindings/message.hpp"
-#include "graphics/TUI/screen_manager.hpp"
-#include <ftxui/dom/elements.hpp>
-#include <optional>
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server.
@@ -61,8 +55,9 @@ void Messaging::createButtons() {
 void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
 
-    addFriendInput_ = ftxui::Input(&newFriendBuffer_, std::string(STR_NAME_OF_FRIEND))
-                      | ftxui::center | ftxui::borderHeavy;
+    addFriendInput_ =
+        ftxui::Input(&newFriendBuffer_, std::string(STR_NAME_OF_FRIEND))
+        | ftxui::center | ftxui::borderHeavy;
     // attempt to send the result when  user press enter
 
     // addFriendInput |= CatchEvent([&](ftxui::Event event) {
@@ -73,8 +68,9 @@ void Messaging::drawInputUser() {
     //     }
     // });
 
-    messageInput_ = ftxui::Input(&newMessageBuffer_, std::string(STR_WRITE_MESSAGE))
-                    | ftxui::center | ftxui::borderHeavy;
+    messageInput_ =
+        ftxui::Input(&newMessageBuffer_, std::string(STR_WRITE_MESSAGE))
+        | ftxui::center | ftxui::borderHeavy;
 }
 
 void Messaging::drawMenu() {
@@ -148,16 +144,18 @@ void Messaging::drawWindow() {
     displayWindow_ = ftxui::Renderer(mainContainer, [&] {
         return ftxui::hbox({
                    ftxui::vbox({
-                       ftxui::text(std::string(STR_FRIENDS_LIST_TITLE)) | ftxui::bold
-                           | ftxui::color(ftxui::Color::Green) | ftxui::center,
+                       ftxui::text(std::string(STR_FRIENDS_LIST_TITLE))
+                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                           | ftxui::center,
                        ftxui::separator(),
                        friendsMenu_->Render(),
 
                    }) | ftxui::borderHeavy,
 
                    ftxui::vbox({
-                       ftxui::text(std::string(STR_CONVERSATION_TITLE)) | ftxui::bold
-                           | ftxui::color(ftxui::Color::Green) | ftxui::center,
+                       ftxui::text(std::string(STR_CONVERSATION_TITLE))
+                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                           | ftxui::center,
                        ftxui::separator(),
                        chatDisplay_->Render() | ftxui::flex,
                        ftxui::separator(),
@@ -168,8 +166,9 @@ void Messaging::drawWindow() {
                        | ftxui::flex,
 
                    ftxui::vbox({
-                       ftxui::text(std::string(STR_ADD_FRIEND_TITLE)) | ftxui::bold
-                           | ftxui::color(ftxui::Color::Green) | ftxui::center,
+                       ftxui::text(std::string(STR_ADD_FRIEND_TITLE))
+                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                           | ftxui::center,
                        ftxui::separator(),
                        addFriendInput_->Render(),
                        ftxui::separator(),

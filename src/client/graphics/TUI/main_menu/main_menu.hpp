@@ -10,17 +10,12 @@
 #define MAIN_MENU_HPP
 
 #include "../../IMain_Menu.hpp"
+
 #include "../friends_menu/friends_menu.hpp"
 #include "../game_menu/game_menu.hpp"
 #include "../messaging/messaging.hpp"
 
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/mouse.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
-
-#include <cstdlib>
 #include <string>
 
 class Controller; // Forward declaration
@@ -108,7 +103,8 @@ class MainMenu final : public IMain_Menu {
     /*
      * @brief Construct a new Main Menu object
      *
-     * @param screenManager The screen manager for asking to render the components
+     * @param screenManager The screen manager for asking to render the
+     * components
      * @param controller The controller to interact with the server
      */
     MainMenu(ScreenManager &screenManager, Controller &controller);

@@ -9,13 +9,8 @@
 #ifndef LOGIN_INPUT_HPP
 #define LOGIN_INPUT_HPP
 
-#include <ftxui/component/component_options.hpp>
-#include <ftxui/component/event.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
-
+#include <ftxui/component/component.hpp>
 #include <string>
-#include <string_view>
 
 #include "../../ILogin_Input.hpp"
 
@@ -33,7 +28,7 @@ class LoginInput final : public ILogin_Input {
     /*
      * @brief The screen to use to render the components
      */
-     ScreenManager &screenManager_;
+    ScreenManager &screenManager_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -93,10 +88,11 @@ class LoginInput final : public ILogin_Input {
     /*
      * @brief Construct a new Login Input object
      *
-     * @param screenManager The screen manager for asking to render the components
+     * @param screenManager The screen manager for asking to render the
+     * components
      * @param controller The controller to interact with the server
      * @param title The title of the input screen (Login or Register)
-      * @param loginType The type of the login (Login or Register)
+     * @param loginType The type of the login (Login or Register)
      */
     LoginInput(ScreenManager &screenManager, Controller &controller,
                std::string title, LoginType loginType);
@@ -108,7 +104,7 @@ class LoginInput final : public ILogin_Input {
 
     /*
      * @brief Render the login input screen with all the components
-     * 
+     *
      * @return LoginState The state of the login input
      */
     LoginState render() override;

@@ -7,19 +7,15 @@
  */
 
 #include "main_menu.hpp"
+
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
-#include "../messaging/messaging.hpp"
-#include "graphics/TUI/screen_manager.hpp"
-
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/component_options.hpp>
-#include <ftxui/dom/elements.hpp>
 
 // ### Constructor ###
 MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller), state_(MainMenuState::NONE),
-      friendsMenu_(screenManager_, controller), messagingMenu_(screenManager_, controller),
+    : screenManager_(screenManager), controller_(controller),
+      state_(MainMenuState::NONE), friendsMenu_(screenManager_, controller),
+      messagingMenu_(screenManager_, controller),
       gameMenu_(screenManager, controller) {
 
     createMainMenuButtons();
@@ -158,8 +154,8 @@ void MainMenu::displayMainWindow() {
 
     mainMenuWindow_ = ftxui::Renderer(buttonDisplay, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_MAIN_MENU)) | ftxui::bold | ftxui::center
-                       | ftxui::color(ftxui::Color::Cyan),
+                   ftxui::text(std::string(STR_MAIN_MENU)) | ftxui::bold
+                       | ftxui::center | ftxui::color(ftxui::Color::Cyan),
                    ftxui::separator(),
                    ftxui::text(std::string(STR_WELCOME)) | ftxui::center,
                    ftxui::separator(),
@@ -235,10 +231,12 @@ void MainMenu::displayProfileManagerButton() {
     password_.clear(); // Empty password
 
     inputChangeUsername_ =
-        ftxui::Input(&username_, std::string(STR_NEW_USERNAME)) | ftxui::borderHeavy;
+        ftxui::Input(&username_, std::string(STR_NEW_USERNAME))
+        | ftxui::borderHeavy;
 
     inputChangePassword_ =
-        ftxui::Input(&password_, std::string(STR_NEW_PASSWORD), PasswordInputOption())
+        ftxui::Input(&password_, std::string(STR_NEW_PASSWORD),
+                     PasswordInputOption())
         | ftxui::borderHeavy;
 
     submitButton_ = ftxui::Button(
@@ -260,7 +258,8 @@ void MainMenu::displayProfileManagerWindow() {
 
     profileManagerWindow_ = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
-                   ftxui::text(std::string(STR_PROFILE_MANAGER)) | ftxui::bold | ftxui::center,
+                   ftxui::text(std::string(STR_PROFILE_MANAGER)) | ftxui::bold
+                       | ftxui::center,
                    ftxui::separator(),
                    ftxui::text(std::string(STR_CHANGE_INFO)) | ftxui::center,
                    ftxui::separator(),

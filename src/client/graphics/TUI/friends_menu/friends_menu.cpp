@@ -11,16 +11,9 @@
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <vector>
-
-
 // ### Public methods ###
 
-FriendsMenu::FriendsMenu(ScreenManager &screenManager,
-                         Controller &controller)
+FriendsMenu::FriendsMenu(ScreenManager &screenManager, Controller &controller)
     : screenManager_(screenManager), controller_(controller), exit_(false) {
     createButtons();
 }
@@ -49,10 +42,11 @@ void FriendsMenu::render() {
             ftxui::Container::Vertical({friendsContainer, buttonsContainer}),
             [&] {
                 return ftxui::vbox({
-                           ftxui::text(std::string(STR_FRIENDS_LIST)) | ftxui::bold
-                               | ftxui::center,
+                           ftxui::text(std::string(STR_FRIENDS_LIST))
+                               | ftxui::bold | ftxui::center,
                            ftxui::separator(),
-                           ftxui::text(std::string(STR_FRIENDS)) | ftxui::center,
+                           ftxui::text(std::string(STR_FRIENDS))
+                               | ftxui::center,
                            friendsContainer->Render() | ftxui::borderHeavy,
                            ftxui::separator(),
                            buttonAddFriend_->Render(),
@@ -160,7 +154,8 @@ void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
 
 void FriendsMenu::createButtons() {
     buttonBack_ = ftxui::Button(
-        std::string(STR_BACK), [&] { screenManager_.stopRender(); }, GlobalButtonStyle());
+        std::string(STR_BACK), [&] { screenManager_.stopRender(); },
+        GlobalButtonStyle());
 
     buttonAddFriend_ = ftxui::Button(
         std::string(STR_ADD_A_FRIEND),
