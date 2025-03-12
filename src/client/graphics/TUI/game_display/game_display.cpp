@@ -286,43 +286,43 @@ void GameDisplay::displayOppponentsBoard() {
 
     ftxui::Components rows = {};
     uint32_t totalPlayers =
-        pGameState_->gameState.externals.size(); // +1 for the self board
+        pGameState_->gameState.externals.size();
 
-    for (uint32_t i = 0; i < 3; ++i) {
+    for (uint32_t i = 0; i < 2; ++i) { // 2 rows
         ftxui::Component line;
-        uint32_t leftPlayers = totalPlayers - (i * 3 + 1);
+        uint32_t leftPlayers = totalPlayers - (i * 4 + 1); // 4 players per row
 
         if (leftPlayers <= 0) break;
 
         switch (leftPlayers) {
-        case 1:
-            line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3)});
-            break;
-        case 2:
-            line = ftxui::Container::Horizontal(
-                {opBoards_.at(0 + i * 3), opBoards_.at(1 + i * 3)});
-            break;
-        default:
-            line = ftxui::Container::Horizontal({opBoards_.at(0 + i * 3),
-                                                 opBoards_.at(1 + i * 3),
-                                                 opBoards_.at(2 + i * 3)});
-            break;
+            case 1:
+                line = ftxui::Container::Horizontal({opBoards_.at(i * 4)});
+                break;
+            case 2:
+                line = ftxui::Container::Horizontal(
+                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4)});
+                break;
+            case 3:
+                line = ftxui::Container::Horizontal(
+                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4), opBoards_.at(2 + i * 4)});
+                break;
+            default:
+                line = ftxui::Container::Horizontal(
+                    {opBoards_.at(i * 4), opBoards_.at(1 + i * 4), 
+                     opBoards_.at(2 + i * 4), opBoards_.at(3 + i * 4)});
+                break;
         }
-
+        
         rows.push_back(line);
     }
 
     switch (rows.size()) {
-    case 1:
-        opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0)});
-        break;
-    case 2:
-        opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0), rows.at(1)});
-        break;
-    case 3:
-        opBoardDisplay_ =
-            ftxui::Container::Vertical({rows.at(0), rows.at(1), rows.at(2)});
-        break;
+        case 1:
+            opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0)});
+            break;
+        case 2:
+            opBoardDisplay_ = ftxui::Container::Vertical({rows.at(0), rows.at(1)});
+            break;
     }
 }
 
