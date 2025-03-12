@@ -25,17 +25,6 @@ struct RequestCreateGame{
     bindings::CreateGame bindCreateGame;
 };
 
-class Loby {
-    private: 
-        GameMode gameMode_;
-        std::vector<PlayerID> players;
-        NumberOfPlayers numberOfPlayers_;
-
-    public: 
-        Loby(bindings::JoinGame joinGame);
-        void addFriend(bindings::JoinGame joinGame); 
-}; 
-
 class GameCandidate{
     private: 
         NumberOfPlayers numberOfPlayerTotale_;
