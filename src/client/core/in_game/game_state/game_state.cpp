@@ -1,19 +1,5 @@
 #include "game_state.hpp"
-
-nlohmann::json client::GameState::serialize() const {
-    nlohmann::json j;
-
-    j["gameMode"] = gameMode;
-
-    j["self"] = self.serialize();
-
-    j["externals"] = nlohmann::json::array();
-    for (const auto &playerTetris : externals) {
-        j["externals"].push_back(playerTetris.serialize());
-    }
-
-    return j;
-}
+#include "effect/bonus/bonus_type.hpp"
 
 void client::GameState::deserialize(const nlohmann::json &j) {
     self.deserialize(j.at("self"));
@@ -24,5 +10,14 @@ void client::GameState::deserialize(const nlohmann::json &j) {
         PlayerTetrisExternal externalPlayer;
         externalPlayer.deserialize(external);
         externals.push_back(externalPlayer);
+    }
+
+    for (const std::pair<BonusType, Energy> bonusTypePrice :
+         j.at("bonusToPrice")) {
+        effectsPrice.push_back(bonusTypePrice);
+    }
+    for (const std::pair<PenaltyType, Energy> penaltyTypePrice :
+         j.at("penaltyToPrice")) {
+        effectsPrice.push_back(penaltyTypePrice);
     }
 }

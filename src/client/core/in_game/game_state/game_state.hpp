@@ -14,8 +14,7 @@ namespace client {
         GameMode gameMode;
         PlayerTetrisSelf self;
         std::vector<PlayerTetrisExternal> externals;
-
-        nlohmann::json serialize() const;
+        std::vector<std::pair<EffectType, Energy>> effectsPrice;
 
         void deserialize(const nlohmann::json &j);
     };
