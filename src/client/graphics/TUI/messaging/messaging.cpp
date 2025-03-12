@@ -131,57 +131,57 @@ void Messaging::drawDisplay() {
 void Messaging::drawWindow() {
     drawDisplay();
 
-    ftxui::Component mainContainer = ftxui::Container::Horizontal({
-        sidebar_,
-        ftxui::Container::Vertical({
-            chatDisplay_,
-            messageInput_,
-            sendButton_,
+    displayWindow_ = ftxui::Renderer(
+        ftxui::Container::Horizontal({
+            sidebar_,
+            ftxui::Container::Vertical({
+                chatDisplay_,
+                messageInput_,
+                sendButton_,
+            }),
+            addMenu_,
         }),
-        addMenu_,
-    });
+        [&] {
+            return ftxui::hbox({
+                       ftxui::vbox({
+                           ftxui::text(std::string(STR_FRIENDS_LIST_TITLE))
+                               | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                               | ftxui::center,
+                           ftxui::separator(),
+                           friendsMenu_->Render(),
 
-    displayWindow_ = ftxui::Renderer(mainContainer, [&] {
-        return ftxui::hbox({
-                   ftxui::vbox({
-                       ftxui::text(std::string(STR_FRIENDS_LIST_TITLE))
-                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
-                           | ftxui::center,
-                       ftxui::separator(),
-                       friendsMenu_->Render(),
+                       }) | ftxui::borderHeavy,
 
-                   }) | ftxui::borderHeavy,
+                       ftxui::vbox({
+                           ftxui::text(std::string(STR_CONVERSATION_TITLE))
+                               | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                               | ftxui::center,
+                           ftxui::separator(),
+                           chatDisplay_->Render() | ftxui::flex,
+                           ftxui::separator(),
+                           messageInput_->Render(),
+                           ftxui::separator(),
+                           sendButton_->Render(),
+                       }) | ftxui::borderHeavy
+                           | ftxui::flex,
 
-                   ftxui::vbox({
-                       ftxui::text(std::string(STR_CONVERSATION_TITLE))
-                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
-                           | ftxui::center,
-                       ftxui::separator(),
-                       chatDisplay_->Render() | ftxui::flex,
-                       ftxui::separator(),
-                       messageInput_->Render(),
-                       ftxui::separator(),
-                       sendButton_->Render(),
-                   }) | ftxui::borderHeavy
-                       | ftxui::flex,
+                       ftxui::vbox({
+                           ftxui::text(std::string(STR_ADD_FRIEND_TITLE))
+                               | ftxui::bold | ftxui::color(ftxui::Color::Green)
+                               | ftxui::center,
+                           ftxui::separator(),
+                           addFriendInput_->Render(),
+                           ftxui::separator(),
+                           addFriendButton_->Render(),
+                           ftxui::separator(),
 
-                   ftxui::vbox({
-                       ftxui::text(std::string(STR_ADD_FRIEND_TITLE))
-                           | ftxui::bold | ftxui::color(ftxui::Color::Green)
-                           | ftxui::center,
-                       ftxui::separator(),
-                       addFriendInput_->Render(),
-                       ftxui::separator(),
-                       addFriendButton_->Render(),
-                       ftxui::separator(),
+                           backButton_->Render(),
+                           ftxui::separator(),
+                       }) | ftxui::borderHeavy,
 
-                       backButton_->Render(),
-                       ftxui::separator(),
-                   }) | ftxui::borderHeavy,
-
-               })
-               | ftxui::borderHeavy;
-    });
+                   })
+                   | ftxui::borderHeavy;
+        });
 }
 
 std::optional<PlayerID> Messaging::getSelectedFriendId() {
