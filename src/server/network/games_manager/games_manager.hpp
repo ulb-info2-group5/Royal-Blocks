@@ -33,6 +33,7 @@ class GamesManager {
         void enqueueGameBinding(int clientId, const std::string& strBindings);
         void startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds );
         void callBackFinishGame(GameID gameId);
+        bool isThisClientInGame(PlayerID playerId);
 
 };
 

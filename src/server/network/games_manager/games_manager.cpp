@@ -16,6 +16,7 @@ GamesManager::GamesManager(UpdateGameStates updateGameStates) :updateGameStates_
 
 void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds ){
     for (PlayerID id : playerIds){
+        std::cout << " id : " << id << std::endl;
         clientToGame_[id] = nextGameId;
     }
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(gameMode , std::move(playerIds),updateGameStates_, nextGameId, 
@@ -27,7 +28,6 @@ void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> pla
 }
 
 void GamesManager::enqueueGameBinding(int clientId, const std::string& strBindings){
-
     GameID gameId = clientToGame_[clientId];
     auto gameServer = gameSessions_[gameId]; 
     boost::asio::post(gameServer->getIoContext(), [gameServer, clientId, strBindings](){
@@ -42,4 +42,11 @@ void GamesManager::callBackFinishGame(GameID gameId ){
     
     // TODO :  for all clients who participated -> send the game score  
     deleteGame(gameId);
+}
+
+
+bool GamesManager::isThisClientInGame(PlayerID playerId){
+    bool res =  clientToGame_.find(playerId) != clientToGame_.end();
+    std::cout <<  res << std::endl;
+    return res;
 }

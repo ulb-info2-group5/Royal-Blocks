@@ -11,11 +11,13 @@ GameCandidate::GameCandidate(RequestJoinGame joinGame)
 :  numberOfPlayersMax_{(joinGame.bindGame.gameMode == GameMode::Dual) ?  MAXPLAYERDUAL : MAXPLAYERCLASSICANDROYAL }, gameMode{joinGame.bindGame.gameMode} {
     std::cout << "gameCandidate create (RequestJoinGame)" << std::endl;
     numberOfPlayerTotale_ ++;
+    players_.push_back(joinGame.playerId);
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame) : numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers}, gameMode{createGame.bindCreateGame.gameMode} {
     std::cout << "gameCandidate create (RequestCreateGame)" << std::endl;
     numberOfPlayerTotale_ ++;
+    players_.push_back(createGame.playerId);
 }
 
 bool GameCandidate::tryToAddPlayer(RequestJoinGame joinGame ){
@@ -34,7 +36,6 @@ bool GameCandidate::isThereRoomInThisGame(){
 
 
 bool GameCandidate::isThisPartyReady(){
-    std::cout << "is this Party Ready : max :  " << numberOfPlayersMax_ << " total : " << numberOfPlayerTotale_ << std::endl;
     return numberOfPlayersMax_ == numberOfPlayerTotale_;
 }
 

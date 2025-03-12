@@ -123,6 +123,8 @@ class ClientManager {
         * @brief : manage of the packet received by the clientLink
         */
         void handlePacket(const std::string& packet, const PlayerID& clientId);
+
+        void handlePacketMenu(const std::string& packet , const PlayerID& clientId);
         /*
         * @brief : manage package when the client is not yet logged in
         * @return : the response of the package 
@@ -130,6 +132,7 @@ class ClientManager {
         nlohmann::json authPacketHandler(bindings::BindingType type, nlohmann::json data);
 
         void handleMessage(nlohmann::json message);
+
         /*
         * @brief:  add client to the waitingForAuthCLient list 
         */

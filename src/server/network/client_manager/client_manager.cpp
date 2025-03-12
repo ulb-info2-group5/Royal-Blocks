@@ -139,12 +139,21 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
 
 
 void ClientManager::handlePacket(const std::string& packet, const PlayerID& clientId){
+
+    if (gamesManager_.isThisClientInGame(clientId)){
+        gamesManager_.enqueueGameBinding(clientId, packet );
+        return;
+    }
+    else {
+        handlePacketMenu(std::move(packet), std::move(clientId));
+    }
+}
+void ClientManager::handlePacketMenu(const std::string& packet , const PlayerID& clientId) {
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " <<std::endl;
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
     nlohmann::json data = jPack.at("data").get<nlohmann::json>();
-    // TODO : if client is in game then send the packet to GamesManager using enqueueGameBinding
     switch (type){
     case bindings::BindingType::Message:  
         handleMessage(jPack);
@@ -156,6 +165,8 @@ void ClientManager::handlePacket(const std::string& packet, const PlayerID& clie
         matchmaking_.createAGame(RequestCreateGame{clientId, bindings::CreateGame::from_json(jPack)});
         break;
     default:
+
+       
         break;
     }
 }
@@ -185,6 +196,5 @@ bool ClientManager::checkCredentials(nlohmann::json data ){
 }
 
 void ClientManager::updateGameStates(PlayerID playerIds, nlohmann::json gameState){
-    
-        connectedClients_[static_cast<int>(playerIds)]->sendPackage(gameState);
+        connectedClients_[playerIds]->sendPackage(gameState);
 }
