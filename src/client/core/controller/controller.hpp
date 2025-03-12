@@ -14,7 +14,7 @@
 #include "../common/bindings/conversations.hpp"
 #include "../common/bindings/friends_list.hpp"
 #include "../common/bindings/ranking.hpp"
-#include "../in_game/game_state_wrapper.hpp"
+#include "../in_game/game_state/game_state.hpp"
 #include "../network/network_manager.hpp"
 #include "core/in_game/player_state/player_state_external.hpp"
 #include "effect/bonus/bonus_type.hpp"
@@ -53,7 +53,7 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    std::shared_ptr<client::GameStateWrapper> pGameState_;
+    client::GameState gameState_;
 
     std::mutex mutex_;
 
@@ -96,9 +96,6 @@ class Controller {
      * @brief Returns the authentication-state.
      */
     AuthState getAuthState() const;
-
-    // TODO
-    std::shared_ptr<client::GameStateWrapper> &getGameState();
 
     /*
      * @brief Run the controller to manage the game
@@ -183,6 +180,19 @@ class Controller {
     void quitGame();
 
     void handleKeypress(const std::string &pressedKey);
+
+    Score getSelfScore();
+
+    Score getSelfEnergy();
+
+    GameMode getGameMode();
+
+    std::optional<unsigned> selfBoardGetColorIdAt(int x, int y);
+
+    std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
+                                                       int x, int y);
+
+    size_t getNumOpponents();
 };
 
 #endif // CONTROLLER_HPP

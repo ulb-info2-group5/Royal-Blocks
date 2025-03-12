@@ -18,6 +18,8 @@
 #include "../game_display/game_display.hpp"
 #include "game_mode/game_mode.hpp"
 
+using PlayerID = size_t;
+
 class Controller; // Forward declaration
 
 /**

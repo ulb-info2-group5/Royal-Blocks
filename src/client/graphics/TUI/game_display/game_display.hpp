@@ -1,7 +1,6 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../../core/in_game/game_state_wrapper.hpp"
 #include "../../IGame.hpp"
 #include "../../interfaceConstants.hpp"
 
@@ -13,14 +12,13 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
-#include <memory>
 #include <string>
 #include <vector>
 
 constexpr uint32_t LENGTH_PLAYER = 7, LENGTH_OPPONENT = 3, PADDING = 10;
 
 constexpr uint32_t WIDTH_PLAYER_CANVAS = 70, HEIGHT_PLAYER_CANVAS = 140,
-               WIDTH_OP_CANVAS = 30, HEIGHT_OP_CANVAS = 60;
+                   WIDTH_OP_CANVAS = 30, HEIGHT_OP_CANVAS = 60;
 
 class Controller; // Forward declaration
 
@@ -31,8 +29,6 @@ class GameDisplay : public IGame {
     ftxui::ScreenInteractive &screen_;
 
     Controller &controller_;
-
-    std::shared_ptr<client::GameStateWrapper> pGameState_;
 
     // TODO: remove this
     std::vector<std::string> pseudos_;
@@ -76,8 +72,7 @@ class GameDisplay : public IGame {
     void handleKeys() override;
 
   public:
-    GameDisplay(ftxui::ScreenInteractive &screen, Controller &controller,
-                std::shared_ptr<client::GameStateWrapper> &pGameState);
+    GameDisplay(ftxui::ScreenInteractive &screen, Controller &controller);
 
     ~GameDisplay() = default;
 

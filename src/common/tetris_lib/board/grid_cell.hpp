@@ -47,7 +47,7 @@ class GridCell {
      *
      * @return The colorId.
      */
-    unsigned getColorId() const;
+    std::optional<unsigned> getColorId() const;
 
     // #### Setters ####
 

@@ -75,8 +75,8 @@ void Controller::handlePacket(const std::string &pack) {
     }
 
     case bindings::BindingType::GameState: {
-        std::lock_guard<std::mutex> guard(pGameState_->mutex);
-        pGameState_->gameState = bindings::GameStateMessage::deserialize(j);
+        std::lock_guard<std::mutex> guard(mutex_);
+        gameState_ = bindings::GameStateMessage::deserialize(j);
         break;
     }
 
@@ -95,7 +95,6 @@ void Controller::handlePacket(const std::string &pack) {
 Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
-      pGameState_{std::make_shared<client::GameStateWrapper>()},
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
@@ -107,7 +106,7 @@ Controller::Controller()
     // TODO: remove this
     GameState gameState{GameMode::Endless, {PlayerState{0}}};
 
-    pGameState_->gameState.deserialize(gameState.serializeFor(0));
+    gameState_.deserialize(gameState.serializeFor(0));
     // ---------------------------------
 };
 
@@ -120,10 +119,6 @@ Controller::RegistrationState Controller::getRegistrationState() const {
 }
 
 Controller::AuthState Controller::getAuthState() const { return authState_; }
-
-std::shared_ptr<client::GameStateWrapper> &Controller::getGameState() {
-    return pGameState_;
-}
 
 void Controller::run() {
     networkManager_.connect();
@@ -224,4 +219,37 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     if (pressedKey == "q") {
         quitGame();
     }
+}
+
+Score Controller::getSelfScore() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.self.playerState_.score_;
+}
+
+Score Controller::getSelfEnergy() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.self.playerState_.energy_.value_or(0);
+}
+
+GameMode Controller::getGameMode() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.gameMode;
+}
+
+std::optional<unsigned> Controller::selfBoardGetColorIdAt(int x, int y) {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.self.tetris_.board_.get(x, y).getColorId();
+}
+
+std::optional<unsigned>
+Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.externals.at(opponentIdx)
+        .tetris_.board_.get(x, y)
+        .getColorId();
+}
+
+size_t Controller::getNumOpponents() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.externals.size();
 }
