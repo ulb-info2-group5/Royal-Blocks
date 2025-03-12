@@ -1,7 +1,7 @@
 #include "game_display.hpp"
 
+#include "../../../core/controller/controller.hpp"
 #include "../../interfaceConstants.hpp"
-#include "core/controller/controller.hpp"
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/canvas.hpp" // for Canvas
@@ -84,7 +84,7 @@ ftxui::Color getFTXUIColor(Color color) {
     return returnValue;
 }
 
-// constructor 
+// constructor
 
 GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
     : screenManager_(screenManager), controller_(controller) {

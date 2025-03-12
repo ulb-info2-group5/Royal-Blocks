@@ -15,8 +15,7 @@
 #include <memory>
 
 #include "../../IGame_Menu.hpp"
-#include "../game_display/game_display.hpp" 
-#include "game_mode/game_mode.hpp"
+#include "../game_display/game_display.hpp"
 
 using PlayerID = size_t;
 
@@ -24,11 +23,13 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
+enum class GameMode; // Forward declaration
+
 /**
  * @brief Game menu class to show and select the game party
  *
  */
-class GameMenu final : public IGame_Menu {
+class GameMenu : public IGame_Menu {
   private:
     ScreenManager &screenManager_;
     Controller &controller_;
@@ -53,14 +54,16 @@ class GameMenu final : public IGame_Menu {
     ftxui::Component royalButon_;
     ftxui::Component backButton_;
     ftxui::Component quitMenuButton_;
-
     /*
      * @brief Rend the all the game present in the game menu
+     *
+     * @return PlayMode the game mode selected
      */
     void renderAllGames() override;
 
     /*
      * @brief Rend the game menu with just the online games mods
+     * @return PlayMode the game mode selected
      */
     void renderOnlineGames() override;
 
@@ -92,10 +95,6 @@ class GameMenu final : public IGame_Menu {
 
     /*
      * @brief Make a button to add a friend
-     *
-     * @param playerId The id of the player to add as a friend
-     * @param friendName The name of the friend to add
-     * @return ftxui::Component The button to add a friend
      */
     ftxui::Component makeFriendButton(PlayerID playerId,
                                       const std::string &friendName);
@@ -115,8 +114,7 @@ class GameMenu final : public IGame_Menu {
     /*
      * @brief Construct a new Game Menu object
      *
-     * @param screenManager The screen manager for asking to render the components
-     * @param controller The controller to interact with the server
+     * @param screen
      */
     GameMenu(ScreenManager &screenManager, Controller &controller);
 
