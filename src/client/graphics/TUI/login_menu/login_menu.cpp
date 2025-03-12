@@ -62,28 +62,32 @@ void LoginMenu::createButtons() {
 }
 
 void LoginMenu::displayWindow() {
-    ftxui::Component component = ftxui::Container::Vertical({
-        buttonRegister_,
-        buttonLogin_,
-        buttonExit_,
-    });
-
-    displayWindow_ = ftxui::Renderer(component, [&] {
-        return ftxui::vbox({
-                   ftxui::text(std::string(STR_LOGIN_MENU)) | ftxui::bold
-                       | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
-                   ftxui::separator(),
-                   ftxui::text(std::string(STR_INSTRUCTION_LOGIN))
-                       | ftxui::center | ftxui::bgcolor(ftxui::Color::Black),
-                   ftxui::separator(),
-                   buttonRegister_->Render()
-                       | ftxui::bgcolor(ftxui::Color::Black),
-                   buttonLogin_->Render() | ftxui::bgcolor(ftxui::Color::Black),
-                   buttonExit_->Render() | ftxui::bgcolor(ftxui::Color::Black),
-               })
-               | ftxui::borderHeavy | ftxui::center
-               | ftxui::bgcolor(ftxui::Color::Black);
-    });
+    displayWindow_ = ftxui::Renderer(
+        ftxui::Container::Vertical({
+            buttonRegister_,
+            buttonLogin_,
+            buttonExit_,
+        }),
+        [&] {
+            return ftxui::vbox({
+                       ftxui::text(std::string(STR_LOGIN_MENU)) | ftxui::bold
+                           | ftxui::center
+                           | ftxui::bgcolor(ftxui::Color::Black),
+                       ftxui::separator(),
+                       ftxui::text(std::string(STR_INSTRUCTION_LOGIN))
+                           | ftxui::center
+                           | ftxui::bgcolor(ftxui::Color::Black),
+                       ftxui::separator(),
+                       buttonRegister_->Render()
+                           | ftxui::bgcolor(ftxui::Color::Black),
+                       buttonLogin_->Render()
+                           | ftxui::bgcolor(ftxui::Color::Black),
+                       buttonExit_->Render()
+                           | ftxui::bgcolor(ftxui::Color::Black),
+                   })
+                   | ftxui::borderHeavy | ftxui::center
+                   | ftxui::bgcolor(ftxui::Color::Black);
+        });
 }
 
 // ### public methods ###

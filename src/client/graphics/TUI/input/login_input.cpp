@@ -117,47 +117,46 @@ void LoginInput::createButtonSubmit() {
 }
 
 void LoginInput::displayWindow() {
+    displayWindow_ = ftxui::Renderer(
+        ftxui::Container::Vertical({
+            inputUsername_,
+            inputPassword_,
+            buttonSubmit_,
+            buttonBack_,
+        }),
+        [&] {
+            std::vector<ftxui::Element> elements = {
+                ftxui::text(title_) | ftxui::bold | ftxui::center,
+            };
 
-    ftxui::Component displayButtons = ftxui::Container::Vertical({
-        inputUsername_,
-        inputPassword_,
-        buttonSubmit_,
-        buttonBack_,
-    });
+            if (!instruction_.empty()) {
+                elements.push_back(ftxui::separator());
+                elements.push_back(ftxui::text(instruction_) | ftxui::center);
+                elements.push_back(ftxui::separator());
+            }
 
-    displayWindow_ = ftxui::Renderer(displayButtons, [&] {
-        std::vector<ftxui::Element> elements = {
-            ftxui::text(title_) | ftxui::bold | ftxui::center,
-        };
-
-        if (!instruction_.empty()) {
+            elements.push_back(inputUsername_->Render());
+            elements.push_back(inputPassword_->Render());
             elements.push_back(ftxui::separator());
-            elements.push_back(ftxui::text(instruction_) | ftxui::center);
-            elements.push_back(ftxui::separator());
-        }
 
-        elements.push_back(inputUsername_->Render());
-        elements.push_back(inputPassword_->Render());
-        elements.push_back(ftxui::separator());
+            if (!msg_.empty()) {
+                elements.push_back(ftxui::text(msg_) | ftxui::center
+                                   | ftxui::color(ftxui::Color::Red));
+                elements.push_back(ftxui::separator());
+            }
 
-        if (!msg_.empty()) {
-            elements.push_back(ftxui::text(msg_) | ftxui::center
-                               | ftxui::color(ftxui::Color::Red));
-            elements.push_back(ftxui::separator());
-        }
+            if (!message_.empty()) {
+                elements.push_back(ftxui::text(message_)
+                                   | ftxui::color(ftxui::Color::Red)
+                                   | ftxui::center);
+                elements.push_back(ftxui::separator());
+            }
 
-        if (!message_.empty()) {
-            elements.push_back(ftxui::text(message_)
-                               | ftxui::color(ftxui::Color::Red)
-                               | ftxui::center);
-            elements.push_back(ftxui::separator());
-        }
+            elements.push_back(buttonSubmit_->Render());
+            elements.push_back(buttonBack_->Render());
 
-        elements.push_back(buttonSubmit_->Render());
-        elements.push_back(buttonBack_->Render());
-
-        return ftxui::vbox(elements) | ftxui::borderHeavy | ftxui::center;
-    });
+            return ftxui::vbox(elements) | ftxui::borderHeavy | ftxui::center;
+        });
 }
 
 // ### public methods ###
