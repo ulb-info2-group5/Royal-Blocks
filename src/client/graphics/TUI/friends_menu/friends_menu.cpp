@@ -52,7 +52,7 @@ void FriendsMenu::render() {
 
         screenManager_.render(render);
     }
-    exit_ = false;
+    exit_ = false; // Reset the exit boolean for the next time
 }
 
 // ### Private methods ###
@@ -60,14 +60,15 @@ void FriendsMenu::render() {
 void FriendsMenu::addFriendScreen() {
     friendNameBuffer_.clear();
 
-    ftxui::Component container = ftxui::Container::Vertical({
-        input_,
-        submitButton_,
-        buttonBack_,
-    });
-
-    ftxui::Component component =
-        ftxui::Renderer(ftxui::Container::Vertical({container}), [&] {
+    ftxui::Component component = ftxui::Renderer(
+        ftxui::Container::Vertical({
+            ftxui::Container::Vertical({
+                input_,
+                submitButton_,
+                buttonBack_,
+            }),
+        }),
+        [&] {
             return ftxui::vbox({
                        ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold
                            | ftxui::center,
@@ -113,24 +114,19 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
 }
 
 void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
-    ftxui::Component buttonYes = ftxui::Button(
-        std::string(STR_YES),
-        [&] {
-            controller_.removeFriend(friendUser.playerId);
-            screenManager_.stopRender();
-        },
-        GlobalButtonStyle());
+    ftxui::Component component = ftxui::Renderer([&] {
+        ftxui::Component buttonYes = ftxui::Button(
+            std::string(STR_YES),
+            [&] {
+                controller_.removeFriend(friendUser.playerId);
+                screenManager_.stopRender();
+            },
+            GlobalButtonStyle());
 
-    ftxui::Component buttonNo = ftxui::Button(
-        std::string(STR_NO), [&] { screenManager_.stopRender(); },
-        GlobalButtonStyle()); // Like it's a back button
+        ftxui::Component buttonNo = ftxui::Button(
+            std::string(STR_NO), [&] { screenManager_.stopRender(); },
+            GlobalButtonStyle());
 
-    ftxui::Component container = ftxui::Container::Vertical({
-        buttonYes,
-        buttonNo,
-    });
-
-    ftxui::Component component = ftxui::Renderer(container, [&] {
         return ftxui::vbox({
                    ftxui::text("Do you want to remove " + friendUser.username
                                + " from your friends list ?")
