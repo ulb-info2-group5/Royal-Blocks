@@ -81,8 +81,6 @@ class MainMenu final : public IMain_Menu {
 
     void displayMainWindow() override;
 
-    void displayRankingList() override;
-
     void displayRankingWindow() override;
 
     void displayProfileManagerButton() override;

@@ -171,59 +171,67 @@ void MainMenu::displayMainWindow() {
         });
 }
 
-void MainMenu::displayRankingList() {
-    rowsRanking_.clear();
-
-    // column width
-    constexpr int widthRanking = 10;
-    constexpr int widthUser = 30;
-    constexpr int widthScore = 10;
-
-    // table titles
-    rowsRanking_.push_back(ftxui::hbox({
-        ftxui::text(std::string(STR_RANKING)) | ftxui::bold
-            | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking) | ftxui::center,
-        ftxui::text(std::string(STR_USER)) | ftxui::bold
-            | size(ftxui::WIDTH, ftxui::EQUAL, widthUser) | ftxui::center,
-        ftxui::text(std::string(STR_SCORE)) | ftxui::bold
-            | size(ftxui::WIDTH, ftxui::EQUAL, widthScore) | ftxui::center,
-    }));
-    rowsRanking_.push_back(ftxui::separator());
-
-    for (auto [rank, player] :
-         std::views::enumerate(controller_.getRanking())) {
-        const auto &[user, score] = player;
-
-        rowsRanking_.push_back(ftxui::hbox({
-            ftxui::text(std::to_string(rank + 1))
-                | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking),
-
-            ftxui::text(user) | size(ftxui::WIDTH, ftxui::EQUAL, widthUser),
-
-            ftxui::text(std::to_string(score))
-                | size(ftxui::WIDTH, ftxui::EQUAL, widthScore),
-        }));
-    }
-}
-
 void MainMenu::displayRankingWindow() {
-    displayRankingList();
+    ftxui::Component container = ftxui::Container::Vertical({
+        buttonBack_,
+    });
 
-    rankingWindow_ = ftxui::Renderer(
-        ftxui::Container::Vertical({
-            buttonBack_,
-        }),
-        [&] {
-            return ftxui::vbox({
-                       ftxui::text(std::string(STR_ENDLESS_RANKING))
-                           | ftxui::bold | ftxui::center,
-                       ftxui::separator(),
-                       ftxui::vbox(rowsRanking_) | ftxui::borderHeavy,
-                       ftxui::separator(),
-                       buttonBack_->Render(),
-                   })
-                   | ftxui::borderHeavy | ftxui::center;
-        });
+    rankingWindow_ = ftxui::Renderer(container, [&] {
+        std::vector<ftxui::Element> rows;
+
+        constexpr int widthRanking = 10;
+        constexpr int widthUser = 30;
+        constexpr int widthScore = 10;
+
+        // Title of the ranking
+        rows.push_back(ftxui::hbox({
+                           ftxui::text(std::string(STR_RANKING)) | ftxui::bold
+                               | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking)
+                               | ftxui::center,
+                           ftxui::text("   "),
+                           ftxui::text(std::string(STR_USER)) | ftxui::bold
+                               | size(ftxui::WIDTH, ftxui::EQUAL, widthUser)
+                               | ftxui::center,
+                           ftxui::text("   "),
+                           ftxui::text(std::string(STR_SCORE)) | ftxui::bold
+                               | size(ftxui::WIDTH, ftxui::EQUAL, widthScore)
+                               | ftxui::center,
+                       })
+                       | ftxui::center);
+        rows.push_back(ftxui::separator());
+
+        // Ranking of the players
+        for (auto [rank, player] :
+             std::views::enumerate(controller_.getRanking())) {
+            const auto &[user, score] = player;
+
+            rows.push_back(
+                ftxui::hbox({
+                    ftxui::text(std::to_string(rank + 1))
+                        | size(ftxui::WIDTH, ftxui::EQUAL, widthRanking)
+                        | ftxui::center,
+                    ftxui::text("   "),
+                    ftxui::text(user)
+                        | size(ftxui::WIDTH, ftxui::EQUAL, widthUser)
+                        | ftxui::center,
+                    ftxui::text("   "),
+                    ftxui::text(std::to_string(score))
+                        | size(ftxui::WIDTH, ftxui::EQUAL, widthScore)
+                        | ftxui::center,
+                })
+                | ftxui::center);
+        }
+
+        return ftxui::vbox({
+                   ftxui::text(std::string(STR_ENDLESS_RANKING)) | ftxui::bold
+                       | ftxui::center,
+                   ftxui::separator(),
+                   ftxui::vbox(rows) | ftxui::borderHeavy,
+                   ftxui::separator(),
+                   buttonBack_->Render(),
+               })
+               | ftxui::borderHeavy | ftxui::center;
+    });
 }
 
 void MainMenu::displayProfileManagerButton() {
