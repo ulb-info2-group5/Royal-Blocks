@@ -73,6 +73,8 @@ class GameServer {
     // === getters ===
     
     boost::asio::io_context& getIoContext();
+
+    std::vector<PlayerID> getVectorPlayersId();
 };
 
 #endif // GAME_SERVER_HPP

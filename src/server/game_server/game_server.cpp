@@ -8,6 +8,8 @@
 #include <memory>
 #include <ostream>
 #include <vector>
+#include <iostream>
+#include <ranges>
 
 constexpr size_t SECONDS_BETWEEN_TICKS = 1;
 
@@ -173,5 +175,14 @@ void GameServer::run() {
 
 boost::asio::io_context& GameServer::getIoContext() {
     return  context_;
+}
+
+
+std::vector<PlayerID> GameServer::getVectorPlayersId(){
+    std::vector<PlayerID> playerIds;
+    for (auto player : pGameState_->getPlayerToTetris()){
+        playerIds.push_back(player.pPlayerState->getPlayerID()); 
+    }
+    return playerIds;
 }
 
