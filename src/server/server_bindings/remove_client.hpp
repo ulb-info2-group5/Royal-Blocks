@@ -12,7 +12,7 @@ namespace bindings {
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::RemoveClient}};
         }
-        static RemoveClient from_json(const nlohmann::json &j){
+        static RemoveClient from_json(const nlohmann::json &j) {
             if (j.at("type") != BindingType::RemoveClient) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
@@ -22,4 +22,3 @@ namespace bindings {
 } // namespace bindings
 
 #endif // BINDINGS_REMOVE_CLIENT_HPP
-

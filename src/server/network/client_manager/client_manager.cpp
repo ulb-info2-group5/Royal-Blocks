@@ -1,183 +1,179 @@
 
 #include "client_manager.hpp"
 
-
 using json = nlohmann::json;
-
 
 using boost::asio::ip::tcp;
 
-
-
 // ====== tcp connection class ======
-
 
 // --- private ---
 
-void ClientLink::read(){
-    boost::asio::async_read_until(socket_, streamBuffer_, '\n',[this](boost::system::error_code ec, std::size_t length) {
-        if (!ec) {
-            handleReading();
-        }else if (ec  == boost::asio::error::eof) {    
-            handleErrorReading();
-        }
-
-    }); 
+void ClientLink::read() {
+    boost::asio::async_read_until(
+        socket_, streamBuffer_, '\n',
+        [this](boost::system::error_code ec, std::size_t length) {
+            if (!ec) {
+                handleReading();
+            } else if (ec == boost::asio::error::eof) {
+                handleErrorReading();
+            }
+        });
 }
 
-void ClientLink::handleReading(){
-        std::istream is(&streamBuffer_);
-        std::string packet;
-        std::getline(is, packet);
-        std::cout << "packet : " << packet << std::endl;
-        if (!isIdentify()) {
-            handleAuthentication(packet);
-        }else {
-            packetHandler_(packet, clientId.value());
-        }
-        read();
+void ClientLink::handleReading() {
+    std::istream is(&streamBuffer_);
+    std::string packet;
+    std::getline(is, packet);
+    std::cout << "packet : " << packet << std::endl;
+    if (!isIdentify()) {
+        handleAuthentication(packet);
+    } else {
+        packetHandler_(packet, clientId.value());
+    }
+    read();
 }
 
-void ClientLink::handleErrorReading(){
-    nlohmann::json removeClient =  bindings::RemoveClient{}.to_json(); 
-    if (!isIdentify()){
+void ClientLink::handleErrorReading() {
+    nlohmann::json removeClient = bindings::RemoveClient{}.to_json();
+    if (!isIdentify()) {
         mustBeDeletedFromTheWaitingForAuthList_ = false;
-        authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(), removeClient);
-    }else {
+        authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(),
+                           removeClient);
+    } else {
         packetHandler_(removeClient.dump(), clientId.value());
     }
 }
 
-void ClientLink::handleAuthentication(std::string & packet){
+void ClientLink::handleAuthentication(std::string &packet) {
     nlohmann::json jsonPacket = nlohmann::json::parse(packet);
-    nlohmann::json response = authPacketHandler_(jsonPacket.at("type").get<bindings::BindingType>(),jsonPacket.at("data"));
+    nlohmann::json response =
+        authPacketHandler_(jsonPacket.at("type").get<bindings::BindingType>(),
+                           jsonPacket.at("data"));
     sendPackage(response);
     std::cout << response.dump() << std::endl;
-    if (response.at("type").get<bindings::BindingType>() == bindings::BindingType::AuthenticationResponse && response.at("data").at("success").get<bool>()){
+    if (response.at("type").get<bindings::BindingType>()
+            == bindings::BindingType::AuthenticationResponse
+        && response.at("data").at("success").get<bool>()) {
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
         identify_ = true;
         mustBeDeletedFromTheWaitingForAuthList_ = true;
     }
 }
 
-void ClientLink::writeSocket(std::string &content){
-    boost::asio::async_write(socket_, boost::asio::buffer(content) , [this](boost::system::error_code ec, std::size_t length){
-        if (!ec){
-            std::cout << "message send from the server " << std::endl;
-            buffer_.erase(0, length);
-        }
-    });
+void ClientLink::writeSocket(std::string &content) {
+    boost::asio::async_write(
+        socket_, boost::asio::buffer(content),
+        [this](boost::system::error_code ec, std::size_t length) {
+            if (!ec) {
+                std::cout << "message send from the server " << std::endl;
+                buffer_.erase(0, length);
+            }
+        });
 }
 
 // --- public ---
-ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler, AuthPacketHandler authPacketHandler, AuthSuccessCallback authSuccessCallback) 
-: socket_(std::move(socket)), packetHandler_(packetHandler), authPacketHandler_(authPacketHandler), authSuccessCallback_(authSuccessCallback), clientId(std::nullopt) {
+ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
+                       AuthPacketHandler authPacketHandler,
+                       AuthSuccessCallback authSuccessCallback)
+    : socket_(std::move(socket)), packetHandler_(packetHandler),
+      authPacketHandler_(authPacketHandler),
+      authSuccessCallback_(authSuccessCallback), clientId(std::nullopt) {
     start();
 }
 
-
-void ClientLink::start(){
+void ClientLink::start() {
     std::cout << "start client link" << std::endl;
     read();
 }
 
-bool ClientLink::isIdentify(){
-    return identify_;
-}
-bool ClientLink::shouldItBeDeletedFromTheList(){
+bool ClientLink::isIdentify() { return identify_; }
+bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
 }
 
-
-void ClientLink::sendPackage(nlohmann::json gameState){
+void ClientLink::sendPackage(nlohmann::json gameState) {
     buffer_ = gameState.dump() + "\n";
     writeSocket(buffer_);
 }
 
+void ClientLink::setClientId(const int id) { clientId = id; }
 
-void ClientLink::setClientId(const int id){
-    clientId = id;
-}
-
-
-void ClientLink::setIdentifyFalse(){
-    identify_ = false;
-}
-
-
-
+void ClientLink::setIdentifyFalse() { identify_ = false; }
 
 // ====== Client manager class ======
 // ---private ---
 
-void ClientManager::removeClientsFromTheWaintingList(){
-    auto ne = remove_if(waitingForAuthClient.begin(), waitingForAuthClient.end(),
-    [](std::shared_ptr<ClientLink> x) {
-      return x->shouldItBeDeletedFromTheList();
-    });
+void ClientManager::removeClientsFromTheWaintingList() {
+    auto ne =
+        remove_if(waitingForAuthClient.begin(), waitingForAuthClient.end(),
+                  [](std::shared_ptr<ClientLink> x) {
+                      return x->shouldItBeDeletedFromTheList();
+                  });
     waitingForAuthClient.erase(ne, waitingForAuthClient.end());
 }
 
-bool ClientManager::attemptCreateAccount(nlohmann::json data){
-    CreateAccountStatus status = database_.accountManager->createAccount(data.at("nickname").get<std::string>(), data.at("password").get<std::string>());
+bool ClientManager::attemptCreateAccount(nlohmann::json data) {
+    CreateAccountStatus status = database_.accountManager->createAccount(
+        data.at("nickname").get<std::string>(),
+        data.at("password").get<std::string>());
     if (status == CreateAccountStatus::SUCCESS) return true;
     return false;
 }
 
-
-void ClientManager::disconnectClient(const PlayerID & playerID ){
-    if (!isClientConnected(playerID)){
-        std::cout << "***** the client has already been disconnected  (id : ) " << playerID << std::endl;
-    }else {
+void ClientManager::disconnectClient(const PlayerID &playerID) {
+    if (!isClientConnected(playerID)) {
+        std::cout << "***** the client has already been disconnected  (id : ) "
+                  << playerID << std::endl;
+    } else {
         connectedClients_[playerID]->setIdentifyFalse();
         addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
         removeConnection(playerID);
-
     }
 }
 
+void ClientManager::removeConnection(const PlayerID &playerID) {
 
-void ClientManager::removeConnection(const PlayerID & playerID){
-    
     connectedClients_.erase(playerID);
 }
 
-
-
-
 // ---public ---
-ClientManager::ClientManager(DataBase database) : 
-database_(database), gamesManager_([this](PlayerID playerId, nlohmann::json gameState){ 
-                updateGameStates(playerId, gameState);
-    })  {}
+ClientManager::ClientManager(DataBase database)
+    : database_(database),
+      gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
+          updateGameStates(playerId, gameState);
+      }) {}
 
-
-void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData){
+void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
+                                    nlohmann::json clientData) {
     addConnection(clientLink, clientData.at("nickname").get<std::string>());
 }
 
-
-void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo){
+void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
+                                  const std::string &pseudo) {
     std::lock_guard<std::mutex> lock(mutex_);
     const PlayerID id = database_.accountManager->getUserId(pseudo);
-    std::cout << "new client id :" <<id << std::endl;
-    clientSession->setClientId(id);  
+    std::cout << "new client id :" << id << std::endl;
+    clientSession->setClientId(id);
     connectedClients_[id] = clientSession;
     removeClientsFromTheWaintingList();
 }
 
-
-
-nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nlohmann::json data){
+nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
+                                                nlohmann::json data) {
     nlohmann::json response;
-    switch (type){
-    case bindings::BindingType::Authentication :
-        response = (checkCredentials(data)) ? bindings::AuthenticationResponse{true}.to_json() : bindings::AuthenticationResponse{false}.to_json(); 
+    switch (type) {
+    case bindings::BindingType::Authentication:
+        response = (checkCredentials(data))
+                       ? bindings::AuthenticationResponse{true}.to_json()
+                       : bindings::AuthenticationResponse{false}.to_json();
         break;
-    case bindings::BindingType::Registration :
-        response = (attemptCreateAccount(data)) ? bindings::RegistrationResponse{true}.to_json() : bindings::RegistrationResponse{false}.to_json();
+    case bindings::BindingType::Registration:
+        response = (attemptCreateAccount(data))
+                       ? bindings::RegistrationResponse{true}.to_json()
+                       : bindings::RegistrationResponse{false}.to_json();
         break;
-    case bindings::BindingType::RemoveClient : 
+    case bindings::BindingType::RemoveClient:
         removeClientsFromTheWaintingList();
     default:
         break;
@@ -185,73 +181,76 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
     return response;
 }
 
+void ClientManager::handlePacket(const std::string &packet,
+                                 const PlayerID &clientId) {
 
-
-void ClientManager::handlePacket(const std::string& packet, const PlayerID& clientId){
-
-    if (gamesManager_.isThisClientInGame(clientId)){
-        gamesManager_.enqueueGameBinding(clientId, packet );
+    if (gamesManager_.isThisClientInGame(clientId)) {
+        gamesManager_.enqueueGameBinding(clientId, packet);
         return;
-    }
-    else {
+    } else {
         handlePacketMenu(std::move(packet), std::move(clientId));
     }
 }
-void ClientManager::handlePacketMenu(const std::string& packet , const PlayerID& clientId) {
+void ClientManager::handlePacketMenu(const std::string &packet,
+                                     const PlayerID &clientId) {
     nlohmann::json jPack = nlohmann::json::parse(packet);
-    std::cout << "-- handle Packet call -- " <<std::endl;
+    std::cout << "-- handle Packet call -- " << std::endl;
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
-    switch (type){
-    case bindings::BindingType::Message:  
+    switch (type) {
+    case bindings::BindingType::Message:
         handleMessage(jPack);
         break;
     case bindings::BindingType::JoinGame:
-        matchmaking_.addPlayer(RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)}, gamesManager_);
+        matchmaking_.addPlayer(
+            RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)},
+            gamesManager_);
         break;
     case bindings::BindingType::CreateGame:
-        matchmaking_.createAGame(RequestCreateGame{clientId, bindings::CreateGame::from_json(jPack)});
+        matchmaking_.createAGame(RequestCreateGame{
+            clientId, bindings::CreateGame::from_json(jPack)});
         break;
-    case bindings::BindingType::RemoveClient: 
+    case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
     default:
 
-       
         break;
     }
 }
 
-void ClientManager::addClientInWaitingForAuth(std::shared_ptr<ClientLink> &&clientLink){
+void ClientManager::addClientInWaitingForAuth(
+    std::shared_ptr<ClientLink> &&clientLink) {
     waitingForAuthClient.push_back(clientLink);
 }
 
-void ClientManager::handleMessage(nlohmann::json message){
+void ClientManager::handleMessage(nlohmann::json message) {
     std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("data").at("recipientId").get<int>()]->sendPackage(message);
+    connectedClients_[message.at("data").at("recipientId").get<int>()]
+        ->sendPackage(message);
 }
 
-
-bool ClientManager::checkCredentials(nlohmann::json data ){
-    if (!database_.accountManager->checkUsernameExists(data.at("nickname").get<std::string>())){
-        std::cout << "username false" << std::endl;    
+bool ClientManager::checkCredentials(nlohmann::json data) {
+    if (!database_.accountManager->checkUsernameExists(
+            data.at("nickname").get<std::string>())) {
+        std::cout << "username false" << std::endl;
         return false;
-    }else{
-        if (database_.accountManager->checkUserPassword(data.at("nickname").get<std::string>(), data.at("password").get<std::string>())){
+    } else {
+        if (database_.accountManager->checkUserPassword(
+                data.at("nickname").get<std::string>(),
+                data.at("password").get<std::string>())) {
             return true;
-        }else {
-            std::cout <<  "password false" << std::endl;
-            return false; 
+        } else {
+            std::cout << "password false" << std::endl;
+            return false;
         }
     }
 }
 
-void ClientManager::updateGameStates(PlayerID playerIds, nlohmann::json gameState){
-        connectedClients_[playerIds]->sendPackage(gameState);
+void ClientManager::updateGameStates(PlayerID playerIds,
+                                     nlohmann::json gameState) {
+    connectedClients_[playerIds]->sendPackage(gameState);
 }
 
-
-
-
-bool ClientManager::isClientConnected(PlayerID playerId){
+bool ClientManager::isClientConnected(PlayerID playerId) {
     return connectedClients_.find(playerId) != connectedClients_.end();
 }

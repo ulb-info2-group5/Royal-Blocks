@@ -1,48 +1,41 @@
 
 #include "network.hpp"
 
-
-
 using json = nlohmann::json;
 
-
 using boost::asio::ip::tcp;
-
-
 
 // ====== Network class ======
 
 //--- private ---
-void Network::accept(){
-   acceptor_.async_accept([this](boost::system::error_code ec, tcp::socket socket){
-    if (!ec ){
+void Network::accept() {
+    acceptor_.async_accept([this](boost::system::error_code ec,
+                                  tcp::socket socket) {
+        if (!ec) {
 
-        std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(std::move(socket), 
-                [this](const std::string& packet, const int clientId){ clientManager_.handlePacket(packet, clientId); }, 
-                [this](bindings::BindingType type, nlohmann::json data) -> nlohmann::json  {
-                    return clientManager_.authPacketHandler(type, data);  
-                    
-                }, 
-                [this](std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData){clientManager_.authSuccessCall(clientLink, clientData); }
-            );
+            std::shared_ptr<ClientLink> newLink = std::make_shared<ClientLink>(
+                std::move(socket),
+                [this](const std::string &packet, const int clientId) {
+                    clientManager_.handlePacket(packet, clientId);
+                },
+                [this](bindings::BindingType type,
+                       nlohmann::json data) -> nlohmann::json {
+                    return clientManager_.authPacketHandler(type, data);
+                },
+                [this](std::shared_ptr<ClientLink> clientLink,
+                       nlohmann::json clientData) {
+                    clientManager_.authSuccessCall(clientLink, clientData);
+                });
 
-        clientManager_.addClientInWaitingForAuth(std::move(newLink));
-    }
-    accept();
-   });
-   
+            clientManager_.addClientInWaitingForAuth(std::move(newLink));
+        }
+        accept();
+    });
 }
-
-
-
-
-
-
-
-
 
 // --- public ---
-Network::Network(boost::asio::io_context& io, ClientManager &clientManager) : io_(io), acceptor_(io, tcp::endpoint(tcp::v4(), 1234)), clientManager_(clientManager) {
+Network::Network(boost::asio::io_context &io, ClientManager &clientManager)
+    : io_(io), acceptor_(io, tcp::endpoint(tcp::v4(), 1234)),
+      clientManager_(clientManager) {
     this->accept();
 }
-

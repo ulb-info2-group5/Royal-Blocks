@@ -18,14 +18,11 @@
 
 using GameID = size_t;
 
-using UpdateGameStates = std::function<void (PlayerID, nlohmann::json)>;
-using CallBackFinishGame = std::function<void (GameID)>; 
-
-
-
+using UpdateGameStates = std::function<void(PlayerID, nlohmann::json)>;
+using CallBackFinishGame = std::function<void(GameID)>;
 
 class GameServer {
-  
+
   private:
     boost::asio::io_context context_;
     boost::asio::steady_timer tickTimer_;
@@ -33,10 +30,8 @@ class GameServer {
     GameEngine engine;
     GameID gameId_;
 
-
     UpdateGameStates updateGameStates_;
     CallBackFinishGame callBackFinishGame_;
-    
 
     /**
      * @brief Signals the engine that an engine tick occured. Resets the timer
@@ -48,7 +43,9 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameState, GameID id, CallBackFinishGame callBackFinishGame);
+    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds,
+               UpdateGameStates updateGameState, GameID id,
+               CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;
@@ -65,7 +62,6 @@ class GameServer {
      */
     void sendGameStates();
 
-
     /**
      * @brief Runs the server. This function returns as soon as the game is
      * finished.
@@ -73,8 +69,8 @@ class GameServer {
     void run();
 
     // === getters ===
-    
-    boost::asio::io_context& getIoContext();
+
+    boost::asio::io_context &getIoContext();
 
     std::vector<PlayerID> getVectorPlayersId();
 };
