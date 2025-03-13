@@ -190,39 +190,11 @@ void GameDisplay::displayMiddleWindow() {
                | ftxui::border;
     });
 
-    ftxui::Component playButtonsDisplay = ftxui::Container::Horizontal({
-        ftxui::Button(
-            "g", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-        ftxui::Button(
-            "f", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-        ftxui::Button(
-            "<-", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-        ftxui::Button(
-            "->", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-        ftxui::Button(
-            "j", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-        ftxui::Button(
-            "G", [&] { /* function to call */ },
-            ftxui::ButtonOption::Animated(ftxui::Color::Red))
-            | ftxui::borderDouble,
-    });
-
     displayMiddle_ = ftxui::Container::Vertical({
         modeDisplay
             | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, WIDTH_PLAYER_CANVAS / 2)
             | ftxui::center,
         playerBoard_,
-        playButtonsDisplay,
     });
 }
 
@@ -232,10 +204,11 @@ void GameDisplay::drawOpponentsBoard() {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&, index] {
             ftxui::Canvas opCanvas =
                 ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
-            ftxui::Pixel pixel;
+            ftxui::Pixel pixel = ftxui::Pixel();
 
             for (uint32_t y = 0; y < HEIGHT; ++y) {
                 for (uint32_t x = 0; x < WIDTH; ++x) {
+
                     pixel.background_color = getFTXUIColor(
                         controller_.opponentsBoardGetColorIdAt(index, x, y)
                             .transform(
@@ -307,8 +280,10 @@ void GameDisplay::displayOppponentsBoard() {
 
 void GameDisplay::displayOpponentBoardDuel() {
     opBoardDisplay_ = ftxui::Renderer([&] {
-        ftxui::Canvas playerCanvas =
-            ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
+        ftxui::Canvas playerCanvas = ftxui::Canvas(
+            WIDTH_PLAYER_CANVAS,
+            HEIGHT_PLAYER_CANVAS); // For dual the size of the board is the same
+                                   // as the player's
         ftxui::Pixel pixel = ftxui::Pixel();
 
         for (uint32_t y = 0; y < HEIGHT; ++y) {
@@ -319,11 +294,19 @@ void GameDisplay::displayOpponentBoardDuel() {
                         .transform([](auto id) { return colorIdToColor(id); })
                         .value_or(Color::Black));
 
-                for (uint32_t dy = 0; dy < CELL_SIZE_OPPONENT; ++dy) {
-                    for (uint32_t dx = 0; dx < CELL_SIZE_OPPONENT; ++dx) {
+                for (uint32_t dy = 0; dy < CELL_SIZE_PLAYER;
+                     ++dy) { // For dual the size of the cells of the tetrominos
+                             // is the same as the player's
+                    for (uint32_t dx = 0; dx < CELL_SIZE_PLAYER;
+                         ++dx) { // For dual the size of the cells of the
+                                 // tetrominos is the same as the player's
                         playerCanvas.DrawBlock(
-                            x * CELL_SIZE_OPPONENT + dx,
-                            (HEIGHT - 1 - y) * CELL_SIZE_OPPONENT + dy, true,
+                            x * CELL_SIZE_PLAYER
+                                + dx, // For dual the size of the cells of the
+                                      // tetrominos is the same as the player's
+                            (HEIGHT - 1 - y) * CELL_SIZE_PLAYER + dy,
+                            true, // For dual the size of the cells of the
+                                  // tetrominos is the same as the player's
                             pixel.background_color);
                     }
                 }
