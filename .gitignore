@@ -4,7 +4,7 @@ build/
 tetris_tests
 tetris_royal_tests
 tetris_royal_client
+tetris_royal_server
 accounts.db
-tetris_royal_client
 auth
 *.o
