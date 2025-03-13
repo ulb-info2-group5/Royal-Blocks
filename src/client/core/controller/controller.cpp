@@ -217,6 +217,17 @@ void Controller::quitGame() {
 void Controller::handleKeypress(const std::string &pressedKey) {
     if (pressedKey == "q") {
         quitGame();
+    } else if (pressedKey == "ArrowLeft") {
+        networkManager_.send(
+            bindings::MoveActive{TetrominoMove::Left}.to_json().dump());
+    } else if (pressedKey == "ArrowRight") {
+        networkManager_.send(
+            bindings::MoveActive{TetrominoMove::Right}.to_json().dump());
+    } else if (pressedKey == "ArrowUp") {
+        networkManager_.send(bindings::BigDrop{}.to_json().dump());
+    } else if (pressedKey == "ArrowDown") {
+        networkManager_.send(
+            bindings::MoveActive{TetrominoMove::Down}.to_json().dump());
     }
 }
 
