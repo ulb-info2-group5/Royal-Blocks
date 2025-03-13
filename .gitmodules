@@ -1,6 +1,0 @@
-[submodule "glaze"]
-	path = glaze
-	url = https://github.com/stephenberry/glaze.git
-[submodule "lib/glaze"]
-	path = lib/glaze
-	url = https://github.com/stephenberry/glaze.git
