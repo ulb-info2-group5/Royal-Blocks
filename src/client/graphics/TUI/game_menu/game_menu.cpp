@@ -187,7 +187,8 @@ void GameMenu::handleChoice() {
         return;
     }
 
-    while (joinType_ != JoinType::BACK) {
+    while (joinType_ != JoinType::BACK
+           && joinType_ != JoinType::GAME_FINISHED) {
 
         switch (joinType_) {
         case JoinType::FRIEND:
@@ -200,6 +201,11 @@ void GameMenu::handleChoice() {
 
         case JoinType::BACK: // Do nothing because the user pressed the back
                              // button
+            break;
+
+        case JoinType::GAME_FINISHED:
+            quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
+                              // menu loop when the game is finished
             break;
 
         default:
@@ -217,7 +223,8 @@ void GameMenu::joinFriendScreen() {
 
     auto updateFriendsList = [&] {
         friendsContainer->DetachAllChildren();
-        const std::vector<bindings::User>& friendsList = controller_.getFriendsList();
+        const std::vector<bindings::User> &friendsList =
+            controller_.getFriendsList();
 
         if (friendsList.empty()) {
             ftxui::Component renderNoFriends =
@@ -232,7 +239,8 @@ void GameMenu::joinFriendScreen() {
 
         for (const bindings::User &friendUser : friendsList) {
             if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
-                friendsContainer->Add(makeFriendButton(friendUser.playerId, friendUser.username));
+                friendsContainer->Add(
+                    makeFriendButton(friendUser.playerId, friendUser.username));
             }
         }
     };
