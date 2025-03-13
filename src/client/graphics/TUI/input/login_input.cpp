@@ -175,12 +175,12 @@ void LoginInput::clearInfo() {
 }
 
 LoginState LoginInput::render() {
-    message_.clear();
-    msg_.clear();
-
     displayWindow();
 
     screenManager_.render(displayWindow_);
+
+    message_.clear();
+    msg_.clear();
 
     return loginState_;
 }
