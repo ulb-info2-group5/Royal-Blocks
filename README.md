@@ -1,10 +1,12 @@
+<div align="center">
+
 # Tetris Royale
 
 ## Membres du groupe
 
 | Prénom    | Nom                 | Matricule |
 | --------- | ------------------- | --------- |
-| Tao       | CHAU                | 000567638 |
+| Tao       | Chau                | 000567638 |
 | Juliette  | Cornu-Besser        | 000581723 |
 | Quentin   | Bernard Bouissières | 000572078 |
 | Jonas     | Schellekens         | 000590985 |
@@ -14,6 +16,8 @@
 | Rafaou    | Gajewicz            | 000569354 |
 
 ## Build le projet
+
+</div>
 
 ### Dépendances
 
@@ -26,8 +30,6 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
   `sudo apt install cmake`
 - **CppUnit**  
   `sudo apt install libcppunit-dev`
-- **Ncurses**  
-  `sudo apt install libncurses5-dev libncursesw5-dev`
 
 ### Compilation
 
@@ -41,7 +43,11 @@ make release
 make debug
 ```
 
+<div align="center">
+
 ## Exécution du jeu
+
+</div>
 
 **Pour afficher correctement le jeu Tetris avec la bibliothèque Ncurses dans
 votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
@@ -52,7 +58,13 @@ votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
 Pour lancer Tetris, exécutez :
 
 ```sh
-./build/tetris
+./tetris_royal_client
+```
+
+Pour lancer le serveur, exécutez :
+
+```sh
+./tetris_royal_server
 ```
 
 ### Les différentes commandes de déplacement
@@ -61,19 +73,19 @@ Voici une liste des différentes touches pour déplacer et tourner les pièces d
 Tetris :
 
 - **Rotation sens horlogique**  
-  `g` ou `espace`
+  `g`
 
 - **Rotation sens anti-horlogique**  
   `f`
 
 - **Déplacement vers la gauche**  
-  `h` ou `←`
+  `←`
 
 - **Déplacement vers la droite**  
-  `l` ou `→`
+  `→`
 
 - **Descendre plus rapidement**  
-  `j` ou `↓`
+  `↓`
 
 - **Placer le tetromino en bas**  
-  `G` ou `↑`
+  `↑`
