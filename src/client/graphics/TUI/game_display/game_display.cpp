@@ -365,7 +365,7 @@ void GameDisplay::drawEndlessMode() {
     displayWindow_ = ftxui::Container::Horizontal({
         displayLeft_,
         displayMiddle_,
-    });
+    }) | ftxui::center;
 }
 
 void GameDisplay::drawMultiMode() {
@@ -377,7 +377,7 @@ void GameDisplay::drawMultiMode() {
         displayLeft_,
         displayMiddle_,
         displayRight_,
-    });
+    }) | ftxui::center;
 }
 
 void GameDisplay::handleKeys() {
@@ -419,12 +419,5 @@ void GameDisplay::render() {
         drawMultiMode();
     }
 
-    handleKeys();
-
-    // Center the displayWindow_
-    ftxui::Component finalDisplay = ftxui::Renderer(displayWindow_, [&] {
-        return ftxui::vbox({displayWindow_->Render()}) | ftxui::center;
-    });
-
-    screenManager_.render(finalDisplay);
+    screenManager_.render(displayWindow_);
 }
