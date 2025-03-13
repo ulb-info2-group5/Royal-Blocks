@@ -59,6 +59,10 @@ Pour lancer le serveur, exécutez :
 ./tetris_royal_server
 ```
 
+### Information importante concernant l'affichage du jeu dans le terminal
+
+Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
+
 ### Les différentes commandes de déplacement
 
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
