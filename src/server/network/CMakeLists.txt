@@ -20,8 +20,6 @@ target_link_libraries(network_lib PUBLIC
 )
 
 
-# TODO: remove this (temporary)
-# network binary
-set(SOURCES_NETWORK_MAIN main.cpp)
-add_executable(network ${SOURCES_NETWORK_MAIN})
-target_link_libraries(network network_lib)
+set(SOURCE_SERVER_MAIN main.cpp)
+add_executable(${PROJECT_NAME}_server ${SOURCE_SERVER_MAIN})
+target_link_libraries(${PROJECT_NAME}_server network_lib)
