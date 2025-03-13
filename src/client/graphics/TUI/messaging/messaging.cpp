@@ -105,26 +105,32 @@ void Messaging::drawDisplay() {
 
     chatDisplay_ = ftxui::Renderer([&] {
         return getSelectedFriendId()
-                   .and_then([this](auto id) -> std::optional<ftxui::Element> {
-                       ftxui::Elements chat_elements;
+            .and_then([this](auto id) -> std::optional<ftxui::Element> {
+                ftxui::Elements chat_elements;
 
-                       auto &[name, conversation] =
-                           controller_.getConversationWith(id);
+                auto &[name, conversation] =
+                    controller_.getConversationWith(id);
 
-                       for (auto &[senderId, message] :
-                            conversation.senderMessages) {
+                if (conversation.senderMessages.empty()) {
+                    chat_elements.push_back(
+                        ftxui::text(std::string("No messages yet")));
+                }
 
-                           // TODO: display our own messages with a different
-                           // color
-                           chat_elements.push_back(
-                               ftxui::text(message) | ftxui::bold
-                               | ftxui::color(ftxui::Color::Yellow));
-                       }
+                else {
+                    for (auto &[senderId, message] :
+                         conversation.senderMessages) {
 
-                       return ftxui::vbox(chat_elements) | ftxui::flex;
-                   })
-                   .value_or(ftxui::text(std::string(STR_NO_CONVERSATION)))
-               | ftxui::bold | ftxui::center;
+                        // TODO: display our own messages with a different
+                        // color
+                        chat_elements.push_back(
+                            ftxui::text(message) | ftxui::bold
+                            | ftxui::color(ftxui::Color::Yellow));
+                    }
+                }
+
+                return ftxui::vbox(chat_elements) | ftxui::flex;
+            })
+            .value_or(ftxui::text(std::string(STR_NO_CONVERSATION)));
     });
 }
 
