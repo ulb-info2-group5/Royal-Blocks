@@ -1,5 +1,3 @@
-<div align="center">
-
 # Tetris Royale
 
 ## Membres du groupe
@@ -16,8 +14,6 @@
 | Rafaou    | Gajewicz            | 000569354 |
 
 ## Build le projet
-
-</div>
 
 ### Dépendances
 
@@ -43,11 +39,7 @@ make release
 make debug
 ```
 
-<div align="center">
-
 ## Exécution du jeu
-
-</div>
 
 **Pour afficher correctement le jeu Tetris avec la bibliothèque Ncurses dans
 votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
