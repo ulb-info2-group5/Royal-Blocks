@@ -5,6 +5,7 @@
 #include "../../../core/controller/controller.hpp"
 
 // TODO: this should defo go somewhere else
+#include <ftxui/screen/pixel.hpp>
 #include <stdexcept>
 Color colorIdToColor(unsigned colorID) {
     // TODO: add missing colorID's such as penalty lines
@@ -166,12 +167,12 @@ void GameDisplay::drawPlayerBoard() {
                         .transform([](auto id) { return colorIdToColor(id); })
                         .value_or(Color::Black));
 
-                for (uint32_t dy = 0; dy < LENGTH_PLAYER; ++dy) {
-                    for (uint32_t dx = 0; dx < LENGTH_PLAYER; ++dx) {
-                        playerCanvas.DrawBlock(x * LENGTH_PLAYER + dx,
-                                               (HEIGHT - 1 - y) * LENGTH_PLAYER
-                                                   + dy,
-                                               true, pixel.background_color);
+                for (uint32_t dy = 0; dy < CELL_SIZE_PLAYER; ++dy) {
+                    for (uint32_t dx = 0; dx < CELL_SIZE_PLAYER; ++dx) {
+                        playerCanvas.DrawBlock(
+                            x * CELL_SIZE_PLAYER + dx,
+                            (HEIGHT - 1 - y) * CELL_SIZE_PLAYER + dy, true,
+                            pixel.background_color);
                     }
                 }
             }
@@ -241,12 +242,12 @@ void GameDisplay::drawOpponentsBoard() {
                                 [](auto id) { return colorIdToColor(id); })
                             .value_or(Color::Black));
 
-                    for (uint32_t dy = 0; dy < LENGTH_OPPONENT; ++dy) {
-                        for (uint32_t dx = 0; dx < LENGTH_OPPONENT; ++dx) {
+                    for (uint32_t dy = 0; dy < CELL_SIZE_OPPONENT; ++dy) {
+                        for (uint32_t dx = 0; dx < CELL_SIZE_OPPONENT; ++dx) {
                             opCanvas.DrawBlock(
-                                x * LENGTH_OPPONENT + dx,
-                                (HEIGHT - 1 - y) * LENGTH_OPPONENT + dy, true,
-                                pixel.background_color);
+                                x * CELL_SIZE_OPPONENT + dx,
+                                (HEIGHT - 1 - y) * CELL_SIZE_OPPONENT + dy,
+                                true, pixel.background_color);
                         }
                     }
                 }
@@ -318,11 +319,11 @@ void GameDisplay::displayOpponentBoardDuel() {
                         .transform([](auto id) { return colorIdToColor(id); })
                         .value_or(Color::Black));
 
-                for (uint32_t dy = 0; dy < LENGTH_OPPONENT; ++dy) {
-                    for (uint32_t dx = 0; dx < LENGTH_OPPONENT; ++dx) {
+                for (uint32_t dy = 0; dy < CELL_SIZE_OPPONENT; ++dy) {
+                    for (uint32_t dx = 0; dx < CELL_SIZE_OPPONENT; ++dx) {
                         playerCanvas.DrawBlock(
-                            x * LENGTH_OPPONENT + dx,
-                            (HEIGHT - 1 - y) * LENGTH_OPPONENT + dy, true,
+                            x * CELL_SIZE_OPPONENT + dx,
+                            (HEIGHT - 1 - y) * CELL_SIZE_OPPONENT + dy, true,
                             pixel.background_color);
                     }
                 }

@@ -9,10 +9,15 @@
 #include <string>
 #include <vector>
 
-constexpr uint32_t LENGTH_PLAYER = 8, LENGTH_OPPONENT = 2, PADDING = 10;
+constexpr uint32_t CELL_SIZE_PLAYER = 8, CELL_SIZE_OPPONENT = 4,
+                   PADDING =
+                       10; // A power of 2 is needed for the canvas for the size
+                           // of the cells of the tetrominos to be correct
 
-constexpr uint32_t WIDTH_PLAYER_CANVAS = 80, HEIGHT_PLAYER_CANVAS = 160,
-                   WIDTH_OP_CANVAS = 20, HEIGHT_OP_CANVAS = 40;
+constexpr uint32_t WIDTH_PLAYER_CANVAS = CELL_SIZE_PLAYER * 10,
+                   HEIGHT_PLAYER_CANVAS = CELL_SIZE_PLAYER * 20,
+                   WIDTH_OP_CANVAS = CELL_SIZE_OPPONENT * 10,
+                   HEIGHT_OP_CANVAS = CELL_SIZE_OPPONENT * 20;
 
 class Controller; // Forward declaration
 

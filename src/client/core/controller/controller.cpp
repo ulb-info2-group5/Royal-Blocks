@@ -108,6 +108,15 @@ Controller::Controller()
     GameState gameState{GameMode::Endless, {PlayerState{0}}};
 
     gameState_.deserialize(gameState.serializeFor(0));
+
+    TetrominoPtr pTetromino =
+        ATetromino::makeTetromino(TetrominoShape::I, {1, 0});
+    TetrominoPtr second = ATetromino::makeTetromino(TetrominoShape::I, {5, 7});
+
+    gameState_.self.tetris_.board_.placeTetromino(std::move(pTetromino));
+    gameState_.self.tetris_.board_.placeTetromino(std::move(second));
+
+    screenManager_.forceRefresh();
     // ---------------------------------
 };
 
