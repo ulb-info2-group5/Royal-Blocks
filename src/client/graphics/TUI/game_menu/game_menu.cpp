@@ -212,38 +212,36 @@ void GameMenu::handleChoice() {
 }
 
 void GameMenu::joinFriendScreen() {
-    const std::vector<bindings::User> &friendsList =
-        controller_.getFriendsList();
 
-    std::vector<ftxui::Component> friendButtons;
+    ftxui::Component friendsContainer = ftxui::Container::Vertical({});
 
-    if (friendsList.empty()) {
-        ftxui::Component renderNoFriends =
-            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
-                return ftxui::vbox({
-                    ftxui::text(std::string(STR_NO_FRIEND)),
+    auto updateFriendsList = [&] {
+        friendsContainer->DetachAllChildren();
+        const std::vector<bindings::User>& friendsList = controller_.getFriendsList();
+
+        if (friendsList.empty()) {
+            ftxui::Component renderNoFriends =
+                ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+                    return ftxui::vbox({
+                        ftxui::text(std::string(STR_NO_FRIEND)),
+                    });
                 });
-            });
-        friendButtons.push_back(renderNoFriends);
-    } else {
+            friendsContainer->Add(renderNoFriends);
+            return;
+        }
+
         for (const bindings::User &friendUser : friendsList) {
             if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
-                friendButtons.push_back(
-                    makeFriendButton(friendUser.playerId, friendUser.username));
+                friendsContainer->Add(makeFriendButton(friendUser.playerId, friendUser.username));
             }
         }
-    }
-
-    ftxui::Component friendsContainer =
-        ftxui::Container::Vertical(friendButtons);
+    };
 
     ftxui::Component mainContainer =
         ftxui::Container::Vertical({friendsContainer, backButton_});
 
-    // TODO: do we need this
-    // friendsContainer->Add(backButton_);
-
     ftxui::Component renderer = ftxui::Renderer(mainContainer, [&] {
+        updateFriendsList();
         return ftxui::vbox({
                    ftxui::text(std::string(STR_SELECT_FRIEND_TO_JOIN))
                        | ftxui::center | ftxui::bold,
