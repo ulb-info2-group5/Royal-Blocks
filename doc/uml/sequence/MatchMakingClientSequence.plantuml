@@ -2,4 +2,55 @@
 
 skinparam style strictuml
 
+actor User
+participant Menu
+participant GameMenu
+participant GameDisplay
+participant NetworkManager
+participant Controller
+participant Network
+
+activate User
+activate Menu
+activate NetworkManager
+activate Controller
+activate Network
+
+User -> Menu : selectAGameOption
+Menu -> GameMenu : <<create>>
+deactivate Menu
+activate GameMenu
+alt User is creating a Game
+    GameMenu -> GameMenu : renderOnlineGames()
+    User -> GameMenu : selectGameMode
+    alt GameMode != Dual && GameMode != Endless
+        GameMenu -> GameMenu : selectPlayerCountScreen()
+        User -> GameMenu : selectNumberOfPlayers()
+    end 
+    GameMenu -> Controller : createGame(GameMode, numberOfPlayers)
+    GameMenu -> GameMenu : matchmakingScreen()
+    Controller -> NetworkManager : send(bindingsCreateGame{GameMode, numberOfPlayers})
+    NetworkManager -> Network : send(bindingsCreateGame{GameMode, numberOfPlayers})
+else User is joining a Game
+    GameMenu -> GameMenu : renderAllGames()
+    User -> GameMenu : selectGameMode
+    alt GameMode != Endless
+        GameMenu -> GameMenu : joinFriendOrRandomScreen()
+        User -> GameMenu : makeChoice
+        alt User choose to join a friend
+            GameMenu -> GameMenu : handleChoice() 
+            GameMenu -> GameMenu : joinFriendScreen()
+            ' not finished
+        else User choose to join random screen
+            GameMenu -> Controller : joinGame(GameMode, Null)
+            Controller -> NetworkManager : send(bindingsJoinGame{GameMode, Null})
+            NetworkManager -> Network : send(bindingsJoinGame{GameMode, Null})
+            Network -> NetworkManager : 
+        end
+    end
+end 
+
+GameMenu -> GameDisplay : render()
+activate GameDisplay
+deactivate GameMenu
 @enduml
