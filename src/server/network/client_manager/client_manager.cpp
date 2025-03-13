@@ -17,25 +17,35 @@ using boost::asio::ip::tcp;
 void ClientLink::read(){
     boost::asio::async_read_until(socket_, streamBuffer_, '\n',[this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
-            std::istream is(&streamBuffer_);
-            std::string packet;
-            std::getline(is, packet);
-            std::cout << "packet : " << packet << std::endl;
-            if (!identify_) {
-                handleAuthentication(packet);
-            }else {
-                packetHandler_(packet, clientId.value());
-            }
-            read();
-        }else {
-            if (ec  == boost::asio::error::eof){
-                std::cout << "client disconected " << std::endl;
-                packetHandler_(bindings::RemoveClient{}.to_json().dump(), clientId.value());
-
-            }
+            handleReading();
+        }else if (ec  == boost::asio::error::eof) {    
+            handleErrorReading();
         }
 
     }); 
+}
+
+void ClientLink::handleReading(){
+        std::istream is(&streamBuffer_);
+        std::string packet;
+        std::getline(is, packet);
+        std::cout << "packet : " << packet << std::endl;
+        if (!isIdentify()) {
+            handleAuthentication(packet);
+        }else {
+            packetHandler_(packet, clientId.value());
+        }
+        read();
+}
+
+void ClientLink::handleErrorReading(){
+    nlohmann::json removeClient =  bindings::RemoveClient{}.to_json(); 
+    if (!isIdentify()){
+        mustBeDeletedFromTheWaitingForAuthList_ = false;
+        authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(), removeClient);
+    }else {
+        packetHandler_(removeClient.dump(), clientId.value());
+    }
 }
 
 void ClientLink::handleAuthentication(std::string & packet){
@@ -46,6 +56,7 @@ void ClientLink::handleAuthentication(std::string & packet){
     if (response.at("type").get<bindings::BindingType>() == bindings::BindingType::AuthenticationResponse && response.at("data").at("success").get<bool>()){
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
         identify_ = true;
+        mustBeDeletedFromTheWaitingForAuthList_ = true;
     }
 }
 
@@ -73,6 +84,9 @@ void ClientLink::start(){
 bool ClientLink::isIdentify(){
     return identify_;
 }
+bool ClientLink::shouldItBeDeletedFromTheList(){
+    return mustBeDeletedFromTheWaitingForAuthList_;
+}
 
 
 void ClientLink::sendPackage(nlohmann::json gameState){
@@ -91,13 +105,15 @@ void ClientLink::setIdentifyFalse(){
 }
 
 
+
+
 // ====== Client manager class ======
 // ---private ---
 
-void ClientManager::removeAuthClients(){
+void ClientManager::removeClientsFromTheWaintingList(){
     auto ne = remove_if(waitingForAuthClient.begin(), waitingForAuthClient.end(),
     [](std::shared_ptr<ClientLink> x) {
-      return x->isIdentify();
+      return x->shouldItBeDeletedFromTheList();
     });
     waitingForAuthClient.erase(ne, waitingForAuthClient.end());
 }
@@ -147,7 +163,7 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession, con
     std::cout << "new client id :" <<id << std::endl;
     clientSession->setClientId(id);  
     connectedClients_[id] = clientSession;
-    removeAuthClients();
+    removeClientsFromTheWaintingList();
 }
 
 
@@ -161,6 +177,8 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type, nloh
     case bindings::BindingType::Registration :
         response = (attemptCreateAccount(data)) ? bindings::RegistrationResponse{true}.to_json() : bindings::RegistrationResponse{false}.to_json();
         break;
+    case bindings::BindingType::RemoveClient : 
+        removeClientsFromTheWaintingList();
     default:
         break;
     }

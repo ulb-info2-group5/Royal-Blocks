@@ -56,7 +56,11 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         std::string buffer_;
         boost::asio::streambuf streamBuffer_;
         bool identify_ = false;
+        bool mustBeDeletedFromTheWaitingForAuthList_ = false;
+
         std::optional<PlayerID> clientId;
+
+
         // std function to manage packages
         PacketHandler packetHandler_;
         //std function to manage authentication packages  
@@ -68,6 +72,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         *@param packet : string wich contains the package 
         */
         void handleAuthentication(std::string & packet);
+
+        void handleReading(); 
+        void handleErrorReading();
         /*
         *@brief : read the socket 
         */
@@ -87,6 +94,8 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         *@brief : return true if the client is authenticated
         */
         bool isIdentify();
+
+        bool shouldItBeDeletedFromTheList(); 
 
         void setClientId(const int id);
 
@@ -108,9 +117,9 @@ class ClientManager {
         // contains client who are not yet authenticated
         std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
         /*
-        * @brief : remove authenticated clients from the vector waitingForAuthClient 
+        * @brief : remove authenticated clients and clients who have closed their socket from the vector waitingForAuthClient 
         */
-        void removeAuthClients();
+        void removeClientsFromTheWaintingList();
         /*
         * @brief : try to create a account 
         * @return : true if success else false 
