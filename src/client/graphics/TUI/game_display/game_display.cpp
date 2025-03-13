@@ -363,9 +363,10 @@ void GameDisplay::drawEndlessMode() {
     displayMiddleWindow();
 
     displayWindow_ = ftxui::Container::Horizontal({
-        displayLeft_,
-        displayMiddle_,
-    }) | ftxui::center;
+                         displayLeft_,
+                         displayMiddle_,
+                     })
+                     | ftxui::center;
 }
 
 void GameDisplay::drawMultiMode() {
@@ -374,10 +375,11 @@ void GameDisplay::drawMultiMode() {
     displayMultiRightWindow();
 
     displayWindow_ = ftxui::Container::Horizontal({
-        displayLeft_,
-        displayMiddle_,
-        displayRight_,
-    }) | ftxui::center;
+                         displayLeft_,
+                         displayMiddle_,
+                         displayRight_,
+                     })
+                     | ftxui::center;
 }
 
 void GameDisplay::handleKeys() {
@@ -410,14 +412,37 @@ void GameDisplay::handleKeys() {
     });
 }
 
-// public methods
-
-void GameDisplay::render() {
+void GameDisplay::updateDisplay() {
     if (controller_.getGameMode() == GameMode::Endless) {
         drawEndlessMode();
     } else {
         drawMultiMode();
     }
+}
 
-    screenManager_.render(displayWindow_);
+// public methods
+
+void GameDisplay::render() {
+    ftxui::Component gameContainer = ftxui::Container::Vertical({});
+
+    auto updateGameDisplay = [&] {
+        gameContainer->DetachAllChildren();
+        updateDisplay();
+        handleKeys();
+        gameContainer->Add(displayWindow_);
+    };
+
+    ftxui::Component render =
+        ftxui::Renderer(ftxui::Container::Vertical({ftxui::Container::Vertical({
+                            gameContainer,
+                        })}),
+                        [&] {
+                            updateGameDisplay();
+                            return ftxui::vbox({
+                                       gameContainer->Render(),
+                                   })
+                                   | ftxui::borderHeavy | ftxui::center;
+                        });
+
+    screenManager_.render(render);
 }

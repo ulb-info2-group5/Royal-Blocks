@@ -29,6 +29,8 @@ class IGame {
 
     virtual void handleKeys() = 0;
 
+    virtual void updateDisplay() = 0;
+
   public:
     virtual ~IGame() = default;
 

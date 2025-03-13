@@ -66,6 +66,8 @@ class GameDisplay final : public IGame {
 
     void handleKeys() override;
 
+    void updateDisplay() override;
+
   public:
     GameDisplay(ScreenManager &screenManager, Controller &controller);
 
