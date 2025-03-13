@@ -33,6 +33,15 @@ void FriendsMenu::render() {
             for (const ftxui::Component &friendButton : friendsButtons) {
                 friendsContainer->Add(friendButton);
             }
+            if (friendsContainer->ChildCount() == 0) {
+                ftxui::Component renderNoFriends =
+                    ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+                        return ftxui::vbox({
+                            ftxui::text(std::string(STR_NO_FRIEND)),
+                        });
+                    });
+                friendsContainer->Add(renderNoFriends);
+            }
         };
 
         ftxui::Component render = ftxui::Renderer(
@@ -101,21 +110,6 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     ManageOrRequestFriend manageOrRequest) {
     std::vector<ftxui::Component> friendButtons;
 
-    if (friendsList.empty()) {
-        if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
-            ftxui::Component renderNoFriends =
-                ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
-                    return ftxui::vbox({
-                        manageOrRequest == ManageOrRequestFriend::REQUEST
-                            ? ftxui::text(std::string(STR_NO_FRIEND_REQUEST))
-                            : ftxui::text(std::string(STR_NO_FRIEND)),
-                    });
-                });
-            friendButtons.push_back(renderNoFriends);
-            return friendButtons;
-        }
-    }
-
     for (const bindings::User &friendUser : friendsList) {
         friendButtons.push_back(ftxui::Button(
             friendUser.username,
@@ -164,10 +158,7 @@ void FriendsMenu::manageFriendlistScreen(
         }),
         [&] {
             return ftxui::vbox({
-                       ftxui::text("Do you want to remove "
-                                   + friendUser.username
-                                   + " from your friends list ?")
-                           | ftxui::bold | ftxui::center,
+                       ftxui::text(message) | ftxui::bold | ftxui::center,
                        ftxui::separator(),
                        buttonYes->Render() | ftxui::flex,
                        buttonNo->Render() | ftxui::flex,
@@ -226,11 +217,21 @@ void FriendsMenu::FriendRequestScreen() {
     auto updateFriendsList = [&] {
         friendsContainer->DetachAllChildren();
         // TODO: get the list of friends from the controller
-        const std::vector<bindings::User> &friendsList{};
-        std::vector<ftxui::Component> friendsButtons;
-        displayFriendButtons(friendsList, ManageOrRequestFriend::REQUEST);
+        const std::vector<bindings::User> &friendsList =
+            controller_.getFriendsList();
+        std::vector<ftxui::Component> friendsButtons =
+            displayFriendButtons(friendsList, ManageOrRequestFriend::REQUEST);
         for (const ftxui::Component &friendButton : friendsButtons) {
             friendsContainer->Add(friendButton);
+        }
+        if (friendsContainer->ChildCount() == 0) {
+            ftxui::Component renderNoFriends =
+                ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+                    return ftxui::vbox({
+                        ftxui::text(std::string(STR_NO_FRIEND_REQUEST)),
+                    });
+                });
+            friendsContainer->Add(renderNoFriends);
         }
     };
 

@@ -50,8 +50,6 @@ class FriendsMenu final {
      * dislayed is a button
      *
      * @param friendsList The list of friends to display
-     * @param manageOrRequest To know if the user is managing or requesting the
-     * friend
      * @return std::vector<ftxui::Component> The list of buttons to display
      */
     std::vector<ftxui::Component>
