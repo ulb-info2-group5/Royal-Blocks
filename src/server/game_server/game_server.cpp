@@ -17,11 +17,6 @@ constexpr size_t SECONDS_BETWEEN_TICKS = 1;
 //                          PRIVATE METHODS
 // ----------------------------------------------------------------------------
 
-void GameServer::sendGameStates() {
-    for (auto player : pGameState_->getPlayerToTetris()){
-        updateGameStates_(player.pPlayerState->getPlayerID(), pGameState_->serializeFor(player.pPlayerState->getPlayerID()));
-    }
-}
 
 void GameServer::onTimerTick() {
     if (engine.gameIsFinished()) {
@@ -169,6 +164,13 @@ void GameServer::run() {
     //notify GameManager that the game is finished
     callBackFinishGame_(gameId_);
 }
+
+void GameServer::sendGameStates() {
+    for (auto player : pGameState_->getPlayerToTetris()){
+        updateGameStates_(player.pPlayerState->getPlayerID(), pGameState_->serializeFor(player.pPlayerState->getPlayerID()));
+    }
+}
+
 
 
 // ==== getters ====

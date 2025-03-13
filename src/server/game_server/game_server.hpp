@@ -37,11 +37,6 @@ class GameServer {
     UpdateGameStates updateGameStates_;
     CallBackFinishGame callBackFinishGame_;
     
-    /**
-     * @brief Sends the GameState to all the connected people in the game
-     * include viewers. TODO: (not implemented yet)
-     */
-    void sendGameStates();
 
     /**
      * @brief Signals the engine that an engine tick occured. Resets the timer
@@ -63,6 +58,13 @@ class GameServer {
      * @brief Enqueues a new binding as a string (json).
      */
     void enqueueBinding(PlayerID playerId, const std::string &bindingStr);
+
+    /**
+     * @brief Sends the GameState to all the connected people in the game
+     * include viewers. TODO: (not implemented yet)
+     */
+    void sendGameStates();
+
 
     /**
      * @brief Runs the server. This function returns as soon as the game is

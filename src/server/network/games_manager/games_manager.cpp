@@ -25,6 +25,7 @@ void GamesManager::startGameServeur(GameMode gameMode, std::vector<PlayerID> pla
         [this](GameID gameId) {callBackFinishGame(gameId); }); 
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] = std::thread([gameServer]() {gameServer->run(); });
+    gameServer->sendGameStates();
     std::cout << " ==<< create a new game >>== gameServer id : " << nextGameId << std::endl; 
     nextGameId += 1;
 }
