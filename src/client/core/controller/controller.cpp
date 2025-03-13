@@ -75,7 +75,6 @@ void Controller::handlePacket(const std::string &pack) {
     }
 
     case bindings::BindingType::GameState: {
-        std::lock_guard<std::mutex> guard(mutex_);
         gameState_ = bindings::GameStateMessage::deserialize(j);
         break;
     }
@@ -88,6 +87,7 @@ void Controller::handlePacket(const std::string &pack) {
     default:
         std::cerr << "unknown bindingType" << std::endl;
     }
+
     screenManager_.forceRefresh();
 }
 
