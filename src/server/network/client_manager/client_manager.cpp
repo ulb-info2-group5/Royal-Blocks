@@ -230,20 +230,24 @@ void ClientManager::handleMessage(nlohmann::json message) {
 }
 
 bool ClientManager::checkCredentials(nlohmann::json data) {
-    if (!database_.accountManager->checkUsernameExists(
-            data.at("nickname").get<std::string>())) {
-        std::cout << "username false" << std::endl;
+    const std::string nickname = data.at("nickname").get<std::string>();
+    const std::string password = data.at("password").get<std::string>();
+
+    if (!database_.accountManager->checkUsernameExists(nickname)) {
+        std::cout << "Invalid username" << std::endl;
         return false;
-    } else {
-        if (database_.accountManager->checkUserPassword(
-                data.at("nickname").get<std::string>(),
-                data.at("password").get<std::string>())) {
-            return true;
-        } else {
-            std::cout << "password false" << std::endl;
-            return false;
-        }
     }
+
+    if (!database_.accountManager->checkUserPassword(nickname, password)) {
+        std::cout << "Invalid password" << std::endl;
+        return false;
+    }
+
+    if (isClientConnected(database_.accountManager->getUserId(nickname))) {
+        std::cout << "User already connected" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 void ClientManager::updateGameStates(UserID userIds, nlohmann::json gameState) {
