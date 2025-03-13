@@ -96,6 +96,7 @@ void Controller::handlePacket(const std::string &pack) {
 Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
+      gameState_(std::nullopt),
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},

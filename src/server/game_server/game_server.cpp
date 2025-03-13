@@ -5,18 +5,17 @@
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
+#include <iostream>
 #include <memory>
 #include <ostream>
-#include <vector>
-#include <iostream>
 #include <ranges>
+#include <vector>
 
 constexpr size_t SECONDS_BETWEEN_TICKS = 1;
 
 // ----------------------------------------------------------------------------
 //                          PRIVATE METHODS
 // ----------------------------------------------------------------------------
-
 
 void GameServer::onTimerTick() {
     if (engine.gameIsFinished()) {
@@ -42,7 +41,9 @@ void GameServer::onTimerTick() {
 //                          PUBLIC METHODS
 // ----------------------------------------------------------------------------
 
-GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, UpdateGameStates updateGameStates, GameID id, CallBackFinishGame callBackFinishGame)
+GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds,
+                       UpdateGameStates updateGameStates, GameID id,
+                       CallBackFinishGame callBackFinishGame)
     : context_{},
       tickTimer_{context_, boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS}},
       pGameState_{std::make_shared<GameState>(
@@ -55,7 +56,8 @@ GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds, Upd
                              [](PlayerID id) { return PlayerState(id); });
               return playerStates;
           }())},
-      engine{pGameState_}, updateGameStates_{updateGameStates}, gameId_{id}, callBackFinishGame_{callBackFinishGame} {}
+      engine{pGameState_}, updateGameStates_{updateGameStates}, gameId_{id},
+      callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(PlayerID playerId,
                                 const std::string &bindingStr) {
@@ -161,30 +163,27 @@ void GameServer::run() {
 
     // End of context_.run() means the game is finished
 
-    //notify GameManager that the game is finished
+    // notify GameManager that the game is finished
     callBackFinishGame_(gameId_);
 }
 
 void GameServer::sendGameStates() {
-    for (auto player : pGameState_->getPlayerToTetris()){
-        updateGameStates_(player.pPlayerState->getPlayerID(), pGameState_->serializeFor(player.pPlayerState->getPlayerID()));
-    }
+    for (auto player : pGameState_->getPlayerToTetris()) {
+        updateGameStates_(
+            player.pPlayerState->getPlayerID(),
+            bindings::GameStateMessage::serializeForPlayer(
+                *pGameState_, player.pPlayerState->getPlayerID()));
+    };
 }
-
-
 
 // ==== getters ====
 
-boost::asio::io_context& GameServer::getIoContext() {
-    return  context_;
-}
+boost::asio::io_context &GameServer::getIoContext() { return context_; }
 
-
-std::vector<PlayerID> GameServer::getVectorPlayersId(){
+std::vector<PlayerID> GameServer::getVectorPlayersId() {
     std::vector<PlayerID> playerIds;
-    for (auto player : pGameState_->getPlayerToTetris()){
-        playerIds.push_back(player.pPlayerState->getPlayerID()); 
+    for (auto player : pGameState_->getPlayerToTetris()) {
+        playerIds.push_back(player.pPlayerState->getPlayerID());
     }
     return playerIds;
 }
-

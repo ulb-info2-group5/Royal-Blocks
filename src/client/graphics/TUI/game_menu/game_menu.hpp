@@ -88,7 +88,7 @@ class GameMenu : public IGame_Menu {
     /*
      * @brief Screen when the user is waiting for the matchmaking
      */
-    void matchmakingScreen() override;
+    void createGameScreen() override;
 
     /*
      * @brief Make a button to add a friend

@@ -190,6 +190,11 @@ void GameMenu::handleChoice() {
 
     while (joinType_ != JoinType::BACK && joinType_ != JoinType::GAME_STARTED) {
 
+        if (joinType_ == JoinType::GAME_STARTED) {
+            quitMenu_ = true;
+            break;
+        }
+
         switch (joinType_) {
         case JoinType::FRIEND:
             joinFriendScreen();
@@ -203,11 +208,6 @@ void GameMenu::handleChoice() {
                              // button
             break;
 
-        case JoinType::GAME_STARTED:
-            quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
-                              // menu loop when the game is finished
-            break;
-
         default:
             throw std::invalid_argument(
                 "Invalid state in GameMenu::handleChoice()");
@@ -215,8 +215,6 @@ void GameMenu::handleChoice() {
         }
         joinFriendOrRandomScreen();
     }
-
-    gameDisplay_->render();
 }
 
 void GameMenu::joinFriendScreen() {
@@ -270,6 +268,10 @@ void GameMenu::joinFriendScreen() {
 void GameMenu::joinRandomScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+            if (controller_.gameHasStarted()) {
+                screenManager_.stopRender();
+            }
+
             return ftxui::vbox({
                        ftxui::text("Searching for a random game")
                            | ftxui::center | ftxui::bold,
@@ -281,9 +283,13 @@ void GameMenu::joinRandomScreen() {
         });
 
     screenManager_.render(renderer);
+
+    gameDisplay_->render();
+
+    joinType_ = JoinType::GAME_STARTED;
 }
 
-void GameMenu::matchmakingScreen() {
+void GameMenu::createGameScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
             if (controller_.gameHasStarted()) {
@@ -363,7 +369,7 @@ void GameMenu::render(const TypeGame &typeGame) {
 void GameMenu::selectPlayerCountScreen() {
     if (gameMode_ == GameMode::Dual) {
         controller_.createGame(gameMode_, 2);
-        matchmakingScreen();
+        createGameScreen();
         screenManager_.stopRender();
         return;
     }
@@ -389,7 +395,7 @@ void GameMenu::selectPlayerCountScreen() {
         std::string(STR_CONFIRM),
         [&] {
             controller_.createGame(gameMode_, playerCount);
-            matchmakingScreen();
+            createGameScreen();
             screenManager_.stopRender();
         },
         GlobalButtonStyle());

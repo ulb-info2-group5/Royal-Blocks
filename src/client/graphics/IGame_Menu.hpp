@@ -48,7 +48,7 @@ class IGame_Menu {
 
     virtual void waitingFriendScreen() = 0;
 
-    virtual void matchmakingScreen() = 0;
+    virtual void createGameScreen() = 0;
 
     virtual void selectPlayerCountScreen() = 0;
 
