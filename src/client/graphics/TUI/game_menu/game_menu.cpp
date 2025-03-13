@@ -10,6 +10,7 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include "graphics/IGame_Menu.hpp"
 
 // ### Constructor ###
 
@@ -187,8 +188,7 @@ void GameMenu::handleChoice() {
         return;
     }
 
-    while (joinType_ != JoinType::BACK
-           && joinType_ != JoinType::GAME_FINISHED) {
+    while (joinType_ != JoinType::BACK && joinType_ != JoinType::GAME_STARTED) {
 
         switch (joinType_) {
         case JoinType::FRIEND:
@@ -203,7 +203,7 @@ void GameMenu::handleChoice() {
                              // button
             break;
 
-        case JoinType::GAME_FINISHED:
+        case JoinType::GAME_STARTED:
             quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
                               // menu loop when the game is finished
             break;
@@ -215,6 +215,8 @@ void GameMenu::handleChoice() {
         }
         joinFriendOrRandomScreen();
     }
+
+    gameDisplay_->render();
 }
 
 void GameMenu::joinFriendScreen() {
@@ -284,6 +286,10 @@ void GameMenu::joinRandomScreen() {
 void GameMenu::matchmakingScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+            if (controller_.gameHasStarted()) {
+                screenManager_.stopRender();
+            }
+
             return ftxui::vbox({
                        ftxui::text("Game is launching") | ftxui::center
                            | ftxui::bold,
@@ -295,6 +301,8 @@ void GameMenu::matchmakingScreen() {
         });
 
     screenManager_.render(renderer);
+
+    joinType_ = JoinType::GAME_STARTED;
 }
 
 ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,

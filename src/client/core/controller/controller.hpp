@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -53,7 +54,7 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    client::GameState gameState_;
+    std::optional<client::GameState> gameState_;
 
     mutable std::mutex mutex_;
 
@@ -193,6 +194,8 @@ class Controller {
                                                        int x, int y) const;
 
     size_t getNumOpponents() const;
+
+    bool gameHasStarted() const;
 };
 
 #endif // CONTROLLER_HPP

@@ -99,26 +99,7 @@ Controller::Controller()
       networkManager_{
           context_,
           [this](const std::string &packet) { handlePacket(packet); }},
-      screenManager_{*this}
-
-{
-
-    // ---------------------------------
-    // TODO: remove this
-    GameState gameState{GameMode::Endless, {PlayerState{0}}};
-
-    gameState_.deserialize(gameState.serializeFor(0));
-
-    TetrominoPtr pTetromino =
-        ATetromino::makeTetromino(TetrominoShape::I, {1, 0});
-    TetrominoPtr second = ATetromino::makeTetromino(TetrominoShape::I, {5, 7});
-
-    gameState_.self.tetris_.board_.placeTetromino(std::move(pTetromino));
-    gameState_.self.tetris_.board_.placeTetromino(std::move(second));
-
-    screenManager_.forceRefresh();
-    // ---------------------------------
-};
+      screenManager_{*this} {};
 
 Controller::~Controller() {
     // TODO: join the iothread
@@ -240,33 +221,38 @@ void Controller::handleKeypress(const std::string &pressedKey) {
 
 Score Controller::getSelfScore() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.self.playerState_.score_;
+    return gameState_->self.playerState_.score_;
 }
 
 Score Controller::getSelfEnergy() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.self.playerState_.energy_.value_or(0);
+    return gameState_->self.playerState_.energy_.value_or(0);
 }
 
 GameMode Controller::getGameMode() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.gameMode;
+    return gameState_->gameMode;
 }
 
 std::optional<unsigned> Controller::selfBoardGetColorIdAt(int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.self.tetris_.board_.get(x, y).getColorId();
+    return gameState_->self.tetris_.board_.get(x, y).getColorId();
 }
 
 std::optional<unsigned>
 Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.externals.at(opponentIdx)
+    return gameState_->externals.at(opponentIdx)
         .tetris_.board_.get(x, y)
         .getColorId();
 }
 
 size_t Controller::getNumOpponents() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.externals.size();
+    return gameState_->externals.size();
+}
+
+bool Controller::gameHasStarted() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_.has_value();
 }
