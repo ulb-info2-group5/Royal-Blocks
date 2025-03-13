@@ -10,6 +10,7 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include <vector>
 
 // ### Public methods ###
 
@@ -27,8 +28,8 @@ void FriendsMenu::render() {
             friendsContainer->DetachAllChildren();
             const std::vector<bindings::User> &friendsList =
                 controller_.getFriendsList();
-            std::vector<ftxui::Component> friendsButtons =
-                displayFriendButtons(friendsList);
+            std::vector<ftxui::Component> friendsButtons = displayFriendButtons(
+                friendsList, ManageOrRequestFriend::MANAGE);
             for (const ftxui::Component &friendButton : friendsButtons) {
                 friendsContainer->Add(friendButton);
             }
@@ -38,6 +39,7 @@ void FriendsMenu::render() {
             ftxui::Container::Vertical({ftxui::Container::Vertical({
                 friendsContainer,
                 buttonAddFriend_,
+                ManageFriendRequest_,
                 buttonBackToMainMenu_,
             })}),
             [&] {
@@ -51,6 +53,8 @@ void FriendsMenu::render() {
                            friendsContainer->Render() | ftxui::borderHeavy,
                            ftxui::separator(),
                            buttonAddFriend_->Render(),
+                           ftxui::separator(),
+                           ManageFriendRequest_->Render(),
                            ftxui::separator(),
                            buttonBackToMainMenu_->Render(),
                        })
@@ -93,25 +97,30 @@ void FriendsMenu::addFriendScreen() {
 }
 
 std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
-    const std::vector<bindings::User> &friendsList) {
+    const std::vector<bindings::User> &friendsList,
+    ManageOrRequestFriend manageOrRequest) {
     std::vector<ftxui::Component> friendButtons;
 
     if (friendsList.empty()) {
-        ftxui::Component renderNoFriends =
-            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
-                return ftxui::vbox({
-                    ftxui::text(std::string(STR_NO_FRIEND)),
+        if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
+            ftxui::Component renderNoFriends =
+                ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+                    return ftxui::vbox({
+                        manageOrRequest == ManageOrRequestFriend::REQUEST
+                            ? ftxui::text(std::string(STR_NO_FRIEND_REQUEST))
+                            : ftxui::text(std::string(STR_NO_FRIEND)),
+                    });
                 });
-            });
-        friendButtons.push_back(renderNoFriends);
-        return friendButtons;
+            friendButtons.push_back(renderNoFriends);
+            return friendButtons;
+        }
     }
 
     for (const bindings::User &friendUser : friendsList) {
         friendButtons.push_back(ftxui::Button(
             friendUser.username,
             [&] {
-                manageFriendlistScreen(friendUser);
+                manageFriendlistScreen(friendUser, manageOrRequest);
                 screenManager_.stopRender();
             },
             GlobalButtonStyle()));
@@ -120,11 +129,26 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     return friendButtons;
 }
 
-void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
+void FriendsMenu::manageFriendlistScreen(
+    const bindings::User &friendUser, ManageOrRequestFriend manageOrRequest) {
+    std::string message;
+
+    if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
+        message = "Do you want to remove " + friendUser.username
+                  + " from your friends list ?";
+    } else {
+        message = "Do you want to accept or decline " + friendUser.username
+                  + " friend request ?";
+    }
+
     ftxui::Component buttonYes = ftxui::Button(
         std::string(STR_YES),
         [&] {
-            controller_.removeFriend(friendUser.playerId);
+            if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
+                controller_.removeFriend(friendUser.playerId);
+            } else {
+                // TODO: with controller to accept or decline friend request
+            }
             screenManager_.stopRender();
         },
         GlobalButtonStyle());
@@ -185,4 +209,48 @@ void FriendsMenu::createButtons() {
             screenManager_.stopRender();
         },
         GlobalButtonStyle());
+
+    ManageFriendRequest_ = ftxui::Button(
+        std::string(STR_MANAGE_FRIENDS_REQUESTS),
+        [&] {
+            FriendRequestScreen();
+            screenManager_.stopRender();
+        },
+        GlobalButtonStyle());
+}
+
+void FriendsMenu::FriendRequestScreen() {
+
+    ftxui::Component friendsContainer = ftxui::Container::Vertical({});
+
+    auto updateFriendsList = [&] {
+        friendsContainer->DetachAllChildren();
+        // TODO: get the list of friends from the controller
+        const std::vector<bindings::User> &friendsList{};
+        std::vector<ftxui::Component> friendsButtons;
+        displayFriendButtons(friendsList, ManageOrRequestFriend::REQUEST);
+        for (const ftxui::Component &friendButton : friendsButtons) {
+            friendsContainer->Add(friendButton);
+        }
+    };
+
+    ftxui::Component render = ftxui::Renderer(
+        ftxui::Container::Vertical({ftxui::Container::Vertical({
+            friendsContainer,
+            buttonBack_,
+        })}),
+        [&] {
+            updateFriendsList();
+            return ftxui::vbox({
+                       ftxui::text("Friend request received") | ftxui::center
+                           | ftxui::bold,
+                       ftxui::separator(),
+                       friendsContainer->Render() | ftxui::borderHeavy,
+                       ftxui::separator(),
+                       buttonBack_->Render(),
+                   })
+                   | ftxui::borderHeavy | ftxui::center;
+        });
+
+    screenManager_.render(render);
 }

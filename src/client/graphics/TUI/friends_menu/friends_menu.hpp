@@ -26,6 +26,11 @@ enum class FriendsManagerState {
     BACK,
 };
 
+enum class ManageOrRequestFriend {
+    MANAGE,
+    REQUEST,
+};
+
 class FriendsMenu final {
   private:
     ScreenManager &screenManager_;
@@ -38,18 +43,30 @@ class FriendsMenu final {
     ftxui::Component input_;
     ftxui::Component submitButton_;
     ftxui::Component buttonBackToMainMenu_;
+    ftxui::Component ManageFriendRequest_;
 
     /*
      * @brief Render the friends list of the user to display with all friends
      * dislayed is a button
+     *
+     * @param friendsList The list of friends to display
+     * @param manageOrRequest To know if the user is managing or requesting the
+     * friend
+     * @return std::vector<ftxui::Component> The list of buttons to display
      */
     std::vector<ftxui::Component>
-    displayFriendButtons(const std::vector<bindings::User> &friendsList);
+    displayFriendButtons(const std::vector<bindings::User> &friendsList,
+                         ManageOrRequestFriend manageOrRequest);
 
     /*
      * @brief Manage the friendlist screen when a friend is clicked
+     *
+     * @param friendUser The friend to manage
+     * @param manageOrRequest To know if the user is managing or requesting the
+     * friend
      */
-    void manageFriendlistScreen(const bindings::User &friendUser);
+    void manageFriendlistScreen(const bindings::User &friendUser,
+                                ManageOrRequestFriend manageOrRequest);
 
     /*
      * @brief Screen to add a friend
@@ -60,6 +77,11 @@ class FriendsMenu final {
      * @brief Create the buttons of the friends manager
      */
     void createButtons();
+
+    /*
+     * @brief Screen accept or decline a friend in the friend request screen
+     */
+    void FriendRequestScreen();
 
   public:
     /*

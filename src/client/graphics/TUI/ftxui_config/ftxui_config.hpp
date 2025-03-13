@@ -44,7 +44,9 @@ constexpr std::string_view
     STR_NO_CONVERSATION = "No conversation",
     STR_FRIENDS_LIST_TITLE = " --- FRIENDS LIST --- ",
     STR_CONVERSATION_TITLE = " --- CONVERSATION --- ",
-    STR_ADD_FRIEND_TITLE = "-- Add a friend --";
+    STR_ADD_FRIEND_TITLE = "-- Add a friend --",
+    STR_MANAGE_FRIENDS_REQUESTS = "Manage friends requests",
+    STR_NO_FRIEND_REQUEST = "You don't have any friend request";
 
 const ftxui::Element WELCOME_TITLE = ftxui::vbox({
     ftxui::text(
