@@ -54,6 +54,7 @@ function exportFileSeq()
 {
   nameFile=$1
   pathing="$seqUMLDIR""$nameFile"".plantuml"
+  echo $pathing
   plantuml $pathing
   mv "$seqUMLDIR""$nameFile"".png" ./sequence/
 }
@@ -70,7 +71,8 @@ function exportFileUseCase()
 for dir in */; do 
   if [ "$dir" = "class/" ]; then
     for (( i = 0; i<${#classUMLDiag[@]}; i++ )); do
-      exportFileClass ${classUMLDiag[$i]}
+      #exportFileClass ${classUMLDiag[$i]}
+	  echo "hello1"
     done
 
   elif [ "$dir" = "sequence/" ]; then
@@ -81,8 +83,8 @@ for dir in */; do
 
   elif [ "$dir" = "usecase/" ]; then
     for (( i = 0; i<${#useCaseUMLDiag[@]}; i++ )); do
-      exportFileUseCase ${useCaseUMLDiag[$i]}
-      #echo "hello2"
+      #exportFileUseCase ${useCaseUMLDiag[$i]}
+      echo "hello2"
     done
 
   fi

@@ -116,8 +116,12 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
         0.4 & Quentin Bernard Bouissières / Lucas Verbeiren & Diagrammes de classe Game et Connexion & 01/12/2024 \\ \hline
         0.5 & Quentin Bernard Bouissières & Diagrammes de séquence Connexion et Inscription & 30/11/2024 \\ \hline
         0.7 & Juliette Cornu / Quentin Bernard Bouissières & Diagramme de classe Tetris & 08/12/2024 \\ \hline
-        0.8 & Enerst Malysz & Relecture du SRD & 10/12/2024 \\ \hline
+        0.8 & Ernest Malysz & Relecture du SRD & 10/12/2024 \\ \hline
         1.0 & & rendu première version du projet & 12/12/2024 \\ \hline
+        1.2 & Ernest Malysz / Jonas Schellekens / Rafaou Gajewicz & commencement diagrammes de classes & 26/02/2025 \\ \hline
+        1.6 & Juliette Cornu & terminaison diagrammes de classes & 11/03/2025 \\ \hline
+        1.7 & Juliette Cornu & avancement des diagrammes de séquence & 12/03/2025 \\ \hline 
+        
         
         
     \end{tabular}
@@ -721,7 +725,7 @@ Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps �
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3, angle=90]{../res/uml/class/GameStructureClass.png}
-    \caption{Diagramme de classes du jeu}
+    \caption{Diagramme de classes simplifiées du jeu}
     \label{fig:WholeGameDiagramm}
 \end{figure}
 
@@ -775,22 +779,35 @@ Nous pouvons voir le ClientLink comme une méthode pour transmettre les paquets 
 	 \label{fig:NetworkDiagram}
 \end{figure}
 
-\subsubsection{Le matching Pool}
+\subsubsection{Le Matchmaking}
+
+\begin{figure}[H]
+	\centering
+	 \includegraphics[scale=0.2]{../res/uml/class/MatchMakingClass.png}
+	 \caption{Diagramme de classes de Matchmaking}
+	 \label{fig:MatchmakingDiagram}
+\end{figure}
 
 \subsubsection{GameServer}
 
+\begin{figure}[H]
+	\centering
+	 \includegraphics[scale=0.2]{../res/uml/class/GameServerClass.png}
+	 \caption{Diagramme de classes de GameServer}
+	 \label{fig:GameServerDiagram}
+\end{figure}
+
 \subsubsection{MainServer}
 
-%\subsubsection*{Connexion et Création d'un compte}
-%
-%\begin{figure}[!ht]
-%    \centering
-%    \includegraphics[width=1\textwidth]{../res/uml/class/ConnexionClass.png}
-%    \caption{Connexion et Création d'un compte}
-%    \label{fig:Royal-Competition}
-%\end{figure}
 
 \subsubsection{Diagramme complet du serveur}
+
+\begin{figure}[H]
+	\centering
+	 \includegraphics[scale=0.2]{../res/uml/class/ServerStructureClass.png}
+	 \caption{Diagramme de classes  simplifiées du Serveur}
+	 \label{fig:WholeServerDiagram}
+\end{figure}
 
 \subsection{Architecture du client}
 
@@ -861,28 +878,66 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Création d'un compte}
 
-%\begin{figure}[!h]
-%    \centering
-%    \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
-%    \caption{Diagramme de séquence de connexion}
-%    \label{fig:Royal-Competition}
-%\end{figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
+    \caption{Diagramme de séquence d'inscription}
+    \label{fig:InscriptionDiagram}
+\end{figure}
 
 \subsection{Connexion}
 
-%\begin{figure}[!h]
-%    \centering
-%    \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
-%    \caption{Diagramme de séquence de connexion}
-%    \label{fig:Royal-Competition}
-%\end{figure}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
+    \caption{Diagramme de séquence de connexion}
+    \label{fig:ConnexionSeqDiagram}
+\end{figure}
 
-\subsection{Envoi d'une requête}
+\subsection{Matchmaking côté serveur}
 
-\subsection{Traitement d'une requête}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingServerSequence.png}
+    \caption{Diagramme de séquence de Matchmaking côté serveur}
+    \label{fig:MatchmakingServerDiagram}
+\end{figure}
 
-\subsection{Lancement d'une partie}
+\subsection{Matchmaking côté client}
 
-\subsection{Rejoindre un Lobby}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingClientSequence.png}
+    \caption{Diagramme de séquence de Matchmaking côté client}
+    \label{fig:MatchmakingClientDiagram}
+\end{figure}
+
+\subsection{Game côté serveur}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/GameServerSequence.png}
+    \caption{Diagramme de séquence du jeu côté serveur}
+    \label{fig:GameServerSeqDiagram}
+\end{figure}
+
+\subsection{Game côté client}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{../res/uml/sequence/GameClientSequence.png}
+    \caption{Diagramme de séquence du jeu côté client}
+    \label{fig:GameClientSeqDiagram}
+\end{figure}
+
+\subsection{Actions à partir du menu du jeu}
+
+%\subsection{Envoi d'une requête}
+
+%\subsection{Traitement d'une requête}
+
+%\subsection{Lancement d'une partie}
+
+%\subsection{Rejoindre un Lobby}
 
 \end{document}
