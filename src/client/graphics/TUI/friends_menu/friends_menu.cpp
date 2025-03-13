@@ -20,21 +20,29 @@ FriendsMenu::FriendsMenu(ScreenManager &screenManager, Controller &controller)
 
 void FriendsMenu::render() {
     while (!exit_) {
+
+
+        ftxui::Component friendsContainer = ftxui::Container::Vertical({});
+        
+        auto updateFriendsList = [&] {
+            friendsContainer->DetachAllChildren();
+            const std::vector<bindings::User>& friendsList = controller_.getFriendsList();
+            std::vector<ftxui::Component> friendsButtons = displayFriendButtons(friendsList);
+            for (const ftxui::Component &friendButton : friendsButtons) {
+                friendsContainer->Add(friendButton);
+            }
+        };
+
+        updateFriendsList();
+
         ftxui::Component render = ftxui::Renderer(
             ftxui::Container::Vertical({ftxui::Container::Vertical({
+                friendsContainer,
                 buttonAddFriend_,
                 buttonBackToMainMenu_,
             })}),
             [&] {
-                const std::vector<bindings::User> &friendsList =
-                    controller_.getFriendsList();
-                ftxui::Component friendsContainer =
-                    ftxui::Container::Vertical({});
-                for (const auto &friendButton :
-                     displayFriendButtons(friendsList)) {
-                    friendsContainer->Add(friendButton);
-                }
-
+                updateFriendsList();
                 return ftxui::vbox({
                            ftxui::text(std::string(STR_FRIENDS_LIST))
                                | ftxui::bold | ftxui::center,
@@ -114,19 +122,23 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
 }
 
 void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
-    ftxui::Component component = ftxui::Renderer([&] {
-        ftxui::Component buttonYes = ftxui::Button(
-            std::string(STR_YES),
-            [&] {
-                controller_.removeFriend(friendUser.playerId);
-                screenManager_.stopRender();
-            },
-            GlobalButtonStyle());
+    ftxui::Component buttonYes = ftxui::Button(
+        std::string(STR_YES),
+        [&] {
+            controller_.removeFriend(friendUser.playerId);
+            screenManager_.stopRender();
+        },
+        GlobalButtonStyle());
 
-        ftxui::Component buttonNo = ftxui::Button(
-            std::string(STR_NO), [&] { screenManager_.stopRender(); },
-            GlobalButtonStyle());
+    ftxui::Component buttonNo = ftxui::Button(
+        std::string(STR_NO), [&] { screenManager_.stopRender(); },
+        GlobalButtonStyle());
 
+    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({
+            buttonYes,
+            buttonNo,
+        }),
+        [&] {
         return ftxui::vbox({
                    ftxui::text("Do you want to remove " + friendUser.username
                                + " from your friends list ?")
@@ -137,6 +149,7 @@ void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
                })
                | ftxui::borderHeavy | ftxui::center;
     });
+
 
     screenManager_.render(component);
 }
