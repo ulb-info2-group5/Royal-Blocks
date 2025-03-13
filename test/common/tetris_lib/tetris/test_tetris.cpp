@@ -8,5 +8,4 @@ void TetrisTest::fetchNewTetrominoTest() {
                          tetris.getTetrominoesQueueSize());
 }
 
-// TODO:
 void TetrisTest::checkCanDropTest() {}

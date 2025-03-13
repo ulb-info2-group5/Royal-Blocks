@@ -8,7 +8,6 @@
 namespace client {
 
     struct TetrisSelf {
-        // TODO: should those be optional ?
         std::optional<Tetromino> activeTetromino_;
         std::optional<Tetromino> previewTetromino_;
 

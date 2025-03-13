@@ -256,7 +256,6 @@ void GameMenu::joinFriendScreen() {
                    ftxui::separator(),
                    friendsContainer->Render() | ftxui::borderHeavy,
                    ftxui::separator(),
-                   // TODO: do we need this
                    backButton_->Render(),
                })
                | ftxui::borderHeavy | ftxui::center
