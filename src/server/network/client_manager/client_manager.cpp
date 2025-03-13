@@ -27,7 +27,14 @@ void ClientLink::read(){
                 packetHandler_(packet, clientId.value());
             }
             read();
+        }else {
+            if (ec  == boost::asio::error::eof){
+                std::cout << "client disconected " << std::endl;
+                packetHandler_(bindings::RemoveClient{}.to_json().dump(), clientId.value());
+
+            }
         }
+
     }); 
 }
 
@@ -79,6 +86,10 @@ void ClientLink::setClientId(const int id){
 }
 
 
+void ClientLink::setIdentifyFalse(){
+    identify_ = false;
+}
+
 
 // ====== Client manager class ======
 // ---private ---
@@ -96,6 +107,26 @@ bool ClientManager::attemptCreateAccount(nlohmann::json data){
     if (status == CreateAccountStatus::SUCCESS) return true;
     return false;
 }
+
+
+void ClientManager::disconnectClient(const PlayerID & playerID ){
+    if (!isClientConnected(playerID)){
+        std::cout << "***** the client has already been disconnected  (id : ) " << playerID << std::endl;
+    }else {
+        connectedClients_[playerID]->setIdentifyFalse();
+        addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
+        removeConnection(playerID);
+
+    }
+}
+
+
+void ClientManager::removeConnection(const PlayerID & playerID){
+    
+    connectedClients_.erase(playerID);
+}
+
+
 
 
 // ---public ---
@@ -153,7 +184,6 @@ void ClientManager::handlePacketMenu(const std::string& packet , const PlayerID&
     std::cout << "-- handle Packet call -- " <<std::endl;
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
-    nlohmann::json data = jPack.at("data").get<nlohmann::json>();
     switch (type){
     case bindings::BindingType::Message:  
         handleMessage(jPack);
@@ -164,6 +194,8 @@ void ClientManager::handlePacketMenu(const std::string& packet , const PlayerID&
     case bindings::BindingType::CreateGame:
         matchmaking_.createAGame(RequestCreateGame{clientId, bindings::CreateGame::from_json(jPack)});
         break;
+    case bindings::BindingType::RemoveClient: 
+        removeConnection(clientId);
     default:
 
        
@@ -171,7 +203,7 @@ void ClientManager::handlePacketMenu(const std::string& packet , const PlayerID&
     }
 }
 
-void ClientManager::addClientInWaitingForAuth(std::shared_ptr<ClientLink> clientLink){
+void ClientManager::addClientInWaitingForAuth(std::shared_ptr<ClientLink> &&clientLink){
     waitingForAuthClient.push_back(clientLink);
 }
 
@@ -197,4 +229,11 @@ bool ClientManager::checkCredentials(nlohmann::json data ){
 
 void ClientManager::updateGameStates(PlayerID playerIds, nlohmann::json gameState){
         connectedClients_[playerIds]->sendPackage(gameState);
+}
+
+
+
+
+bool ClientManager::isClientConnected(PlayerID playerId){
+    return connectedClients_.find(playerId) != connectedClients_.end();
 }

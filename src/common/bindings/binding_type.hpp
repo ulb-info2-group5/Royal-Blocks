@@ -34,6 +34,9 @@ namespace bindings {
         MoveActive,
         RotateActive,
         SelectTarget,
+
+        // intern to server
+        RemoveClient,
     };
 
 } // namespace bindings

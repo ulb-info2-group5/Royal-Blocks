@@ -17,6 +17,7 @@
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/binding_type.hpp"
+#include "../../server_bindings/remove_client.hpp"
 
 #include "../matchmaking/matchmaking.hpp"
 
@@ -27,6 +28,9 @@ using boost::asio::ip::tcp;
 
 
 class ClientLink;
+
+
+
 
 //it's just a structure to bring database classes together
 struct DataBase{
@@ -85,6 +89,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink>{
         bool isIdentify();
 
         void setClientId(const int id);
+
+        void setIdentifyFalse();
+
 };
 
 
@@ -109,6 +116,13 @@ class ClientManager {
         * @return : true if success else false 
         */
         bool attemptCreateAccount(nlohmann::json data);
+
+
+        void disconnectClient(const PlayerID & playerID );
+
+        void removeConnection(const PlayerID & playerID);
+
+
     public:
         ClientManager(DataBase database);
         ~ClientManager() = default;
@@ -136,15 +150,18 @@ class ClientManager {
         /*
         * @brief:  add client to the waitingForAuthCLient list 
         */
-        void addClientInWaitingForAuth(std::shared_ptr<ClientLink> clientLink);
+        void addClientInWaitingForAuth(std::shared_ptr<ClientLink> &&clientLink);
         /*
         * @brief : add client in the unordered_map 
         */
         void addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo);
 
-        void removeConnection(const int & PlayerID);
+
+     
         
         bool checkCredentials(nlohmann::json data);
 
         void updateGameStates(PlayerID playerIds, nlohmann::json gameState);
+
+        bool isClientConnected(PlayerID playerId);
 };

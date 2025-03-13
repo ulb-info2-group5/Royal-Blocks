@@ -4,8 +4,10 @@
 
 // ======== private methode ========
 void GamesManager::deleteGame(GameID gameId){
+
     //TODO : update clientTOGame_ , gameThreads and gameSessions 
     //to avoid storing the finished games 
+    
 }
 
 
