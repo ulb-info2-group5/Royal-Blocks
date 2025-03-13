@@ -21,19 +21,18 @@ FriendsMenu::FriendsMenu(ScreenManager &screenManager, Controller &controller)
 void FriendsMenu::render() {
     while (!exit_) {
 
-
         ftxui::Component friendsContainer = ftxui::Container::Vertical({});
-        
+
         auto updateFriendsList = [&] {
             friendsContainer->DetachAllChildren();
-            const std::vector<bindings::User>& friendsList = controller_.getFriendsList();
-            std::vector<ftxui::Component> friendsButtons = displayFriendButtons(friendsList);
+            const std::vector<bindings::User> &friendsList =
+                controller_.getFriendsList();
+            std::vector<ftxui::Component> friendsButtons =
+                displayFriendButtons(friendsList);
             for (const ftxui::Component &friendButton : friendsButtons) {
                 friendsContainer->Add(friendButton);
             }
         };
-
-        updateFriendsList();
 
         ftxui::Component render = ftxui::Renderer(
             ftxui::Container::Vertical({ftxui::Container::Vertical({
@@ -134,22 +133,23 @@ void FriendsMenu::manageFriendlistScreen(const bindings::User &friendUser) {
         std::string(STR_NO), [&] { screenManager_.stopRender(); },
         GlobalButtonStyle());
 
-    ftxui::Component component = ftxui::Renderer(ftxui::Container::Vertical({
+    ftxui::Component component = ftxui::Renderer(
+        ftxui::Container::Vertical({
             buttonYes,
             buttonNo,
         }),
         [&] {
-        return ftxui::vbox({
-                   ftxui::text("Do you want to remove " + friendUser.username
-                               + " from your friends list ?")
-                       | ftxui::bold | ftxui::center,
-                   ftxui::separator(),
-                   buttonYes->Render() | ftxui::flex,
-                   buttonNo->Render() | ftxui::flex,
-               })
-               | ftxui::borderHeavy | ftxui::center;
-    });
-
+            return ftxui::vbox({
+                       ftxui::text("Do you want to remove "
+                                   + friendUser.username
+                                   + " from your friends list ?")
+                           | ftxui::bold | ftxui::center,
+                       ftxui::separator(),
+                       buttonYes->Render() | ftxui::flex,
+                       buttonNo->Render() | ftxui::flex,
+                   })
+                   | ftxui::borderHeavy | ftxui::center;
+        });
 
     screenManager_.render(component);
 }
