@@ -1,8 +1,5 @@
 @startuml BindingClass
-
-
-
-
+skinparam linetype ortho
 
 /' Objects '/
 
@@ -13,6 +10,8 @@ namespace bindings {
 		BigDrop
 		BuyBonus
 		BuyPenalty
+		ChangePassword
+		ChangeUsername
 		Conversation
 		Conversations
 		CreateGame
@@ -20,22 +19,26 @@ namespace bindings {
 		FriendRequest
 		FriendsList
 		GameState
+		HandleFriendRequest
 		HoldNextTetromino
 		JoinGame
 		Message
 		MoveActive
+		PendingFriendRequests
 		QuitGame
 		Ranking
 		Registration
 		RegistrationResponse
+		RemoveClient
+		RemoveFriend
 		RotateActive
 		SelectTarget
 		User
 	}
 
-	enum FriendRequest::FriendRequestType {
-		Add
-		Remove
+	enum HandleFriendRequest::Action {
+		Accept
+		Decline
 	}
 
 	enum User::State {
@@ -76,6 +79,18 @@ namespace bindings {
 		+to_json() : nlohmann::json {query}
 	}
 
+	class ChangePassword {
+		+{static} from_json(const nlohmann::json& j) : ChangePassword
+		+to_json() : nlohmann::json {query}
+		+password : std::string
+	}
+
+	class ChangeUsername {
+		+{static} from_json(const nlohmann::json& j) : ChangeUsername
+		+to_json() : nlohmann::json {query}
+		+username : std::string
+	}
+
 	class Conversation {
 		+{static} from_json(const nlohmann::json& j) : Conversation
 		+to_json() : nlohmann::json {query}
@@ -102,7 +117,6 @@ namespace bindings {
 
 	class FriendRequest {
 		+{static} from_json(const nlohmann::json& j) : FriendRequest
-		+friendRequestType : FriendRequestType
 		+to_json() : nlohmann::json {query}
 		+targetName : std::string
 	}
@@ -111,6 +125,13 @@ namespace bindings {
 		+{static} from_json(const nlohmann::json& j) : FriendsList
 		+to_json() : nlohmann::json {query}
 		+friendsList : std::vector<User>
+	}
+
+	class HandleFriendRequest {
+		+action : Action
+		+{static} from_json(const nlohmann::json& j) : HandleFriendRequest
+		+user : User
+		+to_json() : nlohmann::json {query}
 	}
 
 	class HoldNextTetromino {
@@ -138,6 +159,12 @@ namespace bindings {
 		+to_json() : nlohmann::json {query}
 	}
 
+	class PendingFriendRequests {
+		+{static} from_json(const nlohmann::json& j) : PendingFriendRequests
+		+to_json() : nlohmann::json {query}
+		+requests : std::vector<bindings::User>
+	}
+
 	class QuitGame {
 		+{static} from_json(const nlohmann::json& j) : QuitGame
 		+to_json() : nlohmann::json {query}
@@ -160,6 +187,12 @@ namespace bindings {
 		+{static} from_json(const nlohmann::json& j) : RegistrationResponse
 		+success : bool
 		+to_json() : nlohmann::json {query}
+	}
+
+	class RemoveFriend {
+		+{static} from_json(const nlohmann::json& j) : RemoveFriend
+		+to_json() : nlohmann::json {query}
+		+playerId : size_t
 	}
 
 	class RotateActive {
@@ -199,13 +232,19 @@ namespace bindings {
 bindings.FriendsList *-- bindings.User
 
 
+bindings.HandleFriendRequest *-- bindings.User
+
+
+bindings.PendingFriendRequests *-- bindings.User
+
+
 
 
 
 
 /' Nested objects '/
 
-bindings.FriendRequest +-- bindings.FriendRequest.FriendRequestType
+bindings.HandleFriendRequest +-- bindings.HandleFriendRequest.Action
 
 
 bindings.User +-- bindings.User.State

@@ -5,6 +5,7 @@
 
 left to right direction
 actor Joueur as player
+skinparam linetype ortho
 
 rectangle "Partie Duel" as game {
     '### Social

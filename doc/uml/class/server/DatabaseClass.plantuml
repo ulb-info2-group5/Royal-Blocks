@@ -91,10 +91,6 @@ class Message {
 	+content : std::string
 }
 
-
-
-
-
 /' Inheritance relationships '/
 
 

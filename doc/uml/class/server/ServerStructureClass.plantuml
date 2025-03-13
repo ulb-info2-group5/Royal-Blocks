@@ -2,8 +2,101 @@
 
 skinparam linetype ortho
 
-!include DatabaseClass.plantuml!0
-!include GameServerClass.plantuml!0
-!include NetworkClass.plantuml!0
+' !include DatabaseClass.plantuml!0
+' !include GameServerClass.plantuml!0
+' !include NetworkClass.plantuml!0
+
+class AccountManager{}
+class DatabaseManager{}
+class FriendsManager{}
+class MessagesManager{}
+enum CreateAccountStatus {
+	FAILED
+	SUCCESS
+	USERNAME_EXISTS
+}
+
+
+class Discution {
+	+{static} from_json(const nlohmann::json& j) : Discution
+	+idUser1 : int
+	+idUser2 : int
+	+to_json() : nlohmann::json {query}
+	+messages : std::vector<Message>
+}
+
+
+class Message {
+	+{static} from_json(const nlohmann::json& j) : Message
+	+senderId : int
+	+to_json() : nlohmann::json {query}
+	+content : std::string
+}
+
+AccountManager o-- "1" DatabaseManager
+
+
+Discution *-- Message
+
+
+FriendsManager o-- "1" DatabaseManager
+
+
+MessagesManager o-- "1" DatabaseManager
+
+class GameServer{}
+
+class ClientLink{}
+
+class ClientManager{}
+
+class GameCandidate{}
+
+class GamesManager{}
+
+class MatchMaking{}
+
+class Network{}
+
+class RequestCreateGame {
+	+playerId : PlayerID
+	+bindCreateGame : bindings::CreateGame
+}
+
+
+class RequestJoinGame {
+	+playerId : PlayerID
+	+bindGame : bindings::JoinGame
+}
+
+class DataBase {
+	+accountManager : std::shared_ptr<AccountManager>
+	+friendsManager : std::shared_ptr<FriendsManager>
+	+messagesManager : std::shared_ptr<MessagesManager>
+}
+
+
+ClientManager o-- "0..n" ClientLink
+
+
+ClientManager *-- "1" DataBase
+
+
+ClientManager *-- "1" GamesManager
+
+
+ClientManager *-- "1" Matchmaking
+
+
+Matchmaking *-- "0..n" GameCandidate
+
+
+Network *-- "1" ClientManager
+
+DataBase o-- "1" AccountManager
+DataBase o-- "1" FriendsManager
+DataBase o-- "1" MessagesManager
+
+GamesManager *-- "0..n" GameServer
 
 @enduml

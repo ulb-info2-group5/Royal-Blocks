@@ -3,6 +3,7 @@
 'common usecase for manage_friendlist and send_message
 
 left to right direction
+skinparam linetype ortho
 actor Utilisateur as user
 
 rectangle "Menu Principal" as main_menu {

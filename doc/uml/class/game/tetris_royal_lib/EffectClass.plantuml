@@ -6,25 +6,6 @@ skinparam class {
 }
 
 /' Objects '/
-
-abstract class AbstractTimedEffect {
-	#AbstractTimedEffect()
-	+~AbstractTimedEffect()
-	+{abstract} isFinished() : bool {query}
-	+{abstract} getElapsedTime() : double {query}
-	+{abstract} serialize() : nlohmann::json {query}
-	+tetrominoPlaced() : void
-	+tick() : void
-}
-
-
-class Blackout {
-	+Blackout()
-	+~Blackout()
-	-{static} TICKS_NUM : static constexpr size_t
-}
-
-
 class EffectSelector {
 	+EffectSelector()
 	+EffectSelector(const EffectSelector &)
@@ -43,6 +24,24 @@ class EffectSelector {
 	+next() : void
 	+prev() : void
 	+select(variant<BonusType, PenaltyType> effectType) : void
+}
+
+
+abstract class AbstractTimedEffect {
+	#AbstractTimedEffect()
+	+~AbstractTimedEffect()
+	+{abstract} isFinished() : bool {query}
+	+{abstract} getElapsedTime() : double {query}
+	+{abstract} serialize() : nlohmann::json {query}
+	+tetrominoPlaced() : void
+	+tick() : void
+}
+
+
+class Blackout {
+	+Blackout()
+	+~Blackout()
+	-{static} TICKS_NUM : static constexpr size_t
 }
 
 

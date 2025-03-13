@@ -15,10 +15,10 @@ class PlayerState {
 	+operator=(const PlayerState &) : PlayerState&
 	+operator=(PlayerState& &) : PlayerState&
 	+getScore() : Score {query}
-	-pActiveBonus_ : shared_ptr<TimedBonus>
-	+getActiveBonus() : shared_ptr<TimedBonus>&
-	-pActivePenalty_ : shared_ptr<TimedPenalty>
-	+getActivePenalty() : shared_ptr<TimedPenalty>&
+	-pActiveBonus_ : TimedBonusPtr
+	+getActiveBonus() : TimedBonusPtr&
+	-pActivePenalty_ : TimedPenaltyPtr
+	+getActivePenalty() : TimedPenaltyPtr&
 	+isAlive() : bool {query}
 	-isAlive_ : bool
 	+isGameTick() : bool
@@ -28,8 +28,6 @@ class PlayerState {
 	-score_ : size_t
 	+getStashedPenalties() : std::deque<PenaltyType>
 	+fetchGrantedBonus() : std::optional<BonusType>
-	-effectSelector_ : std::optional<EffectSelector>
-	+getSelectedEffect() : std::optional<EffectType>
 	-energy_ : std::optional<Energy>
 	+getEnergy() : std::optional<Energy> {query}
 	+fetchReceivedPenalty() : std::optional<PenaltyType>
@@ -39,6 +37,7 @@ class PlayerState {
 	-stashedPenalties_ : std::optional<std::deque<PenaltyType>>
 	-grantedBonusesQueue_ : std::optional<std::queue<BonusType>>
 	-receivedPenaltiesQueue_ : std::optional<std::queue<PenaltyType>>
+	-effectsPrice : std::vector<EffectPrice>
 	+decreaseEnergy(size_t amount) : void
 	+grantBonus(BonusType bonus) : void
 	+increaseEnergy(size_t amount) : void
@@ -47,11 +46,8 @@ class PlayerState {
 	+notifyEngineTick() : void
 	+notifyLost() : void
 	+receivePenalty(PenaltyType penalty) : void
-	+selectEffect(EffectType effectType) : void
-	+selectNextEffect() : void
-	+selectPrevEffect() : void
-	+setActiveBonus(const shared_ptr<TimedBonus>& pTimedBonus) : void
-	+setActivePenalty(const shared_ptr<TimedPenalty>& pTimedPenalty) : void
+	+setActiveBonus(const TimedBonusPtr& pTimedBonus) : void
+	+setActivePenalty(const TimedPenaltyPtr& pTimedPenalty) : void
 	+setAlive(bool isAlive) : void
 	+setPenaltyTarget(size_t playerID) : void
 	+stashPenalty(PenaltyType penalty) : void

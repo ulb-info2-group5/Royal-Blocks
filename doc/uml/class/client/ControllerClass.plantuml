@@ -1,7 +1,7 @@
 @startuml ControllerClass
 
 
-
+skinparam linetype ortho
 
 
 /' Objects '/
@@ -10,24 +10,30 @@ class Controller {
 	+Controller()
 	+~Controller()
 	-authState_ : AuthState
+	+getGameMode() : GameMode {query}
 	+getConversationWith(PlayerID playerID) : NameConversation&
 	-networkManager_ : NetworkManager
 	-registrationState_ : RegistrationState
+	+getSelfEnergy() : Score {query}
+	+getSelfScore() : Score {query}
 	-screenManager_ : ScreenManager
-	-conversations_ : bindings::Conversations
-	-friendsList_ : bindings::FriendsList
-	+getFriendsList() : bindings::FriendsList& {query}
-	-ranking_ : bindings::Ranking
-	+getRanking() : bindings::Ranking& {query}
+	+gameHasStarted() : bool {query}
 	-context_ : boost::asio::io_context
 	+getAuthState() : int {query}
 	+getRegistrationState() : int {query}
-	-mutex_ : std::mutex
-	-pGameState_ : std::shared_ptr<client::GameStateWrapper>
-	+getGameState() : std::shared_ptr<client::GameStateWrapper>&
+	-mutex_ : mutable std::mutex
+	+getNumOpponents() : size_t {query}
+	-gameState_ : std::optional<client::GameState>
+	+opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) : std::optional<unsigned> {query}
+	+selfBoardGetColorIdAt(int x, int y) : std::optional<unsigned> {query}
 	-ioThread_ : std::thread
+	-conversationsById_ : std::unordered_map<PlayerID, NameConversation>
+	-friendsList_ : std::vector<bindings::User>
+	+getFriendsList() : std::vector<bindings::User>& {query}
+	+getRanking() : std::vector<std::pair<std::string , Score>>& {query}
+	-ranking_ : std::vector<std::pair<std::string, Score>>
 	+bigDrop() : void
-	+changeProfile(const std::string& username, const std::string& password) : void {query}
+	+changeProfile(const std::string& username, const std::string& password) : void
 	+createGame(GameMode gameMode, size_t targetNumPlayers) : void
 	+emptyPenaltyStash() : void
 	+handleKeypress(const std::string& pressedKey) : void
@@ -36,7 +42,7 @@ class Controller {
 	+joinGame(GameMode gameMode, std::optional<PlayerID> friendID) : void
 	+moveActive(TetrominoMove tetrominoMove) : void
 	+quitGame() : void
-	+removeFriend(const std::string& username) : void
+	+removeFriend(PlayerID playerID) : void
 	+rotateActive(bool clockwise) : void
 	+run() : void
 	+sendFriendRequest(const std::string& username) : void

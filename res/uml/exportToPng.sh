@@ -16,14 +16,15 @@ classUMLDiag=("game/tetris_lib/GameClass"
               "client/ScreenManagerClass"
               "client/NetworkManagerClass"
               "client/ClientStructureClass"
-#              "connexion/ConnexionClass"
               "common/BindingClass"
               "common/coreInGameClass"
               "server/DatabaseClass"
               "server/GameServerClass"
+              "server/MatchMakingClass"
+              "server/ServerBindingClass"
+              "server/ServerStructureClass"
               "server/NetworkClass")
             
-
 seqUMLDiag=("ConnexionSequence" 
             "InscriptionSequence"
             "GameClientSequence"
@@ -74,14 +75,14 @@ for dir in */; do
 
   elif [ "$dir" = "sequence/" ]; then
     for (( i = 0; i<${#SeqUMLDiag[@]}; i++ )); do
-      #exportFileSeq ${SeqUMLDiag[$i]}
-      echo "hello"
+      exportFileSeq ${SeqUMLDiag[$i]}
+      #echo "hello"
     done
 
   elif [ "$dir" = "usecase/" ]; then
     for (( i = 0; i<${#useCaseUMLDiag[@]}; i++ )); do
-      #exportFileUseCase ${useCaseUMLDiag[$i]}
-      echo "hello2"
+      exportFileUseCase ${useCaseUMLDiag[$i]}
+      #echo "hello2"
     done
 
   fi

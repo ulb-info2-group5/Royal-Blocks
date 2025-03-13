@@ -1,7 +1,7 @@
 @startuml ConnexionUseCase
 
 left to right direction
-
+skinparam linetype ortho
 actor Utilisateur as user
 
 rectangle connexion {

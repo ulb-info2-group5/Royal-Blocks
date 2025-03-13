@@ -1,5 +1,7 @@
 @startuml InterfaceClass
 
+skinparam linetype ortho
+
 
 /' Objects '/
 
@@ -24,20 +26,23 @@ abstract class IGame {
 	#{abstract} drawPlayerBoard() : void
 	#{abstract} drawPlayerInfo() : void
 	#{abstract} drawRoyalEffectsEnergy() : void
+	#{abstract} handleKeys() : void
 	+{abstract} render() : void
+	#{abstract} updateDisplay() : void
 }
 
 
 abstract class IGame_Menu {
 	+~IGame_Menu()
+	-{abstract} createGameScreen() : void
 	-{abstract} handleChoice() : void
 	-{abstract} joinFriendOrRandomScreen() : void
 	-{abstract} joinFriendScreen() : void
 	-{abstract} joinRandomScreen() : void
-	-{abstract} matchmakingScreen() : void
 	+{abstract} render(const TypeGame& typeGame) : void
 	-{abstract} renderAllGames() : void
 	-{abstract} renderOnlineGames() : void
+	-{abstract} selectPlayerCountScreen() : void
 	-{abstract} waitingFriendScreen() : void
 }
 
@@ -68,7 +73,6 @@ abstract class IMain_Menu {
 	#{abstract} displayMainWindow() : void
 	#{abstract} displayProfileManagerButton() : void
 	#{abstract} displayProfileManagerWindow() : void
-	#{abstract} displayRankingList() : void
 	#{abstract} displayRankingWindow() : void
 	-{abstract} handleChoice() : void
 	+{abstract} render() : void
@@ -91,6 +95,7 @@ abstract class IMessage {
 enum JoinType {
 	BACK
 	FRIEND
+	GAME_STARTED
 	NONE
 	RANDOM
 }

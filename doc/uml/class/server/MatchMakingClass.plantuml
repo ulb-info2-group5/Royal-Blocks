@@ -1,0 +1,45 @@
+@startuml MatchMakingClass
+
+skinparam linetype ortho
+
+class Matchmaking {
+	+Matchmaking()
+	+~Matchmaking()
+	-gamesCanditatesClassic_ : std::vector<GameCandidate>
+	-gamesCanditatesDuel_ : std::vector<GameCandidate>
+	-gamesCanditatesRoyalCompetition_ : std::vector<GameCandidate>
+	-getGame(GameMode gameMode) : std::vector<GameCandidate>&
+	+addPlayer(RequestJoinGame joinGame, GamesManager& gamesManager) : void
+	+createAGame(RequestCreateGame createGame) : void
+	-createNewGameCandidate(std::vector<GameCandidate>& games, RequestJoinGame joinGame) : void
+	+findaGame(std::vector<GameCandidate>& games, RequestJoinGame joinGame, GamesManager& gamesManager) : void
+	-startGame(GameCandidate&& gameCandidate, GamesManager& gamesManager) : void
+}
+
+class GameCandidate {
+	+GameCandidate(RequestJoinGame joinGame)
+	+GameCandidate(RequestCreateGame createGame)
+	+~GameCandidate()
+	-gameMode : GameMode
+	+getGameMode() : GameMode
+	+isThereRoomInThisGame() : bool
+	+isThisPartyReady() : bool
+	+isthisPlayerInThisGame(PlayerID playerId) : bool
+	+tryToAddPlayer(RequestJoinGame joinGame) : bool
+	-numberOfPlayerTotale_ : size_t
+	-numberOfPlayersMax_ : size_t
+	-players_ : std::vector<PlayerID>
+	+getPlayers() : std::vector<PlayerID>&
+}
+
+class RequestCreateGame {
+	+playerId : PlayerID
+	+bindCreateGame : bindings::CreateGame
+}
+
+
+class RequestJoinGame {
+	+playerId : PlayerID
+	+bindGame : bindings::JoinGame
+}
+@enduml

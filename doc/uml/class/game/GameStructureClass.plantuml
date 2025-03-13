@@ -91,7 +91,7 @@ enum PenaltyType {
 
 class GameEngine{}
 
-enum GameModeFeature{
+enum GameEngine::GameModeFeature{
 	PenaltyRows,
     Effects,
     SelectPenaltyTarget,
@@ -172,15 +172,17 @@ Board *--"width_* height_" GridCell
 Tetris ->"1" Board
 Tetris --> "1..*" ATetromino
 
-PlayerState <- "0..1" EffectSelector
-PlayerState <- "0..n" BonusType
-PlayerState <- "0..n" PenaltyType
+PlayerState *-- "0..1" EffectSelector
+PlayerState *-- "0..n" BonusType
+PlayerState *-- "0..n" PenaltyType
 
 PlayerTetris *-- "1" PlayerState
 PlayerTetris *-- "1" Tetris
 
 GameState *-- "1..9" PlayerTetris
 
-GameEngine *-- "1" GameState
+GameEngine o-- "1" GameState
+
+GameEngine +-- GameEngine::GameModeFeature
 
 @enduml

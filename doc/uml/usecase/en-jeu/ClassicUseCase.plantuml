@@ -5,6 +5,8 @@
 
 left to right direction
 actor Joueur as player
+skinparam linetype ortho
+
 
 rectangle "Partie Classique" as game {
     '### Social
