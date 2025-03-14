@@ -444,7 +444,7 @@ void GameEngine::emptyPenaltyStash(UserID userID) {
 
     while (!penaltiesQueue.empty()) {
         PenaltyType penaltyType = penaltiesQueue.front();
-        sendPenaltyEffect(userID, penaltyType);
+        sendPenaltyEffect(*pPlayerState, penaltyType);
         penaltiesQueue.pop_front();
     }
 }
