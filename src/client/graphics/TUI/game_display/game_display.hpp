@@ -23,8 +23,6 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
-ftxui::Color getFTXUIColor(Color color);
-
 class GameDisplay final : public IGame {
   private:
     ScreenManager &screenManager_;
