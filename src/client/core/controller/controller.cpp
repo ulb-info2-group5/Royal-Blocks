@@ -228,6 +228,10 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     } else if (pressedKey == "ArrowDown") {
         networkManager_.send(
             bindings::MoveActive{TetrominoMove::Down}.to_json().dump());
+    } else if (pressedKey == "f") {
+        networkManager_.send(bindings::RotateActive{false}.to_json().dump());
+    } else if (pressedKey == "g") {
+        networkManager_.send(bindings::RotateActive{true}.to_json().dump());
     }
 }
 
