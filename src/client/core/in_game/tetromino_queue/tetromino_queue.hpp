@@ -10,8 +10,6 @@ namespace client {
     struct TetrominoQueue {
         std::deque<client::Tetromino> queue_;
 
-        nlohmann::json serialize() const;
-
         void deserialize(const nlohmann::json &j);
     };
 

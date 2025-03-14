@@ -17,8 +17,6 @@ namespace client {
 
         TetrominoQueue tetrominoQueue_;
 
-        nlohmann::json serialize() const;
-
         void deserialize(const nlohmann::json &j);
     };
 

@@ -269,8 +269,11 @@ class ATetromino {
             j_body.push_back(vec.serialize());
         }
 
-        return nlohmann::json{{"anchorPoint", anchorPoint_.serialize()},
-                              {"body", j_body}};
+        return nlohmann::json{
+            {"anchorPoint", anchorPoint_.serialize()},
+            {"body", j_body},
+            {"colorId", getColorId()},
+        };
     }
 
     /* ------------------------------------------------

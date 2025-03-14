@@ -10,8 +10,7 @@ namespace client {
     struct Tetromino {
         Vec2 anchorPoint_;
         std::vector<Vec2> body_;
-
-        nlohmann::json serialize() const;
+        unsigned colorId;
 
         void deserialize(const nlohmann::json &j);
     };

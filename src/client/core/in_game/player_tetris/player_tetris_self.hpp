@@ -10,8 +10,6 @@ namespace client {
         PlayerStateSelf playerState_;
         TetrisSelf tetris_;
 
-        nlohmann::json serialize() const;
-
         void deserialize(const nlohmann::json &j);
     };
 
