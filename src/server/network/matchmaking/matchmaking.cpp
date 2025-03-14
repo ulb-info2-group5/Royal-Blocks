@@ -56,8 +56,8 @@ GameMode GameCandidate::getGameMode() { return gameMode; }
 
 void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager) {
     if (joinGame.bindGame.gameMode == GameMode::Endless) {
-        std::vector<PlayerID> players;
-        players.emplace_back(joinGame.playerId);
+        std::vector<UserID> players;
+        players.emplace_back(joinGame.userId);
         
         gamesManager.startGameServeur(GameMode::Endless, std::move(players));
         gameFindCallback_(players);
