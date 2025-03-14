@@ -29,7 +29,6 @@ class GameDisplay final : public IGame {
     Controller &controller_;
 
     // TODO: remove this
-    std::vector<std::string> pseudos_;
     // float penaltyGauge_;
     std::vector<std::string> effects_ = {};
 

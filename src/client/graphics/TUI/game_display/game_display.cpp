@@ -85,8 +85,6 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
 GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
     : screenManager_(screenManager), controller_(controller) {
     // initialise for preview
-    pseudos_ = {"juliette", "ethan", "quentin", "frog",   "lucas",
-                "rafaou",   "jonas", "ernest",  "vanilla"};
     // penaltyGauge_ = 0.5;
 
     effects_ = {"bonus0", "bonus1", "bonus2", "bonus3", "bonus4",
@@ -98,9 +96,10 @@ GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
 void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
         return ftxui::vbox(
+
                    {ftxui::text(std::to_string(controller_.getSelfScore())),
                     // TODO: use the actual nickname
-                    ftxui::text(pseudos_.at(0))})
+                    ftxui::text(controller_.getSelfUsername())})
                | ftxui::borderDashed;
     });
 }
@@ -249,7 +248,8 @@ void GameDisplay::drawOpponentsBoard() {
         ftxui::Component opDisplay = ftxui::Container::Vertical({
             opBoardDisplay,
             ftxui::Button(
-                pseudos_.at(index), [&] { /* function to call */ },
+                controller_.getOpponentUsername(index),
+                [&] { /* function to call */ },
                 ftxui::ButtonOption::Animated(ftxui::Color::Yellow1))
                 | ftxui::borderDouble,
         });
@@ -335,7 +335,8 @@ void GameDisplay::displayOpponentBoardDuel() {
 
         return ftxui::vbox({
             ftxui::canvas(playerCanvas) | ftxui::border,
-            ftxui::text(pseudos_.at(1)) | ftxui::borderDouble,
+            ftxui::text(controller_.getOpponentUsername(0))
+                | ftxui::borderDouble,
         });
     });
 }

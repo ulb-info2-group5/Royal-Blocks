@@ -200,8 +200,12 @@ class Controller {
     std::optional<std::pair<unsigned, Controller::SelfCellType>>
     selfCellInfoAt(int x, int y) const;
 
+    std::string getSelfUsername() const;
+
     std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
                                                        int x, int y) const;
+
+    std::string getOpponentUsername(size_t opponentIdx) const;
 
     size_t getNumOpponents() const;
 

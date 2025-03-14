@@ -301,6 +301,16 @@ Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
         .getColorId();
 }
 
+std::string Controller::getSelfUsername() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_->self.playerState.username;
+}
+
+std::string Controller::getOpponentUsername(size_t opponentIdx) const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_->externals.at(opponentIdx).playerState.username;
+}
+
 size_t Controller::getNumOpponents() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_->externals.size();
