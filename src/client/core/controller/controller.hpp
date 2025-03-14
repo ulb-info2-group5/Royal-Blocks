@@ -27,8 +27,6 @@
 #include <utility>
 #include <vector>
 
-using Score = size_t;
-
 using NameConversation = std::pair<std::string, bindings::Conversation>;
 
 struct Message;

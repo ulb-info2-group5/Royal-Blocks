@@ -4,13 +4,13 @@
 #include "binding_type.hpp"
 
 #include <nlohmann/json.hpp>
-#include <utility>
-#include <vector>
+#include <string>
+
+#include "../types/types.hpp"
 
 namespace bindings {
 
     struct Ranking {
-        using Score = size_t;
         using PlayerScore = std::pair<std::string, Score>;
 
         std::vector<PlayerScore> ranking;
