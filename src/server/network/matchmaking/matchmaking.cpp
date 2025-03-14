@@ -53,8 +53,17 @@ GameMode GameCandidate::getGameMode() { return gameMode; }
 
 // ======= matchmaking class =======
 
-void Matchmaking::addPlayer(RequestJoinGame joinGame,
-                            GamesManager &gamesManager) {
+
+void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager) {
+    if (joinGame.bindGame.gameMode == GameMode::Endless) {
+        std::vector<PlayerID> players;
+        players.emplace_back(joinGame.playerId);
+        
+        gamesManager.startGameServeur(GameMode::Endless, std::move(players));
+        gameFindCallback_(players);
+        return;
+    }
+
     findaGame(getGame(joinGame.bindGame.gameMode), joinGame, gamesManager);
 }
 
