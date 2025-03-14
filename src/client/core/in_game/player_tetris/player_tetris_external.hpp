@@ -7,8 +7,8 @@
 namespace client {
 
     struct PlayerTetrisExternal {
-        PlayerStateExternal playerState_;
-        TetrisExternal tetris_;
+        PlayerStateExternal playerState;
+        TetrisExternal tetris;
 
         nlohmann::json serialize() const;
 

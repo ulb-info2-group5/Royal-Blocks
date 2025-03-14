@@ -237,22 +237,22 @@ void Controller::handleKeypress(const std::string &pressedKey) {
 
 size_t Controller::getBoardHeight() {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.tetris_.board_.getHeight();
+    return gameState_->self.tetris.board.getHeight();
 }
 
 size_t Controller::getBoardWidth() {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.tetris_.board_.getWidth();
+    return gameState_->self.tetris.board.getWidth();
 }
 
 Score Controller::getSelfScore() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.playerState_.score_;
+    return gameState_->self.playerState.score;
 }
 
 Score Controller::getSelfEnergy() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.playerState_.energy_.value_or(0);
+    return gameState_->self.playerState.energy.value_or(0);
 }
 
 GameMode Controller::getGameMode() const {
@@ -264,16 +264,16 @@ std::optional<std::pair<unsigned, Controller::SelfCellType>>
 Controller::selfCellInfoAt(int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
 
-    if (gameState_->self.tetris_.board_.get(x, y).getColorId().has_value()) {
+    if (gameState_->self.tetris.board.get(x, y).getColorId().has_value()) {
         return std::make_pair(
-            gameState_->self.tetris_.board_.get(x, y).getColorId().value(),
+            gameState_->self.tetris.board.get(x, y).getColorId().value(),
             Controller::SelfCellType::Placed);
     }
 
-    auto &activeTetromino = gameState_->self.tetris_.activeTetromino_;
+    auto &activeTetromino = gameState_->self.tetris.activeTetromino;
     if (activeTetromino.has_value()) {
-        for (auto &vec : activeTetromino->body_) {
-            if (activeTetromino->anchorPoint_ + vec == Vec2{x, y}) {
+        for (auto &vec : activeTetromino->body) {
+            if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
                 return std::make_optional(
                     std::make_pair(activeTetromino->colorId,
                                    Controller::SelfCellType::Active));
@@ -281,10 +281,10 @@ Controller::selfCellInfoAt(int x, int y) const {
         }
     }
 
-    auto &previewTetromino = gameState_->self.tetris_.previewTetromino_;
+    auto &previewTetromino = gameState_->self.tetris.previewTetromino;
     if (previewTetromino.has_value()) {
-        for (auto &vec : previewTetromino->body_) {
-            if (previewTetromino->anchorPoint_ + vec == Vec2{x, y}) {
+        for (auto &vec : previewTetromino->body) {
+            if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
                 return std::make_optional(
                     std::make_pair(previewTetromino->colorId,
                                    Controller::SelfCellType::Preview));
@@ -299,7 +299,7 @@ std::optional<unsigned>
 Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_->externals.at(opponentIdx)
-        .tetris_.board_.get(x, y)
+        .tetris.board.get(x, y)
         .getColorId();
 }
 

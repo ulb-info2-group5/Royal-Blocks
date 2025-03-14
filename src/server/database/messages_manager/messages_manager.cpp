@@ -7,6 +7,7 @@
  */
 
 #include "messages_manager.hpp"
+#include <fstream>
 #include <iostream>
 #include <ostream>
 #include <string>

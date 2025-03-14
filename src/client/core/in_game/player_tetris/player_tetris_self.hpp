@@ -7,8 +7,8 @@
 namespace client {
 
     struct PlayerTetrisSelf {
-        PlayerStateSelf playerState_;
-        TetrisSelf tetris_;
+        PlayerStateSelf playerState;
+        TetrisSelf tetris;
 
         void deserialize(const nlohmann::json &j);
     };

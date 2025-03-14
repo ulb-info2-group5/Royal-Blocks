@@ -8,9 +8,9 @@
 namespace client {
 
     struct PlayerStateExternal {
-        UserID userID_;
-        Score score_;
-        bool isAlive_;
+        UserID userID;
+        Score score;
+        bool isAlive;
 
         /* ------------------------------------------------
          *          Serialization

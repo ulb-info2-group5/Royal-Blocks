@@ -16,20 +16,20 @@ using EffectPrice = std::pair<EffectType, Energy>;
 namespace client {
 
     struct PlayerStateSelf {
-        UserID userID_;
-        Score score_;
-        bool isAlive_;
+        UserID userID;
+        Score score;
+        bool isAlive;
 
-        std::optional<UserID> penaltyTarget_;
+        std::optional<UserID> penaltyTarget;
 
-        std::optional<Energy> energy_;
+        std::optional<Energy> energy;
 
         std::vector<EffectPrice> effectsPrice;
 
-        std::optional<std::deque<PenaltyType>> stashedPenalties_;
+        std::optional<std::deque<PenaltyType>> stashedPenalties;
 
-        std::optional<client::TimedBonus> activeBonus_;
-        std::optional<client::TimedPenalty> activePenalty_;
+        std::optional<client::TimedBonus> activeBonus;
+        std::optional<client::TimedPenalty> activePenalty;
 
         /* ------------------------------------------------
          *          Serialization

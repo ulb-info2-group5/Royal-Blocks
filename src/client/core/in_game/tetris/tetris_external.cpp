@@ -1,9 +1,9 @@
 #include "tetris_external.hpp"
 
 nlohmann::json client::TetrisExternal::serialize() const {
-    return {{"board", board_.serialize()}};
+    return {{"board", board.serialize()}};
 }
 
 void client::TetrisExternal::deserialize(const nlohmann::json &j) {
-    board_.deserialize(j.at("board"));
+    board.deserialize(j.at("board"));
 }

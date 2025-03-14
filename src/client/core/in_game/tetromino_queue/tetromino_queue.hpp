@@ -8,7 +8,7 @@
 namespace client {
 
     struct TetrominoQueue {
-        std::deque<client::Tetromino> queue_;
+        std::deque<client::Tetromino> queue;
 
         void deserialize(const nlohmann::json &j);
     };

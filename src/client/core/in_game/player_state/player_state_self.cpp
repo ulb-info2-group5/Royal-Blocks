@@ -4,40 +4,40 @@
 
 nlohmann::json client::PlayerStateSelf::serialize() const {
     nlohmann::json j;
-    j["playerID"] = userID_;
-    j["score"] = score_;
-    j["isAlive"] = isAlive_;
+    j["playerID"] = userID;
+    j["score"] = score;
+    j["isAlive"] = isAlive;
 
-    if (penaltyTarget_) {
-        j["penaltyTarget"] = *penaltyTarget_;
+    if (penaltyTarget) {
+        j["penaltyTarget"] = *penaltyTarget;
     } else {
         j["penaltyTarget"] = nullptr;
     }
 
-    if (energy_) {
-        j["energy"] = *energy_;
+    if (energy) {
+        j["energy"] = *energy;
     } else {
         j["energy"] = nullptr;
     }
 
-    if (stashedPenalties_) {
-        nlohmann::json j_stashedPenalties = nlohmann::json::array();
-        for (const auto &stashedPenalty : *stashedPenalties_) {
-            j_stashedPenalties.push_back(stashedPenalty);
+    if (stashedPenalties) {
+        nlohmann::json jstashedPenalties = nlohmann::json::array();
+        for (const auto &stashedPenalty : *stashedPenalties) {
+            jstashedPenalties.push_back(stashedPenalty);
         }
-        j["stashedPenalties"] = j_stashedPenalties;
+        j["stashedPenalties"] = jstashedPenalties;
     } else {
         j["stashedPenalties"] = nullptr;
     }
 
-    if (activeBonus_) {
-        j["activeBonus"] = activeBonus_->serialize();
+    if (activeBonus) {
+        j["activeBonus"] = activeBonus->serialize();
     } else {
         j["activeBonus"] = nullptr;
     }
 
-    if (activePenalty_) {
-        j["activePenalty"] = activePenalty_->serialize();
+    if (activePenalty) {
+        j["activePenalty"] = activePenalty->serialize();
     } else {
         j["activePenalty"] = nullptr;
     }
@@ -46,42 +46,42 @@ nlohmann::json client::PlayerStateSelf::serialize() const {
 }
 
 void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
-    j.at("playerID").get_to(userID_);
-    j.at("score").get_to(score_);
-    j.at("isAlive").get_to(isAlive_);
+    j.at("playerID").get_to(userID);
+    j.at("score").get_to(score);
+    j.at("isAlive").get_to(isAlive);
 
     if (!j.at("penaltyTarget").is_null()) {
-        penaltyTarget_ = std::make_optional(UserID{});
-        penaltyTarget_ = j.at("penaltyTarget").get<UserID>();
+        penaltyTarget = std::make_optional(UserID{});
+        penaltyTarget = j.at("penaltyTarget").get<UserID>();
     } else {
-        penaltyTarget_ = std::nullopt;
+        penaltyTarget = std::nullopt;
     }
 
     if (!j.at("energy").is_null()) {
-        energy_ = std::make_optional(Energy{});
-        energy_ = j.at("energy").get<Energy>();
+        energy = std::make_optional(Energy{});
+        energy = j.at("energy").get<Energy>();
     } else {
-        energy_ = std::nullopt;
+        energy = std::nullopt;
     }
 
     if (!j.at("stashedPenalties").is_null()) {
-        stashedPenalties_ = std::make_optional(std::deque<PenaltyType>{});
-        stashedPenalties_ = j.at("stashedPenalties");
+        stashedPenalties = std::make_optional(std::deque<PenaltyType>{});
+        stashedPenalties = j.at("stashedPenalties");
     } else {
-        stashedPenalties_ = std::nullopt;
+        stashedPenalties = std::nullopt;
     }
 
     if (!j.at("activeBonus").is_null()) {
-        activeBonus_ = std::make_optional(client::TimedBonus{});
-        activeBonus_->deserialize(j.at("activeBonus"));
+        activeBonus = std::make_optional(client::TimedBonus{});
+        activeBonus->deserialize(j.at("activeBonus"));
     } else {
-        activeBonus_ = std::nullopt;
+        activeBonus = std::nullopt;
     }
 
     if (!j.at("activePenalty").is_null()) {
-        activePenalty_ = std::make_optional(client::TimedPenalty{});
-        activePenalty_->deserialize(j.at("activePenalty"));
+        activePenalty = std::make_optional(client::TimedPenalty{});
+        activePenalty->deserialize(j.at("activePenalty"));
     } else {
-        activePenalty_ = std::nullopt;
+        activePenalty = std::nullopt;
     }
 }

@@ -7,8 +7,6 @@
 #define MESSAGE_MANAGER_HPP
 
 #include "../database_manager/database_manager.hpp"
-#include <fstream>
-#include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <sqlite3.h>

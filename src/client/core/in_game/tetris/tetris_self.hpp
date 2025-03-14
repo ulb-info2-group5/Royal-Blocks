@@ -8,14 +8,14 @@
 namespace client {
 
     struct TetrisSelf {
-        std::optional<Tetromino> activeTetromino_;
-        std::optional<Tetromino> previewTetromino_;
+        std::optional<Tetromino> activeTetromino;
+        std::optional<Tetromino> previewTetromino;
 
-        Board board_;
+        Board board;
 
-        std::optional<Tetromino> holdTetromino_;
+        std::optional<Tetromino> holdTetromino;
 
-        TetrominoQueue tetrominoQueue_;
+        TetrominoQueue tetrominoQueue;
 
         void deserialize(const nlohmann::json &j);
     };

@@ -5,10 +5,9 @@
 #include "../types/types.hpp"
 #include "binding_type.hpp"
 #include "user_state.hpp"
-#include <cstddef>
+
 #include <optional>
 #include <string>
-
 #include <nlohmann/json.hpp>
 
 namespace bindings {
