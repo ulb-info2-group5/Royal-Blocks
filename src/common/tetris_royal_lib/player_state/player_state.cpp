@@ -4,8 +4,13 @@
 
 #include <optional>
 
-PlayerState::PlayerState(UserID userID, Score score)
+PlayerState::PlayerState(UserID userID, std::string username, Score score)
     : TetrisObserver{}, userID_{userID}, score_{score}, isAlive_{true},
+
+      username{username.empty() ? std::string{DEFAULT_USERNAME_PREFIX}
+                                      + std::to_string(userID)
+                                : username},
+
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
       receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
       pActiveBonus_{nullptr}, pActivePenalty_{nullptr},
@@ -202,6 +207,7 @@ nlohmann::json PlayerState::serializeExternal() const {
     j["playerID"] = userID_;
     j["score"] = score_;
     j["isAlive"] = isAlive_;
+    j["username"] = username;
 
     return j;
 }
@@ -211,6 +217,7 @@ nlohmann::json PlayerState::serializeSelf() const {
     j["playerID"] = userID_;
     j["score"] = score_;
     j["isAlive"] = isAlive_;
+    j["username"] = username;
 
     if (penaltyTarget_) {
         j["penaltyTarget"] = *penaltyTarget_;

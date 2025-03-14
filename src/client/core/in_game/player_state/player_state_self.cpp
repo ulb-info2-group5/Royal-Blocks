@@ -7,6 +7,7 @@ nlohmann::json client::PlayerStateSelf::serialize() const {
     j["playerID"] = userID;
     j["score"] = score;
     j["isAlive"] = isAlive;
+    j["username"] = username;
 
     if (penaltyTarget) {
         j["penaltyTarget"] = *penaltyTarget;
@@ -49,6 +50,7 @@ void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
     j.at("playerID").get_to(userID);
     j.at("score").get_to(score);
     j.at("isAlive").get_to(isAlive);
+    j.at("username").get_to(username);
 
     if (!j.at("penaltyTarget").is_null()) {
         penaltyTarget = std::make_optional(UserID{});

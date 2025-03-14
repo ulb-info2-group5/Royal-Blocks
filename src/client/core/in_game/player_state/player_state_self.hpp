@@ -20,6 +20,7 @@ namespace client {
         UserID userID;
         Score score;
         bool isAlive;
+        std::string username;
 
         std::optional<UserID> penaltyTarget;
 

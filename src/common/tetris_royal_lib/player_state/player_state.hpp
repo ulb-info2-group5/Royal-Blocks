@@ -11,12 +11,15 @@
 #include <cstddef>
 #include <optional>
 #include <queue>
+#include <string_view>
 #include <sys/types.h>
 
 class PlayerState;
 using PlayerStatePtr = std::shared_ptr<PlayerState>;
 
 using EffectPrice = std::pair<EffectType, Energy>;
+
+constexpr std::string_view DEFAULT_USERNAME_PREFIX = "player ";
 
 class PlayerState final : public TetrisObserver {
   private:
@@ -27,6 +30,7 @@ class PlayerState final : public TetrisObserver {
     UserID userID_;
     Score score_;
     bool isAlive_;
+    std::string username;
 
     /* ------------------------------------------------
      *      Classic & RoyalCompetition Specific
@@ -59,7 +63,7 @@ class PlayerState final : public TetrisObserver {
     std::optional<size_t> engineTicksSinceLastTick_;
 
   public:
-    PlayerState(UserID userID, Score score = 0);
+    PlayerState(UserID userID, std::string username, Score score = 0);
     PlayerState(const PlayerState &) = default;
     PlayerState(PlayerState &&) = default;
     PlayerState &operator=(const PlayerState &) = default;

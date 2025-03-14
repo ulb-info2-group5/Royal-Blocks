@@ -11,6 +11,7 @@ namespace client {
         UserID userID;
         Score score;
         bool isAlive;
+        std::string username;
 
         /* ------------------------------------------------
          *          Serialization
