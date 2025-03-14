@@ -23,7 +23,7 @@ NetworkManager::NetworkManager(
     std::function<void(const std::string &)> packetHandler)
     : context_{context}, socket_(context), packetHandler_{packetHandler} {}
 
-void NetworkManager::connect() {
+bool NetworkManager::connect() {
     try {
         boost::asio::ip::tcp::resolver resolver(context_);
         boost::asio::ip::tcp::resolver::results_type endpoints =
@@ -31,14 +31,11 @@ void NetworkManager::connect() {
         boost::asio::connect(socket_, endpoints);
 
         receive(); // Start listening for messages
+        return true;
     }
 
-    catch (const std::exception &e) {
-        std::cerr << "Connection error: " << e.what() << std::endl;
-        disconnect();
-        std::cout << std::endl;
-        std::cerr << "Failed to connect to the server" << std::endl;
-        std::exit(1); // TODO
+    catch (...) {
+        return false;
     }
 }
 

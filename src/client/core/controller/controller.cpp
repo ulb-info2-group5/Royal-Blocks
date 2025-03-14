@@ -115,7 +115,11 @@ Controller::AuthState Controller::getAuthState() const {
 }
 
 void Controller::run() {
-    networkManager_.connect();
+    if (!networkManager_.connect()) {
+        std::cerr << "Failed to connect to server" << std::endl;
+        return; // We failed to connect to the server so we can't do anything so
+                // we end the program
+    };
 
     ioThread_ = std::thread([this]() { context_.run(); });
 

@@ -11,7 +11,6 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/io_context.hpp>
-#include <deque>
 
 class NetworkManager {
   private:
@@ -56,8 +55,10 @@ class NetworkManager {
 
     /*
      * @brief Connect to the server and start listening for messages
+     *
+     * @return true if the connection was successful and false otherwise
      */
-    void connect();
+    bool connect();
 
     /*
      * @brief Disconnect from the server
