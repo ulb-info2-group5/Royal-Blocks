@@ -25,6 +25,7 @@ GameMenu::GameMenu(ScreenManager &screenManager, Controller &controller)
         std::string(STR_ENDLESS),
         [&] {
             gameMode_ = GameMode::Endless;
+            controller_.joinGame(gameMode_, std::nullopt);
             screenManager_.stopRender();
         },
         GlobalButtonStyle());
