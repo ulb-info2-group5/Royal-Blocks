@@ -21,10 +21,9 @@ using GameID = size_t;
 using UpdateGameStates = std::function<void(UserID, nlohmann::json)>;
 using CallBackFinishGame = std::function<void(GameID)>;
 
-
 struct Player {
-  UserID userID;
-  std::string username;
+    UserID userID;
+    std::string username;
 };
 
 class GameServer {

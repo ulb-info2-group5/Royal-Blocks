@@ -51,12 +51,14 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
           [&] {
               std::vector<PlayerState> playerStates;
               playerStates.reserve(players.size());
-              std::transform(players.begin(), players.end(),
-                             std::back_inserter(playerStates),
-                             [](Player player) { return PlayerState(player.userID, player.username); });
+              std::transform(
+                  players.begin(), players.end(),
+                  std::back_inserter(playerStates), [](Player player) {
+                      return PlayerState(player.userID, player.username);
+                  });
               return playerStates;
           }())},
-      engine{pGameState_}, updateGameStates_{updateGameStates}, gameId_{id},
+      engine{pGameState_}, gameId_{id}, updateGameStates_{updateGameStates},
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {

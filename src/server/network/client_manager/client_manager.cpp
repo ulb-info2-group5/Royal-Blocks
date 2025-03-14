@@ -77,9 +77,10 @@ void ClientLink::writeSocket(std::string &content) {
 ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
                        AuthPacketHandler authPacketHandler,
                        AuthSuccessCallback authSuccessCallback)
-    : socket_(std::move(socket)), packetHandler_(packetHandler),
+    : socket_(std::move(socket)), userState(bindings::State::Offline),
+      clientId(std::nullopt), packetHandler_(packetHandler),
       authPacketHandler_(authPacketHandler),
-      authSuccessCallback_(authSuccessCallback), clientId(std::nullopt), userState(bindings::State::Offline) {
+      authSuccessCallback_(authSuccessCallback) {
     start();
 }
 
@@ -87,7 +88,6 @@ void ClientLink::start() {
     std::cout << "start client link" << std::endl;
     read();
 }
-
 
 bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
@@ -100,16 +100,11 @@ void ClientLink::sendPackage(nlohmann::json gameState) {
 
 void ClientLink::setClientId(const int id) { clientId = id; }
 
-
-
-
-void ClientLink::setUserState(bindings::State newState){
+void ClientLink::setUserState(bindings::State newState) {
     userState = newState;
 }
 
-bindings::State ClientLink::getUserState(){
-    return userState;
-}
+bindings::State ClientLink::getUserState() { return userState; }
 
 // ====== Client manager class ======
 // ---private ---
@@ -136,7 +131,7 @@ void ClientManager::disconnectClient(const UserID &userID) {
         std::cout << "***** the client has already been disconnected  (id : ) "
                   << userID << std::endl;
     } else {
-        
+
         connectedClients_[userID]->setUserState(bindings::State::Offline);
         addClientInWaitingForAuth(std::move(connectedClients_[userID]));
         removeConnection(userID);
@@ -153,25 +148,21 @@ ClientManager::ClientManager(DataBase database)
     : database_(database),
       gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
           updateGameStates(playerId, gameState);
-      }), 
-      matchmaking_([this](std::vector<UserID> userIDs){
-            gameFindCallback(userIDs);
-      })
-      {}
+      }),
+      matchmaking_(
+          [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }) {}
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                                     nlohmann::json clientData) {
     addConnection(clientLink, clientData.at("nickname").get<std::string>());
 }
-void ClientManager::gameFindCallback(std::vector<PlayerID>& playersID){
-    std::cout << "== game find callback succcess ===" <<std::endl;
-    for (auto id: playersID){
+void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID) {
+    std::cout << "== game find callback succcess ===" << std::endl;
+    for (auto id : playersID) {
         std::cout << "id player : " << id << std::endl;
         connectedClients_[id]->setUserState(bindings::State::InGame);
     }
-
 }
-
 
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
                                   const std::string &pseudo) {
@@ -228,22 +219,20 @@ void ClientManager::handlePacketMenu(const std::string &packet,
     case bindings::BindingType::JoinGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.addPlayer(
-            RequestJoinGame{
-                Player{
-                    clientId,
-                    database_.accountManager->getUsername(clientId),}, 
-                bindings::JoinGame::from_json(jPack)},
+            RequestJoinGame{Player{
+                                clientId,
+                                database_.accountManager->getUsername(clientId),
+                            },
+                            bindings::JoinGame::from_json(jPack)},
             gamesManager_);
-        
+
         break;
     case bindings::BindingType::CreateGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.createAGame(RequestCreateGame{
-            Player{
-                clientId,
-                database_.accountManager->getUsername(clientId)}, 
+            Player{clientId, database_.accountManager->getUsername(clientId)},
             bindings::CreateGame::from_json(jPack)});
-        
+
         break;
     case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
@@ -257,7 +246,6 @@ void ClientManager::addClientInWaitingForAuth(
     std::shared_ptr<ClientLink> &&clientLink) {
     clientLink->setUserState(bindings::State::Offline);
     waitingForAuthClient.push_back(clientLink);
-
 }
 
 void ClientManager::handleMessage(nlohmann::json message) {
