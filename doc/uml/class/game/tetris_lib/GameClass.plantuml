@@ -1,0 +1,43 @@
+@startuml GameClass
+
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor AliceBlue
+}
+
+!include BoardClass.plantuml!0
+
+!include BoardUpdateClass.plantuml!0
+
+!include Vec2Class.plantuml!0
+
+!include EventClass.plantuml!0
+
+!include GridCellClass.plantuml!0
+
+!include RotationIndexClass.plantuml!0
+
+!include TetrisClass.plantuml!0
+
+!include TetrominoesClass.plantuml!0
+
+enum TetrominoMove {
+    Left,
+    Right,
+    Down,
+}
+
+TetrominoShape"1"- ATetromino
+ 
+ATetromino  - "2" RotationIndex : have  >
+ATetromino *--"4" Vec2 : have > 
+ATetromino - "1" RotationIndex
+
+
+Board *--"width_* height_" GridCell
+
+
+Tetris ->"1" Board
+Tetris --> "1..*" ATetromino
+
+@enduml

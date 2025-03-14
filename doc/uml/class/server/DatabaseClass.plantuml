@@ -1,0 +1,121 @@
+@startuml DatabaseClass
+
+
+
+
+/' Objects '/
+
+class AccountManager {
+	+AccountManager(std::shared_ptr<DatabaseManager>& db)
+	+~AccountManager()
+	-checkFriendshipExists(const std::string& user, const std::string& friendUser) : bool {query}
+	+checkUserPassword(const std::string& username, const std::string& password) : bool {query}
+	+checkUsernameExists(const std::string& username) : bool {query}
+	+deleteAccount(const int userId) : bool
+	+login(const std::string& username, const std::string& password) : bool {query}
+	+createAccount(const std::string& username, const std::string& password) : int
+	+getUserId(const std::string& username) : int {query}
+	-dbManager_ : std::shared_ptr<DatabaseManager>
+	+getUsername(const int userId) : std::string {query}
+	+launch() : void
+	+updateScore(const int userId, const int newScore) : void
+}
+
+
+class DatabaseManager {
+	+DatabaseManager()
+	+DatabaseManager(const std::string& path)
+	+~DatabaseManager()
+	+createTables(const std::string& sql) : bool
+	+executeSqlChangeData(const std::string& sql, const std::vector<MultiType>& params) : bool
+	+executeSqlRecoveryInt(const std::string& sql, const std::vector<MultiType>& params, int& result) : bool {query}
+	+executeSqlRecoveryString(const std::string& sql, const std::vector<MultiType>& params, std::string& result) : bool {query}
+	+findUserInDatabase(const std::string& table, const int userId) : bool
+	-db_ : sqlite3*
+	+getDatabase() : sqlite3* {query}
+	+getVectorInfo(const std::string& sql, const int id) : std::vector<int> {query}
+	+getRanking() : std::vector<std::pair<std::string , int>> {query}
+}
+
+
+class FriendsManager {
+	+FriendsManager(std::shared_ptr<DatabaseManager>& db)
+	+~FriendsManager()
+	+addFriend(const int userId, const int friendUserId) : bool
+	-checkFriendshipExists(const int idUser1, const int idUser2) : bool {query}
+	-checkUserExists(const int userId) : bool {query}
+	+removeFriend(const int userId, const int friendUserId) : bool
+	-dbManager_ : std::shared_ptr<DatabaseManager>
+	+getFriends(const int userId) : std::vector<int> {query}
+}
+
+
+class MessagesManager {
+	+MessagesManager(std::shared_ptr<DatabaseManager>& db)
+	+~MessagesManager()
+	+getDiscussion(const int& idUser1, const int& idUser2) : Discution
+	-addDiscussion(const int& idUser1, const int& idUser2) : bool
+	-createDiscussionFile(const std::string& filePath, Discution discussion) : bool
+	-isThereDiscussion(const int& idUser1, const int& idUser2) : bool
+	-dbManager_ : std::shared_ptr<DatabaseManager>
+	-generateFileName(const int& idUser1, const int& idUser2) : std::string
+	-getPathDiscussion(const int& idUser1, const int& idUser2) : std::string
+	+getAllUser(const int& idUser) : std::vector<int>
+	+readDiscussion(const std::string& pathfile) : void
+	+sendMessage(const int& senderId, const int& recieverId, const std::string& content) : void
+	+showAllMessages(const int& idUser1, const int& idUser2) : void
+	+writeMessage(const std::string& pathfile, const Message& message) : void
+}
+
+
+enum CreateAccountStatus {
+	FAILED
+	SUCCESS
+	USERNAME_EXISTS
+}
+
+
+class Discution {
+	+{static} from_json(const nlohmann::json& j) : Discution
+	+idUser1 : int
+	+idUser2 : int
+	+to_json() : nlohmann::json {query}
+	+messages : std::vector<Message>
+}
+
+
+class Message {
+	+{static} from_json(const nlohmann::json& j) : Message
+	+senderId : int
+	+to_json() : nlohmann::json {query}
+	+content : std::string
+}
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+AccountManager o-- DatabaseManager
+
+
+Discution *-- Message
+
+
+FriendsManager o-- DatabaseManager
+
+
+MessagesManager o-- DatabaseManager
+
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

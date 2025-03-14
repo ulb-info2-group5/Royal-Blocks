@@ -1,0 +1,190 @@
+@startuml InterfaceClass
+
+skinparam linetype ortho
+
+
+/' Objects '/
+
+abstract class IFriends_Manager {
+	+~IFriends_Manager()
+	-{abstract} addFriendScreen() : void
+	-{abstract} manageFriendlistScreen(const std::string& friendName) : void
+	+{abstract} render() : void
+}
+
+
+abstract class IGame {
+	+~IGame()
+	#{abstract} displayLeftWindow() : void
+	#{abstract} displayMiddleWindow() : void
+	#{abstract} displayMultiRightWindow() : void
+	#{abstract} displayOpponentBoardDuel() : void
+	#{abstract} displayOppponentsBoard() : void
+	#{abstract} drawEndlessMode() : void
+	#{abstract} drawMultiMode() : void
+	#{abstract} drawOpponentsBoard() : void
+	#{abstract} drawPlayerBoard() : void
+	#{abstract} drawPlayerInfo() : void
+	#{abstract} drawRoyalEffectsEnergy() : void
+	#{abstract} handleKeys() : void
+	+{abstract} render() : void
+	#{abstract} updateDisplay() : void
+}
+
+
+abstract class IGame_Menu {
+	+~IGame_Menu()
+	-{abstract} createGameScreen() : void
+	-{abstract} handleChoice() : void
+	-{abstract} joinFriendOrRandomScreen() : void
+	-{abstract} joinFriendScreen() : void
+	-{abstract} joinRandomScreen() : void
+	+{abstract} render(const TypeGame& typeGame) : void
+	-{abstract} renderAllGames() : void
+	-{abstract} renderOnlineGames() : void
+	-{abstract} selectPlayerCountScreen() : void
+	-{abstract} waitingFriendScreen() : void
+}
+
+
+abstract class ILogin_Input {
+	+~ILogin_Input()
+	+{abstract} render() : int
+	+{abstract} addInstruction(const std::string_view instruction) : void
+	+{abstract} addMessage(const std::string_view message) : void
+	+{abstract} clearInfo() : void
+	#{abstract} createButtonBack() : void
+	#{abstract} createButtonSubmit() : void
+	#{abstract} displayWindow() : void
+}
+
+
+abstract class ILogin_Menu {
+	+~ILogin_Menu()
+	+{abstract} render() : int
+	#{abstract} createButtons() : void
+	#{abstract} displayWindow() : void
+}
+
+
+abstract class IMain_Menu {
+	+~IMain_Menu()
+	#{abstract} createMainMenuButtons() : void
+	#{abstract} displayMainWindow() : void
+	#{abstract} displayProfileManagerButton() : void
+	#{abstract} displayProfileManagerWindow() : void
+	#{abstract} displayRankingWindow() : void
+	-{abstract} handleChoice() : void
+	+{abstract} render() : void
+	#{abstract} renderProfileManager() : void
+	#{abstract} renderRanking() : void
+}
+
+
+abstract class IMessage {
+	+~IMessage()
+	#{abstract} createButtons() : void
+	#{abstract} drawDisplay() : void
+	#{abstract} drawInputUser() : void
+	#{abstract} drawMenu() : void
+	#{abstract} drawWindow() : void
+	+{abstract} render() : void
+}
+
+
+enum JoinType {
+	BACK
+	FRIEND
+	GAME_STARTED
+	NONE
+	RANDOM
+}
+
+
+enum Login {
+	EXIT
+	LOGGED
+	NONE
+}
+
+
+enum LoginResult {
+	EXIT
+	SUCCESS
+}
+
+
+enum LoginState {
+	BACK
+	NONE
+	SUBMIT
+}
+
+
+enum LoginType {
+	LOGIN
+	NONE
+	REGISTER
+}
+
+
+enum MainMenuState {
+	BACK
+	CREATE_GAME
+	EXIT
+	JOIN_GAME
+	LOOK_RANKING
+	MANAGE_FRIENDS_LIST
+	MANAGE_PROFILE
+	NONE
+	SEND_MESSAGES_TO_FRIENDS
+}
+
+
+enum MessagingState {
+	BACK
+	NONE
+}
+
+
+enum PlayMode {
+	CLASSIC
+	DUEL
+	ENDLESS
+	NONE
+	ROYAL
+}
+
+
+enum TypeGame {
+	CREATE_GAME
+	JOIN_GAME
+	NONE
+}
+
+
+class Message {
+	+idSender : int
+	+message : std::string
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

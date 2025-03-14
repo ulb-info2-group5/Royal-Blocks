@@ -1,10 +1,10 @@
-.vscode/
+*.o
 .cache/
-build/
-tetris_tests
-tetris_royal_tests
-tetris_royal_client
-tetris_royal_server
+.vscode/
 accounts.db
 auth
-*.o
+build/
+tetris_royal_client
+tetris_royal_server
+tetris_royal_tests
+tetris_tests

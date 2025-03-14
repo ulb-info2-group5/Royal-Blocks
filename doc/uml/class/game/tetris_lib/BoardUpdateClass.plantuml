@@ -1,0 +1,23 @@
+/' authors Ernest Jonas Rafaou '/
+@startuml (id=BoardUpdate)
+
+class BoardUpdate {
+    - numClearedRows_ : size_t
+    - numClearedCols_ : size_t
+
+    + BoardUpdate()
+    + BoardUpdate(const BoardUpdate&) = default
+    + BoardUpdate(BoardUpdate&&) = default
+    + ~BoardUpdate() = default
+    
+    + operator=(const BoardUpdate&) = default
+    + operator=(BoardUpdate&&) = default
+    
+    + getNumClearedRows() : size_t const noexcept
+    + getNumClearedColumns() : size_t const noexcept
+    
+    + incrementClearedRows() : void
+    + incrementClearedCols() : void
+}
+
+@enduml

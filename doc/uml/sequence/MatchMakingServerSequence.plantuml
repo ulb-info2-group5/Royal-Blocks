@@ -1,0 +1,55 @@
+@startuml MatchMakingServerSequence
+
+skinparam style strictuml
+
+actor User
+participant GameCandidate
+participant MatchMaking
+participant ClientLink
+participant ClientManager
+participant GameServer
+participant GamesManager
+
+activate User
+activate ClientLink
+activate ClientManager
+activate GamesManager
+activate MatchMaking
+
+alt User Is Creating A Game
+    User -> ClientLink : send(bindingCreateGame{gameMode, targetNom})
+    ClientLink -> ClientManager : packetHandler(paquet, userID)
+    ClientManager -> ClientManager : handlePacketMenu(paquet, userID)
+    ClientManager -> MatchMaking : createGame(RequestCreateGame{userID, bindingsCreateGame})
+    MatchMaking -> GameCandidate : createAGame(RequestCreateGame)
+    activate GameCandidate
+else User Is Joining A Game
+    activate GameCandidate
+    User -> ClientLink : send(bindingJoinGame{gameMode,friendID})
+    ClientLink -> ClientManager : packetHandler(paquet, userID)
+    ClientManager -> ClientManager : handlePacketMenu(paquet, userID)
+    ClientManager -> MatchMaking : createGame(RequestJoinGame{userID, bindingsJoinGame, gamesManager })
+    MatchMaking -> MatchMaking : addPlayer(RequestJoinGame, gamesManager)
+
+    alt friendID found in a GameCandidate
+        MatchMaking -> MatchMaking : findaGame(vector<GameCandidateWithGameMode>, RequestJoinGame, gamesManager)
+        alt friendID party still have places in GameCandidate
+            MatchMaking -> GameCandidate : tryToAddPlayer(RequestJoinGame)
+        else find a random Game with same gameMode
+            MatchMaking -> GameCandidate : tryToAddPlayer(RequestJoinGame)
+        end
+    else friendID not found in any GameCandidate
+        MatchMaking -> MatchMaking : createNewGameCandidate(vector<GameCandidateWithGameMode>, RequestJoinGame)
+        MatchMaking -> GameCandidate : createAGame(RequestCreateGame)
+    end
+end 
+
+loop [ numberOfPlayersInGameCandidate < numberOfPlayersMaxInGameCandidate ]
+    MatchMaking -> GameCandidate : tryToAddPlayer(RequestJoinGame)
+end 
+
+MatchMaking -> GamesManager : startGame(GameCandidate, gamesManager)
+GamesManager -> GameServer : startGameServeur(GameMode, vector<playerID>)
+activate GameServer
+
+@enduml

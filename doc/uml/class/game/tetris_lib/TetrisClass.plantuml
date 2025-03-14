@@ -1,0 +1,42 @@
+@startuml (id=Tetris)
+
+class Tetris {
+    - tetrisObservers_ : vector<shared_ptr<TetrisObserver>>
+
+    - activeTetromino_ : shared_ptr<ATetromino>
+    - previewTetromino_ : shared_ptr<ATetromino>
+    - board_ : Board
+
+    - holdTetromino : shared_ptr<ATetromino>
+    - tetrominoesQueue_ : queue<shared_ptr>ATetromino>> 
+
+    - lockDelayTicksNum_ : uint32_t 
+    - ticksSinceLockStart_ : uint32_t
+
+    - updatePreviewTetromino() : void
+    - resetLockDelay() : void
+
+    - checkCanDrop() : const bool 
+    - checkEmptyCell( rowIdx : size_t, colIdx : size_t) : const bool
+
+    + addObserver(pTetrisObserver : shared_ptr<TetrisObserver>) : void
+    + removeObserver(pTetrisObserver : shared_ptr<TetrisObserver>) : void
+
+    + eventClockTick() : size_t
+    + eventBigDrop() : size_t
+
+    + eventTyMoveActive(tetrominoMove : TetrominoMove) : void
+    + eventTryRotateActive(rotateClockWise : bool) : void
+    + eventHoldNextTetromino() : void
+    + eventReceivePenaltyLines(numPenalties : int) : void
+    
+    + getTetrominoesQueueSize() : const size_t
+    + inserNextTetromino(&&pTetromino : shared_ptr<ATetromino>) : void
+    + {static} createTetromino(tetrominoShape : TetrominoShape) : shared_ptr<ATetromino>
+    
+    + destroy2By2Occupied() : void
+
+    + serializeSelf(emptyBoard : bool = false) : const nlohmann::json
+    + serializeExternal() : const nlohmann::json
+}
+@enduml

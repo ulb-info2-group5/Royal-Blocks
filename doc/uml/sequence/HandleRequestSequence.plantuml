@@ -1,0 +1,17 @@
+@startuml HandleRequestSequence
+skinparam style strictuml
+
+actor User
+participant Window
+participant Controller
+participant ClientLink
+participant ClientManager
+
+activate ClientManager
+activate ClientLink
+activate Window
+activate Controller
+activate User
+
+
+@enduml

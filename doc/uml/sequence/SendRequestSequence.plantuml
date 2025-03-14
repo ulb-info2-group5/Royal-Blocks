@@ -1,0 +1,25 @@
+@startuml SendRequestSequence
+
+skinparam style strictuml
+
+actor User
+participant Window
+participant Controller
+participant NetworkManager
+participant ClientLink
+participant ClientManager
+
+activate ClientManager
+activate ClientLink
+activate Window
+activate Controller
+activate NetworkManager
+activate User
+
+User -> Window : pushAButton
+Window -> Controller : userStateChanged
+Controller -> NetworkManager : sendServerRequest
+NetworkManager -> ClientLink : send(userRequest)
+ClientLink -> ClientManager : packetHandler(userRequest)
+
+@enduml 

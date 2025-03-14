@@ -1,0 +1,34 @@
+@startuml GameServerSequence
+
+skinparam style strictuml
+
+actor Player
+participant GamesManager
+participant GameServer
+participant GameEngine
+participant ClientLink
+participant ClientManager
+
+activate Player
+activate ClientLink
+activate ClientManager
+activate GamesManager
+
+GamesManager -> GameServer : startGameServer(gameMode, playerIds)
+activate GameServer
+activate GameEngine
+
+loop [ while game not finished ]
+    Player -> ClientLink : send(gameBinding)
+    ClientLink -> ClientManager : packetHandler(paquet, playerID)
+    ClientManager -> GamesManager : enqueueGameBinding(clientID, paquet)
+    GamesManager -> GameServer : enqueueGameBinding(playerID, gameBinding)
+    GameServer -> GameEngine : enqueueBinding(playerID, gameBinding)
+    GameServer -> ClientManager  : sendGameStates()
+    ClientManager -> ClientLink : updateGameState(playerID, gameState)
+    ClientLink -> Player : sendPackage(gameState)
+end 
+GameServer -> GamesManager : callBackFinishGame(gameID)
+deactivate GameEngine
+deactivate GameServer
+@enduml

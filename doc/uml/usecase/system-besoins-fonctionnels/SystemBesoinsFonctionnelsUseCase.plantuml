@@ -1,0 +1,27 @@
+@startuml SystemBesoinsFonctionnelsUseCase
+
+left to right direction
+actor Utilisateur as user
+skinparam linetype ortho
+
+together {
+    cloud "Serveur d'Authentification" as check_auth_server
+
+    rectangle "Connexion" as connection {
+        usecase "Se connecter" as signin
+        usecase "S'authentifier" as authentify
+        usecase "Créer un compte" as create_account
+
+        usecase "Verifier l'authentification" as check_auth
+    }
+}
+
+user -- signin
+user -- create_account
+check_auth -- check_auth_server
+
+(signin) .-> (authentify): <<include>>
+(create_account) .-> (check_auth): <<include>>
+(authentify) .-> (check_auth): <<include>>
+ 
+@enduml

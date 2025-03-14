@@ -1,0 +1,156 @@
+@startuml coreInGameClass
+
+skinparam linetype ortho
+
+/' Objects '/
+
+namespace client {
+	class GameState {
+		+gameMode : GameMode
+		+self : PlayerTetrisSelf
+		+serialize() : nlohmann::json {query}
+		+externals : std::vector<PlayerTetrisExternal>
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class GameStateWrapper {
+		+gameState : GameState
+		+mutex : std::mutex
+	}
+
+	class PlayerStateExternal {
+		+isAlive_ : bool
+		+serialize() : nlohmann::json {query}
+		+playerID_ : size_t
+		+score_ : size_t
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class PlayerStateSelf {
+		+isAlive_ : bool
+		+serialize() : nlohmann::json {query}
+		+playerID_ : size_t
+		+score_ : size_t
+		+effectSelector_ : std::optional<EffectSelector>
+		+energy_ : std::optional<Energy>
+		+penaltyTarget_ : std::optional<PlayerID>
+		+activeBonus_ : std::optional<client::TimedBonus>
+		+activePenalty_ : std::optional<client::TimedPenalty>
+		+stashedPenalties_ : std::optional<std::deque<PenaltyType>>
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class PlayerTetrisExternal {
+		+playerState_ : PlayerStateExternal
+		+tetris_ : TetrisExternal
+		+serialize() : nlohmann::json {query}
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class PlayerTetrisSelf {
+		+playerState_ : PlayerStateSelf
+		+tetris_ : TetrisSelf
+		+serialize() : nlohmann::json {query}
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class TetrisExternal {
+		+board_ : Board
+		+serialize() : nlohmann::json {query}
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class TetrisSelf {
+		+board_ : Board
+		+tetrominoQueue_ : TetrominoQueue
+		+serialize() : nlohmann::json {query}
+		+activeTetromino_ : std::optional<Tetromino>
+		+holdTetromino_ : std::optional<Tetromino>
+		+previewTetromino_ : std::optional<Tetromino>
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class Tetromino {
+		+anchorPoint_ : Vec2
+		+serialize() : nlohmann::json {query}
+		+body_ : std::vector<Vec2>
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class TetrominoQueue {
+		+serialize() : nlohmann::json {query}
+		+queue_ : std::deque<client::Tetromino>
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class TimedBonus {
+		+bonusType : BonusType
+		+elapsedTime : double
+		+serialize() : nlohmann::json {query}
+		+deserialize(const nlohmann::json& j) : void
+	}
+
+	class TimedPenalty {
+		+penaltyType : PenaltyType
+		+elapsedTime : double
+		+serialize() : nlohmann::json {query}
+		+deserialize(const nlohmann::json& j) : void
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+client.GameState *-- client.PlayerTetrisExternal
+
+
+client.GameState *-- client.PlayerTetrisSelf
+
+
+client.GameStateWrapper *-- client.GameState
+
+
+client.PlayerStateSelf *-- client.TimedBonus
+
+
+client.PlayerStateSelf *-- client.TimedPenalty
+
+
+client.PlayerTetrisExternal *-- client.PlayerStateExternal
+
+
+client.PlayerTetrisExternal *-- client.TetrisExternal
+
+
+client.PlayerTetrisSelf *-- client.PlayerStateSelf
+
+
+client.PlayerTetrisSelf *-- client.TetrisSelf
+
+
+client.TetrisSelf "3" *-- client.Tetromino
+
+
+client.TetrisSelf *-- client.TetrominoQueue
+
+
+client.TetrominoQueue *-- client.Tetromino
+
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

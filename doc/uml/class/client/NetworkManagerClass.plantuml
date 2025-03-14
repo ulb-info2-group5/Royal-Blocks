@@ -1,0 +1,38 @@
+@startuml NetworkManagerClass
+
+
+
+
+
+/' Objects '/
+
+class NetworkManager {
+	+NetworkManager(boost::asio::io_context& context, std::function<void ( const std::string& )> packetHandler)
+	-function<void(const std::string &)
+	+~NetworkManager()
+	-context_ : boost::asio::io_context&
+	-socket_ : boost::asio::ip::tcp::socket
+	-readBuf : std::string
+	+connect() : void
+	+disconnect() : void
+	-receive() : void
+	+send(const std::string& message) : void
+	-write() : void
+}
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

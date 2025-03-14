@@ -1,0 +1,32 @@
+@startuml ServerBindingClass
+
+
+/' Objects '/
+
+namespace bindings {
+	class RemoveClient {
+		+{static} from_json(const nlohmann::json& j) : RemoveClient
+		+to_json() : nlohmann::json {query}
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

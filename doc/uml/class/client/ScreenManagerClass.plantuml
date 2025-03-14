@@ -1,0 +1,45 @@
+@startuml ScreenManagerClass
+
+
+
+
+/' Objects '/
+
+class ScreenManager {
+	+ScreenManager(Controller& controller)
+	+~ScreenManager()
+	-controller_ : Controller&
+	-loginMenu_ : LoginMenu
+	-mainMenu_ : MainMenu
+	-currentWindow_ : ftxui::Component
+	-handleCtrl(ftxui::Component& component) : ftxui::Component
+	-screen_ : ftxui::ScreenInteractive
+	-drawEndScreen() : void
+	-drawStartScreen() : void
+	+forceRefresh() : void
+	+render(ftxui::Component& component) : void
+	+run() : void
+	+simulateTab() : void
+	+stopRender() : void
+	+updateScreen() : void
+}
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

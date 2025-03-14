@@ -1,0 +1,188 @@
+@startuml GameStructureClass
+
+skinparam linetype ortho
+
+' !include tetris_lib/GameClass.plantuml!0
+' !include tetris_royal_lib/EffectClass.plantuml!0
+' !include tetris_royal_lib/PlayerStateClass.plantuml!0
+' !include tetris_royal_lib/PlayerTetrisClass.plantuml!0
+' !include tetris_royal_lib/GameEngineClass.plantuml!0
+' !include tetris_royal_lib/GameStateClass.plantuml!0
+
+class Board{}
+class BoardUpdate{}
+enum EventType{}
+class GridCell{}
+class RotationIndex{}
+class Tetris{}
+class TetrisObserverClass{}
+class TetrominoQueue{}
+class Vec2{}
+
+abstract class ATetromino{}
+
+enum TetrominoShape {
+    Z
+    L
+    O
+    S
+    I
+    J
+    T
+    NUM_TETROMINOSHAPE
+}
+
+class TetrominoI extends ATetromino{}
+class TetrominoO extends ATetromino{}
+class TetrominoT extends ATetromino{}
+class TetrominoS extends ATetromino{}
+class TetrominoZ extends ATetromino{}
+class TetrominoL extends ATetromino{}
+class TetrominoJ extends ATetromino{}
+class MiniTetromino extends ATetromino{}
+
+
+abstract class AbstractTimedEffect {}
+
+
+class Blackout {}
+
+
+class EffectSelector {}
+
+
+class InputLock {}
+
+
+class PlacementTimedEffect {}
+
+
+class ReverseControls {}
+
+
+class SlowDown {}
+
+
+class SpeedUp {}
+
+class TickTimedEffect {}
+
+
+class TimedBonus {}
+
+class TimedPenalty {}
+
+
+enum BonusType {
+	MiniTetrominoes
+	NumBonusType
+	SlowDown
+}
+
+
+enum PenaltyType {
+	Blackout
+	InputLock
+	Lightning
+	NumPenaltyType
+	ReverseControls
+	SpeedUp
+}
+
+class GameEngine{}
+
+enum GameEngine::GameModeFeature{
+	PenaltyRows,
+    Effects,
+    SelectPenaltyTarget,
+    NumGameModeFeature,
+}
+
+class GameState{}
+class PlayerState{}
+class PlayerTetris{}
+
+
+
+/' Inheritance relationships '/
+
+AbstractTimedEffect <|-- PlacementTimedEffect
+
+
+AbstractTimedEffect <|-- TickTimedEffect
+
+
+AbstractTimedEffect <|-- TimedBonus
+
+
+AbstractTimedEffect <|-- TimedPenalty
+
+
+PlacementTimedEffect <|-- InputLock
+
+
+PlacementTimedEffect <|-- ReverseControls
+
+
+TickTimedEffect <|-- Blackout
+
+
+TickTimedEffect <|-- SlowDown
+
+
+TickTimedEffect <|-- SpeedUp
+
+
+TimedBonus <|-- SlowDown
+
+
+TimedPenalty <|-- Blackout
+
+
+TimedPenalty <|-- InputLock
+
+
+TimedPenalty <|-- ReverseControls
+
+
+TimedPenalty <|-- SpeedUp
+
+TimedBonus *-- BonusType
+
+
+TimedPenalty *-- PenaltyType
+
+
+enum TetrominoMove {
+    Left,
+    Right,
+    Down,
+}
+
+TetrominoShape"1"- ATetromino
+ 
+ATetromino  - "2" RotationIndex : have  >
+ATetromino *--"4" Vec2 : have > 
+ATetromino - "1" RotationIndex
+
+
+Board *--"width_* height_" GridCell
+
+
+Tetris ->"1" Board
+Tetris --> "1..*" ATetromino
+
+PlayerState *-- "0..1" EffectSelector
+PlayerState *-- "0..n" BonusType
+PlayerState *-- "0..n" PenaltyType
+
+PlayerTetris *-- "1" PlayerState
+PlayerTetris *-- "1" Tetris
+
+GameState *-- "1..9" PlayerTetris
+
+GameEngine o-- "1" GameState
+
+GameEngine +-- GameEngine::GameModeFeature
+
+@enduml

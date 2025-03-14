@@ -1,0 +1,54 @@
+@startuml GameServerClass
+
+
+
+
+
+/' Objects '/
+class GamesManager {
+	+GamesManager(function<void ( PlayerID, nlohmann::json )> updateGameStates)
+	-nextGameId : GameID
+	+isThisClientInGame(PlayerID playerId) : bool
+	-updateGameStates_ : function<void ( PlayerID, nlohmann::json )>
+	-gameSessions_ : std::unordered_map<GameID, std::shared_ptr<GameServer>>
+	-gamethreads_ : std::unordered_map<GameID, std::thread>
+	-clientToGame_ : std::unordered_map<PlayerID, GameID>
+	+callBackFinishGame(GameID gameId) : void
+	-deleteGame(GameID gameId) : void
+	+enqueueGameBinding(int clientId, const std::string& strBindings) : void
+	+startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds) : void
+}
+
+class GameServer {
+	+GameServer(GameMode gameMode, std::vector<PlayerID>&& playerIds, function<void ( PlayerID, nlohmann::json )> updateGameState, size_t id, function<void ( GameID )> callBackFinishGame)
+	-engine : GameEngine
+	-pGameState_ : GameStatePtr
+	-context_ : boost::asio::io_context
+	+getIoContext() : boost::asio::io_context&
+	-tickTimer_ : boost::asio::steady_timer
+	-callBackFinishGame_ : function<void ( GameID )>
+	-updateGameStates_ : function<void ( PlayerID, nlohmann::json )>
+	-gameId_ : size_t
+	+getVectorPlayersId() : std::vector<PlayerID>
+	+enqueueBinding(PlayerID playerId, const std::string& bindingStr) : void
+	-onTimerTick() : void
+	+run() : void
+	+sendGameStates() : void
+}
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+GamesManager *-- "0..n" GameServer
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

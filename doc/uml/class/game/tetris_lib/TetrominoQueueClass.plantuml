@@ -1,0 +1,22 @@
+/' authors Ernest Jonas Rafaou '/
+@startuml (id=TetrominoQueue)
+class TetrominoQueue {
+    - queue_ : std::deque<shared_ptr<Tetromino>>
+    - {static} MINIMUM_ENQUEUED_NUM : static constexpr size_t
+   
+    + TetrominoQueue()
+    + TetrominoQueue(const TetrominoQueue &) = default
+    + TetrominoQueue(TetrominoQueue &&) = default
+    + operator=(const TetrominoQueue &) : TetrominoQueue& = default
+    + operator=(TetrominoQueue &&) : TetrominoQueue& = default
+    + ~TetrominoQueue() = default
+
+    + size() : size_t const noexcept
+    + front() : shared_ptr<Tetromino>&
+    + refill() : void
+    + fetchNext() : shared_ptr<Tetromino>
+    + insertNextTetromino(pTetromino : shared_ptr<Tetromino>&&) : void
+    
+    + serialize() : nlohmann::json const
+}
+@enduml

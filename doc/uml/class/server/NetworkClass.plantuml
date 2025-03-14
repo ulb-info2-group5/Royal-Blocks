@@ -1,0 +1,109 @@
+@startuml NetworkClass
+
+
+skinparam linetype ortho
+
+
+/' Objects '/
+
+class ClientLink {
+	+ClientLink(tcp::socket socket, function<void ( const std::string&, const int clientId )> packetHandler, function<nlohmann::json ( bindings::BindingType, nlohmann::json )> authPacketHandler, function<void ( std::shared_ptr<ClientLink>, nlohmann::json )> authSuccessCallback)
+	-identify_ : bool
+	+isIdentify() : bool
+	-mustBeDeletedFromTheWaitingForAuthList_ : bool
+	+shouldItBeDeletedFromTheList() : bool
+	-streamBuffer_ : boost::asio::streambuf
+	-authPacketHandler_ : function<nlohmann::json ( bindings::BindingType, nlohmann::json )>
+	-packetHandler_ : function<void ( const std::string&, const int clientId )>
+	-authSuccessCallback_ : function<void ( std::shared_ptr<ClientLink>, nlohmann::json )>
+	-clientId : std::optional<PlayerID>
+	-buffer_ : std::string
+	-socket_ : tcp::socket
+	-handleAuthentication(std::string& packet) : void
+	-handleErrorReading() : void
+	-handleReading() : void
+	-read() : void
+	+sendPackage(nlohmann::json gameState) : void
+	+setClientId(const int id) : void
+	+setIdentifyFalse() : void
+	+start() : void
+	-writeSocket(std::string& content) : void
+}
+
+
+class ClientManager {
+	+ClientManager(DataBase database)
+	+~ClientManager()
+	-database_ : DataBase
+	-gamesManager_ : GamesManager
+	-matchmaking_ : Matchmaking
+	-attemptCreateAccount(nlohmann::json data) : bool
+	+checkCredentials(nlohmann::json data) : bool
+	+isClientConnected(PlayerID playerId) : bool
+	+authPacketHandler(bindings::BindingType type, nlohmann::json data) : nlohmann::json
+	-mutex_ : std::mutex
+	-connectedClients_ : std::unordered_map<PlayerID, std::shared_ptr<ClientLink>>
+	-waitingForAuthClient : std::vector<std::shared_ptr<ClientLink>>
+	+addClientInWaitingForAuth(std::shared_ptr<ClientLink>&& clientLink) : void
+	+addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo) : void
+	+authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData) : void
+	-disconnectClient(const PlayerID& playerID) : void
+	+handleMessage(nlohmann::json message) : void
+	+handlePacket(const std::string& packet, const PlayerID& clientId) : void
+	+handlePacketMenu(const std::string& packet, const PlayerID& clientId) : void
+	-removeClientsFromTheWaintingList() : void
+	-removeConnection(const PlayerID& playerID) : void
+	+updateGameStates(PlayerID playerIds, nlohmann::json gameState) : void
+}
+
+
+class Network {
+	+Network(boost::asio::io_context& io, ClientManager& clientManager)
+	-clientManager_ : ClientManager&
+	-io_ : boost::asio::io_context&
+	-acceptor_ : tcp::acceptor
+	-accept() : void
+}
+
+
+class DataBase {
+	+accountManager : std::shared_ptr<AccountManager>
+	+friendsManager : std::shared_ptr<FriendsManager>
+	+messagesManager : std::shared_ptr<MessagesManager>
+}
+
+
+class RequestCreateGame {
+	+playerId : PlayerID
+	+bindCreateGame : bindings::CreateGame
+}
+
+
+class RequestJoinGame {
+	+playerId : PlayerID
+	+bindGame : bindings::JoinGame
+}
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+ClientManager o-- "0..n" ClientLink
+
+
+ClientManager *-- "1" DataBase
+
+
+Network *-- "1" ClientManager
+
+
+/' Nested objects '/
+
+
+
+@enduml

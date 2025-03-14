@@ -1,0 +1,40 @@
+@startuml GameStateClass
+
+
+
+
+
+/' Objects '/
+
+class GameState {
+	+GameState(GameMode gameMode, std::vector<PlayerState>&& playerStates)
+	+GameState(const GameState &)
+	+GameState(GameState& &)
+	+~GameState()
+	+getGameMode() : GameMode {query}
+	+getPlayerState(PlayerID playerID) : PlayerStatePtr
+	+getTetris(PlayerID playerID) : TetrisPtr
+	-gameMode_ : const GameMode
+	+serializeFor(PlayerID playerID) : nlohmann::json {query}
+	+getWinner() : std::optional<PlayerID> {query}
+	-playerToTetris_ : std::vector<PlayerTetris>
+	+getPlayerToTetris() : std::vector<PlayerTetris>&
+}
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

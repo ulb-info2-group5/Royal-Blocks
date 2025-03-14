@@ -1,0 +1,36 @@
+@startuml PlayerTetrisClass
+
+
+
+
+
+/' Objects '/
+
+class PlayerTetris {
+	+PlayerTetris(PlayerStatePtr&& pPlayerState)
+	+pPlayerState : shared_ptr<PlayerState>
+	+pTetris : shared_ptr<Tetris>
+	+serializeExternal() : nlohmann::json {query}
+	+serializeSelf() : nlohmann::json {query}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml

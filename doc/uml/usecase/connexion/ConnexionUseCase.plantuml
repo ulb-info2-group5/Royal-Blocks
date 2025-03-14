@@ -1,0 +1,18 @@
+@startuml ConnexionUseCase
+
+left to right direction
+skinparam linetype ortho
+actor Utilisateur as user
+
+rectangle connexion {
+     usecase "Se connecter" as signin
+     usecase "Créer un compte" as create_account
+     usecase "S'authentifier" as authentify
+}
+
+user -- signin
+user -- create_account
+(signin) .-> (authentify): <<include>>
+
+
+@enduml

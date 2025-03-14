@@ -1,0 +1,40 @@
+@startuml GameClientSequence
+
+skinparam style strictuml
+
+actor Player
+participant GameMenu
+participant GameDisplay
+participant ScreenManager
+participant NetworkManager
+participant Controller
+participant Network
+
+activate Player
+activate GameMenu
+activate ScreenManager
+activate NetworkManager
+activate Controller
+activate Network
+
+' Player -> GameMenu : selectPlayerCountScreen()
+' GameMenu -> Controller : createGame(gammeMode, playerCount)
+' Controller -> NetworkManager : send(bindingCreateGame{gameMode, targetNumPlayers})
+' NetworkManager -> Network : send(bindingCreateGame{gameMode, targetNumPlayers})
+GameMenu -> GameDisplay : render()
+deactivate GameMenu
+activate GameDisplay
+
+loop [ while game not finished ]
+    Player -> GameDisplay : keyPressed
+    GameDisplay -> Controller : handleKeyPress(keyPressed)
+    Controller -> NetworkManager : send(bindingsGameEvent)
+    NetworkManager -> Network : send(bindingsGameEvent)
+    Network -> NetworkManager : sendPackage(gameState)
+    NetworkManager -> Controller : receive()
+    Controller -> Controller : handlePacket(paquet)
+    Controller -> ScreenManager : forceRefresh()
+    GameDisplay -> GameDisplay : render()
+end
+deactivate GameDisplay
+@enduml
