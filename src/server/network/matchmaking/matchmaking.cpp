@@ -101,7 +101,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,
     if (!findGame) createNewGameCandidate(games, joinGame);
 }
 
-Matchmaking::Matchmaking(GameFindCallback gameFindCallback) : gameFindCallback_{gameFindCallback} {
+Matchmaking::Matchmaking(GameFindCallback gameFindCallback) : gameFindCallback_(gameFindCallback) {
 
 }
 

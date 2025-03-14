@@ -36,7 +36,7 @@ void ClientLink::handleReading() {
 
 void ClientLink::handleErrorReading() {
     nlohmann::json removeClient = bindings::RemoveClient{}.to_json();
-    if (!isIdentify()) {
+    if (getUserState() == bindings::State::Offline) {
         mustBeDeletedFromTheWaitingForAuthList_ = false;
         authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(),
                            removeClient);
@@ -56,7 +56,6 @@ void ClientLink::handleAuthentication(std::string &packet) {
             == bindings::BindingType::AuthenticationResponse
         && response.at("data").at("success").get<bool>()) {
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
-        identify_ = true;
         userState = bindings::State::Menu;
         mustBeDeletedFromTheWaitingForAuthList_ = true;
     }
@@ -88,7 +87,7 @@ void ClientLink::start() {
     read();
 }
 
-bool ClientLink::isIdentify() { return identify_; }
+
 bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
 }
@@ -100,7 +99,7 @@ void ClientLink::sendPackage(nlohmann::json gameState) {
 
 void ClientLink::setClientId(const int id) { clientId = id; }
 
-void ClientLink::setIdentifyFalse() { identify_ = false; }
+
 
 
 void ClientLink::setUserState(bindings::State newState){
@@ -136,7 +135,7 @@ void ClientManager::disconnectClient(const UserID &userID) {
         std::cout << "***** the client has already been disconnected  (id : ) "
                   << userID << std::endl;
     } else {
-        connectedClients_[playerID]->setIdentifyFalse();
+        
         connectedClients_[playerID]->setUserState(bindings::State::Offline);
         addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
         removeConnection(playerID);

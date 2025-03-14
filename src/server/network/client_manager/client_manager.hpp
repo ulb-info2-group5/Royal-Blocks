@@ -54,7 +54,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     tcp::socket socket_;
     std::string buffer_;
     boost::asio::streambuf streamBuffer_;
-    bool identify_ = false;
+    
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
     bindings::State userState;
 
@@ -95,13 +95,10 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     /*
      *@brief : return true if the client is authenticated
      */
-    bool isIdentify();
-
+    
     bool shouldItBeDeletedFromTheList();
 
     void setClientId(const int id);
-
-    void setIdentifyFalse();
 
     void setUserState(bindings::State newState);
 
