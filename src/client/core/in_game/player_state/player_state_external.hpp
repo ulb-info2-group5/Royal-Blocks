@@ -3,16 +3,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include <cstddef>
-
-using PlayerID = size_t;
-using Score = size_t;
-using Energy = size_t;
+#include "../../../../common/types/types.hpp"
 
 namespace client {
 
     struct PlayerStateExternal {
-        PlayerID playerID_;
+        UserID userID_;
         Score score_;
         bool isAlive_;
 

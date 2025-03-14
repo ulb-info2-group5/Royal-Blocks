@@ -13,13 +13,13 @@ GamesManager::GamesManager(UpdateGameStates updateGameStates)
     : updateGameStates_(updateGameStates) {}
 
 void GamesManager::startGameServeur(GameMode gameMode,
-                                    std::vector<PlayerID> playerIds) {
-    for (PlayerID id : playerIds) {
+                                    std::vector<UserID> userIds) {
+    for (UserID id : userIds) {
         std::cout << " id : " << id << std::endl;
         clientToGame_[id] = nextGameId;
     }
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
-        gameMode, std::move(playerIds), updateGameStates_, nextGameId,
+        gameMode, std::move(userIds), updateGameStates_, nextGameId,
         [this](GameID gameId) { callBackFinishGame(gameId); });
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] =
@@ -48,8 +48,8 @@ void GamesManager::callBackFinishGame(GameID gameId) {
     deleteGame(gameId);
 }
 
-bool GamesManager::isThisClientInGame(PlayerID playerId) {
-    bool res = clientToGame_.find(playerId) != clientToGame_.end();
+bool GamesManager::isThisClientInGame(UserID userId) {
+    bool res = clientToGame_.find(userId) != clientToGame_.end();
     std::cout << res << std::endl;
     return res;
 }

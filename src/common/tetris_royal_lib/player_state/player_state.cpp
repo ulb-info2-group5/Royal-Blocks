@@ -5,8 +5,8 @@
 
 #include <optional>
 
-PlayerState::PlayerState(PlayerID playerID, Score score)
-    : TetrisObserver{}, playerID_{playerID}, score_{score}, isAlive_{true},
+PlayerState::PlayerState(UserID userID, Score score)
+    : TetrisObserver{}, userID_{userID}, score_{score}, isAlive_{true},
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
       receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
       pActiveBonus_{nullptr}, pActivePenalty_{nullptr},
@@ -38,7 +38,7 @@ void PlayerState::toggleEffects(bool activated) {
  *              Common to all GameModes
  * ------------------------------------------------*/
 
-PlayerID PlayerState::getPlayerID() const { return playerID_; }
+UserID PlayerState::getUserID() const { return userID_; }
 
 Score PlayerState::getScore() const { return score_; }
 
@@ -52,18 +52,18 @@ void PlayerState::setAlive(bool isAlive) { isAlive_ = isAlive; }
  *      Classic & RoyalCompetition Specific
  * ------------------------------------------------*/
 
-std::optional<PlayerID> PlayerState::getPenaltyTarget() const {
+std::optional<UserID> PlayerState::getPenaltyTarget() const {
     return penaltyTarget_;
 }
 
-void PlayerState::setPenaltyTarget(PlayerID playerID) {
+void PlayerState::setPenaltyTarget(UserID userID) {
     // WARN: This member could be nullopt for multiple reasons:
     // 1. The GameMode is neither Classic nor RoyalCompetition.
     // 2. Viewers shouldn't see other players's target.
     // 3. Players shouldn't see other player's target.
     // 4. There is no player selected at the beginning. (Depending on what we
     // choose later)
-    penaltyTarget_ = playerID;
+    penaltyTarget_ = userID;
 }
 
 /* ------------------------------------------------
@@ -200,7 +200,7 @@ void PlayerState::notifyActiveTetrominoPlaced() {
 
 nlohmann::json PlayerState::serializeExternal() const {
     nlohmann::json j;
-    j["playerID"] = playerID_;
+    j["playerID"] = userID_;
     j["score"] = score_;
     j["isAlive"] = isAlive_;
 
@@ -209,7 +209,7 @@ nlohmann::json PlayerState::serializeExternal() const {
 
 nlohmann::json PlayerState::serializeSelf() const {
     nlohmann::json j;
-    j["playerID"] = playerID_;
+    j["playerID"] = userID_;
     j["score"] = score_;
     j["isAlive"] = isAlive_;
 

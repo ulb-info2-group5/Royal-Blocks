@@ -15,7 +15,7 @@
 
 #include "../game_display/game_display.hpp"
 
-using PlayerID = size_t;
+#include "../../../../common/types/types.hpp"
 
 class Controller; // Forward declaration
 
@@ -94,7 +94,7 @@ class GameMenu : public IGame_Menu {
     /*
      * @brief Make a button to add a friend
      */
-    ftxui::Component makeFriendButton(PlayerID playerId,
+    ftxui::Component makeFriendButton(UserID userID,
                                       const std::string &friendName);
 
     /*

@@ -12,12 +12,12 @@
 #include "../../game_server/game_server.hpp"
 
 // TODO : rename to sendGameState
-using UpdateGameStates = std::function<void(PlayerID, nlohmann::json)>;
+using UpdateGameStates = std::function<void(UserID, nlohmann::json)>;
 
 class GamesManager {
 
   private:
-    std::unordered_map<PlayerID, GameID> clientToGame_;
+    std::unordered_map<UserID, GameID> clientToGame_;
     std::unordered_map<GameID, std::shared_ptr<GameServer>> gameSessions_;
     std::unordered_map<GameID, std::thread> gamethreads_;
 
@@ -29,9 +29,9 @@ class GamesManager {
   public:
     GamesManager(UpdateGameStates updateGameStates);
     void enqueueGameBinding(int clientId, const std::string &strBindings);
-    void startGameServeur(GameMode gameMode, std::vector<PlayerID> playerIds);
+    void startGameServeur(GameMode gameMode, std::vector<UserID> userIds);
     void callBackFinishGame(GameID gameId);
-    bool isThisClientInGame(PlayerID playerId);
+    bool isThisClientInGame(UserID userId);
 };
 
 #endif

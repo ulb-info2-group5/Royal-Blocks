@@ -241,7 +241,7 @@ void GameMenu::joinFriendScreen() {
         for (const bindings::User &friendUser : friendsList) {
             if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
                 friendsContainer->Add(
-                    makeFriendButton(friendUser.playerId, friendUser.username));
+                    makeFriendButton(friendUser.userID, friendUser.username));
             }
         }
     };
@@ -312,12 +312,12 @@ void GameMenu::createGameScreen() {
     joinType_ = JoinType::GAME_STARTED;
 }
 
-ftxui::Component GameMenu::makeFriendButton(PlayerID playerId,
+ftxui::Component GameMenu::makeFriendButton(UserID userID,
                                             const std::string &friendName) {
     return ftxui::Button(
         friendName,
-        [this, playerId] {
-            controller_.joinGame(gameMode_, playerId);
+        [this, userID] {
+            controller_.joinGame(gameMode_, userID);
             waitingFriendScreen();
             screenManager_.stopRender();
         },

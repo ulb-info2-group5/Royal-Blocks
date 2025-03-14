@@ -54,7 +54,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     bool identify_ = false;
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
 
-    std::optional<PlayerID> clientId;
+    std::optional<UserID> clientId;
 
     // std function to manage packages
     PacketHandler packetHandler_;
@@ -103,7 +103,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
 class ClientManager {
   private:
     // map => { key : client id , value : the client session }
-    std::unordered_map<PlayerID, std::shared_ptr<ClientLink>> connectedClients_;
+    std::unordered_map<UserID, std::shared_ptr<ClientLink>> connectedClients_;
     std::mutex mutex_;
     DataBase database_;
 
@@ -123,9 +123,9 @@ class ClientManager {
      */
     bool attemptCreateAccount(nlohmann::json data);
 
-    void disconnectClient(const PlayerID &playerID);
+    void disconnectClient(const UserID &userID);
 
-    void removeConnection(const PlayerID &playerID);
+    void removeConnection(const UserID &userID);
 
   public:
     ClientManager(DataBase database);
@@ -141,9 +141,9 @@ class ClientManager {
     /*
      * @brief : manage of the packet received by the clientLink
      */
-    void handlePacket(const std::string &packet, const PlayerID &clientId);
+    void handlePacket(const std::string &packet, const UserID &clientId);
 
-    void handlePacketMenu(const std::string &packet, const PlayerID &clientId);
+    void handlePacketMenu(const std::string &packet, const UserID &clientId);
     /*
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
@@ -165,7 +165,7 @@ class ClientManager {
 
     bool checkCredentials(nlohmann::json data);
 
-    void updateGameStates(PlayerID playerIds, nlohmann::json gameState);
+    void updateGameStates(UserID userIds, nlohmann::json gameState);
 
-    bool isClientConnected(PlayerID playerId);
+    bool isClientConnected(UserID userId);
 };

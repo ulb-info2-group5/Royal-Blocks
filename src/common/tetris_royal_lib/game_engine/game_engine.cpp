@@ -145,7 +145,7 @@ void GameEngine::sendPenaltyEffect(const PlayerState &playerStateSender,
         return;
     }
 
-    std::optional<PlayerID> target = playerStateSender.getPenaltyTarget();
+    std::optional<UserID> target = playerStateSender.getPenaltyTarget();
 
     if (!target.has_value()) {
         throw std::runtime_error{"sendPenaltyEffect: Player attempted to "
@@ -169,7 +169,7 @@ void GameEngine::sendPenaltyRows(const PlayerState &playerStateSender,
         return;
     }
 
-    std::optional<PlayerID> targetID = playerStateSender.getPenaltyTarget();
+    std::optional<UserID> targetID = playerStateSender.getPenaltyTarget();
 
     if (!targetID.has_value()) {
         throw std::runtime_error{
@@ -257,14 +257,14 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
     pPlayerState->increaseScore(earnedPoints);
 
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().and_then([&](PlayerID targetID) {
+        pPlayerState->getPenaltyTarget().and_then([&](UserID targetID) {
             if (checkAlive(targetID) && numClearedRows >= 2) {
                 // For n (>= 2) rows cleared by the player, his target
                 // receives n-1 penalty rows.
                 sendPenaltyRows(*pPlayerState, numClearedRows - 1);
             }
 
-            return std::optional<PlayerID>{};
+            return std::optional<UserID>{};
         });
     }
 
@@ -281,7 +281,7 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
 GameEngine::GameEngine(const GameStatePtr &pGameState)
     : pGameState_(pGameState) {}
 
-void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
+void GameEngine::tryBuyEffect(UserID buyerID, EffectType effectType,
                               bool stashForLater) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
@@ -298,7 +298,7 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
     }
 
     // Stash if penalty and no target defined/dead
-    std::optional<PlayerID> optTargetID = pPlayerStateBuyer->getPenaltyTarget();
+    std::optional<UserID> optTargetID = pPlayerStateBuyer->getPenaltyTarget();
     bool targetAlive = optTargetID.has_value() && checkAlive(*optTargetID);
     if (std::holds_alternative<PenaltyType>(effectType) && !targetAlive) {
         stashForLater = true;
@@ -329,13 +329,13 @@ void GameEngine::tryBuyEffect(PlayerID buyerID, EffectType effectType,
     pPlayerStateBuyer->decreaseEnergy(getEffectPrice(effectType));
 }
 
-void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
+void GameEngine::selectTarget(UserID userID, UserID target) {
     if (!checkFeatureEnabled(GameModeFeature::SelectPenaltyTarget)) {
         return;
     }
 
     // Ensure that both players are alive and exist
-    PlayerStatePtr pPlayerStatePlayer = pGameState_->getPlayerState(playerID);
+    PlayerStatePtr pPlayerStatePlayer = pGameState_->getPlayerState(userID);
     PlayerStatePtr pPlayerStateTarget = pGameState_->getPlayerState(target);
     if (!(checkAlive(pPlayerStatePlayer) && checkAlive(pPlayerStateTarget))) {
         return;
@@ -344,8 +344,8 @@ void GameEngine::selectTarget(PlayerID playerID, PlayerID target) {
     pPlayerStatePlayer->setPenaltyTarget(target);
 }
 
-void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+void GameEngine::tryMoveActive(UserID userID, TetrominoMove tetrominoMove) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
@@ -354,7 +354,7 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
         return;
     }
 
-    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    TetrisPtr pTetris = pGameState_->getTetris(userID);
     if (pTetris == nullptr) {
         return;
     }
@@ -364,8 +364,8 @@ void GameEngine::tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) {
                                     : tetrominoMove);
 }
 
-void GameEngine::bigDrop(PlayerID playerID) {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+void GameEngine::bigDrop(UserID userID) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
@@ -374,7 +374,7 @@ void GameEngine::bigDrop(PlayerID playerID) {
         return;
     }
 
-    size_t numClearedRows = pGameState_->getTetris(playerID)->eventBigDrop();
+    size_t numClearedRows = pGameState_->getTetris(userID)->eventBigDrop();
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
     pPlayerState->increaseScore(earnedPoints);
 
@@ -384,8 +384,8 @@ void GameEngine::bigDrop(PlayerID playerID) {
     }
 }
 
-void GameEngine::holdNextTetromino(PlayerID playerID) {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+void GameEngine::holdNextTetromino(UserID userID) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
@@ -394,7 +394,7 @@ void GameEngine::holdNextTetromino(PlayerID playerID) {
         return;
     }
 
-    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    TetrisPtr pTetris = pGameState_->getTetris(userID);
     if (pTetris == nullptr) {
         return;
     }
@@ -402,8 +402,8 @@ void GameEngine::holdNextTetromino(PlayerID playerID) {
     pTetris->eventHoldNextTetromino();
 }
 
-void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+void GameEngine::tryRotateActive(UserID userID, bool rotateClockwise) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
@@ -412,7 +412,7 @@ void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
         return;
     }
 
-    TetrisPtr pTetris = pGameState_->getTetris(playerID);
+    TetrisPtr pTetris = pGameState_->getTetris(userID);
     if (pTetris == nullptr) {
         return;
     }
@@ -422,12 +422,12 @@ void GameEngine::tryRotateActive(PlayerID playerID, bool rotateClockwise) {
                                       : rotateClockwise);
 }
 
-void GameEngine::emptyPenaltyStash(PlayerID playerID) {
+void GameEngine::emptyPenaltyStash(UserID userID) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
 
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
     }
@@ -444,7 +444,7 @@ void GameEngine::emptyPenaltyStash(PlayerID playerID) {
 
     while (!penaltiesQueue.empty()) {
         PenaltyType penaltyType = penaltiesQueue.front();
-        sendPenaltyEffect(playerID, penaltyType);
+        sendPenaltyEffect(userID, penaltyType);
         penaltiesQueue.pop_front();
     }
 }
@@ -468,12 +468,12 @@ void GameEngine::tick() {
     }
 }
 
-bool GameEngine::checkAlive(PlayerID playerID) const {
-    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(playerID);
+bool GameEngine::checkAlive(UserID userID) const {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     return checkAlive(pPlayerState);
 }
 
-std::optional<PlayerID> GameEngine::getWinner() const {
+std::optional<UserID> GameEngine::getWinner() const {
     if (pGameState_->getGameMode() == GameMode::Endless) {
         return std::nullopt;
     }
@@ -489,7 +489,7 @@ std::optional<PlayerID> GameEngine::getWinner() const {
         return std::nullopt;
     }
 
-    return alivePlayers.begin()->pPlayerState->getPlayerID();
+    return alivePlayers.begin()->pPlayerState->getUserID();
 }
 
 bool GameEngine::gameIsFinished() const {

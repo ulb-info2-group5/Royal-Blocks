@@ -5,7 +5,7 @@
 
 #include <vector>
 
-using SenderMessage = std::pair<PlayerID, std::string>;
+using SenderMessage = std::pair<UserID, std::string>;
 
 namespace bindings {
 

@@ -11,7 +11,7 @@ GameCandidate::GameCandidate(RequestJoinGame joinGame)
       gameMode{joinGame.bindGame.gameMode} {
     std::cout << "gameCandidate create (RequestJoinGame)" << std::endl;
     numberOfPlayerTotale_++;
-    players_.push_back(joinGame.playerId);
+    players_.push_back(joinGame.userId);
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame)
@@ -19,12 +19,12 @@ GameCandidate::GameCandidate(RequestCreateGame createGame)
       gameMode{createGame.bindCreateGame.gameMode} {
     std::cout << "gameCandidate create (RequestCreateGame)" << std::endl;
     numberOfPlayerTotale_++;
-    players_.push_back(createGame.playerId);
+    players_.push_back(createGame.userId);
 }
 
 bool GameCandidate::tryToAddPlayer(RequestJoinGame joinGame) {
     if (isThereRoomInThisGame()) {
-        players_.push_back(joinGame.playerId);
+        players_.push_back(joinGame.userId);
         numberOfPlayerTotale_++;
         std::cout << "add player " << std::endl;
         return true;
@@ -40,14 +40,14 @@ bool GameCandidate::isThisPartyReady() {
     return numberOfPlayersMax_ == numberOfPlayerTotale_;
 }
 
-bool GameCandidate::isthisPlayerInThisGame(PlayerID playerId) {
+bool GameCandidate::isthisPlayerInThisGame(UserID userId) {
     for (auto id : players_) {
-        if (id == playerId) return true;
+        if (id == userId) return true;
     }
     return false;
 }
 
-std::vector<PlayerID> &GameCandidate::getPlayers() { return players_; }
+std::vector<UserID> &GameCandidate::getPlayers() { return players_; }
 
 GameMode GameCandidate::getGameMode() { return gameMode; }
 

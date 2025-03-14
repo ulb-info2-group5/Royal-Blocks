@@ -18,7 +18,7 @@
 
 using GameID = size_t;
 
-using UpdateGameStates = std::function<void(PlayerID, nlohmann::json)>;
+using UpdateGameStates = std::function<void(UserID, nlohmann::json)>;
 using CallBackFinishGame = std::function<void(GameID)>;
 
 class GameServer {
@@ -43,7 +43,7 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds,
+    GameServer(GameMode gameMode, std::vector<UserID> &&userIds,
                UpdateGameStates updateGameState, GameID id,
                CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
@@ -54,7 +54,7 @@ class GameServer {
     /**
      * @brief Enqueues a new binding as a string (json).
      */
-    void enqueueBinding(PlayerID playerId, const std::string &bindingStr);
+    void enqueueBinding(UserID userId, const std::string &bindingStr);
 
     /**
      * @brief Sends the GameState to all the connected people in the game
@@ -72,7 +72,7 @@ class GameServer {
 
     boost::asio::io_context &getIoContext();
 
-    std::vector<PlayerID> getVectorPlayersId();
+    std::vector<UserID> getVectorPlayersId();
 };
 
 #endif // GAME_SERVER_HPP

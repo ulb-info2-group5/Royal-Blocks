@@ -3,6 +3,7 @@
 
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
 #include "in_game/select_target.hpp"
+#include "player_state/player_state.hpp"
 
 #include <nlohmann/json.hpp>
 #include <optional>
@@ -12,7 +13,7 @@ namespace bindings {
     struct JoinGame {
         // friendId = nullopt means "join any game in this GameMode"
         GameMode gameMode;
-        std::optional<PlayerID> friendId;
+        std::optional<UserID> friendId;
 
         nlohmann::json to_json() const {
             nlohmann::json j_data;
@@ -41,7 +42,7 @@ namespace bindings {
 
                 data.at("friendId").is_null()
                     ? std::nullopt
-                    : std::make_optional(data.at("friendId").get<PlayerID>())};
+                    : std::make_optional(data.at("friendId").get<UserID>())};
         }
     };
 

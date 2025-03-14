@@ -3,15 +3,15 @@
 
 #include "binding_type.hpp"
 
+#include "../../common/types/types.hpp"
+
 #include <nlohmann/json.hpp>
 #include <string>
-
-using PlayerID = size_t;
 
 namespace bindings {
 
     struct Message {
-        PlayerID recipientId;
+        UserID recipientId;
         std::string content;
 
         nlohmann::json to_json() const {
@@ -29,7 +29,7 @@ namespace bindings {
             }
 
             const auto &data = j.at("data");
-            return Message{data.at("recipientId").get<PlayerID>(),
+            return Message{data.at("recipientId").get<UserID>(),
                            data.at("content").get<std::string>()};
         }
     };

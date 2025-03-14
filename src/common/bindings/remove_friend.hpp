@@ -3,20 +3,19 @@
 
 #include "binding_type.hpp"
 
+#include "../types/types.hpp"
+
 #include <nlohmann/json.hpp>
-
-using PlayerID = size_t;
-
 namespace bindings {
 
     struct RemoveFriend {
-        PlayerID playerId;
+        UserID userID;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::RemoveFriend},
                                   {"data",
                                    {
-                                       {"playerId", playerId},
+                                       {"playerId", userID},
                                    }}};
         }
 
@@ -27,7 +26,7 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return RemoveFriend{
-                data.at("playerId").get<PlayerID>(),
+                data.at("playerId").get<UserID>(),
             };
         }
     };

@@ -162,22 +162,22 @@ void Controller::sendFriendRequest(const std::string &username) {
     networkManager_.send(bindings::FriendRequest{username}.to_json().dump());
 }
 
-void Controller::removeFriend(PlayerID playerID) {
-    networkManager_.send(bindings::RemoveFriend{playerID}.to_json().dump());
+void Controller::removeFriend(UserID userID) {
+    networkManager_.send(bindings::RemoveFriend{userID}.to_json().dump());
 }
 
-void Controller::sendMessage(PlayerID recipientId, const std::string &message) {
+void Controller::sendMessage(UserID recipientId, const std::string &message) {
     networkManager_.send(
         bindings::Message{recipientId, message}.to_json().dump());
 }
 
-const NameConversation &Controller::getConversationWith(PlayerID playerID) {
+const NameConversation &Controller::getConversationWith(UserID userID) {
     std::lock_guard<std::mutex> guard(mutex_);
-    if (!conversationsById_.contains(playerID)) {
-        conversationsById_[playerID] = {};
+    if (!conversationsById_.contains(userID)) {
+        conversationsById_[userID] = {};
     }
 
-    return conversationsById_.at(playerID);
+    return conversationsById_.at(userID);
 }
 
 void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
@@ -185,7 +185,7 @@ void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
         bindings::CreateGame{gameMode, targetNumPlayers}.to_json().dump());
 }
 
-void Controller::joinGame(GameMode gameMode, std::optional<PlayerID> friendID) {
+void Controller::joinGame(GameMode gameMode, std::optional<UserID> friendID) {
     networkManager_.send(
         bindings::JoinGame{gameMode, friendID}.to_json().dump());
 }

@@ -121,27 +121,27 @@ bool ClientManager::attemptCreateAccount(nlohmann::json data) {
     return false;
 }
 
-void ClientManager::disconnectClient(const PlayerID &playerID) {
-    if (!isClientConnected(playerID)) {
+void ClientManager::disconnectClient(const UserID &userID) {
+    if (!isClientConnected(userID)) {
         std::cout << "***** the client has already been disconnected  (id : ) "
-                  << playerID << std::endl;
+                  << userID << std::endl;
     } else {
-        connectedClients_[playerID]->setIdentifyFalse();
-        addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
-        removeConnection(playerID);
+        connectedClients_[userID]->setIdentifyFalse();
+        addClientInWaitingForAuth(std::move(connectedClients_[userID]));
+        removeConnection(userID);
     }
 }
 
-void ClientManager::removeConnection(const PlayerID &playerID) {
+void ClientManager::removeConnection(const UserID &userID) {
 
-    connectedClients_.erase(playerID);
+    connectedClients_.erase(userID);
 }
 
 // ---public ---
 ClientManager::ClientManager(DataBase database)
     : database_(database),
-      gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
-          updateGameStates(playerId, gameState);
+      gamesManager_([this](UserID userID, nlohmann::json gameState) {
+          updateGameStates(userID, gameState);
       }) {}
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
@@ -152,7 +152,7 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
                                   const std::string &pseudo) {
     std::lock_guard<std::mutex> lock(mutex_);
-    const PlayerID id = database_.accountManager->getUserId(pseudo);
+    const UserID id = database_.accountManager->getUserId(pseudo);
     std::cout << "new client id :" << id << std::endl;
     clientSession->setClientId(id);
     connectedClients_[id] = clientSession;
@@ -182,7 +182,7 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
 }
 
 void ClientManager::handlePacket(const std::string &packet,
-                                 const PlayerID &clientId) {
+                                 const UserID &clientId) {
 
     if (gamesManager_.isThisClientInGame(clientId)) {
         gamesManager_.enqueueGameBinding(clientId, packet);
@@ -192,7 +192,7 @@ void ClientManager::handlePacket(const std::string &packet,
     }
 }
 void ClientManager::handlePacketMenu(const std::string &packet,
-                                     const PlayerID &clientId) {
+                                     const UserID &clientId) {
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " << std::endl;
 
@@ -246,11 +246,10 @@ bool ClientManager::checkCredentials(nlohmann::json data) {
     }
 }
 
-void ClientManager::updateGameStates(PlayerID playerIds,
-                                     nlohmann::json gameState) {
-    connectedClients_[playerIds]->sendPackage(gameState);
+void ClientManager::updateGameStates(UserID userIds, nlohmann::json gameState) {
+    connectedClients_[userIds]->sendPackage(gameState);
 }
 
-bool ClientManager::isClientConnected(PlayerID playerId) {
-    return connectedClients_.find(playerId) != connectedClients_.end();
+bool ClientManager::isClientConnected(UserID userID) {
+    return connectedClients_.find(userID) != connectedClients_.end();
 }

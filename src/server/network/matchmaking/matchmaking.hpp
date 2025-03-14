@@ -15,12 +15,12 @@ constexpr NumberOfPlayers MAXPLAYERDUAL = 2;
 constexpr NumberOfPlayers MAXPLAYERCLASSICANDROYAL = 9;
 
 struct RequestJoinGame {
-    PlayerID playerId;
+    UserID userId;
     bindings::JoinGame bindGame;
 };
 
 struct RequestCreateGame {
-    PlayerID playerId;
+    UserID userId;
     bindings::CreateGame bindCreateGame;
 };
 
@@ -29,7 +29,7 @@ class GameCandidate {
     NumberOfPlayers numberOfPlayerTotale_;
     NumberOfPlayers numberOfPlayersMax_;
     GameMode gameMode;
-    std::vector<PlayerID> players_;
+    std::vector<UserID> players_;
 
   public:
     GameCandidate(RequestJoinGame joinGame);
@@ -37,11 +37,11 @@ class GameCandidate {
 
     ~GameCandidate() = default;
     bool isThisPartyReady();
-    bool isthisPlayerInThisGame(PlayerID playerId);
+    bool isthisPlayerInThisGame(UserID userId);
     bool tryToAddPlayer(RequestJoinGame joinGame);
     bool isThereRoomInThisGame();
 
-    std::vector<PlayerID> &getPlayers();
+    std::vector<UserID> &getPlayers();
     GameMode getGameMode();
 };
 

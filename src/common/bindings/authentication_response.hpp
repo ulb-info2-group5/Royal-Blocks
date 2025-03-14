@@ -5,8 +5,6 @@
 
 #include <nlohmann/json.hpp>
 
-using PlayerID = size_t;
-
 namespace bindings {
 
     struct AuthenticationResponse {

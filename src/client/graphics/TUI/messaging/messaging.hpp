@@ -60,7 +60,7 @@ class Messaging final : public IMessage {
 
     void drawWindow() override;
 
-    std::optional<PlayerID> getSelectedFriendId();
+    std::optional<UserID> getSelectedFriendId();
 
   public:
     /*

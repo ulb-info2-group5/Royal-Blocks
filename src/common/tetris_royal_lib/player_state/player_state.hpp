@@ -1,6 +1,7 @@
 #ifndef PLAYER_STATE_HPP
 #define PLAYER_STATE_HPP
 
+#include "../../types/types.hpp"
 #include "../effect/bonus/timed_bonus.hpp"
 #include "../effect/penalty/penalty_type.hpp"
 #include "../effect/penalty/timed_penalty.hpp"
@@ -15,10 +16,6 @@
 #include <utility>
 #include <vector>
 
-using PlayerID = size_t;
-using Score = size_t;
-using Energy = size_t;
-
 class PlayerState;
 using PlayerStatePtr = std::shared_ptr<PlayerState>;
 
@@ -30,7 +27,7 @@ class PlayerState final : public TetrisObserver {
      *              Common to all GameModes
      * ------------------------------------------------*/
 
-    PlayerID playerID_;
+    UserID userID_;
     Score score_;
     bool isAlive_;
 
@@ -38,7 +35,7 @@ class PlayerState final : public TetrisObserver {
      *      Classic & RoyalCompetition Specific
      * ------------------------------------------------*/
 
-    std::optional<PlayerID> penaltyTarget_;
+    std::optional<UserID> penaltyTarget_;
 
     /* ------------------------------------------------
      *          RoyalCompetition Specific
@@ -65,7 +62,7 @@ class PlayerState final : public TetrisObserver {
     std::optional<size_t> engineTicksSinceLastTick_;
 
   public:
-    PlayerState(PlayerID playerID, Score score = 0);
+    PlayerState(UserID userID, Score score = 0);
     PlayerState(const PlayerState &) = default;
     PlayerState(PlayerState &&) = default;
     PlayerState &operator=(const PlayerState &) = default;
@@ -82,7 +79,7 @@ class PlayerState final : public TetrisObserver {
     /**
      * @brief Returns the player's ID.
      */
-    PlayerID getPlayerID() const;
+    UserID getUserID() const;
 
     /**
      * @brief Returns the player's score.
@@ -111,12 +108,12 @@ class PlayerState final : public TetrisObserver {
     /**
      * @brief Returns the player's target.
      */
-    std::optional<PlayerID> getPenaltyTarget() const;
+    std::optional<UserID> getPenaltyTarget() const;
 
     /**
      * @brief Sets the player's target.
      */
-    void setPenaltyTarget(PlayerID playerID);
+    void setPenaltyTarget(UserID userID);
 
     /* ------------------------------------------------
      *          RoyalCompetition Specific

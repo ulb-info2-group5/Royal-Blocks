@@ -3,15 +3,13 @@
 
 #include "../binding_type.hpp"
 
-#include <cstddef>
+#include "../../common/types/types.hpp"
+
 #include <nlohmann/json.hpp>
-
-using PlayerID = size_t;
-
 namespace bindings {
 
     struct SelectTarget {
-        PlayerID targetId;
+        UserID targetId;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::SelectTarget},
@@ -27,7 +25,7 @@ namespace bindings {
             }
 
             const auto &data = j.at("data");
-            return SelectTarget{data.at("targetId").get<PlayerID>()};
+            return SelectTarget{data.at("targetId").get<UserID>()};
         }
     };
 

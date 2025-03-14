@@ -71,7 +71,7 @@ class Controller {
     mutable std::mutex mutex_;
 
     std::vector<bindings::User> friendsList_;
-    std::unordered_map<PlayerID, NameConversation> conversationsById_;
+    std::unordered_map<UserID, NameConversation> conversationsById_;
     std::vector<std::pair<std::string, Score>> ranking_;
 
     /*
@@ -161,24 +161,24 @@ class Controller {
     /*
      * @brief Remove a friend from the friends list of the user
      *
-     * @param playerID The id of the player to remove.
+     * @param userID The id of the player to remove.
      */
-    void removeFriend(PlayerID playerID);
+    void removeFriend(UserID userID);
 
     /*
      * @brief Send a message to a friend
      *
-     * @param recipientId The PlayerID of the friend to send the message
+     * @param recipientId The UserID of the friend to send the message
      * @param message The message to send
      */
-    void sendMessage(PlayerID recipientId, const std::string &message);
+    void sendMessage(UserID recipientId, const std::string &message);
 
     void createGame(GameMode gameMode, size_t targetNumPlayers);
 
-    void joinGame(GameMode gameMode, std::optional<PlayerID> friendID);
+    void joinGame(GameMode gameMode, std::optional<UserID> friendID);
 
     // TODO
-    const NameConversation &getConversationWith(PlayerID playerID);
+    const NameConversation &getConversationWith(UserID userID);
 
     void bigDrop();
 

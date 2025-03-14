@@ -2,6 +2,7 @@
 #define BINDINGS_USER_HPP
 
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../types/types.hpp"
 #include "binding_type.hpp"
 
 #include <cstddef>
@@ -9,8 +10,6 @@
 #include <string>
 
 #include <nlohmann/json.hpp>
-
-using PlayerID = size_t;
 
 namespace bindings {
 
@@ -22,7 +21,7 @@ namespace bindings {
             InGame,
         };
 
-        PlayerID playerId;
+        UserID userID;
         std::string username;
         State state;
         std::optional<GameMode> gameMode;
@@ -30,9 +29,8 @@ namespace bindings {
         bool isJoinable() const { return state == State::Matchmaking; }
 
         nlohmann::json to_json() const {
-            nlohmann::json j_data{{"playerId", playerId},
-                                  {"username", username},
-                                  {"state", state}};
+            nlohmann::json j_data{
+                {"playerId", userID}, {"username", username}, {"state", state}};
 
             if (gameMode) {
                 j_data["gameMode"] = gameMode.value();
@@ -52,7 +50,7 @@ namespace bindings {
             const auto &data = j.at("data");
 
             return User{
-                data.at("playerId").get<PlayerID>(),
+                data.at("playerId").get<UserID>(),
                 data.at("username").get<std::string>(),
                 data.at("state").get<State>(),
 

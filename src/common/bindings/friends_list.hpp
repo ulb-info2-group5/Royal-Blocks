@@ -8,8 +8,6 @@
 
 #include <vector>
 
-using PlayerID = size_t;
-
 namespace bindings {
 
     struct FriendsList {

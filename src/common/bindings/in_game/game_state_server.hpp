@@ -15,12 +15,12 @@ namespace bindings {
          * TODO
          */
         nlohmann::json serializeForPlayer(const GameState &gameState,
-                                          PlayerID playerId) {
+                                          UserID userID) {
             return nlohmann::json{{"type", BindingType::GameState},
                                   {"data",
                                    {{
                                        "gameState",
-                                       gameState.serializeFor(playerId),
+                                       gameState.serializeFor(userID),
                                    }}}};
         };
 

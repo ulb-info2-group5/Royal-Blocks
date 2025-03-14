@@ -2,6 +2,7 @@
 #include "effect/bonus/bonus_type.hpp"
 #include "game_engine/game_engine.hpp"
 #include "nlohmann/json_fwd.hpp"
+#include "player_state/player_state.hpp"
 #include "player_tetris/player_tetris.hpp"
 
 #include <memory>
@@ -21,8 +22,8 @@ GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
 
 GameMode GameState::getGameMode() const { return gameMode_; }
 
-std::optional<PlayerID> GameState::getWinner() const {
-    std::optional<PlayerID> winner;
+std::optional<UserID> GameState::getWinner() const {
+    std::optional<UserID> winner;
 
     for (const PlayerTetris &playerStateTetris : playerToTetris_) {
         if (playerStateTetris.pPlayerState->isAlive()) {
@@ -33,16 +34,16 @@ std::optional<PlayerID> GameState::getWinner() const {
                 return std::nullopt;
             }
 
-            winner = playerStateTetris.pPlayerState->getPlayerID();
+            winner = playerStateTetris.pPlayerState->getUserID();
         }
     }
 
     return winner;
 }
 
-PlayerStatePtr GameState::getPlayerState(PlayerID playerID) {
+PlayerStatePtr GameState::getPlayerState(UserID userID) {
     for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState->getPlayerID() == playerID) {
+        if (playerStateTetris.pPlayerState->getUserID() == userID) {
             return playerStateTetris.pPlayerState;
         }
     }
@@ -50,9 +51,9 @@ PlayerStatePtr GameState::getPlayerState(PlayerID playerID) {
     return nullptr;
 }
 
-TetrisPtr GameState::getTetris(PlayerID playerID) {
+TetrisPtr GameState::getTetris(UserID userID) {
     for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState->getPlayerID() == playerID) {
+        if (playerStateTetris.pPlayerState->getUserID() == userID) {
             return playerStateTetris.pTetris;
         }
     }
@@ -68,7 +69,7 @@ std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
  *          Serialization
  * ------------------------------------------------*/
 
-nlohmann::json GameState::serializeFor(PlayerID playerID) const {
+nlohmann::json GameState::serializeFor(UserID userID) const {
     nlohmann::json j;
 
     j["gameMode"] = gameMode_;
@@ -76,7 +77,7 @@ nlohmann::json GameState::serializeFor(PlayerID playerID) const {
     j["externals"] = nlohmann::json::array();
 
     for (const auto &playerTetris : playerToTetris_) {
-        if (playerTetris.pPlayerState->getPlayerID() == playerID) {
+        if (playerTetris.pPlayerState->getUserID() == userID) {
             j["self"] = playerTetris.serializeSelf();
         } else {
             j["externals"].push_back(playerTetris.serializeExternal());

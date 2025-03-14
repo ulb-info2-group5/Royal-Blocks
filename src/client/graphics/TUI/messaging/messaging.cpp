@@ -31,9 +31,9 @@ void Messaging::createButtons() {
                 if (!newMessageBuffer_.empty()
                     // && TODO: lulu check valid friend (at least one)
                 ) {
-                    getSelectedFriendId().and_then([&](PlayerID playerId) {
-                        controller_.sendMessage(playerId, newMessageBuffer_);
-                        return std::optional<PlayerID>{};
+                    getSelectedFriendId().and_then([&](UserID userID) {
+                        controller_.sendMessage(userID, newMessageBuffer_);
+                        return std::optional<UserID>{};
                     });
                     newMessageBuffer_.clear();
                 }
@@ -190,13 +190,13 @@ void Messaging::drawWindow() {
         });
 }
 
-std::optional<PlayerID> Messaging::getSelectedFriendId() {
+std::optional<UserID> Messaging::getSelectedFriendId() {
     const std::vector<bindings::User> &friendsList =
         controller_.getFriendsList();
 
     return (friendsList.empty())
                ? std::nullopt
-               : std::make_optional(friendsList.at(selectedFriend_).playerId);
+               : std::make_optional(friendsList.at(selectedFriend_).userID);
 }
 
 // ### public methods ###

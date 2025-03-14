@@ -41,7 +41,7 @@ void GameServer::onTimerTick() {
 //                          PUBLIC METHODS
 // ----------------------------------------------------------------------------
 
-GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds,
+GameServer::GameServer(GameMode gameMode, std::vector<UserID> &&userIds,
                        UpdateGameStates updateGameStates, GameID id,
                        CallBackFinishGame callBackFinishGame)
     : context_{},
@@ -50,17 +50,16 @@ GameServer::GameServer(GameMode gameMode, std::vector<PlayerID> &&playerIds,
           gameMode,
           [&] {
               std::vector<PlayerState> playerStates;
-              playerStates.reserve(playerIds.size());
-              std::transform(playerIds.begin(), playerIds.end(),
+              playerStates.reserve(userIds.size());
+              std::transform(userIds.begin(), userIds.end(),
                              std::back_inserter(playerStates),
-                             [](PlayerID id) { return PlayerState(id); });
+                             [](UserID id) { return PlayerState(id); });
               return playerStates;
           }())},
       engine{pGameState_}, updateGameStates_{updateGameStates}, gameId_{id},
       callBackFinishGame_{callBackFinishGame} {}
 
-void GameServer::enqueueBinding(PlayerID playerId,
-                                const std::string &bindingStr) {
+void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
 
     // Translate bindingStr to nlohmann::json
     nlohmann::json j = nlohmann::json::parse(bindingStr);
@@ -70,8 +69,8 @@ void GameServer::enqueueBinding(PlayerID playerId,
     switch (bindingType) {
 
     case bindings::BindingType::BigDrop:
-        boost::asio::post(context_, [this, playerId]() {
-            engine.bigDrop(playerId);
+        boost::asio::post(context_, [this, userId]() {
+            engine.bigDrop(userId);
             sendGameStates();
         });
         break;
@@ -79,8 +78,8 @@ void GameServer::enqueueBinding(PlayerID playerId,
     case bindings::BindingType::BuyBonus: {
         boost::asio::post(
             context_,
-            [this, playerId, buyBonus = bindings::BuyBonus::from_json(j)]() {
-                engine.tryBuyEffect(playerId, buyBonus.bonusType);
+            [this, userId, buyBonus = bindings::BuyBonus::from_json(j)]() {
+                engine.tryBuyEffect(userId, buyBonus.bonusType);
                 sendGameStates();
             });
         break;
@@ -88,9 +87,9 @@ void GameServer::enqueueBinding(PlayerID playerId,
 
     case bindings::BindingType::BuyPenalty: {
         boost::asio::post(
-            context_, [this, playerId,
-                       buyPenalty = bindings::BuyPenalty::from_json(j)]() {
-                engine.tryBuyEffect(playerId, buyPenalty.penaltyType,
+            context_,
+            [this, userId, buyPenalty = bindings::BuyPenalty::from_json(j)]() {
+                engine.tryBuyEffect(userId, buyPenalty.penaltyType,
                                     buyPenalty.stashForLater);
                 sendGameStates();
             });
@@ -98,24 +97,24 @@ void GameServer::enqueueBinding(PlayerID playerId,
     }
 
     case bindings::BindingType::EmptyPenaltyStash:
-        boost::asio::post(context_, [this, playerId]() {
-            engine.emptyPenaltyStash(playerId);
+        boost::asio::post(context_, [this, userId]() {
+            engine.emptyPenaltyStash(userId);
             sendGameStates();
         });
         break;
 
     case bindings::BindingType::HoldNextTetromino:
-        boost::asio::post(context_, [this, playerId]() {
-            engine.holdNextTetromino(playerId);
+        boost::asio::post(context_, [this, userId]() {
+            engine.holdNextTetromino(userId);
             sendGameStates();
         });
         break;
 
     case bindings::BindingType::MoveActive: {
         boost::asio::post(
-            context_, [this, playerId,
-                       moveActive = bindings::MoveActive::from_json(j)]() {
-                engine.tryMoveActive(playerId, moveActive.tetrominoMove);
+            context_,
+            [this, userId, moveActive = bindings::MoveActive::from_json(j)]() {
+                engine.tryMoveActive(userId, moveActive.tetrominoMove);
                 sendGameStates();
             });
         break;
@@ -123,9 +122,9 @@ void GameServer::enqueueBinding(PlayerID playerId,
 
     case bindings::BindingType::RotateActive: {
         boost::asio::post(
-            context_, [this, playerId,
+            context_, [this, userId,
                        rotateActive = bindings::RotateActive::from_json(j)]() {
-                engine.tryRotateActive(playerId, rotateActive.rotateClockwise);
+                engine.tryRotateActive(userId, rotateActive.rotateClockwise);
                 sendGameStates();
             });
         break;
@@ -133,9 +132,9 @@ void GameServer::enqueueBinding(PlayerID playerId,
 
     case bindings::BindingType::SelectTarget: {
         boost::asio::post(
-            context_, [this, playerId,
+            context_, [this, userId,
                        selectTarget = bindings::SelectTarget::from_json(j)]() {
-                engine.tryRotateActive(playerId, selectTarget.targetId);
+                engine.tryRotateActive(userId, selectTarget.targetId);
                 sendGameStates();
             });
         break;
@@ -169,10 +168,9 @@ void GameServer::run() {
 
 void GameServer::sendGameStates() {
     for (auto player : pGameState_->getPlayerToTetris()) {
-        updateGameStates_(
-            player.pPlayerState->getPlayerID(),
-            bindings::GameStateMessage::serializeForPlayer(
-                *pGameState_, player.pPlayerState->getPlayerID()));
+        updateGameStates_(player.pPlayerState->getUserID(),
+                          bindings::GameStateMessage::serializeForPlayer(
+                              *pGameState_, player.pPlayerState->getUserID()));
     };
 }
 
@@ -180,10 +178,10 @@ void GameServer::sendGameStates() {
 
 boost::asio::io_context &GameServer::getIoContext() { return context_; }
 
-std::vector<PlayerID> GameServer::getVectorPlayersId() {
-    std::vector<PlayerID> playerIds;
+std::vector<UserID> GameServer::getVectorPlayersId() {
+    std::vector<UserID> userIds;
     for (auto player : pGameState_->getPlayerToTetris()) {
-        playerIds.push_back(player.pPlayerState->getPlayerID());
+        userIds.push_back(player.pPlayerState->getUserID());
     }
-    return playerIds;
+    return userIds;
 }

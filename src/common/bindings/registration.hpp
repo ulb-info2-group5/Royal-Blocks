@@ -5,9 +5,6 @@
 
 #include <nlohmann/json.hpp>
 #include <string>
-
-using PlayerID = size_t;
-
 namespace bindings {
 
     struct Registration {

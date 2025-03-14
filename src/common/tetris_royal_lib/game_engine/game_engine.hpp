@@ -196,47 +196,47 @@ class GameEngine {
      * energy for it, stashes the effect for later or activates it
      * instantly.
      */
-    void tryBuyEffect(PlayerID playerID, EffectType effectType,
+    void tryBuyEffect(UserID userID, EffectType effectType,
                       bool stashForLater = false);
 
     /**
      * @brief Changes the given player's target to the new target.
-     * @param playerID The player whose target will be changed.
+     * @param userID The player whose target will be changed.
      * @param target The new target.
      */
-    void selectTarget(PlayerID playerID, PlayerID target);
+    void selectTarget(UserID userID, UserID target);
 
-    // void selectEffect(PlayerID playerID, EffectType effectType);
-    // void selectNextEffect(PlayerID playerID);
-    // void selectPrevEffect(PlayerID playerID);
+    // void selectEffect(UserID userID, EffectType effectType);
+    // void selectNextEffect(UserID userID);
+    // void selectPrevEffect(UserID userID);
 
     /**
      * @brief Moves the player's active Tetromino in the given direction if
      * possible.
      */
-    void tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove);
+    void tryMoveActive(UserID userID, TetrominoMove tetrominoMove);
 
     /**
      * @brief Drops the active Tetromino until it hits the bottom or an
      * occupied cell.
      */
-    void bigDrop(PlayerID playerID);
+    void bigDrop(UserID userID);
 
     /**
      * @brief Moves the next Tetromino from the queue to hold.
      */
-    void holdNextTetromino(PlayerID playerID);
+    void holdNextTetromino(UserID userID);
 
     /**
      * @brief Rotates the player's active Tetromino in the given direction
      * if possible.
      */
-    void tryRotateActive(PlayerID playerID, bool rotateClockwise);
+    void tryRotateActive(UserID userID, bool rotateClockwise);
 
     /**
      * @brief Sends all the penalties that were stashed.
      */
-    void emptyPenaltyStash(PlayerID playerID);
+    void emptyPenaltyStash(UserID userID);
 
     /**
      * @brief Creates an engine tick, making everything update.
@@ -244,14 +244,14 @@ class GameEngine {
     void tick();
 
     /**
-     * @brief Returns the winner's playerID if there is one, nullopt otherwise.
+     * @brief Returns the winner's userID if there is one, nullopt otherwise.
      */
-    std::optional<PlayerID> getWinner() const;
+    std::optional<UserID> getWinner() const;
 
     /**
      * @brief Checks that the given player is alive.
      */
-    bool checkAlive(PlayerID playerID) const;
+    bool checkAlive(UserID userID) const;
 
     // TODO
     bool gameIsFinished() const;

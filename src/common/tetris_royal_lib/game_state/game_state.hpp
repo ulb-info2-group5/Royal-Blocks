@@ -31,27 +31,27 @@ class GameState {
 
     GameMode getGameMode() const;
 
-    std::optional<PlayerID> getWinner() const;
+    std::optional<UserID> getWinner() const;
 
     /**
      * @brief Returns a pointer to the PlayerState of the player whose
-     * PlayerID matches the given one.
+     * userID matches the given one.
      *
      * Returns nullptr no player was found.
      *
-     * @param playerID The player's ID.
+     * @param userID The player's ID.
      */
-    PlayerStatePtr getPlayerState(PlayerID playerID);
+    PlayerStatePtr getPlayerState(UserID userID);
 
     /**
-     * @brief Returns a pointer to the Tetris of the player whose PlayerID
+     * @brief Returns a pointer to the Tetris of the player whose userID
      * matches the given one.
      *
      * Returns nullptr no player was found.
      *
-     * @param playerID The player's ID.
+     * @param userID The player's ID.
      */
-    TetrisPtr getTetris(PlayerID playerID);
+    TetrisPtr getTetris(UserID userID);
 
     /**
      * @brief Returns the playerToTetris vector member.
@@ -62,7 +62,7 @@ class GameState {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serializeFor(PlayerID playerID) const;
+    nlohmann::json serializeFor(UserID userID) const;
 };
 
 #endif // GAME_STATE_HPP

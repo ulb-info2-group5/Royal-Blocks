@@ -139,7 +139,7 @@ void FriendsMenu::manageFriendlistScreen(
         std::string(STR_YES),
         [&] {
             if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
-                controller_.removeFriend(friendUser.playerId);
+                controller_.removeFriend(friendUser.userID);
             } else {
                 // TODO: with controller to accept or decline friend request
             }
