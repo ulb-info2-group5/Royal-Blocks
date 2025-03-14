@@ -1,7 +1,7 @@
 /**
  * @file test_account_manager.hpp
  * @authors Rafaou, Ernest, Jonas
- * @brief Unit test header for AccountManager using CppUnit.
+ * @brief Unit test header for AccountManager with CppUnit.
  */
 
 #ifndef ACCOUNT_MANAGER_TEST_HPP

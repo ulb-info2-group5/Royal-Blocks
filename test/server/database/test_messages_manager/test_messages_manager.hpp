@@ -1,7 +1,7 @@
 /**
  * @file test_messages_manager.hpp
  * @authors: Rafaou, Ernest, Jonas
- * @brief Unit test header for MessagesManager using CppUnit.
+ * @brief Unit test header for MessagesManager with CppUnit.
  */
 
 #ifndef MESSAGES_MANAGER_TEST_HPP
