@@ -4,7 +4,7 @@
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../types/types.hpp"
 #include "binding_type.hpp"
-
+#include "user_state.hpp"
 #include <cstddef>
 #include <optional>
 #include <string>
@@ -14,12 +14,7 @@
 namespace bindings {
 
     struct User {
-        enum class State {
-            Offline,
-            Menu,
-            Matchmaking,
-            InGame,
-        };
+        
 
         UserID userID;
         std::string username;
