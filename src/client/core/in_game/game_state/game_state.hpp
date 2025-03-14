@@ -4,7 +4,7 @@
 #include "../player_tetris/player_tetris_external.hpp"
 #include "../player_tetris/player_tetris_self.hpp"
 
-#include "game_mode/game_mode.hpp"
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 
 #include <vector>
 

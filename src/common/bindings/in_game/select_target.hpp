@@ -3,7 +3,7 @@
 
 #include "../binding_type.hpp"
 
-#include "../../common/types/types.hpp"
+#include "../../types/types.hpp"
 
 #include <nlohmann/json.hpp>
 namespace bindings {

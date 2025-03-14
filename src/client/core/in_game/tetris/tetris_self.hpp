@@ -1,9 +1,9 @@
 #ifndef CLIENT_TETRIS_SELF_HPP
 #define CLIENT_TETRIS_SELF_HPP
 
+#include "../../../../common/tetris_lib/board/board.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "../tetromino_queue/tetromino_queue.hpp"
-#include "board/board.hpp"
 
 namespace client {
 

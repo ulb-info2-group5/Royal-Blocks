@@ -1,7 +1,7 @@
 #ifndef PENALTY_HPP
 #define PENALTY_HPP
 
-#include "effect/abstract_timed_effect.hpp"
+#include "../abstract_timed_effect.hpp"
 #include "penalty_type.hpp"
 
 #include <memory>

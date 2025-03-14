@@ -1,7 +1,6 @@
 #include "player_state.hpp"
-#include "effect/bonus/bonus_type.hpp"
-#include "effect/penalty/penalty_type.hpp"
-#include "effect/penalty/speed_up.hpp"
+#include "../effect/bonus/bonus_type.hpp"
+#include "../effect/penalty/speed_up.hpp"
 
 #include <optional>
 

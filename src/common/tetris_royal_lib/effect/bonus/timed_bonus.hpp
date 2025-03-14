@@ -1,8 +1,8 @@
 #ifndef BONUS_HPP
 #define BONUS_HPP
 
+#include "../abstract_timed_effect.hpp"
 #include "bonus_type.hpp"
-#include "effect/abstract_timed_effect.hpp"
 
 #include <memory>
 

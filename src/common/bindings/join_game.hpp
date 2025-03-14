@@ -2,8 +2,8 @@
 #define BINDINGS_JOIN_FRIEND_HPP
 
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../tetris_royal_lib/player_state/player_state.hpp"
 #include "in_game/select_target.hpp"
-#include "player_state/player_state.hpp"
 
 #include <nlohmann/json.hpp>
 #include <optional>

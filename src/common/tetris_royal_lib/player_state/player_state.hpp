@@ -1,20 +1,17 @@
 #ifndef PLAYER_STATE_HPP
 #define PLAYER_STATE_HPP
 
+#include "../../tetris_lib/tetris/tetris_observer.hpp"
 #include "../../types/types.hpp"
 #include "../effect/bonus/timed_bonus.hpp"
 #include "../effect/penalty/penalty_type.hpp"
 #include "../effect/penalty/timed_penalty.hpp"
-#include "effect/bonus/timed_bonus.hpp"
-#include "effect_price/effect_price.hpp"
-#include "tetris/tetris_observer.hpp"
+#include "../effect_price/effect_price.hpp"
 
 #include <cstddef>
 #include <optional>
 #include <queue>
 #include <sys/types.h>
-#include <utility>
-#include <vector>
 
 class PlayerState;
 using PlayerStatePtr = std::shared_ptr<PlayerState>;
