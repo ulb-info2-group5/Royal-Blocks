@@ -26,7 +26,7 @@ void ClientLink::handleReading() {
     std::string packet;
     std::getline(is, packet);
     std::cout << "packet : " << packet << std::endl;
-    if (!isIdentify()) {
+    if (getUserState() == bindings::State::Offline) {
         handleAuthentication(packet);
     } else {
         packetHandler_(packet, clientId.value());
@@ -57,6 +57,7 @@ void ClientLink::handleAuthentication(std::string &packet) {
         && response.at("data").at("success").get<bool>()) {
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
         identify_ = true;
+        userState = bindings::State::Menu;
         mustBeDeletedFromTheWaitingForAuthList_ = true;
     }
 }
@@ -78,7 +79,7 @@ ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
                        AuthSuccessCallback authSuccessCallback)
     : socket_(std::move(socket)), packetHandler_(packetHandler),
       authPacketHandler_(authPacketHandler),
-      authSuccessCallback_(authSuccessCallback), clientId(std::nullopt) {
+      authSuccessCallback_(authSuccessCallback), clientId(std::nullopt), userState(bindings::State::Offline) {
     start();
 }
 
@@ -100,6 +101,15 @@ void ClientLink::sendPackage(nlohmann::json gameState) {
 void ClientLink::setClientId(const int id) { clientId = id; }
 
 void ClientLink::setIdentifyFalse() { identify_ = false; }
+
+
+void ClientLink::setUserState(bindings::State newState){
+    userState = newState;
+}
+
+bindings::State ClientLink::getUserState(){
+    return userState;
+}
 
 // ====== Client manager class ======
 // ---private ---
@@ -126,9 +136,10 @@ void ClientManager::disconnectClient(const UserID &userID) {
         std::cout << "***** the client has already been disconnected  (id : ) "
                   << userID << std::endl;
     } else {
-        connectedClients_[userID]->setIdentifyFalse();
-        addClientInWaitingForAuth(std::move(connectedClients_[userID]));
-        removeConnection(userID);
+        connectedClients_[playerID]->setIdentifyFalse();
+        connectedClients_[playerID]->setUserState(bindings::State::Offline);
+        addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
+        removeConnection(playerID);
     }
 }
 
@@ -140,14 +151,26 @@ void ClientManager::removeConnection(const UserID &userID) {
 // ---public ---
 ClientManager::ClientManager(DataBase database)
     : database_(database),
-      gamesManager_([this](UserID userID, nlohmann::json gameState) {
-          updateGameStates(userID, gameState);
-      }) {}
+      gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
+          updateGameStates(playerId, gameState);
+      }), 
+      matchmaking_([this](std::vector<PlayerID> &playersID){
+            gameFindCallback(playersID);
+      })
+      {}
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                                     nlohmann::json clientData) {
     addConnection(clientLink, clientData.at("nickname").get<std::string>());
 }
+void ClientManager::gameFindCallback(std::vector<PlayerID>& playersID){
+    std::cout << "== game find callback succcess ===" <<std::endl;
+    for (auto id: playersID){
+        connectedClients_[id]->setUserState(bindings::State::InGame);
+    }
+
+}
+
 
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
                                   const std::string &pseudo) {
@@ -184,7 +207,7 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
 void ClientManager::handlePacket(const std::string &packet,
                                  const UserID &clientId) {
 
-    if (gamesManager_.isThisClientInGame(clientId)) {
+    if (connectedClients_[clientId]->getUserState() == bindings::State::InGame) {
         gamesManager_.enqueueGameBinding(clientId, packet);
         return;
     } else {
@@ -205,10 +228,12 @@ void ClientManager::handlePacketMenu(const std::string &packet,
         matchmaking_.addPlayer(
             RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)},
             gamesManager_);
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         break;
     case bindings::BindingType::CreateGame:
         matchmaking_.createAGame(RequestCreateGame{
             clientId, bindings::CreateGame::from_json(jPack)});
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         break;
     case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
@@ -220,7 +245,9 @@ void ClientManager::handlePacketMenu(const std::string &packet,
 
 void ClientManager::addClientInWaitingForAuth(
     std::shared_ptr<ClientLink> &&clientLink) {
+    clientLink->setUserState(bindings::State::Offline);
     waitingForAuthClient.push_back(clientLink);
+
 }
 
 void ClientManager::handleMessage(nlohmann::json message) {

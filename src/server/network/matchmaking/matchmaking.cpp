@@ -91,6 +91,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,
         }
         if (it->isThisPartyReady()) {
             std::cout << "game ready" << std::endl;
+            gameFindCallback_(it->getPlayers());
             startGame(std::move(*it), gamesManager);
             it = games.erase(it);
         } else {
@@ -99,6 +100,11 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,
     }
     if (!findGame) createNewGameCandidate(games, joinGame);
 }
+
+Matchmaking::Matchmaking(GameFindCallback gameFindCallback) : gameFindCallback_{gameFindCallback} {
+
+}
+
 
 void Matchmaking::createNewGameCandidate(std::vector<GameCandidate> &games,
                                          RequestJoinGame joinGame) {

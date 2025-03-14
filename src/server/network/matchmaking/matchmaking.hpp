@@ -11,6 +11,11 @@
 
 using NumberOfPlayers = size_t;
 
+
+using GameFindCallback =
+        std::function<void(std::vector<PlayerID>&)>;
+
+
 constexpr NumberOfPlayers MAXPLAYERDUAL = 2;
 constexpr NumberOfPlayers MAXPLAYERCLASSICANDROYAL = 9;
 
@@ -51,13 +56,16 @@ class Matchmaking {
     std::vector<GameCandidate> gamesCanditatesDuel_;
     std::vector<GameCandidate> gamesCanditatesRoyalCompetition_;
 
+
+    GameFindCallback gameFindCallback_;
+
     void createNewGameCandidate(std::vector<GameCandidate> &games,
                                 RequestJoinGame joinGame);
     void startGame(GameCandidate &&gameCandidate, GamesManager &gamesManager);
     std::vector<GameCandidate> &getGame(GameMode gameMode);
 
   public:
-    Matchmaking() = default;
+    Matchmaking(GameFindCallback gameFindCallback) ;
     ~Matchmaking() = default;
     void addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager);
     void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame,

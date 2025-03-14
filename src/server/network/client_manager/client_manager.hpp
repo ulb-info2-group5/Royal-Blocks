@@ -17,7 +17,10 @@
 #include "../../../common/bindings/message.hpp"
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
+#include "../../../common/bindings/user_state.hpp"
+#include "../../../common/bindings/user.hpp"
 #include "../../server_bindings/remove_client.hpp"
+
 
 #include "../matchmaking/matchmaking.hpp"
 
@@ -53,6 +56,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     boost::asio::streambuf streamBuffer_;
     bool identify_ = false;
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
+    bindings::State userState;
 
     std::optional<UserID> clientId;
 
@@ -98,6 +102,11 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void setClientId(const int id);
 
     void setIdentifyFalse();
+
+    void setUserState(bindings::State newState);
+
+    bindings::State getUserState();
+
 };
 
 class ClientManager {
@@ -138,6 +147,9 @@ class ClientManager {
      */
     void authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                          nlohmann::json clientData);
+
+
+    void gameFindCallback(std::vector<PlayerID>& playersID);
     /*
      * @brief : manage of the packet received by the clientLink
      */
