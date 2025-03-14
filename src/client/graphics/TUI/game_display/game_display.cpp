@@ -2,7 +2,7 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "graphics/interfaceConstants.hpp"
+#include "graphics/color.hpp"
 
 // TODO: this should defo go somewhere else
 #include <ftxui/screen/color.hpp>
@@ -167,8 +167,11 @@ void GameDisplay::drawPlayerBoard() {
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        for (uint32_t y = 0; y < HEIGHT; ++y) {
-            for (uint32_t x = 0; x < WIDTH; ++x) {
+        size_t height = controller_.getBoardHeight();
+        size_t width = controller_.getBoardWidth();
+
+        for (uint32_t y = 0; y < height; ++y) {
+            for (uint32_t x = 0; x < width; ++x) {
 
                 pixel.background_color =
                     controller_.selfCellInfoAt(x, y)
@@ -182,7 +185,7 @@ void GameDisplay::drawPlayerBoard() {
                     for (uint32_t dx = 0; dx < CELL_SIZE_PLAYER; ++dx) {
                         playerCanvas.DrawBlock(
                             x * CELL_SIZE_PLAYER + dx,
-                            (HEIGHT - 1 - y) * CELL_SIZE_PLAYER + dy, true,
+                            (height - 1 - y) * CELL_SIZE_PLAYER + dy, true,
                             pixel.background_color);
                     }
                 }
@@ -217,8 +220,11 @@ void GameDisplay::drawOpponentsBoard() {
                 ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
             ftxui::Pixel pixel = ftxui::Pixel();
 
-            for (uint32_t y = 0; y < HEIGHT; ++y) {
-                for (uint32_t x = 0; x < WIDTH; ++x) {
+            size_t height = controller_.getBoardHeight();
+            size_t width = controller_.getBoardWidth();
+
+            for (uint32_t y = 0; y < height; ++y) {
+                for (uint32_t x = 0; x < width; ++x) {
 
                     pixel.background_color = getFTXUIColor(
                         controller_.opponentsBoardGetColorIdAt(index, x, y)
@@ -230,7 +236,7 @@ void GameDisplay::drawOpponentsBoard() {
                         for (uint32_t dx = 0; dx < CELL_SIZE_OPPONENT; ++dx) {
                             opCanvas.DrawBlock(
                                 x * CELL_SIZE_OPPONENT + dx,
-                                (HEIGHT - 1 - y) * CELL_SIZE_OPPONENT + dy,
+                                (height - 1 - y) * CELL_SIZE_OPPONENT + dy,
                                 true, pixel.background_color);
                         }
                     }
@@ -297,8 +303,11 @@ void GameDisplay::displayOpponentBoardDuel() {
                                    // as the player's
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        for (uint32_t y = 0; y < HEIGHT; ++y) {
-            for (uint32_t x = 0; x < WIDTH; ++x) {
+        size_t height = controller_.getBoardHeight();
+        size_t width = controller_.getBoardWidth();
+
+        for (uint32_t y = 0; y < height; ++y) {
+            for (uint32_t x = 0; x < width; ++x) {
 
                 pixel.background_color = getFTXUIColor(
                     controller_.opponentsBoardGetColorIdAt(0, x, y)
@@ -315,7 +324,7 @@ void GameDisplay::displayOpponentBoardDuel() {
                             x * CELL_SIZE_PLAYER
                                 + dx, // For dual the size of the cells of the
                                       // tetrominos is the same as the player's
-                            (HEIGHT - 1 - y) * CELL_SIZE_PLAYER + dy,
+                            (height - 1 - y) * CELL_SIZE_PLAYER + dy,
                             true, // For dual the size of the cells of the
                                   // tetrominos is the same as the player's
                             pixel.background_color);

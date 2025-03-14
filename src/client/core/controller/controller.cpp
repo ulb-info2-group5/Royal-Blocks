@@ -235,6 +235,16 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     }
 }
 
+size_t Controller::getBoardHeight() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_->self.tetris_.board_.getHeight();
+}
+
+size_t Controller::getBoardWidth() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return gameState_->self.tetris_.board_.getWidth();
+}
+
 Score Controller::getSelfScore() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_->self.playerState_.score_;

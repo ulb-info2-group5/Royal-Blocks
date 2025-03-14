@@ -2,7 +2,6 @@
 #define GAME_DISPLAY_HPP
 
 #include "../../IGame.hpp"
-#include "../../interfaceConstants.hpp"
 
 #include <ftxui/component/component.hpp>
 

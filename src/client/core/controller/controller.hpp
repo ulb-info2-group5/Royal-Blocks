@@ -192,6 +192,10 @@ class Controller {
 
     void handleKeypress(const std::string &pressedKey);
 
+    size_t getBoardHeight();
+
+    size_t getBoardWidth();
+
     Score getSelfScore() const;
 
     Score getSelfEnergy() const;
