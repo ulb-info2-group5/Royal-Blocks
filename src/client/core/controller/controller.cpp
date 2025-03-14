@@ -100,10 +100,6 @@ Controller::Controller()
           [this](const std::string &packet) { handlePacket(packet); }},
       screenManager_{*this} {};
 
-Controller::~Controller() {
-    // TODO: join the iothread
-}
-
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return registrationState_;

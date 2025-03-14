@@ -44,9 +44,6 @@ class Controller {
         Failed,
     };
 
-    // TODO I know this name is bad so just to remember what it is until I
-    // change it:
-    //
     // Returned by selfCellInfoAt.
     // Tells us whether the cell at (x,y) is the part of the active or preview
     // or a placed Tetromino.
@@ -95,7 +92,7 @@ class Controller {
     /*
      * @brief Destroy the Controller object
      */
-    ~Controller();
+    ~Controller() = default;
 
     /**
      * @brief Returns the registration-state.
@@ -174,7 +171,6 @@ class Controller {
 
     void joinGame(GameMode gameMode, std::optional<UserID> friendID);
 
-    // TODO
     const NameConversation &getConversationWith(UserID userID);
 
     void bigDrop();

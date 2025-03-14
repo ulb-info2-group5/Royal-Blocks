@@ -119,9 +119,6 @@ void Messaging::drawDisplay() {
                 else {
                     for (auto &[senderId, message] :
                          conversation.senderMessages) {
-
-                        // TODO: display our own messages with a different
-                        // color
                         chat_elements.push_back(
                             ftxui::text(message) | ftxui::bold
                             | ftxui::color(ftxui::Color::Yellow));

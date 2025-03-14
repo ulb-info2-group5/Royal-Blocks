@@ -253,7 +253,6 @@ class GameEngine {
      */
     bool checkAlive(UserID userID) const;
 
-    // TODO
     bool gameIsFinished() const;
 
     /**

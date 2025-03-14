@@ -12,7 +12,6 @@
 #include <cstdlib>
 #include <iostream>
 
-// TODO: Move this to a config file ?
 constexpr std::string_view PORT = "1234";
 constexpr std::string_view IP = "127.0.0.1";
 
