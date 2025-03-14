@@ -72,11 +72,10 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
         break;
     };
 
-    // if (selfCellType == Controller::SelfCellType::Preview) {
-    //     returnValue =
-    //         ftxui::Color::Blend(returnValue, ftxui::Color::RGB(128, 128,
-    //         128));
-    // }
+    if (selfCellType == Controller::SelfCellType::Preview) {
+        returnValue =
+            ftxui::Color::Blend(returnValue, ftxui::Color::RGB(128, 128, 128));
+    }
 
     return returnValue;
 }
@@ -340,8 +339,6 @@ void GameDisplay::displayMultiRightWindow() {
     }
 
     // ftxui::Component penaltyDisplay = ftxui::Renderer([&] {
-    //     std::lock_guard<std::mutex> guard(pGameState_->mutex);
-    //
     //     return ftxui::vbox({
     //         ftxui::gaugeRight(penaltyGauge_),
     //         ftxui::text("penalty to come") | ftxui::borderDashed,
