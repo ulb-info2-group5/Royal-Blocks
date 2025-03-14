@@ -12,7 +12,6 @@ size_t TetrominoQueue::size() const noexcept { return queue_.size(); };
 TetrominoPtr &TetrominoQueue::front() { return queue_.front(); }
 
 void TetrominoQueue::refill() {
-    std::cerr << "in refill" << std::endl;
     constexpr size_t numShapes =
         static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
@@ -37,9 +36,7 @@ void TetrominoQueue::refill() {
 }
 
 TetrominoPtr TetrominoQueue::fetchNext() {
-    std::cerr << "in fetchNext" << std::endl;
     refill();
-    std::cerr << "after refill" << std::endl;
     TetrominoPtr ret = std::move(queue_.front());
     queue_.pop_front();
     return ret;
