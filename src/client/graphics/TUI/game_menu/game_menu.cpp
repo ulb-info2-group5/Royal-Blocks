@@ -190,32 +190,24 @@ void GameMenu::handleChoice() {
         return;
     }
 
-    while (joinType_ != JoinType::BACK && joinType_ != JoinType::GAME_STARTED) {
+    while (joinType_ != JoinType::BACK) {
 
-        if (joinType_ == JoinType::GAME_STARTED) {
+        if (joinType_ == JoinType::FRIEND) {
+            joinFriendScreen();
+            // TODO: Launch the game when the friend screen has been exited
+            // because the game has started ?
+        }
+
+        else if (joinType_ == JoinType::RANDOM) {
+            joinRandomScreen(); // We can exit the random screen when the game
+                                // just if the game has started
+            gameDisplay_->render(); // The game has started because the random
+                                    // screen has been exited
             quitMenu_ = true;
             break;
         }
-
-        switch (joinType_) {
-        case JoinType::FRIEND:
-            joinFriendScreen();
-            break;
-
-        case JoinType::RANDOM:
-            joinRandomScreen();
-            break;
-
-        case JoinType::BACK: // Do nothing because the user pressed the back
-                             // button
-            break;
-
-        default:
-            throw std::invalid_argument(
-                "Invalid state in GameMenu::handleChoice()");
-            break;
-        }
-        joinFriendOrRandomScreen();
+        joinFriendOrRandomScreen(); // If the user goes back to the previous
+                                    // screen
     }
 }
 
@@ -285,10 +277,6 @@ void GameMenu::joinRandomScreen() {
         });
 
     screenManager_.render(renderer);
-
-    gameDisplay_->render();
-
-    joinType_ = JoinType::GAME_STARTED;
 }
 
 void GameMenu::createGameScreen() {
@@ -309,8 +297,6 @@ void GameMenu::createGameScreen() {
         });
 
     screenManager_.render(renderer);
-
-    joinType_ = JoinType::GAME_STARTED;
 }
 
 ftxui::Component GameMenu::makeFriendButton(UserID userID,

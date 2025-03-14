@@ -5,7 +5,6 @@ enum class JoinType {
     FRIEND,
     RANDOM,
     BACK,
-    GAME_STARTED,
     NONE,
 };
 

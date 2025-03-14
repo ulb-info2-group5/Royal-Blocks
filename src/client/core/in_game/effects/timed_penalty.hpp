@@ -1,7 +1,7 @@
 #ifndef TIMED_PENALTY_HPP
 #define TIMED_PENALTY_HPP
 
-#include "effect/penalty/penalty_type.hpp"
+#include "../../../../common/tetris_royal_lib/effect/penalty/penalty_type.hpp"
 
 #include <nlohmann/json.hpp>
 
