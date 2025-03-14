@@ -29,7 +29,7 @@ class GamesManager {
   public:
     GamesManager(UpdateGameStates updateGameStates);
     void enqueueGameBinding(int clientId, const std::string &strBindings);
-    void startGameServeur(GameMode gameMode, std::vector<UserID> userIds);
+    void startGameServeur(GameMode gameMode, std::vector<Player> players);
     void callBackFinishGame(GameID gameId);
     bool isThisClientInGame(UserID userId);
 };

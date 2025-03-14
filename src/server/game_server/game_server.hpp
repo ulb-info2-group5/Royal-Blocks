@@ -21,6 +21,12 @@ using GameID = size_t;
 using UpdateGameStates = std::function<void(UserID, nlohmann::json)>;
 using CallBackFinishGame = std::function<void(GameID)>;
 
+
+struct Player {
+  UserID userID;
+  std::string username;
+};
+
 class GameServer {
 
   private:
@@ -43,7 +49,7 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<UserID> &&userIds,
+    GameServer(GameMode gameMode, std::vector<Player> &&players,
                UpdateGameStates updateGameState, GameID id,
                CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;

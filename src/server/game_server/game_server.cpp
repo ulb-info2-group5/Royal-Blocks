@@ -41,7 +41,7 @@ void GameServer::onTimerTick() {
 //                          PUBLIC METHODS
 // ----------------------------------------------------------------------------
 
-GameServer::GameServer(GameMode gameMode, std::vector<UserID> &&userIds,
+GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
                        UpdateGameStates updateGameStates, GameID id,
                        CallBackFinishGame callBackFinishGame)
     : context_{},
@@ -50,10 +50,10 @@ GameServer::GameServer(GameMode gameMode, std::vector<UserID> &&userIds,
           gameMode,
           [&] {
               std::vector<PlayerState> playerStates;
-              playerStates.reserve(userIds.size());
-              std::transform(userIds.begin(), userIds.end(),
+              playerStates.reserve(players.size());
+              std::transform(players.begin(), players.end(),
                              std::back_inserter(playerStates),
-                             [](UserID id) { return PlayerState(id); });
+                             [](Player player) { return PlayerState(player.userID, player.username); });
               return playerStates;
           }())},
       engine{pGameState_}, updateGameStates_{updateGameStates}, gameId_{id},

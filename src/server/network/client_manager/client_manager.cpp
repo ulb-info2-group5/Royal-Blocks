@@ -154,7 +154,7 @@ ClientManager::ClientManager(DataBase database)
       gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
           updateGameStates(playerId, gameState);
       }), 
-      matchmaking_([this](std::vector<UserID> &userIDs){
+      matchmaking_([this](std::vector<UserID> userIDs){
             gameFindCallback(userIDs);
       })
       {}
@@ -228,14 +228,21 @@ void ClientManager::handlePacketMenu(const std::string &packet,
     case bindings::BindingType::JoinGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.addPlayer(
-            RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)},
+            RequestJoinGame{
+                Player{
+                    clientId,
+                    database_.accountManager->getUsername(clientId),}, 
+                bindings::JoinGame::from_json(jPack)},
             gamesManager_);
         
         break;
     case bindings::BindingType::CreateGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.createAGame(RequestCreateGame{
-            clientId, bindings::CreateGame::from_json(jPack)});
+            Player{
+                clientId,
+                database_.accountManager->getUsername(clientId)}, 
+            bindings::CreateGame::from_json(jPack)});
         
         break;
     case bindings::BindingType::RemoveClient:

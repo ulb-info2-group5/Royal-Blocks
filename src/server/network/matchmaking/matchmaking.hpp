@@ -13,19 +13,19 @@ using NumberOfPlayers = size_t;
 
 
 using GameFindCallback =
-        std::function<void(std::vector<UserID>&)>;
+        std::function<void(std::vector<UserID>)>;
 
 
 constexpr NumberOfPlayers MAXPLAYERDUAL = 2;
 constexpr NumberOfPlayers MAXPLAYERCLASSICANDROYAL = 9;
 
 struct RequestJoinGame {
-    UserID userId;
+    Player player;
     bindings::JoinGame bindGame;
 };
 
 struct RequestCreateGame {
-    UserID userId;
+    Player player;
     bindings::CreateGame bindCreateGame;
 };
 
@@ -34,7 +34,7 @@ class GameCandidate {
     NumberOfPlayers numberOfPlayerTotale_;
     NumberOfPlayers numberOfPlayersMax_;
     GameMode gameMode;
-    std::vector<UserID> players_;
+    std::vector<Player> players_;
 
   public:
     GameCandidate(RequestJoinGame joinGame);
@@ -46,7 +46,8 @@ class GameCandidate {
     bool tryToAddPlayer(RequestJoinGame joinGame);
     bool isThereRoomInThisGame();
 
-    std::vector<UserID> &getPlayers();
+    std::vector<Player> &getPlayers();
+    std::vector<UserID> getPlayerIDs();
     GameMode getGameMode();
 };
 
