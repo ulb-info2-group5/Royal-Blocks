@@ -9,7 +9,7 @@
 class TetrominoQueue {
   private:
     std::deque<TetrominoPtr> queue_;
-    static constexpr size_t MINIMUM_ENQUEUED_NUM =
+    static constexpr size_t NUM_SERIALIZED_TETROMINOES =
         static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
 
   public:
@@ -53,13 +53,7 @@ class TetrominoQueue {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serialize() const {
-        nlohmann::json j_queue = nlohmann::json::array();
-        for (const auto &tetromino : queue_) {
-            j_queue.push_back(tetromino ? tetromino->serialize() : nullptr);
-        }
-        return j_queue;
-    }
+    nlohmann::json serialize() const;
 };
 
 #endif // TETROMINO_QUEUE_HPP

@@ -61,6 +61,7 @@ bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
 }
 
 void Tetris::fetchNewTetromino() {
+    std::cerr << "in fetchNewTetromino" << std::endl;
     // The queue will refill itself if there are too few Tetrominos
     // inside. -> No need to do it here.
     activeTetromino_ = tetrominoQueue_.fetchNext();
