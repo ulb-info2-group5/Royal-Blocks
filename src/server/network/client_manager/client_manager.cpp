@@ -136,9 +136,9 @@ void ClientManager::disconnectClient(const UserID &userID) {
                   << userID << std::endl;
     } else {
         
-        connectedClients_[playerID]->setUserState(bindings::State::Offline);
-        addClientInWaitingForAuth(std::move(connectedClients_[playerID]));
-        removeConnection(playerID);
+        connectedClients_[userID]->setUserState(bindings::State::Offline);
+        addClientInWaitingForAuth(std::move(connectedClients_[userID]));
+        removeConnection(userID);
     }
 }
 
@@ -153,8 +153,8 @@ ClientManager::ClientManager(DataBase database)
       gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
           updateGameStates(playerId, gameState);
       }), 
-      matchmaking_([this](std::vector<PlayerID> &playersID){
-            gameFindCallback(playersID);
+      matchmaking_([this](std::vector<UserID> &userIDs){
+            gameFindCallback(userIDs);
       })
       {}
 
