@@ -72,10 +72,11 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
         break;
     };
 
-    if (selfCellType == Controller::SelfCellType::Preview) {
-        returnValue =
-            ftxui::Color::Blend(returnValue, ftxui::Color::RGB(128, 128, 128));
-    }
+    // if (selfCellType == Controller::SelfCellType::Preview) {
+    //     returnValue =
+    //         ftxui::Color::Blend(returnValue, ftxui::Color::RGB(128, 128,
+    //         128));
+    // }
 
     return returnValue;
 }

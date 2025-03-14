@@ -250,33 +250,35 @@ std::optional<std::pair<unsigned, Controller::SelfCellType>>
 Controller::selfCellInfoAt(int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
 
-    auto getColorFromTetromino = [&](const client::Tetromino &tetromino,
-                                     Controller::SelfCellType type)
-        -> std::optional<std::pair<unsigned, Controller::SelfCellType>> {
-        return std::ranges::any_of(
-                   tetromino.body_,
-                   [&](const Vec2 &vec) {
-                       return tetromino.anchorPoint_ + vec == Vec2{x, y};
-                   })
-                   ? std::make_optional(std::pair{tetromino.colorId, type})
-                   : std::nullopt;
-    };
+    if (gameState_->self.tetris_.board_.get(x, y).getColorId().has_value()) {
+        return std::make_pair(
+            gameState_->self.tetris_.board_.get(x, y).getColorId().value(),
+            Controller::SelfCellType::Placed);
+    }
 
-    return gameState_->self.tetris_.board_.get(x, y)
-        .getColorId()
-        .transform([](unsigned colorId) {
-            return std::make_pair(colorId, Controller::SelfCellType::Placed);
-        })
-        .or_else([&] {
-            return getColorFromTetromino(
-                *gameState_->self.tetris_.activeTetromino_,
-                Controller::SelfCellType::Active);
-        })
-        .or_else([&] {
-            return getColorFromTetromino(
-                *gameState_->self.tetris_.previewTetromino_,
-                Controller::SelfCellType::Preview);
-        });
+    auto &activeTetromino = gameState_->self.tetris_.activeTetromino_;
+    if (activeTetromino.has_value()) {
+        for (auto &vec : activeTetromino->body_) {
+            if (activeTetromino->anchorPoint_ + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(activeTetromino->colorId,
+                                   Controller::SelfCellType::Active));
+            }
+        }
+    }
+
+    auto &previewTetromino = gameState_->self.tetris_.previewTetromino_;
+    if (previewTetromino.has_value()) {
+        for (auto &vec : previewTetromino->body_) {
+            if (previewTetromino->anchorPoint_ + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(previewTetromino->colorId,
+                                   Controller::SelfCellType::Preview));
+            }
+        }
+    }
+
+    return std::nullopt;
 }
 
 std::optional<unsigned>
