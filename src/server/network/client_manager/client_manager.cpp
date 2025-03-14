@@ -26,6 +26,7 @@ void ClientLink::handleReading() {
     std::string packet;
     std::getline(is, packet);
     std::cout << "packet : " << packet << std::endl;
+    std::cout << "user state: " << static_cast<int>(userState) << std::endl;
     if (getUserState() == bindings::State::Offline) {
         handleAuthentication(packet);
     } else {
@@ -165,6 +166,7 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
 void ClientManager::gameFindCallback(std::vector<PlayerID>& playersID){
     std::cout << "== game find callback succcess ===" <<std::endl;
     for (auto id: playersID){
+        std::cout << "id player : " << id << std::endl;
         connectedClients_[id]->setUserState(bindings::State::InGame);
     }
 
@@ -206,7 +208,7 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
 void ClientManager::handlePacket(const std::string &packet,
                                  const UserID &clientId) {
 
-    if (connectedClients_[clientId]->getUserState() == bindings::State::InGame) {
+    if (gamesManager_.isThisClientInGame(clientId)) {
         gamesManager_.enqueueGameBinding(clientId, packet);
         return;
     } else {
@@ -224,15 +226,17 @@ void ClientManager::handlePacketMenu(const std::string &packet,
         handleMessage(jPack);
         break;
     case bindings::BindingType::JoinGame:
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.addPlayer(
             RequestJoinGame{clientId, bindings::JoinGame::from_json(jPack)},
             gamesManager_);
-        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        
         break;
     case bindings::BindingType::CreateGame:
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.createAGame(RequestCreateGame{
             clientId, bindings::CreateGame::from_json(jPack)});
-        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        
         break;
     case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
