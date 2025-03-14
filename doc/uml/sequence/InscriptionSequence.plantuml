@@ -2,28 +2,35 @@
 
 skinparam style strictuml
 actor User
+participant NetworkManager
 participant Controller
 participant ClientLink
 participant ClientManager
 participant Network
+participant AccountManager
 
+activate AccountManager
 activate Network
 activate ClientManager
 activate User
 User -> Controller : run()
 activate Controller
-Controller -> Network : connect()
+activate NetworkManager
+NetworkManager -> Network : connect()
 Network -> ClientLink : <<create>> 
 activate ClientLink
 ClientLink -> ClientManager : authPacketHandler(BindingType, data)
 ClientManager -> ClientManager : addClientInWaitingForAuth(ClientLink)
 
 User -> Controller : tryRegister(username, password)
-Controller -> ClientLink : send(data)
+Controller -> NetworkManager : send(data)
+NetworkManager -> ClientLink : send(data)
 ClientLink -> ClientManager : authPacketHandler(BindingType, data)
-ClientManager -> ClientManager : attemptCreateAccount(data)
+ClientManager -> AccountManager: attemptCreateAccount(data)
+AccountManager -> ClientManager : createAccount(username, password)
 ClientManager -> ClientLink : handleMessage(attemptCreateAccount)
-ClientLink -> Controller : writeSocket(attemptCreateAccount)
+ClientLink -> NetworkManager : writeSocket(attemptCreateAccount)
+NetworkManager -> Controller : packetHandler(attemptCreateAccount)
 Controller -> Controller : handlePacket(attemptCreateAccount)
 alt attemptCreateAccount == false
     Controller -> Controller : registrationState = Unregistered

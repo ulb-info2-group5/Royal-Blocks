@@ -20,6 +20,7 @@ User -> Menu : selectAGameOption
 Menu -> GameMenu : <<create>>
 deactivate Menu
 activate GameMenu
+
 alt User is creating a Game
     GameMenu -> GameMenu : renderOnlineGames()
     User -> GameMenu : selectGameMode
@@ -34,23 +35,30 @@ alt User is creating a Game
 else User is joining a Game
     GameMenu -> GameMenu : renderAllGames()
     User -> GameMenu : selectGameMode
-    alt GameMode != Endless
-        GameMenu -> GameMenu : joinFriendOrRandomScreen()
-        User -> GameMenu : makeChoice
+    GameMenu -> GameMenu : joinFriendOrRandomScreen()
+    User -> GameMenu : makeAChoice
         alt User choose to join a friend
             GameMenu -> GameMenu : handleChoice() 
-            GameMenu -> GameMenu : joinFriendScreen()
-            ' not finished
+
+            Controller -> GameMenu : getFriendsList() 
+            GameMenu -> GameMenu : joinFriendScreen() 
+            User -> GameMenu : selectFriend
+            GameMenu -> Controller : joinGame(gameMode, userID)
+            GameMenu -> GameMenu : waitingFriendScreen()
+            Controller -> NetworkManager : send(bindingJoinGame{GameMode, friendID})
+            NetworkManager -> Network : send(bindingJoinGame{GameMode, friendID})
         else User choose to join random screen
             GameMenu -> Controller : joinGame(GameMode, Null)
             Controller -> NetworkManager : send(bindingsJoinGame{GameMode, Null})
             NetworkManager -> Network : send(bindingsJoinGame{GameMode, Null})
-            Network -> NetworkManager : 
-        end
-    end
+        end 
 end 
+Network -> NetworkManager : send(gameState)
+NetworkManager -> Controller : handlerPacket(gameState)
+Controller -> Controller : gameState_  = gameState
 
 GameMenu -> GameDisplay : render()
 activate GameDisplay
 deactivate GameMenu
+Controller -> GameDisplay : getGameState()
 @enduml

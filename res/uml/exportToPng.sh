@@ -71,14 +71,14 @@ function exportFileUseCase()
 for dir in */; do 
   if [ "$dir" = "class/" ]; then
     for (( i = 0; i<${#classUMLDiag[@]}; i++ )); do
-      #exportFileClass ${classUMLDiag[$i]}
-	  echo "hello1"
+      exportFileClass ${classUMLDiag[$i]}
+	  #echo "hello1"
     done
 
   elif [ "$dir" = "sequence/" ]; then
     for (( i = 0; i<${#SeqUMLDiag[@]}; i++ )); do
       exportFileSeq ${SeqUMLDiag[$i]}
-      #echo "hello"
+     # echo "hello"
     done
 
   elif [ "$dir" = "usecase/" ]; then
