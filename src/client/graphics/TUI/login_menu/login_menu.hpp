@@ -12,8 +12,18 @@
 #include <ftxui/component/component.hpp>
 #include <string_view>
 
-#include "../../ILogin_Menu.hpp"
 #include "../input/login_input.hpp"
+
+enum class LoginResult {
+    SUCCESS,
+    EXIT,
+};
+
+enum class Login {
+    LOGGED,
+    EXIT,
+    NONE,
+};
 
 constexpr char LOGIN_INPUT_TITLE[] = "Login";
 constexpr char REGISTER_INPUT_TITLE[] = "Register";
@@ -31,7 +41,7 @@ class Controller; // Forward declaration
  * register
  *
  */
-class LoginMenu final : public ILogin_Menu {
+class LoginMenu final {
   private:
     /*
      * @brief The screen to use to render the components
@@ -57,9 +67,9 @@ class LoginMenu final : public ILogin_Menu {
 
     ftxui::Component displayWindow_;
 
-    void createButtons() override;
+    void createButtons();
 
-    void displayWindow() override;
+    void displayWindow();
 
   public:
     /*
@@ -82,7 +92,7 @@ class LoginMenu final : public ILogin_Menu {
      * @return LoginResult The result if login succeed or want to exit the
      * program
      */
-    LoginResult render() override;
+    LoginResult render();
 };
 
 #endif // LOGIN_MENU_HPP

@@ -1,8 +1,6 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../IGame.hpp"
-
 #include <ftxui/component/component.hpp>
 
 #include <string>
@@ -22,7 +20,21 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
-class GameDisplay final : public IGame {
+enum class Color {
+    Black,
+    White,
+    Grey,
+    DarkBlue,
+    LightBlue,
+    Purple,
+    Red,
+    Orange,
+    Pink,
+    Green,
+    Yellow
+};
+
+class GameDisplay final {
   private:
     ScreenManager &screenManager_;
 
@@ -43,40 +55,42 @@ class GameDisplay final : public IGame {
     ftxui::Component displayLeft_;
     ftxui::Component displayWindow_;
 
-    void drawPlayerInfo() override;
+    ftxui::Component gameOverComponent_;
 
-    void drawRoyalEffectsEnergy() override;
+    void drawPlayerInfo();
 
-    void displayLeftWindow() override;
+    void drawRoyalEffectsEnergy();
 
-    void drawPlayerBoard() override;
+    void displayLeftWindow();
 
-    void displayMiddleWindow() override;
+    void drawPlayerBoard();
 
-    void drawOpponentsBoard() override;
+    void displayMiddleWindow();
 
-    void displayOpponentBoardDuel() override;
+    void drawOpponentsBoard();
 
-    void displayOppponentsBoard() override;
+    void displayOpponentBoardDuel();
 
-    void displayMultiRightWindow() override;
+    void displayOppponentsBoard();
 
-    void drawEndlessMode() override;
+    void displayMultiRightWindow();
 
-    void drawMultiMode() override;
+    void drawEndlessMode();
 
-    void handleKeys() override;
+    void drawMultiMode();
 
-    void updateDisplay() override;
+    void handleKeys();
 
-    ftxui::Component drawGameOver() override;
+    void updateDisplay();
+
+    ftxui::Component drawGameOver();
 
   public:
     GameDisplay(ScreenManager &screenManager, Controller &controller);
 
     ~GameDisplay() = default;
 
-    void render() override;
+    void render();
 };
 
 #endif

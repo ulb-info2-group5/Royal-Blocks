@@ -12,18 +12,28 @@
 #include <ftxui/component/component.hpp>
 #include <string>
 
-#include "../../ILogin_Input.hpp"
-
 class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
+
+enum class LoginType {
+    LOGIN,
+    REGISTER,
+    NONE,
+};
+
+enum class LoginState {
+    SUBMIT,
+    BACK,
+    NONE,
+};
 
 /**
  * @brief LoginInput class to get the login input or register input from the
  * user
  *
  */
-class LoginInput final : public ILogin_Input {
+class LoginInput final {
   private:
     /*
      * @brief The screen to use to render the components
@@ -78,11 +88,11 @@ class LoginInput final : public ILogin_Input {
     ftxui::Component inputPassword_;
     ftxui::Component displayWindow_;
 
-    void createButtonBack() override;
+    void createButtonBack();
 
-    void createButtonSubmit() override;
+    void createButtonSubmit();
 
-    void displayWindow() override;
+    void displayWindow();
 
   public:
     /*
@@ -107,26 +117,26 @@ class LoginInput final : public ILogin_Input {
      *
      * @return LoginState The state of the login input
      */
-    LoginState render() override;
+    LoginState render();
 
     /*
      * @brief Add an instruction to show to the user
      *
      * @param string instruction the instruction to show
      */
-    void addInstruction(const std::string_view instruction) override;
+    void addInstruction(const std::string_view instruction);
 
     /*
      * @brief Add a message to show to the user
      *
      * @param string message the message to show
      */
-    void addMessage(const std::string_view message) override;
+    void addMessage(const std::string_view message);
 
     /*
      * @brief Clear the info of the user input (username and password)
      */
-    void clearInfo() override;
+    void clearInfo();
 };
 
 #endif // LOGIN_INPUT_HPP

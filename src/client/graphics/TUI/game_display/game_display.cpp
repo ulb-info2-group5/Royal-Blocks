@@ -3,7 +3,6 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "board/board.hpp"
-#include "../../color.hpp"
 #include "game_mode/game_mode.hpp"
 
 // TODO: this should defo go somewhere else
@@ -38,7 +37,6 @@ Color colorIdToColor(unsigned colorID) {
     default:
         throw std::runtime_error{"unknown color"};
     };
-
 }
 
 ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
@@ -106,7 +104,9 @@ void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
         return ftxui::vbox(
 
-                   {ftxui::text("Score : " + std::to_string(controller_.getSelfScore())) | ftxui::center,
+                   {ftxui::text("Score : "
+                                + std::to_string(controller_.getSelfScore()))
+                        | ftxui::center,
                     // TODO: use the actual nickname
                     ftxui::text(controller_.getSelfUsername()) | ftxui::center})
                | ftxui::borderDashed;
@@ -147,9 +147,10 @@ void GameDisplay::drawRoyalEffectsEnergy() {
 
 void GameDisplay::displayLeftWindow() {
     ftxui::Component menuDisplay = ftxui::Button(
-        std::string(STR_QUIT_GAME), [&] { 
+        std::string(STR_QUIT_GAME),
+        [&] {
             controller_.quitGame();
-            screenManager_.stopRender(); 
+            screenManager_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -436,17 +437,18 @@ void GameDisplay::updateDisplay() {
 }
 
 ftxui::Component GameDisplay::drawGameOver() {
-    ftxui::Component title = ftxui::Renderer([] {
-        return GAME_OVER_TITLE | ftxui::center;
-    });
+    ftxui::Component title =
+        ftxui::Renderer([] { return GAME_OVER_TITLE | ftxui::center; });
 
     ftxui::Component scoreText = ftxui::Renderer([&] {
-        return ftxui::text("Your score was: " + std::to_string(controller_.getSelfScore())) | ftxui::center;
+        return ftxui::text("Your score was: "
+                           + std::to_string(controller_.getSelfScore()))
+               | ftxui::center;
     });
 
-    ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
-        screenManager_.stopRender();
-    }, GlobalButtonStyle());
+    ftxui::Component button = ftxui::Button(
+        std::string(STR_RETURN_TO_MAIN_MENU),
+        [&] { screenManager_.stopRender(); }, GlobalButtonStyle());
 
     ftxui::Component container = ftxui::Container::Vertical({
         title,
@@ -459,7 +461,6 @@ ftxui::Component GameDisplay::drawGameOver() {
     return container;
 }
 
-
 // public methods
 
 void GameDisplay::render() {
@@ -469,7 +470,8 @@ void GameDisplay::render() {
         gameContainer->DetachAllChildren();
 
         if (controller_.noGame()) {
-            // It's game over so we change the displayWindow to the gameOverComponent to show the game over screen
+            // It's game over so we change the displayWindow to the
+            // gameOverComponent to show the game over screen
             gameContainer->Add(drawGameOver());
             return;
         }

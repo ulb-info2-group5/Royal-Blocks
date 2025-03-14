@@ -9,8 +9,6 @@
 #ifndef GAME_MENU_HPP
 #define GAME_MENU_HPP
 
-#include "../../IGame_Menu.hpp"
-
 #include <ftxui/component/component.hpp>
 
 #include "../game_display/game_display.hpp"
@@ -23,11 +21,24 @@ class ScreenManager; // Forward declaration
 
 enum class GameMode; // Forward declaration
 
+enum class JoinType {
+    FRIEND,
+    RANDOM,
+    BACK,
+    NONE,
+};
+
+enum class TypeGame {
+    CREATE_GAME,
+    JOIN_GAME,
+    NONE,
+};
+
 /**
  * @brief Game menu class to show and select the game party
  *
  */
-class GameMenu : public IGame_Menu {
+class GameMenu {
   private:
     ScreenManager &screenManager_;
     Controller &controller_;
@@ -54,42 +65,39 @@ class GameMenu : public IGame_Menu {
     ftxui::Component quitMenuButton_;
     /*
      * @brief Rend the all the game present in the game menu
-     *
-     * @return PlayMode the game mode selected
      */
-    void renderAllGames() override;
+    void renderAllGames();
 
     /*
      * @brief Rend the game menu with just the online games mods
-     * @return PlayMode the game mode selected
      */
-    void renderOnlineGames() override;
+    void renderOnlineGames();
 
     /*
      * @brief Screen to choose between joining a friend or a random game
      */
-    void joinFriendOrRandomScreen() override;
+    void joinFriendOrRandomScreen();
 
     /*
      * @brief Handle the choice of the user in the game menu
      */
-    void handleChoice() override;
+    void handleChoice();
 
     /*
      * @brief Screen when the user is joining a friend, a list of the online
      * friends is displayed and the user can select one
      */
-    void joinFriendScreen() override;
+    void joinFriendScreen();
 
     /*
      * @brief Screen when the is waiting for a random game
      */
-    void joinRandomScreen() override;
+    void joinRandomScreen();
 
     /*
      * @brief Screen when the user is waiting for the matchmaking
      */
-    void createGameScreen() override;
+    void createGameScreen();
 
     /*
      * @brief Make a button to add a friend
@@ -101,12 +109,12 @@ class GameMenu : public IGame_Menu {
      * @brief Screen when the user has choosen the friend and now waiting for
      * the start of the game
      */
-    void waitingFriendScreen() override;
+    void waitingFriendScreen();
 
     /*
      * @brief The screen to select the number of player for the game
      */
-    void selectPlayerCountScreen() override;
+    void selectPlayerCountScreen();
 
   public:
     /*
@@ -126,7 +134,7 @@ class GameMenu : public IGame_Menu {
      *
      * @param typeGame The type of the game to render
      */
-    void render(const TypeGame &typeGame) override;
+    void render(const TypeGame &typeGame);
 };
 
 #endif // GAME_MENU_HPP

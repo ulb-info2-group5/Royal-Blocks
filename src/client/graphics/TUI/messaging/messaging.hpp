@@ -2,7 +2,6 @@
 #define MESSAGING_HPP
 
 #include "../../../core/in_game/player_state/player_state_external.hpp"
-#include "../../IMessage.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <string>
@@ -12,7 +11,12 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
-class Messaging final : public IMessage {
+enum class MessagingState {
+    BACK,
+    NONE,
+};
+
+class Messaging final {
   private:
     /*
      * @brief The screen to use to render the components
@@ -50,15 +54,15 @@ class Messaging final : public IMessage {
     // just to simulate a user ID
     int userId = 5;
 
-    void createButtons() override;
+    void createButtons();
 
-    void drawInputUser() override;
+    void drawInputUser();
 
-    void drawMenu() override;
+    void drawMenu();
 
-    void drawDisplay() override;
+    void drawDisplay();
 
-    void drawWindow() override;
+    void drawWindow();
 
     std::optional<UserID> getSelectedFriendId();
 
@@ -80,7 +84,7 @@ class Messaging final : public IMessage {
     /*
      * @brief Render the messaging screen with all the components
      */
-    void render() override;
+    void render();
 };
 
 #endif

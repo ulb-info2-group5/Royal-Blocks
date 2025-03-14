@@ -9,8 +9,6 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
-#include "../../IMain_Menu.hpp"
-
 #include "../friends_menu/friends_menu.hpp"
 #include "../game_menu/game_menu.hpp"
 #include "../messaging/messaging.hpp"
@@ -22,11 +20,23 @@ class Controller; // Forward declaration
 
 class ScreenManager; // Forward declaration
 
+enum class MainMenuState {
+    CREATE_GAME,
+    JOIN_GAME,
+    SEND_MESSAGES_TO_FRIENDS,
+    LOOK_RANKING,
+    MANAGE_PROFILE,
+    MANAGE_FRIENDS_LIST,
+    EXIT,
+    BACK,
+    NONE,
+};
+
 /**
  * @brief Main menu of the game that will be displayed to the user
  *
  */
-class MainMenu final : public IMain_Menu {
+class MainMenu final {
   private:
     /*
      * @brief The screen to use to render the components
@@ -75,27 +85,27 @@ class MainMenu final : public IMain_Menu {
     /*
      * @brief Handle the choice of the user in the main menu
      */
-    void handleChoice() override;
+    void handleChoice();
 
-    void createMainMenuButtons() override;
+    void createMainMenuButtons();
 
-    void displayMainWindow() override;
+    void displayMainWindow();
 
-    void displayRankingWindow() override;
+    void displayRankingWindow();
 
-    void displayProfileManagerButton() override;
+    void displayProfileManagerButton();
 
-    void displayProfileManagerWindow() override;
+    void displayProfileManagerWindow();
 
     /*
      * @brief Render the ranking of the players of the Endless mode
      */
-    void renderRanking() override;
+    void renderRanking();
 
     /*
      * @brief Render the profile manager of the user
      */
-    void renderProfileManager() override;
+    void renderProfileManager();
 
   public:
     /*
@@ -115,7 +125,7 @@ class MainMenu final : public IMain_Menu {
     /*
      * @brief Render the main menu screen with all the components
      */
-    void render() override;
+    void render();
 };
 
 #endif // MAIN_MENU_HPP
