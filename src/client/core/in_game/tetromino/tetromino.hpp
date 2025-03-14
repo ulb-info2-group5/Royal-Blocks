@@ -1,7 +1,7 @@
 #ifndef CLIENT_TETROMINO_HPP
 #define CLIENT_TETROMINO_HPP
 
-#include "vec2/vec2.hpp"
+#include "../../../../common/tetris_lib/vec2/vec2.hpp"
 
 #include <vector>
 

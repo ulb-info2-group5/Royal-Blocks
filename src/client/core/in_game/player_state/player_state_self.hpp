@@ -9,6 +9,7 @@
 
 #include <deque>
 #include <optional>
+#include <variant>
 
 using EffectType = std::variant<BonusType, PenaltyType>;
 using EffectPrice = std::pair<EffectType, Energy>;

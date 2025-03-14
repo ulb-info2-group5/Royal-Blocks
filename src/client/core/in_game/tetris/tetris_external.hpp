@@ -1,7 +1,7 @@
 #ifndef CLIENT_TETRIS_EXTERNAL_HPP
 #define CLIENT_TETRIS_EXTERNAL_HPP
 
-#include "board/board.hpp"
+#include "../../../../common/tetris_lib/board/board.hpp"
 
 namespace client {
 

@@ -9,11 +9,10 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../../common/bindings/ranking.hpp"
+#include "../../../common/bindings/conversations.hpp"
+#include "../../../common/bindings/friends_list.hpp"
+#include "../../../common/bindings/ranking.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
-#include "../common/bindings/conversations.hpp"
-#include "../common/bindings/friends_list.hpp"
-#include "../common/bindings/ranking.hpp"
 #include "../in_game/game_state/game_state.hpp"
 #include "../network/network_manager.hpp"
 #include "core/in_game/player_state/player_state_external.hpp"
