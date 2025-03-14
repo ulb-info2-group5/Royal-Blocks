@@ -40,6 +40,7 @@ else User Is Joining A Game
         end
     else friendID not found in any GameCandidate
         MatchMaking -> MatchMaking : createNewGameCandidate(vector<GameCandidateWithGameMode>, RequestJoinGame)
+        MatchMaking -> GameCandidate : createAGame(RequestCreateGame)
     end
 end 
 

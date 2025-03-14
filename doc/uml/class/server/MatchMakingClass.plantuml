@@ -42,4 +42,6 @@ class RequestJoinGame {
 	+playerId : PlayerID
 	+bindGame : bindings::JoinGame
 }
+
+Matchmaking *-- "0..n" GameCandidate
 @enduml

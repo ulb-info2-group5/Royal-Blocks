@@ -87,10 +87,6 @@ ClientManager *-- "1" GamesManager
 
 ClientManager *-- "1" Matchmaking
 
-
-Matchmaking *-- "0..n" GameCandidate
-
-
 Network *-- "1" ClientManager
 
 DataBase o-- "1" AccountManager

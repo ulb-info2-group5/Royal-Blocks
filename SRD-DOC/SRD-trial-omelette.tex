@@ -93,7 +93,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
     \item \textbf{Speed Up} : Pénalité qui augmente la vitesse de chute des tetrominoes sur le plateau d'un adversaire.
     
-	 \item \textbf{Pseudo} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
+	 \item \textbf{Username} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
 	
 	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
 	
@@ -121,6 +121,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
         1.2 & Ernest Malysz / Jonas Schellekens / Rafaou Gajewicz & commencement diagrammes de classes & 26/02/2025 \\ \hline
         1.6 & Juliette Cornu & terminaison diagrammes de classes & 11/03/2025 \\ \hline
         1.7 & Juliette Cornu & avancement des diagrammes de séquence & 12/03/2025 \\ \hline 
+        1.8 & Juliette Cornu & rajout des descriptions pour les diagrammes de séquence et de classes & 13/03/2025 \\ \hline
         
         
         
@@ -781,6 +782,8 @@ Nous pouvons voir le ClientLink comme une méthode pour transmettre les paquets 
 
 \subsubsection{Le Matchmaking}
 
+La classe Matchmaking est une classe que possède le ClientManager. Elle est appelée quand le ClientManager reçoit des paquets concernant une demande de  création ou pour rejoindre une partie de jeu. Quand une demande de création de partie est dans le paquet, Matchmaking insère une nouvelle instance de GameCandidate dans un de ses attributs de gamesCandidate\textit{Mode de jeu}. Pour GameCandidate, cela représente une partie en attente qu'elle se lance selon un mode de jeu sélectionné par le premier utilisateur, un nombre maximum d'utilisateurs, le nombre d'utilisateurs en train d'attendre. Quand un nouveau utilisateur veut se rejoindre une possible partie en attente créé par un de ses amis ou aléatoirement, Matchmaking va chercher possiblement la partie en question et essayer de l'ajouter dans GameCandidate de cette dernière. Si le GameCandidate a atteint le quota de nombres dans la partie en attente, Matchmaking l'appelle dans une méthode privée pour commencer lancer la partie en attente. 
+
 \begin{figure}[H]
 	\centering
 	 \includegraphics[scale=0.2]{../res/uml/class/MatchMakingClass.png}
@@ -789,6 +792,8 @@ Nous pouvons voir le ClientLink comme une méthode pour transmettre les paquets 
 \end{figure}
 
 \subsubsection{GameServer}
+
+la classe GamesManager contient plusieurs maps pour permettre de trouver le gameID et le gameServer correspondant, de même pour le gameID et le thread et le gameID, le PlayerID et le gameID. GamesManager crée des instances de GameServer quand Matchmaking l'appelle selon un mode de jeu et une liste de PlayerID de la partie créée. Quand ClientManager reçoit un paquet pour le jeu avec un playerID, le paquet est envoyé à GamesManager et puis à GameServer avec enqueueBinding. GameServer le traite au tick du gameServer correspondant pour que le gameEngine puisse prendre en compte le paquet reçu du serveur. Quand toutes les demandes en attente durant la période de temps accordée, le GameServer envoie le GameState changéà clientManager. 
 
 \begin{figure}[H]
 	\centering
@@ -878,7 +883,9 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Création d'un compte}
 
-\begin{figure}[!h]
+Lors du lancement de l'application, si l'utilisateur n'a pas de compte, il commence la procèdure d'inscription. Le Controller va se connecter au réseau du serveur. Network va créer une nouvelle instance de ClientLink. Ce nouvel objet le notifie à ClientManager qui appelle ensuite une méthode interne à elle-même. Ensuite l'utilisateur va entrer un username et un mot de passe sur l'interface et validera l'action. Le controller enverra les données dans un paquet au ClientLink correspondant à l'utilisateur. ClientManager traite le paquet une fois signalé par ClientLink. La réponse au succès ou non de la nouvelle entrée dans la base de données est transmise de ClientManager à ClientLink qui écrira la réponse dans le socket. Le Controller traite la réponse et changera l'attribut nécessaire pour savoir le status de l'utilisateur.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
     \caption{Diagramme de séquence d'inscription}
@@ -887,7 +894,9 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Connexion}
 
-\begin{figure}[!h]
+Lors du lancement de l'application, si l'utilisateur possède déjà un compte, il commence la procédure d'authentification. Le Controller va se connecter au réseau du serveur. Network va créer une nouvelle instance de ClientLink. Ce nouvel objet le notifie à ClientManager qui appelle ensuite une méthode interne à elle-même. Ensuite l'utilisateur va entrer un username et un mot de passe sur l'interface et validera l'action. Le controller enverra les données dans un paquet au ClientLink correspondant à l'utilisateur. ClientManager traite le paquet une fois signalé par ClientLink. ClientManager envoie un message à la base de données pour vérifier si le compte existe et si le mot de passe est correct avec le compte associé. La réponse sera récupérée par ClientManager. Ce dernier envoie un paquet à écrire pour le ClientLink de l'utilisateur. Le Controller traite la réponse et changera l'attribut nécessaire pour savoir le status de l'utilisateur.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
     \caption{Diagramme de séquence de connexion}
@@ -896,7 +905,13 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Matchmaking côté serveur}
 
-\begin{figure}[!h]
+Quand l'utilisateur veut créer une partie, ClientLink reçoit un paquet correspondant à sa demande. Ce dernier est transmis à ClientManager avec l'userID du client. ClientManager traite la demande et va envoyer un message à Matchmaking pour créer une partie. Une instance de GameCandidate sera créer par Matchmaking en conséquent. 
+
+Quand l'utilisateur veut rejoindre une partie existante, ClientLink reçoit un paquet correspondant à sa demande. Ce dernier est transmis à ClientManager avec l'userID du client. ClientManager traite sa demande et va envoyer un message à Matchmaking. Il va essayer de trouver selon le mode de jeu et la demande ou non de la présence d'un autre userID spécifique. Si la partie est trouvée, Matchmaking va essayer de rajouter l'utilisateur dans l'instance de GameCandidate. Si cela n'est pas possible, MatchMaking créera alors une nouvelle instance de GameCandidate. 
+
+Puis quand le nombre de joueurs maximum dans la partie sera atteint, Matchmaking enverra un message à GamesManager pour initier une nouvelle instance de GameServer.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingServerSequence.png}
     \caption{Diagramme de séquence de Matchmaking côté serveur}
@@ -905,7 +920,9 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Matchmaking côté client}
 
-\begin{figure}[!h]
+
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingClientSequence.png}
     \caption{Diagramme de séquence de Matchmaking côté client}
@@ -914,7 +931,9 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Game côté serveur}
 
-\begin{figure}[!h]
+Au début d'une partie, GamesManager commencera une instance de GameServer avec le mode de jeu indiqué et les playerID des utilisateurs présents. Durant la partie, le joueur enverra des paquets de jeu à son ClientLink correspondant. Ensuite, le paquet est reçue dans ClientManager puis transmis à GamesManager qui rajoutera à la queue de paquets que le GameServer doit encore traitée. Le GameServer traite le paquet et l'incorpore dans son GameEngine. Une fois tous les paquets reçsu traités, le GameServer envera le GameState de la partie mis à jour à ClientManager. Puis il est passé à ClientLink pour être écrit dans le socket afin que l'utilisateur le reçoive. A la fin d'une partie, le GameServer le signalera à GamesManager puis se détruit.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/GameServerSequence.png}
     \caption{Diagramme de séquence du jeu côté serveur}
@@ -923,7 +942,9 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \subsection{Game côté client}
 
-\begin{figure}[!h]
+Au début d'une partie, l'objet GameDisplay est activé. Durant la partie, le joueur presse une touche de son clavier qui sera signalé à GameDisplay. Ce dernier enverra un message à Controller qui sera transformé en paquet et écrit dans le socket à NetworkManager. Le paquet sera reçu au serveur. Une fois le paquet traité, le serveur enverra à NetworkManager le nouveau gameState de la partie dans un paquet. Ce dernier sera traité dans le Controller qui forcera l'écran de l'utilisateur de se refaire.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{../res/uml/sequence/GameClientSequence.png}
     \caption{Diagramme de séquence du jeu côté client}

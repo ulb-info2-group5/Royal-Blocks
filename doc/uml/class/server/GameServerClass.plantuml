@@ -43,7 +43,7 @@ class GameServer {
 
 /' Aggregation relationships '/
 
-
+GamesManager *-- "0..n" GameServer
 
 
 
