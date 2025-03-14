@@ -1,13 +1,13 @@
-#include "game_display.hpp"
-
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../../../core/controller/controller.hpp"
+#include "graphics/interfaceConstants.hpp"
 
 // TODO: this should defo go somewhere else
 #include <ftxui/screen/pixel.hpp>
+#include <optional>
 #include <stdexcept>
-Color colorIdToColor(unsigned colorID) {
+Color colorIdToColor(unsigned colorID, Controller::SelfCellType selfCellType) {
     // TODO: add missing colorID's such as penalty lines
 
     switch (colorID) {
@@ -162,10 +162,13 @@ void GameDisplay::drawPlayerBoard() {
         for (uint32_t y = 0; y < HEIGHT; ++y) {
             for (uint32_t x = 0; x < WIDTH; ++x) {
 
-                pixel.background_color = getFTXUIColor(
-                    controller_.selfBoardGetColorIdAt(x, y)
-                        .transform([](auto id) { return colorIdToColor(id); })
-                        .value_or(Color::Black));
+                pixel.background_color =
+                    getFTXUIColor(controller_.selfCellInfoAt(x, y)
+                                      .transform([](const auto &cellInfo) {
+                                          return colorIdToColor(
+                                              cellInfo.first, cellInfo.second);
+                                      })
+                                      .value_or(Color::Black));
 
                 for (uint32_t dy = 0; dy < CELL_SIZE_PLAYER; ++dy) {
                     for (uint32_t dx = 0; dx < CELL_SIZE_PLAYER; ++dx) {
@@ -211,8 +214,10 @@ void GameDisplay::drawOpponentsBoard() {
 
                     pixel.background_color = getFTXUIColor(
                         controller_.opponentsBoardGetColorIdAt(index, x, y)
-                            .transform(
-                                [](auto id) { return colorIdToColor(id); })
+                            .transform([](auto id) {
+                                return colorIdToColor(
+                                    id, Controller::SelfCellType::Placed);
+                            })
                             .value_or(Color::Black));
 
                     for (uint32_t dy = 0; dy < CELL_SIZE_OPPONENT; ++dy) {
@@ -291,7 +296,10 @@ void GameDisplay::displayOpponentBoardDuel() {
 
                 pixel.background_color = getFTXUIColor(
                     controller_.opponentsBoardGetColorIdAt(0, x, y)
-                        .transform([](auto id) { return colorIdToColor(id); })
+                        .transform([](auto id) {
+                            return colorIdToColor(
+                                id, Controller::SelfCellType::Placed);
+                        })
                         .value_or(Color::Black));
 
                 for (uint32_t dy = 0; dy < CELL_SIZE_PLAYER;

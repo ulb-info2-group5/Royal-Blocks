@@ -246,9 +246,37 @@ GameMode Controller::getGameMode() const {
     return gameState_->gameMode;
 }
 
-std::optional<unsigned> Controller::selfBoardGetColorIdAt(int x, int y) const {
+std::optional<std::pair<unsigned, Controller::SelfCellType>>
+Controller::selfCellInfoAt(int x, int y) const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.tetris_.board_.get(x, y).getColorId();
+
+    auto getColorFromTetromino = [&](const client::Tetromino &tetromino,
+                                     Controller::SelfCellType type)
+        -> std::optional<std::pair<unsigned, Controller::SelfCellType>> {
+        return std::ranges::any_of(
+                   tetromino.body_,
+                   [&](const Vec2 &vec) {
+                       return tetromino.anchorPoint_ + vec == Vec2{x, y};
+                   })
+                   ? std::make_optional(std::pair{tetromino.colorId, type})
+                   : std::nullopt;
+    };
+
+    return gameState_->self.tetris_.board_.get(x, y)
+        .getColorId()
+        .transform([](unsigned colorId) {
+            return std::make_pair(colorId, Controller::SelfCellType::Placed);
+        })
+        .or_else([&] {
+            return getColorFromTetromino(
+                *gameState_->self.tetris_.activeTetromino_,
+                Controller::SelfCellType::Active);
+        })
+        .or_else([&] {
+            return getColorFromTetromino(
+                *gameState_->self.tetris_.previewTetromino_,
+                Controller::SelfCellType::Preview);
+        });
 }
 
 std::optional<unsigned>

@@ -10,6 +10,7 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include "../game_display/game_display.hpp"
 #include "graphics/IGame_Menu.hpp"
 
 // ### Constructor ###

@@ -47,6 +47,18 @@ class Controller {
         Failed,
     };
 
+    // TODO I know this name is bad so just to remember what it is until I
+    // change it:
+    //
+    // Returned by selfCellInfoAt.
+    // Tells us whether the cell at (x,y) is the part of the active or preview
+    // or a placed Tetromino.
+    enum class SelfCellType {
+        Active,
+        Preview,
+        Placed,
+    };
+
   private:
     boost::asio::io_context context_;
     std::thread ioThread_;
@@ -188,7 +200,8 @@ class Controller {
 
     GameMode getGameMode() const;
 
-    std::optional<unsigned> selfBoardGetColorIdAt(int x, int y) const;
+    std::optional<std::pair<unsigned, Controller::SelfCellType>>
+    selfCellInfoAt(int x, int y) const;
 
     std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
                                                        int x, int y) const;

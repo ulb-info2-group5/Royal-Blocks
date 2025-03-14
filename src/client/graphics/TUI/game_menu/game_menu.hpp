@@ -10,9 +10,10 @@
 #define GAME_MENU_HPP
 
 #include "../../IGame_Menu.hpp"
-#include "../game_display/game_display.hpp"
 
 #include <ftxui/component/component.hpp>
+
+#include "../game_display/game_display.hpp"
 
 using PlayerID = size_t;
 
