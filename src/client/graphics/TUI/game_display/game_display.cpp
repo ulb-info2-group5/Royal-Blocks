@@ -6,6 +6,7 @@
 #include "../../color.hpp"
 
 // TODO: this should defo go somewhere else
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
 #include <ftxui/screen/pixel.hpp>
 #include <optional>
@@ -88,7 +89,7 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
 // constructor
 
 GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller) {
+    : screenManager_(screenManager), controller_(controller), gameOverComponent_(drawGameOver()) {
     // initialise for preview
     // penaltyGauge_ = 0.5;
 
@@ -431,17 +432,28 @@ void GameDisplay::updateDisplay() {
     }
 }
 
+ftxui::Component GameDisplay::drawGameOver() {
+    ftxui::Component gameOverScreen = ftxui::Container::Vertical({
+        ftxui::Renderer([] {return GAME_OVER_TITLE | ftxui::border | ftxui::center;}),
+        ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] { screenManager_.stopRender(); }, GlobalButtonStyle()),
+    });
+    return gameOverScreen;
+}
+
+
 // public methods
 
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
     auto updateGameDisplay = [&] {
+        gameContainer->DetachAllChildren();
+
         if (controller_.noGame()) {
-            screenManager_.stopRender();
+            displayWindow_ = gameOverComponent_; // It's game over so we change the displayWindow to the gameOverComponent to show the game over screen
+            gameContainer->Add(displayWindow_);
             return;
         }
-        gameContainer->DetachAllChildren();
         updateDisplay();
         handleKeys();
         gameContainer->Add(displayWindow_);
@@ -460,5 +472,4 @@ void GameDisplay::render() {
                         });
 
     screenManager_.render(render);
-    std::cerr << "after game display" << std::endl;
 }

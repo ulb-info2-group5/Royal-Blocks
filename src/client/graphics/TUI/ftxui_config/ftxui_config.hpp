@@ -46,7 +46,8 @@ constexpr std::string_view
     STR_CONVERSATION_TITLE = " --- CONVERSATION --- ",
     STR_ADD_FRIEND_TITLE = "-- Add a friend --",
     STR_MANAGE_FRIENDS_REQUESTS = "Manage friends requests",
-    STR_NO_FRIEND_REQUEST = "You don't have any friend request";
+    STR_NO_FRIEND_REQUEST = "You don't have any friend request",
+    STR_RETURN_TO_MAIN_MENU = "Return to main menu";
 
 const ftxui::Element WELCOME_TITLE = ftxui::vbox({
     ftxui::text(
@@ -76,6 +77,16 @@ const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
     ftxui::text(R"( \_____/ \___/ \___/ \____|____/ \__  |\____)  |_|)"),
     ftxui::text(R"(                                (____/            )"),
 });
+
+const ftxui::Element GAME_OVER_TITLE = ftxui::vbox({
+    ftxui::text(R"(   _____                         ____                 )"),
+    ftxui::text(R"(  / ____|                       / __ \                )"),
+    ftxui::text(R"( | |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ )"),
+    ftxui::text(R"( | | |_ |/ _` | '_ ` _ \ / _ \ | |  | \ \ / / _ \ '__|)"),
+    ftxui::text(R"( | |__| | (_| | | | | | |  __/ | |__| |\ V /  __/ |   )"),
+    ftxui::text(R"(  \_____|\__,_|_| |_| |_|\___|  \____/  \_/ \___|_|   )"),
+});
+
 
 /*
  * @brief Global style for the buttons

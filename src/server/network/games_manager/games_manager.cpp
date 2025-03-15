@@ -55,15 +55,12 @@ void GamesManager::enqueueGameBinding(int clientId,
 }
 
 void GamesManager::callBackFinishGame(GameID gameId) {
-<<<<<<< HEAD
     if (gameSessions_[gameId]->getGameMode() == GameMode::Endless) {
         for (auto &user : gameSessions_[gameId]->getVectorPlayersId()) {
             int score = gameSessions_[gameId]->getPlayerScore(user);
             saveScoreCallback_(user, score);
         }
     }
-=======
->>>>>>> 67bc8c5 (correct manage of end game with client and server (back to main menu when the game is end))
     deleteGame(gameId);
 
 }

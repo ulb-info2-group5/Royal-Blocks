@@ -1,6 +1,8 @@
 #ifndef IGAME_HPP
 #define IGAME_HPP
 
+#include <ftxui/component/component.hpp>
+
 enum class PlayMode { CLASSIC, ROYAL, DUEL, ENDLESS, NONE };
 
 class IGame {
@@ -30,6 +32,8 @@ class IGame {
     virtual void handleKeys() = 0;
 
     virtual void updateDisplay() = 0;
+  
+    virtual ftxui::Component drawGameOver() = 0;
 
   public:
     virtual ~IGame() = default;

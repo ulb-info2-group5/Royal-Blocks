@@ -43,6 +43,8 @@ class GameDisplay final : public IGame {
     ftxui::Component displayLeft_;
     ftxui::Component displayWindow_;
 
+    ftxui::Component gameOverComponent_;
+
     void drawPlayerInfo() override;
 
     void drawRoyalEffectsEnergy() override;
@@ -68,6 +70,8 @@ class GameDisplay final : public IGame {
     void handleKeys() override;
 
     void updateDisplay() override;
+
+    ftxui::Component drawGameOver() override;
 
   public:
     GameDisplay(ScreenManager &screenManager, Controller &controller);
