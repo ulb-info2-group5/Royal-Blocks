@@ -261,6 +261,12 @@ class GameEngine {
      */
     static bool checkFeatureEnabled(GameMode gameMode,
                                     GameModeFeature gameModeFeature);
+
+    /**
+     * @brief Quits the game for the given player.
+     */
+    void quitGame(const UserID userID);                       
+
 };
 
 #endif // GAME_ENGINE_HPP

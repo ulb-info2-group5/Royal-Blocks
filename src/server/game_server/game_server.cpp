@@ -143,7 +143,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     }
 
     case bindings::BindingType::QuitGame:
-        // TODO
+        engine.quitGame(userId);
         break;
 
     default:

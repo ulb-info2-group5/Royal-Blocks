@@ -514,3 +514,11 @@ bool GameEngine::gameIsFinished() const {
         return getWinner() != std::nullopt;
     }
 }
+
+void GameEngine::quitGame(UserID userID) {
+    PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
+    if (!pPlayerState) {
+        return;
+    }
+    pPlayerState->setAlive(false);
+}
