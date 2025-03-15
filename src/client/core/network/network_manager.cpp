@@ -11,6 +11,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
 #include <iostream>
+#include <iterator>
 
 constexpr std::string_view PORT = "1234";
 constexpr std::string_view IP = "127.0.0.1";
@@ -63,7 +64,7 @@ void NetworkManager::receive() {
             if (!error) {
                 std::string message(
                     readBuf.substr(0, length - 1)); // Exclude '\n'
-                readBuf.clear();
+                readBuf.erase(0, length);
 
                 packetHandler_(message);
                 receive(); // Continue listening for messages
