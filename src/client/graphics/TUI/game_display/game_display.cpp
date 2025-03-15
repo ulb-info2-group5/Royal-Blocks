@@ -1,15 +1,17 @@
-#include "graphics/TUI/game_display/game_display.hpp"
+#include "game_display.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../../../core/controller/controller.hpp"
 #include "board/board.hpp"
-#include "graphics/color.hpp"
+#include "../../color.hpp"
 
 // TODO: this should defo go somewhere else
 #include <ftxui/screen/color.hpp>
 #include <ftxui/screen/pixel.hpp>
 #include <optional>
 #include <stdexcept>
+#include <string>
+
 Color colorIdToColor(unsigned colorID) {
     // TODO: add missing colorID's such as mini tetromino
     switch (colorID) {
