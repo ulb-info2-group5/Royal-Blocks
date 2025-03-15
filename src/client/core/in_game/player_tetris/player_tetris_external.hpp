@@ -3,16 +3,15 @@
 
 #include "../player_state/player_state_external.hpp"
 #include "../tetris/tetris_external.hpp"
+#include "abstract_player_tetris.hpp"
 
 namespace client {
 
-    struct PlayerTetrisExternal {
+    struct PlayerTetrisExternal : public AbstractPlayerTetris {
         PlayerStateExternal playerState;
         TetrisExternal tetris;
 
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client

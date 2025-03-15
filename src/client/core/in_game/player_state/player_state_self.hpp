@@ -4,6 +4,7 @@
 #include "../../../../common/types/types.hpp"
 #include "../effects/timed_bonus.hpp"
 #include "../effects/timed_penalty.hpp"
+#include "abstract_player_state.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -16,12 +17,7 @@ using EffectPrice = std::pair<EffectType, Energy>;
 
 namespace client {
 
-    struct PlayerStateSelf {
-        UserID userID;
-        Score score;
-        bool isAlive;
-        std::string username;
-
+    struct PlayerStateSelf : public AbstractPlayerState {
         std::optional<UserID> penaltyTarget;
 
         std::optional<Energy> energy;
@@ -33,13 +29,7 @@ namespace client {
         std::optional<client::TimedBonus> activeBonus;
         std::optional<client::TimedPenalty> activePenalty;
 
-        /* ------------------------------------------------
-         *          Serialization
-         * ------------------------------------------------*/
-
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client

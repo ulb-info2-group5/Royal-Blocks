@@ -2,50 +2,6 @@
 #include <deque>
 #include <optional>
 
-nlohmann::json client::PlayerStateSelf::serialize() const {
-    nlohmann::json j;
-    j["playerID"] = userID;
-    j["score"] = score;
-    j["isAlive"] = isAlive;
-    j["username"] = username;
-
-    if (penaltyTarget) {
-        j["penaltyTarget"] = *penaltyTarget;
-    } else {
-        j["penaltyTarget"] = nullptr;
-    }
-
-    if (energy) {
-        j["energy"] = *energy;
-    } else {
-        j["energy"] = nullptr;
-    }
-
-    if (stashedPenalties) {
-        nlohmann::json jstashedPenalties = nlohmann::json::array();
-        for (const auto &stashedPenalty : *stashedPenalties) {
-            jstashedPenalties.push_back(stashedPenalty);
-        }
-        j["stashedPenalties"] = jstashedPenalties;
-    } else {
-        j["stashedPenalties"] = nullptr;
-    }
-
-    if (activeBonus) {
-        j["activeBonus"] = activeBonus->serialize();
-    } else {
-        j["activeBonus"] = nullptr;
-    }
-
-    if (activePenalty) {
-        j["activePenalty"] = activePenalty->serialize();
-    } else {
-        j["activePenalty"] = nullptr;
-    }
-
-    return j;
-}
-
 void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
     j.at("playerID").get_to(userID);
     j.at("score").get_to(score);

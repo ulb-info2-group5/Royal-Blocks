@@ -1,16 +1,12 @@
 #ifndef CLIENT_TETRIS_EXTERNAL_HPP
 #define CLIENT_TETRIS_EXTERNAL_HPP
 
-#include "../../../../common/tetris_lib/board/board.hpp"
+#include "abstract_tetris.hpp"
 
 namespace client {
 
-    struct TetrisExternal {
-        Board board;
-
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+    struct TetrisExternal : public AbstractTetris {
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client

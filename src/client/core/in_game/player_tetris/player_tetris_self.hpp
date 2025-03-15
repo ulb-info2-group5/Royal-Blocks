@@ -3,14 +3,15 @@
 
 #include "../player_state/player_state_self.hpp"
 #include "../tetris/tetris_self.hpp"
+#include "abstract_player_tetris.hpp"
 
 namespace client {
 
-    struct PlayerTetrisSelf {
+    struct PlayerTetrisSelf : public AbstractPlayerTetris {
         PlayerStateSelf playerState;
         TetrisSelf tetris;
 
-        void deserialize(const nlohmann::json &j);
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client

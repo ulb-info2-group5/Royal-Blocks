@@ -4,22 +4,12 @@
 #include <nlohmann/json.hpp>
 
 #include "../../../../common/types/types.hpp"
+#include "abstract_player_state.hpp"
 
 namespace client {
 
-    struct PlayerStateExternal {
-        UserID userID;
-        Score score;
-        bool isAlive;
-        std::string username;
-
-        /* ------------------------------------------------
-         *          Serialization
-         * ------------------------------------------------*/
-
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+    struct PlayerStateExternal : public AbstractPlayerState {
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client
