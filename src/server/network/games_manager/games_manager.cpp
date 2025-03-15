@@ -16,12 +16,13 @@ void GamesManager::deleteGame(GameID gameId) {
     gameSessions_.erase(gameId);
 }
 
+
 // ======== public methode ========
 
 GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
-            SaveScoreCallback saveScoreCallback)
+            SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback)
         : updateGamePlayer_(updateGamePlayer),
-        saveScoreCallback_(saveScoreCallback) {}
+        saveScoreCallback_(saveScoreCallback), updateRankingCallback_(updateRankingCallback) {}
 
 
 void GamesManager::startGameServeur(GameMode gameMode,
@@ -59,6 +60,7 @@ void GamesManager::callBackFinishGame(GameID gameId) {
         for (auto &user : gameSessions_[gameId]->getVectorPlayersId()) {
             int score = gameSessions_[gameId]->getPlayerScore(user);
             saveScoreCallback_(user, score);
+            updateRankingCallback_();
         }
     }
     deleteGame(gameId);

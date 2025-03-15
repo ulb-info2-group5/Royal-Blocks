@@ -125,6 +125,13 @@ class AccountManager {
      * @return Username of the user
      */
     std::string getUsername(const int userId) const;
+
+    /*
+     * @brief Get the ranking of the users for the endless mode
+     *
+     * @return Vector of pairs containing the username and the score
+     */
+    std::vector<std::pair<std::string, size_t>> getRanking() const;
 };
 
 #endif // ACCOUNT_MANAGER_HPP

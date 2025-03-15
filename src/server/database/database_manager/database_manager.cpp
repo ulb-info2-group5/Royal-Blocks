@@ -144,9 +144,9 @@ bool DatabaseManager::executeSqlRecoveryString(
 // ### Getters ###
 sqlite3 *DatabaseManager::getDatabase() const { return db_; }
 
-std::vector<std::pair<std::string, int>> DatabaseManager::getRanking() const {
+std::vector<std::pair<std::string, size_t>> DatabaseManager::getRanking() const {
     // Prepare the SQL statement
-    std::vector<std::pair<std::string, int>> ranking;
+    std::vector<std::pair<std::string, size_t>> ranking;
     std::string sql = "SELECT username, score FROM users ORDER BY score DESC";
     sqlite3_stmt *stmt;
 
@@ -156,7 +156,7 @@ std::vector<std::pair<std::string, int>> DatabaseManager::getRanking() const {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             std::string username =
                 reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-            int score = sqlite3_column_int(stmt, 1);
+            size_t score = sqlite3_column_int(stmt, 1);
 
             ranking.push_back({username, score});
         }

@@ -14,6 +14,8 @@
 // TODO : rename to sendGameState
 using UpdateGamePlayer = std::function<void(UserID, nlohmann::json)>;
 using SaveScoreCallback = std::function<void(UserID, int)>;
+using UpdateRankingCallback = std::function<void()>;
+
 
 class GamesManager {
 
@@ -24,12 +26,13 @@ class GamesManager {
 
     UpdateGamePlayer updateGamePlayer_;
     SaveScoreCallback saveScoreCallback_;
+    UpdateRankingCallback updateRankingCallback_;
     GameID nextGameId = 1;
 
     void deleteGame(GameID gameId);
 
   public:
-  GamesManager(UpdateGamePlayer updateGamePlayer, SaveScoreCallback saveScoreCallback);
+  GamesManager(UpdateGamePlayer updateGamePlayer, SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);
 
     void enqueueGameBinding(int clientId, const std::string &strBindings);
     void startGameServeur(GameMode gameMode, std::vector<Player> players);

@@ -159,3 +159,7 @@ std::string AccountManager::getUsername(const int userId) const {
     dbManager_->executeSqlRecoveryString(sql, {userId}, username);
     return username;
 }
+
+std::vector<std::pair<std::string, size_t>> AccountManager::getRanking() const {
+    return dbManager_->getRanking();
+}

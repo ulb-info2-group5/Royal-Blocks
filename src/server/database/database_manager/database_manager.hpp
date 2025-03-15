@@ -97,7 +97,7 @@ class DatabaseManager {
      *
      * @return a vector of pairs containing the username and score of each user
      */
-    std::vector<std::pair<std::string, int>> getRanking() const;
+    std::vector<std::pair<std::string, size_t>> getRanking() const;
 
     /*
      * @brief Find the user in the table of database

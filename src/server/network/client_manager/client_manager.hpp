@@ -133,6 +133,12 @@ class ClientManager {
 
     void removeConnection(const UserID &userID);
 
+    /*
+    * @brief : send the ranking to all the connected clients
+    */
+    void sendUpdatedRankingToClients() const;
+
+
   public:
     ClientManager(DataBase database);
     ~ClientManager() = default;
@@ -177,4 +183,6 @@ class ClientManager {
     void updateGamePlayer(UserID userIds, nlohmann::json gameState);
 
     bool isClientConnected(UserID userId);
+
+
 };

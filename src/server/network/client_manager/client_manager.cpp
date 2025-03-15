@@ -1,5 +1,6 @@
 
 #include "client_manager.hpp"
+#include "../../../common/bindings/ranking.hpp"
 
 using json = nlohmann::json;
 
@@ -143,6 +144,15 @@ void ClientManager::removeConnection(const UserID &userID) {
     connectedClients_.erase(userID);
 }
 
+void ClientManager::sendUpdatedRankingToClients() const {
+    std::vector<std::pair<std::string, size_t>> ranking = database_.accountManager->getRanking();
+    nlohmann::json rankingJson = bindings::Ranking{ranking}.to_json();
+    for (auto &client : connectedClients_) {
+        client.second->sendPackage(rankingJson);
+    }
+}
+
+
 // ---public ---
 ClientManager::ClientManager(DataBase database)
     : database_(database),
@@ -152,6 +162,9 @@ ClientManager::ClientManager(DataBase database)
         },
         [this](UserID user, int score) {
             database_.accountManager->updateScore(user, score);
+        },
+        [this]() {
+            sendUpdatedRankingToClients();
         }),
     matchmaking_(
         [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }) {}
@@ -162,6 +175,11 @@ ClientManager::ClientManager(DataBase database)
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                                     nlohmann::json clientData) {
     addConnection(clientLink, clientData.at("nickname").get<std::string>());
+
+    std::vector<std::pair<std::string, size_t>> ranking = database_.accountManager->getRanking();
+    nlohmann::json rankingJson = bindings::Ranking{ranking}.to_json();
+    clientLink->sendPackage(rankingJson);
+
 }
 void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID) {
     std::cout << "== game find callback succcess ===" << std::endl;
