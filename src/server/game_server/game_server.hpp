@@ -79,6 +79,10 @@ class GameServer {
     boost::asio::io_context &getIoContext();
 
     std::vector<UserID> getVectorPlayersId();
+
+    GameMode getGameMode() const;
+
+    int getPlayerScore(const UserID userId) const;
 };
 
 #endif // GAME_SERVER_HPP

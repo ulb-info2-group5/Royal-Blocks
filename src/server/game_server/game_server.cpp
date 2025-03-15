@@ -187,3 +187,9 @@ std::vector<UserID> GameServer::getVectorPlayersId() {
     }
     return userIds;
 }
+
+GameMode GameServer::getGameMode() const { return pGameState_->getGameMode(); }
+
+int GameServer::getPlayerScore(const UserID userId) const {
+    return pGameState_->getPlayerState(userId)->getScore();
+}

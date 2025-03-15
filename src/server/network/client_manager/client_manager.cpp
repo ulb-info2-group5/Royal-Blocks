@@ -146,13 +146,16 @@ void ClientManager::removeConnection(const UserID &userID) {
 // ---public ---
 ClientManager::ClientManager(DataBase database)
     : database_(database),
-    gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
-        updateGamePlayer(playerId, gameState);
-    }), 
-    matchmaking_([this](std::vector<UserID> userIDs){
-          gameFindCallback(userIDs);
-    })
-    {}
+    gamesManager_(
+        [this](PlayerID playerId, nlohmann::json gameState) {
+            updateGamePlayer(playerId, gameState);
+        },
+        [this](UserID user, int score) {
+            database_.accountManager->updateScore(user, score);
+        }),
+    matchmaking_(
+        [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }) {}
+
 
 
 

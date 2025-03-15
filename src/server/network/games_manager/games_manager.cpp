@@ -18,8 +18,10 @@ void GamesManager::deleteGame(GameID gameId) {
 
 // ======== public methode ========
 
-GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer)
-        : updateGamePlayer_(updateGamePlayer) {}
+GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
+            SaveScoreCallback saveScoreCallback)
+        : updateGamePlayer_(updateGamePlayer),
+        saveScoreCallback_(saveScoreCallback) {}
 
 
 void GamesManager::startGameServeur(GameMode gameMode,
@@ -53,6 +55,12 @@ void GamesManager::enqueueGameBinding(int clientId,
 }
 
 void GamesManager::callBackFinishGame(GameID gameId) {
+    if (gameSessions_[gameId]->getGameMode() == GameMode::Endless) {
+        for (auto &user : gameSessions_[gameId]->getVectorPlayersId()) {
+            int score = gameSessions_[gameId]->getPlayerScore(user);
+            saveScoreCallback_(user, score);
+        }
+    }
     deleteGame(gameId);
 
 }

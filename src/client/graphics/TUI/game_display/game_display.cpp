@@ -34,6 +34,7 @@ Color colorIdToColor(unsigned colorID) {
     default:
         throw std::runtime_error{"unknown color"};
     };
+
 }
 
 ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =

@@ -13,6 +13,7 @@
 
 // TODO : rename to sendGameState
 using UpdateGamePlayer = std::function<void(UserID, nlohmann::json)>;
+using SaveScoreCallback = std::function<void(UserID, int)>;
 
 class GamesManager {
 
@@ -22,13 +23,15 @@ class GamesManager {
     std::unordered_map<GameID, std::thread> gamethreads_;
 
     UpdateGamePlayer updateGamePlayer_;
+    SaveScoreCallback saveScoreCallback_;
     GameID nextGameId = 1;
 
     void deleteGame(GameID gameId);
 
   public:
-  GamesManager(UpdateGamePlayer updateGamePlayer);
-void enqueueGameBinding(int clientId, const std::string &strBindings);
+  GamesManager(UpdateGamePlayer updateGamePlayer, SaveScoreCallback saveScoreCallback);
+
+    void enqueueGameBinding(int clientId, const std::string &strBindings);
     void startGameServeur(GameMode gameMode, std::vector<Player> players);
     void callBackFinishGame(GameID gameId);
     bool isThisClientInGame(UserID userId);
