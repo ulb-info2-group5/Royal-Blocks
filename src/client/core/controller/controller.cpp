@@ -33,6 +33,7 @@
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/conversations.hpp"
+#include "../../../common/bindings/in_game/game_over.hpp"
 
 #include <mutex>
 #include <optional>

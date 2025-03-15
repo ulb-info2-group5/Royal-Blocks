@@ -159,7 +159,6 @@ ClientManager::ClientManager(DataBase database)
 
 
 
-
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                                     nlohmann::json clientData) {
     addConnection(clientLink, clientData.at("nickname").get<std::string>());
