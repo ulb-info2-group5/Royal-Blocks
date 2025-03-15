@@ -404,10 +404,10 @@ void GameDisplay::handleKeys() {
                 keyPressed = "ArrowLeft";
             } else if (event == ftxui::Event::ArrowRight) {
                 keyPressed = "ArrowRight";
-            } else if (event == ftxui::Event::ArrowUp) {
-                keyPressed = "ArrowUp";
             } else if (event == ftxui::Event::ArrowDown) {
                 keyPressed = "ArrowDown";
+            } else if (event == ftxui::Event::Character(' ')) {
+                keyPressed = "Space";
             } else if (!event.character().empty()) {
                 keyPressed = event.input();
             }

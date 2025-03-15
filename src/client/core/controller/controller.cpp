@@ -221,7 +221,7 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     } else if (pressedKey == "ArrowRight") {
         networkManager_.send(
             bindings::MoveActive{TetrominoMove::Right}.to_json().dump());
-    } else if (pressedKey == "ArrowUp") {
+    } else if (pressedKey == "Space") {
         networkManager_.send(bindings::BigDrop{}.to_json().dump());
     } else if (pressedKey == "ArrowDown") {
         networkManager_.send(
