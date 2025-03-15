@@ -122,9 +122,14 @@
          return false;
      }
      if (isPendingFriendRequestExist(user1Id, user2Id)){
-         std::cerr << "error pendingFriendRequest dos not exist" << std::endl;
+         std::cerr << "error pendingFriendRequest already exists" << std::endl;
          return false;
      }
+     if (checkFriendshipExists(user1Id, user2Id)){
+        std::cerr << "error friendship exist " << std::endl;
+        return false;
+     }
+
      return dbManager_->executeSqlChangeData(
          "INSERT INTO pendingFriendRequests (user1, user2) VALUES (?, ?)",
          {user1Id, user2Id});

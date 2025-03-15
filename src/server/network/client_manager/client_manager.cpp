@@ -96,6 +96,7 @@ bool ClientLink::shouldItBeDeletedFromTheList() {
 
 void ClientLink::sendPackage(nlohmann::json gameState) {
     buffer_ = gameState.dump() + "\n";
+    std::cout << "package send : " << gameState.dump() << std::endl;
     writeSocket(buffer_);
 }
 
@@ -167,7 +168,9 @@ ClientManager::ClientManager(DataBase database)
             sendUpdatedRankingToClients();
         }),
     matchmaking_(
-        [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }) {}
+        [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }), 
+    socialService_(database.friendsManager, database.messagesManager)
+     {}
 
 
 
@@ -231,26 +234,28 @@ void ClientManager::handlePacket(const std::string &packet,
         handlePacketMenu(std::move(packet), std::move(clientId));
     }
 }
+
+
+
+
 void ClientManager::handlePacketMenu(const std::string &packet,
                                      const UserID &clientId) {
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " << std::endl;
 
     bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
+
+
     switch (type) {
     case bindings::BindingType::Message:
         handleMessage(jPack);
         break;
+
     case bindings::BindingType::JoinGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
-        matchmaking_.addPlayer(
-            RequestJoinGame{Player{
-                                clientId,
-                                database_.accountManager->getUsername(clientId),
-                            },
-                            bindings::JoinGame::from_json(jPack)},
-            gamesManager_);
-
+        matchmaking_.addPlayer(RequestJoinGame{
+            Player{clientId,database_.accountManager->getUsername(clientId),},
+            bindings::JoinGame::from_json(jPack)},gamesManager_);
         break;
     case bindings::BindingType::CreateGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
@@ -261,10 +266,17 @@ void ClientManager::handlePacketMenu(const std::string &packet,
         break;
     case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
+        break;
+    case bindings::BindingType::FriendRequest:
+        socialService_.handleFriendRequest(clientId, bindings::FriendRequest::from_json(jPack),database_.accountManager);
+        break;
     default:
 
         break;
     }
+   
+    bindings::PendingFriendRequests pendingRequests =  socialService_.getPendignsFriendRequests(clientId, [this](UserID userID)->bindings::User { return getUser(userID) ; }); 
+    connectedClients_[clientId]->sendPackage(pendingRequests.to_json());
 }
 
 void ClientManager::addClientInWaitingForAuth(
@@ -309,4 +321,16 @@ void ClientManager::updateGamePlayer(UserID userIds, nlohmann::json gameState) {
 
 bool ClientManager::isClientConnected(UserID userID) {
     return connectedClients_.find(userID) != connectedClients_.end();
+}
+bindings::State ClientManager::getUserState(UserID userID){
+    if (isClientConnected(userID)){
+        return connectedClients_[userID]->getUserState();
+    }else {
+        return bindings::State::Offline;
+    }
+}
+
+
+bindings::User ClientManager::getUser(UserID userID){
+    return bindings::User{userID, database_.accountManager->getUsername(userID), getUserState(userID)};
 }

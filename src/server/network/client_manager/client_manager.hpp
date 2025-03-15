@@ -5,20 +5,14 @@
 #include <string>
 #include <unordered_map>
 
-// include database
-#include "../../database/account_manager/account_manager.hpp"
-#include "../../database/database_manager/database_manager.hpp"
-#include "../../database/friends_manager/friends_manager.hpp"
-#include "../../database/messages_manager/messages_manager.hpp"
+#include "../social_service/social_service.hpp"
 
 #include "../../../common/bindings/authentication.hpp"
 #include "../../../common/bindings/authentication_response.hpp"
-#include "../../../common/bindings/binding_type.hpp"
-#include "../../../common/bindings/message.hpp"
+
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
-#include "../../../common/bindings/user_state.hpp"
-#include "../../../common/bindings/user.hpp"
+
 #include "../../server_bindings/remove_client.hpp"
 
 
@@ -115,6 +109,8 @@ class ClientManager {
 
     GamesManager gamesManager_;
     Matchmaking matchmaking_;
+    SocialService socialService_;
+
 
     // contains client who are not yet authenticated
     std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
@@ -183,6 +179,10 @@ class ClientManager {
     void updateGamePlayer(UserID userIds, nlohmann::json gameState);
 
     bool isClientConnected(UserID userId);
+    
+    bindings::State getUserState(UserID userID);
+
+    bindings::User getUser(UserID userID);
 
 
 };
