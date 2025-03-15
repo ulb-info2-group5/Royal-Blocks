@@ -2,6 +2,7 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../../../core/controller/controller.hpp"
+#include "board/board.hpp"
 #include "graphics/color.hpp"
 
 // TODO: this should defo go somewhere else
@@ -10,8 +11,7 @@
 #include <optional>
 #include <stdexcept>
 Color colorIdToColor(unsigned colorID) {
-    // TODO: add missing colorID's such as penalty lines
-
+    // TODO: add missing colorID's such as mini tetromino
     switch (colorID) {
     case 0:
         return Color::Red;
@@ -27,6 +27,8 @@ Color colorIdToColor(unsigned colorID) {
         return Color::DarkBlue;
     case 6:
         return Color::Purple;
+    case PENALTY_BLOCKS_COLOR_ID:
+        return Color::Grey;
     default:
         throw std::runtime_error{"unknown color"};
     };

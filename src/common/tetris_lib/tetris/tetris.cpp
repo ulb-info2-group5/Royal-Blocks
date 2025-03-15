@@ -173,7 +173,8 @@ void Tetris::eventHoldNextTetromino() {
 }
 
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
-    bool hasLost = board_.receivePenaltyLines(numPenalties);
+    bool hasLost = !board_.receivePenaltyLines(numPenalties);
+    updatePreviewTetromino();
     if (hasLost) {
         for (auto &tetrisObserver : tetrisObservers_) {
             tetrisObserver->notifyLost();

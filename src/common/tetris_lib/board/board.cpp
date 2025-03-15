@@ -59,12 +59,12 @@ void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
     // The empty block in the row
     size_t emptyIndex = distrib(gen);
 
-    // Fill all the GridCell with PenaltyBlocksColor except one (empty state)
+    // Fill all the GridCell with penaltyBlocksColor except one (empty state)
     for (size_t xCol = 0; xCol < getWidth(); xCol++) {
         if (xCol == emptyIndex) {
             row.at(xCol).setEmpty();
         } else {
-            row.at(xCol).setColorId(PenaltyBlocksColor);
+            row.at(xCol).setColorId(PENALTY_BLOCKS_COLOR_ID);
         }
     }
 }

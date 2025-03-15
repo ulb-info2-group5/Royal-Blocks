@@ -256,6 +256,7 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
     pPlayerState->increaseScore(earnedPoints);
 
+    // TODO: remove code duplication with bigDrop
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
         pPlayerState->getPenaltyTarget().and_then([&](UserID targetID) {
             if (checkAlive(targetID) && numClearedRows >= 2) {
@@ -377,6 +378,19 @@ void GameEngine::bigDrop(UserID userID) {
     size_t numClearedRows = pGameState_->getTetris(userID)->eventBigDrop();
     Score earnedPoints = calculatePointsClearedRows(numClearedRows);
     pPlayerState->increaseScore(earnedPoints);
+
+    // TODO: remove code duplication with tick
+    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
+        pPlayerState->getPenaltyTarget().and_then([&](UserID targetID) {
+            if (checkAlive(targetID) && numClearedRows >= 2) {
+                // For n (>= 2) rows cleared by the player, his target
+                // receives n-1 penalty rows.
+                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
+            }
+
+            return std::optional<UserID>{};
+        });
+    }
 
     if (checkFeatureEnabled(GameModeFeature::Effects)) {
         Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);

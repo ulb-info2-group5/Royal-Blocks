@@ -10,7 +10,7 @@
 
 class BoardTest;
 
-constexpr int PenaltyBlocksColor =
+constexpr int PENALTY_BLOCKS_COLOR_ID =
     static_cast<int>(TetrominoShape::NumTetrominoShape);
 
 /**

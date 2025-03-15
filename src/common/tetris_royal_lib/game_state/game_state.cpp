@@ -12,7 +12,12 @@
 GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
     : gameMode_{gameMode} {
 
-    for (PlayerState &playerState : playerStates) {
+    for (size_t i = 0; i < playerStates.size(); i++) {
+        PlayerState &playerState = playerStates.at(i);
+        size_t numPlayers = playerStates.size();
+
+        playerState.setPenaltyTarget(
+            playerStates.at((i + 1) % numPlayers).getUserID());
         playerState.toggleEffects(GameEngine::checkFeatureEnabled(
             gameMode, GameEngine::GameModeFeature::Effects));
         playerToTetris_.emplace_back(
