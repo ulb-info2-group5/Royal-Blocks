@@ -31,7 +31,8 @@
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
-#include "../../../common/bindings/in_game/game_over.hpp"
+#include "../../../common/bindings/friends_list.hpp"
+#include "../../../common/bindings/conversations.hpp"
 
 #include <mutex>
 #include <optional>

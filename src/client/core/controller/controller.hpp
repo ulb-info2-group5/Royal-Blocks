@@ -9,17 +9,14 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../../../common/bindings/conversations.hpp"
-#include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/ranking.hpp"
+#include "../../../common/bindings/conversation.hpp"
 #include "../../../common/tetris_royal_lib//game_mode/game_mode.hpp"
-#include "../../../common/tetris_royal_lib/effect/bonus/bonus_type.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../in_game/game_state/game_state.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
-#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
