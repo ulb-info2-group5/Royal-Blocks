@@ -431,6 +431,10 @@ void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
     auto updateGameDisplay = [&] {
+        if (controller_.noGame()) {
+            screenManager_.stopRender();
+            return;
+        }
         gameContainer->DetachAllChildren();
         updateDisplay();
         handleKeys();
@@ -450,4 +454,5 @@ void GameDisplay::render() {
                         });
 
     screenManager_.render(render);
+    std::cerr << "after game display" << std::endl;
 }

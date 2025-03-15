@@ -1,6 +1,7 @@
 #include "screen_manager.hpp"
 
 #include "ftxui_config/ftxui_config.hpp"
+#include <ftxui/component/component_base.hpp>
 
 // ### Public methods ###
 ScreenManager::ScreenManager(Controller &controller)
@@ -31,8 +32,6 @@ void ScreenManager::stopRender() { screen_.ExitLoopClosure()(); }
 void ScreenManager::forceRefresh() { screen_.PostEvent(ftxui::Event::Custom); }
 
 void ScreenManager::simulateTab() { screen_.PostEvent(ftxui::Event::Tab); }
-
-void ScreenManager::updateScreen() {}
 
 // ### Private methods ###
 

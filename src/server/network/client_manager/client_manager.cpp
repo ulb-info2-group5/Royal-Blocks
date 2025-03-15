@@ -146,11 +146,16 @@ void ClientManager::removeConnection(const UserID &userID) {
 // ---public ---
 ClientManager::ClientManager(DataBase database)
     : database_(database),
-      gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
-          updateGameStates(playerId, gameState);
-      }),
-      matchmaking_(
-          [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }) {}
+    gamesManager_([this](PlayerID playerId, nlohmann::json gameState) {
+        updateGamePlayer(playerId, gameState);
+    }), 
+    matchmaking_([this](std::vector<UserID> userIDs){
+          gameFindCallback(userIDs);
+    })
+    {}
+
+
+
 
 void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                                     nlohmann::json clientData) {
@@ -275,7 +280,10 @@ bool ClientManager::checkCredentials(nlohmann::json data) {
     return true;
 }
 
-void ClientManager::updateGameStates(UserID userIds, nlohmann::json gameState) {
+void ClientManager::updateGamePlayer(UserID userIds, nlohmann::json gameState) {
+    if (gameState.at("type").get<bindings::BindingType>() == bindings::BindingType::GameOver){
+        connectedClients_[userIds]->setUserState(bindings::State::Menu);
+    } 
     connectedClients_[userIds]->sendPackage(gameState);
 }
 

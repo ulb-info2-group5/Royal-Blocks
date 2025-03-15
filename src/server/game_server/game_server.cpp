@@ -42,7 +42,7 @@ void GameServer::onTimerTick() {
 // ----------------------------------------------------------------------------
 
 GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
-                       UpdateGameStates updateGameStates, GameID id,
+                       UpdateGamePlayer updateGamePlayer, GameID id,
                        CallBackFinishGame callBackFinishGame)
     : context_{},
       tickTimer_{context_, boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS}},
@@ -58,7 +58,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
                   });
               return playerStates;
           }())},
-      engine{pGameState_}, gameId_{id}, updateGameStates_{updateGameStates},
+          engine{pGameState_}, updateGamePlayer_{updateGamePlayer}, gameId_{id},
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
@@ -170,7 +170,7 @@ void GameServer::run() {
 
 void GameServer::sendGameStates() {
     for (auto player : pGameState_->getPlayerToTetris()) {
-        updateGameStates_(player.pPlayerState->getUserID(),
+        updateGamePlayer_(player.pPlayerState->getUserID(),
                           bindings::GameStateMessage::serializeForPlayer(
                               *pGameState_, player.pPlayerState->getUserID()));
     };

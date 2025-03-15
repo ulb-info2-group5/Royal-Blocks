@@ -31,6 +31,7 @@
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
+#include "../../../common/bindings/in_game/game_over.hpp"
 
 #include <mutex>
 #include <optional>
@@ -79,6 +80,11 @@ void Controller::handlePacket(const std::string &pack) {
 
     case bindings::BindingType::Ranking: {
         ranking_ = bindings::Ranking::from_json(j).ranking;
+        break;
+    }
+
+    case bindings::BindingType::GameOver: {
+        gameState_ = std::nullopt;
         break;
     }
 
@@ -319,4 +325,12 @@ size_t Controller::getNumOpponents() const {
 bool Controller::gameHasStarted() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_.has_value();
+}
+
+bool Controller::noGame() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    if (gameState_ == std::nullopt) {
+        return true;
+    };
+    return false;
 }

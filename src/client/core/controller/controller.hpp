@@ -210,6 +210,8 @@ class Controller {
     size_t getNumOpponents() const;
 
     bool gameHasStarted() const;
+
+    bool noGame() const;
 };
 
 #endif // CONTROLLER_HPP

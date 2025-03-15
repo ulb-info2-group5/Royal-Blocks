@@ -2,15 +2,25 @@
 
 // ======== private methode ========
 void GamesManager::deleteGame(GameID gameId) {
-
-    // TODO : update clientTOGame_ , gameThreads and gameSessions
-    // to avoid storing the finished games
+    for (auto user : gameSessions_[gameId]->getVectorPlayersId()) {
+        updateGamePlayer_(user, bindings::GameOver{}.to_json());
+        clientToGame_.erase(user);
+    }
+    if (gamethreads_[gameId].joinable()) {
+        if (std::this_thread::get_id() == gamethreads_[gameId].get_id()) {
+            gamethreads_[gameId].detach();
+        } else {
+            gamethreads_[gameId].join();
+        }
+    }
+    gameSessions_.erase(gameId);
 }
 
 // ======== public methode ========
 
-GamesManager::GamesManager(UpdateGameStates updateGameStates)
-    : updateGameStates_(updateGameStates) {}
+GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer)
+        : updateGamePlayer_(updateGamePlayer) {}
+
 
 void GamesManager::startGameServeur(GameMode gameMode,
                                     std::vector<Player> players) {
@@ -19,7 +29,7 @@ void GamesManager::startGameServeur(GameMode gameMode,
         clientToGame_[player.userID] = nextGameId;
     }
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
-        gameMode, std::move(players), updateGameStates_, nextGameId,
+        gameMode, std::move(players), updateGamePlayer_, nextGameId,
         [this](GameID gameId) { callBackFinishGame(gameId); });
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] =
@@ -43,9 +53,8 @@ void GamesManager::enqueueGameBinding(int clientId,
 }
 
 void GamesManager::callBackFinishGame(GameID gameId) {
-
-    // TODO :  for all clients who participated -> send the game score
     deleteGame(gameId);
+
 }
 
 bool GamesManager::isThisClientInGame(UserID userId) {

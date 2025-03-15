@@ -96,11 +96,6 @@ class ScreenManager {
      * @brief Simulate the tab key press
      */
     void simulateTab();
-
-    /*
-     * @brief Update the screen
-     */
-    void updateScreen();
 };
 
 #endif // SCREEN_MANAGER_HPP

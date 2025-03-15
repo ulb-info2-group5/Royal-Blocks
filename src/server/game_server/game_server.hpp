@@ -9,6 +9,7 @@
 #include "../../common/bindings/in_game/move_active.hpp"
 #include "../../common/bindings/in_game/rotate_active.hpp"
 #include "../../common/bindings/in_game/select_target.hpp"
+#include "../../common/bindings/in_game/game_over.hpp"
 
 #include "game_engine/game_engine.hpp"
 #include "game_state/game_state.hpp"
@@ -18,7 +19,7 @@
 
 using GameID = size_t;
 
-using UpdateGameStates = std::function<void(UserID, nlohmann::json)>;
+using UpdateGamePlayer = std::function<void(UserID, nlohmann::json)>;
 using CallBackFinishGame = std::function<void(GameID)>;
 
 struct Player {
@@ -35,7 +36,7 @@ class GameServer {
     GameEngine engine;
     GameID gameId_;
 
-    UpdateGameStates updateGameStates_;
+    UpdateGamePlayer updateGamePlayer_;
     CallBackFinishGame callBackFinishGame_;
 
     /**
@@ -49,8 +50,8 @@ class GameServer {
      * @brief Constructor.
      */
     GameServer(GameMode gameMode, std::vector<Player> &&players,
-               UpdateGameStates updateGameState, GameID id,
-               CallBackFinishGame callBackFinishGame);
+              UpdateGamePlayer updateGamePlayer, GameID id,
+              CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;

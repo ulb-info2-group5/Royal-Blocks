@@ -34,6 +34,7 @@ namespace bindings {
         MoveActive,
         RotateActive,
         SelectTarget,
+        GameOver,
 
         // intern to server
         RemoveClient,
