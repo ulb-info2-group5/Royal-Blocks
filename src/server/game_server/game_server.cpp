@@ -58,7 +58,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
                   });
               return playerStates;
           }())},
-          engine{pGameState_}, updateGamePlayer_{updateGamePlayer}, gameId_{id},
+      engine{pGameState_}, gameId_{id}, updateGamePlayer_{updateGamePlayer},
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
