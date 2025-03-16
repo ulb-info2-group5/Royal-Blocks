@@ -21,7 +21,6 @@
 #include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/in_game/big_drop.hpp"
 #include "../../../common/bindings/in_game/empty_penalty_stash.hpp"
-#include "../../../common/bindings/in_game/game_over.hpp"
 #include "../../../common/bindings/in_game/game_state_client.hpp"
 #include "../../../common/bindings/in_game/hold_next_tetromino.hpp"
 #include "../../../common/bindings/in_game/move_active.hpp"
@@ -29,6 +28,7 @@
 #include "../../../common/bindings/in_game/rotate_active.hpp"
 #include "../../../common/bindings/join_game.hpp"
 #include "../../../common/bindings/message.hpp"
+#include "../../../common/bindings/pending_friend_requests.hpp"
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
@@ -72,6 +72,12 @@ void Controller::handlePacket(const std::string_view pack) {
     case bindings::BindingType::Conversations: {
         conversationsById_ =
             bindings::Conversations::from_json(j).conversationsById;
+        break;
+    }
+
+    case bindings::BindingType::PendingFriendRequests: {
+        pendingFriendRequests_ =
+            bindings::PendingFriendRequests::from_json(j).requests;
         break;
     }
 
@@ -162,6 +168,11 @@ void Controller::changeProfile(const std::string &username,
 const std::vector<bindings::User> &Controller::getFriendsList() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return friendsList_;
+}
+
+std::vector<bindings::User> Controller::getPendingFriendRequests() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return pendingFriendRequests_;
 }
 
 void Controller::sendFriendRequest(const std::string &username) {

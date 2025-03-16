@@ -70,6 +70,7 @@ class Controller {
     std::vector<bindings::User> friendsList_;
     std::unordered_map<UserID, NameConversation> conversationsById_;
     std::vector<std::pair<std::string, Score>> ranking_;
+    std::vector<bindings::User> pendingFriendRequests_;
 
     /*
      * @brief The network manager to manage the connection with the server
@@ -147,6 +148,8 @@ class Controller {
      * @brief Get the friends list of the user
      */
     const std::vector<bindings::User> &getFriendsList() const;
+
+    std::vector<bindings::User> getPendingFriendRequests() const;
 
     /*
      * @brief Add a friend to the friends list of the user
