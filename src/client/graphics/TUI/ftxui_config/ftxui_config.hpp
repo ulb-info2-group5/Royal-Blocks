@@ -79,12 +79,12 @@ const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
 });
 
 const ftxui::Element GAME_OVER_TITLE = ftxui::vbox({
-    ftxui::text(R"(   _____                         ____                 )"),
-    ftxui::text(R"(  / ____|                       / __ \                )"),
-    ftxui::text(R"( | |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ )"),
-    ftxui::text(R"( | | |_ |/ _` | '_ ` _ \ / _ \ | |  | \ \ / / _ \ '__|)"),
-    ftxui::text(R"( | |__| | (_| | | | | | |  __/ | |__| |\ V /  __/ |   )"),
-    ftxui::text(R"(  \_____|\__,_|_| |_| |_|\___|  \____/  \_/ \___|_|   )"),
+    ftxui::text(R"(   _____                         ____                  )"),
+    ftxui::text(R"(  / ____|                       / __ \                 )"),
+    ftxui::text(R"( | |  __  __ _ _ __ ___   ___  | |  | |__   __ __   __ )"),
+    ftxui::text(R"( | | |_ |/ _` | '_ ` _ \ / _ \ | |  | |\ \ / / _ \ |__|)"),
+    ftxui::text(R"( | |__| | (_| | | | | | |  __/ | |__| | \ V /  __/ |   )"),
+    ftxui::text(R"(  \_____|\__,_|_| |_| |_|\___|  \____/   \_/ \___|_|   )"),
 });
 
 

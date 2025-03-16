@@ -43,8 +43,6 @@ class GameDisplay final : public IGame {
     ftxui::Component displayLeft_;
     ftxui::Component displayWindow_;
 
-    ftxui::Component gameOverComponent_;
-
     void drawPlayerInfo() override;
 
     void drawRoyalEffectsEnergy() override;
