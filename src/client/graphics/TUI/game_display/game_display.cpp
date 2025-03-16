@@ -93,11 +93,6 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
 
 GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
     : mainTui_(mainTui), controller_(controller) {
-    // initialise for preview
-    // penaltyGauge_ = 0.5;
-
-    effects_ = {"bonus0", "bonus1", "bonus2", "bonus3", "bonus4",
-                "bonus5", "bonus6", "bonus7", "bonus8"};
 }
 
 // protected methods
@@ -439,8 +434,28 @@ void GameDisplay::updateDisplay() {
 }
 
 ftxui::Component GameDisplay::drawGameOver() {
-    ftxui::Component title =
-        ftxui::Renderer([] { return GAME_OVER_TITLE | ftxui::center; });
+    ftxui::Component title = ftxui::Renderer([] {
+        return GAME_OVER_TITLE | ftxui::center;
+    });
+
+    ftxui::Component scoreText = ftxui::Renderer([&] {
+        return ftxui::text("Your score was: " + std::to_string(controller_.getSelfScore())) | ftxui::center;
+    });
+
+    ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
+        screenManager_.stopRender();
+    }, GlobalButtonStyle());
+
+    ftxui::Component container = ftxui::Container::Vertical({
+        title,
+        ftxui::Renderer([] { return ftxui::separator(); }),
+        scoreText,
+        ftxui::Renderer([] { return ftxui::separator(); }),
+        button,
+    });
+
+    return container;
+}
 
     ftxui::Component scoreText = ftxui::Renderer([&] {
         return ftxui::text("Your score was: "
@@ -472,8 +487,12 @@ void GameDisplay::render() {
         gameContainer->DetachAllChildren();
 
         if (controller_.noGame()) {
+<<<<<<< HEAD
             // It's game over so we change the displayWindow to the
             // gameOverComponent to show the game over screen
+=======
+            // It's game over so we change the displayWindow to the gameOverComponent to show the game over screen
+>>>>>>> 57747da (add score on the gameover screen)
             gameContainer->Add(drawGameOver());
             return;
         }
