@@ -15,10 +15,13 @@
 #include "../../../common/bindings/authentication_response.hpp"
 #include "../../../common/bindings/change_password.hpp"
 #include "../../../common/bindings/change_username.hpp"
+#include "../../../common/bindings/conversations.hpp"
 #include "../../../common/bindings/create_game.hpp"
 #include "../../../common/bindings/friend_request.hpp"
+#include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/in_game/big_drop.hpp"
 #include "../../../common/bindings/in_game/empty_penalty_stash.hpp"
+#include "../../../common/bindings/in_game/game_over.hpp"
 #include "../../../common/bindings/in_game/game_state_client.hpp"
 #include "../../../common/bindings/in_game/hold_next_tetromino.hpp"
 #include "../../../common/bindings/in_game/move_active.hpp"
@@ -31,9 +34,6 @@
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
-#include "../../../common/bindings/friends_list.hpp"
-#include "../../../common/bindings/conversations.hpp"
-#include "../../../common/bindings/in_game/game_over.hpp"
 
 #include <mutex>
 #include <optional>
@@ -43,7 +43,7 @@
 
 // ### Private methods ###
 
-void Controller::handlePacket(const std::string &pack) {
+void Controller::handlePacket(const std::string_view pack) {
     nlohmann::json j = nlohmann::json::parse(pack);
 
     std::lock_guard<std::mutex> guard(mutex_);
@@ -105,7 +105,7 @@ Controller::Controller()
       gameState_(std::nullopt),
       networkManager_{
           context_,
-          [this](const std::string &packet) { handlePacket(packet); }},
+          [this](const std::string_view packet) { handlePacket(packet); }},
       screenManager_{*this} {};
 
 Controller::RegistrationState Controller::getRegistrationState() const {

@@ -11,7 +11,6 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
 #include <iostream>
-#include <iterator>
 
 constexpr std::string_view PORT = "1234";
 constexpr std::string_view IP = "127.0.0.1";
@@ -20,7 +19,7 @@ constexpr std::string_view IP = "127.0.0.1";
 
 NetworkManager::NetworkManager(
     boost::asio::io_context &context,
-    std::function<void(const std::string &)> packetHandler)
+    std::function<void(const std::string_view)> packetHandler)
     : context_{context}, socket_(context), packetHandler_{packetHandler} {}
 
 bool NetworkManager::connect() {
@@ -62,11 +61,10 @@ void NetworkManager::receive() {
         socket_, boost::asio::dynamic_buffer(readBuf), '\n',
         [this](boost::system::error_code error, std::size_t length) {
             if (!error) {
-                std::string message(
-                    readBuf.substr(0, length - 1)); // Exclude '\n'
-                readBuf.erase(0, length);
 
-                packetHandler_(message);
+                std::string_view packetView{readBuf.data(), length - 1};
+                packetHandler_(packetView);
+                readBuf.erase(0, length);
                 receive(); // Continue listening for messages
             } else {
                 std::cerr << "Receive error: " << error.message() << std::endl;

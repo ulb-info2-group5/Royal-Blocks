@@ -9,8 +9,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../../../common/bindings/ranking.hpp"
 #include "../../../common/bindings/conversation.hpp"
+#include "../../../common/bindings/ranking.hpp"
 #include "../../../common/tetris_royal_lib//game_mode/game_mode.hpp"
 #include "../../graphics/TUI/screen_manager.hpp"
 #include "../in_game/game_state/game_state.hpp"
@@ -78,7 +78,7 @@ class Controller {
     /**
      * @brief Handles the received packet
      */
-    void handlePacket(const std::string &pack);
+    void handlePacket(const std::string_view pack);
 
   public:
     /*

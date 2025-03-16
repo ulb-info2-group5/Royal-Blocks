@@ -29,7 +29,7 @@ class NetworkManager {
     /*
      * @brief Handles the packets received by the client
      */
-    std::function<void(const std::string &)> packetHandler_;
+    std::function<void(const std::string_view)> packetHandler_;
 
     /*
      * @brief Function to write and send messages to the server
@@ -46,7 +46,7 @@ class NetworkManager {
      * @brief Construct a new Network Manager object
      */
     NetworkManager(boost::asio::io_context &context,
-                   std::function<void(const std::string &)> packetHandler);
+                   std::function<void(const std::string_view)> packetHandler);
 
     /*
      * @brief Destroy the Network Manager object
