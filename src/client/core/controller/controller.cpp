@@ -19,6 +19,7 @@
 #include "../../../common/bindings/create_game.hpp"
 #include "../../../common/bindings/friend_request.hpp"
 #include "../../../common/bindings/friends_list.hpp"
+#include "../../../common/bindings/handle_friend_request.hpp"
 #include "../../../common/bindings/in_game/big_drop.hpp"
 #include "../../../common/bindings/in_game/empty_penalty_stash.hpp"
 #include "../../../common/bindings/in_game/game_state_client.hpp"
@@ -318,6 +319,20 @@ Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
     return gameState_->externals.at(opponentIdx)
         .tetris.board.get(x, y)
         .getColorId();
+}
+
+void Controller::acceptFriendRequest(UserID userId) {
+    networkManager_.send(bindings::HandleFriendRequest{
+        userId, bindings::HandleFriendRequest::Action::Accept}
+                             .to_json()
+                             .dump());
+}
+
+void Controller::declineFriendRequest(UserID userId) {
+    networkManager_.send(bindings::HandleFriendRequest{
+        userId, bindings::HandleFriendRequest::Action::Decline}
+                             .to_json()
+                             .dump());
 }
 
 std::string Controller::getSelfUsername() const {

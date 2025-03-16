@@ -193,6 +193,10 @@ class Controller {
 
     void handleKeypress(const std::string &pressedKey);
 
+    void acceptFriendRequest(UserID userId);
+
+    void declineFriendRequest(UserID userId);
+
     size_t getBoardHeight();
 
     size_t getBoardWidth();
