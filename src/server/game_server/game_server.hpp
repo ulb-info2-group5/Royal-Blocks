@@ -1,18 +1,9 @@
 #ifndef GAME_SERVER_HPP
 #define GAME_SERVER_HPP
 
-#include "../../common/bindings/in_game/big_drop.hpp"
-#include "../../common/bindings/in_game/buy_bonus.hpp"
-#include "../../common/bindings/in_game/buy_penalty.hpp"
-#include "../../common/bindings/in_game/empty_penalty_stash.hpp"
-#include "../../common/bindings/in_game/hold_next_tetromino.hpp"
-#include "../../common/bindings/in_game/move_active.hpp"
-#include "../../common/bindings/in_game/rotate_active.hpp"
 #include "../../common/bindings/in_game/select_target.hpp"
-#include "../../common/bindings/in_game/game_over.hpp"
 
 #include "game_engine/game_engine.hpp"
-#include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
 #include <boost/asio.hpp>
@@ -50,8 +41,8 @@ class GameServer {
      * @brief Constructor.
      */
     GameServer(GameMode gameMode, std::vector<Player> &&players,
-              UpdateGamePlayer updateGamePlayer, GameID id,
-              CallBackFinishGame callBackFinishGame);
+               UpdateGamePlayer updateGamePlayer, GameID id,
+               CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
     GameServer &operator=(const GameServer &) = delete;

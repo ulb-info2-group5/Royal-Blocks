@@ -1,4 +1,5 @@
 #include "games_manager.hpp"
+#include "../../common/bindings/in_game/game_over.hpp"
 
 // ======== private methode ========
 void GamesManager::deleteGame(GameID gameId) {
@@ -16,19 +17,20 @@ void GamesManager::deleteGame(GameID gameId) {
     gameSessions_.erase(gameId);
 }
 
-
 // ======== public methode ========
 
 GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
-            SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback)
-        : updateGamePlayer_(updateGamePlayer),
-        saveScoreCallback_(saveScoreCallback), updateRankingCallback_(updateRankingCallback) {}
-
+                           SaveScoreCallback saveScoreCallback,
+                           UpdateRankingCallback updateRankingCallback)
+    : updateGamePlayer_(updateGamePlayer),
+      saveScoreCallback_(saveScoreCallback),
+      updateRankingCallback_(updateRankingCallback) {}
 
 void GamesManager::startGameServeur(GameMode gameMode,
                                     std::vector<Player> players) {
     for (Player player : players) {
-        std::cout << " id : " << player.userID << "name :" << player.username << std::endl;
+        std::cout << " id : " << player.userID << "name :" << player.username
+                  << std::endl;
         clientToGame_[player.userID] = nextGameId;
     }
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
@@ -64,7 +66,6 @@ void GamesManager::callBackFinishGame(GameID gameId) {
         }
     }
     deleteGame(gameId);
-
 }
 
 bool GamesManager::isThisClientInGame(UserID userId) {

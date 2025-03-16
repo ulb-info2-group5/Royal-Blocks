@@ -1,5 +1,9 @@
 #include "game_server.hpp"
+#include "../../common/bindings/in_game/buy_bonus.hpp"
+#include "../../common/bindings/in_game/buy_penalty.hpp"
 #include "../../common/bindings/in_game/game_state_server.hpp"
+#include "../../common/bindings/in_game/move_active.hpp"
+#include "../../common/bindings/in_game/rotate_active.hpp"
 #include "game_engine/game_engine.hpp"
 #include "game_mode/game_mode.hpp"
 #include "game_state/game_state.hpp"
@@ -8,7 +12,6 @@
 #include <iostream>
 #include <memory>
 #include <ostream>
-#include <ranges>
 #include <vector>
 
 constexpr size_t SECONDS_BETWEEN_TICKS = 1;
