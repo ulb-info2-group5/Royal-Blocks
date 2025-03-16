@@ -127,7 +127,7 @@ class Tetris {
      *
      * @param tetrominoMove The direction to move the Tetromino.
      */
-    void eventTryMoveActive(TetrominoMove tetrominoMove);
+    size_t eventTryMoveActive(TetrominoMove tetrominoMove);
 
     /**
      * @brief Rotates the active Tetromino if possible.

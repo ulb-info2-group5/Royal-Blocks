@@ -127,14 +127,26 @@ size_t Tetris::eventBigDrop() {
     return numClearedRows;
 }
 
-void Tetris::eventTryMoveActive(TetrominoMove tetrominoMove) {
-    activeTetromino_->move(tetrominoMove);
+size_t Tetris::eventTryMoveActive(TetrominoMove tetrominoMove) {
+    size_t numClearedRows = 0;
 
-    if (!board_.checkInGrid(*activeTetromino_)) {
-        activeTetromino_->move(tetrominoMove, true);
+    if (tetrominoMove == TetrominoMove::Down
+        && !checkCanDrop(*activeTetromino_)) {
+        placeActive();
+        numClearedRows = board_.update().getNumClearedRows();
+
+        fetchNewTetromino();
+    } else {
+        activeTetromino_->move(tetrominoMove);
+
+        if (!board_.checkInGrid(*activeTetromino_)) {
+            activeTetromino_->move(tetrominoMove, true);
+        }
     }
 
     updatePreviewTetromino();
+
+    return numClearedRows;
 }
 
 void Tetris::eventTryRotateActive(bool rotateClockwise) {
