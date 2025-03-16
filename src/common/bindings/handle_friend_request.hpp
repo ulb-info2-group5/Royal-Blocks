@@ -10,14 +10,14 @@ namespace bindings {
     struct HandleFriendRequest {
         enum class Action { Accept, Decline };
 
-        User user;
+        UserID userId;
         Action action;
 
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::HandleFriendRequest},
                                   {"data",
                                    {
-                                       {"user", user.to_json()},
+                                       {"user", userId},
                                        {"action", action},
                                    }}};
         }
@@ -29,7 +29,7 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return HandleFriendRequest{
-                User::from_json(data.at("user")),
+                data.at("userId").get<UserID>(),
                 data.at("action").get<Action>(),
             };
         }

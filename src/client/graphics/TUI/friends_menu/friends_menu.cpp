@@ -143,6 +143,7 @@ void FriendsMenu::manageFriendlistScreen(
             if (manageOrRequest == ManageOrRequestFriend::MANAGE) {
                 controller_.removeFriend(friendUser.userID);
             } else {
+                controller_.acceptFriendRequest(friendUser.userID);
                 // TODO: with controller to accept or decline friend request
             }
             mainTui_.stopRender();
@@ -218,9 +219,11 @@ void FriendsMenu::FriendRequestScreen() {
 
     auto updateFriendsList = [&] {
         friendsContainer->DetachAllChildren();
+
         // TODO: get the list of friends from the controller
         const std::vector<bindings::User> &friendsList =
-            controller_.getFriendsList();
+            controller_.getPendingFriendRequests();
+
         std::vector<ftxui::Component> friendsButtons =
             displayFriendButtons(friendsList, ManageOrRequestFriend::REQUEST);
         for (const ftxui::Component &friendButton : friendsButtons) {
