@@ -130,8 +130,7 @@ bool ClientManager::attemptCreateAccount(nlohmann::json data) {
 
 void ClientManager::disconnectClient(const UserID &userID) {
     if (!isClientConnected(userID)) {
-        std::cout << "***** the client has already been disconnected  (id : ) "
-                  << userID << std::endl;
+        std::cout << "the client has already been disconnected id : "<< userID << std::endl;
     } else {
 
         connectedClients_[userID]->setUserState(bindings::State::Offline);
@@ -169,7 +168,9 @@ ClientManager::ClientManager(DataBase database)
         }),
     matchmaking_(
         [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }), 
-    socialService_(database.friendsManager, database.messagesManager)
+
+    socialService_(database.friendsManager, database.messagesManager, 
+        [this](UserID userID)->bindings::User { return getUser(userID) ; })
      {}
 
 
@@ -247,10 +248,6 @@ void ClientManager::handlePacketMenu(const std::string &packet,
 
 
     switch (type) {
-    case bindings::BindingType::Message:
-        handleMessage(jPack);
-        break;
-
     case bindings::BindingType::JoinGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
         matchmaking_.addPlayer(RequestJoinGame{
@@ -262,21 +259,30 @@ void ClientManager::handlePacketMenu(const std::string &packet,
         matchmaking_.createAGame(RequestCreateGame{
             Player{clientId, database_.accountManager->getUsername(clientId)},
             bindings::CreateGame::from_json(jPack)});
-
-        break;
-    case bindings::BindingType::RemoveClient:
-        removeConnection(clientId);
         break;
     case bindings::BindingType::FriendRequest:
         socialService_.handleFriendRequest(clientId, bindings::FriendRequest::from_json(jPack),database_.accountManager);
+        break;
+    case bindings::BindingType::Message:
+        socialService_.handleMessages(clientId, bindings::Message::from_json(jPack));
+        break;
+    case bindings::BindingType::HandleFriendRequest:
+        socialService_.handleHandleFriendRequest(clientId, bindings::HandleFriendRequest::from_json(jPack));
+        break;
+    case bindings::BindingType::RemoveFriend:
+        socialService_.handleRemoveFriend(clientId, bindings::RemoveFriend::from_json(jPack));
+        break;
+    case bindings::BindingType::RemoveClient:
+        removeConnection(clientId);
         break;
     default:
 
         break;
     }
    
-    bindings::PendingFriendRequests pendingRequests =  socialService_.getPendignsFriendRequests(clientId, [this](UserID userID)->bindings::User { return getUser(userID) ; }); 
+    bindings::PendingFriendRequests pendingRequests =  socialService_.getPendignsFriendRequests(clientId); 
     connectedClients_[clientId]->sendPackage(pendingRequests.to_json());
+    socialService_.getFriendsList(clientId);
 }
 
 void ClientManager::addClientInWaitingForAuth(

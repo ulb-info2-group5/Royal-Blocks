@@ -6,6 +6,8 @@
 #ifndef MESSAGE_MANAGER_HPP
 #define MESSAGE_MANAGER_HPP
 
+#include "../../common/bindings/conversation.hpp"
+
 #include "../database_manager/database_manager.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -25,7 +27,7 @@ struct Message {
     }
 };
 
-struct Discution {
+struct Discussion {
     int idUser1;
     int idUser2;
     std::vector<Message> messages;
@@ -37,8 +39,8 @@ struct Discution {
         return nlohmann::json{
             {"idUser1", idUser1}, {"idUser2", idUser2}, {"messages", jsonsms}};
     }
-    static Discution from_json(const nlohmann::json &j) {
-        Discution d;
+    static Discussion from_json(const nlohmann::json &j) {
+        Discussion d;
         d.idUser1 = j.at("idUser1").get<int>();
         d.idUser2 = j.at("idUser2").get<int>();
 
@@ -69,8 +71,7 @@ class MessagesManager {
      * @param filePath : the path of the file which will be created
      * @return true if there has been no error
      */
-    bool createDiscussionFile(const std::string &filePath,
-                              Discution discussion);
+    bool createDiscussionFile(const std::string &filePath);
 
     /*
      *@brief add and create a new discussion between two users
@@ -125,7 +126,7 @@ class MessagesManager {
      * @param content the content of the messages
      *
      **/
-    void sendMessage(const int &senderId, const int &recieverId,
+    void addMessage(const int &senderId, const int &recieverId,
                      const std::string &content);
 
     void writeMessage(const std::string &pathfile, const Message &message);
@@ -142,7 +143,7 @@ class MessagesManager {
      *
      * @return vector of all messages between user1 and user2
      */
-    Discution getDiscussion(const int &idUser1, const int &idUser2);
+    bindings::Conversation getDiscussion(const int &idUser1, const int &idUser2);
 
     /*
      * @brief finds all users who have a discussion with the user : idUser
@@ -151,6 +152,9 @@ class MessagesManager {
      * @return vector of all users who have a discussion with idUser
      */
     std::vector<int> getAllUser(const int &idUser);
+
+    std::vector<bindings::Conversation> getAllDiscusions(const int & idUser);
+
 
     friend MessagesManagerTest;
 };

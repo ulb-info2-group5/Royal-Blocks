@@ -20,21 +20,25 @@
 #include "../../../common/bindings/binding_type.hpp"
 #include "../../../common/bindings/message.hpp"
 #include "../../../common/bindings/conversation.hpp"
+#include "../../../common/bindings/conversations.hpp"
 #include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/friend_request.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/bindings/handle_friend_request.hpp"
 #include "../../../common/bindings/pending_friend_requests.hpp"
 
-using GetUser = std::function<bindings::User(UserID)>;
+
 
 
 class SocialService{
+    using GetUser = std::function<bindings::User(UserID)>;
     private:
         std::shared_ptr<FriendsManager> friendsManager_;
         std::shared_ptr<MessagesManager> messagesManager_;
+        GetUser getUser_;
+
     public:
-        SocialService(std::shared_ptr<FriendsManager>& friendsManager, std::shared_ptr<MessagesManager> &messagesManager );
+        SocialService(std::shared_ptr<FriendsManager>& friendsManager, std::shared_ptr<MessagesManager> &messagesManager, GetUser getUser );
         ~SocialService() = default;
 
         void handleMessages(UserID senderID ,bindings::Message message );
@@ -43,7 +47,14 @@ class SocialService{
         void handleRemoveFriend(UserID senderID, bindings::RemoveFriend removeFriend);
 
         // === getters ===
-        bindings::PendingFriendRequests getPendignsFriendRequests(UserID userID, GetUser getUser);
+        bindings::PendingFriendRequests getPendignsFriendRequests(UserID userID);
+
+        bindings::FriendsList getFriendsList(UserID userID);
+
+
+        bindings::Conversations getConversations(UserID userID);
+
+
 
 };
 

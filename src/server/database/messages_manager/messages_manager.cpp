@@ -31,26 +31,21 @@ std::string MessagesManager::generateFileName(const int &idUser1,
            + std::to_string(idUser2) + ".json";
 }
 
-bool MessagesManager::createDiscussionFile(const std::string &filePath,
-                                           Discution discussion) {
+bool MessagesManager::createDiscussionFile(const std::string &filePath) {
     std::ofstream file(filePath);
     if (!file) {
         std::cerr << "file error" << filePath << std::endl;
         return false;
     }
-    nlohmann::json discuJson = discussion.to_json();
-    std::cout << "discution -> tojson : " << discuJson.dump() << std::endl;
+    nlohmann::json discuJson = bindings::Conversation{}.to_json();
+    std::cout << "Discussion -> tojson : " << discuJson.dump() << std::endl;
     file << discuJson;
     return true;
 }
 
 bool MessagesManager::addDiscussion(const int &idUser1, const int &idUser2) {
     const std::string filePath = generateFileName(idUser1, idUser2);
-    Discution discussion;
-    discussion.idUser1 = idUser1;
-    discussion.idUser2 = idUser2;
-    discussion.messages = {};
-    if (!this->createDiscussionFile(filePath, discussion)) return false;
+    if (!this->createDiscussionFile(filePath)) return false;
 
     const char *sqlRe = "INSERT INTO userMessages (user1_id, user2_id, "
                         "file_path) VALUES (?, ?, ?);";
@@ -100,15 +95,15 @@ void MessagesManager::writeMessage(const std::string &pathfile,
 
     nlohmann::json jsondiscu = nlohmann::json::parse(infile);
     std::cout << jsondiscu.dump() << std::endl;
-    Discution discussion = Discution::from_json(jsondiscu);
-    discussion.messages.push_back(message);
+    bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
+    discussion.senderMessages.push_back(SenderMessage{message.senderId, message.content});
     std::ofstream outfile(pathfile);
     outfile << discussion.to_json().dump();
 }
 
 // ==== Public ====
 
-void MessagesManager::sendMessage(const int &senderId, const int &recieverId,
+void MessagesManager::addMessage(const int &senderId, const int &recieverId,
                                   const std::string &content) {
     if (!isThereDiscussion(senderId, recieverId))
         addDiscussion(senderId, recieverId);
@@ -116,19 +111,25 @@ void MessagesManager::sendMessage(const int &senderId, const int &recieverId,
     writeMessage(getPathDiscussion(senderId, recieverId), {senderId, content});
 }
 
-// Discution MessagesManager::getDiscussion(const int &idUser1 , const int
-// &idUser2){
-//     std::ifstream infile(getPathDiscussion(idUser1, idUser2));
-//     if (!infile) {
-//         std::cerr << "error open json file (ifstream) !" << std::endl;
-//     }
-//     //https://app.studyraid.com/en/read/12316/397451/secure-json-parsing-practices
-//     const std::string content((std::istreambuf_iterator<char>(infile)),
-//     std::istreambuf_iterator<char>()); Discution discussion; auto result =
-//     glz::read_json(discussion, content);
 
-//     // if (!result) {
-//     //     throw std::runtime_error("error glz read_json ");
-//     // }
-//     return discussion;
-// }
+std::vector<int> MessagesManager::getAllUser(const int &idUser){
+    std::string sql = "SELECT user1, user2 FROM userMessages WHERE user1 = ? OR user2 = ?";
+    return dbManager_->getVectorInfo(sql, idUser);
+}
+
+bindings::Conversation MessagesManager::getDiscussion(const int &idUser1 , const int&idUser2){
+    std::ifstream infile(getPathDiscussion(idUser1, idUser2));
+
+    nlohmann::json jsondiscu = nlohmann::json::parse(infile);
+    std::cout << jsondiscu.dump() << std::endl;
+    bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
+    return discussion;
+}
+
+std::vector<bindings::Conversation> MessagesManager::getAllDiscusions(const int & idUser){
+    std::vector<bindings::Conversation> allDiscussions;
+    for (auto id : getAllUser(idUser)){
+        allDiscussions.push_back(getDiscussion(idUser, id));
+    }
+    return allDiscussions;
+}
