@@ -19,8 +19,12 @@ struct Player {
 };
 
 class GameServer {
-
   private:
+    static constexpr size_t INITIAL_TICK_DELAY_MS = 700;
+    static constexpr size_t MIN_TICK_DELAY_MS = 200;
+    static constexpr size_t DECREASE_TICK_DELAY_MS = 20;
+    size_t tickDelayMs_;
+
     boost::asio::io_context context_;
     boost::asio::steady_timer tickTimer_;
     GameStatePtr pGameState_;

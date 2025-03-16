@@ -14,8 +14,6 @@
 #include <ostream>
 #include <vector>
 
-constexpr size_t SECONDS_BETWEEN_TICKS = 1;
-
 // ----------------------------------------------------------------------------
 //                          PRIVATE METHODS
 // ----------------------------------------------------------------------------
@@ -29,9 +27,11 @@ void GameServer::onTimerTick() {
     std::cout << "ticking" << std::endl;
     engine.tick();
 
-    tickTimer_.expires_at(
-        tickTimer_.expiry()
-        + boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS});
+    tickTimer_.expires_after(boost::asio::chrono::milliseconds{tickDelayMs_});
+
+    if (tickDelayMs_ > MIN_TICK_DELAY_MS) {
+        tickDelayMs_ -= DECREASE_TICK_DELAY_MS;
+    }
 
     tickTimer_.async_wait([this](const boost::system::error_code &ec) {
         if (!ec) {
@@ -47,8 +47,10 @@ void GameServer::onTimerTick() {
 GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
                        UpdateGamePlayer updateGamePlayer, GameID id,
                        CallBackFinishGame callBackFinishGame)
-    : context_{},
-      tickTimer_{context_, boost::asio::chrono::seconds{SECONDS_BETWEEN_TICKS}},
+    :
+
+      tickDelayMs_{INITIAL_TICK_DELAY_MS}, context_{},
+      tickTimer_{context_, boost::asio::chrono::milliseconds{tickDelayMs_}},
       pGameState_{std::make_shared<GameState>(
           gameMode,
           [&] {
