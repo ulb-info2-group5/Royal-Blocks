@@ -1,25 +1,23 @@
 #include "penalty_type.hpp"
 
-std::ostream &operator<<(std::ostream &os, PenaltyType type) {
+std::string toString(PenaltyType type) {
     switch (type) {
     case PenaltyType::Blackout:
-        os << "Blackout";
-        break;
+        return "Blackout";
     case PenaltyType::InputLock:
-        os << "InputLock";
-        break;
+        return "InputLock";
     case PenaltyType::Lightning:
-        os << "Lightning";
-        break;
+        return "Lightning";
     case PenaltyType::ReverseControls:
-        os << "ReverseControls";
-        break;
+        return "ReverseControls";
     case PenaltyType::SpeedUp:
-        os << "SpeedUp";
-        break;
+        return "SpeedUp";
     default:
-        os << "Unknown";
-        break;
+        return "Unknown";
     }
+}
+
+std::ostream &operator<<(std::ostream &os, PenaltyType type) {
+    os << toString(type);
     return os;
 }

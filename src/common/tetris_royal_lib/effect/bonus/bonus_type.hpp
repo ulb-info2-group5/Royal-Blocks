@@ -1,13 +1,15 @@
 #ifndef BONUS_TYPE_HPP
 #define BONUS_TYPE_HPP
 
-#include <ostream>
+#include <string>
 
 enum class BonusType {
     SlowDown,
     MiniTetrominoes,
     NumBonusType,
 };
+
+std::string toString(BonusType type);
 
 std::ostream &operator<<(std::ostream &os, BonusType type);
 

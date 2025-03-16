@@ -6,18 +6,19 @@
 #include "../../../core/in_game/game_state/game_state.hpp"
 #include <ftxui/component/component.hpp>
 
-#include <string>
-#include <vector>
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/elements.hpp>
 
-constexpr uint32_t CELL_SIZE_PLAYER = 8, CELL_SIZE_OPPONENT = 4,
-                   PADDING =
-                       10; // A power of 2 is needed for the canvas for the size
-                           // of the cells of the tetrominos to be correct
+enum class CellSize : size_t {
+    Small = 4,
+    Big = 8,
+};
 
-constexpr uint32_t WIDTH_PLAYER_CANVAS = CELL_SIZE_PLAYER * 10,
-                   HEIGHT_PLAYER_CANVAS = CELL_SIZE_PLAYER * 20,
-                   WIDTH_OP_CANVAS = CELL_SIZE_OPPONENT * 10,
-                   HEIGHT_OP_CANVAS = CELL_SIZE_OPPONENT * 20;
+constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+                 HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
+                 WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
+                 HEIGHT_CANVAS_SMALL =
+                     static_cast<size_t>(CellSize::Small) * 20;
 
 class MainTui; // Forward declaration
 
@@ -55,54 +56,52 @@ class GameDisplay final {
 
     std::optional<client::GameState> gameState_;
 
-    // TODO: remove this
-    // float penaltyGauge_;
-    std::vector<std::string> effects_ = {};
-
+    ftxui::Component quitButton_;
     ftxui::Component playerInfo_;
-    ftxui::Component effectsDisplay_;
-    ftxui::Component playerBoard_;
-    ftxui::Components opBoards_;
-    ftxui::Component opBoardDisplay_;
+    ftxui::Component energy_;
+    ftxui::Component availableEffects_;
+    ftxui::Component leftPane_;
 
-    ftxui::Component displayRight_;
-    ftxui::Component displayMiddle_;
-    ftxui::Component displayLeft_;
+    ftxui::Component gameMode_;
+    ftxui::Component selfBoard_;
+    ftxui::Component middlePane_;
+
+    ftxui::Component opponentsBoards_;
+    ftxui::Component rightPane_;
+
     ftxui::Component displayWindow_;
 
-    ftxui::Component gameOverComponent_;
+    /**
+     * @brief Returns a new component containing the board of the index-th
+     * opponent.
+     */
+    ftxui::Component createOpBoardDisplay(size_t index, CellSize cellSize);
 
-    void drawPlayerInfo();
+    ftxui::Component &quitButton();
+    ftxui::Component &playerInfo();
+    ftxui::Component &energy();
+    ftxui::Component &availableEffects();
+    ftxui::Component &leftPane();
 
-    void drawRoyalEffectsEnergy();
+    ftxui::Component &gameMode();
+    ftxui::Component &selfBoard(CellSize size = CellSize::Big);
+    ftxui::Component &middlePane();
 
-    void displayLeftWindow();
+    ftxui::Component &opponentsBoards();
 
-    void drawPlayerBoard();
+    ftxui::Component &rightPane();
 
-    void displayMiddleWindow();
+    ftxui::Component &drawEndlessMode();
 
-    void drawOpponentsBoard();
+    ftxui::Component &drawMultiMode();
 
-    void displayOpponentBoardDuel();
-
-    void displayOppponentsBoard();
-
-    void displayMultiRightWindow();
-
-    void drawEndlessMode();
-
-    void drawMultiMode();
+    ftxui::Component &drawGameOver();
 
     void handleKeys();
 
-    void updateDisplay();
+    size_t getBoardHeight() const;
 
-    ftxui::Component drawGameOver();
-
-    size_t getBoardHeight();
-
-    size_t getBoardWidth();
+    size_t getBoardWidth() const;
 
     Score getSelfScore() const;
 
@@ -121,6 +120,8 @@ class GameDisplay final {
     std::string getOpponentUsername(size_t opponentIdx) const;
 
     size_t getNumOpponents() const;
+
+    const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
 
     bool inGame() const;
 

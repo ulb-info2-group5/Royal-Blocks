@@ -1,16 +1,17 @@
 #include "bonus_type.hpp"
 
-std::ostream &operator<<(std::ostream &os, BonusType type) {
+std::string toString(BonusType type) {
     switch (type) {
     case BonusType::SlowDown:
-        os << "SlowDown";
-        break;
+        return "SlowDown";
     case BonusType::MiniTetrominoes:
-        os << "MiniTetrominoes";
-        break;
+        return "MiniTetrominoes";
     default:
-        os << "unknown";
-        break;
+        return "unknown";
     }
+}
+
+std::ostream &operator<<(std::ostream &os, BonusType type) {
+    os << toString(type);
     return os;
 }

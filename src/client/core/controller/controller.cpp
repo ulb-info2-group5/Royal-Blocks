@@ -21,6 +21,8 @@
 #include "../../../common/bindings/friends_list.hpp"
 #include "../../../common/bindings/handle_friend_request.hpp"
 #include "../../../common/bindings/in_game/big_drop.hpp"
+#include "../../../common/bindings/in_game/buy_bonus.hpp"
+#include "../../../common/bindings/in_game/buy_penalty.hpp"
 #include "../../../common/bindings/in_game/empty_penalty_stash.hpp"
 #include "../../../common/bindings/in_game/game_state_client.hpp"
 #include "../../../common/bindings/in_game/hold_next_tetromino.hpp"
@@ -35,6 +37,8 @@
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
+#include "core/in_game/game_state/game_state.hpp"
+#include "game_mode/game_mode.hpp"
 
 #include <mutex>
 #include <optional>
@@ -227,6 +231,26 @@ void Controller::holdNextTetromino() {
     networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
 }
 
+void Controller::buyEffect(EffectType effectType, bool stashForLater) {
+
+    std::visit(
+        [this, stashForLater](auto &&effectType) {
+            using T = std::decay_t<decltype(effectType)>;
+            if constexpr (std::is_same_v<T, BonusType>) {
+                std::cerr << "buying effect : " << effectType << std::endl;
+                networkManager_.send(
+                    bindings::BuyBonus{effectType}.to_json().dump());
+            } else if constexpr (std::is_same_v<T, PenaltyType>) {
+                std::cerr << "buying effect : " << effectType << std::endl;
+                networkManager_.send(
+                    bindings::BuyPenalty{effectType, stashForLater}
+                        .to_json()
+                        .dump());
+            }
+        },
+        effectType);
+}
+
 void Controller::quitGame() {
     networkManager_.send(bindings::QuitGame{}.to_json().dump());
 }
@@ -252,6 +276,25 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     }
 }
 
+size_t Controller::getNumEffects() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+
+    return gameState_
+        .transform([](const client::GameState &gameState) {
+            return gameState.effectsPrice.size();
+        })
+        .value_or(0);
+}
+
+void Controller::selectNextEffect() {
+    currentEffectIdx_ = (currentEffectIdx_ + 1) % getNumEffects();
+}
+
+void Controller::selectPrevEffect() {
+    currentEffectIdx_ =
+        (currentEffectIdx_ - 1 + getNumEffects()) % getNumEffects();
+}
+
 void Controller::acceptFriendRequest(UserID userId) {
     networkManager_.send(bindings::HandleFriendRequest{
         userId, bindings::HandleFriendRequest::Action::Accept}
@@ -266,9 +309,9 @@ void Controller::declineFriendRequest(UserID userId) {
                              .dump());
 }
 
-bool Controller::inGame() const { return gameState_.has_value(); }
-
 std::optional<client::GameState> Controller::getGameState() {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_;
 }
+
+bool Controller::inGame() const { return gameState_.has_value(); }

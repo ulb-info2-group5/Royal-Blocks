@@ -1,7 +1,7 @@
 #ifndef PENALTY_TYPE_HPP
 #define PENALTY_TYPE_HPP
 
-#include <ostream>
+#include <string>
 
 enum class PenaltyType {
     ReverseControls,
@@ -11,6 +11,8 @@ enum class PenaltyType {
     Blackout,
     NumPenaltyType,
 };
+
+std::string toString(PenaltyType type);
 
 std::ostream &operator<<(std::ostream &os, PenaltyType type);
 

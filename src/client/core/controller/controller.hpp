@@ -54,7 +54,9 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
+    // TODO: merge these two in a single struct
     std::optional<client::GameState> gameState_;
+    size_t currentEffectIdx_;
 
     mutable std::mutex mutex_;
 
@@ -170,6 +172,12 @@ class Controller {
 
     const NameConversation getConversationWith(UserID userID);
 
+    size_t getNumEffects() const;
+
+    void selectNextEffect();
+
+    void selectPrevEffect();
+
     void bigDrop();
 
     void moveActive(TetrominoMove tetrominoMove);
@@ -180,6 +188,8 @@ class Controller {
 
     void holdNextTetromino();
 
+    void buyEffect(EffectType effectType, bool stashForLater = false);
+
     void quitGame();
 
     void handleKeypress(const std::string &pressedKey);
@@ -188,9 +198,9 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    bool inGame() const;
-
     std::optional<client::GameState> getGameState();
+
+    bool inGame() const;
 };
 
 #endif // CONTROLLER_HPP
