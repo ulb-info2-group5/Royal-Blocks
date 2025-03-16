@@ -1,7 +1,5 @@
+{"data":{"gameMode":null,"playerId":4,"state":1,"username":"quentin"},"type":8}
+{"data":{"action":0,"user":{"data":{"gameMode":null,"playerId":4,"state":1,"username":"quentin"},"type":8}},"type":14}
 {"data":{"nickname":"leo","password":"leo"},"type":0}
-{"data":{"nickname":"quentin","password":"1234"},"type":0}
-{"data":{"gameMode":2,"targetNumPlayers":2},"type":13}
-{"data":{"friendId":null,"gameMode":2},"type":10}
-{"type":20}
-{"data":{"tetrominoMove":0},"type":25}
-{"data":{"bonusType":0},"type":21}
+{"data":{"nickname":"ethan","password":"ethan"},"type":0}
+{"data":{"recipientId":4, "content":"message de test "},"type":5}

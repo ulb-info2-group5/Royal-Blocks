@@ -63,9 +63,8 @@ bool MessagesManager::isThereDiscussion(const int &idUser1,
                       "AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
     int count = 0;
     // check if the discussion exists on the table
-    if (!dbManager_->executeSqlRecoveryInt(
-            sql, {idUser1, idUser2, idUser2, idUser1}, count)
-        && count > 0) {
+    
+    if (!(dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0)) {
         return false;
     } else {
         // check if the discussion file exists (json file)
@@ -90,11 +89,11 @@ std::string MessagesManager::getPathDiscussion(const int &idUser1,
 
 void MessagesManager::writeMessage(const std::string &pathfile,
                                    const Message &message) {
-
+    
     std::ifstream infile(pathfile);
+     
 
     nlohmann::json jsondiscu = nlohmann::json::parse(infile);
-    std::cout << jsondiscu.dump() << std::endl;
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
     discussion.senderMessages.push_back(SenderMessage{message.senderId, message.content});
     std::ofstream outfile(pathfile);
@@ -105,9 +104,13 @@ void MessagesManager::writeMessage(const std::string &pathfile,
 
 void MessagesManager::addMessage(const int &senderId, const int &recieverId,
                                   const std::string &content) {
-    if (!isThereDiscussion(senderId, recieverId))
-        addDiscussion(senderId, recieverId);
+    if (senderId == recieverId ){
+        return ;
+    }
 
+    if (!isThereDiscussion(senderId, recieverId)){
+        addDiscussion(senderId, recieverId);
+    }    
     writeMessage(getPathDiscussion(senderId, recieverId), {senderId, content});
 }
 

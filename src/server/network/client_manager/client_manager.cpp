@@ -27,7 +27,6 @@ void ClientLink::handleReading() {
     std::string packet;
     std::getline(is, packet);
     std::cout << "packet : " << packet << std::endl;
-    std::cout << "user state: " << static_cast<int>(userState) << std::endl;
     if (getUserState() == bindings::State::Offline) {
         handleAuthentication(packet);
     } else {
@@ -283,6 +282,9 @@ void ClientManager::handlePacketMenu(const std::string &packet,
     bindings::PendingFriendRequests pendingRequests =  socialService_.getPendignsFriendRequests(clientId); 
     connectedClients_[clientId]->sendPackage(pendingRequests.to_json());
     socialService_.getFriendsList(clientId);
+
+    bindings::FriendsList friendsList = socialService_.getFriendsList(clientId);
+    std::cout << "friendlist : " << friendsList.to_json().dump() << std::endl;
 }
 
 void ClientManager::addClientInWaitingForAuth(
