@@ -2,22 +2,16 @@
 #define TIMED_PENALTY_HPP
 
 #include "../../../../common/tetris_royal_lib/effect/penalty/penalty_type.hpp"
+#include "abstract_timed_effect.hpp"
 
 #include <nlohmann/json.hpp>
 
 namespace client {
 
-    struct TimedPenalty {
+    struct TimedPenalty : public client::AbstractTimedEffect {
         PenaltyType penaltyType;
-        double elapsedTime;
 
-        /* ------------------------------------------------
-         *          Serialization
-         * ------------------------------------------------*/
-
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client

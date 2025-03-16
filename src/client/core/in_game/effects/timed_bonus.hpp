@@ -2,6 +2,7 @@
 #define TIMED_BONUS_HPP
 
 #include "../../../../common/tetris_royal_lib/effect/bonus/bonus_type.hpp"
+#include "abstract_timed_effect.hpp"
 
 #include "nlohmann/json_fwd.hpp"
 
@@ -9,17 +10,10 @@
 
 namespace client {
 
-    struct TimedBonus {
+    struct TimedBonus : public client::AbstractTimedEffect {
         BonusType bonusType;
-        double elapsedTime;
 
-        /* ------------------------------------------------
-         *          Serialization
-         * ------------------------------------------------*/
-
-        nlohmann::json serialize() const;
-
-        void deserialize(const nlohmann::json &j);
+        void deserialize(const nlohmann::json &j) override;
     };
 
 } // namespace client
