@@ -81,6 +81,9 @@ void MainWindow::on_SendButtonRegister_clicked()
         loginThread.join();
     }
 
+    ui->UsernameInputRegister->clear();
+    ui->PasswordInputRegister->clear();
+
     if (registerSuccess) {
         QMessageBox::information(this, "Register successful", "You have successfully registered.");
         ui->stackedWidget->setCurrentIndex(2); // Login page
@@ -88,8 +91,6 @@ void MainWindow::on_SendButtonRegister_clicked()
 
     else {
         QMessageBox::warning(this, "Register failed", "This username is already taken.");
-            ui->UsernameInputRegister->clear();
-            ui->PasswordInputRegister->clear();
     }
 }
 
@@ -120,13 +121,14 @@ void MainWindow::on_SendButtonLogin_clicked()
         loginThread.join();
     }
 
+    ui->UsernameInputLogin->clear();
+    ui->PasswordInputLogin->clear();
+
     if (loginSuccess) {
         std::exit(0); // TODO: change it to go to the MainMenu
     }
 
     else {
-        ui->UsernameInputLogin->clear();
-        ui->PasswordInputLogin->clear();
         QMessageBox::warning(this, "Login failed", "Your username or password is incorrect.");
     }
 }
