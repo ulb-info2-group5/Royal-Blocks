@@ -12,7 +12,7 @@
 #include "../../../common/bindings/conversation.hpp"
 #include "../../../common/bindings/ranking.hpp"
 #include "../../../common/tetris_royal_lib//game_mode/game_mode.hpp"
-#include "../../graphics/TUI/screen_manager.hpp"
+#include "../../graphics/screen_manager.hpp"
 #include "../in_game/game_state/game_state.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
@@ -26,6 +26,12 @@
 using NameConversation = std::pair<std::string, bindings::Conversation>;
 
 struct Message;
+
+enum class UiChoice {
+  GUI,
+  TUI,
+  NONE,
+};
 
 class Controller {
   public:
@@ -84,7 +90,7 @@ class Controller {
     /*
      * @brief Construct a new Controller object
      */
-    Controller();
+    Controller(UiChoice uiChoice);
 
     /*
      * @brief Destroy the Controller object

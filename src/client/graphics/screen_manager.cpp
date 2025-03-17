@@ -1,11 +1,15 @@
 #include "screen_manager.hpp"
 
-#include "ftxui_config/ftxui_config.hpp"
 #include <ftxui/component/component_base.hpp>
 
+
+#include "TUI/ftxui_config/ftxui_config.hpp"
+#include "../core/controller/controller.hpp"
+
 // ### Public methods ###
-ScreenManager::ScreenManager(Controller &controller)
-    : controller_(controller), screen_(ftxui::ScreenInteractive::Fullscreen()),
+ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice)
+    : controller_(controller), uiChoice_(uiChoice),
+      screen_(ftxui::ScreenInteractive::Fullscreen()),
       loginMenu_(LoginMenu(*this, controller_)),
       mainMenu_(MainMenu(*this, controller_)) {
     screen_.ForceHandleCtrlC(false);
@@ -13,13 +17,16 @@ ScreenManager::ScreenManager(Controller &controller)
 }
 
 void ScreenManager::run() {
-    drawStartScreen();
+    if (uiChoice_ == UiChoice::TUI) {
+        drawStartScreen();
 
-    // Handle the login menu
-    if (loginMenu_.render() == LoginResult::SUCCESS) {
-        mainMenu_.render();
+        // Handle the login menu
+        if (loginMenu_.render() == LoginResult::SUCCESS) {
+            mainMenu_.render();
+        }
+        drawEndScreen();
     }
-    drawEndScreen();
+    std::cout << "Gui is not yet impemented" << std::endl;
 }
 
 void ScreenManager::render(ftxui::Component &component) {

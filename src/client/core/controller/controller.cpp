@@ -7,7 +7,7 @@
  */
 
 #include "controller.hpp"
-#include "../../graphics/TUI/screen_manager.hpp"
+#include "../../graphics/screen_manager.hpp"
 #include "..//in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
@@ -99,14 +99,14 @@ void Controller::handlePacket(const std::string_view pack) {
 
 // ### Public methods ###
 
-Controller::Controller()
+Controller::Controller(UiChoice uiChoice)
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
       gameState_(std::nullopt),
       networkManager_{
           context_,
           [this](const std::string_view packet) { handlePacket(packet); }},
-      screenManager_{*this} {};
+      screenManager_{*this, uiChoice} {};
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);

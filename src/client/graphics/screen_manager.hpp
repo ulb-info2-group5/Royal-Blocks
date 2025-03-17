@@ -1,13 +1,15 @@
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 
-#include "login_menu/login_menu.hpp"
-#include "main_menu/main_menu.hpp"
+#include "TUI/login_menu/login_menu.hpp"
+#include "TUI/main_menu/main_menu.hpp"
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
 class Controller; // Forward declaration
+
+enum class UiChoice; // Forward declaration
 
 class ScreenManager {
   private:
@@ -15,6 +17,8 @@ class ScreenManager {
      *
      */
     Controller &controller_;
+
+    UiChoice uiChoice_;
 
     /*
      * @brief The screen to use to render the components in the terminal user
@@ -63,7 +67,7 @@ class ScreenManager {
      *
      * @param controller The controller to ask for the data to show to the user
      */
-    ScreenManager(Controller &controller);
+    ScreenManager(Controller &controller, UiChoice uiChoice);
 
     /*
      * @brief Destroy the Screen Manager object
