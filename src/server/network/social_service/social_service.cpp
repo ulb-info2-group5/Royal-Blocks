@@ -24,9 +24,9 @@ void SocialService::handleFriendRequest(UserID senderID, bindings::FriendRequest
 
 void SocialService::handleHandleFriendRequest(UserID senderID, bindings::HandleFriendRequest handleFrienddRequest){
     if (handleFrienddRequest.action == bindings::HandleFriendRequest::Action::Accept){
-        friendsManager_->addFriend(static_cast<int>(senderID), static_cast<int>(handleFrienddRequest.user.userID) );
+        friendsManager_->addFriend(senderID, handleFrienddRequest.userId );
     }
-    friendsManager_->removePendingFriendRequest(static_cast<int>(senderID), static_cast<int>(handleFrienddRequest.user.userID));
+    friendsManager_->removePendingFriendRequest(senderID, handleFrienddRequest.userId);
 }
 
 
@@ -63,3 +63,4 @@ bindings::Conversations SocialService::getConversations(UserID userID){
     }
     return conversations;
 }
+

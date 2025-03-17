@@ -54,7 +54,7 @@ class SocialService{
 
         bindings::Conversations getConversations(UserID userID);
 
-
+       
 
 };
 
