@@ -1,9 +1,10 @@
 #include "screen_manager.hpp"
 
 #include <ftxui/component/component_base.hpp>
-
+#include <qapplication.h>
 
 #include "TUI/ftxui_config/ftxui_config.hpp"
+#include "GUI/mainwindow.h"
 #include "../core/controller/controller.hpp"
 
 // ### Public methods ###
@@ -26,7 +27,13 @@ void ScreenManager::run() {
         }
         drawEndScreen();
     }
-    std::cout << "Gui is not yet impemented" << std::endl;
+
+    int argc = 2;
+    char *argv[] = {"./tetris_royal_client", "--gui"};
+    QApplication app(argc, argv);
+    MainWindow mainWindow(nullptr, &controller_);
+    mainWindow.show();
+    app.exec();
 }
 
 void ScreenManager::render(ftxui::Component &component) {

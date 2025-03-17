@@ -106,7 +106,6 @@ void LoginInput::createButtonSubmit() {
                 });
             }
 
-            // Attendre la fin du thread avant de clear les inputs
             if (loginThread.joinable()) {
                 loginThread.join();
             }
