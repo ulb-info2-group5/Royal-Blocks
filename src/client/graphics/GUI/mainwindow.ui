@@ -31,7 +31,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="MainLoginMenu">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -256,44 +256,58 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </spacer>
           </item>
           <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt; font-weight:700;&quot;&gt;🎮 Main Menu 🎮&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton">
             <property name="text">
-             <string>Create a game</string>
+             <string>▶ Create a game</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
-             <string>Join a game</string>
+             <string>▶ Join a game</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_3">
             <property name="text">
-             <string>PushButton</string>
+             <string>🏆 Ranking</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_4">
             <property name="text">
-             <string>PushButton</string>
+             <string>💬 Messages</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_6">
             <property name="text">
-             <string>PushButton</string>
+             <string>⚙ Manage profile</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_5">
             <property name="text">
-             <string>PushButton</string>
+             <string>👥 Manage friends list</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_7">
+            <property name="text">
+             <string>Quit the game</string>
             </property>
            </widget>
           </item>

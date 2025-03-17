@@ -110,8 +110,8 @@ void MainWindow::on_SendButtonLogin_clicked()
             ++i) { // 2 seconds limit (20 * 100ms)
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(100));
-            if (controller_->getRegistrationState()
-                == Controller::RegistrationState::Registered) {
+            if (controller_->getAuthState()
+                == Controller::AuthState::Authenticated) {
                 loginSuccess = true;
                 return;
             }
@@ -126,7 +126,7 @@ void MainWindow::on_SendButtonLogin_clicked()
     ui->PasswordInputLogin->clear();
 
     if (loginSuccess) {
-        std::exit(0); // TODO: change it to go to the MainMenu
+        ui->stackedWidget->setCurrentIndex(3); // Main Menu page
     }
 
     else {
