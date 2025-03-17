@@ -16,13 +16,14 @@ MainWindow::MainWindow(QWidget *parent, Controller *controller)
     ui->PasswordInputRegister->setAlignment(Qt::AlignCenter);
     ui->UsernameInputLogin->setAlignment(Qt::AlignCenter);
     ui->PasswordInputLogin->setAlignment(Qt::AlignCenter);
+
+    ui->stackedWidget->setCurrentIndex(0); // MainMenuLogin page
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::on_ExitButton_clicked()
 {
