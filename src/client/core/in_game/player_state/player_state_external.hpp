@@ -8,7 +8,7 @@
 
 namespace client {
 
-    struct PlayerStateExternal : public AbstractPlayerState {
+    struct PlayerStateExternal final : public AbstractPlayerState {
         void deserialize(const nlohmann::json &j) override;
     };
 

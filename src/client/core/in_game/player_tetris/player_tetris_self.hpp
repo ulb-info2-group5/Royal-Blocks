@@ -7,7 +7,7 @@
 
 namespace client {
 
-    struct PlayerTetrisSelf : public AbstractPlayerTetris {
+    struct PlayerTetrisSelf final : public AbstractPlayerTetris {
         PlayerStateSelf playerState;
         TetrisSelf tetris;
 

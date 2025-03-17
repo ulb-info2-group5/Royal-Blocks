@@ -8,7 +8,7 @@
 
 namespace client {
 
-    struct TimedPenalty : public client::AbstractTimedEffect {
+    struct TimedPenalty final : public client::AbstractTimedEffect {
         PenaltyType penaltyType;
 
         void deserialize(const nlohmann::json &j) override;

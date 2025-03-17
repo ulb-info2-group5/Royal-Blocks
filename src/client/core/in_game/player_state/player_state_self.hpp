@@ -17,7 +17,7 @@ using EffectPrice = std::pair<EffectType, Energy>;
 
 namespace client {
 
-    struct PlayerStateSelf : public AbstractPlayerState {
+    struct PlayerStateSelf final : public AbstractPlayerState {
         std::optional<UserID> penaltyTarget;
 
         std::optional<Energy> energy;

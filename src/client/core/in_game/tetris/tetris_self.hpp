@@ -7,7 +7,7 @@
 
 namespace client {
 
-    struct TetrisSelf : public AbstractTetris {
+    struct TetrisSelf final : public AbstractTetris {
         std::optional<Tetromino> activeTetromino;
         std::optional<Tetromino> previewTetromino;
 

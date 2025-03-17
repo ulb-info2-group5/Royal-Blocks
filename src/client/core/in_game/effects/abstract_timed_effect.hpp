@@ -8,6 +8,8 @@ namespace client {
     struct AbstractTimedEffect {
         double elapsedTime;
 
+        virtual ~AbstractTimedEffect() = default;
+
         virtual void deserialize(const nlohmann::json &j) = 0;
     };
 

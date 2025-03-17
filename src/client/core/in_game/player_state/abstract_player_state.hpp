@@ -13,6 +13,8 @@ namespace client {
         bool isAlive;
         std::string username;
 
+        virtual ~AbstractPlayerState() = default;
+
         virtual void deserialize(const nlohmann::json &j) = 0;
     };
 

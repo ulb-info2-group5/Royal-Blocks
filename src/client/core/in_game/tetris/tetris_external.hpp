@@ -5,7 +5,7 @@
 
 namespace client {
 
-    struct TetrisExternal : public AbstractTetris {
+    struct TetrisExternal final : public AbstractTetris {
         void deserialize(const nlohmann::json &j) override;
     };
 

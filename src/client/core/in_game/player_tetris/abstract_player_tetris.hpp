@@ -6,6 +6,8 @@
 namespace client {
 
     struct AbstractPlayerTetris {
+        virtual ~AbstractPlayerTetris() = default;
+
         virtual void deserialize(const nlohmann::json &j) = 0;
     };
 

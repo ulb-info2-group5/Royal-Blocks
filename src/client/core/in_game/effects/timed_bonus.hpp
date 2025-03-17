@@ -10,7 +10,7 @@
 
 namespace client {
 
-    struct TimedBonus : public client::AbstractTimedEffect {
+    struct TimedBonus final : public client::AbstractTimedEffect {
         BonusType bonusType;
 
         void deserialize(const nlohmann::json &j) override;
