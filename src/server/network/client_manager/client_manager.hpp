@@ -179,6 +179,8 @@ class ClientManager {
     void updateGamePlayer(UserID userIds, nlohmann::json gameState);
 
     bool isClientConnected(UserID userId);
+
+    void updateMenu(UserID userId );
     
     bindings::State getUserState(UserID userID);
 

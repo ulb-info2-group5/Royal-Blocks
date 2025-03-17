@@ -182,6 +182,7 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
     std::vector<std::pair<std::string, size_t>> ranking = database_.accountManager->getRanking();
     nlohmann::json rankingJson = bindings::Ranking{ranking}.to_json();
     clientLink->sendPackage(rankingJson);
+    
 
 }
 void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID) {
@@ -200,6 +201,7 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
     clientSession->setClientId(id);
     connectedClients_[id] = clientSession;
     removeClientsFromTheWaintingList();
+    updateMenu(id);
 }
 
 nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
@@ -261,15 +263,21 @@ void ClientManager::handlePacketMenu(const std::string &packet,
         break;
     case bindings::BindingType::FriendRequest:
         socialService_.handleFriendRequest(clientId, bindings::FriendRequest::from_json(jPack),database_.accountManager);
+        updateMenu(clientId);
+        updateMenu(database_.accountManager->getUserId(jPack.at("data").at("targetName").get<std::string>()));
         break;
     case bindings::BindingType::Message:
         socialService_.handleMessages(clientId, bindings::Message::from_json(jPack));
         break;
     case bindings::BindingType::HandleFriendRequest:
         socialService_.handleHandleFriendRequest(clientId, bindings::HandleFriendRequest::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("user").get<UserID>());
         break;
     case bindings::BindingType::RemoveFriend:
         socialService_.handleRemoveFriend(clientId, bindings::RemoveFriend::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("playerId").get<UserID>());
         break;
     case bindings::BindingType::RemoveClient:
         removeConnection(clientId);
@@ -278,13 +286,6 @@ void ClientManager::handlePacketMenu(const std::string &packet,
 
         break;
     }
-   
-    bindings::PendingFriendRequests pendingRequests =  socialService_.getPendignsFriendRequests(clientId); 
-    connectedClients_[clientId]->sendPackage(pendingRequests.to_json());
-    socialService_.getFriendsList(clientId);
-
-    bindings::FriendsList friendsList = socialService_.getFriendsList(clientId);
-    std::cout << "friendlist : " << friendsList.to_json().dump() << std::endl;
 }
 
 void ClientManager::addClientInWaitingForAuth(
@@ -318,6 +319,12 @@ bool ClientManager::checkCredentials(nlohmann::json data) {
         return false;
     }
     return true;
+}
+
+
+void ClientManager::updateMenu(UserID userID){
+    connectedClients_[userID]->sendPackage(socialService_.getPendignsFriendRequests(userID).to_json());
+    connectedClients_[userID]->sendPackage(socialService_.getFriendsList(userID).to_json());
 }
 
 void ClientManager::updateGamePlayer(UserID userIds, nlohmann::json gameState) {
