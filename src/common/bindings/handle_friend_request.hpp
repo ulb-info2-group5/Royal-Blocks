@@ -29,7 +29,7 @@ namespace bindings {
 
             const auto &data = j.at("data");
             return HandleFriendRequest{
-                data.at("userId").get<UserID>(),
+                data.at("user").get<UserID>(),
                 data.at("action").get<Action>(),
             };
         }
