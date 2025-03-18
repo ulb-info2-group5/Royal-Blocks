@@ -115,7 +115,7 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     for (const bindings::User &friendUser : friendsList) {
         friendButtons.push_back(ftxui::Button(
             friendUser.username,
-            [&] {
+            [friendUser, manageOrRequest, this] {
                 manageFriendlistScreen(friendUser, manageOrRequest);
                 mainTui_.stopRender();
             },
