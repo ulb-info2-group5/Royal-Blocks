@@ -13,10 +13,15 @@ MainGui::MainGui(QWidget *parent, Controller *controller)
     , controller_(controller)
 {
     ui->setupUi(this);
+
     ui->UsernameInputRegister->setAlignment(Qt::AlignCenter);
-    ui->PasswordInputRegister->setAlignment(Qt::AlignCenter);
     ui->UsernameInputLogin->setAlignment(Qt::AlignCenter);
+
+    ui->PasswordInputRegister->setAlignment(Qt::AlignCenter);
+    ui->PasswordInputRegister->setEchoMode(QLineEdit::Password);
+
     ui->PasswordInputLogin->setAlignment(Qt::AlignCenter);
+    ui->PasswordInputLogin->setEchoMode(QLineEdit::Password);
 
     ui->stackedWidget->setCurrentIndex(0); // MainMenuLogin page
 }
@@ -26,15 +31,9 @@ MainGui::~MainGui()
     delete ui;
 }
 
-void MainGui::run() {
-    QApplication *app = qApp;
-    show();
-    app->exec();
-}
-
 void MainGui::on_ExitButton_clicked()
 {
-    QApplication::quit();
+    actionOnExit();
 }
 
 
@@ -89,8 +88,7 @@ void MainGui::on_SendButtonRegister_clicked()
         loginThread.join();
     }
 
-    ui->UsernameInputRegister->clear();
-    ui->PasswordInputRegister->clear();
+    clearInputs();
 
     if (registerSuccess) {
         QMessageBox::information(this, "Register successful", "You have successfully registered.");
@@ -129,8 +127,7 @@ void MainGui::on_SendButtonLogin_clicked()
         loginThread.join();
     }
 
-    ui->UsernameInputLogin->clear();
-    ui->PasswordInputLogin->clear();
+    clearInputs();
 
     if (loginSuccess) {
         ui->stackedWidget->setCurrentIndex(3); // Main Menu page
@@ -143,5 +140,28 @@ void MainGui::on_SendButtonLogin_clicked()
 
 void MainGui::on_QuitGameButton_clicked()
 {
-    QApplication::quit();
+    actionOnExit();
+}
+
+/*--------------------------------------------
+                PRIVATE METHODS
+--------------------------------------------*/
+
+void MainGui::actionOnExit()
+{
+    QMessageBox::StandardButton confirmExit;
+    confirmExit = QMessageBox::question(this, "Quit", "Are you sure you want to qut the game ?",
+                                    QMessageBox::Yes | QMessageBox::No);
+    if (confirmExit == QMessageBox::Yes) {
+        QApplication::quit();
+    }
+}
+
+void MainGui::clearInputs()
+{
+    ui->UsernameInputRegister->clear();
+    ui->PasswordInputRegister->clear();
+
+    ui->UsernameInputLogin->clear();
+    ui->PasswordInputLogin->clear();
 }

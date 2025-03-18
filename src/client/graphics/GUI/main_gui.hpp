@@ -21,8 +21,6 @@ public:
     
     ~MainGui();
 
-    void run();
-
 private slots:
 
     void on_ExitButton_clicked();
@@ -44,5 +42,15 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Controller *controller_;
+
+    /*
+    * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
+    */
+    void actionOnExit();
+
+    /*
+    * @brief Clear the inputs of the user
+    */
+    void clearInputs();
 };
 #endif // MAIN_GUI_HPP

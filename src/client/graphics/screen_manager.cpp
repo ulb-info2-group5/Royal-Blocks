@@ -18,7 +18,7 @@ void ScreenManager::run() {
         char *argv[] = {"./tetris_royal_client", "--gui"};
         QApplication app(argc, argv);
         MainGui mainGui(nullptr, &controller_);
-        mainGui.run();
+        mainGui.show();
         app.exec();
     }
 }
