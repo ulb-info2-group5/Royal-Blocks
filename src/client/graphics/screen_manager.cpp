@@ -1,9 +1,8 @@
 #include "screen_manager.hpp"
 
-#include <qapplication.h>
-
-#include "GUI/mainwindow.h"
 #include "../core/controller/controller.hpp"
+#include "GUI/main_gui.hpp"
+#include <qapplication.h>
 
 // ### Public methods ###
 ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice)
@@ -11,16 +10,15 @@ ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice)
 
 void ScreenManager::run() {
     if (uiChoice_ == UiChoice::TUI) {
-        MainTui tui(controller_);
-        tui.run();
+        tui_.run();
     }
 
     else {
         int argc = 2;
         char *argv[] = {"./tetris_royal_client", "--gui"};
         QApplication app(argc, argv);
-        MainWindow mainWindow(nullptr, &controller_);
-        mainWindow.show();
+        MainGui mainGui(nullptr, &controller_);
+        mainGui.run();
         app.exec();
     }
 }

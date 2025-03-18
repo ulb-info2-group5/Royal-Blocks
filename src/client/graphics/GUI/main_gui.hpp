@@ -1,10 +1,8 @@
-#ifndef MAINLOGINWINDOW_H
-#define MAINLOGINWINDOW_H
+#ifndef MAIN_GUI_HPP
+#define MAIN_GUI_HPP
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include "core/controller/controller.hpp"
-#include "ui_mainwindow.h"
 
 class Controller; // Forward declaration
 
@@ -14,13 +12,16 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainGui : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, Controller *controller = nullptr);
-    ~MainWindow();
+    MainGui(QWidget *parent = nullptr, Controller *controller = nullptr);
+    
+    ~MainGui();
+
+    void run();
 
 private slots:
 
@@ -44,4 +45,4 @@ private:
     Ui::MainWindow *ui;
     Controller *controller_;
 };
-#endif // MAINLOGINWINDOW_H
+#endif // MAIN_GUI_HPP

@@ -1,11 +1,13 @@
-#include "mainwindow.h"
+#include "main_gui.hpp"
 
 #include "../../core/controller/controller.hpp"
+#include "ui_mainwindow.h"
 
 #include <QMessageBox>
 #include <QApplication>
+#include <qmainwindow.h>
 
-MainWindow::MainWindow(QWidget *parent, Controller *controller)
+MainGui::MainGui(QWidget *parent, Controller *controller)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , controller_(controller)
@@ -19,42 +21,48 @@ MainWindow::MainWindow(QWidget *parent, Controller *controller)
     ui->stackedWidget->setCurrentIndex(0); // MainMenuLogin page
 }
 
-MainWindow::~MainWindow()
+MainGui::~MainGui()
 {
     delete ui;
 }
 
-void MainWindow::on_ExitButton_clicked()
+void MainGui::run() {
+    QApplication *app = qApp;
+    show();
+    app->exec();
+}
+
+void MainGui::on_ExitButton_clicked()
 {
     QApplication::quit();
 }
 
 
-void MainWindow::on_LoginButton_clicked()
+void MainGui::on_LoginButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2); // Login page
 }
 
 
-void MainWindow::on_RegisterButton_clicked()
+void MainGui::on_RegisterButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1); // Register page
 }
 
 
-void MainWindow::on_BackButtonLogin_clicked()
+void MainGui::on_BackButtonLogin_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0); // Main page
 }
 
 
-void MainWindow::on_BackButtonRegister_clicked()
+void MainGui::on_BackButtonRegister_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0); // Main page
 }
 
 
-void MainWindow::on_SendButtonRegister_clicked()
+void MainGui::on_SendButtonRegister_clicked()
 {
     QString username = ui->UsernameInputRegister->text();
     QString password = ui->PasswordInputRegister->text();
@@ -94,7 +102,7 @@ void MainWindow::on_SendButtonRegister_clicked()
     }
 }
 
-void MainWindow::on_SendButtonLogin_clicked()
+void MainGui::on_SendButtonLogin_clicked()
 {
     QString username = ui->UsernameInputLogin->text();
     QString password = ui->PasswordInputLogin->text();
@@ -133,7 +141,7 @@ void MainWindow::on_SendButtonLogin_clicked()
     }
 }
 
-void MainWindow::on_QuitGameButton_clicked()
+void MainGui::on_QuitGameButton_clicked()
 {
     QApplication::quit();
 }
