@@ -3,8 +3,7 @@
 #include "../../core/controller/controller.hpp"
 
 #include <QMessageBox>
-#include <cstdlib>
-#include <qmessagebox.h>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent, Controller *controller)
     : QMainWindow(parent)
@@ -27,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_ExitButton_clicked()
 {
-    std::exit(0);
+    QApplication::quit();
 }
 
 
@@ -132,4 +131,9 @@ void MainWindow::on_SendButtonLogin_clicked()
     else {
         QMessageBox::warning(this, "Login failed", "Your username or password is incorrect.");
     }
+}
+
+void MainWindow::on_QuitGameButton_clicked()
+{
+    QApplication::quit();
 }

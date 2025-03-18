@@ -28,12 +28,14 @@ void ScreenManager::run() {
         drawEndScreen();
     }
 
-    int argc = 2;
-    char *argv[] = {"./tetris_royal_client", "--gui"};
-    QApplication app(argc, argv);
-    MainWindow mainWindow(nullptr, &controller_);
-    mainWindow.show();
-    app.exec();
+    else {
+        int argc = 2;
+        char *argv[] = {"./tetris_royal_client", "--gui"};
+        QApplication app(argc, argv);
+        MainWindow mainWindow(nullptr, &controller_);
+        mainWindow.show();
+        app.exec();
+    }
 }
 
 void ScreenManager::render(ftxui::Component &component) {

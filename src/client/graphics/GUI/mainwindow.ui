@@ -263,49 +263,49 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="CreateGameButton">
             <property name="text">
              <string>▶ Create a game</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="JoinGameButton">
             <property name="text">
              <string>▶ Join a game</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="RankingButton">
             <property name="text">
              <string>🏆 Ranking</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="MessageButton">
             <property name="text">
              <string>💬 Messages</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="ManageProfileButton">
             <property name="text">
              <string>⚙ Manage profile</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
+           <widget class="QPushButton" name="ManageFriendsListButton">
             <property name="text">
              <string>👥 Manage friends list</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_7">
+           <widget class="QPushButton" name="QuitGameButton">
             <property name="text">
              <string>Quit the game</string>
             </property>

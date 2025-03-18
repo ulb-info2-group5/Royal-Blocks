@@ -38,6 +38,7 @@ private slots:
 
     void on_SendButtonLogin_clicked();
 
+    void on_QuitGameButton_clicked();
 
 private:
     Ui::MainWindow *ui;
