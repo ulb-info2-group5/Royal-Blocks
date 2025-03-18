@@ -17,7 +17,7 @@
 
 class Controller; // Forward declaration
 
-class ScreenManager; // Forward declaration
+class MainTui; // Forward declaration
 
 enum class GameMode; // Forward declaration
 
@@ -40,7 +40,8 @@ enum class TypeGame {
  */
 class GameMenu {
   private:
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
+
     Controller &controller_;
 
     std::unique_ptr<GameDisplay> gameDisplay_;
@@ -120,9 +121,10 @@ class GameMenu {
     /*
      * @brief Construct a new Game Menu object
      *
-     * @param screen
+     * @param mainTui The main TUI to render the components
+     * @param controller The controller to interact with the server
      */
-    GameMenu(ScreenManager &screenManager, Controller &controller);
+    GameMenu(MainTui &mainTui, Controller &controller);
 
     /*
      * @brief Destroy the Game Menu object

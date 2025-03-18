@@ -8,15 +8,17 @@
 
 #include "login_menu.hpp"
 
+#include "../main_tui.hpp"
 #include "../../../core/controller/controller.hpp"
+
 #include "../ftxui_config/ftxui_config.hpp"
 
 // ### constructor ###
-LoginMenu::LoginMenu(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller),
-      loginInput_(LoginInput(screenManager_, controller_, LOGIN_INPUT_TITLE,
+LoginMenu::LoginMenu(MainTui &mainTui, Controller &controller)
+    : mainTui_(mainTui), controller_(controller),
+      loginInput_(LoginInput(mainTui_, controller_, LOGIN_INPUT_TITLE,
                              LoginType::LOGIN)),
-      registerInput_(LoginInput(screenManager_, controller_,
+      registerInput_(LoginInput(mainTui_, controller_,
                                 REGISTER_INPUT_TITLE, LoginType::REGISTER)) {
     loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
     registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
@@ -38,7 +40,7 @@ void LoginMenu::createButtons() {
                     loginState_ = Login::LOGGED;
                 }
             }
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -48,7 +50,7 @@ void LoginMenu::createButtons() {
             if (loginInput_.render() == LoginState::SUBMIT) {
                 loginState_ = Login::LOGGED;
             }
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -56,7 +58,7 @@ void LoginMenu::createButtons() {
         std::string(STR_EXIT),
         [&] {
             loginState_ = Login::EXIT;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -94,7 +96,7 @@ void LoginMenu::displayWindow() {
 LoginResult LoginMenu::render() {
     while (loginState_ == Login::NONE) {
         displayWindow();
-        screenManager_.render(displayWindow_);
+        mainTui_.render(displayWindow_);
     }
     if (loginState_ == Login::EXIT) {
         return LoginResult::EXIT;

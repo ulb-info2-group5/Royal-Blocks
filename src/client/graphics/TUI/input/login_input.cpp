@@ -11,10 +11,12 @@
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
+#include "../main_tui.hpp"
+
 // ### Constructor ###
-LoginInput::LoginInput(ScreenManager &screenManager, Controller &controller,
+LoginInput::LoginInput(MainTui &mainTui, Controller &controller,
                        std::string title, LoginType loginType)
-    : screenManager_(screenManager), controller_(controller), title_(title),
+    : mainTui_(mainTui), controller_(controller), title_(title),
       loginType_(loginType), loginState_(LoginState::NONE) {
 
     createButtonBack();
@@ -25,7 +27,7 @@ LoginInput::LoginInput(ScreenManager &screenManager, Controller &controller,
         | ftxui::borderHeavy
         | ftxui::CatchEvent([this](const ftxui::Event &event) {
               if (event == ftxui::Event::Return) {
-                  screenManager_.simulateTab(); // Move to the next input
+                  mainTui_.simulateTab(); // Move to the next input
                   return true;
               }
               return false;
@@ -52,7 +54,7 @@ void LoginInput::createButtonBack() {
         [&] {
             clearInfo();
             loginState_ = LoginState::BACK;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -75,12 +77,12 @@ void LoginInput::createButtonSubmit() {
                         if (controller_.getRegistrationState()
                             == Controller::RegistrationState::Registered) {
                             loginState_ = LoginState::SUBMIT;
-                            screenManager_.stopRender();
+                            mainTui_.stopRender();
                             return;
                         }
                     }
                     msg_ = STR_REGISTRATION_FAILED;
-                    screenManager_
+                    mainTui_
                         .forceRefresh(); // Post event to update screen
                 });
 
@@ -96,12 +98,12 @@ void LoginInput::createButtonSubmit() {
                         if (controller_.getAuthState()
                             == Controller::AuthState::Authenticated) {
                             loginState_ = LoginState::SUBMIT;
-                            screenManager_.stopRender();
+                            mainTui_.stopRender();
                             return;
                         }
                     }
                     msg_ = STR_INCORRECT;
-                    screenManager_
+                    mainTui_
                         .forceRefresh(); // Post event to update screen
                 });
             }
@@ -176,7 +178,7 @@ void LoginInput::clearInfo() {
 LoginState LoginInput::render() {
     displayWindow();
 
-    screenManager_.render(displayWindow_);
+    mainTui_.render(displayWindow_);
 
     message_.clear();
     msg_.clear();

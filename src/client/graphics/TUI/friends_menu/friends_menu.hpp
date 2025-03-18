@@ -16,7 +16,7 @@
 
 class Controller; // Forward declaration
 
-class ScreenManager; // Forward declaration
+class MainTui; // Forward declaration
 
 enum class FriendsManagerState {
     ADD_FRIEND,
@@ -33,7 +33,7 @@ enum class ManageOrRequestFriend {
 
 class FriendsMenu final {
   private:
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
     Controller &controller_;
     std::string friendNameBuffer_;
     bool exit_; // Boolean to exit the friends menu
@@ -85,11 +85,11 @@ class FriendsMenu final {
     /*
      * @brief Construct a new Friends Manager object
      *
-     * @param screenManager The screen manager for asking to render the
+     * @param mainnTui The Main Tui for asking to render the
      * components
      * @param controller The controller to interact with the server
      */
-    FriendsMenu(ScreenManager &screenManager, Controller &controller);
+    FriendsMenu(MainTui &mainTui, Controller &controller);
 
     /*
      * @brief Destroy the Friends Manager object

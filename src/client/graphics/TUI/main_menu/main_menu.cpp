@@ -8,15 +8,16 @@
 
 #include "main_menu.hpp"
 
-#include "../../../core/controller/controller.hpp"
+#include "../main_tui.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include "../../../core/controller/controller.hpp"
 
 // ### Constructor ###
-MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller),
-      state_(MainMenuState::NONE), friendsMenu_(screenManager_, controller),
-      messagingMenu_(screenManager_, controller),
-      gameMenu_(screenManager, controller) {
+MainMenu::MainMenu(MainTui &mainTui, Controller &controller)
+    : mainTui_(mainTui), controller_(controller),
+      state_(MainMenuState::NONE), friendsMenu_(mainTui_, controller),
+      messagingMenu_(mainTui_, controller),
+      gameMenu_(mainTui_, controller) {
 
     createMainMenuButtons();
 
@@ -24,7 +25,7 @@ MainMenu::MainMenu(ScreenManager &screenManager, Controller &controller)
         std::string(STR_BACK),
         [&] {
             state_ = MainMenuState::BACK;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -88,7 +89,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_CREATE_GAME),
         [&] {
             state_ = MainMenuState::CREATE_GAME;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -96,7 +97,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_JOIN_GAME),
         [&] {
             state_ = MainMenuState::JOIN_GAME;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -104,7 +105,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_MESSAGES),
         [&] {
             state_ = MainMenuState::SEND_MESSAGES_TO_FRIENDS;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -112,7 +113,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_RANKING),
         [&] {
             state_ = MainMenuState::LOOK_RANKING;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -120,7 +121,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_MANAGE_PROFILE),
         [&] {
             state_ = MainMenuState::MANAGE_PROFILE;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -128,7 +129,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_MANAGE_FRIENDS_LIST),
         [&] {
             state_ = MainMenuState::MANAGE_FRIENDS_LIST;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -136,7 +137,7 @@ void MainMenu::createMainMenuButtons() {
         std::string(STR_QUIT_GAME),
         [&] {
             state_ = MainMenuState::EXIT;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -251,7 +252,7 @@ void MainMenu::displayProfileManagerButton() {
         std::string(STR_SUBMIT),
         [&] {
             controller_.changeProfile(username_, password_); // profile screen
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -285,21 +286,21 @@ void MainMenu::renderRanking() {
 
     displayRankingWindow();
 
-    screenManager_.render(rankingWindow_);
+    mainTui_.render(rankingWindow_);
 }
 
 void MainMenu::renderProfileManager() {
 
     displayProfileManagerWindow();
 
-    screenManager_.render(profileManagerWindow_);
+    mainTui_.render(profileManagerWindow_);
 }
 
 // ### Public methods ###
 void MainMenu::render() {
     while (state_ != MainMenuState::EXIT) {
         displayMainWindow();
-        screenManager_.render(mainMenuWindow_);
+        mainTui_.render(mainMenuWindow_);
         handleChoice();
     }
 }

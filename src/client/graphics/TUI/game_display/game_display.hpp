@@ -16,9 +16,9 @@ constexpr uint32_t WIDTH_PLAYER_CANVAS = CELL_SIZE_PLAYER * 10,
                    WIDTH_OP_CANVAS = CELL_SIZE_OPPONENT * 10,
                    HEIGHT_OP_CANVAS = CELL_SIZE_OPPONENT * 20;
 
-class Controller; // Forward declaration
+class MainTui; // Forward declaration
 
-class ScreenManager; // Forward declaration
+class Controller; // Forward declaration
 
 enum class Color {
     Black,
@@ -36,7 +36,7 @@ enum class Color {
 
 class GameDisplay final {
   private:
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
 
     Controller &controller_;
 
@@ -86,7 +86,7 @@ class GameDisplay final {
     ftxui::Component drawGameOver();
 
   public:
-    GameDisplay(ScreenManager &screenManager, Controller &controller);
+    GameDisplay(MainTui &screenManager, Controller &controller);
 
     ~GameDisplay() = default;
 

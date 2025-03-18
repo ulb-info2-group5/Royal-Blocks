@@ -12,10 +12,12 @@
 #include "../ftxui_config/ftxui_config.hpp"
 #include <vector>
 
+#include "../main_tui.hpp"
+
 // ### Public methods ###
 
-FriendsMenu::FriendsMenu(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller), exit_(false) {
+FriendsMenu::FriendsMenu(MainTui &mainTui, Controller &controller)
+    : mainTui_(mainTui), controller_(controller), exit_(false) {
     createButtons();
 }
 
@@ -70,7 +72,7 @@ void FriendsMenu::render() {
                        | ftxui::borderHeavy | ftxui::center;
             });
 
-        screenManager_.render(render);
+        mainTui_.render(render);
     }
     exit_ = false; // Reset the exit boolean for the next time
 }
@@ -102,7 +104,7 @@ void FriendsMenu::addFriendScreen() {
                    | ftxui::borderHeavy | ftxui::center;
         });
 
-    screenManager_.render(component);
+    mainTui_.render(component);
 }
 
 std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
@@ -115,7 +117,7 @@ std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
             friendUser.username,
             [&] {
                 manageFriendlistScreen(friendUser, manageOrRequest);
-                screenManager_.stopRender();
+                mainTui_.stopRender();
             },
             GlobalButtonStyle()));
     }
@@ -143,12 +145,12 @@ void FriendsMenu::manageFriendlistScreen(
             } else {
                 // TODO: with controller to accept or decline friend request
             }
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
     ftxui::Component buttonNo = ftxui::Button(
-        std::string(STR_NO), [&] { screenManager_.stopRender(); },
+        std::string(STR_NO), [&] { mainTui_.stopRender(); },
         GlobalButtonStyle());
 
     ftxui::Component component = ftxui::Renderer(
@@ -166,19 +168,19 @@ void FriendsMenu::manageFriendlistScreen(
                    | ftxui::borderHeavy | ftxui::center;
         });
 
-    screenManager_.render(component);
+    mainTui_.render(component);
 }
 
 void FriendsMenu::createButtons() {
     buttonBack_ = ftxui::Button(
-        std::string(STR_BACK), [&] { screenManager_.stopRender(); },
+        std::string(STR_BACK), [&] { mainTui_.stopRender(); },
         GlobalButtonStyle());
 
     buttonAddFriend_ = ftxui::Button(
         std::string(STR_ADD_A_FRIEND),
         [&] {
             addFriendScreen();
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -189,7 +191,7 @@ void FriendsMenu::createButtons() {
         std::string(STR_ADD),
         [&] {
             controller_.sendFriendRequest(friendNameBuffer_);
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -197,7 +199,7 @@ void FriendsMenu::createButtons() {
         std::string(STR_BACK_TO_MAIN_MENU),
         [&] {
             exit_ = true; // Exit the while loop
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
@@ -205,7 +207,7 @@ void FriendsMenu::createButtons() {
         std::string(STR_MANAGE_FRIENDS_REQUESTS),
         [&] {
             FriendRequestScreen();
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -253,5 +255,5 @@ void FriendsMenu::FriendRequestScreen() {
                    | ftxui::borderHeavy | ftxui::center;
         });
 
-    screenManager_.render(render);
+    mainTui_.render(render);
 }

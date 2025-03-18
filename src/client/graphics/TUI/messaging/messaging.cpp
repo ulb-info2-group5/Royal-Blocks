@@ -1,14 +1,15 @@
 #include "messaging.hpp"
 
-#include "../../../core/controller/controller.hpp"
+#include "../main_tui.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
+#include "../../../core/controller/controller.hpp"
 
 // TODO: add verification of information when adding a friend, sending a
 // message, etc. with the server.
 
 // ### constructor ###
-Messaging::Messaging(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller) {
+Messaging::Messaging(MainTui &mainTui, Controller &controller)
+    : mainTui_(mainTui), controller_(controller) {
     userState_ = MessagingState::NONE;
     createButtons();
 }
@@ -47,7 +48,7 @@ void Messaging::createButtons() {
             newMessageBuffer_.clear();
             newFriendBuffer_.clear();
             userState_ = MessagingState::BACK;
-            screenManager_.stopRender();
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 }
@@ -199,5 +200,5 @@ std::optional<UserID> Messaging::getSelectedFriendId() {
 // ### public methods ###
 void Messaging::render() {
     drawWindow();
-    screenManager_.render(displayWindow_);
+    mainTui_.render(displayWindow_);
 }

@@ -16,9 +16,11 @@
 #include <ftxui/component/component.hpp>
 #include <string>
 
+
+class MainTui; // Forward declaration
+
 class Controller; // Forward declaration
 
-class ScreenManager; // Forward declaration
 
 enum class MainMenuState {
     CREATE_GAME,
@@ -41,7 +43,7 @@ class MainMenu final {
     /*
      * @brief The screen to use to render the components
      */
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -115,7 +117,7 @@ class MainMenu final {
      * components
      * @param controller The controller to interact with the server
      */
-    MainMenu(ScreenManager &screenManager, Controller &controller);
+    MainMenu(MainTui &mainTui, Controller &controller);
 
     /*
      * @brief Destroy the Main Menu object

@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-class Controller; // Forward declaration
+class MainTui; // Forward declaration
 
-class ScreenManager; // Forward declaration
+class Controller; // Forward declaration
 
 enum class MessagingState {
     BACK,
@@ -21,7 +21,7 @@ class Messaging final {
     /*
      * @brief The screen to use to render the components
      */
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -74,7 +74,7 @@ class Messaging final {
      * components
      * @param controller The controller to interact with the server
      */
-    Messaging(ScreenManager &screenManager, Controller &controller);
+    Messaging(MainTui &mainTui, Controller &controller);
 
     /*
      * @brief Destroy the Messaging object

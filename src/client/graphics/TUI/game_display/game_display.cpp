@@ -1,9 +1,11 @@
 #include "game_display.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
-#include "../../../core/controller/controller.hpp"
 #include "board/board.hpp"
 #include "game_mode/game_mode.hpp"
+
+#include "../main_tui.hpp"
+#include "../../../core/controller/controller.hpp"
 
 // TODO: this should defo go somewhere else
 #include <ftxui/component/component.hpp>
@@ -89,8 +91,8 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
 
 // constructor
 
-GameDisplay::GameDisplay(ScreenManager &screenManager, Controller &controller)
-    : screenManager_(screenManager), controller_(controller) {
+GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
+    : mainTui_(mainTui), controller_(controller) {
     // initialise for preview
     // penaltyGauge_ = 0.5;
 
@@ -150,7 +152,7 @@ void GameDisplay::displayLeftWindow() {
         std::string(STR_QUIT_GAME),
         [&] {
             controller_.quitGame();
-            screenManager_.stopRender();
+            mainTui_.stopRender(); 
         },
         GlobalButtonStyle());
 
@@ -446,9 +448,9 @@ ftxui::Component GameDisplay::drawGameOver() {
                | ftxui::center;
     });
 
-    ftxui::Component button = ftxui::Button(
-        std::string(STR_RETURN_TO_MAIN_MENU),
-        [&] { screenManager_.stopRender(); }, GlobalButtonStyle());
+    ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
+        mainTui_.stopRender();
+    }, GlobalButtonStyle());
 
     ftxui::Component container = ftxui::Container::Vertical({
         title,
@@ -492,5 +494,5 @@ void GameDisplay::render() {
                                    | ftxui::borderHeavy | ftxui::center;
                         });
 
-    screenManager_.render(render);
+    mainTui_.render(render);
 }

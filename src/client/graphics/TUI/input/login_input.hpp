@@ -12,9 +12,11 @@
 #include <ftxui/component/component.hpp>
 #include <string>
 
-class Controller; // Forward declaration
+#include "../../ILogin_Input.hpp"
 
-class ScreenManager; // Forward declaration
+class MainTui; // Forward declaration
+
+class Controller; // Forward declaration
 
 enum class LoginType {
     LOGIN,
@@ -38,7 +40,7 @@ class LoginInput final {
     /*
      * @brief The screen to use to render the components
      */
-    ScreenManager &screenManager_;
+     MainTui &mainTui_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -98,13 +100,13 @@ class LoginInput final {
     /*
      * @brief Construct a new Login Input object
      *
-     * @param screenManager The screen manager for asking to render the
+     * @param MainTui The Main Tui for asking to render the
      * components
      * @param controller The controller to interact with the server
      * @param title The title of the input screen (Login or Register)
      * @param loginType The type of the login (Login or Register)
      */
-    LoginInput(ScreenManager &screenManager, Controller &controller,
+    LoginInput(MainTui &MminTui, Controller &controller,
                std::string title, LoginType loginType);
 
     /*

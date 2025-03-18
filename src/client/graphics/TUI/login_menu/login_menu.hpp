@@ -34,6 +34,9 @@ constexpr std::string_view REGISTER_INSTRUCTIONS =
 constexpr std::string_view LOGIN_MESSAGE =
     "Your account has been created successfully! You can now login.";
 
+
+class MainTui; // Forward declaration
+
 class Controller; // Forward declaration
 
 /**
@@ -46,7 +49,7 @@ class LoginMenu final {
     /*
      * @brief The screen to use to render the components
      */
-    ScreenManager &screenManager_;
+    MainTui &mainTui_;
 
     /*
      * @brief The controller to ask for the data to show to the user
@@ -79,7 +82,7 @@ class LoginMenu final {
      * components
      * @param controller The controller to interact with the server
      */
-    LoginMenu(ScreenManager &screenManager, Controller &controller);
+    LoginMenu(MainTui &screenManager, Controller &controller);
 
     /*
      * @brief Destroy the Login Menu object
