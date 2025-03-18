@@ -12,8 +12,6 @@
 #include <ftxui/component/component.hpp>
 #include <string>
 
-#include "../../ILogin_Input.hpp"
-
 class MainTui; // Forward declaration
 
 class Controller; // Forward declaration
