@@ -443,27 +443,6 @@ ftxui::Component GameDisplay::drawGameOver() {
     });
 
     ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
-        screenManager_.stopRender();
-    }, GlobalButtonStyle());
-
-    ftxui::Component container = ftxui::Container::Vertical({
-        title,
-        ftxui::Renderer([] { return ftxui::separator(); }),
-        scoreText,
-        ftxui::Renderer([] { return ftxui::separator(); }),
-        button,
-    });
-
-    return container;
-}
-
-    ftxui::Component scoreText = ftxui::Renderer([&] {
-        return ftxui::text("Your score was: "
-                           + std::to_string(controller_.getSelfScore()))
-               | ftxui::center;
-    });
-
-    ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
         mainTui_.stopRender();
     }, GlobalButtonStyle());
 
@@ -478,6 +457,7 @@ ftxui::Component GameDisplay::drawGameOver() {
     return container;
 }
 
+
 // public methods
 
 void GameDisplay::render() {
@@ -487,12 +467,7 @@ void GameDisplay::render() {
         gameContainer->DetachAllChildren();
 
         if (controller_.noGame()) {
-<<<<<<< HEAD
-            // It's game over so we change the displayWindow to the
-            // gameOverComponent to show the game over screen
-=======
             // It's game over so we change the displayWindow to the gameOverComponent to show the game over screen
->>>>>>> 57747da (add score on the gameover screen)
             gameContainer->Add(drawGameOver());
             return;
         }
