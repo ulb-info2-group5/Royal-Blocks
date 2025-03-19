@@ -4,9 +4,6 @@
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../../../core/controller/controller.hpp"
 
-// TODO: add verification of information when adding a friend, sending a
-// message, etc. with the server.
-
 // ### constructor ###
 Messaging::Messaging(MainTui &mainTui, Controller &controller)
     : mainTui_(mainTui), controller_(controller) {
@@ -132,10 +129,16 @@ void Messaging::drawDisplay() {
                 else {
                     for (auto &[senderId, message] :
                          conversation.senderMessages) {
-                        chat_elements.push_back(
-                            ftxui::text(message) | ftxui::bold
-                            | ftxui::color(ftxui::Color::Yellow));
-                    }
+                            if (senderId == id) {
+                                chat_elements.push_back(
+                                    ftxui::text(name + " : " + message) | ftxui::bold
+                                    | ftxui::color(ftxui::Color::Blue));
+                            } else {
+                                chat_elements.push_back(
+                                    ftxui::text("me : " + message) | ftxui::bold
+                                    | ftxui::color(ftxui::Color::White));
+                            }
+                        }
                 }
 
                 return ftxui::vbox(chat_elements) | ftxui::flex;
