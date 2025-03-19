@@ -137,7 +137,7 @@
  
  
  bool FriendsManager::removePendingFriendRequest(const int user1Id, const int user2Id){
-     if (!checkFriendshipExists(user1Id, user2Id)) {
+     if (!isPendingFriendRequestExist(user1Id, user2Id)) {
          std::cerr << "Error: PendingFriendRequest between '" << user1Id << "' and '"
                    << user2Id << "' does not exist." << std::endl;
          return false;
