@@ -15,6 +15,7 @@ void GamesManager::deleteGame(GameID gameId) {
         }
     }
     gameSessions_.erase(gameId);
+    gamethreads_.erase(gameId);
 }
 
 // ======== public methode ========

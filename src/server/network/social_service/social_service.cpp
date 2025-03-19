@@ -56,10 +56,10 @@ bindings::FriendsList SocialService::getFriendsList(UserID userID){
 
 
 
-bindings::Conversations SocialService::getConversations(UserID userID){
+bindings::Conversations SocialService::getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager ){
     bindings::Conversations conversations;
     for (auto id : messagesManager_->getAllUser(userID)){
-        //
+        conversations.conversationsById.insert({id, {accountManager->getUsername(id), messagesManager_->getDiscussion(userID, id) }});
     }
     return conversations;
 }

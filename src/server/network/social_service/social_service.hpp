@@ -52,7 +52,7 @@ class SocialService{
         bindings::FriendsList getFriendsList(UserID userID);
 
 
-        bindings::Conversations getConversations(UserID userID);
+        bindings::Conversations getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager);
 
        
 

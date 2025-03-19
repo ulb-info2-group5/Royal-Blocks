@@ -327,6 +327,7 @@ void ClientManager::updateMenu(UserID userID){
     if (getUserState(userID) == bindings::State::Menu ){
         connectedClients_[userID]->sendPackage(socialService_.getPendignsFriendRequests(userID).to_json());
         connectedClients_[userID]->sendPackage(socialService_.getFriendsList(userID).to_json());
+        connectedClients_[userID]->sendPackage(socialService_.getConversations(userID, database_.accountManager).to_json());
     }
     
 }
