@@ -26,11 +26,6 @@ enum class FriendsManagerState {
     BACK,
 };
 
-enum class ManageOrRequestFriend {
-    MANAGE,
-    REQUEST,
-};
-
 class FriendsMenu final {
   private:
     MainTui &mainTui_;
@@ -53,18 +48,15 @@ class FriendsMenu final {
      * @return std::vector<ftxui::Component> The list of buttons to display
      */
     std::vector<ftxui::Component>
-    displayFriendButtons(const std::vector<bindings::User> &friendsList,
-                         ManageOrRequestFriend manageOrRequest);
+    displayFriendButtons(const std::vector<bindings::User> &friendsList);
 
     /*
      * @brief Manage the friendlist screen when a friend is clicked
      *
      * @param friendUser The friend to manage
-     * @param manageOrRequest To know if the user is managing or requesting the
      * friend
      */
-    void manageFriendlistScreen(const bindings::User &friendUser,
-                                ManageOrRequestFriend manageOrRequest);
+    void manageFriendlistScreen(const bindings::User &friendUser);
 
     /*
      * @brief Screen to add a friend
