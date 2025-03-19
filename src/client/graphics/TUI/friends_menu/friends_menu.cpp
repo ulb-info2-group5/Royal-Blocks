@@ -98,7 +98,6 @@ void FriendsMenu::addFriendScreen() {
                        ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold
                            | ftxui::center,
                        ftxui::separator(),
-                       ftxui::text(""), // Empty line
                        input_->Render(),
                        ftxui::separator(),
                        submitButton_->Render(),
@@ -171,14 +170,24 @@ void FriendsMenu::createButtons() {
         },
         GlobalButtonStyle());
 
-    input_ = ftxui::Input(&friendNameBuffer_, std::string(STR_NAME_OF_FRIEND))
-             | ftxui::borderHeavy | ftxui::center;
+        input_ = ftxui::Input(&friendNameBuffer_, std::string(STR_NAME_OF_FRIEND))
+        | ftxui::borderHeavy | ftxui::center | ftxui::CatchEvent([&](ftxui::Event event) {
+           if (event == ftxui::Event::Return && !friendNameBuffer_.empty()) {
+               controller_.sendFriendRequest(friendNameBuffer_);
+               addMessage_ = "Friend request sent to " + friendNameBuffer_;
+               friendNameBuffer_.clear();
+               return true;
+           } else if (event == ftxui::Event::Return) {
+               return true; // Do not send an empty friend request
+           }
+           return false; 
+       });
 
     submitButton_ = ftxui::Button(
         std::string(STR_ADD),
         [&] {
             controller_.sendFriendRequest(friendNameBuffer_);
-            mainTui_.stopRender();
+            addMessage_ = "Friend request sent to " + friendNameBuffer_;
         },
         GlobalButtonStyle());
 

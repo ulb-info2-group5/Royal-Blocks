@@ -40,6 +40,8 @@ class FriendsMenu final {
     ftxui::Component buttonBackToMainMenu_;
     ftxui::Component ManageFriendRequest_;
 
+    std::string addMessage_;
+
     /*
      * @brief Render the friends list of the user to display with all friends
      * dislayed is a button
