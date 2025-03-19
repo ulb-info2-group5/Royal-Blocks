@@ -239,21 +239,22 @@ void FriendsMenu::FriendRequestScreen() {
                 },
                 GlobalButtonStyle()));
         }
-
-        mainContainer->Add(ftxui::Renderer([] {
-            return ftxui::text("List of your pending friends requests");
-        }));
-        for (const ftxui::Component &friendButton : friendsButtons) {
-            mainContainer->Add(friendButton);
-        }
+        
         if (friendsButtons.size() == 0) {
             ftxui::Component renderNoFriends =
                 ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                     return ftxui::vbox({
-                        ftxui::text(std::string(STR_NO_FRIEND)),
+                        ftxui::text(std::string(STR_NO_FRIEND_REQUEST)) | ftxui::center,
                     });
                 });
             mainContainer->Add(renderNoFriends);
+        } else {
+            mainContainer->Add(ftxui::Renderer([] {
+                return ftxui::text("List of your pending friends requests");
+            }));
+            for (const ftxui::Component &friendButton : friendsButtons) {
+                mainContainer->Add(friendButton);
+            }
         }
 
         if (activeRequest) {
