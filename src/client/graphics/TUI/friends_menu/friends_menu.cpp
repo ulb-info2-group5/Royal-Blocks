@@ -84,6 +84,7 @@ void FriendsMenu::render() {
 
 void FriendsMenu::addFriendScreen() {
     friendNameBuffer_.clear();
+    addMessage_.clear();
 
     ftxui::Component component = ftxui::Renderer(
         ftxui::Container::Vertical({
@@ -94,20 +95,27 @@ void FriendsMenu::addFriendScreen() {
             }),
         }),
         [&] {
-            return ftxui::vbox({
-                       ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold
-                           | ftxui::center,
-                       ftxui::separator(),
-                       input_->Render(),
-                       ftxui::separator(),
-                       submitButton_->Render(),
-                       buttonBack_->Render(),
-                   })
-                   | ftxui::borderHeavy | ftxui::center;
+            std::vector<ftxui::Element> elements = {
+                ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold | ftxui::center,
+                ftxui::separator(),
+                input_->Render(),
+                ftxui::separator()
+            };
+
+            if (!addMessage_.empty()) {
+                elements.push_back(ftxui::text(addMessage_) | ftxui::bold | ftxui::center);
+                elements.push_back(ftxui::separator());
+            }
+
+            elements.push_back(submitButton_->Render());
+            elements.push_back(buttonBack_->Render());
+
+            return ftxui::vbox(elements) | ftxui::borderHeavy | ftxui::center;
         });
 
     mainTui_.render(component);
 }
+
 
 std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     const std::vector<bindings::User> &friendsList) {
