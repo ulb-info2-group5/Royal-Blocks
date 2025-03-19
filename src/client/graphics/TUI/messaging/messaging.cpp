@@ -71,7 +71,19 @@ void Messaging::drawInputUser() {
 
     messageInput_ =
         ftxui::Input(&newMessageBuffer_, std::string(STR_WRITE_MESSAGE))
-        | ftxui::center | ftxui::borderHeavy;
+        | ftxui::center | ftxui::borderHeavy | ftxui::CatchEvent([&](ftxui::Event event) {
+            if (event == ftxui::Event::Return) {
+                if (!newMessageBuffer_.empty()) {
+                    getSelectedFriendId().and_then([&](UserID userID) {
+                        controller_.sendMessage(userID, newMessageBuffer_);
+                        return std::optional<UserID>{};
+                    });
+                    newMessageBuffer_.clear();
+                }
+                return true;
+            }
+            return false;
+        });;
 }
 
 void Messaging::drawMenu() {
