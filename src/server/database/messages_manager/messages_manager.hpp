@@ -83,18 +83,7 @@ class MessagesManager {
      */
 
     bool addDiscussion(const int &idUser1, const int &idUser2);
-    /*
-     *
-     *@brief check if there is a discussion between two users managing the case
-     *where the discussion exists on the table but the file containing the
-     *discussion no longer exists or does not exist
-     * @param idUser1 Id of the first user
-     * @param idUser2 Id of the second user
-     *
-     * @return true if there is any discussion and false is not
-     *
-     */
-    bool isThereDiscussion(const int &idUser1, const int &idUser2);
+    
 
     /*
      *@brief return the discussion pathfile between user 1 and user 2
@@ -126,8 +115,22 @@ class MessagesManager {
      * @param content the content of the messages
      *
      **/
+
     void addMessage(const int &senderId, const int &recieverId,
                      const std::string &content);
+    
+    /*
+     *
+     *@brief check if there is a discussion between two users managing the case
+     *where the discussion exists on the table but the file containing the
+     *discussion no longer exists or does not exist
+     * @param idUser1 Id of the first user
+     * @param idUser2 Id of the second user
+     *
+     * @return true if there is any discussion and false is not
+     *
+     */
+    bool isThereDiscussion(const int &idUser1, const int &idUser2);
 
     void writeMessage(const std::string &pathfile, const Message &message);
 

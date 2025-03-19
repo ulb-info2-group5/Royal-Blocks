@@ -26,6 +26,7 @@ void SocialService::handleHandleFriendRequest(UserID senderID, bindings::HandleF
     if (handleFrienddRequest.action == bindings::HandleFriendRequest::Action::Accept){
         friendsManager_->addFriend(senderID, handleFrienddRequest.userId );
     }
+    
     friendsManager_->removePendingFriendRequest(senderID, handleFrienddRequest.userId);
 }
 
@@ -59,7 +60,9 @@ bindings::FriendsList SocialService::getFriendsList(UserID userID){
 bindings::Conversations SocialService::getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager ){
     bindings::Conversations conversations;
     for (auto id : messagesManager_->getAllUser(userID)){
-        conversations.conversationsById.insert({id, {accountManager->getUsername(id), messagesManager_->getDiscussion(userID, id) }});
+        if (messagesManager_->isThereDiscussion(userID, id)){
+            conversations.conversationsById.insert({id, {accountManager->getUsername(id), messagesManager_->getDiscussion(userID, id) }});
+        }
     }
     return conversations;
 }

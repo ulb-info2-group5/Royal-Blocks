@@ -268,6 +268,8 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         break;
     case bindings::BindingType::Message:
         socialService_.handleMessages(clientId, bindings::Message::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("recipientId").get<UserID>());
         break;
     case bindings::BindingType::HandleFriendRequest:
         

@@ -57,25 +57,7 @@ bool MessagesManager::addDiscussion(const int &idUser1, const int &idUser2) {
     return true;
 }
 
-bool MessagesManager::isThereDiscussion(const int &idUser1,
-                                        const int &idUser2) {
-    std::string sql = "SELECT COUNT(*) FROM userMessages WHERE (user1_id = ? "
-                      "AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
-    int count = 0;
-    // check if the discussion exists on the table
-    
-    if (!(dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0)) {
-        return false;
-    } else {
-        // check if the discussion file exists (json file)
-        return std::filesystem::exists("data/chat/user"
-                                       + std::to_string(idUser1) + "_user"
-                                       + std::to_string(idUser2) + ".json")
-               || std::filesystem::exists("data/chat/user"
-                                          + std::to_string(idUser2) + "_user"
-                                          + std::to_string(idUser1) + ".json");
-    }
-}
+
 
 std::string MessagesManager::getPathDiscussion(const int &idUser1,
                                                const int &idUser2) {
@@ -115,16 +97,37 @@ void MessagesManager::addMessage(const int &senderId, const int &recieverId,
 }
 
 
+bool MessagesManager::isThereDiscussion(const int &idUser1,
+                                        const int &idUser2) {
+    std::string sql = "SELECT COUNT(*) FROM userMessages WHERE (user1_id = ? "
+                      "AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
+    int count = 0;
+    // check if the discussion exists on the table
+    
+    if (!(dbManager_->executeSqlRecoveryInt(sql, {idUser1, idUser2, idUser2, idUser1}, count) && count > 0)) {
+        return false;
+    } else {
+        // check if the discussion file exists (json file)
+        return std::filesystem::exists("data/chat/user"
+                                       + std::to_string(idUser1) + "_user"
+                                       + std::to_string(idUser2) + ".json")
+               || std::filesystem::exists("data/chat/user"
+                                          + std::to_string(idUser2) + "_user"
+                                          + std::to_string(idUser1) + ".json");
+    }
+}
+
 std::vector<int> MessagesManager::getAllUser(const int &idUser){
-    std::string sql = "SELECT user1, user2 FROM userMessages WHERE user1 = ? OR user2 = ?";
-    return dbManager_->getVectorInfo(sql, idUser);
+    std::string sql = "SELECT user1_id, user2_id FROM userMessages WHERE user1_id = ? OR user2_id = ?";
+    return dbManager_->getVectorInfo(sql, idUser); 
 }
 
 bindings::Conversation MessagesManager::getDiscussion(const int &idUser1 , const int&idUser2){
+    std::cout << "get path discussion (debug) => "<< getPathDiscussion(idUser1, idUser2) << std::endl;
     std::ifstream infile(getPathDiscussion(idUser1, idUser2));
 
     nlohmann::json jsondiscu = nlohmann::json::parse(infile);
-    std::cout << jsondiscu.dump() << std::endl;
+    std::cout << "get conversation == " << jsondiscu.dump() << std::endl;
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
     return discussion;
 }
