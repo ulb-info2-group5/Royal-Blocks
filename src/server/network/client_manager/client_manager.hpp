@@ -9,6 +9,7 @@
 
 #include "../../../common/bindings/authentication.hpp"
 #include "../../../common/bindings/authentication_response.hpp"
+#include "../../../common/bindings/in_game/quit_game.hpp"
 
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"

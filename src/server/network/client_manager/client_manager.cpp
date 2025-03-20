@@ -36,12 +36,19 @@ void ClientLink::handleReading() {
 }
 
 void ClientLink::handleErrorReading() {
+    std::cout << "erreor reading " << std::endl;
     nlohmann::json removeClient = bindings::RemoveClient{}.to_json();
     if (getUserState() == bindings::State::Offline) {
         mustBeDeletedFromTheWaitingForAuthList_ = false;
         authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(),
                            removeClient);
-    } else {
+    }else if (getUserState() == bindings::State::InGame){
+        packetHandler_(bindings::QuitGame{}.to_json().dump(), clientId.value());
+        setUserState(bindings::State::Offline);
+        packetHandler_(removeClient.dump(), clientId.value());
+    } 
+    
+    else {
         packetHandler_(removeClient.dump(), clientId.value());
     }
 }
@@ -140,7 +147,7 @@ void ClientManager::disconnectClient(const UserID &userID) {
 }
 
 void ClientManager::removeConnection(const UserID &userID) {
-
+    std::cout << "remove connection call " << std::endl;
     connectedClients_.erase(userID);
 }
 
@@ -232,7 +239,8 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
 void ClientManager::handlePacket(const std::string &packet,
                                  const UserID &clientId) {
 
-    if (gamesManager_.isThisClientInGame(clientId)) {
+    if (connectedClients_[clientId]->getUserState() == bindings::State::InGame ) {
+
         gamesManager_.enqueueGameBinding(clientId, packet);
         return;
     } else {
@@ -335,10 +343,13 @@ void ClientManager::updateMenu(UserID userID){
 }
 
 void ClientManager::updateGamePlayer(UserID userIds, nlohmann::json gameState) {
-    if (gameState.at("type").get<bindings::BindingType>() == bindings::BindingType::GameOver){
-        connectedClients_[userIds]->setUserState(bindings::State::Menu);
-    } 
-    connectedClients_[userIds]->sendPackage(gameState);
+    if (getUserState(userIds) != bindings::State::Offline){
+        if (gameState.at("type").get<bindings::BindingType>() == bindings::BindingType::GameOver){
+            connectedClients_[userIds]->setUserState(bindings::State::Menu);
+        } 
+        connectedClients_[userIds]->sendPackage(gameState);    
+    }
+    
 }
 
 bool ClientManager::isClientConnected(UserID userID) {
