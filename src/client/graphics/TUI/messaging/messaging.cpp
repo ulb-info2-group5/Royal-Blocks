@@ -3,6 +3,7 @@
 #include "../main_tui.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../../../core/controller/controller.hpp"
+#include <ftxui/dom/elements.hpp>
 
 // ### constructor ###
 Messaging::Messaging(MainTui &mainTui, Controller &controller)
@@ -14,14 +15,6 @@ Messaging::Messaging(MainTui &mainTui, Controller &controller)
 // ### protected methods ###
 
 void Messaging::createButtons() {
-    addFriendButton_ = ftxui::Button(
-        std::string(STR_ADD_A_FRIEND),
-        [&] {
-            controller_.sendFriendRequest(newFriendBuffer_);
-            newFriendBuffer_.clear();
-        },
-        GlobalButtonStyle());
-
     sendButton_ =
         ftxui::Button(
             std::string(STR_SEND),
@@ -47,24 +40,11 @@ void Messaging::createButtons() {
             userState_ = MessagingState::BACK;
             mainTui_.stopRender();
         },
-        GlobalButtonStyle());
+        GlobalButtonStyle()) | ftxui::center;
 }
 
 void Messaging::drawInputUser() {
     newFriendBuffer_.clear();
-
-    addFriendInput_ =
-        ftxui::Input(&newFriendBuffer_, std::string(STR_NAME_OF_FRIEND))
-        | ftxui::center | ftxui::borderHeavy;
-    // attempt to send the result when  user press enter
-
-    // addFriendInput |= CatchEvent([&](ftxui::Event event) {
-    //     if ( event == event.Return) {
-    //         if (!newFriend.empty()) {
-    //         }
-
-    //     }
-    // });
 
     messageInput_ =
         ftxui::Input(&newMessageBuffer_, std::string(STR_WRITE_MESSAGE))
@@ -98,12 +78,6 @@ void Messaging::drawMenu() {
                    });
 
     friendsMenu_ = ftxui::Menu(&friendNames_, &selectedFriend_);
-
-    addMenu_ = ftxui::Container::Vertical({
-        addFriendInput_,
-        addFriendButton_,
-        backButton_,
-    });
 }
 
 void Messaging::drawDisplay() {
@@ -157,8 +131,8 @@ void Messaging::drawWindow() {
                 chatDisplay_,
                 messageInput_,
                 sendButton_,
+                backButton_,
             }),
-            addMenu_,
         }),
         [&] {
             return ftxui::hbox({
@@ -180,24 +154,14 @@ void Messaging::drawWindow() {
                            ftxui::separator(),
                            messageInput_->Render(),
                            ftxui::separator(),
+
+                           ftxui::hbox({
                            sendButton_->Render(),
+                           backButton_->Render(),
+                           }) | ftxui::center,
+                           
                        }) | ftxui::borderHeavy
                            | ftxui::flex,
-
-                       ftxui::vbox({
-                           ftxui::text(std::string(STR_ADD_FRIEND_TITLE))
-                               | ftxui::bold | ftxui::color(ftxui::Color::Green)
-                               | ftxui::center,
-                           ftxui::separator(),
-                           addFriendInput_->Render(),
-                           ftxui::separator(),
-                           addFriendButton_->Render(),
-                           ftxui::separator(),
-
-                           backButton_->Render(),
-                           ftxui::separator(),
-                       }) | ftxui::borderHeavy,
-
                    })
                    | ftxui::borderHeavy;
         });

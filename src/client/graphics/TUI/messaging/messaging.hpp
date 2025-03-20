@@ -37,14 +37,11 @@ class Messaging final {
     MessagingState userState_;
 
     ftxui::Component friendsMenu_;
-    ftxui::Component addMenu_;
 
-    ftxui::Component addFriendInput_;
     ftxui::Component messageInput_;
 
     ftxui::Component backButton_;
     ftxui::Component sendButton_;
-    ftxui::Component addFriendButton_;
 
     ftxui::Component sidebar_;
     ftxui::Component chatDisplay_;
