@@ -253,74 +253,6 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     }
 }
 
-size_t Controller::getBoardHeight() {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.tetris.board.getHeight();
-}
-
-size_t Controller::getBoardWidth() {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.tetris.board.getWidth();
-}
-
-Score Controller::getSelfScore() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.playerState.score;
-}
-
-Score Controller::getSelfEnergy() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.playerState.energy.value_or(0);
-}
-
-GameMode Controller::getGameMode() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->gameMode;
-}
-
-std::optional<std::pair<unsigned, Controller::SelfCellType>>
-Controller::selfCellInfoAt(int x, int y) const {
-    std::lock_guard<std::mutex> guard(mutex_);
-
-    if (gameState_->self.tetris.board.get(x, y).getColorId().has_value()) {
-        return std::make_pair(
-            gameState_->self.tetris.board.get(x, y).getColorId().value(),
-            Controller::SelfCellType::Placed);
-    }
-
-    auto &activeTetromino = gameState_->self.tetris.activeTetromino;
-    if (activeTetromino.has_value()) {
-        for (auto &vec : activeTetromino->body) {
-            if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
-                return std::make_optional(
-                    std::make_pair(activeTetromino->colorId,
-                                   Controller::SelfCellType::Active));
-            }
-        }
-    }
-
-    auto &previewTetromino = gameState_->self.tetris.previewTetromino;
-    if (previewTetromino.has_value()) {
-        for (auto &vec : previewTetromino->body) {
-            if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
-                return std::make_optional(
-                    std::make_pair(previewTetromino->colorId,
-                                   Controller::SelfCellType::Preview));
-            }
-        }
-    }
-
-    return std::nullopt;
-}
-
-std::optional<unsigned>
-Controller::opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->externals.at(opponentIdx)
-        .tetris.board.get(x, y)
-        .getColorId();
-}
-
 void Controller::acceptFriendRequest(UserID userId) {
     networkManager_.send(bindings::HandleFriendRequest{
         userId, bindings::HandleFriendRequest::Action::Accept}
@@ -335,30 +267,9 @@ void Controller::declineFriendRequest(UserID userId) {
                              .dump());
 }
 
-std::string Controller::getSelfUsername() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->self.playerState.username;
-}
+bool Controller::gameHasStarted() const { return gameState_.has_value(); }
 
-std::string Controller::getOpponentUsername(size_t opponentIdx) const {
+std::optional<client::GameState> Controller::getGameState() {
     std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->externals.at(opponentIdx).playerState.username;
-}
-
-size_t Controller::getNumOpponents() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_->externals.size();
-}
-
-bool Controller::gameHasStarted() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    return gameState_.has_value();
-}
-
-bool Controller::noGame() const {
-    std::lock_guard<std::mutex> guard(mutex_);
-    if (gameState_ == std::nullopt) {
-        return true;
-    };
-    return false;
+    return gameState_;
 }

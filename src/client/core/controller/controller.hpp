@@ -28,9 +28,9 @@ using NameConversation = std::pair<std::string, bindings::Conversation>;
 struct Message;
 
 enum class UiChoice {
-  GUI,
-  TUI,
-  NONE,
+    GUI,
+    TUI,
+    NONE,
 };
 
 class Controller {
@@ -45,15 +45,6 @@ class Controller {
         Unregistered,
         Registered,
         Failed,
-    };
-
-    // Returned by selfCellInfoAt.
-    // Tells us whether the cell at (x,y) is the part of the active or preview
-    // or a placed Tetromino.
-    enum class SelfCellType {
-        Active,
-        Preview,
-        Placed,
     };
 
   private:
@@ -197,31 +188,9 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    size_t getBoardHeight();
-
-    size_t getBoardWidth();
-
-    Score getSelfScore() const;
-
-    Score getSelfEnergy() const;
-
-    GameMode getGameMode() const;
-
-    std::optional<std::pair<unsigned, Controller::SelfCellType>>
-    selfCellInfoAt(int x, int y) const;
-
-    std::string getSelfUsername() const;
-
-    std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
-                                                       int x, int y) const;
-
-    std::string getOpponentUsername(size_t opponentIdx) const;
-
-    size_t getNumOpponents() const;
-
     bool gameHasStarted() const;
 
-    bool noGame() const;
+    std::optional<client::GameState> getGameState();
 };
 
 #endif // CONTROLLER_HPP

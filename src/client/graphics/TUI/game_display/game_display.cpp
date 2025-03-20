@@ -4,8 +4,8 @@
 #include "board/board.hpp"
 #include "game_mode/game_mode.hpp"
 
-#include "../main_tui.hpp"
 #include "../../../core/controller/controller.hpp"
+#include "../main_tui.hpp"
 
 // TODO: this should defo go somewhere else
 #include <ftxui/component/component.hpp>
@@ -41,8 +41,8 @@ Color colorIdToColor(unsigned colorID) {
     };
 }
 
-ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
-                                            Controller::SelfCellType::Placed) {
+ftxui::Color getFTXUIColor(Color color, GameDisplay::SelfCellType selfCellType =
+                                            GameDisplay::SelfCellType::Placed) {
     ftxui::Color returnValue = ftxui::Color::Blue;
 
     switch (color) {
@@ -81,7 +81,7 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
         break;
     };
 
-    if (selfCellType == Controller::SelfCellType::Preview) {
+    if (selfCellType == GameDisplay::SelfCellType::Preview) {
         returnValue =
             ftxui::Color::Blend(returnValue, ftxui::Color::RGB(128, 128, 128));
     }
@@ -92,8 +92,7 @@ ftxui::Color getFTXUIColor(Color color, Controller::SelfCellType selfCellType =
 // constructor
 
 GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller) {
-}
+    : mainTui_(mainTui), controller_(controller) {}
 
 // protected methods
 
@@ -101,11 +100,10 @@ void GameDisplay::drawPlayerInfo() {
     playerInfo_ = ftxui::Renderer([&] {
         return ftxui::vbox(
 
-                   {ftxui::text("Score : "
-                                + std::to_string(controller_.getSelfScore()))
+                   {ftxui::text("Score : " + std::to_string(getSelfScore()))
                         | ftxui::center,
                     // TODO: use the actual nickname
-                    ftxui::text(controller_.getSelfUsername()) | ftxui::center})
+                    ftxui::text(getSelfUsername()) | ftxui::center})
                | ftxui::borderDashed;
     });
 }
@@ -137,7 +135,7 @@ void GameDisplay::drawRoyalEffectsEnergy() {
         return ftxui::vbox(
             {ftxui::gaugeRight(
                  // TODO: check that whether this must be below 1.
-                 controller_.getSelfEnergy()),
+                 getSelfEnergy()),
              ftxui::text("energy power") | ftxui::borderRounded});
     });
 }
@@ -147,11 +145,11 @@ void GameDisplay::displayLeftWindow() {
         std::string(STR_QUIT_GAME),
         [&] {
             controller_.quitGame();
-            mainTui_.stopRender(); 
+            mainTui_.stopRender();
         },
         GlobalButtonStyle());
 
-    if (controller_.getGameMode() == GameMode::RoyalCompetition) {
+    if (getGameMode() == GameMode::RoyalCompetition) {
         drawPlayerInfo();
         drawRoyalEffectsEnergy();
 
@@ -176,14 +174,14 @@ void GameDisplay::drawPlayerBoard() {
             ftxui::Canvas(WIDTH_PLAYER_CANVAS, HEIGHT_PLAYER_CANVAS);
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        size_t height = controller_.getBoardHeight();
-        size_t width = controller_.getBoardWidth();
+        size_t height = getBoardHeight();
+        size_t width = getBoardWidth();
 
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
 
                 pixel.background_color =
-                    controller_.selfCellInfoAt(x, y)
+                    selfCellInfoAt(x, y)
                         .transform([](auto cellInfo) {
                             return getFTXUIColor(colorIdToColor(cellInfo.first),
                                                  cellInfo.second);
@@ -209,7 +207,7 @@ void GameDisplay::displayMiddleWindow() {
     drawPlayerBoard();
 
     ftxui::Component modeDisplay = ftxui::Renderer([&] {
-        return ftxui::text(toString(controller_.getGameMode())) | ftxui::center
+        return ftxui::text(toString(getGameMode())) | ftxui::center
                | ftxui::border;
     });
 
@@ -223,23 +221,24 @@ void GameDisplay::displayMiddleWindow() {
 
 void GameDisplay::drawOpponentsBoard() {
     opBoards_.clear();
-    for (uint32_t index = 0; index < controller_.getNumOpponents(); ++index) {
+    for (uint32_t index = 0; index < getNumOpponents(); ++index) {
         ftxui::Component opBoardDisplay = ftxui::Renderer([&, index] {
             ftxui::Canvas opCanvas =
                 ftxui::Canvas(WIDTH_OP_CANVAS, HEIGHT_OP_CANVAS);
             ftxui::Pixel pixel = ftxui::Pixel();
 
-            size_t height = controller_.getBoardHeight();
-            size_t width = controller_.getBoardWidth();
+            size_t height = getBoardHeight();
+            size_t width = getBoardWidth();
 
             for (uint32_t y = 0; y < height; ++y) {
                 for (uint32_t x = 0; x < width; ++x) {
 
-                    pixel.background_color = getFTXUIColor(
-                        controller_.opponentsBoardGetColorIdAt(index, x, y)
-                            .transform(
-                                [](auto id) { return colorIdToColor(id); })
-                            .value_or(Color::Black));
+                    pixel.background_color =
+                        getFTXUIColor(opponentsBoardGetColorIdAt(index, x, y)
+                                          .transform([](auto id) {
+                                              return colorIdToColor(id);
+                                          })
+                                          .value_or(Color::Black));
 
                     for (uint32_t dy = 0; dy < CELL_SIZE_OPPONENT; ++dy) {
                         for (uint32_t dx = 0; dx < CELL_SIZE_OPPONENT; ++dx) {
@@ -258,8 +257,7 @@ void GameDisplay::drawOpponentsBoard() {
         ftxui::Component opDisplay = ftxui::Container::Vertical({
             opBoardDisplay,
             ftxui::Button(
-                controller_.getOpponentUsername(index),
-                [&] { /* function to call */ },
+                getOpponentUsername(index), [&] { /* function to call */ },
                 ftxui::ButtonOption::Animated(ftxui::Color::Yellow1))
                 | ftxui::borderDouble,
         });
@@ -272,7 +270,7 @@ void GameDisplay::displayOppponentsBoard() {
     drawOpponentsBoard();
 
     ftxui::Components rows = {};
-    uint32_t totalOpponentsPlayers = controller_.getNumOpponents();
+    uint32_t totalOpponentsPlayers = getNumOpponents();
 
     for (uint32_t i = 0; i < 2; ++i) { // 2 rows
         ftxui::Component line;
@@ -313,14 +311,14 @@ void GameDisplay::displayOpponentBoardDuel() {
                                    // as the player's
         ftxui::Pixel pixel = ftxui::Pixel();
 
-        size_t height = controller_.getBoardHeight();
-        size_t width = controller_.getBoardWidth();
+        size_t height = getBoardHeight();
+        size_t width = getBoardWidth();
 
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
 
                 pixel.background_color = getFTXUIColor(
-                    controller_.opponentsBoardGetColorIdAt(0, x, y)
+                    opponentsBoardGetColorIdAt(0, x, y)
                         .transform([](auto id) { return colorIdToColor(id); })
                         .value_or(Color::Black));
 
@@ -345,14 +343,13 @@ void GameDisplay::displayOpponentBoardDuel() {
 
         return ftxui::vbox({
             ftxui::canvas(playerCanvas) | ftxui::border,
-            ftxui::text(controller_.getOpponentUsername(0))
-                | ftxui::borderDouble,
+            ftxui::text(getOpponentUsername(0)) | ftxui::borderDouble,
         });
     });
 }
 
 void GameDisplay::displayMultiRightWindow() {
-    if (controller_.getGameMode() == GameMode::Dual) {
+    if (getGameMode() == GameMode::Dual) {
         displayOpponentBoardDuel();
     } else {
         displayOppponentsBoard();
@@ -426,7 +423,7 @@ void GameDisplay::handleKeys() {
 }
 
 void GameDisplay::updateDisplay() {
-    if (controller_.getGameMode() == GameMode::Endless) {
+    if (getGameMode() == GameMode::Endless) {
         drawEndlessMode();
     } else {
         drawMultiMode();
@@ -434,17 +431,17 @@ void GameDisplay::updateDisplay() {
 }
 
 ftxui::Component GameDisplay::drawGameOver() {
-    ftxui::Component title = ftxui::Renderer([] {
-        return GAME_OVER_TITLE | ftxui::center;
-    });
+    ftxui::Component title =
+        ftxui::Renderer([] { return GAME_OVER_TITLE | ftxui::center; });
 
     ftxui::Component scoreText = ftxui::Renderer([&] {
-        return ftxui::text("Your score was: " + std::to_string(controller_.getSelfScore())) | ftxui::center;
+        return ftxui::text("Your score was: " + std::to_string(getSelfScore()))
+               | ftxui::center;
     });
 
-    ftxui::Component button = ftxui::Button(std::string(STR_RETURN_TO_MAIN_MENU), [&] {
-        mainTui_.stopRender();
-    }, GlobalButtonStyle());
+    ftxui::Component button = ftxui::Button(
+        std::string(STR_RETURN_TO_MAIN_MENU), [&] { mainTui_.stopRender(); },
+        GlobalButtonStyle());
 
     ftxui::Component container = ftxui::Container::Vertical({
         title,
@@ -457,17 +454,19 @@ ftxui::Component GameDisplay::drawGameOver() {
     return container;
 }
 
-
 // public methods
 
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
     auto updateGameDisplay = [&] {
+        gameState_ = controller_.getGameState();
+
         gameContainer->DetachAllChildren();
 
-        if (controller_.noGame()) {
-            // It's game over so we change the displayWindow to the gameOverComponent to show the game over screen
+        if (!inGame()) {
+            // It's game over so we change the displayWindow to the
+            // gameOverComponent to show the game over screen
             gameContainer->Add(drawGameOver());
             return;
         }
@@ -490,3 +489,76 @@ void GameDisplay::render() {
 
     mainTui_.render(render);
 }
+
+size_t GameDisplay::getBoardHeight() {
+    return gameState_->self.tetris.board.getHeight();
+}
+
+size_t GameDisplay::getBoardWidth() {
+    return gameState_->self.tetris.board.getWidth();
+}
+
+Score GameDisplay::getSelfScore() const {
+    return gameState_->self.playerState.score;
+}
+
+Score GameDisplay::getSelfEnergy() const {
+    return gameState_->self.playerState.energy.value_or(0);
+}
+
+GameMode GameDisplay::getGameMode() const { return gameState_->gameMode; }
+
+std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
+GameDisplay::selfCellInfoAt(int x, int y) const {
+    if (gameState_->self.tetris.board.get(x, y).getColorId().has_value()) {
+        return std::make_pair(
+            gameState_->self.tetris.board.get(x, y).getColorId().value(),
+            GameDisplay::SelfCellType::Placed);
+    }
+
+    auto &activeTetromino = gameState_->self.tetris.activeTetromino;
+    if (activeTetromino.has_value()) {
+        for (auto &vec : activeTetromino->body) {
+            if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(activeTetromino->colorId,
+                                   GameDisplay::SelfCellType::Active));
+            }
+        }
+    }
+
+    auto &previewTetromino = gameState_->self.tetris.previewTetromino;
+    if (previewTetromino.has_value()) {
+        for (auto &vec : previewTetromino->body) {
+            if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(previewTetromino->colorId,
+                                   GameDisplay::SelfCellType::Preview));
+            }
+        }
+    }
+
+    return std::nullopt;
+}
+
+std::optional<unsigned>
+GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
+                                        int y) const {
+    return gameState_->externals.at(opponentIdx)
+        .tetris.board.get(x, y)
+        .getColorId();
+}
+
+std::string GameDisplay::getSelfUsername() const {
+    return gameState_->self.playerState.username;
+}
+
+std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
+    return gameState_->externals.at(opponentIdx).playerState.username;
+}
+
+size_t GameDisplay::getNumOpponents() const {
+    return gameState_->externals.size();
+}
+
+bool GameDisplay::inGame() const { return gameState_.has_value(); }

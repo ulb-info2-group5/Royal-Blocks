@@ -1,6 +1,9 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../../../common/types/types.hpp"
+#include "../../../core/in_game/game_state/game_state.hpp"
 #include <ftxui/component/component.hpp>
 
 #include <string>
@@ -35,10 +38,22 @@ enum class Color {
 };
 
 class GameDisplay final {
+  public:
+    // Returned by selfCellInfoAt.
+    // Tells us whether the cell at (x,y) is the part of the active or preview
+    // or a placed Tetromino.
+    enum class SelfCellType {
+        Active,
+        Preview,
+        Placed,
+    };
+
   private:
     MainTui &mainTui_;
 
     Controller &controller_;
+
+    std::optional<client::GameState> gameState_;
 
     // TODO: remove this
     // float penaltyGauge_;
@@ -84,6 +99,30 @@ class GameDisplay final {
     void updateDisplay();
 
     ftxui::Component drawGameOver();
+
+    size_t getBoardHeight();
+
+    size_t getBoardWidth();
+
+    Score getSelfScore() const;
+
+    Score getSelfEnergy() const;
+
+    GameMode getGameMode() const;
+
+    std::optional<std::pair<unsigned, SelfCellType>>
+    selfCellInfoAt(int x, int y) const;
+
+    std::string getSelfUsername() const;
+
+    std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
+                                                       int x, int y) const;
+
+    std::string getOpponentUsername(size_t opponentIdx) const;
+
+    size_t getNumOpponents() const;
+
+    bool inGame() const;
 
   public:
     GameDisplay(MainTui &screenManager, Controller &controller);
