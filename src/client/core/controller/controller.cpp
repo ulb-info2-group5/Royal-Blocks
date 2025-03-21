@@ -267,7 +267,7 @@ void Controller::declineFriendRequest(UserID userId) {
                              .dump());
 }
 
-bool Controller::gameHasStarted() const { return gameState_.has_value(); }
+bool Controller::inGame() const { return gameState_.has_value(); }
 
 std::optional<client::GameState> Controller::getGameState() {
     std::lock_guard<std::mutex> guard(mutex_);

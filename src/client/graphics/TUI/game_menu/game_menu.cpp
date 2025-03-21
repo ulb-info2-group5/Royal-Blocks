@@ -16,8 +16,8 @@
 // ### Constructor ###
 
 GameMenu::GameMenu(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller),
-      joinType_(JoinType::NONE), typeGame_(TypeGame::NONE), quitMenu_(false) {
+    : mainTui_(mainTui), controller_(controller), joinType_(JoinType::NONE),
+      typeGame_(TypeGame::NONE), quitMenu_(false) {
 
     gameDisplay_ = std::make_unique<GameDisplay>(mainTui_, controller_);
 
@@ -262,7 +262,7 @@ void GameMenu::joinFriendScreen() {
 void GameMenu::joinRandomScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
-            if (controller_.gameHasStarted()) {
+            if (controller_.inGame()) {
                 mainTui_.stopRender();
             }
 
@@ -282,7 +282,7 @@ void GameMenu::joinRandomScreen() {
 void GameMenu::createGameScreen() {
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
-            if (controller_.gameHasStarted()) {
+            if (controller_.inGame()) {
                 mainTui_.stopRender();
             }
 

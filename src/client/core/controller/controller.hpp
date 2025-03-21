@@ -188,7 +188,7 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    bool gameHasStarted() const;
+    bool inGame() const;
 
     std::optional<client::GameState> getGameState();
 };
