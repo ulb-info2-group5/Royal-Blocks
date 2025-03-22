@@ -138,7 +138,7 @@ class Controller {
     /*
      * @brief Get the friends list of the user
      */
-    const std::vector<bindings::User> &getFriendsList() const;
+    const std::vector<bindings::User> getFriendsList() const;
 
     std::vector<bindings::User> getPendingFriendRequests() const;
 
@@ -168,7 +168,7 @@ class Controller {
 
     void joinGame(GameMode gameMode, std::optional<UserID> friendID);
 
-    const NameConversation &getConversationWith(UserID userID);
+    const NameConversation getConversationWith(UserID userID);
 
     void bigDrop();
 

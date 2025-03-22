@@ -217,7 +217,7 @@ void GameMenu::joinFriendScreen() {
 
     auto updateFriendsList = [&] {
         friendsContainer->DetachAllChildren();
-        const std::vector<bindings::User> &friendsList =
+        const std::vector<bindings::User> friendsList =
             controller_.getFriendsList();
 
         if (friendsList.empty()) {

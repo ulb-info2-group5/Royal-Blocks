@@ -1,8 +1,8 @@
 #include "messaging.hpp"
 
-#include "../main_tui.hpp"
-#include "../ftxui_config/ftxui_config.hpp"
 #include "../../../core/controller/controller.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
+#include "../main_tui.hpp"
 #include <ftxui/dom/elements.hpp>
 
 // ### constructor ###
@@ -33,14 +33,15 @@ void Messaging::createButtons() {
         | ftxui::center;
 
     backButton_ = ftxui::Button(
-        std::string(STR_BACK),
-        [&] {
-            newMessageBuffer_.clear();
-            newFriendBuffer_.clear();
-            userState_ = MessagingState::BACK;
-            mainTui_.stopRender();
-        },
-        GlobalButtonStyle()) | ftxui::center;
+                      std::string(STR_BACK),
+                      [&] {
+                          newMessageBuffer_.clear();
+                          newFriendBuffer_.clear();
+                          userState_ = MessagingState::BACK;
+                          mainTui_.stopRender();
+                      },
+                      GlobalButtonStyle())
+                  | ftxui::center;
 }
 
 void Messaging::drawInputUser() {
@@ -48,19 +49,21 @@ void Messaging::drawInputUser() {
 
     messageInput_ =
         ftxui::Input(&newMessageBuffer_, std::string(STR_WRITE_MESSAGE))
-        | ftxui::center | ftxui::borderHeavy | ftxui::CatchEvent([&](ftxui::Event event) {
-            if (event == ftxui::Event::Return) {
-                if (!newMessageBuffer_.empty()) {
-                    getSelectedFriendId().and_then([&](UserID userID) {
-                        controller_.sendMessage(userID, newMessageBuffer_);
-                        return std::optional<UserID>{};
-                    });
-                    newMessageBuffer_.clear();
-                }
-                return true;
-            }
-            return false;
-        });;
+        | ftxui::center | ftxui::borderHeavy
+        | ftxui::CatchEvent([&](ftxui::Event event) {
+              if (event == ftxui::Event::Return) {
+                  if (!newMessageBuffer_.empty()) {
+                      getSelectedFriendId().and_then([&](UserID userID) {
+                          controller_.sendMessage(userID, newMessageBuffer_);
+                          return std::optional<UserID>{};
+                      });
+                      newMessageBuffer_.clear();
+                  }
+                  return true;
+              }
+              return false;
+          });
+    ;
 }
 
 void Messaging::drawMenu() {
@@ -92,8 +95,7 @@ void Messaging::drawDisplay() {
             .and_then([this](auto id) -> std::optional<ftxui::Element> {
                 ftxui::Elements chat_elements;
 
-                auto &[name, conversation] =
-                    controller_.getConversationWith(id);
+                auto [name, conversation] = controller_.getConversationWith(id);
 
                 if (conversation.senderMessages.empty()) {
                     chat_elements.push_back(
@@ -103,16 +105,17 @@ void Messaging::drawDisplay() {
                 else {
                     for (auto &[senderId, message] :
                          conversation.senderMessages) {
-                            if (senderId == id) {
-                                chat_elements.push_back(
-                                    ftxui::text(name + " : " + message) | ftxui::bold
-                                    | ftxui::color(ftxui::Color::Blue));
-                            } else {
-                                chat_elements.push_back(
-                                    ftxui::text("me : " + message) | ftxui::bold
-                                    | ftxui::color(ftxui::Color::White));
-                            }
+                        if (senderId == id) {
+                            chat_elements.push_back(
+                                ftxui::text(name + " : " + message)
+                                | ftxui::bold
+                                | ftxui::color(ftxui::Color::Blue));
+                        } else {
+                            chat_elements.push_back(
+                                ftxui::text("me : " + message) | ftxui::bold
+                                | ftxui::color(ftxui::Color::White));
                         }
+                    }
                 }
 
                 return ftxui::vbox(chat_elements) | ftxui::flex;
@@ -156,10 +159,10 @@ void Messaging::drawWindow() {
                            ftxui::separator(),
 
                            ftxui::hbox({
-                           sendButton_->Render(),
-                           backButton_->Render(),
+                               sendButton_->Render(),
+                               backButton_->Render(),
                            }) | ftxui::center,
-                           
+
                        }) | ftxui::borderHeavy
                            | ftxui::flex,
                    })
@@ -168,7 +171,7 @@ void Messaging::drawWindow() {
 }
 
 std::optional<UserID> Messaging::getSelectedFriendId() {
-    const std::vector<bindings::User> &friendsList =
+    const std::vector<bindings::User> friendsList =
         controller_.getFriendsList();
 
     return (friendsList.empty())

@@ -31,7 +31,7 @@ void FriendsMenu::render() {
 
         auto updateFriendsList = [&] {
             friendsContainer->DetachAllChildren();
-            const std::vector<bindings::User> &friendsList =
+            const std::vector<bindings::User> friendsList =
                 controller_.getFriendsList();
             std::vector<ftxui::Component> friendsButtons =
                 displayFriendButtons(friendsList);
@@ -96,14 +96,13 @@ void FriendsMenu::addFriendScreen() {
         }),
         [&] {
             std::vector<ftxui::Element> elements = {
-                ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold | ftxui::center,
-                ftxui::separator(),
-                input_->Render(),
-                ftxui::separator()
-            };
+                ftxui::text(std::string(STR_ADD_A_FRIEND)) | ftxui::bold
+                    | ftxui::center,
+                ftxui::separator(), input_->Render(), ftxui::separator()};
 
             if (!addMessage_.empty()) {
-                elements.push_back(ftxui::text(addMessage_) | ftxui::bold | ftxui::center);
+                elements.push_back(ftxui::text(addMessage_) | ftxui::bold
+                                   | ftxui::center);
                 elements.push_back(ftxui::separator());
             }
 
@@ -115,7 +114,6 @@ void FriendsMenu::addFriendScreen() {
 
     mainTui_.render(component);
 }
-
 
 std::vector<ftxui::Component> FriendsMenu::displayFriendButtons(
     const std::vector<bindings::User> &friendsList) {
@@ -178,18 +176,20 @@ void FriendsMenu::createButtons() {
         },
         GlobalButtonStyle());
 
-        input_ = ftxui::Input(&friendNameBuffer_, std::string(STR_NAME_OF_FRIEND))
-        | ftxui::borderHeavy | ftxui::center | ftxui::CatchEvent([&](ftxui::Event event) {
-           if (event == ftxui::Event::Return && !friendNameBuffer_.empty()) {
-               controller_.sendFriendRequest(friendNameBuffer_);
-               addMessage_ = "Friend request sent to " + friendNameBuffer_;
-               friendNameBuffer_.clear();
-               return true;
-           } else if (event == ftxui::Event::Return) {
-               return true; // Do not send an empty friend request
-           }
-           return false; 
-       });
+    input_ =
+        ftxui::Input(&friendNameBuffer_, std::string(STR_NAME_OF_FRIEND))
+        | ftxui::borderHeavy | ftxui::center
+        | ftxui::CatchEvent([&](ftxui::Event event) {
+              if (event == ftxui::Event::Return && !friendNameBuffer_.empty()) {
+                  controller_.sendFriendRequest(friendNameBuffer_);
+                  addMessage_ = "Friend request sent to " + friendNameBuffer_;
+                  friendNameBuffer_.clear();
+                  return true;
+              } else if (event == ftxui::Event::Return) {
+                  return true; // Do not send an empty friend request
+              }
+              return false;
+          });
 
     submitButton_ = ftxui::Button(
         std::string(STR_ADD),
@@ -256,12 +256,13 @@ void FriendsMenu::FriendRequestScreen() {
                 },
                 GlobalButtonStyle()));
         }
-        
+
         if (friendsButtons.size() == 0) {
             ftxui::Component renderNoFriends =
                 ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                     return ftxui::vbox({
-                        ftxui::text(std::string(STR_NO_FRIEND_REQUEST)) | ftxui::center,
+                        ftxui::text(std::string(STR_NO_FRIEND_REQUEST))
+                            | ftxui::center,
                     });
                 });
             mainContainer->Add(renderNoFriends);

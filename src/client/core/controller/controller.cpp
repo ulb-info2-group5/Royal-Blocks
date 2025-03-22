@@ -165,7 +165,7 @@ void Controller::changeProfile(const std::string &username,
     networkManager_.send(bindings::ChangePassword{password}.to_json().dump());
 }
 
-const std::vector<bindings::User> &Controller::getFriendsList() const {
+const std::vector<bindings::User> Controller::getFriendsList() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return friendsList_;
 }
@@ -188,7 +188,7 @@ void Controller::sendMessage(UserID recipientId, const std::string &message) {
         bindings::Message{recipientId, message}.to_json().dump());
 }
 
-const NameConversation &Controller::getConversationWith(UserID userID) {
+const NameConversation Controller::getConversationWith(UserID userID) {
     std::lock_guard<std::mutex> guard(mutex_);
     if (!conversationsById_.contains(userID)) {
         conversationsById_[userID] = {};
