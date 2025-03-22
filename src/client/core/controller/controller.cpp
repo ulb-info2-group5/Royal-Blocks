@@ -154,8 +154,7 @@ void Controller::tryLogin(const std::string &username,
         bindings::Authentication{username, password}.to_json().dump());
 }
 
-const std::vector<std::pair<std::string, Score>> &
-Controller::getRanking() const {
+std::vector<std::pair<std::string, Score>> Controller::getRanking() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return ranking_;
 }

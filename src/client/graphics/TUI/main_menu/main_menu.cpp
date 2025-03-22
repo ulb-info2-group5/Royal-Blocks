@@ -8,15 +8,14 @@
 
 #include "main_menu.hpp"
 
-#include "../main_tui.hpp"
-#include "../ftxui_config/ftxui_config.hpp"
 #include "../../../core/controller/controller.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
+#include "../main_tui.hpp"
 
 // ### Constructor ###
 MainMenu::MainMenu(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller),
-      state_(MainMenuState::NONE), friendsMenu_(mainTui_, controller),
-      messagingMenu_(mainTui_, controller),
+    : mainTui_(mainTui), controller_(controller), state_(MainMenuState::NONE),
+      friendsMenu_(mainTui_, controller), messagingMenu_(mainTui_, controller),
       gameMenu_(mainTui_, controller) {
 
     createMainMenuButtons();

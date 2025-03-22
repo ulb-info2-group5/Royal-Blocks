@@ -123,7 +123,7 @@ class Controller {
     /*
      * @brief Get the ranking of the players of the Endless mode
      */
-    const std::vector<std::pair<std::string, Score>> &getRanking() const;
+    std::vector<std::pair<std::string, Score>> getRanking() const;
 
     /*
      * @brief Change the profile of the user by changing the username and
