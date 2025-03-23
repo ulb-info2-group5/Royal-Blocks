@@ -97,6 +97,8 @@ class GameDisplay final {
 
     ftxui::Component &drawGameOver();
 
+    ftxui::Component &drawWin();
+
     void handleKeys();
 
     size_t getBoardHeight() const;

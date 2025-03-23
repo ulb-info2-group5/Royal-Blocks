@@ -2,6 +2,7 @@
 #define FTXUI_CONFIG_HPP
 
 #include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 #include <string_view>
 
 // Constants for the TUI
@@ -50,22 +51,14 @@ constexpr std::string_view
     STR_RETURN_TO_MAIN_MENU = "Return to main menu";
 
 const ftxui::Element WELCOME_TITLE = ftxui::vbox({
-    ftxui::text(
-        R"(__          __  _                            _          _____                   _   _______   _        _       _ )"),
-    ftxui::text(
-        R"(\ \        / / | |                          | |        |  __ \                 | | |__   __| | |      (_)     | |)"),
-    ftxui::text(
-        R"( \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |__) |___  _   _  __ _| |    | | ___| |_ _ __ _ ___  | |)"),
-    ftxui::text(
-        R"(  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  _  // _ \| | | |/ _` | |    | |/ _ \ __| '__| / __| | |)"),
-    ftxui::text(
-        R"(   \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | | \ \ (_) | |_| | (_| | |    | |  __/ |_| |  | \__ \ |_|)"),
-    ftxui::text(
-        R"(    \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_|  \_\___/ \__, |\__,_|_|    |_|\___|\__|_|  |_|___/ (_))"),
-    ftxui::text(
-        R"(                                                                     __/ |                                       )"),
-    ftxui::text(
-        R"(                                                                    |___/                                        )"),
+    ftxui::text(R"(__          __  _                            _          _____                   _   _______   _        _       _ )"),
+    ftxui::text(R"(\ \        / / | |                          | |        |  __ \                 | | |__   __| | |      (_)     | |)"),
+    ftxui::text(R"( \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |__) |___  _   _  __ _| |    | | ___| |_ _ __ _ ___  | |)"),
+    ftxui::text(R"(  \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  _  // _ \| | | |/ _` | |    | |/ _ \ __| '__| / __| | |)"),
+    ftxui::text(R"(   \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | | \ \ (_) | |_| | (_| | |    | |  __/ |_| |  | \__ \ |_|)"),
+    ftxui::text(R"(    \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_|  \_\___/ \__, |\__,_|_|    |_|\___|\__|_|  |_|___/ (_))"),
+    ftxui::text(R"(                                                                     __/ |                                       )"),
+    ftxui::text(R"(                                                                    |___/                                        )"),
 });
 
 const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
@@ -79,14 +72,22 @@ const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
 });
 
 const ftxui::Element GAME_OVER_TITLE = ftxui::vbox({
-    ftxui::text(R"(   _____                         ____                  )"),
-    ftxui::text(R"(  / ____|                       / __ \                 )"),
-    ftxui::text(R"( | |  __  __ _ _ __ ___   ___  | |  | |__   __ __   __ )"),
-    ftxui::text(R"( | | |_ |/ _` | '_ ` _ \ / _ \ | |  | |\ \ / / _ \ |__|)"),
-    ftxui::text(R"( | |__| | (_| | | | | | |  __/ | |__| | \ V /  __/ |   )"),
-    ftxui::text(R"(  \_____|\__,_|_| |_| |_|\___|  \____/   \_/ \___|_|   )"),
+    ftxui::text(R"(  _____                         ____                  )"),
+    ftxui::text(R"( / ____|                       / __ \                 )"),
+    ftxui::text(R"(| |  __  __ _ _ __ ___   ___  | |  | |__   __ __   __ )"),
+    ftxui::text(R"(| | |_ |/ _` | '_ ` _ \ / _ \ | |  | |\ \ / / _ \ |__|)"),
+    ftxui::text(R"(| |__| | (_| | | | | | |  __/ | |__| | \ V /  __/ |   )"),
+    ftxui::text(R"( \_____|\__,_|_| |_| |_|\___|  \____/   \_/ \___|_|   )"),
 });
 
+const ftxui::Element YOU_WIN_TITLE = ftxui::vbox({
+    ftxui::text(R"(__     __          __          ___         _ )"),
+    ftxui::text(R"(\ \   / /          \ \        / (_)       | |)"),
+    ftxui::text(R"( \ \_/ /__  _   _   \ \  /\  / / _ _ __   | |)"),
+    ftxui::text(R"(  \   / _ \| | | |   \ \/  \/ / | | '_ \  | |)"),
+    ftxui::text(R"(   | | (_) | |_| |    \  /\  /  | | | | | |_|)"),
+    ftxui::text(R"(   |_|\___/ \____|     \/  \/   |_|_| |_| (_))"),
+});                                                
 
 /*
  * @brief Global style for the buttons

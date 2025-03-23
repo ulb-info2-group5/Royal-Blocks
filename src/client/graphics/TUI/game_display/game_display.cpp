@@ -397,6 +397,30 @@ ftxui::Component &GameDisplay::drawGameOver() {
     return displayWindow_;
 }
 
+ftxui::Component &GameDisplay::drawWin() {
+    ftxui::Component title =
+        ftxui::Renderer([] { return YOU_WIN_TITLE | ftxui::center; });
+
+    ftxui::Component scoreText = ftxui::Renderer([&] {
+        return ftxui::text("Your score was: " + std::to_string(getSelfScore()))
+               | ftxui::center;
+    });
+
+    ftxui::Component button = ftxui::Button(
+        std::string(STR_RETURN_TO_MAIN_MENU), [&] { mainTui_.stopRender(); },
+        GlobalButtonStyle());
+
+    displayWindow_ = ftxui::Container::Vertical({
+        title,
+        ftxui::Renderer([] { return ftxui::separator(); }),
+        scoreText,
+        ftxui::Renderer([] { return ftxui::separator(); }),
+        button,
+    });
+
+    return displayWindow_;
+}
+
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
