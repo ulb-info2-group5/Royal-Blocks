@@ -19,11 +19,13 @@
 // ----------------------------------------------------------------------------
 
 void GameServer::onTimerTick() {
+    sendGameStates();
+
     if (engine.gameIsFinished()) {
         context_.stop();
         return;
     }
-    sendGameStates();
+
     std::cout << "ticking" << std::endl;
     engine.tick();
 

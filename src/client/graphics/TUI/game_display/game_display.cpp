@@ -424,15 +424,25 @@ ftxui::Component &GameDisplay::drawWin() {
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
+    bool isWinner = true;
+
     auto updateGame = [&] {
         gameContainer->DetachAllChildren();
 
         gameState_ = controller_.getGameState();
 
         if (!inGame()) {
-            gameContainer->Add(drawGameOver());
+            if (getGameMode() == GameMode::Endless || !isWinner) {
+                gameContainer->Add(drawGameOver());
+            } else {
+                gameContainer->Add(drawWin());
+            }
+
             return;
         }
+
+        // TODO: improve optional safety here
+        isWinner = gameState_->self.playerState.isAlive;
 
         if (getGameMode() == GameMode::Endless) {
             drawEndlessMode();
