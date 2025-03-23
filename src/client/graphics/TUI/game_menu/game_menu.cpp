@@ -220,7 +220,13 @@ void GameMenu::joinFriendScreen() {
         const std::vector<bindings::User> friendsList =
             controller_.getFriendsList();
 
-        if (friendsList.empty()) {
+        for (const bindings::User &friendUser : friendsList) {
+            if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
+                friendsContainer->Add(
+                    makeFriendButton(friendUser.userID, friendUser.username));
+            }
+        }
+        if (friendsContainer->ChildCount() == 0) {
             ftxui::Component renderNoFriends =
                 ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
                     return ftxui::vbox({
@@ -229,13 +235,6 @@ void GameMenu::joinFriendScreen() {
                 });
             friendsContainer->Add(renderNoFriends);
             return;
-        }
-
-        for (const bindings::User &friendUser : friendsList) {
-            if (friendUser.isJoinable() && friendUser.gameMode == gameMode_) {
-                friendsContainer->Add(
-                    makeFriendButton(friendUser.userID, friendUser.username));
-            }
         }
     };
 
