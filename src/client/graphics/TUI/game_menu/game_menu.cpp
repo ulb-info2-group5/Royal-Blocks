@@ -296,6 +296,10 @@ void GameMenu::createGameScreen() {
         });
 
     mainTui_.render(renderer);
+
+    gameDisplay_->render(); // The game has started because the game has been
+                            // launched
+    quitMenu_ = true;
 }
 
 ftxui::Component GameMenu::makeFriendButton(UserID userID,

@@ -16,7 +16,7 @@ GameCandidate::GameCandidate(RequestJoinGame joinGame)
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame)
-    : numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers},
+    : numberOfPlayerTotale_{0}, numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers},
       gameMode{createGame.bindCreateGame.gameMode} {
     std::cout << "gameCandidate create (RequestCreateGame)" << std::endl;
     numberOfPlayerTotale_++;
