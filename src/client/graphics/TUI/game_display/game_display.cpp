@@ -162,10 +162,10 @@ ftxui::Component &GameDisplay::penaltyInfo() {
             elapsedTime = 0;
         }
 
-        return ftxui::vbox(
-            {ftxui::text("Penalty : " + penaltyName + "="
-                         + std::to_string(elapsedTime)),
-             ftxui::gaugeRight(elapsedTime) | ftxui::borderRounded});
+        return ftxui::vbox({ftxui::text("Penalty : " + penaltyName),
+                            ftxui::gaugeRight(elapsedTime)
+                                | ftxui::color(ftxui::Color::Red)
+                                | ftxui::borderRounded});
     });
 
     return penaltyInfo_;
@@ -187,10 +187,10 @@ ftxui::Component &GameDisplay::bonusInfo() {
             elapsedTime = 0;
         }
 
-        return ftxui::vbox(
-            {ftxui::text("Bonus : " + bonusName + "="
-                         + std::to_string(elapsedTime)),
-             ftxui::gaugeRight(elapsedTime) | ftxui::borderRounded});
+        return ftxui::vbox({ftxui::text("Bonus : " + bonusName),
+                            ftxui::gaugeRight(elapsedTime)
+                                | ftxui::color(ftxui::Color::Green)
+                                | ftxui::borderRounded});
     });
 
     return bonusInfo_;
