@@ -1,5 +1,0 @@
-{"data":{"gameMode":null,"playerId":4,"state":1,"username":"quentin"},"type":8}
-{"data":{"action":0,"user":{"data":{"gameMode":null,"playerId":4,"state":1,"username":"quentin"},"type":8}},"type":14}
-{"data":{"nickname":"leo","password":"leo"},"type":0}
-{"data":{"nickname":"ethan","password":"ethan"},"type":0}
-{"data":{"recipientId":4, "content":"message de test "},"type":5}
