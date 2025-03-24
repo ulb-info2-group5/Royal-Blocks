@@ -38,6 +38,7 @@
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "core/in_game/game_state/game_state.hpp"
+#include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
 
 #include <mutex>
@@ -235,6 +236,10 @@ void Controller::emptyPenaltyStash() {
 
 void Controller::holdNextTetromino() {
     networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
+}
+
+void Controller::selectTarget(UserID userId) {
+    networkManager_.send(bindings::SelectTarget{userId}.to_json().dump());
 }
 
 void Controller::buyEffect(EffectType effectType, bool stashForLater) {

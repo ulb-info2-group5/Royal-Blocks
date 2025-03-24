@@ -285,13 +285,18 @@ ftxui::Component &GameDisplay::opponentsBoards() {
 
     ftxui::Components opponentsBoards;
     for (size_t index = 0; index < getNumOpponents(); index++) {
-        opponentsBoards.emplace_back(ftxui::Container::Vertical({
-            createOpBoardDisplay(index, cellSize),
-            ftxui::Button(
-                getOpponentUsername(index), [] {},
-                ftxui::ButtonOption::Animated(ftxui::Color::Yellow1))
-                | ftxui::borderDouble,
-        }));
+        opponentsBoards.emplace_back( //
+            ftxui::Container::Vertical({
+                createOpBoardDisplay(index, cellSize),
+                ftxui::Button(
+                    getOpponentUsername(index),
+                    [index, this] {
+                        controller_.selectTarget(getNthOpponentUserID(index));
+                    },
+                    ftxui::ButtonOption::Animated(ftxui::Color::Yellow1))
+                    | ftxui::borderDouble,
+            }) //
+        );
     }
 
     size_t numCols = 4;
@@ -340,6 +345,10 @@ ftxui::Component &GameDisplay::drawMultiMode() {
                      | ftxui::center;
 
     return displayWindow_;
+}
+
+UserID GameDisplay::getNthOpponentUserID(size_t n) const {
+    return gameState_.externals.at(n).playerState.userID;
 }
 
 void GameDisplay::handleKeys() {

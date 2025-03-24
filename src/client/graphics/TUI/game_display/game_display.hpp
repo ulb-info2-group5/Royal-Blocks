@@ -99,6 +99,8 @@ class GameDisplay final {
 
     ftxui::Component &drawWin();
 
+    UserID getNthOpponentUserID(size_t n) const;
+
     void handleKeys();
 
     size_t getBoardHeight() const;

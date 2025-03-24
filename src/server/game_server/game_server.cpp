@@ -142,7 +142,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         boost::asio::post(
             context_, [this, userId,
                        selectTarget = bindings::SelectTarget::from_json(j)]() {
-                engine.tryRotateActive(userId, selectTarget.targetId);
+                engine.selectTarget(userId, selectTarget.targetId);
                 sendGameStates();
             });
         break;

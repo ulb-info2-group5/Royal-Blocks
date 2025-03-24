@@ -190,6 +190,8 @@ class Controller {
 
     void rotateActive(bool clockwise);
 
+    void selectTarget(UserID userId);
+
     void emptyPenaltyStash();
 
     void holdNextTetromino();
