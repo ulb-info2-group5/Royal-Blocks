@@ -5,8 +5,8 @@
 #include <qapplication.h>
 
 // ### Public methods ###
-ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice)
-    : controller_(controller), uiChoice_(uiChoice), tui_(controller) {}
+ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice, std::tuple<int, char **> args)
+    : controller_(controller), uiChoice_(uiChoice), args_(args), tui_(controller) {}
 
 void ScreenManager::run() {
     if (uiChoice_ == UiChoice::TUI) {
@@ -14,10 +14,13 @@ void ScreenManager::run() {
     }
 
     else {
-        int argc = 2;
-        char *argv[] = {"./tetris_royal_client", "--gui"};
+        int argc = std::get<0>(args_);
+        char **argv = std::get<1>(args_);
+        
         QApplication app(argc, argv);
         MainGui mainGui(nullptr, &controller_);
+        app.setApplicationName("Tetris Royal");
+        app.setApplicationDisplayName("Tetris Royal");
         mainGui.show();
         app.exec();
     }

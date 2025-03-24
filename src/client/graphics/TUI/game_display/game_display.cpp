@@ -479,6 +479,9 @@ size_t GameDisplay::getBoardWidth() const {
 }
 
 Score GameDisplay::getSelfScore() const {
+    if (!gameState_) {
+        return 0;
+    }
     return gameState_->self.playerState.score;
 }
 

@@ -1,8 +1,8 @@
 #include "core/controller/controller.hpp"
 
+#include <QApplication>
 #include <iostream>
-
-#define BLANKLINE std::cout << std::endl;
+#include <thread>
 
 /*
  * @brief Handle the arguments passed to the program
@@ -26,9 +26,13 @@ UiChoice handleArguments(int argc, char *argv[]) {
 
     else if (std::string(argv[1]) == "--help") {
         std::cout << "Tetris Royal : Help" << std::endl;
-        BLANKLINE;
+
+        std::cout << std::endl;
+
         std::cout << "Usage: tetris_royal_client [OPTION]" << std::endl;
-        BLANKLINE;
+
+        std::cout << std::endl;
+
         std::cout << "Options:" << std::endl;
         std::cout << "  --help\t\tDisplay this information" << std::endl;
         std::cout
@@ -63,7 +67,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Controller controller(choice);
+    Controller controller(choice, std::make_tuple(argc, argv));
     controller.run();
+
     return 0;
 }

@@ -84,7 +84,7 @@ class Controller {
     /*
      * @brief Construct a new Controller object
      */
-    Controller(UiChoice uiChoice);
+    Controller(UiChoice uiChoice, std::tuple<int, char **> args);
 
     /*
      * @brief Destroy the Controller object

@@ -110,14 +110,14 @@ void Controller::handlePacket(const std::string_view pack) {
 
 // ### Public methods ###
 
-Controller::Controller(UiChoice uiChoice)
+Controller::Controller(UiChoice uiChoice, std::tuple<int, char **> args)
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
       gameState_(std::nullopt),
       networkManager_{
           context_,
           [this](const std::string_view packet) { handlePacket(packet); }},
-      screenManager_{*this, uiChoice} {};
+      screenManager_{*this, uiChoice, args} {};
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
