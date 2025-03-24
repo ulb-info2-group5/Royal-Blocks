@@ -31,6 +31,11 @@ MainGui::~MainGui()
     delete ui;
 }
 
+void MainGui::forceRefresh()
+{
+    this->update();
+}
+
 void MainGui::on_ExitButton_clicked()
 {
     actionOnExit();

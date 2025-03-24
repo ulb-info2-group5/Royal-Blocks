@@ -21,6 +21,8 @@ public:
     
     ~MainGui();
 
+    void forceRefresh();
+
 private slots:
 
     void on_ExitButton_clicked();

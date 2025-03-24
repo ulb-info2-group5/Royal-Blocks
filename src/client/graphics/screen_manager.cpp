@@ -6,31 +6,38 @@
 
 // ### Public methods ###
 ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice, std::tuple<int, char **> args)
-    : controller_(controller), uiChoice_(uiChoice), args_(args), tui_(controller) {}
+    : controller_(controller), uiChoice_(uiChoice) {
+    if (uiChoice_ == UiChoice::TUI) {
+        tui_ = std::make_unique<MainTui>(controller_);
+    }
+    else {
+        int argc = std::get<0>(args);
+        char **argv = std::get<1>(args);
+
+        app_ = std::make_unique<QApplication>(argc, argv);
+        gui_ = std::make_unique<MainGui>(nullptr, &controller_);
+    }
+}
 
 void ScreenManager::run() {
     if (uiChoice_ == UiChoice::TUI) {
-        tui_.run();
+        tui_->run();
     }
 
     else {
-        int argc = std::get<0>(args_);
-        char **argv = std::get<1>(args_);
-        
-        QApplication app(argc, argv);
-        MainGui mainGui(nullptr, &controller_);
-        app.setApplicationName("Tetris Royal");
-        app.setApplicationDisplayName("Tetris Royal");
-        mainGui.show();
-        app.exec();
+
+        app_->setApplicationName("Royal Tetris");
+        app_->setApplicationDisplayName("Royal Tetris");
+        gui_->show();
+        app_->exec();
     }
 }
 
 void ScreenManager::forceRefresh() {
     if (uiChoice_ == UiChoice::TUI) {
-        tui_.forceRefresh();
+        tui_->forceRefresh();
     }
     else {
-        //TODO: refresh to GUI
+        gui_->forceRefresh();
     }
 }

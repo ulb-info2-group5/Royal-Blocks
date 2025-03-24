@@ -2,6 +2,10 @@
 #define SCREEN_MANAGER_HPP
 
 #include "TUI/main_tui.hpp"
+#include "GUI/main_gui.hpp"
+
+#include <QApplication>
+#include <memory>
 #include <tuple>
 
 class Controller; // Forward declaration
@@ -17,9 +21,11 @@ class ScreenManager {
 
     UiChoice uiChoice_;
 
-    std::tuple<int, char **> args_;
+    std::unique_ptr<MainTui> tui_;
 
-    MainTui tui_;
+    std::unique_ptr<QApplication> app_;
+
+    std::unique_ptr<MainGui> gui_;
 
   public:
     /*
