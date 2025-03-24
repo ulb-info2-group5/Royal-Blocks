@@ -3,6 +3,7 @@
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
+#include "nlohmann/json_fwd.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -223,14 +224,22 @@ void Tetris::destroy2By2Occupied() { board_.destroy2By2Occupied(); }
  * ------------------------------------------------*/
 
 nlohmann::json Tetris::serializeSelf(bool emptyBoard) const {
-    return {{"activeTetromino",
-             activeTetromino_ ? activeTetromino_->serialize() : nullptr},
-            {"previewTetromino",
-             previewTetromino_ ? previewTetromino_->serialize() : nullptr},
-            {"holdTetromino",
-             holdTetromino_ ? holdTetromino_->serialize() : nullptr},
-            {"board", emptyBoard ? Board{}.serialize() : board_.serialize()},
-            {"tetrominoQueue", tetrominoQueue_.serialize()}};
+    auto tetrominoSerialize =
+        [emptyBoard](const TetrominoPtr &pTetromino) -> nlohmann::json {
+        return (pTetromino == nullptr || emptyBoard) ? nullptr
+                                                     : pTetromino->serialize();
+    };
+
+    nlohmann::json j_tetrominoQueue =
+        emptyBoard ? TetrominoQueue{}.serialize() : tetrominoQueue_.serialize();
+    nlohmann::json j_board =
+        emptyBoard ? Board{}.serialize() : board_.serialize();
+
+    return {{"activeTetromino", tetrominoSerialize(activeTetromino_)},
+            {"previewTetromino", tetrominoSerialize(previewTetromino_)},
+            {"holdTetromino", tetrominoSerialize(holdTetromino_)},
+            {"board", j_board},
+            {"tetrominoQueue", j_tetrominoQueue}};
 }
 
 nlohmann::json Tetris::serializeExternal() const {
