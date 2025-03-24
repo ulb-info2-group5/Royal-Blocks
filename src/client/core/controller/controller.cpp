@@ -97,13 +97,10 @@ void Controller::handlePacket(const std::string_view pack) {
         break;
     }
 
-        // TODO: remove this as it is not useful anymore now that we have the
-        // isFinished flag in GameState
-        //
-        // case bindings::BindingType::GameOver: {
-        //     gameState_ = std::nullopt;
-        //     break;
-        // }
+    case bindings::BindingType::GameOver: {
+        gameState_.isFinished = true;
+        break;
+    }
 
     default:
         std::cerr << "unknown bindingType" << std::endl;
