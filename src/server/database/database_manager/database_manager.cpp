@@ -7,15 +7,23 @@
  */
 
 #include "database_manager.hpp"
-#include "../config.hpp"
 #include <iostream>
 #include <sqlite3.h>
 #include <string>
 #include <vector>
+#include <filesystem>
+
+#define DATABASE_PATH "data/users.db"
 
 // ### Constructor ###
 DatabaseManager::DatabaseManager() {
-    if (sqlite3_open(DATABASE_PATH.c_str(), &db_) != SQLITE_OK) {
+    std::filesystem::path dbPath(DATABASE_PATH);
+    std::filesystem::path dataPath = dbPath.parent_path();
+    if (!std::filesystem::exists(dataPath)) {
+        std::filesystem::create_directories(dataPath);
+    }
+
+    if (sqlite3_open(DATABASE_PATH, &db_) != SQLITE_OK) {
         std::cerr << "Error SQLite: " << sqlite3_errmsg(db_) << std::endl;
     }
 }
