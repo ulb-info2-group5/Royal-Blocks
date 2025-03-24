@@ -148,19 +148,13 @@ ftxui::Component &GameDisplay::energy() {
 
 ftxui::Component &GameDisplay::penaltyInfo() {
     penaltyInfo_ = ftxui::Renderer([this] {
-        std::string penaltyName;
-        double elapsedTime;
-
-        if (gameState_.self.playerState.activePenalty.has_value()) {
-            const client::TimedPenalty &penalty =
-                gameState_.self.playerState.activePenalty.value();
-
-            penaltyName = toString(penalty.penaltyType);
-            elapsedTime = penalty.elapsedTime;
-        } else {
-            penaltyName = "";
-            elapsedTime = 0;
-        }
+        auto [penaltyName, elapsedTime] =
+            gameState_.self.playerState.activePenalty
+                .transform([](const client::TimedPenalty &penalty) {
+                    return std::pair{toString(penalty.penaltyType),
+                                     penalty.elapsedTime};
+                })
+                .value_or(std::pair<std::string, int>{"", 0});
 
         return ftxui::vbox({ftxui::text("Penalty : " + penaltyName),
                             ftxui::gaugeRight(elapsedTime)
@@ -173,19 +167,13 @@ ftxui::Component &GameDisplay::penaltyInfo() {
 
 ftxui::Component &GameDisplay::bonusInfo() {
     bonusInfo_ = ftxui::Renderer([this] {
-        std::string bonusName;
-        double elapsedTime;
-
-        if (gameState_.self.playerState.activeBonus.has_value()) {
-            const client::TimedBonus &bonus =
-                gameState_.self.playerState.activeBonus.value();
-
-            bonusName = toString(bonus.bonusType);
-            elapsedTime = bonus.elapsedTime;
-        } else {
-            bonusName = "";
-            elapsedTime = 0;
-        }
+        auto [bonusName, elapsedTime] =
+            gameState_.self.playerState.activeBonus
+                .transform([](const client::TimedBonus &bonus) {
+                    return std::pair{toString(bonus.bonusType),
+                                     bonus.elapsedTime};
+                })
+                .value_or(std::pair<std::string, int>{"", 0});
 
         return ftxui::vbox({ftxui::text("Bonus : " + bonusName),
                             ftxui::gaugeRight(elapsedTime)
