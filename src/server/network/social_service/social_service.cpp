@@ -18,7 +18,7 @@ void SocialService::handleMessages(UserID senderID ,bindings::Message message){
 
 void SocialService::handleFriendRequest(UserID senderID, bindings::FriendRequest friendRequest, std::shared_ptr<AccountManager>& accountManager){
     if (accountManager->checkUsernameExists(friendRequest.targetName)){
-        friendsManager_->addPendingFriendRequest(static_cast<int>(senderID), static_cast<int>(accountManager->getUserId(friendRequest.targetName)));
+        friendsManager_->addPendingFriendRequest(static_cast<int>(senderID), accountManager->getUserId(friendRequest.targetName));
     }
 }
 

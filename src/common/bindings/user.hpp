@@ -22,10 +22,10 @@ namespace bindings {
 
         User() = default;
 
-        User(UserID userID, std::string username, State state,
-             std::optional<GameMode> gameMode = std::nullopt)
-            : userID(userID), username(username), state(state),
-              gameMode(gameMode) {}
+        User(UserID USERID, std::string USERNAME, State STATE,
+             std::optional<GameMode> GAMEMODE = std::nullopt)
+            : userID(USERID), username(USERNAME), state(STATE),
+              gameMode(GAMEMODE) {}
 
         bool isJoinable() const { return state == State::Matchmaking; }
 

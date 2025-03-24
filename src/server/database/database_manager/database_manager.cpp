@@ -57,9 +57,9 @@ bool DatabaseManager::executeSqlChangeData(
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
         if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1,
+            sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
                               SQLITE_STATIC);
         }
@@ -90,9 +90,9 @@ bool DatabaseManager::executeSqlRecoveryInt(
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
         if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1,
+            sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
                               SQLITE_STATIC);
         }
@@ -126,9 +126,9 @@ bool DatabaseManager::executeSqlRecoveryString(
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
         if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, i + 1, std::get<int>(params[i]));
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
         } else {
-            sqlite3_bind_text(stmt, i + 1,
+            sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
                               SQLITE_STATIC);
         }
@@ -164,7 +164,7 @@ std::vector<std::pair<std::string, size_t>> DatabaseManager::getRanking() const 
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             std::string username =
                 reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
-            size_t score = sqlite3_column_int(stmt, 1);
+            size_t score = static_cast<size_t>(sqlite3_column_int(stmt, 1));
 
             ranking.push_back({username, score});
         }

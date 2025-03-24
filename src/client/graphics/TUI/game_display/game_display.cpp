@@ -139,7 +139,7 @@ ftxui::Component &GameDisplay::energy() {
         return ftxui::vbox(
             {ftxui::text("Energy"),
              ftxui::gaugeRight(
-                 static_cast<float>(static_cast<float>(getSelfEnergy()))
+                 static_cast<float>(getSelfEnergy())
                  / GAUGE_COEFFICIENT)
                  | ftxui::borderRounded});
     });

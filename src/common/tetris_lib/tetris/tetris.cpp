@@ -5,6 +5,7 @@
 #include "../tetromino/tetromino.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <cstdlib>
 #include <memory>
 
@@ -34,7 +35,7 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
             or absoluteVec2.getX() >= static_cast<int>(board_.getWidth())
             or absoluteVec2.getY() < 0
             or absoluteVec2.getY() >= static_cast<int>(board_.getHeight())
-            or !checkEmptyCell(absoluteVec2.getX(), absoluteVec2.getY()))
+            or !checkEmptyCell(static_cast<size_t>(absoluteVec2.getX()), static_cast<size_t>(absoluteVec2.getY())))
             return false;
     }
 
@@ -57,7 +58,7 @@ void Tetris::placeActive() {
 }
 
 bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
-    return board_.get(xCol, yRow).isEmpty();
+    return board_.get(static_cast<int>(xCol), static_cast<int>(yRow)).isEmpty();
 }
 
 void Tetris::fetchNewTetromino() {
@@ -158,7 +159,7 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 
     for (size_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
          ++testIdx) {
-        testTetromino = activeTetromino_->getNthOffset(testIdx);
+        testTetromino = activeTetromino_->getNthOffset(static_cast<uint8_t>(testIdx));
 
         if (board_.checkInGrid(*testTetromino)) {
             activeTetromino_ = std::move(testTetromino);
@@ -185,7 +186,7 @@ void Tetris::eventHoldNextTetromino() {
 }
 
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
-    bool hasLost = !board_.receivePenaltyLines(numPenalties);
+    bool hasLost = !board_.receivePenaltyLines(static_cast<size_t>(numPenalties));
     updatePreviewTetromino();
     if (hasLost) {
         for (auto &tetrisObserver : tetrisObservers_) {

@@ -16,21 +16,21 @@
 
 // #### Helpers ####
 
-GridCell &Board::at(int xCol, int yRow) { return getRow(yRow).at(xCol); }
+GridCell &Board::at(int xCol, int yRow) { return getRow(yRow).at(static_cast<size_t>(xCol)); }
 
 std::array<GridCell, Board::width_> &Board::getRow(int yRow) {
-    return grid_.at(getHeight() - 1 - yRow);
+    return grid_.at(getHeight() - 1 - static_cast<size_t>(yRow));
 }
 
 const std::array<GridCell, Board::width_> &Board::getRow(int yRow) const {
-    return grid_.at(getHeight() - 1 - yRow);
+    return grid_.at(getHeight() - 1 - static_cast<size_t>(yRow));
 }
 
 void Board::dropRowsAbove(int yRow) {
     const int topRow = getHeight() - 1;
 
     for (int y = yRow; y < static_cast<int>(topRow); y++) {
-        setRow(getRow(y + 1), y);
+        setRow(getRow(y + 1), static_cast<size_t>(y));
     }
 
     emptyRow(getHeight() - 1);
@@ -41,7 +41,7 @@ void Board::liftRowsFrom(int yRow, size_t numRows) {
 
     for (size_t lineCount = 0; lineCount < numRows; lineCount++) {
         for (int y = topRow; y > static_cast<int>(yRow); y--) {
-            setRow(getRow(y - 1), y);
+            setRow(getRow(y - 1), static_cast<size_t>(y));
         }
     }
 
@@ -57,7 +57,7 @@ void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
     std::uniform_int_distribution<int> distrib(firstCol, lastCol);
 
     // The empty block in the row
-    size_t emptyIndex = distrib(gen);
+    size_t emptyIndex = static_cast<size_t>(distrib(gen));
 
     // Fill all the GridCell with penaltyBlocksColor except one (empty state)
     for (size_t xCol = 0; xCol < getWidth(); xCol++) {
@@ -70,7 +70,7 @@ void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
 }
 
 void Board::setRow(const std::array<GridCell, width_> &row, size_t yRow) {
-    getRow(yRow) = row;
+    getRow(static_cast<int>(yRow)) = row;
 }
 
 bool Board::checkEmptyRow(int yRow) const {
@@ -138,7 +138,7 @@ void Board::gravity() {
 // #### Getters ####
 
 const GridCell &Board::get(int xCol, int yRow) const {
-    return getRow(yRow).at(xCol);
+    return getRow(yRow).at(static_cast<size_t>(xCol));
 }
 
 // #### Board Actions ####
@@ -198,8 +198,8 @@ void Board::destroy2By2Occupied() {
     std::uniform_int_distribution<int> distrib(0, Board::getHeight()
                                                       * Board::getWidth());
     int tmp = distrib(gen);
-    int startY = tmp / Board::getHeight();
-    int startX = tmp % Board::getWidth();
+    int startY = static_cast<int>(static_cast<size_t>(tmp)/ Board::getHeight());
+    int startX = static_cast<int>(static_cast<size_t>(tmp) % Board::getWidth());
 
     bool found2By2 = false;
 
@@ -226,7 +226,7 @@ void Board::destroy2By2Occupied() {
 // #### Penalty Lines ####
 
 bool Board::receivePenaltyLines(size_t numPenaltyLines) {
-    if (!checkEmptyRow(getHeight() - numPenaltyLines)) {
+    if (!checkEmptyRow(static_cast<int>(getHeight() - numPenaltyLines))) {
         return false;
     }
 
@@ -237,7 +237,7 @@ bool Board::receivePenaltyLines(size_t numPenaltyLines) {
     // Fill the newly freed lines with penalty lines.
     for (size_t penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
          penaltyLinesCount++) {
-        setPenaltyLine(getRow(penaltyLinesCount));
+        setPenaltyLine(getRow(static_cast<int>(penaltyLinesCount)));
     }
 
     return true;
