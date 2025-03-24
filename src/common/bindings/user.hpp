@@ -20,6 +20,13 @@ namespace bindings {
         State state;
         std::optional<GameMode> gameMode;
 
+        User() = default;
+
+        User(UserID userID, std::string username, State state,
+             std::optional<GameMode> gameMode = std::nullopt)
+            : userID(userID), username(username), state(state),
+              gameMode(gameMode) {}
+
         bool isJoinable() const { return state == State::Matchmaking; }
 
         nlohmann::json to_json() const {
