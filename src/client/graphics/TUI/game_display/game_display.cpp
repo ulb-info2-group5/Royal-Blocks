@@ -9,7 +9,6 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_tui.hpp"
 
-// TODO: this should defo go somewhere else
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/deprecated.hpp>
@@ -21,7 +20,7 @@
 #include <string>
 
 Color colorIdToColor(unsigned colorID) {
-    // TODO: add missing colorID's such as mini tetromino
+    // TODO: remove those magic number
     switch (colorID) {
     case 0:
         return Color::Red;
@@ -37,8 +36,11 @@ Color colorIdToColor(unsigned colorID) {
         return Color::DarkBlue;
     case 6:
         return Color::Purple;
+    case 8: // MINI_TETROMINO
+        return Color::Pink;
     case PENALTY_BLOCKS_COLOR_ID:
         return Color::Grey;
+
     default:
         throw std::runtime_error{"unknown color"};
     };
