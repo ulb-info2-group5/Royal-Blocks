@@ -54,7 +54,9 @@ class SocialService{
 
         bindings::Conversations getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager);
 
-       
+        std::vector<int> getFriendIdsList(UserID userID);
+
+
 
 };
 

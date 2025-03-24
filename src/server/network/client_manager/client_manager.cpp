@@ -88,7 +88,7 @@ ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
                        AuthPacketHandler authPacketHandler,
                        AuthSuccessCallback authSuccessCallback)
     : socket_(std::move(socket)), userState(bindings::State::Offline),
-      clientId(std::nullopt), packetHandler_(packetHandler),
+      clientId(std::nullopt),gameMode_(std::nullopt), packetHandler_(packetHandler),
       authPacketHandler_(authPacketHandler),
       authSuccessCallback_(authSuccessCallback) {
     start();
@@ -113,6 +113,13 @@ void ClientLink::setClientId(const int id) { clientId = id; }
 
 void ClientLink::setUserState(bindings::State newState) {
     userState = newState;
+}
+void ClientLink::setGameMode(GameMode newGameMode){
+    gameMode_ = newGameMode;
+}
+
+std::optional<GameMode> ClientLink::getGameMode(){
+    return gameMode_;
 }
 
 bindings::State ClientLink::getUserState() { return userState; }
@@ -266,12 +273,16 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
     switch (type) {
     case bindings::BindingType::JoinGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        connectedClients_[clientId]->setGameMode(bindings::JoinGame::from_json(jPack).gameMode);
+        updateThisUserWithAllhisFriends(clientId);
         matchmaking_.addPlayer(RequestJoinGame{
             Player{clientId,database_.accountManager->getUsername(clientId),},
             bindings::JoinGame::from_json(jPack)},gamesManager_);
         break;
     case bindings::BindingType::CreateGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        connectedClients_[clientId]->setGameMode(bindings::CreateGame::from_json(jPack).gameMode);
+        updateThisUserWithAllhisFriends(clientId);
         matchmaking_.createAGame(RequestCreateGame{
             Player{clientId, database_.accountManager->getUsername(clientId)},
             bindings::CreateGame::from_json(jPack)});
@@ -371,7 +382,21 @@ bindings::State ClientManager::getUserState(UserID userID){
     }
 }
 
+void ClientManager::updateThisUserWithAllhisFriends(UserID userId){
+    bindings::User user = getUser(userId);
+    for (auto id : socialService_.getFriendIdsList(userId)){
+        if (isClientConnected(id)){
+            connectedClients_[id]->sendPackage(user.to_json());
+        }
+    }
+}
 
 bindings::User ClientManager::getUser(UserID userID){
-    return bindings::User{userID, database_.accountManager->getUsername(userID), getUserState(userID)};
+
+    return bindings::User{
+        userID, 
+        database_.accountManager->getUsername(userID), 
+        getUserState(userID), 
+        (getUserState(userID) != bindings::State::Offline) ? connectedClients_[userID]->getGameMode() : std::nullopt};
 }
+

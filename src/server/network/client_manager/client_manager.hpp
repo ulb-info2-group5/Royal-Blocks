@@ -52,7 +52,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
     bindings::State userState;
-
+    std::optional<GameMode> gameMode_;
     std::optional<UserID> clientId;
 
     // std function to manage packages
@@ -96,8 +96,12 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void setClientId(const int id);
 
     void setUserState(bindings::State newState);
+    void setGameMode(GameMode newGameMode);
 
+
+    bindings::User createUserFromThis();
     bindings::State getUserState();
+    std::optional<GameMode> getGameMode();
 
 };
 
@@ -182,6 +186,8 @@ class ClientManager {
     bool isClientConnected(UserID userId);
 
     void updateMenu(UserID userId );
+
+    void updateThisUserWithAllhisFriends(UserID userId); 
     
     bindings::State getUserState(UserID userID);
 

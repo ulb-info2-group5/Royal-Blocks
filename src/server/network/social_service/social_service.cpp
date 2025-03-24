@@ -67,3 +67,6 @@ bindings::Conversations SocialService::getConversations(UserID userID, std::shar
     return conversations;
 }
 
+std::vector<int> SocialService::getFriendIdsList(UserID userID){
+    return friendsManager_->getFriends(userID);
+}
