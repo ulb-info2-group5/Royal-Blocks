@@ -54,9 +54,7 @@ class GameDisplay final {
 
     Controller &controller_;
 
-    std::optional<client::GameState> gameState_;
-
-    Score score_;
+    client::GameState gameState_;
 
     ftxui::Component quitButton_;
     ftxui::Component playerInfo_;
@@ -107,7 +105,7 @@ class GameDisplay final {
 
     size_t getBoardWidth() const;
 
-    Score getSelfScore();
+    Score getSelfScore() const;
 
     Score getSelfEnergy() const;
 

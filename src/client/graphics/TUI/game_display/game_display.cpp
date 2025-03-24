@@ -92,7 +92,7 @@ ftxui::Color getFTXUIColor(Color color, GameDisplay::SelfCellType selfCellType =
 }
 
 GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller), score_(0) {}
+    : mainTui_(mainTui), controller_(controller) {}
 
 //----------------------------------------------------------------------------
 //                          Left Pane
@@ -431,7 +431,7 @@ void GameDisplay::render() {
 
         gameState_ = controller_.getGameState();
 
-        if (!inGame()) {
+        if (gameState_.isFinished) {
             if (getGameMode() == GameMode::Endless || !isWinner) {
                 gameContainer->Add(drawGameOver());
             } else {
@@ -441,8 +441,7 @@ void GameDisplay::render() {
             return;
         }
 
-        // TODO: improve optional safety here
-        isWinner = gameState_->self.playerState.isAlive;
+        isWinner = gameState_.self.playerState.isAlive;
 
         if (getGameMode() == GameMode::Endless) {
             drawEndlessMode();
@@ -471,36 +470,32 @@ void GameDisplay::render() {
 }
 
 size_t GameDisplay::getBoardHeight() const {
-    return gameState_->self.tetris.board.getHeight();
+    return gameState_.self.tetris.board.getHeight();
 }
 
 size_t GameDisplay::getBoardWidth() const {
-    return gameState_->self.tetris.board.getWidth();
+    return gameState_.self.tetris.board.getWidth();
 }
 
-Score GameDisplay::getSelfScore() {
-    if (!gameState_) {
-        return score_;
-    }
-    score_ = gameState_->self.playerState.score;
-    return score_;
+Score GameDisplay::getSelfScore() const {
+    return gameState_.self.playerState.score;
 }
 
 Score GameDisplay::getSelfEnergy() const {
-    return gameState_->self.playerState.energy.value_or(0);
+    return gameState_.self.playerState.energy.value_or(0);
 }
 
-GameMode GameDisplay::getGameMode() const { return gameState_->gameMode; }
+GameMode GameDisplay::getGameMode() const { return gameState_.gameMode; }
 
 std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
 GameDisplay::selfCellInfoAt(int x, int y) const {
-    if (gameState_->self.tetris.board.get(x, y).getColorId().has_value()) {
+    if (gameState_.self.tetris.board.get(x, y).getColorId().has_value()) {
         return std::make_pair(
-            gameState_->self.tetris.board.get(x, y).getColorId().value(),
+            gameState_.self.tetris.board.get(x, y).getColorId().value(),
             GameDisplay::SelfCellType::Placed);
     }
 
-    auto &activeTetromino = gameState_->self.tetris.activeTetromino;
+    auto &activeTetromino = gameState_.self.tetris.activeTetromino;
     if (activeTetromino.has_value()) {
         for (auto &vec : activeTetromino->body) {
             if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
@@ -511,7 +506,7 @@ GameDisplay::selfCellInfoAt(int x, int y) const {
         }
     }
 
-    auto &previewTetromino = gameState_->self.tetris.previewTetromino;
+    auto &previewTetromino = gameState_.self.tetris.previewTetromino;
     if (previewTetromino.has_value()) {
         for (auto &vec : previewTetromino->body) {
             if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
@@ -528,26 +523,26 @@ GameDisplay::selfCellInfoAt(int x, int y) const {
 std::optional<unsigned>
 GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
                                         int y) const {
-    return gameState_->externals.at(opponentIdx)
+    return gameState_.externals.at(opponentIdx)
         .tetris.board.get(x, y)
         .getColorId();
 }
 
 std::string GameDisplay::getSelfUsername() const {
-    return gameState_->self.playerState.username;
+    return gameState_.self.playerState.username;
 }
 
 std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
-    return gameState_->externals.at(opponentIdx).playerState.username;
+    return gameState_.externals.at(opponentIdx).playerState.username;
 }
 
 size_t GameDisplay::getNumOpponents() const {
-    return gameState_->externals.size();
+    return gameState_.externals.size();
 }
 
-bool GameDisplay::inGame() const { return gameState_.has_value(); }
+bool GameDisplay::inGame() const { return !gameState_.isFinished; }
 
 const std::vector<std::pair<EffectType, Energy>> &
 GameDisplay::getEffectPrices() const {
-    return gameState_->effectsPrice;
+    return gameState_.effectsPrice;
 }

@@ -19,16 +19,15 @@
 // ----------------------------------------------------------------------------
 
 void GameServer::onTimerTick() {
-    sendGameStates();
-
     if (engine.gameIsFinished()) {
         pGameState_->setIsFinished();
+        sendGameStates();
         context_.stop();
         return;
     }
 
-    std::cout << "ticking" << std::endl;
     engine.tick();
+    sendGameStates();
 
     tickTimer_.expires_after(boost::asio::chrono::milliseconds{tickDelayMs_});
 
@@ -70,7 +69,6 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
-
     // Translate bindingStr to nlohmann::json
     nlohmann::json j = nlohmann::json::parse(bindingStr);
 

@@ -59,7 +59,7 @@ class Controller {
     AuthState authState_;
 
     // TODO: merge these two in a single struct
-    std::optional<client::GameState> gameState_;
+    client::GameState gameState_;
     size_t currentEffectIdx_;
 
     mutable std::mutex mutex_;
@@ -204,7 +204,7 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    std::optional<client::GameState> getGameState();
+    client::GameState getGameState();
 
     bool inGame() const;
 };

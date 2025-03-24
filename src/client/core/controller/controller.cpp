@@ -96,10 +96,13 @@ void Controller::handlePacket(const std::string_view pack) {
         break;
     }
 
-    case bindings::BindingType::GameOver: {
-        gameState_ = std::nullopt;
-        break;
-    }
+        // TODO: remove this as it is not useful anymore now that we have the
+        // isFinished flag in GameState
+        //
+        // case bindings::BindingType::GameOver: {
+        //     gameState_ = std::nullopt;
+        //     break;
+        // }
 
     default:
         std::cerr << "unknown bindingType" << std::endl;
@@ -111,12 +114,12 @@ void Controller::handlePacket(const std::string_view pack) {
 // ### Public methods ###
 
 Controller::Controller(UiChoice uiChoice, std::tuple<int, char **> args)
-    : uiChoice_(uiChoice), args_(args), registrationState_{Controller::RegistrationState::Unregistered},
-      authState_{Controller::AuthState::Unauthenticated},
-      gameState_(std::nullopt),
-      networkManager_{
-          context_,
-          [this](const std::string_view packet) { handlePacket(packet); }}  {};
+    : uiChoice_(uiChoice), args_(args),
+      registrationState_{Controller::RegistrationState::Unregistered},
+      authState_{Controller::AuthState::Unauthenticated}, gameState_{},
+      networkManager_{context_, [this](const std::string_view packet) {
+                          handlePacket(packet);
+                      }} {};
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
@@ -131,8 +134,8 @@ Controller::AuthState Controller::getAuthState() const {
 int Controller::run() {
     if (!networkManager_.connect()) {
         std::cerr << "Failed to connect to server" << std::endl;
-        return -1; // We failed to connect to the server so we can't do anything so
-                // we end the program
+        return -1; // We failed to connect to the server so we can't do anything
+                   // so we end the program
     };
 
     screenManager_ = std::make_unique<ScreenManager>(*this, uiChoice_, args_);
@@ -281,12 +284,7 @@ void Controller::handleKeypress(const std::string &pressedKey) {
 
 size_t Controller::getNumEffects() const {
     std::lock_guard<std::mutex> guard(mutex_);
-
-    return gameState_
-        .transform([](const client::GameState &gameState) {
-            return gameState.effectsPrice.size();
-        })
-        .value_or(0);
+    return gameState_.effectsPrice.size();
 }
 
 void Controller::selectNextEffect() {
@@ -312,9 +310,9 @@ void Controller::declineFriendRequest(UserID userId) {
                              .dump());
 }
 
-std::optional<client::GameState> Controller::getGameState() {
+client::GameState Controller::getGameState() {
     std::lock_guard<std::mutex> guard(mutex_);
     return gameState_;
 }
 
-bool Controller::inGame() const { return gameState_.has_value(); }
+bool Controller::inGame() const { return !gameState_.isFinished; }
