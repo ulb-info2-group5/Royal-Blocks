@@ -11,6 +11,7 @@
 namespace client {
 
     struct GameState {
+        bool isFinished;
         GameMode gameMode;
         PlayerTetrisSelf self;
         std::vector<PlayerTetrisExternal> externals;

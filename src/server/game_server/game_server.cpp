@@ -22,6 +22,7 @@ void GameServer::onTimerTick() {
     sendGameStates();
 
     if (engine.gameIsFinished()) {
+        pGameState_->setIsFinished();
         context_.stop();
         return;
     }

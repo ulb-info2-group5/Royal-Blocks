@@ -70,6 +70,8 @@ std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
     return playerToTetris_;
 }
 
+void GameState::setIsFinished(bool isFinished) { isFinished_ = isFinished; }
+
 /* ------------------------------------------------
  *          Serialization
  * ------------------------------------------------*/
@@ -77,6 +79,7 @@ std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
 nlohmann::json GameState::serializeFor(UserID userID) const {
     nlohmann::json j;
 
+    j["isFinished"] = isFinished_;
     j["gameMode"] = gameMode_;
 
     j["externals"] = nlohmann::json::array();

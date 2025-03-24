@@ -12,8 +12,8 @@
 
 class GameState {
   private:
+    bool isFinished_;
     const GameMode gameMode_;
-
     std::vector<PlayerTetris> playerToTetris_;
 
   public:
@@ -57,6 +57,8 @@ class GameState {
      * @brief Returns the playerToTetris vector member.
      */
     std::vector<PlayerTetris> &getPlayerToTetris();
+
+    void setIsFinished(bool isFinished = true);
 
     /* ------------------------------------------------
      *          Serialization

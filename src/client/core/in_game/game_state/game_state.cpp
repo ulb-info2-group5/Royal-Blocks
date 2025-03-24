@@ -4,6 +4,7 @@
 void client::GameState::deserialize(const nlohmann::json &j) {
     self.deserialize(j.at("self"));
 
+    isFinished = j.at("isFinished");
     gameMode = j.at("gameMode");
 
     for (const auto &external : j.at("externals")) {
