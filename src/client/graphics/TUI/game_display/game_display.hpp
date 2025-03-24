@@ -113,6 +113,8 @@ class GameDisplay final {
 
     Score getSelfScore() const;
 
+    std::optional<UserID> getSelectedTarget() const;
+
     Score getSelfEnergy() const;
 
     GameMode getGameMode() const;

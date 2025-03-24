@@ -4,6 +4,7 @@
 #include "board/board.hpp"
 #include "effect/effect_type.hpp"
 #include "effect/penalty/timed_penalty.hpp"
+#include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
 
 #include "../../../core/controller/controller.hpp"
@@ -337,18 +338,25 @@ ftxui::Component &GameDisplay::opponentsBoards() {
 
     ftxui::Components opponentsBoards;
     for (size_t index = 0; index < getNumOpponents(); index++) {
+
+        auto button = ftxui::Button(
+            getOpponentUsername(index),
+            [index, this] {
+                controller_.selectTarget(getNthOpponentUserID(index));
+            },
+            ftxui::ButtonOption::Animated(ftxui::Color::Yellow1));
+
+        if (getSelectedTarget() == getNthOpponentUserID(index)) {
+            button = button | ftxui::borderDouble;
+        } else {
+            button = button | ftxui::borderLight;
+        }
+
         opponentsBoards.emplace_back( //
             ftxui::Container::Vertical({
                 createOpBoardDisplay(index, cellSize),
-                ftxui::Button(
-                    getOpponentUsername(index),
-                    [index, this] {
-                        controller_.selectTarget(getNthOpponentUserID(index));
-                    },
-                    ftxui::ButtonOption::Animated(ftxui::Color::Yellow1))
-                    | ftxui::borderDouble,
-            }) //
-        );
+                button,
+            }));
     }
 
     size_t numCols = 4;
@@ -540,6 +548,10 @@ size_t GameDisplay::getBoardWidth() const {
 
 Score GameDisplay::getSelfScore() const {
     return gameState_.self.playerState.score;
+}
+
+std::optional<UserID> GameDisplay::getSelectedTarget() const {
+    return gameState_.self.playerState.penaltyTarget;
 }
 
 Score GameDisplay::getSelfEnergy() const {
