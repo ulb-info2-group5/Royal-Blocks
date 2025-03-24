@@ -2,7 +2,6 @@
 
 #include <QApplication>
 #include <iostream>
-#include <thread>
 
 /*
  * @brief Handle the arguments passed to the program
@@ -64,11 +63,9 @@ int main(int argc, char *argv[]) {
     UiChoice choice = handleArguments(argc, argv);
 
     if (choice == UiChoice::NONE) {
-        return 1;
+        return -1;
     }
 
     Controller controller(choice, std::make_tuple(argc, argv));
-    controller.run();
-
-    return 0;
+    return controller.run();
 }

@@ -17,6 +17,7 @@
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -48,6 +49,9 @@ class Controller {
     };
 
   private:
+    UiChoice uiChoice_;
+    std::tuple<int, char **> args_;
+
     boost::asio::io_context context_;
     std::thread ioThread_;
 
@@ -73,7 +77,7 @@ class Controller {
     /*
      * @brief The screen manager to manage the screens to show to the user
      */
-    ScreenManager screenManager_;
+    std::unique_ptr<ScreenManager> screenManager_;
 
     /**
      * @brief Handles the received packet
@@ -103,8 +107,10 @@ class Controller {
 
     /*
      * @brief Run the controller to manage the game
+     *
+     * @return The exit code of the program of the tui or gui
      */
-    void run();
+    int run();
 
     /*
      * @brief Makes a registration request to the server.

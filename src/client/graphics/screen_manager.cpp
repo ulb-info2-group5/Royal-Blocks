@@ -19,18 +19,16 @@ ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice, std::tup
     }
 }
 
-void ScreenManager::run() {
+int ScreenManager::run() {
     if (uiChoice_ == UiChoice::TUI) {
         tui_->run();
+        return 0;
     }
 
-    else {
-
-        app_->setApplicationName("Royal Tetris");
-        app_->setApplicationDisplayName("Royal Tetris");
-        gui_->show();
-        app_->exec();
-    }
+    app_->setApplicationName("Royal Tetris");
+    app_->setApplicationDisplayName("Royal Tetris");
+    gui_->show();
+    return app_->exec();
 }
 
 void ScreenManager::forceRefresh() {

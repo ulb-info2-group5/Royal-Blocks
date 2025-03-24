@@ -42,8 +42,10 @@ class ScreenManager {
 
     /*
      * @brief Run the screen manager to manage the screens to show to the user
+     *
+     * @return The exit code of the program of the tui or gui
      */
-    void run();
+    int run();
 
     void forceRefresh();
 };

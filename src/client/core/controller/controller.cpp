@@ -105,19 +105,18 @@ void Controller::handlePacket(const std::string_view pack) {
         std::cerr << "unknown bindingType" << std::endl;
     }
 
-    screenManager_.forceRefresh();
+    screenManager_->forceRefresh();
 }
 
 // ### Public methods ###
 
 Controller::Controller(UiChoice uiChoice, std::tuple<int, char **> args)
-    : registrationState_{Controller::RegistrationState::Unregistered},
+    : uiChoice_(uiChoice), args_(args), registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated},
       gameState_(std::nullopt),
       networkManager_{
           context_,
-          [this](const std::string_view packet) { handlePacket(packet); }},
-      screenManager_{*this, uiChoice, args} {};
+          [this](const std::string_view packet) { handlePacket(packet); }}  {};
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
@@ -129,21 +128,25 @@ Controller::AuthState Controller::getAuthState() const {
     return authState_;
 }
 
-void Controller::run() {
+int Controller::run() {
     if (!networkManager_.connect()) {
         std::cerr << "Failed to connect to server" << std::endl;
-        return; // We failed to connect to the server so we can't do anything so
+        return -1; // We failed to connect to the server so we can't do anything so
                 // we end the program
     };
 
+    screenManager_ = std::make_unique<ScreenManager>(*this, uiChoice_, args_);
+
     ioThread_ = std::thread([this]() { context_.run(); });
 
-    screenManager_.run();
+    int result = screenManager_->run();
 
     context_.stop();
     if (ioThread_.joinable()) {
         ioThread_.join();
     }
+
+    return result;
 }
 
 void Controller::tryRegister(const std::string &username,

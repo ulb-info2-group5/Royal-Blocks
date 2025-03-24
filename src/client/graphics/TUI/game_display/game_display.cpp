@@ -92,7 +92,7 @@ ftxui::Color getFTXUIColor(Color color, GameDisplay::SelfCellType selfCellType =
 }
 
 GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller) {}
+    : mainTui_(mainTui), controller_(controller), score_(0) {}
 
 //----------------------------------------------------------------------------
 //                          Left Pane
@@ -478,11 +478,12 @@ size_t GameDisplay::getBoardWidth() const {
     return gameState_->self.tetris.board.getWidth();
 }
 
-Score GameDisplay::getSelfScore() const {
+Score GameDisplay::getSelfScore() {
     if (!gameState_) {
-        return 0;
+        return score_;
     }
-    return gameState_->self.playerState.score;
+    score_ = gameState_->self.playerState.score;
+    return score_;
 }
 
 Score GameDisplay::getSelfEnergy() const {
