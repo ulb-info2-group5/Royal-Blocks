@@ -1,4 +1,5 @@
 #include "matchmaking.hpp"
+#include <vector>
 // ====== Loby class ======
 
 // ====== GameCandidate class ======
@@ -78,20 +79,19 @@ void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager
 }
 
 std::vector<GameCandidate> &Matchmaking::getGame(GameMode gameMode) {
-    switch (gameMode) {
-    case GameMode::Classic:
+    if (gameMode == GameMode::Classic) {
         return gamesCanditatesClassic_;
-
-    case GameMode::Dual:
-        return gamesCanditatesDuel_;
-
-    case GameMode::RoyalCompetition:
-        return gamesCanditatesRoyalCompetition_;
-
-    default:
-        std::cerr << "incorect gamesMode" << std::endl;
-        break;
     }
+
+    else if (gameMode == GameMode::Dual) {
+        return gamesCanditatesDuel_;
+    }
+
+    else if (gameMode == GameMode::RoyalCompetition) {
+        return gamesCanditatesRoyalCompetition_;
+    }
+
+    throw std::runtime_error("incorect gamesMode"); 
 }
 
 void Matchmaking::findaGame(std::vector<GameCandidate> &games,
