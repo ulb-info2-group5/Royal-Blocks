@@ -106,11 +106,6 @@ class AccountManager {
     void updateScore(const int userId, const int newScore);
 
     /*
-     * @brief Launch the account manager to create an account and/or login
-     */
-    void launch();
-
-    /*
      * @brief Get the user ID from the username
      *
      * @param username Username of the user

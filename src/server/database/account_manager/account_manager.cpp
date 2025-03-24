@@ -83,59 +83,6 @@ bool AccountManager::login(const std::string &username,
     return checkUserPassword(username, password);
 }
 
-void AccountManager::launch() {
-    using namespace std;
-
-    // ### Part 1: Create an account ###
-    std::cout << "Do you want to create an account? (y/n): ";
-    char choice;
-    cin >> choice;
-    choice = tolower(choice);
-
-    while (choice != 'y' && choice != 'n') {
-        cout << "Invalid choice! Please enter 'y' or 'n': ";
-        cin >> choice;
-        choice = tolower(choice);
-    }
-
-    std::string username, password;
-
-    if (choice == 'y') {
-        cout << "An account will be created." << endl;
-        cout << "Enter a username: ";
-        cin >> username;
-        cout << "Enter a password: ";
-        cin >> password;
-
-        while (createAccount(username, password)
-               != CreateAccountStatus::SUCCESS) {
-            cout << "Enter a username: ";
-            cin >> username;
-            cout << "Enter a password: ";
-            cin >> password;
-        }
-
-        cout << "Account created!" << endl;
-    }
-
-    // ### Part 2: Login ###
-    cout << "You will have to login." << endl;
-    cout << "Enter username: ";
-    cin >> username;
-    cout << "Enter password: ";
-    cin >> password;
-
-    while (!login(username, password)) {
-        cout << "Login failed! Please try again." << endl;
-        cout << "Enter username: ";
-        cin >> username;
-        cout << "Enter password: ";
-        cin >> password;
-    }
-
-    cout << "Login successful!" << endl;
-}
-
 void AccountManager::updateScore(const int userId, const int newScore) {
     dbManager_->executeSqlChangeData(
         "UPDATE users SET score = MAX(score, ?) WHERE id = ?",
