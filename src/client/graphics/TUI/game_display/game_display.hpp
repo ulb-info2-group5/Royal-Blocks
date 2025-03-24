@@ -60,6 +60,8 @@ class GameDisplay final {
     ftxui::Component playerInfo_;
     ftxui::Component energy_;
     ftxui::Component availableEffects_;
+    ftxui::Component penaltyInfo_;
+    ftxui::Component bonusInfo_;
     ftxui::Component leftPane_;
 
     ftxui::Component gameMode_;
@@ -81,6 +83,8 @@ class GameDisplay final {
     ftxui::Component &playerInfo();
     ftxui::Component &energy();
     ftxui::Component &availableEffects();
+    ftxui::Component &penaltyInfo();
+    ftxui::Component &bonusInfo();
     ftxui::Component &leftPane();
 
     ftxui::Component &gameMode();

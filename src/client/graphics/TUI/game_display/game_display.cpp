@@ -3,6 +3,7 @@
 
 #include "board/board.hpp"
 #include "effect/effect_type.hpp"
+#include "effect/penalty/timed_penalty.hpp"
 #include "game_mode/game_mode.hpp"
 
 #include "../../../core/controller/controller.hpp"
@@ -134,17 +135,62 @@ ftxui::Component &GameDisplay::energy() {
         std::vector<std::pair<EffectType, Energy>> effectPrices =
             getEffectPrices();
 
-        constexpr float GAUGE_COEFFICIENT = 100;
-
         return ftxui::vbox(
-            {ftxui::text("Energy"),
-             ftxui::gaugeRight(
-                 static_cast<float>(getSelfEnergy())
-                 / GAUGE_COEFFICIENT)
-                 | ftxui::borderRounded});
+            {ftxui::text("Energy : " + std::to_string(getSelfEnergy()))
+             | ftxui::borderRounded});
     });
 
     return energy_;
+}
+
+ftxui::Component &GameDisplay::penaltyInfo() {
+    penaltyInfo_ = ftxui::Renderer([this] {
+        std::string penaltyName;
+        double elapsedTime;
+
+        if (gameState_.self.playerState.activePenalty.has_value()) {
+            const client::TimedPenalty &penalty =
+                gameState_.self.playerState.activePenalty.value();
+
+            penaltyName = toString(penalty.penaltyType);
+            elapsedTime = penalty.elapsedTime;
+        } else {
+            penaltyName = "";
+            elapsedTime = 0;
+        }
+
+        return ftxui::vbox(
+            {ftxui::text("Penalty : " + penaltyName + "="
+                         + std::to_string(elapsedTime)),
+             ftxui::gaugeRight(elapsedTime) | ftxui::borderRounded});
+    });
+
+    return penaltyInfo_;
+}
+
+ftxui::Component &GameDisplay::bonusInfo() {
+    bonusInfo_ = ftxui::Renderer([this] {
+        std::string bonusName;
+        double elapsedTime;
+
+        if (gameState_.self.playerState.activeBonus.has_value()) {
+            const client::TimedBonus &bonus =
+                gameState_.self.playerState.activeBonus.value();
+
+            bonusName = toString(bonus.bonusType);
+            elapsedTime = bonus.elapsedTime;
+        } else {
+            bonusName = "";
+            elapsedTime = 0;
+        }
+
+        return ftxui::vbox(
+            {ftxui::text("Bonus : " + bonusName + "="
+                         + std::to_string(elapsedTime)),
+             ftxui::gaugeRight(elapsedTime) | ftxui::borderRounded});
+    });
+
+    return bonusInfo_;
 }
 
 ftxui::Component &GameDisplay::quitButton() {
@@ -165,6 +211,10 @@ ftxui::Component &GameDisplay::leftPane() {
             quitButton(),
             playerInfo(),
             energy(),
+
+            penaltyInfo(),
+            bonusInfo(),
+
             availableEffects(),
 
         });
