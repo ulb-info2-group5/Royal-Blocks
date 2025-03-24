@@ -101,6 +101,9 @@ TetrominoPtr ATetromino::makeTetromino(TetrominoShape shape,
     case (TetrominoShape::T):
         ret = std::make_unique<TetrominoT>(std::move(anchorPoint));
         break;
+    case (TetrominoShape::MiniTetromino):
+        ret = std::make_unique<MiniTetromino>(std::move(anchorPoint));
+        break;
     default:
         break;
     }
