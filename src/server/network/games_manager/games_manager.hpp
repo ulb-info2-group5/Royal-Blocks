@@ -1,7 +1,6 @@
 #ifndef GAMES_MANAGER_HPP
 #define GAMES_MANAGER_HPP
 
-#include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>

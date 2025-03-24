@@ -230,8 +230,6 @@ void FriendsMenu::FriendRequestScreen() {
     ftxui::Component buttonAccept = ftxui::Button(
         "Accept Request",
         [&] {
-            // TODO : appeler chosenFriend avec le controller pour accpeter la
-            // demande d'ami
             controller_.acceptFriendRequest(chosenFriend.userID);
             activeRequest = false;
         },
@@ -242,9 +240,7 @@ void FriendsMenu::FriendRequestScreen() {
 
         const std::vector<bindings::User> friendsList =
             controller_
-                .getPendingFriendRequests(); // TODO : appeler le controller
-                                             // pour récupérer la liste des
-                                             // demandes d'amis
+                .getPendingFriendRequests(); 
 
         std::vector<ftxui::Component> friendsButtons;
         for (const bindings::User &friendUser : friendsList) {
