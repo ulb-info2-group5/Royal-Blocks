@@ -1,25 +1,17 @@
-#include "network.hpp"
-#include <iostream>
-
-boost::asio::io_context io_context;
-
-void handler(const int signal) {
-    if (signal == SIGINT) {
-        std::cout << "\nSIGINT received" << std::endl;
-        io_context.stop();
-    }
-}
+#include "network/network.hpp"
 
 int main() {
-    signal(SIGINT, handler);
+   
  
     auto dbManager = std::make_shared<DatabaseManager>();
     DataBase database{std::make_shared<AccountManager>(dbManager),
                       std::make_shared<FriendsManager>(dbManager),
                       std::make_shared<MessagesManager>(dbManager)};
+    // database.accountManager->createAccount("leo", "leo");
 
     ClientManager clientManager(database);
     try {
+        boost::asio::io_context io_context;
         Network network(io_context, clientManager);
         io_context.run();
     } catch (std::exception &e) {
