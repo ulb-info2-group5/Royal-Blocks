@@ -1,6 +1,9 @@
 
 #include "client_manager.hpp"
+
 #include "../../../common/bindings/ranking.hpp"
+
+#include <bcrypt.h>
 
 using json = nlohmann::json;
 
@@ -128,9 +131,13 @@ void ClientManager::removeClientsFromTheWaintingList() {
 }
 
 bool ClientManager::attemptCreateAccount(nlohmann::json data) {
-    CreateAccountStatus status = database_.accountManager->createAccount(
-        data.at("nickname").get<std::string>(),
-        data.at("password").get<std::string>());
+    const std::string username = data.at("nickname").get<std::string>();
+    const std::string password = data.at("password").get<std::string>();
+
+    // Hash the password before storing it for better security
+    std::string hash = bcrypt::generateHash(password);
+
+    CreateAccountStatus status = database_.accountManager->createAccount(username, hash);
     if (status == CreateAccountStatus::SUCCESS) return true;
     return false;
 }
@@ -313,14 +320,15 @@ void ClientManager::handleMessage(nlohmann::json message) {
 
 bool ClientManager::checkCredentials(nlohmann::json data) {
     const std::string nickname = data.at("nickname").get<std::string>();
-    const std::string password = data.at("password").get<std::string>();
+    const std::string passwordReceive = data.at("password").get<std::string>();
 
     if (!database_.accountManager->checkUsernameExists(nickname)) {
         std::cout << "Invalid username" << std::endl;
         return false;
     }
 
-    if (!database_.accountManager->checkUserPassword(nickname, password)) {
+    std::string storedPasswordHash = database_.accountManager->getUserPasswordHash(nickname);
+    if (!bcrypt::validatePassword(passwordReceive, storedPasswordHash)) {
         std::cout << "Invalid password" << std::endl;
         return false;
     }

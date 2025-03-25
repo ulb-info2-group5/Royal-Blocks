@@ -17,6 +17,7 @@ target_include_directories(client_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
 include(../../third_party/ftxui.cmake)
+
 find_package(Boost REQUIRED COMPONENTS system)
 
 target_link_libraries(client_lib PUBLIC
@@ -29,7 +30,6 @@ target_link_libraries(client_lib PUBLIC
     Qt5::Core
     Qt5::Gui
 )
-
 
 # client binary
 set(SOURCES_CLIENT_MAIN main.cpp)

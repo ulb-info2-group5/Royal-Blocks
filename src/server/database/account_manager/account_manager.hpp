@@ -127,6 +127,14 @@ class AccountManager {
      * @return Vector of pairs containing the username and the score
      */
     std::vector<std::pair<std::string, size_t>> getRanking() const;
+
+    /*
+    * @brief Get the password hash of a user
+    *
+    * @param nickname Username of the user
+    * @return Password hash of the user
+    */
+    std::string getUserPasswordHash(const std::string &nickname) const;
 };
 
 #endif // ACCOUNT_MANAGER_HPP

@@ -131,3 +131,10 @@ std::string AccountManager::getUsername(const int userId) const {
 std::vector<std::pair<std::string, size_t>> AccountManager::getRanking() const {
     return dbManager_->getRanking();
 }
+
+std::string AccountManager::getUserPasswordHash(const std::string &nickname) const {
+    std::string sql = "SELECT password FROM users WHERE username = ?";
+    std::string password;
+    dbManager_->executeSqlRecoveryString(sql, {nickname}, password);
+    return password;
+}
