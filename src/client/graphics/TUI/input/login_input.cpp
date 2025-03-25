@@ -12,6 +12,13 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../main_tui.hpp"
+#include <cctype>
+#include <ftxui/dom/elements.hpp>
+#include <string>
+#include <thread>
+
+const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
+
 
 // ### Constructor ###
 LoginInput::LoginInput(MainTui &mainTui, Controller &controller,
@@ -46,7 +53,7 @@ LoginInput::LoginInput(MainTui &mainTui, Controller &controller,
                        });
 }
 
-// ### protected methods ###
+// ### private methods ###
 
 void LoginInput::createButtonBack() {
     buttonBack_ = ftxui::Button(
@@ -63,56 +70,63 @@ void LoginInput::createButtonSubmit() {
     buttonSubmit_ = ftxui::Button(
         std::string(STR_SUBMIT),
         [&] {
-            std::thread loginThread;
 
-            if (loginType_ == LoginType::REGISTER) {
-                controller_.tryRegister(username_, password_);
+            if (isValidUsername()) {
 
-                // Thread to check if registration is successful
-                loginThread = std::thread([this]() {
-                    for (int i = 0; i < 20;
-                         ++i) { // 2 seconds limit (20 * 100ms)
-                        std::this_thread::sleep_for(
-                            std::chrono::milliseconds(100));
-                        if (controller_.getRegistrationState()
-                            == Controller::RegistrationState::Registered) {
-                            loginState_ = LoginState::SUBMIT;
-                            mainTui_.stopRender();
-                            return;
+                std::thread loginThread;
+
+                if (loginType_ == LoginType::REGISTER) {
+                    controller_.tryRegister(username_, password_);
+
+                    // Thread to check if registration is successful
+                    loginThread = std::thread([this]() {
+                        for (int i = 0; i < 20;
+                            ++i) { // 2 seconds limit (20 * 100ms)
+                            std::this_thread::sleep_for(
+                                std::chrono::milliseconds(100));
+                            if (controller_.getRegistrationState()
+                                == Controller::RegistrationState::Registered) {
+                                loginState_ = LoginState::SUBMIT;
+                                mainTui_.stopRender();
+                                return;
+                            }
                         }
-                    }
-                    msg_ = STR_REGISTRATION_FAILED;
-                    mainTui_
-                        .forceRefresh(); // Post event to update screen
-                });
+                        errorMessage_ = "Registration failed !";
+                        message_.clear();
+                        mainTui_
+                            .forceRefresh(); // Post event to update screen
+                    });
 
-            } else if (loginType_ == LoginType::LOGIN) {
-                controller_.tryLogin(username_, password_);
+                } else if (loginType_ == LoginType::LOGIN) {
+                    
+                    controller_.tryLogin(username_, password_);
 
-                // Thread to check if authentication is successful
-                loginThread = std::thread([this]() {
-                    for (int i = 0; i < 20;
-                         ++i) { // 2 seconds limit (20 * 100ms)
-                        std::this_thread::sleep_for(
-                            std::chrono::milliseconds(100));
-                        if (controller_.getAuthState()
-                            == Controller::AuthState::Authenticated) {
-                            loginState_ = LoginState::SUBMIT;
-                            mainTui_.stopRender();
-                            return;
+                    // Thread to check if authentication is successful
+                    loginThread = std::thread([this]() {
+                        for (int i = 0; i < 20;
+                            ++i) { // 2 seconds limit (20 * 100ms)
+                            std::this_thread::sleep_for(
+                                std::chrono::milliseconds(100));
+                            if (controller_.getAuthState()
+                                == Controller::AuthState::Authenticated) {
+                                loginState_ = LoginState::SUBMIT;
+                                mainTui_.stopRender();
+                                return;
+                            }
                         }
-                    }
-                    msg_ = STR_INCORRECT;
-                    mainTui_
-                        .forceRefresh(); // Post event to update screen
-                });
-            }
+                        errorMessage_ = "Login failed !";
+                        message_.clear();
+                        mainTui_
+                            .forceRefresh(); // Post event to update screen
+                    });
+                }
 
-            if (loginThread.joinable()) {
-                loginThread.join();
-            }
+                if (loginThread.joinable()) {
+                    loginThread.join();
+                }
 
-            clearInfo();
+                clearInfo();
+            }
         },
         GlobalButtonStyle());
 }
@@ -140,8 +154,8 @@ void LoginInput::displayWindow() {
             elements.push_back(inputPassword_->Render());
             elements.push_back(ftxui::separator());
 
-            if (!msg_.empty()) {
-                elements.push_back(ftxui::text(msg_) | ftxui::center
+            if (!errorMessage_.empty()) {
+                elements.push_back(ftxui::text(errorMessage_) | ftxui::center
                                    | ftxui::color(ftxui::Color::Red));
                 elements.push_back(ftxui::separator());
             }
@@ -159,6 +173,38 @@ void LoginInput::displayWindow() {
             return ftxui::vbox(elements) | ftxui::borderHeavy | ftxui::center;
         });
 }
+
+bool LoginInput::isValidUsername() {
+    errorMessage_.clear();
+
+    if (username_.length() < 4) {
+        errorMessage_ = "The lenght of your username is too short ! The username must have at least 4 characters";
+        return false;
+    }
+
+    if (username_.length() > 20) {
+        errorMessage_ = "The lenght of your username is too long ! It must have less than 20 characters";
+    }
+
+    for (const char c : username_) {
+        if (invalidChars.find(c) != std::string::npos || isspace(c)) {
+            if (isprint(c)) {
+                errorMessage_ = "Your username contains an invalid character : '" + std::string(1, c) + "'";
+            } else  {
+                errorMessage_ = "Your username contains an invalid character with ASCII value " + std::to_string(static_cast<int>(c)) + " !";
+            }
+            return false;
+        }
+    }
+
+    if (password_.empty()) {
+        errorMessage_ = "Your password is empty ! You must enter a valid password";
+        return false;
+    }
+
+    return true;
+}
+
 
 // ### public methods ###
 
@@ -181,7 +227,7 @@ LoginState LoginInput::render() {
     mainTui_.render(displayWindow_);
 
     message_.clear();
-    msg_.clear();
+    errorMessage_.clear();
 
     return loginState_;
 }

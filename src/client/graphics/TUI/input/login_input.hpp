@@ -80,7 +80,7 @@ class LoginInput final {
      */
     std::string message_;
 
-    std::string msg_;
+    std::string errorMessage_;
 
     ftxui::Component buttonSubmit_;
     ftxui::Component buttonBack_;
@@ -93,6 +93,8 @@ class LoginInput final {
     void createButtonSubmit();
 
     void displayWindow();
+
+    bool isValidUsername();
 
   public:
     /*
