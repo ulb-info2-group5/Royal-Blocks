@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 
+const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
+
 // ### Constructor ###
 AccountManager::AccountManager(std::shared_ptr<DatabaseManager> &db)
     : dbManager_(db) {
@@ -27,10 +29,29 @@ AccountManager::AccountManager(std::shared_ptr<DatabaseManager> &db)
 // ### Public methods ###
 CreateAccountStatus AccountManager::createAccount(const std::string &username,
                                                   const std::string &password) {
+    if (username.length() < 4 || username.length() > 20) {
+        std::cerr << "AccountManager error: Username must be between 4 and 20 characters."
+                  << std::endl;
+        return CreateAccountStatus::FAILED;
+    }
+
+    if (password.empty()) {
+        std::cerr << "AccountManager error: Password cannot be empty." << std::endl;
+        return CreateAccountStatus::FAILED;
+    }
+
+
+    for (const char c : username) {
+        if (invalidChars.find(c) != std::string::npos || isspace(c)) {
+            std::cerr << "AccountManager error: Username contains an invalid character" << std::endl;
+            return CreateAccountStatus::FAILED;
+        }
+    }
+    
     CreateAccountStatus res = CreateAccountStatus::SUCCESS;
 
     if (checkUsernameExists(username)) {
-        std::cerr << "Error: User '" << username << "' already exist."
+        std::cerr << "AccountManager error: User '" << username << "' already exist."
                   << std::endl;
         res = CreateAccountStatus::USERNAME_EXISTS;
         return res;
