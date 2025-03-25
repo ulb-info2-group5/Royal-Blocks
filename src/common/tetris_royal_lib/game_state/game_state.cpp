@@ -76,7 +76,7 @@ void GameState::setIsFinished(bool isFinished) { isFinished_ = isFinished; }
  *          Serialization
  * ------------------------------------------------*/
 
-nlohmann::json GameState::serializeFor(UserID userID) const {
+nlohmann::json GameState::serializeForPlayer(UserID userID) const {
     nlohmann::json j;
 
     j["isFinished"] = isFinished_;
@@ -110,6 +110,21 @@ nlohmann::json GameState::serializeFor(UserID userID) const {
             j["penaltyToPrice"].push_back(
                 {penaltyType, getEffectPrice(penaltyType)});
         }
+    }
+
+    return j;
+}
+
+nlohmann::json GameState::serializeForViewer() const {
+    nlohmann::json j;
+
+    j["isFinished"] = isFinished_;
+    j["gameMode"] = gameMode_;
+
+    j["externals"] = nlohmann::json::array();
+
+    for (const auto &playerTetris : playerToTetris_) {
+        j["externals"].push_back(playerTetris.serializeExternal());
     }
 
     return j;

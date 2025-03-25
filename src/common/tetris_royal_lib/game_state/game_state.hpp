@@ -64,7 +64,9 @@ class GameState {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serializeFor(UserID userID) const;
+    nlohmann::json serializeForPlayer(UserID userID) const;
+
+    nlohmann::json serializeForViewer() const;
 };
 
 #endif // GAME_STATE_HPP

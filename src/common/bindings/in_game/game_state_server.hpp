@@ -20,7 +20,16 @@ namespace bindings {
                                   {"data",
                                    {{
                                        "gameState",
-                                       gameState.serializeFor(userID),
+                                       gameState.serializeForPlayer(userID),
+                                   }}}};
+        };
+
+        nlohmann::json serializeForViewer(const GameState &gameState) {
+            return nlohmann::json{{"type", BindingType::GameStateViewer},
+                                  {"data",
+                                   {{
+                                       "gameState",
+                                       gameState.serializeForViewer(),
                                    }}}};
         };
 

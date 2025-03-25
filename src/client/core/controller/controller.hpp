@@ -13,6 +13,7 @@
 #include "../../../common/bindings/ranking.hpp"
 #include "../../../common/tetris_royal_lib//game_mode/game_mode.hpp"
 #include "../../graphics/screen_manager.hpp"
+#include "../in_game/game_state/abstract_game_state.hpp"
 #include "../in_game/game_state/game_state.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
@@ -65,8 +66,10 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    // TODO: merge these two in a single struct
-    client::GameState gameState_;
+    std::unique_ptr<client::AbstractGameState> pGameState_;
+
+    // TODO: this is not used currently, remove this and add this back when
+    // needed.
     size_t currentEffectIdx_;
 
     mutable std::mutex mutex_;
@@ -215,7 +218,7 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    client::GameState getGameState();
+    std::unique_ptr<client::AbstractGameState> getGameState();
 
     bool inGame() const;
 };

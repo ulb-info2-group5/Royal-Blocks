@@ -1,23 +1,19 @@
 #ifndef CLIENT_GAME_STATE_HPP
 #define CLIENT_GAME_STATE_HPP
 
-#include "../player_tetris/player_tetris_external.hpp"
 #include "../player_tetris/player_tetris_self.hpp"
-
-#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-
-#include <vector>
+#include "abstract_game_state.hpp"
 
 namespace client {
 
-    struct GameState {
-        bool isFinished = true; // default to not in a game
-        GameMode gameMode;
+    struct GameState : public AbstractGameState {
         PlayerTetrisSelf self;
-        std::vector<PlayerTetrisExternal> externals;
-        std::vector<std::pair<EffectType, Energy>> effectsPrice;
 
-        void deserialize(const nlohmann::json &j);
+        GameState() = default;
+
+        void deserialize(const nlohmann::json &j) override;
+
+        std::unique_ptr<AbstractGameState> clone() const override;
     };
 
 } // namespace client

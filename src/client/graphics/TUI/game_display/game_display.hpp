@@ -8,6 +8,7 @@
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <memory>
 
 enum class CellSize : size_t {
     Small = 4,
@@ -54,7 +55,7 @@ class GameDisplay final {
 
     Controller &controller_;
 
-    client::GameState gameState_;
+    std::shared_ptr<client::AbstractGameState> pAGameState_;
 
     ftxui::Component quitButton_;
     ftxui::Component playerInfo_;
@@ -103,6 +104,8 @@ class GameDisplay final {
 
     ftxui::Component &drawWin();
 
+    ftxui::Component &drawSpectate();
+
     UserID getNthOpponentUserID(size_t n) const;
 
     void handleKeys();
@@ -111,7 +114,7 @@ class GameDisplay final {
 
     size_t getBoardWidth() const;
 
-    Score getSelfScore() const;
+    Energy getSelfScore() const;
 
     std::optional<UserID> getSelectedTarget() const;
 
@@ -134,6 +137,8 @@ class GameDisplay final {
     const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
 
     bool inGame() const;
+
+    bool isSpectating();
 
   public:
     GameDisplay(MainTui &screenManager, Controller &controller);

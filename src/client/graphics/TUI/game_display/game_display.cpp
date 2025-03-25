@@ -2,8 +2,9 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "board/board.hpp"
+#include "core/in_game/game_state/game_state.hpp"
+#include "core/in_game/game_state/game_state_viewer.hpp"
 #include "effect/effect_type.hpp"
-#include "effect/penalty/timed_penalty.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
 
@@ -16,6 +17,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <ftxui/screen/pixel.hpp>
+#include <memory>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -148,13 +150,18 @@ ftxui::Component &GameDisplay::energy() {
 
 ftxui::Component &GameDisplay::penaltyInfo() {
     penaltyInfo_ = ftxui::Renderer([this] {
+        auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_);
+
         auto [penaltyName, elapsedTime] =
-            gameState_.self.playerState.activePenalty
-                .transform([](const client::TimedPenalty &penalty) {
-                    return std::pair{toString(penalty.penaltyType),
-                                     penalty.elapsedTime};
-                })
-                .value_or(std::pair<std::string, int>{"", 0});
+            (pGameState == nullptr)
+                ? std::pair<std::string, double>{"", 0}
+                : pGameState->self.playerState.activePenalty
+                      .transform([](const client::TimedPenalty &penalty) {
+                          return std::pair{toString(penalty.penaltyType),
+                                           penalty.elapsedTime};
+                      })
+                      .value_or(std::pair<std::string, double>{"", 0});
 
         return ftxui::vbox({ftxui::text("Penalty : " + penaltyName),
                             ftxui::gaugeRight(elapsedTime)
@@ -167,13 +174,18 @@ ftxui::Component &GameDisplay::penaltyInfo() {
 
 ftxui::Component &GameDisplay::bonusInfo() {
     bonusInfo_ = ftxui::Renderer([this] {
+        auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_);
+
         auto [bonusName, elapsedTime] =
-            gameState_.self.playerState.activeBonus
-                .transform([](const client::TimedBonus &bonus) {
-                    return std::pair{toString(bonus.bonusType),
-                                     bonus.elapsedTime};
-                })
-                .value_or(std::pair<std::string, int>{"", 0});
+            (pGameState == nullptr)
+                ? std::pair<std::string, double>{"", 0}
+                : pGameState->self.playerState.activeBonus
+                      .transform([](const client::TimedBonus &bonus) {
+                          return std::pair{toString(bonus.bonusType),
+                                           bonus.elapsedTime};
+                      })
+                      .value_or(std::pair<std::string, double>{"", 0});
 
         return ftxui::vbox({ftxui::text("Bonus : " + bonusName),
                             ftxui::gaugeRight(elapsedTime)
@@ -197,7 +209,11 @@ ftxui::Component &GameDisplay::quitButton() {
 }
 
 ftxui::Component &GameDisplay::leftPane() {
-    if (getGameMode() == GameMode::RoyalCompetition) {
+    if (isSpectating()) {
+        leftPane_ = ftxui::Container::Vertical({
+            quitButton(),
+        });
+    } else if (getGameMode() == GameMode::RoyalCompetition) {
         leftPane_ = ftxui::Container::Vertical({
             quitButton(),
             playerInfo(),
@@ -207,7 +223,6 @@ ftxui::Component &GameDisplay::leftPane() {
             bonusInfo(),
 
             availableEffects(),
-
         });
     } else {
         leftPane_ = ftxui::Container::Vertical({
@@ -396,7 +411,17 @@ ftxui::Component &GameDisplay::drawMultiMode() {
 }
 
 UserID GameDisplay::getNthOpponentUserID(size_t n) const {
-    return gameState_.externals.at(n).playerState.userID;
+    return pAGameState_->externals.at(n).playerState.userID;
+}
+
+ftxui::Component &GameDisplay::drawSpectate() {
+    displayWindow_ = ftxui::Container::Horizontal({
+                         leftPane(),
+                         rightPane(),
+                     })
+                     | ftxui::center;
+
+    return displayWindow_;
 }
 
 void GameDisplay::handleKeys() {
@@ -478,18 +503,24 @@ ftxui::Component &GameDisplay::drawWin() {
     return displayWindow_;
 }
 
+bool GameDisplay::isSpectating() {
+    return dynamic_pointer_cast<client::GameStateViewer>(pAGameState_)
+           != nullptr;
+}
+
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
-    bool isWinner = true;
+    bool isWinner = false;
 
     auto updateGame = [&] {
         gameContainer->DetachAllChildren();
 
-        gameState_ = controller_.getGameState();
+        pAGameState_ = controller_.getGameState();
 
-        if (gameState_.isFinished) {
-            if (getGameMode() == GameMode::Endless || !isWinner) {
+        if (pAGameState_->isFinished) {
+            if (getGameMode() == GameMode::Endless || !isWinner
+                || isSpectating()) {
                 gameContainer->Add(drawGameOver());
             } else {
                 gameContainer->Add(drawWin());
@@ -498,15 +529,22 @@ void GameDisplay::render() {
             return;
         }
 
-        isWinner = gameState_.self.playerState.isAlive;
+        if (auto pGameState =
+                std::dynamic_pointer_cast<client::GameState>(pAGameState_)) {
+            isWinner = pGameState->self.playerState.isAlive;
 
-        if (getGameMode() == GameMode::Endless) {
-            drawEndlessMode();
-        } else {
-            drawMultiMode();
+            if (getGameMode() == GameMode::Endless) {
+                drawEndlessMode();
+            } else {
+                drawMultiMode();
+            }
+
+            handleKeys();
+        } else if (auto pGameStateViewer =
+                       std::dynamic_pointer_cast<client::GameStateViewer>(
+                           pAGameState_)) {
+            drawSpectate();
         }
-
-        handleKeys();
 
         gameContainer->Add(displayWindow_);
     };
@@ -526,37 +564,54 @@ void GameDisplay::render() {
     mainTui_.render(render);
 }
 
-size_t GameDisplay::getBoardHeight() const {
-    return gameState_.self.tetris.board.getHeight();
-}
+size_t GameDisplay::getBoardHeight() const { return Board::getHeight(); }
 
-size_t GameDisplay::getBoardWidth() const {
-    return gameState_.self.tetris.board.getWidth();
-}
+size_t GameDisplay::getBoardWidth() const { return Board::getWidth(); }
 
 Score GameDisplay::getSelfScore() const {
-    return gameState_.self.playerState.score;
+    if (auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_)) {
+        return pGameState->self.playerState.score;
+    }
+
+    return 0;
 }
 
 std::optional<UserID> GameDisplay::getSelectedTarget() const {
-    return gameState_.self.playerState.penaltyTarget;
+    if (auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_)) {
+        return pGameState->self.playerState.penaltyTarget;
+    }
+
+    return std::nullopt;
 }
 
-Score GameDisplay::getSelfEnergy() const {
-    return gameState_.self.playerState.energy.value_or(0);
+Energy GameDisplay::getSelfEnergy() const {
+    if (auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_)) {
+        return pGameState->self.playerState.energy.value_or(0);
+    }
+
+    return 0;
 }
 
-GameMode GameDisplay::getGameMode() const { return gameState_.gameMode; }
+GameMode GameDisplay::getGameMode() const { return pAGameState_->gameMode; }
 
 std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
 GameDisplay::selfCellInfoAt(int x, int y) const {
-    if (gameState_.self.tetris.board.get(x, y).getColorId().has_value()) {
+    auto pGameState =
+        std::dynamic_pointer_cast<client::GameState>(pAGameState_);
+    if (pGameState == nullptr) {
+        return std::nullopt;
+    }
+
+    if (pGameState->self.tetris.board.get(x, y).getColorId().has_value()) {
         return std::make_pair(
-            gameState_.self.tetris.board.get(x, y).getColorId().value(),
+            pGameState->self.tetris.board.get(x, y).getColorId().value(),
             GameDisplay::SelfCellType::Placed);
     }
 
-    auto &activeTetromino = gameState_.self.tetris.activeTetromino;
+    auto &activeTetromino = pGameState->self.tetris.activeTetromino;
     if (activeTetromino.has_value()) {
         for (auto &vec : activeTetromino->body) {
             if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
@@ -567,7 +622,7 @@ GameDisplay::selfCellInfoAt(int x, int y) const {
         }
     }
 
-    auto &previewTetromino = gameState_.self.tetris.previewTetromino;
+    auto &previewTetromino = pGameState->self.tetris.previewTetromino;
     if (previewTetromino.has_value()) {
         for (auto &vec : previewTetromino->body) {
             if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
@@ -584,26 +639,31 @@ GameDisplay::selfCellInfoAt(int x, int y) const {
 std::optional<unsigned>
 GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
                                         int y) const {
-    return gameState_.externals.at(opponentIdx)
+    return pAGameState_->externals.at(opponentIdx)
         .tetris.board.get(x, y)
         .getColorId();
 }
 
 std::string GameDisplay::getSelfUsername() const {
-    return gameState_.self.playerState.username;
+    if (auto pGameState =
+            std::dynamic_pointer_cast<client::GameState>(pAGameState_)) {
+        return pGameState->self.playerState.username;
+    }
+
+    return std::string{};
 }
 
 std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
-    return gameState_.externals.at(opponentIdx).playerState.username;
+    return pAGameState_->externals.at(opponentIdx).playerState.username;
 }
 
 size_t GameDisplay::getNumOpponents() const {
-    return gameState_.externals.size();
+    return pAGameState_->externals.size();
 }
 
-bool GameDisplay::inGame() const { return !gameState_.isFinished; }
+bool GameDisplay::inGame() const { return !pAGameState_->isFinished; }
 
 const std::vector<std::pair<EffectType, Energy>> &
 GameDisplay::getEffectPrices() const {
-    return gameState_.effectsPrice;
+    return pAGameState_->effectsPrice;
 }
