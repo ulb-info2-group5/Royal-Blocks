@@ -41,6 +41,7 @@
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
 
+#include <algorithm>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -48,6 +49,19 @@
 #include <vector>
 
 // ### Private methods ###
+
+void Controller::updateFriendState(const bindings::User &updatedFriend) {
+    auto it = std::find_if(friendsList_.begin(), friendsList_.end(),
+                           [&](const bindings::User &u) {
+                               return u.userID == updatedFriend.userID;
+                           });
+
+    if (it != friendsList_.end()) {
+        *it = updatedFriend;
+    } else {
+        friendsList_.push_back(updatedFriend);
+    }
+}
 
 void Controller::handlePacket(const std::string_view pack) {
     nlohmann::json j = nlohmann::json::parse(pack);
@@ -78,6 +92,12 @@ void Controller::handlePacket(const std::string_view pack) {
     case bindings::BindingType::Conversations: {
         conversationsById_ =
             bindings::Conversations::from_json(j).conversationsById;
+        break;
+    }
+
+    case bindings::BindingType::User: {
+        bindings::User updatedFriend = bindings::User::from_json(j);
+        updateFriendState(updatedFriend);
         break;
     }
 

@@ -84,6 +84,8 @@ class Controller {
      */
     void handlePacket(const std::string_view pack);
 
+    void updateFriendState(const bindings::User &updatedFriend);
+
   public:
     /*
      * @brief Construct a new Controller object
