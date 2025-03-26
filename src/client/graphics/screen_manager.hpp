@@ -1,12 +1,11 @@
 #ifndef SCREEN_MANAGER_HPP
 #define SCREEN_MANAGER_HPP
 
-#include "TUI/main_tui.hpp"
 #include "GUI/main_gui.hpp"
+#include "TUI/main_tui.hpp"
 
 #include <QApplication>
 #include <memory>
-#include <tuple>
 
 class Controller; // Forward declaration
 
@@ -33,7 +32,8 @@ class ScreenManager {
      *
      * @param controller The controller to ask for the data to show to the user
      */
-    ScreenManager(Controller &controller, UiChoice uiChoice, std::tuple<int, char **> args);
+    ScreenManager(Controller &controller, UiChoice uiChoice,
+                  std::pair<int, char **> args);
 
     /*
      * @brief Destroy the Screen Manager object

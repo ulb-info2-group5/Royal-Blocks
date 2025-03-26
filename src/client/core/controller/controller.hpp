@@ -50,7 +50,7 @@ class Controller {
 
   private:
     UiChoice uiChoice_;
-    std::tuple<int, char **> args_;
+    std::pair<int, char **> args_;
 
     boost::asio::io_context context_;
     std::thread ioThread_;
@@ -88,7 +88,7 @@ class Controller {
     /*
      * @brief Construct a new Controller object
      */
-    Controller(UiChoice uiChoice, std::tuple<int, char **> args);
+    Controller(UiChoice uiChoice, std::pair<int, char **> args);
 
     /*
      * @brief Destroy the Controller object

@@ -111,7 +111,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
 // ### Public methods ###
 
-Controller::Controller(UiChoice uiChoice, std::tuple<int, char **> args)
+Controller::Controller(UiChoice uiChoice, std::pair<int, char **> args)
     : uiChoice_(uiChoice), args_(args),
       registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},

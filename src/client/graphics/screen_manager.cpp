@@ -5,15 +5,13 @@
 #include <qapplication.h>
 
 // ### Public methods ###
-ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice, std::tuple<int, char **> args)
+ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice,
+                             std::pair<int, char **> args)
     : controller_(controller), uiChoice_(uiChoice) {
     if (uiChoice_ == UiChoice::TUI) {
         tui_ = std::make_unique<MainTui>(controller_);
-    }
-    else {
-        int argc = std::get<0>(args);
-        char **argv = std::get<1>(args);
-
+    } else {
+        auto [argc, argv] = args;
         app_ = std::make_unique<QApplication>(argc, argv);
         gui_ = std::make_unique<MainGui>(nullptr, &controller_);
     }
@@ -34,8 +32,7 @@ int ScreenManager::run() {
 void ScreenManager::forceRefresh() {
     if (uiChoice_ == UiChoice::TUI) {
         tui_->forceRefresh();
-    }
-    else {
+    } else {
         gui_->forceRefresh();
     }
 }
