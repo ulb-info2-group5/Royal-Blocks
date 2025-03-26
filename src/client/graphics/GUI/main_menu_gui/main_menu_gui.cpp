@@ -28,14 +28,15 @@ void MainMenuGui::on_QuitGameButton_clicked()
 
 void MainMenuGui::on_RankingButton_clicked()
 {
-    RankingGui *rankingGui = new RankingGui(controller_);
-    connect(rankingGui, &RankingGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
-    stackedWidget_->addWidget(rankingGui);
-    stackedWidget_->setCurrentWidget(rankingGui);
+    rankingGui_ = new RankingGui(controller_);
+    connect(rankingGui_, &RankingGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
+    stackedWidget_->addWidget(rankingGui_);
+    stackedWidget_->setCurrentWidget(rankingGui_);
 }
 
 void MainMenuGui::showMainMenu()
 {
+    rankingGui_->deleteLater();
     stackedWidget_->setCurrentWidget(mainMenu_);
 }
 

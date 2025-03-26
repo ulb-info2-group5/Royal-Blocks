@@ -1,6 +1,7 @@
 #ifndef MAIN_MENU_GUI_HPP
 #define MAIN_MENU_GUI_HPP
 
+#include "graphics/GUI/rankinggui/rankinggui.hpp"
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedWidget>
@@ -36,6 +37,8 @@ private:
     QStackedWidget  *stackedWidget_;
 
     QWidget *mainMenu_;
+
+    RankingGui *rankingGui_;
 
     /*
     * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
