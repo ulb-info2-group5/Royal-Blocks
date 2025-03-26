@@ -31,8 +31,8 @@ public slots:
 
 private:
     Controller *controller_;
-    QTableWidget *RankingGuiTable;
-    QPushButton *backButton;
+    QTableWidget RankingGuiTable;
+    QPushButton backButton;
 
     /*
     * @brief Setup the ranking Table
