@@ -16,25 +16,23 @@ public:
     
     ~MainGui() = default;
 
+    /*
+    * @brief Run the main Gui
+    */
+    void run();
+
+    /*
+    * @brief Force the refresh of the GUI (QT)
+    */
     void forceRefresh();
 
 public slots:
+    /*
+    * @brief Show the main menu page
+    */
     void showMainMenu();
-
-private slots:
-    void on_QuitGameButton_clicked();
-
-    void on_RankingButton_clicked();
-
-    void on_BackToMainMenu_clicked();
 
 private:
     Controller *controller_;
-
-    QStackedWidget *stackedWidget_;
-    /*
-    * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
-    */
-    void actionOnExit();
 };
 #endif // MAIN_GUI_HPP

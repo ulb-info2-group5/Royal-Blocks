@@ -22,6 +22,15 @@ RankingGui::RankingGui(Controller *controller, QWidget *parent)
     setLayout(layout);
 }
 
+void RankingGui::on_BackButtonClicked() {
+    emit backToMainMenu();
+}
+
+/*--------------------------------------------------------
+                    Private Methods
+---------------------------------------------------------*/
+
+
 void RankingGui::setupRankingGuiTable() {
     std::vector<std::pair<std::string, Score>> RankingGuiData = controller_->getRanking();
 
@@ -42,8 +51,4 @@ void RankingGui::setupRankingGuiTable() {
 
     RankingGuiTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     RankingGuiTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-}
-
-void RankingGui::on_BackButtonClicked() {
-    emit backToMainMenu();
 }

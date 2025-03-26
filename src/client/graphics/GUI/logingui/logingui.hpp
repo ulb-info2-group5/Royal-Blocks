@@ -19,22 +19,51 @@ public:
     explicit LoginGui(Controller *controller, QWidget *parent = nullptr);
     ~LoginGui() = default;
 
+    /*
+    * @brief Run the login Gui
+    */
+    void run();
+
 signals:
+    /*
+    * @brief Signal emitted when the login is successful
+    */
     void loginSuccessful();
 
 private slots:
+    /*
+    * @brief Action to perform when exiting the application
+    */
     void on_ExitButton_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the login button
+    */
     void on_LoginButton_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the register button
+    */
     void on_RegisterButton_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the back button in the login page
+    */
     void on_BackButtonLogin_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the back button in the register page
+    */
     void on_BackButtonRegister_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the send button in the register page
+    */
     void on_SendButtonRegister_clicked();
 
+    /*
+    * @brief Action to perform when the user click on the send button in the login page
+    */
     void on_SendButtonLogin_clicked();
 
 private:
@@ -77,6 +106,11 @@ private:
     * @return True if the register is valid, false otherwise
     */
     bool isValidRegister();
+
+    /*
+    * @brief Setup the Login Gui
+    */
+    void setup();
 
 };
 

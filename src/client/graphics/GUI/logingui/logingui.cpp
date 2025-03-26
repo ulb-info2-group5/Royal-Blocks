@@ -10,90 +10,16 @@ const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 
 
 LoginGui::LoginGui(Controller *controller, QWidget *parent)
-    : QWidget(parent), controller_(controller) {
-    stackedWidget_ = new QStackedWidget();
+    : QWidget(parent), controller_(controller) {}
 
-    QPushButton *exitButton = new QPushButton("Exit");
-    QPushButton *loginButton = new QPushButton("Login");
-    QPushButton *registerButton = new QPushButton("Register");
-    QPushButton *backButtonLogin = new QPushButton("Back");
-    QPushButton *backButtonRegister = new QPushButton("Back");
-    QPushButton *sendButtonRegister = new QPushButton("Send");
-    QPushButton *sendButtonLogin = new QPushButton("Send");
-
-    connect(exitButton, &QPushButton::clicked, this, &LoginGui::on_ExitButton_clicked);
-    connect(loginButton, &QPushButton::clicked, this, &LoginGui::on_LoginButton_clicked);
-    connect(registerButton, &QPushButton::clicked, this, &LoginGui::on_RegisterButton_clicked);
-    connect(backButtonLogin, &QPushButton::clicked, this, &LoginGui::on_BackButtonLogin_clicked);
-    connect(backButtonRegister, &QPushButton::clicked, this, &LoginGui::on_BackButtonRegister_clicked);
-    connect(sendButtonRegister, &QPushButton::clicked, this, &LoginGui::on_SendButtonRegister_clicked);
-    connect(sendButtonLogin, &QPushButton::clicked, this, &LoginGui::on_SendButtonLogin_clicked);
-
-    
-    usernameInputRegister_ = new QLineEdit();
-    passwordInputRegister_ = new QLineEdit();
-    usernameInputLogin_ = new QLineEdit();
-    passwordInputLogin_ = new QLineEdit();
-
-    usernameInputRegister_->setAlignment(Qt::AlignCenter);
-    passwordInputRegister_->setAlignment(Qt::AlignCenter);
-    passwordInputRegister_->setEchoMode(QLineEdit::Password);
-    usernameInputLogin_->setAlignment(Qt::AlignCenter);
-    passwordInputLogin_->setAlignment(Qt::AlignCenter);
-    passwordInputLogin_->setEchoMode(QLineEdit::Password);
-
-    usernameInputRegister_->setPlaceholderText("Enter a username");
-    passwordInputRegister_->setPlaceholderText("Enter a password");
-    usernameInputLogin_->setPlaceholderText("Enter your username");
-    passwordInputLogin_->setPlaceholderText("Enter your password");
-
-
-    // Create the main page
-    mainPage_ = new QWidget();
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    mainLayout->addWidget(createCenterBoldTitle("Welcome to Royal Tetris !"));
-    mainLayout->addWidget(registerButton);
-    mainLayout->addWidget(loginButton);
-    mainLayout->addWidget(exitButton);
-    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    mainPage_->setLayout(mainLayout);
-
-
-    // Create the register page
-    registerPage_ = new QWidget();
-    QVBoxLayout *registerPageLayout = new QVBoxLayout();
-    registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    registerPageLayout->addWidget(createCenterBoldTitle("Register"));
-    registerPageLayout->addWidget(usernameInputRegister_);
-    registerPageLayout->addWidget(passwordInputRegister_);
-    registerPageLayout->addWidget(sendButtonRegister);
-    registerPageLayout->addWidget(backButtonRegister);
-    registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    registerPage_->setLayout(registerPageLayout);
-
-
-    // Create the login page
-    loginPage_ = new QWidget();
-    QVBoxLayout *loginPageLayout = new QVBoxLayout();
-    loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    loginPageLayout->addWidget(createCenterBoldTitle("Login"));
-    loginPageLayout->addWidget(usernameInputLogin_);
-    loginPageLayout->addWidget(passwordInputLogin_);
-    loginPageLayout->addWidget(sendButtonLogin);
-    loginPageLayout->addWidget(backButtonLogin);
-    loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    loginPage_->setLayout(loginPageLayout);
-
-
-    stackedWidget_->addWidget(mainPage_);
-    stackedWidget_->addWidget(registerPage_);   
-    stackedWidget_->addWidget(loginPage_);
-
+void LoginGui::run() {
+    setup();
 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(stackedWidget_);
     setLayout(layout);
+
+    show();
 }
 
 void LoginGui::on_ExitButton_clicked()
@@ -275,4 +201,85 @@ bool LoginGui::isValidRegister() {
     }
 
     return true;
+}
+
+void LoginGui::setup() {
+    stackedWidget_ = new QStackedWidget();
+
+    QPushButton *exitButton = new QPushButton("Exit");
+    QPushButton *loginButton = new QPushButton("Login");
+    QPushButton *registerButton = new QPushButton("Register");
+    QPushButton *backButtonLogin = new QPushButton("Back");
+    QPushButton *backButtonRegister = new QPushButton("Back");
+    QPushButton *sendButtonRegister = new QPushButton("Send");
+    QPushButton *sendButtonLogin = new QPushButton("Send");
+
+    connect(exitButton, &QPushButton::clicked, this, &LoginGui::on_ExitButton_clicked);
+    connect(loginButton, &QPushButton::clicked, this, &LoginGui::on_LoginButton_clicked);
+    connect(registerButton, &QPushButton::clicked, this, &LoginGui::on_RegisterButton_clicked);
+    connect(backButtonLogin, &QPushButton::clicked, this, &LoginGui::on_BackButtonLogin_clicked);
+    connect(backButtonRegister, &QPushButton::clicked, this, &LoginGui::on_BackButtonRegister_clicked);
+    connect(sendButtonRegister, &QPushButton::clicked, this, &LoginGui::on_SendButtonRegister_clicked);
+    connect(sendButtonLogin, &QPushButton::clicked, this, &LoginGui::on_SendButtonLogin_clicked);
+
+    
+    usernameInputRegister_ = new QLineEdit();
+    passwordInputRegister_ = new QLineEdit();
+    usernameInputLogin_ = new QLineEdit();
+    passwordInputLogin_ = new QLineEdit();
+
+    usernameInputRegister_->setAlignment(Qt::AlignCenter);
+    passwordInputRegister_->setAlignment(Qt::AlignCenter);
+    passwordInputRegister_->setEchoMode(QLineEdit::Password);
+    usernameInputLogin_->setAlignment(Qt::AlignCenter);
+    passwordInputLogin_->setAlignment(Qt::AlignCenter);
+    passwordInputLogin_->setEchoMode(QLineEdit::Password);
+
+    usernameInputRegister_->setPlaceholderText("Enter a username");
+    passwordInputRegister_->setPlaceholderText("Enter a password");
+    usernameInputLogin_->setPlaceholderText("Enter your username");
+    passwordInputLogin_->setPlaceholderText("Enter your password");
+
+
+    // Create the main page
+    mainPage_ = new QWidget();
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    mainLayout->addWidget(createCenterBoldTitle("Welcome to Royal Tetris !"));
+    mainLayout->addWidget(registerButton);
+    mainLayout->addWidget(loginButton);
+    mainLayout->addWidget(exitButton);
+    mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    mainPage_->setLayout(mainLayout);
+
+
+    // Create the register page
+    registerPage_ = new QWidget();
+    QVBoxLayout *registerPageLayout = new QVBoxLayout();
+    registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    registerPageLayout->addWidget(createCenterBoldTitle("Register"));
+    registerPageLayout->addWidget(usernameInputRegister_);
+    registerPageLayout->addWidget(passwordInputRegister_);
+    registerPageLayout->addWidget(sendButtonRegister);
+    registerPageLayout->addWidget(backButtonRegister);
+    registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    registerPage_->setLayout(registerPageLayout);
+
+
+    // Create the login page
+    loginPage_ = new QWidget();
+    QVBoxLayout *loginPageLayout = new QVBoxLayout();
+    loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    loginPageLayout->addWidget(createCenterBoldTitle("Login"));
+    loginPageLayout->addWidget(usernameInputLogin_);
+    loginPageLayout->addWidget(passwordInputLogin_);
+    loginPageLayout->addWidget(sendButtonLogin);
+    loginPageLayout->addWidget(backButtonLogin);
+    loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    loginPage_->setLayout(loginPageLayout);
+
+
+    stackedWidget_->addWidget(mainPage_);
+    stackedWidget_->addWidget(registerPage_);   
+    stackedWidget_->addWidget(loginPage_);
 }

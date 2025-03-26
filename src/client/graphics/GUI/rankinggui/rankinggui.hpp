@@ -14,18 +14,28 @@ class RankingGui : public QWidget {
 
 public:
     RankingGui(Controller *controller, QWidget *parent = nullptr);
-    ~RankingGui() {}
+    ~RankingGui() = default;
 
 signals:
+    /*
+    * @brief Signal emitted when the user click on the back button
+    */
     void backToMainMenu();
 
 public slots:
+    /*
+    * @brief Action to perform when the user click on the back button
+    */
     void on_BackButtonClicked();
 
 private:
     Controller *controller_;
     QTableWidget *RankingGuiTable;
     QPushButton *backButton;
+
+    /*
+    * @brief Setup the ranking Table
+    */
     void setupRankingGuiTable();
 };
 

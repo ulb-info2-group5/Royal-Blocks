@@ -25,6 +25,7 @@ int ScreenManager::run() {
 
     app_->setApplicationName("Royal Tetris");
     app_->setApplicationDisplayName("Royal Tetris");
+    gui_->run();
     gui_->show();
     return app_->exec();
 }
