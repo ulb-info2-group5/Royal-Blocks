@@ -23,23 +23,15 @@ public:
 
     void forceRefresh();
 
+public slots:
+    void showMainMenu();
+
 private slots:
-
-    void on_ExitButton_clicked();
-
-    void on_LoginButton_clicked();
-
-    void on_RegisterButton_clicked();
-
-    void on_BackButtonLogin_clicked();
-
-    void on_BackButtonRegister_clicked();
-
-    void on_SendButtonRegister_clicked();
-
-    void on_SendButtonLogin_clicked();
-
     void on_QuitGameButton_clicked();
+
+    void on_RankingButton_clicked();
+
+    void on_BackToMainMenu_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -49,10 +41,5 @@ private:
     * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
     */
     void actionOnExit();
-
-    /*
-    * @brief Clear the inputs of the user
-    */
-    void clearInputs();
 };
 #endif // MAIN_GUI_HPP
