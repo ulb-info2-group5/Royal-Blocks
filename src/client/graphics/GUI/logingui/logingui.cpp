@@ -2,12 +2,13 @@
 
 #include "../qt_config/qt_config.hpp"
 #include "../../../core/controller/controller.hpp"
+#include <qglobal.h>
 #include <qpushbutton.h>
 
 const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 
 
-LoginGui::LoginGui(Controller *controller, QWidget *parent)
+LoginGui::LoginGui(Controller &controller, QWidget *parent)
     : QWidget(parent), controller_(controller) {}
 
 void LoginGui::run() {
@@ -63,7 +64,7 @@ void LoginGui::on_SendButtonRegister_clicked()
         return;
     }
 
-    controller_->tryRegister(username.toStdString(), password.toStdString());
+    controller_.tryRegister(username.toStdString(), password.toStdString());
 
     bool registerSuccess = false;
 
@@ -73,7 +74,7 @@ void LoginGui::on_SendButtonRegister_clicked()
             ++i) { // 2 seconds limit (20 * 100ms)
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(100));
-            if (controller_->getRegistrationState()
+            if (controller_.getRegistrationState()
                 == Controller::RegistrationState::Registered) {
                 registerSuccess = true;
                 return;
@@ -103,7 +104,7 @@ void LoginGui::on_SendButtonLogin_clicked()
     QString username = usernameInputLogin_.text();
     QString password = passwordInputLogin_.text();
 
-    controller_->tryLogin(username.toStdString(), password.toStdString());
+    controller_.tryLogin(username.toStdString(), password.toStdString());
 
     bool loginSuccess = false;
 
@@ -113,7 +114,7 @@ void LoginGui::on_SendButtonLogin_clicked()
             ++i) { // 2 seconds limit (20 * 100ms)
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(100));
-            if (controller_->getAuthState()
+            if (controller_.getAuthState()
                 == Controller::AuthState::Authenticated) {
                 loginSuccess = true;
                 return;

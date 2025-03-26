@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-MainMenuGui::MainMenuGui(Controller *controller, QWidget *parent)
+MainMenuGui::MainMenuGui(Controller &controller, QWidget *parent)
     : QWidget(parent), controller_(controller),rankingGui_(controller_) {}
 
 

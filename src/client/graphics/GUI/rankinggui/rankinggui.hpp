@@ -14,7 +14,7 @@ class RankingGui : public QWidget {
     Q_OBJECT
 
 public:
-    RankingGui(Controller *controller, QWidget *parent = nullptr);
+    RankingGui(Controller &controller, QWidget *parent = nullptr);
     ~RankingGui() = default;
 
 signals:
@@ -30,7 +30,7 @@ public slots:
     void on_BackButtonClicked();
 
 private:
-    Controller *controller_;
+    Controller &controller_;
     QTableWidget RankingGuiTable;
     QPushButton backButton;
 

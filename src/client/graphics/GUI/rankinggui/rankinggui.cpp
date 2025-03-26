@@ -6,7 +6,7 @@
 
 #include "../../../core/controller/controller.hpp"
 
-RankingGui::RankingGui(Controller *controller, QWidget *parent)
+RankingGui::RankingGui(Controller &controller, QWidget *parent)
     : QWidget(parent), controller_(controller) {
 
     backButton.setText("Back");
@@ -48,7 +48,7 @@ void RankingGui::on_BackButtonClicked() {
 
 
 void RankingGui::setupRankingGuiTable() {
-    std::vector<std::pair<std::string, Score>> RankingGuiData = controller_->getRanking();
+    std::vector<std::pair<std::string, Score>> RankingGuiData = controller_.getRanking();
 
     RankingGuiTable.setRowCount(RankingGuiData.size());
     RankingGuiTable.setColumnCount(2);

@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStackedWidget>
+#include <qglobal.h>
 #include <string>
 
 class Controller; // Forward declaration
@@ -14,7 +15,7 @@ class LoginGui : public QWidget {
     Q_OBJECT
 
 public:
-    explicit LoginGui(Controller *controller, QWidget *parent = nullptr);
+    explicit LoginGui(Controller &controller, QWidget *parent = nullptr);
     ~LoginGui() = default;
 
     /*
@@ -65,7 +66,7 @@ private slots:
     void on_SendButtonLogin_clicked();
 
 private:
-    Controller *controller_;
+    Controller &controller_;
 
     QStackedWidget  *stackedWidget_;
 

@@ -1,6 +1,9 @@
 #ifndef MAIN_GUI_HPP
 #define MAIN_GUI_HPP
 
+#include "main_menu_gui/main_menu_gui.hpp"
+#include "logingui/logingui.hpp"
+
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStackedWidget>

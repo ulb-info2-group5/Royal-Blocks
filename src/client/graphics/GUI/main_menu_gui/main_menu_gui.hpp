@@ -14,7 +14,7 @@ class MainMenuGui : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainMenuGui(Controller *controller, QWidget *parent = nullptr);
+    explicit MainMenuGui(Controller &controller, QWidget *parent = nullptr);
     ~MainMenuGui() = default;
 
     /*
@@ -33,7 +33,7 @@ private slots:
     void showMainMenu();
 
 private:
-    Controller *controller_;
+    Controller &controller_;
 
     QStackedWidget  *stackedWidget_;
 
