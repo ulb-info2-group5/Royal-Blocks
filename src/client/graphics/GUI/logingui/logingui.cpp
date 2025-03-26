@@ -42,12 +42,14 @@ void LoginGui::on_RegisterButton_clicked()
 
 void LoginGui::on_BackButtonLogin_clicked()
 {
+    clearInputs();
     stackedWidget_->setCurrentWidget(mainPage_);
 }
 
 
 void LoginGui::on_BackButtonRegister_clicked()
 {
+    clearInputs();
     stackedWidget_->setCurrentWidget(mainPage_);
 }
 
@@ -207,12 +209,19 @@ void LoginGui::setup() {
     stackedWidget_ = new QStackedWidget();
 
     QPushButton *exitButton = new QPushButton("Exit");
+    exitButton->setFixedWidth(500);
     QPushButton *loginButton = new QPushButton("Login");
+    loginButton->setFixedWidth(500);
     QPushButton *registerButton = new QPushButton("Register");
+    registerButton->setFixedWidth(500);
     QPushButton *backButtonLogin = new QPushButton("Back");
+    backButtonLogin->setFixedWidth(500);
     QPushButton *backButtonRegister = new QPushButton("Back");
+    backButtonRegister->setFixedWidth(500);
     QPushButton *sendButtonRegister = new QPushButton("Send");
+    sendButtonRegister->setFixedWidth(500);
     QPushButton *sendButtonLogin = new QPushButton("Send");
+    sendButtonLogin->setFixedWidth(500);
 
     connect(exitButton, &QPushButton::clicked, this, &LoginGui::on_ExitButton_clicked);
     connect(loginButton, &QPushButton::clicked, this, &LoginGui::on_LoginButton_clicked);
@@ -229,10 +238,14 @@ void LoginGui::setup() {
     passwordInputLogin_ = new QLineEdit();
 
     usernameInputRegister_->setAlignment(Qt::AlignCenter);
+    usernameInputRegister_->setFixedWidth(500);
     passwordInputRegister_->setAlignment(Qt::AlignCenter);
+    passwordInputRegister_->setFixedWidth(500);
     passwordInputRegister_->setEchoMode(QLineEdit::Password);
     usernameInputLogin_->setAlignment(Qt::AlignCenter);
+    usernameInputLogin_->setFixedWidth(500);
     passwordInputLogin_->setAlignment(Qt::AlignCenter);
+    passwordInputLogin_->setFixedWidth(500);
     passwordInputLogin_->setEchoMode(QLineEdit::Password);
 
     usernameInputRegister_->setPlaceholderText("Enter a username");
@@ -246,9 +259,9 @@ void LoginGui::setup() {
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     mainLayout->addWidget(createCenterBoldTitle("Welcome to Royal Tetris !"));
-    mainLayout->addWidget(registerButton);
-    mainLayout->addWidget(loginButton);
-    mainLayout->addWidget(exitButton);
+    mainLayout->addWidget(registerButton, 0, Qt::AlignCenter);
+    mainLayout->addWidget(loginButton, 0, Qt::AlignCenter);
+    mainLayout->addWidget(exitButton, 0, Qt::AlignCenter);
     mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     mainPage_->setLayout(mainLayout);
 
@@ -258,10 +271,10 @@ void LoginGui::setup() {
     QVBoxLayout *registerPageLayout = new QVBoxLayout();
     registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     registerPageLayout->addWidget(createCenterBoldTitle("Register"));
-    registerPageLayout->addWidget(usernameInputRegister_);
-    registerPageLayout->addWidget(passwordInputRegister_);
-    registerPageLayout->addWidget(sendButtonRegister);
-    registerPageLayout->addWidget(backButtonRegister);
+    registerPageLayout->addWidget(usernameInputRegister_, 0, Qt::AlignCenter);
+    registerPageLayout->addWidget(passwordInputRegister_, 0, Qt::AlignCenter);
+    registerPageLayout->addWidget(sendButtonRegister, 0, Qt::AlignCenter);
+    registerPageLayout->addWidget(backButtonRegister, 0, Qt::AlignCenter);
     registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     registerPage_->setLayout(registerPageLayout);
 
@@ -271,10 +284,10 @@ void LoginGui::setup() {
     QVBoxLayout *loginPageLayout = new QVBoxLayout();
     loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     loginPageLayout->addWidget(createCenterBoldTitle("Login"));
-    loginPageLayout->addWidget(usernameInputLogin_);
-    loginPageLayout->addWidget(passwordInputLogin_);
-    loginPageLayout->addWidget(sendButtonLogin);
-    loginPageLayout->addWidget(backButtonLogin);
+    loginPageLayout->addWidget(usernameInputLogin_, 0, Qt::AlignCenter);
+    loginPageLayout->addWidget(passwordInputLogin_, 0, Qt::AlignCenter);
+    loginPageLayout->addWidget(sendButtonLogin, 0, Qt::AlignCenter);
+    loginPageLayout->addWidget(backButtonLogin, 0, Qt::AlignCenter);
     loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     loginPage_->setLayout(loginPageLayout);
 
