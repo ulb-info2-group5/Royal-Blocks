@@ -8,7 +8,7 @@
 #include <QPushButton>
 
 MainMenuGui::MainMenuGui(Controller *controller, QWidget *parent)
-    : QWidget(parent), controller_(controller) {}
+    : QWidget(parent), controller_(controller),rankingGui_(controller_) {}
 
 
 void MainMenuGui::run() {
@@ -28,16 +28,12 @@ void MainMenuGui::on_QuitGameButton_clicked()
 
 void MainMenuGui::on_RankingButton_clicked()
 {
-    rankingGui_ = new RankingGui(controller_);
-    connect(rankingGui_, &RankingGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
-    stackedWidget_->addWidget(rankingGui_);
-    stackedWidget_->setCurrentWidget(rankingGui_);
+    stackedWidget_->setCurrentWidget(&rankingGui_);
 }
 
 void MainMenuGui::showMainMenu()
 {
-    rankingGui_->deleteLater();
-    stackedWidget_->setCurrentWidget(mainMenu_);
+    stackedWidget_->setCurrentWidget(&mainMenu_);
 }
 
 /*---------------------------------------------
@@ -58,45 +54,47 @@ void MainMenuGui::actionOnExit()
 void MainMenuGui::setup() {
     stackedWidget_ = new QStackedWidget();
 
-    QPushButton *createGameButton = new QPushButton("Create a Game");
-    createGameButton->setFixedWidth(500);
+    createGameButton_.setText("Create a Game");
+    createGameButton_.setFixedWidth(500);
 
-    QPushButton *joinGameButton = new QPushButton("Join a Game");
-    joinGameButton->setFixedWidth(500);
+    joinGameButton_.setText("Join a Game");
+    joinGameButton_.setFixedWidth(500);
 
-    QPushButton *messagesButton = new QPushButton("Messages");
-    messagesButton->setFixedWidth(500);
+    messagesButton_.setText("Messages");
+    messagesButton_.setFixedWidth(500);
 
-    QPushButton *rankingButton = new QPushButton("Ranking");
-    connect(rankingButton, &QPushButton::clicked, this, &MainMenuGui::on_RankingButton_clicked);
-    rankingButton->setFixedWidth(500);
+    rankingButton_.setText("Ranking");
+    connect(&rankingButton_, &QPushButton::clicked, this, &MainMenuGui::on_RankingButton_clicked);
+    rankingButton_.setFixedWidth(500);
 
-    QPushButton *manageProfileButton = new QPushButton("Manage Profile");
-    manageProfileButton->setFixedWidth(500);
+    manageProfileButton_.setText("Manage Profile");
+    manageProfileButton_.setFixedWidth(500);
 
-    QPushButton *manageFriendsListButton = new QPushButton("Manage Friends List");
-    manageFriendsListButton->setFixedWidth(500);
+    manageFriendsListButton_.setText("Manage Friends List");
+    manageFriendsListButton_.setFixedWidth(500);
 
-    QPushButton *quitGameButton = new QPushButton("Quit Game");
-    quitGameButton->setFixedWidth(500);
-    connect(quitGameButton, &QPushButton::clicked, this, &MainMenuGui::on_QuitGameButton_clicked);
+    quitGameButton_.setText("Quit Game");
+    quitGameButton_.setFixedWidth(500);
+    connect(&quitGameButton_, &QPushButton::clicked, this, &MainMenuGui::on_QuitGameButton_clicked);
 
 
     QVBoxLayout *menu = new QVBoxLayout();
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     menu->addWidget(createCenterBoldTitle("Welcome to the main menu of Tetris Royal !"));
-    menu->addWidget(createGameButton, 0, Qt::AlignCenter);
-    menu->addWidget(joinGameButton, 0, Qt::AlignCenter);
-    menu->addWidget(messagesButton, 0, Qt::AlignCenter);
-    menu->addWidget(rankingButton, 0, Qt::AlignCenter);
-    menu->addWidget(manageProfileButton, 0, Qt::AlignCenter);
-    menu->addWidget(manageFriendsListButton, 0, Qt::AlignCenter);
-    menu->addWidget(quitGameButton, 0, Qt::AlignCenter);
+    menu->addWidget(&createGameButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&joinGameButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&messagesButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&rankingButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&manageProfileButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&manageFriendsListButton_, 0, Qt::AlignCenter);
+    menu->addWidget(&quitGameButton_, 0, Qt::AlignCenter);
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
 
-    mainMenu_ = new QWidget();
-    mainMenu_->setLayout(menu);
-    stackedWidget_->addWidget(mainMenu_);
+    mainMenu_.setLayout(menu);
+    stackedWidget_->addWidget(&mainMenu_);
+
+    connect(&rankingGui_, &RankingGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
+    stackedWidget_->addWidget(&rankingGui_);
 }
 

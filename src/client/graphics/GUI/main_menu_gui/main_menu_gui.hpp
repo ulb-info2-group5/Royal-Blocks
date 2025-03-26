@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QLabel>
+#include <qpushbutton.h>
 
 class Controller; // Forward declaration
 
@@ -36,9 +37,17 @@ private:
 
     QStackedWidget  *stackedWidget_;
 
-    QWidget *mainMenu_;
+    QWidget mainMenu_;
 
-    RankingGui *rankingGui_;
+    RankingGui rankingGui_;
+
+    QPushButton createGameButton_;
+    QPushButton joinGameButton_;
+    QPushButton messagesButton_;
+    QPushButton rankingButton_;
+    QPushButton manageProfileButton_;
+    QPushButton manageFriendsListButton_;
+    QPushButton quitGameButton_;
 
     /*
     * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
