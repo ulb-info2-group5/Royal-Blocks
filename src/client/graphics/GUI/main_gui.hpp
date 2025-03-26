@@ -3,14 +3,9 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QStackedWidget>
 
 class Controller; // Forward declaration
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
 
 class MainGui : public QMainWindow
 {
@@ -19,7 +14,7 @@ class MainGui : public QMainWindow
 public:
     MainGui(QWidget *parent = nullptr, Controller *controller = nullptr);
     
-    ~MainGui();
+    ~MainGui() = default;
 
     void forceRefresh();
 
@@ -34,9 +29,9 @@ private slots:
     void on_BackToMainMenu_clicked();
 
 private:
-    Ui::MainWindow *ui;
     Controller *controller_;
 
+    QStackedWidget *stackedWidget_;
     /*
     * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
     */

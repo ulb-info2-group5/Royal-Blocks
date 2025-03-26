@@ -1,5 +1,5 @@
-#ifndef RANKING_HPP
-#define RANKING_HPP
+#ifndef RANKINGGUI_HPP
+#define RANKINGGUI_HPP
 
 #include <QWidget>
 #include <QTableWidget>
@@ -9,12 +9,12 @@
 
 class Controller; // Forward declaration
 
-class Ranking : public QWidget {
+class RankingGui : public QWidget {
     Q_OBJECT
 
 public:
-    Ranking(Controller *controller, QWidget *parent = nullptr);
-    ~Ranking() {}
+    RankingGui(Controller *controller, QWidget *parent = nullptr);
+    ~RankingGui() {}
 
 signals:
     void backToMainMenu();
@@ -24,9 +24,9 @@ public slots:
 
 private:
     Controller *controller_;
-    QTableWidget *rankingTable;
+    QTableWidget *RankingGuiTable;
     QPushButton *backButton;
-    void setupRankingTable();
+    void setupRankingGuiTable();
 };
 
-#endif // RANKING_HPP
+#endif // RANKINGGUI_HPP

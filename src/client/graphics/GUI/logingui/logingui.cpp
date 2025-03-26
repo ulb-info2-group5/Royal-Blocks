@@ -4,7 +4,7 @@
 #include <qlabel.h>
 #include <string_view>
 
-#include "../../core/controller/controller.hpp"
+#include "../../../core/controller/controller.hpp"
 
 const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 

@@ -1,10 +1,9 @@
 #include "main_gui.hpp"
 
 #include "../../core/controller/controller.hpp"
-#include "ui_mainwindow.h"
 
-#include "ranking.hpp"
-#include "logingui.hpp"
+#include "rankinggui/rankinggui.hpp"
+#include "logingui/logingui.hpp"
 
 #include <QMessageBox>
 #include <QApplication>
@@ -13,28 +12,23 @@
 
 MainGui::MainGui(QWidget *parent, Controller *controller)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
     , controller_(controller)
 {
-    ui->setupUi(this);
+    stackedWidget_ = new QStackedWidget();
 
-    // Créer l'objet LoginGui et l'ajouter au stackedWidget
     LoginGui *loginPage = new LoginGui(controller_);
-    
-    // Connecter le signal de connexion réussie à l'action de montrer le menu principal
     connect(loginPage, &LoginGui::loginSuccessful, this, &MainGui::showMainMenu);
     
-    // Ajouter la page de login au stackedWidget de MainGui
-    ui->stackedWidget->addWidget(loginPage);
-    ui->stackedWidget->setCurrentWidget(loginPage);  // Afficher la page de login
+    stackedWidget_->addWidget(loginPage);
+    stackedWidget_->setCurrentWidget(loginPage);
 
-    this->show();  // Afficher MainGui avec LoginGui comme premier écran
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(stackedWidget_);
+    QWidget *centralWidget = new QWidget();
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
 
-}
-
-MainGui::~MainGui()
-{
-    delete ui;
+    this->show();
 }
 
 void MainGui::forceRefresh()
@@ -44,8 +38,7 @@ void MainGui::forceRefresh()
 
 void MainGui::showMainMenu()
 {
-    // Afficher le menu principal
-    ui->stackedWidget->setCurrentIndex(3); // Main Menu page
+    stackedWidget_->setCurrentIndex(3); // Main Menu page
 }
 
 void MainGui::on_QuitGameButton_clicked()
@@ -55,20 +48,17 @@ void MainGui::on_QuitGameButton_clicked()
 
 void MainGui::on_RankingButton_clicked()
 {
-    // Créer l'objet Ranking et le connecter au slot
-    Ranking *rankingPage = new Ranking(controller_);
+    RankingGui *rankingPage = new RankingGui(controller_);
 
-    // Connecter le signal backToMainMenu à l'action de retour au menu principal
-    connect(rankingPage, &Ranking::backToMainMenu, this, &MainGui::on_BackToMainMenu_clicked);
+    connect(rankingPage, &RankingGui::backToMainMenu, this, &MainGui::on_BackToMainMenu_clicked);
 
-    // Ajouter la page du classement au stackedWidget et l'afficher
-    ui->stackedWidget->addWidget(rankingPage);
-    ui->stackedWidget->setCurrentWidget(rankingPage);
+    stackedWidget_->addWidget(rankingPage);
+    stackedWidget_->setCurrentWidget(rankingPage);
 }
 
 void MainGui::on_BackToMainMenu_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(3); // Main Menu page
+    stackedWidget_->setCurrentIndex(3); // Main Menu page
 }
 
 /*--------------------------------------------
