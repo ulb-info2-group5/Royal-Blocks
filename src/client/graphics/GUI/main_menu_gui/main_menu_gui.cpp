@@ -1,6 +1,7 @@
 #include "main_menu_gui.hpp"
 
 #include "../qt_config/qt_config.hpp"
+#include "../rankinggui/rankinggui.hpp"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -25,6 +26,19 @@ void MainMenuGui::on_QuitGameButton_clicked()
     actionOnExit();
 }
 
+void MainMenuGui::on_RankingButton_clicked()
+{
+    RankingGui *rankingGui = new RankingGui(controller_);
+    connect(rankingGui, &RankingGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
+    stackedWidget_->addWidget(rankingGui);
+    stackedWidget_->setCurrentWidget(rankingGui);
+}
+
+void MainMenuGui::showMainMenu()
+{
+    stackedWidget_->setCurrentWidget(mainMenu_);
+}
+
 /*---------------------------------------------
                 Private Methods
 ----------------------------------------------*/
@@ -43,19 +57,45 @@ void MainMenuGui::actionOnExit()
 void MainMenuGui::setup() {
     stackedWidget_ = new QStackedWidget();
 
+    QPushButton *createGameButton = new QPushButton("Create a Game");
+    createGameButton->setFixedWidth(500);
+
+    QPushButton *joinGameButton = new QPushButton("Join a Game");
+    joinGameButton->setFixedWidth(500);
+
+    QPushButton *messagesButton = new QPushButton("Messages");
+    messagesButton->setFixedWidth(500);
+
+    QPushButton *rankingButton = new QPushButton("Ranking");
+    connect(rankingButton, &QPushButton::clicked, this, &MainMenuGui::on_RankingButton_clicked);
+    rankingButton->setFixedWidth(500);
+
+    QPushButton *manageProfileButton = new QPushButton("Manage Profile");
+    manageProfileButton->setFixedWidth(500);
+
+    QPushButton *manageFriendsListButton = new QPushButton("Manage Friends List");
+    manageFriendsListButton->setFixedWidth(500);
+
     QPushButton *quitGameButton = new QPushButton("Quit Game");
     quitGameButton->setFixedWidth(500);
     connect(quitGameButton, &QPushButton::clicked, this, &MainMenuGui::on_QuitGameButton_clicked);
 
+
     QVBoxLayout *menu = new QVBoxLayout();
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     menu->addWidget(createCenterBoldTitle("Welcome to the main menu of Tetris Royal !"));
+    menu->addWidget(createGameButton, 0, Qt::AlignCenter);
+    menu->addWidget(joinGameButton, 0, Qt::AlignCenter);
+    menu->addWidget(messagesButton, 0, Qt::AlignCenter);
+    menu->addWidget(rankingButton, 0, Qt::AlignCenter);
+    menu->addWidget(manageProfileButton, 0, Qt::AlignCenter);
+    menu->addWidget(manageFriendsListButton, 0, Qt::AlignCenter);
     menu->addWidget(quitGameButton, 0, Qt::AlignCenter);
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
-    QWidget *layout = new QWidget();
-    layout->setLayout(menu);
 
-    stackedWidget_->addWidget(layout);
+    mainMenu_ = new QWidget();
+    mainMenu_->setLayout(menu);
+    stackedWidget_->addWidget(mainMenu_);
 }
 

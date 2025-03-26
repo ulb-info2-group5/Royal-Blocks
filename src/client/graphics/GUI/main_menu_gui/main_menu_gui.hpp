@@ -26,6 +26,10 @@ private slots:
     */
     void on_QuitGameButton_clicked();
 
+    void on_RankingButton_clicked();
+
+    void showMainMenu();
+
 private:
     Controller *controller_;
 

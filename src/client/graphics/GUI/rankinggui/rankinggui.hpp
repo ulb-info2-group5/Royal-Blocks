@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QResizeEvent>
 
 class Controller; // Forward declaration
 
