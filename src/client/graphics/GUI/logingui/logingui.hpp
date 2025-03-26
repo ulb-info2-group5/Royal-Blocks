@@ -69,14 +69,22 @@ private:
 
     QStackedWidget  *stackedWidget_;
 
-    QLineEdit *usernameInputRegister_;
-    QLineEdit *passwordInputRegister_;
-    QLineEdit *usernameInputLogin_;
-    QLineEdit *passwordInputLogin_;
+    QLineEdit usernameInputRegister_;
+    QLineEdit passwordInputRegister_;
+    QLineEdit usernameInputLogin_;
+    QLineEdit passwordInputLogin_;
 
     QWidget *mainPage_;
     QWidget *loginPage_;
     QWidget *registerPage_;
+
+    QPushButton exitButton_;
+    QPushButton loginButton_;
+    QPushButton registerButton_;
+    QPushButton backButtonLogin_;
+    QPushButton backButtonRegister_;
+    QPushButton sendButtonRegister_;
+    QPushButton sendButtonLogin_;
 
     std::string errorMessage_;
 
