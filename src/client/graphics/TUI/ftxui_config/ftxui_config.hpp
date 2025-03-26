@@ -35,7 +35,7 @@ constexpr std::string_view
     STR_RANKING = "🏆 Ranking", STR_PROFILE = "Profile",
     STR_MANAGE_FRIENDS_LIST = "👥 Manage friends list",
     STR_MANAGE_PROFILE = "⚙ Manage profile", STR_MAIN_MENU = "🎮 Main Menu 🎮",
-    STR_WELCOME = "Welcome to the game menu of Tetris Royal !",
+    STR_WELCOME = "Welcome to the main menu of Tetris Royal !",
     STR_SCORE = "Score", STR_USER = "User",
     STR_ENDLESS_RANKING = "Endless mod Ranking",
     STR_NEW_PASSWORD = "New password", STR_NEW_USERNAME = "New username",

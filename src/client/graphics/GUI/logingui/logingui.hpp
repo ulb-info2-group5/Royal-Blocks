@@ -7,8 +7,6 @@
 #include <QLineEdit>
 #include <QStackedWidget>
 #include <string>
-#include <string_view>
-#include "QLabel"
 
 class Controller; // Forward declaration
 
@@ -91,14 +89,6 @@ private:
     * @brief Clear the inputs of the user
     */
     void clearInputs();
-
-    /*
-    * @brief Create a centered bold title
-    * 
-    * @param title The title to display
-    * @return The QLabel created
-    */
-    QLabel *createCenterBoldTitle(const std::string_view &title);
 
     /*
     * @brief Check if the register username and password is valid

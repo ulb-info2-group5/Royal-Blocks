@@ -1,11 +1,10 @@
 #include "main_menu_gui.hpp"
 
+#include "../qt_config/qt_config.hpp"
+
 #include <QApplication>
 #include <QMessageBox>
 #include <QPushButton>
-#include <qpushbutton.h>
-#include <qwidget.h>
-
 
 MainMenuGui::MainMenuGui(Controller *controller, QWidget *parent)
     : QWidget(parent), controller_(controller) {}
@@ -46,11 +45,11 @@ void MainMenuGui::setup() {
 
     QPushButton *quitGameButton = new QPushButton("Quit Game");
     quitGameButton->setFixedWidth(500);
-
     connect(quitGameButton, &QPushButton::clicked, this, &MainMenuGui::on_QuitGameButton_clicked);
 
     QVBoxLayout *menu = new QVBoxLayout();
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    menu->addWidget(createCenterBoldTitle("Welcome to the main menu of Tetris Royal !"));
     menu->addWidget(quitGameButton, 0, Qt::AlignCenter);
     menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 

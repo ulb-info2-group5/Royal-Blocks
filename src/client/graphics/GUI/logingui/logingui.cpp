@@ -1,9 +1,6 @@
 #include "logingui.hpp"
 
-#include <QLabel>
-#include <qlabel.h>
-#include <string_view>
-
+#include "../qt_config/qt_config.hpp"
 #include "../../../core/controller/controller.hpp"
 
 const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
@@ -161,17 +158,6 @@ void LoginGui::actionOnExit()
     if (confirmExit == QMessageBox::Yes) {
         QApplication::quit();
     }
-}
-
-QLabel *LoginGui::createCenterBoldTitle(const std::string_view &title)
-{
-    QLabel *titleLabel = new QLabel(title.data());
-    QFont boldFont = titleLabel->font();
-    boldFont.setBold(true);
-    boldFont.setPointSize(20);
-    titleLabel->setFont(boldFont);
-    titleLabel->setAlignment(Qt::AlignCenter);
-    return titleLabel;
 }
 
 bool LoginGui::isValidRegister() {
