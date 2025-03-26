@@ -2,8 +2,10 @@
 
 #include "../../core/controller/controller.hpp"
 
+#include "graphics/TUI/main_menu/main_menu.hpp"
 #include "rankinggui/rankinggui.hpp"
 #include "logingui/logingui.hpp"
+#include "main_menu_gui/main_menu_gui.hpp"
 
 #include <QMessageBox>
 #include <QApplication>
@@ -17,6 +19,7 @@ MainGui::MainGui(QWidget *parent, Controller *controller)
 void MainGui::run()
 {
     LoginGui *loginGui = new LoginGui(controller_);
+    connect(loginGui, &LoginGui::loginSuccessful, this, &MainGui::showMainMenu);
     loginGui->run();
     setCentralWidget(loginGui);
 }
@@ -28,5 +31,7 @@ void MainGui::forceRefresh()
 
 void MainGui::showMainMenu()
 {
-    // TODO: run the main menu
+    MainMenuGui *mainMenuGui = new MainMenuGui(controller_);
+    mainMenuGui->run();
+    setCentralWidget(mainMenuGui);
 }
