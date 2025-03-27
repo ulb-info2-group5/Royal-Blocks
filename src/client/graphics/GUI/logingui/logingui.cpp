@@ -227,6 +227,23 @@ void LoginGui::setup() {
     usernameInputLogin_.setPlaceholderText("Enter your username");
     passwordInputLogin_.setPlaceholderText("Enter your password");
 
+    showPasswordLogin_.setText("Show password");
+    showPasswordRegister_.setText("Show password");
+    connect(&showPasswordLogin_, &QCheckBox::stateChanged, [&](int state) {
+        if (state == Qt::Checked) {
+            passwordInputLogin_.setEchoMode(QLineEdit::Normal);
+        } else {
+            passwordInputLogin_.setEchoMode(QLineEdit::Password);
+        }
+    });
+    connect(&showPasswordRegister_, &QCheckBox::stateChanged, [&](int state) {
+        if (state == Qt::Checked) {
+            passwordInputRegister_.setEchoMode(QLineEdit::Normal);
+        } else {
+            passwordInputRegister_.setEchoMode(QLineEdit::Password);
+        }
+    });
+
 
     // Create the main page
     mainPage_ = new QWidget();
@@ -247,6 +264,7 @@ void LoginGui::setup() {
     registerPageLayout->addWidget(createCenterBoldTitle("Register"));
     registerPageLayout->addWidget(&usernameInputRegister_, 0, Qt::AlignCenter);
     registerPageLayout->addWidget(&passwordInputRegister_, 0, Qt::AlignCenter);
+    registerPageLayout->addWidget(&showPasswordRegister_, 0, Qt::AlignCenter);
     registerPageLayout->addWidget(&sendButtonRegister_, 0, Qt::AlignCenter);
     registerPageLayout->addWidget(&backButtonRegister_, 0, Qt::AlignCenter);
     registerPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -260,6 +278,7 @@ void LoginGui::setup() {
     loginPageLayout->addWidget(createCenterBoldTitle("Login"));
     loginPageLayout->addWidget(&usernameInputLogin_, 0, Qt::AlignCenter);
     loginPageLayout->addWidget(&passwordInputLogin_, 0, Qt::AlignCenter);
+    loginPageLayout->addWidget(&showPasswordLogin_, 0, Qt::AlignCenter);
     loginPageLayout->addWidget(&sendButtonLogin_, 0, Qt::AlignCenter);
     loginPageLayout->addWidget(&backButtonLogin_, 0, Qt::AlignCenter);
     loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));

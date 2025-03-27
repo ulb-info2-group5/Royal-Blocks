@@ -6,8 +6,9 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStackedWidget>
-#include <qglobal.h>
+#include <QCheckBox>
 #include <string>
+
 
 class Controller; // Forward declaration
 
@@ -23,6 +24,9 @@ class LoginGui : public QWidget {
         QLineEdit passwordInputRegister_;
         QLineEdit usernameInputLogin_;
         QLineEdit passwordInputLogin_;
+
+        QCheckBox showPasswordLogin_;
+        QCheckBox showPasswordRegister_;
 
         QWidget *mainPage_;
         QWidget *loginPage_;
