@@ -34,6 +34,12 @@ enum class UiChoice {
     NONE,
 };
 
+enum class UpdateType {
+    FRIENDS_LIST,
+    FRIEND_REQUESTS,
+    OTHER,
+};
+
 class Controller {
   public:
     enum class AuthState {

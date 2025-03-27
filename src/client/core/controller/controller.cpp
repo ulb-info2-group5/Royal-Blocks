@@ -68,6 +68,8 @@ void Controller::handlePacket(const std::string_view pack) {
 
     std::lock_guard<std::mutex> guard(mutex_);
 
+    UpdateType updateType = UpdateType::OTHER;
+
     switch (static_cast<bindings::BindingType>(j.at("type"))) {
     case bindings::BindingType::AuthenticationResponse: {
         bool success = bindings::AuthenticationResponse::from_json(j).success;
@@ -86,6 +88,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
     case bindings::BindingType::FriendsList: {
         friendsList_ = bindings::FriendsList::from_json(j).friendsList;
+        updateType = UpdateType::FRIENDS_LIST;
         break;
     }
 
@@ -104,6 +107,7 @@ void Controller::handlePacket(const std::string_view pack) {
     case bindings::BindingType::PendingFriendRequests: {
         pendingFriendRequests_ =
             bindings::PendingFriendRequests::from_json(j).requests;
+        updateType = UpdateType::FRIEND_REQUESTS;
         break;
     }
 
@@ -126,7 +130,7 @@ void Controller::handlePacket(const std::string_view pack) {
         std::cerr << "unknown bindingType" << std::endl;
     }
 
-    screenManager_->forceRefresh();
+    screenManager_->forceRefresh(updateType);
 }
 
 // ### Public methods ###

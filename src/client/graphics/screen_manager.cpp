@@ -30,10 +30,12 @@ int ScreenManager::run() {
     return app_->exec();
 }
 
-void ScreenManager::forceRefresh() {
+void ScreenManager::forceRefresh(UpdateType updateType) {
     if (uiChoice_ == UiChoice::TUI) {
         tui_->forceRefresh();
     } else {
-        gui_->forceRefresh();
+        if (updateType != UpdateType::OTHER) {
+            gui_->forceRefresh(updateType);
+        }
     }
 }

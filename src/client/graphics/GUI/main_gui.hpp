@@ -7,8 +7,11 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStackedWidget>
+#include <qobjectdefs.h>
 
 class Controller; // Forward declaration
+
+enum class UpdateType; // Forward declaration
 
 class MainGui : public QMainWindow
 {
@@ -26,14 +29,27 @@ public:
 
     /*
     * @brief Force the refresh of the GUI (QT)
+    *
+    * @param updateType The type of the update
     */
-    void forceRefresh();
+    void forceRefresh(UpdateType updateType);  
 
 public slots:
     /*
     * @brief Show the main menu page
     */
     void showMainMenu();
+
+signals:
+    /*
+    * @brief Signal to update the friends list
+    */
+    void updateFriendsList();
+
+    /*
+    * @brief Signal to update the friend requests list
+    */
+    void updateFriendRequestsList();
 
 private:
     Controller *controller_;

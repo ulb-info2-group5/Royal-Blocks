@@ -11,6 +11,8 @@ class Controller; // Forward declaration
 
 enum class UiChoice; // Forward declaration
 
+enum class UpdateType; // Forward declaration
+
 class ScreenManager {
   private:
     /*
@@ -43,11 +45,12 @@ class ScreenManager {
     /*
      * @brief Run the screen manager to manage the screens to show to the user
      *
+     * @param updateType The type of the update
      * @return The exit code of the program of the tui or gui
      */
     int run();
 
-    void forceRefresh();
+    void forceRefresh(UpdateType updateType);
 };
 
 #endif // SCREEN_MANAGER_HPP

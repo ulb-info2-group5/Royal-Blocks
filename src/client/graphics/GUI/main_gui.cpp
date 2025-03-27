@@ -22,14 +22,18 @@ void MainGui::run()
     setCentralWidget(loginGui);
 }
 
-void MainGui::forceRefresh()
+void MainGui::forceRefresh(UpdateType updateType)
 {
-    this->update();
+    if (updateType == UpdateType::FRIENDS_LIST) {
+        emit updateFriendsList();
+    } else if (updateType == UpdateType::FRIEND_REQUESTS) {
+        emit updateFriendRequestsList();
+    }
 }
 
 void MainGui::showMainMenu()
 {
-    MainMenuGui *mainMenuGui = new MainMenuGui(*controller_);
+    MainMenuGui *mainMenuGui = new MainMenuGui(*controller_, this);
     mainMenuGui->run();
     setCentralWidget(mainMenuGui);
 }
