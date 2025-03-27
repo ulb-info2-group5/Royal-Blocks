@@ -37,10 +37,12 @@
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
-#include "core/in_game/game_state/abstract_game_state.hpp"
+#include "../../common/bindings/in_game/game_state_client.hpp"
+#include "../../common/bindings/in_game/game_state_server.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
+#include "game_state/game_state.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -114,7 +116,7 @@ void Controller::handlePacket(const std::string_view pack) {
     }
 
     case bindings::BindingType::GameState: {
-        pGameState_ = bindings::GameStateMessage::deserialize(j);
+        gameState_ = bindings::GameStateMessage::deserialize(j);
         break;
     }
 
@@ -125,7 +127,8 @@ void Controller::handlePacket(const std::string_view pack) {
     }
 
     case bindings::BindingType::GameOver: {
-        pGameState_->isFinished = true;
+        std::visit([](auto &gameState) { gameState.isFinished = true; },
+                   gameState_);
         break;
     }
 
@@ -141,8 +144,7 @@ void Controller::handlePacket(const std::string_view pack) {
 Controller::Controller(UiChoice uiChoice, std::pair<int, char **> args)
     : uiChoice_(uiChoice), args_(args),
       registrationState_{Controller::RegistrationState::Unregistered},
-      authState_{Controller::AuthState::Unauthenticated},
-      pGameState_{std::make_unique<client::GameState>()},
+      authState_{Controller::AuthState::Unauthenticated}, gameState_{},
       networkManager_{context_, [this](const std::string_view packet) {
                           handlePacket(packet);
                       }} {};
@@ -314,7 +316,9 @@ void Controller::handleKeypress(const std::string &pressedKey) {
 
 size_t Controller::getNumEffects() const {
     std::lock_guard<std::mutex> guard(mutex_);
-    return pGameState_->effectsPrice.size();
+    return std::visit(
+        [](const auto &gameState) { return gameState.effectsPrice.size(); },
+        gameState_);
 }
 
 void Controller::selectNextEffect() {
@@ -340,9 +344,13 @@ void Controller::declineFriendRequest(UserID userId) {
                              .dump());
 }
 
-std::unique_ptr<client::AbstractGameState> Controller::getGameState() {
+std::variant<client::GameState, client::GameStateViewer>
+Controller::getGameState() {
     std::lock_guard<std::mutex> guard(mutex_);
-    return pGameState_->clone();
+    return gameState_;
 }
 
-bool Controller::inGame() const { return !pGameState_->isFinished; }
+bool Controller::inGame() const {
+    return !std::visit(
+        [](const auto &gameState) { return gameState.isFinished; }, gameState_);
+}

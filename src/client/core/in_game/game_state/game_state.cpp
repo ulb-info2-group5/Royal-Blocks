@@ -22,7 +22,3 @@ void client::GameState::deserialize(const nlohmann::json &j) {
         effectsPrice.push_back(penaltyTypePrice);
     }
 }
-
-std::unique_ptr<client::AbstractGameState> client::GameState::clone() const {
-    return std::make_unique<GameState>(*this);
-}

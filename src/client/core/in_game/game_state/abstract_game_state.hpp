@@ -19,8 +19,6 @@ namespace client {
         virtual ~AbstractGameState() = default;
 
         virtual void deserialize(const nlohmann::json &j) = 0;
-
-        virtual std::unique_ptr<AbstractGameState> clone() const = 0;
     };
 
 } // namespace client

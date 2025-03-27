@@ -4,6 +4,8 @@
 #include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../../../common/types/types.hpp"
 #include "../../../core/in_game/game_state/game_state.hpp"
+#include "../../../core/in_game/game_state/game_state_viewer.hpp"
+
 #include <ftxui/component/component.hpp>
 
 #include <ftxui/component/component_base.hpp>
@@ -55,7 +57,7 @@ class GameDisplay final {
 
     Controller &controller_;
 
-    std::shared_ptr<client::AbstractGameState> pAGameState_;
+    std::variant<client::GameState, client::GameStateViewer> gameState_;
 
     ftxui::Component quitButton_;
     ftxui::Component playerInfo_;

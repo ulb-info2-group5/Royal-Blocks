@@ -7,8 +7,6 @@ namespace client {
 
     struct GameStateViewer : public client::AbstractGameState {
         void deserialize(const nlohmann::json &j) override;
-
-        std::unique_ptr<AbstractGameState> clone() const override;
     };
 
 } // namespace client

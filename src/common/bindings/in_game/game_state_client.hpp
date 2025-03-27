@@ -7,8 +7,9 @@
 
 #include "../binding_type.hpp"
 
-#include <memory>
 #include <nlohmann/json.hpp>
+
+#include <variant>
 
 namespace bindings {
 
@@ -41,20 +42,13 @@ namespace bindings {
             return gameStateViewerBinding;
         };
 
-        std::unique_ptr<client::AbstractGameState>
+        std::variant<client::GameState, client::GameStateViewer>
         deserialize(const nlohmann::json &j) {
-            std::unique_ptr<client::AbstractGameState> ret;
-
+            std::variant<client::GameState, client::GameStateViewer> ret;
             if (j.at("type") == BindingType::GameStateViewer) {
-                ret = std::make_unique<client::GameStateViewer>(
-                    GameStateMessage::deserializeForViewer(j));
-
-                return ret;
+                return GameStateMessage::deserializeForViewer(j);
             } else if (j.at("type") == BindingType::GameState) {
-                ret = std::make_unique<client::GameState>(
-                    GameStateMessage::deserializeForPlayer(j));
-
-                return ret;
+                return GameStateMessage::deserializeForPlayer(j);
             } else {
                 throw std::runtime_error("Invalid type field in JSON");
             }

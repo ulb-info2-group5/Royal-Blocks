@@ -179,6 +179,7 @@ void GameServer::sendGameStates() {
         updateGamePlayer_(player.pPlayerState->getUserID(),
                           bindings::GameStateMessage::serializeForPlayer(
                               *pGameState_, player.pPlayerState->getUserID()));
+        std::cerr << "done serializing" << std::endl;
     };
 }
 

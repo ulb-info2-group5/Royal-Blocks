@@ -11,10 +11,9 @@
 
 #include "../../../common/bindings/conversation.hpp"
 #include "../../../common/bindings/ranking.hpp"
-#include "../../../common/tetris_royal_lib//game_mode/game_mode.hpp"
+#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../graphics/screen_manager.hpp"
-#include "../in_game/game_state/abstract_game_state.hpp"
-#include "../in_game/game_state/game_state.hpp"
+#include "../in_game/game_state/game_state_viewer.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
@@ -66,7 +65,7 @@ class Controller {
     RegistrationState registrationState_;
     AuthState authState_;
 
-    std::unique_ptr<client::AbstractGameState> pGameState_;
+    std::variant<client::GameState, client::GameStateViewer> gameState_;
 
     // TODO: this is not used currently, remove this and add this back when
     // needed.
@@ -218,7 +217,7 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
-    std::unique_ptr<client::AbstractGameState> getGameState();
+    std::variant<client::GameState, client::GameStateViewer> getGameState();
 
     bool inGame() const;
 };

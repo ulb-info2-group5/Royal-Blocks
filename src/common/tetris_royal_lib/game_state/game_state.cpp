@@ -78,10 +78,8 @@ void GameState::setIsFinished(bool isFinished) { isFinished_ = isFinished; }
 
 nlohmann::json GameState::serializeForPlayer(UserID userID) const {
     nlohmann::json j;
-
     j["isFinished"] = isFinished_;
     j["gameMode"] = gameMode_;
-
     j["externals"] = nlohmann::json::array();
 
     for (const auto &playerTetris : playerToTetris_) {
@@ -95,6 +93,7 @@ nlohmann::json GameState::serializeForPlayer(UserID userID) const {
     // add the effects that the players can buy with their price
     j["bonusToPrice"] = nlohmann::json::array();
     j["penaltyToPrice"] = nlohmann::json::array();
+
     if (GameEngine::checkFeatureEnabled(gameMode_,
                                         GameEngine::GameModeFeature::Effects)) {
         // bonuses

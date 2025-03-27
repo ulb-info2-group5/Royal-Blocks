@@ -10,8 +10,3 @@ void client::GameStateViewer::deserialize(const nlohmann::json &j) {
         externals.push_back(externalPlayer);
     }
 }
-
-std::unique_ptr<client::AbstractGameState>
-client::GameStateViewer::clone() const {
-    return std::make_unique<GameStateViewer>(*this);
-}
