@@ -10,7 +10,7 @@
 #include <vector>
 
 GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
-    : gameMode_{gameMode} {
+    : isFinished_{false}, gameMode_{gameMode} {
 
     for (size_t i = 0; i < playerStates.size(); i++) {
         PlayerState &playerState = playerStates.at(i);
