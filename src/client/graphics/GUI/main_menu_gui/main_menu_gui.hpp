@@ -15,7 +15,7 @@ class MainMenuGui : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainMenuGui(Controller &controller, MainGui *mainGui = nullptr, QWidget *parent = nullptr);
+    explicit MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
     ~MainMenuGui() = default;
 
     /*

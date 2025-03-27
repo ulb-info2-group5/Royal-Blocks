@@ -18,7 +18,7 @@ class MainGui : public QMainWindow
     Q_OBJECT
 
 public:
-    MainGui(QWidget *parent = nullptr, Controller *controller = nullptr);
+    MainGui(Controller &controller, QWidget *parent = nullptr);
     
     ~MainGui() = default;
 
@@ -51,7 +51,12 @@ signals:
     */
     void updateFriendRequestsList();
 
+    /*
+    * @brief Signal to update the ranking
+    */
+    void updateRanking();
+
 private:
-    Controller *controller_;
+    Controller &controller_;
 };
 #endif // MAIN_GUI_HPP

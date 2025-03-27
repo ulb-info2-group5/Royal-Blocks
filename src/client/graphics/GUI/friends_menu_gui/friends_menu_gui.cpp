@@ -10,12 +10,12 @@
 #include <qmessagebox.h>
 #include <vector>
 
-FriendsMenuGui::FriendsMenuGui(Controller &controller, MainGui *mainGui, QWidget *parent)
-    : QWidget(parent), controller_(controller), mainGui_(mainGui) {
+FriendsMenuGui::FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
+    : controller_(controller), mainGui_(mainGui), QWidget(parent) {
     setup();
 
-    connect(mainGui_, &MainGui::updateFriendsList, this, &FriendsMenuGui::refreshFriendsList);
-    connect(mainGui_, &MainGui::updateFriendRequestsList, this, &FriendsMenuGui::refreshFriendRequestsList);
+    connect(&mainGui_, &MainGui::updateFriendsList, this, &FriendsMenuGui::refreshFriendsList);
+    connect(&mainGui_, &MainGui::updateFriendRequestsList, this, &FriendsMenuGui::refreshFriendRequestsList);
 
 }
 

@@ -7,14 +7,18 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QResizeEvent>
+#include <qstackedwidget.h>
 
 class Controller; // Forward declaration
+
+class MainGui; // Forward declaration
 
 class RankingGui : public QWidget {
     Q_OBJECT
 
 public:
-    RankingGui(Controller &controller, QWidget *parent = nullptr);
+    RankingGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+    
     ~RankingGui() = default;
 
 signals:
@@ -31,6 +35,10 @@ public slots:
 
 private:
     Controller &controller_;
+    MainGui &mainGui_;
+
+    QStackedWidget *stack_;
+
     QTableWidget RankingGuiTable;
     QPushButton backButton;
 
@@ -38,6 +46,11 @@ private:
     * @brief Setup the ranking Table
     */
     void setupRankingGuiTable();
+
+    /*
+    * @brief Update the ranking Table
+    */
+    void updateRankingGuiTable();
 };
 
 #endif // RANKINGGUI_HPP

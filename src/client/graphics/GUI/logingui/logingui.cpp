@@ -9,7 +9,7 @@ const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 
 
 LoginGui::LoginGui(Controller &controller, QWidget *parent)
-    : QWidget(parent), controller_(controller) {}
+    : controller_(controller), QWidget(parent) {}
 
 void LoginGui::run() {
     setup();

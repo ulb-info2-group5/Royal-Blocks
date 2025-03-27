@@ -18,7 +18,9 @@ class FriendsMenuGui : public QWidget {
     Q_OBJECT
 
 public:
-    FriendsMenuGui(Controller &controller, MainGui *mainGui = nullptr, QWidget *parent = nullptr);
+    FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+
+    ~FriendsMenuGui() = default;
 
 signals:
     void backToMainMenu();
@@ -37,7 +39,7 @@ private slots:
 
 private:
     Controller &controller_;
-    MainGui *mainGui_;
+    MainGui &mainGui_;
 
     QStackedWidget *stack_;
     QWidget *mainWidget_;

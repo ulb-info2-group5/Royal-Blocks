@@ -8,8 +8,8 @@
 #include <QMessageBox>
 #include <QPushButton>
 
-MainMenuGui::MainMenuGui(Controller &controller, MainGui *mainGui, QWidget *parent)
-    : QWidget(parent), controller_(controller),rankingGui_(controller_), friendsMenuGui_(controller, mainGui) {}
+MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
+    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui) {}
 
 
 void MainMenuGui::run() {

@@ -15,7 +15,8 @@ class LoginGui : public QWidget {
     Q_OBJECT
 
 public:
-    explicit LoginGui(Controller &controller, QWidget *parent = nullptr);
+    LoginGui(Controller &controller, QWidget *parent = nullptr);
+    
     ~LoginGui() = default;
 
     /*

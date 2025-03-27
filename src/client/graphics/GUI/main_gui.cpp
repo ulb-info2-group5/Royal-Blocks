@@ -10,13 +10,13 @@
 #include <QTableWidget>
 #include <QHeaderView>
 
-MainGui::MainGui(QWidget *parent, Controller *controller)
-    : QMainWindow(parent), controller_(controller) {}
+MainGui::MainGui(Controller &controller, QWidget *parent)
+    : controller_(controller), QMainWindow(parent) {}
 
 
 void MainGui::run()
 {
-    LoginGui *loginGui = new LoginGui(*controller_);
+    LoginGui *loginGui = new LoginGui(controller_);
     connect(loginGui, &LoginGui::loginSuccessful, this, &MainGui::showMainMenu);
     loginGui->run();
     setCentralWidget(loginGui);
@@ -28,12 +28,14 @@ void MainGui::forceRefresh(UpdateType updateType)
         emit updateFriendsList();
     } else if (updateType == UpdateType::FRIEND_REQUESTS) {
         emit updateFriendRequestsList();
+    } else if (updateType == UpdateType::RANKING) {
+        emit updateRanking();
     }
 }
 
 void MainGui::showMainMenu()
 {
-    MainMenuGui *mainMenuGui = new MainMenuGui(*controller_, this);
+    MainMenuGui *mainMenuGui = new MainMenuGui(controller_, *this);
     mainMenuGui->run();
     setCentralWidget(mainMenuGui);
 }

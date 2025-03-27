@@ -118,6 +118,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
     case bindings::BindingType::Ranking: {
         ranking_ = bindings::Ranking::from_json(j).ranking;
+        updateType = UpdateType::RANKING;
         break;
     }
 

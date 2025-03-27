@@ -6,22 +6,26 @@
 
 #include "../../../core/controller/controller.hpp"
 
-RankingGui::RankingGui(Controller &controller, QWidget *parent)
-    : QWidget(parent), controller_(controller) {
+RankingGui::RankingGui(Controller &controller, MainGui &mainGui,QWidget *parent)
+    : controller_(controller), mainGui_(mainGui), QWidget(parent) {
+
+    connect(&mainGui_, &MainGui::updateRanking, this, &RankingGui::updateRankingGuiTable);
 
     backButton.setText("Back");
     backButton.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    backButton.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
+    backButton.setFixedWidth(500);
 
     setupRankingGuiTable();
+    updateRankingGuiTable();
 
     connect(&backButton, &QPushButton::clicked, this, &RankingGui::on_BackButtonClicked);
 
     QWidget *scrollWidget = new QWidget();
     QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
-    scrollLayout->addWidget(&RankingGuiTable);
-    scrollLayout->addWidget(&backButton);
+    scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    scrollLayout->addWidget(&RankingGuiTable, 0, Qt::AlignCenter);
+    scrollLayout->addWidget(&backButton, 0, Qt::AlignCenter);
+    scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     scrollWidget->setLayout(scrollLayout);
 
     QScrollArea *scrollArea = new QScrollArea();
@@ -34,8 +38,8 @@ RankingGui::RankingGui(Controller &controller, QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(scrollArea, 1);
     layout->setAlignment(Qt::AlignCenter);
+    
     setLayout(layout);
-
 }
 
 void RankingGui::on_BackButtonClicked() {
@@ -55,11 +59,23 @@ void RankingGui::setupRankingGuiTable() {
     RankingGuiTable.setEditTriggers(QAbstractItemView::NoEditTriggers);
     RankingGuiTable.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     RankingGuiTable.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    RankingGuiTable.setFixedSize(500, 500);
+    RankingGuiTable.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    RankingGuiTable.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
 
     QStringList headers;
     headers << "Player" << "Score";
     RankingGuiTable.setHorizontalHeaderLabels(headers);
+
+    RankingGuiTable.horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    RankingGuiTable.horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+}
+
+void RankingGui::updateRankingGuiTable() {
+    std::vector<std::pair<std::string, Score>> RankingGuiData = controller_.getRanking();
+
+    RankingGuiTable.setRowCount(RankingGuiData.size());
 
     for (size_t i = 0; i < RankingGuiData.size(); ++i) {
         QTableWidgetItem *playerItem = new QTableWidgetItem(QString::fromStdString(RankingGuiData[i].first));
@@ -68,7 +84,4 @@ void RankingGui::setupRankingGuiTable() {
         RankingGuiTable.setItem(i, 0, playerItem);
         RankingGuiTable.setItem(i, 1, scoreItem);
     }
-
-    RankingGuiTable.horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    RankingGuiTable.horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 }
