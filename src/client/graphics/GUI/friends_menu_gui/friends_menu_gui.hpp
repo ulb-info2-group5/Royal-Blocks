@@ -46,8 +46,8 @@ private:
     QWidget *addFriendWidget_;
     QWidget *friendRequestsWidget_;
 
-    QListWidget *friendsList_;
-    QListWidget *friendRequestsList_;
+    QListWidget friendsList_;
+    QListWidget friendRequestsList_;
 
     QPushButton addFriendButton_;
     QPushButton manageRequestsButton_;
@@ -59,9 +59,9 @@ private:
     QPushButton backFromReqButton_;
 
     QLineEdit friendNameInput_;
-    QLabel *addFriendMsgLabel_;
-    QLabel *noFriendsLabel_;
-    QLabel *noRequestsLabel_;
+    QLabel addFriendMsgLabel_;
+    QLabel noFriendsLabel_;
+    QLabel noRequestsLabel_;
 
     void setup();
     void updateFriendsList();
