@@ -21,40 +21,34 @@ void LoginGui::run() {
     show();
 }
 
-void LoginGui::on_ExitButton_clicked()
-{
+void LoginGui::on_ExitButton_clicked() {
     actionOnExit();
 }
 
 
-void LoginGui::on_LoginButton_clicked()
-{
+void LoginGui::on_LoginButton_clicked() {
     stackedWidget_->setCurrentWidget(loginPage_);
 }
 
 
-void LoginGui::on_RegisterButton_clicked()
-{
+void LoginGui::on_RegisterButton_clicked() {
     stackedWidget_->setCurrentWidget(registerPage_);
 }
 
 
-void LoginGui::on_BackButtonLogin_clicked()
-{
+void LoginGui::on_BackButtonLogin_clicked() {
     clearInputs();
     stackedWidget_->setCurrentWidget(mainPage_);
 }
 
 
-void LoginGui::on_BackButtonRegister_clicked()
-{
+void LoginGui::on_BackButtonRegister_clicked() {
     clearInputs();
     stackedWidget_->setCurrentWidget(mainPage_);
 }
 
 
-void LoginGui::on_SendButtonRegister_clicked()
-{
+void LoginGui::on_SendButtonRegister_clicked() {
     QString username = usernameInputRegister_.text();
     QString password = passwordInputRegister_.text();
 
@@ -99,8 +93,7 @@ void LoginGui::on_SendButtonRegister_clicked()
     }
 }
 
-void LoginGui::on_SendButtonLogin_clicked()
-{
+void LoginGui::on_SendButtonLogin_clicked() {
     QString username = usernameInputLogin_.text();
     QString password = passwordInputLogin_.text();
 
@@ -143,8 +136,7 @@ void LoginGui::on_SendButtonLogin_clicked()
 -------------------------------------------------------*/
 
 
-void LoginGui::clearInputs()
-{
+void LoginGui::clearInputs(){
     usernameInputRegister_.clear();
     passwordInputRegister_.clear();
 
@@ -152,8 +144,7 @@ void LoginGui::clearInputs()
     passwordInputLogin_.clear();
 }
 
-void LoginGui::actionOnExit()
-{
+void LoginGui::actionOnExit() {
     QMessageBox::StandardButton confirmExit;
     confirmExit = QMessageBox::question(this, "Quit", "Are you sure you want to qut the game ?",
                                     QMessageBox::Yes | QMessageBox::No);

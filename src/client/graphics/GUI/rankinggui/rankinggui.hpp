@@ -16,41 +16,43 @@ class MainGui; // Forward declaration
 class RankingGui : public QWidget {
     Q_OBJECT
 
-public:
-    RankingGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
-    
-    ~RankingGui() = default;
+    private:
+        Controller &controller_;
+        
+        MainGui &mainGui_;
 
-signals:
-    /*
-    * @brief Signal emitted when the user click on the back button
-    */
-    void backToMainMenu();
+        QStackedWidget *stack_;
 
-public slots:
-    /*
-    * @brief Action to perform when the user click on the back button
-    */
-    void on_BackButtonClicked();
+        QTableWidget RankingGuiTable;
 
-private:
-    Controller &controller_;
-    MainGui &mainGui_;
+        QPushButton backButton;
 
-    QStackedWidget *stack_;
+        /*
+        * @brief Setup the ranking Table
+        */
+        void setupRankingGuiTable();
 
-    QTableWidget RankingGuiTable;
-    QPushButton backButton;
+        /*
+        * @brief Update the ranking Table
+        */
+        void updateRankingGuiTable();
 
-    /*
-    * @brief Setup the ranking Table
-    */
-    void setupRankingGuiTable();
+    public:
+        RankingGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+        
+        ~RankingGui() = default;
 
-    /*
-    * @brief Update the ranking Table
-    */
-    void updateRankingGuiTable();
+    signals:
+        /*
+        * @brief Signal emitted when the user click on the back button
+        */
+        void backToMainMenu();
+
+    public slots:
+        /*
+        * @brief Action to perform when the user click on the back button
+        */
+        void on_BackButtonClicked();
 };
 
 #endif // RANKINGGUI_HPP

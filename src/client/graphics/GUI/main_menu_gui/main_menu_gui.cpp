@@ -22,23 +22,19 @@ void MainMenuGui::run() {
     show();
 }
 
-void MainMenuGui::on_QuitGameButton_clicked()
-{
+void MainMenuGui::on_QuitGameButton_clicked() {
     actionOnExit();
 }
 
-void MainMenuGui::on_RankingButton_clicked()
-{
+void MainMenuGui::on_RankingButton_clicked() {
     stackedWidget_->setCurrentWidget(&rankingGui_);
 }
 
-void MainMenuGui::on_ManageFriendsListButton_clicked()
-{
+void MainMenuGui::on_ManageFriendsListButton_clicked() {
     stackedWidget_->setCurrentWidget(&friendsMenuGui_);
 }
 
-void MainMenuGui::showMainMenu()
-{
+void MainMenuGui::showMainMenu() {
     stackedWidget_->setCurrentWidget(&mainMenu_);
 }
 
@@ -47,8 +43,7 @@ void MainMenuGui::showMainMenu()
 ----------------------------------------------*/
 
 
-void MainMenuGui::actionOnExit()
-{
+void MainMenuGui::actionOnExit() {
     QMessageBox::StandardButton confirmExit;
     confirmExit = QMessageBox::question(this, "Quit", "Are you sure you want to qut the game ?",
                                     QMessageBox::Yes | QMessageBox::No);
@@ -107,4 +102,3 @@ void MainMenuGui::setup() {
     connect(&friendsMenuGui_, &FriendsMenuGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
     stackedWidget_->addWidget(&friendsMenuGui_);
 }
-

@@ -14,61 +14,65 @@ class Controller; // Forward declaration
 class MainMenuGui : public QWidget {
     Q_OBJECT
 
-public:
-    explicit MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
-    ~MainMenuGui() = default;
+    private:
+        Controller &controller_;
 
-    /*
-    * @brief Run the Main Menu Gui
-    */
-    void run();
+        QStackedWidget  *stackedWidget_;
 
-private slots:
-    /*
-    * @brief Action to perform when the user click on the quit game button
-    */
-    void on_QuitGameButton_clicked();
+        QWidget mainMenu_;
 
-    /*
-    * @brief Action to perform when the user click on the ranking button
-    */
-    void on_RankingButton_clicked();
+        RankingGui rankingGui_;
 
-    /*
-    * @brief Action to perform when the user click on the manage friendslist button
-    */
-    void on_ManageFriendsListButton_clicked();
+        FriendsMenuGui friendsMenuGui_;
 
-    void showMainMenu();
+        QPushButton createGameButton_;
+        QPushButton joinGameButton_;
+        QPushButton messagesButton_;
+        QPushButton rankingButton_;
+        QPushButton manageProfileButton_;
+        QPushButton manageFriendsListButton_;
+        QPushButton quitGameButton_;
 
-private:
-    Controller &controller_;
+        /*
+        * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
+        */
+        void actionOnExit();
 
-    QStackedWidget  *stackedWidget_;
+        /*
+        * @brief Setup the Login Gui
+        */
+        void setup();
 
-    QWidget mainMenu_;
+    private slots:
+        /*
+        * @brief Action to perform when the user click on the quit game button
+        */
+        void on_QuitGameButton_clicked();
 
-    RankingGui rankingGui_;
-    FriendsMenuGui friendsMenuGui_;
+        /*
+        * @brief Action to perform when the user click on the ranking button
+        */
+        void on_RankingButton_clicked();
 
-    QPushButton createGameButton_;
-    QPushButton joinGameButton_;
-    QPushButton messagesButton_;
-    QPushButton rankingButton_;
-    QPushButton manageProfileButton_;
-    QPushButton manageFriendsListButton_;
-    QPushButton quitGameButton_;
+        /*
+        * @brief Action to perform when the user click on the manage friendslist button
+        */
+        void on_ManageFriendsListButton_clicked();
 
-    /*
-    * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
-    */
-    void actionOnExit();
+        /*
+        * @brief Action to perform to show the main menu
+        */
+        void showMainMenu();
 
-    /*
-    * @brief Setup the Login Gui
-    */
-    void setup();
+    public:
+        MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
 
+        ~MainMenuGui() = default;
+
+        /*
+        * @brief Run the Main Menu Gui
+        */
+        void run();
 };
 
 #endif // MAIN_MENU_GUI_HPP

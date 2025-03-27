@@ -13,50 +13,50 @@ class Controller; // Forward declaration
 
 enum class UpdateType; // Forward declaration
 
-class MainGui : public QMainWindow
-{
+class MainGui : public QMainWindow {
     Q_OBJECT
 
-public:
-    MainGui(Controller &controller, QWidget *parent = nullptr);
-    
-    ~MainGui() = default;
+    private:
+        Controller &controller_;
 
-    /*
-    * @brief Run the main Gui
-    */
-    void run();
+    public:
+        MainGui(Controller &controller, QWidget *parent = nullptr);
+        
+        ~MainGui() = default;
 
-    /*
-    * @brief Force the refresh of the GUI (QT)
-    *
-    * @param updateType The type of the update
-    */
-    void forceRefresh(UpdateType updateType);  
+        /*
+        * @brief Run the main Gui
+        */
+        void run();
 
-public slots:
-    /*
-    * @brief Show the main menu page
-    */
-    void showMainMenu();
+        /*
+        * @brief Force the refresh of the GUI (QT)
+        *
+        * @param updateType The type of the update
+        */
+        void forceRefresh(UpdateType updateType);  
 
-signals:
-    /*
-    * @brief Signal to update the friends list
-    */
-    void updateFriendsList();
+    public slots:
+        /*
+        * @brief Show the main menu page
+        */
+        void showMainMenu();
 
-    /*
-    * @brief Signal to update the friend requests list
-    */
-    void updateFriendRequestsList();
+    signals:
+        /*
+        * @brief Signal to update the friends list
+        */
+        void updateFriendsList();
 
-    /*
-    * @brief Signal to update the ranking
-    */
-    void updateRanking();
+        /*
+        * @brief Signal to update the friend requests list
+        */
+        void updateFriendRequestsList();
 
-private:
-    Controller &controller_;
+        /*
+        * @brief Signal to update the ranking
+        */
+        void updateRanking();
 };
+
 #endif // MAIN_GUI_HPP

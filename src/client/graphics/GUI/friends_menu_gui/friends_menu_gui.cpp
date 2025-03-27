@@ -5,9 +5,6 @@
 #include "../qt_config/qt_config.hpp"
 
 #include <QMessageBox>
-#include <qlabel.h>
-#include <qlistwidget.h>
-#include <qmessagebox.h>
 #include <vector>
 
 FriendsMenuGui::FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)

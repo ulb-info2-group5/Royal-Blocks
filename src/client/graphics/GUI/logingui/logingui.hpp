@@ -14,104 +14,103 @@ class Controller; // Forward declaration
 class LoginGui : public QWidget {
     Q_OBJECT
 
-public:
-    LoginGui(Controller &controller, QWidget *parent = nullptr);
-    
-    ~LoginGui() = default;
+    private:
+        Controller &controller_;
 
-    /*
-    * @brief Run the login Gui
-    */
-    void run();
+        QStackedWidget  *stackedWidget_;
 
-signals:
-    /*
-    * @brief Signal emitted when the login is successful
-    */
-    void loginSuccessful();
+        QLineEdit usernameInputRegister_;
+        QLineEdit passwordInputRegister_;
+        QLineEdit usernameInputLogin_;
+        QLineEdit passwordInputLogin_;
 
-private slots:
-    /*
-    * @brief Action to perform when exiting the application
-    */
-    void on_ExitButton_clicked();
+        QWidget *mainPage_;
+        QWidget *loginPage_;
+        QWidget *registerPage_;
 
-    /*
-    * @brief Action to perform when the user click on the login button
-    */
-    void on_LoginButton_clicked();
+        QPushButton exitButton_;
+        QPushButton loginButton_;
+        QPushButton registerButton_;
+        QPushButton backButtonLogin_;
+        QPushButton backButtonRegister_;
+        QPushButton sendButtonRegister_;
+        QPushButton sendButtonLogin_;
 
-    /*
-    * @brief Action to perform when the user click on the register button
-    */
-    void on_RegisterButton_clicked();
+        std::string errorMessage_;
 
-    /*
-    * @brief Action to perform when the user click on the back button in the login page
-    */
-    void on_BackButtonLogin_clicked();
+        /*
+        * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
+        */
+        void actionOnExit();
 
-    /*
-    * @brief Action to perform when the user click on the back button in the register page
-    */
-    void on_BackButtonRegister_clicked();
+        /*
+        * @brief Clear the inputs of the user
+        */
+        void clearInputs();
 
-    /*
-    * @brief Action to perform when the user click on the send button in the register page
-    */
-    void on_SendButtonRegister_clicked();
+        /*
+        * @brief Check if the register username and password is valid
+        *
+        * @return True if the register is valid, false otherwise
+        */
+        bool isValidRegister();
 
-    /*
-    * @brief Action to perform when the user click on the send button in the login page
-    */
-    void on_SendButtonLogin_clicked();
+        /*
+        * @brief Setup the Login Gui
+        */
+        void setup();
 
-private:
-    Controller &controller_;
+    private slots:
+        /*
+        * @brief Action to perform when exiting the application
+        */
+        void on_ExitButton_clicked();
 
-    QStackedWidget  *stackedWidget_;
+        /*
+        * @brief Action to perform when the user click on the login button
+        */
+        void on_LoginButton_clicked();
 
-    QLineEdit usernameInputRegister_;
-    QLineEdit passwordInputRegister_;
-    QLineEdit usernameInputLogin_;
-    QLineEdit passwordInputLogin_;
+        /*
+        * @brief Action to perform when the user click on the register button
+        */
+        void on_RegisterButton_clicked();
 
-    QWidget *mainPage_;
-    QWidget *loginPage_;
-    QWidget *registerPage_;
+        /*
+        * @brief Action to perform when the user click on the back button in the login page
+        */
+        void on_BackButtonLogin_clicked();
 
-    QPushButton exitButton_;
-    QPushButton loginButton_;
-    QPushButton registerButton_;
-    QPushButton backButtonLogin_;
-    QPushButton backButtonRegister_;
-    QPushButton sendButtonRegister_;
-    QPushButton sendButtonLogin_;
+        /*
+        * @brief Action to perform when the user click on the back button in the register page
+        */
+        void on_BackButtonRegister_clicked();
 
-    std::string errorMessage_;
+        /*
+        * @brief Action to perform when the user click on the send button in the register page
+        */
+        void on_SendButtonRegister_clicked();
 
-    /*
-    * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
-    */
-    void actionOnExit();
+        /*
+        * @brief Action to perform when the user click on the send button in the login page
+        */
+        void on_SendButtonLogin_clicked();
 
-    /*
-    * @brief Clear the inputs of the user
-    */
-    void clearInputs();
+    public:
+        LoginGui(Controller &controller, QWidget *parent = nullptr);
+        
+        ~LoginGui() = default;
 
-    /*
-    * @brief Check if the register username and password is valid
-    *
-    * @return True if the register is valid, false otherwise
-    */
-    bool isValidRegister();
+        /*
+        * @brief Run the login Gui
+        */
+        void run();
 
-    /*
-    * @brief Setup the Login Gui
-    */
-    void setup();
-
+    signals:
+        /*
+        * @brief Signal emitted when the login is successful
+        */
+        void loginSuccessful();
 };
 
 #endif // LOGINGUI_HPP

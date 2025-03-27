@@ -8,7 +8,6 @@
 #include <QLabel>
 #include <QStackedWidget>
 #include <QListWidget>
-#include <qlabel.h>
 
 class Controller; // Forward declaration
 
@@ -17,55 +16,76 @@ class MainGui; // Forward declaration
 class FriendsMenuGui : public QWidget {
     Q_OBJECT
 
-public:
-    FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+    private:
+        Controller &controller_;
+        MainGui &mainGui_;
 
-    ~FriendsMenuGui() = default;
+        QStackedWidget *stack_;
+        QWidget *mainWidget_;
+        QWidget *addFriendWidget_;
+        QWidget *friendRequestsWidget_;
 
-signals:
-    void backToMainMenu();
+        QListWidget friendsList_;
+        QListWidget friendRequestsList_;
 
-private slots:
-    void showMainFriendsMenu();
-    void showAddFriendScreen();
-    void showFriendRequestsScreen();
-    void sendFriendRequest();
-    void removeFriend();
-    void acceptRequest();
-    void declineRequest();
+        QPushButton addFriendButton_;
+        QPushButton manageRequestsButton_;
+        QPushButton backToMainMenuButton_;
+        QPushButton submitAdd_;
+        QPushButton backFromAdd_;
+        QPushButton acceptButton_;
+        QPushButton declineButton_;
+        QPushButton backFromReqButton_;
 
-    void refreshFriendsList();
-    void refreshFriendRequestsList();
+        QLineEdit friendNameInput_;
+        QLabel addFriendMsgLabel_;
+        QLabel noFriendsLabel_;
+        QLabel noRequestsLabel_;
 
-private:
-    Controller &controller_;
-    MainGui &mainGui_;
+        /*
+        * @brief Setup the friends list gui
+        */
+        void setup();
 
-    QStackedWidget *stack_;
-    QWidget *mainWidget_;
-    QWidget *addFriendWidget_;
-    QWidget *friendRequestsWidget_;
+        /*
+        * @brief Update the friends list
+        */
+        void updateFriendsList();
 
-    QListWidget friendsList_;
-    QListWidget friendRequestsList_;
+        /*
+        * @brief Update the friend requests list
+        */
+        void updateFriendRequestsList();
 
-    QPushButton addFriendButton_;
-    QPushButton manageRequestsButton_;
-    QPushButton backToMainMenuButton_;
-    QPushButton submitAdd_;
-    QPushButton backFromAdd_;
-    QPushButton acceptButton_;
-    QPushButton declineButton_;
-    QPushButton backFromReqButton_;
+    private slots:
+        void showMainFriendsMenu();
+        void showAddFriendScreen();
+        void showFriendRequestsScreen();
+        void sendFriendRequest();
+        void removeFriend();
+        void acceptRequest();
+        void declineRequest();
 
-    QLineEdit friendNameInput_;
-    QLabel addFriendMsgLabel_;
-    QLabel noFriendsLabel_;
-    QLabel noRequestsLabel_;
+        /*
+        * @brief Refresh the friends list by calling the updateFriendsList method
+        */
+        void refreshFriendsList();
 
-    void setup();
-    void updateFriendsList();
-    void updateFriendRequestsList();
+        /*
+        * @brief Refresh the friend requests list by calling the updateFriendRequestsList method
+        */
+        void refreshFriendRequestsList();
+
+    public:
+        FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+
+        ~FriendsMenuGui() = default;
+
+    signals:
+        /*
+        * @brief Signal emitted when the user click on the back button to return to the main menu
+        */
+        void backToMainMenu();
 };
 
 #endif // FRIENDS_MENU_GUI_HPP

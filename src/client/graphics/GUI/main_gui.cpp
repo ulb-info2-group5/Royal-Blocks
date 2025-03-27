@@ -14,16 +14,14 @@ MainGui::MainGui(Controller &controller, QWidget *parent)
     : controller_(controller), QMainWindow(parent) {}
 
 
-void MainGui::run()
-{
+void MainGui::run() {
     LoginGui *loginGui = new LoginGui(controller_);
     connect(loginGui, &LoginGui::loginSuccessful, this, &MainGui::showMainMenu);
     loginGui->run();
     setCentralWidget(loginGui);
 }
 
-void MainGui::forceRefresh(UpdateType updateType)
-{
+void MainGui::forceRefresh(UpdateType updateType) {
     if (updateType == UpdateType::FRIENDS_LIST) {
         emit updateFriendsList();
     } else if (updateType == UpdateType::FRIEND_REQUESTS) {
@@ -33,8 +31,7 @@ void MainGui::forceRefresh(UpdateType updateType)
     }
 }
 
-void MainGui::showMainMenu()
-{
+void MainGui::showMainMenu() {
     MainMenuGui *mainMenuGui = new MainMenuGui(controller_, *this);
     mainMenuGui->run();
     setCentralWidget(mainMenuGui);
