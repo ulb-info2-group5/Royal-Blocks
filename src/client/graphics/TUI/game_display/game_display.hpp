@@ -70,6 +70,7 @@ class GameDisplay final {
     ftxui::Component gameMode_;
     ftxui::Component selfBoard_;
     ftxui::Component tetrominoQueue_;
+    ftxui::Component holdTetromino_;
     ftxui::Component middlePane_;
 
     ftxui::Component opponentsBoards_;
@@ -139,6 +140,10 @@ class GameDisplay final {
     size_t getNumOpponents() const;
 
     const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
+
+    ftxui::Component &holdTetromino();
+
+    const client::Tetromino *getHoldTetromino() const;
 
     size_t getTetrominoQueuesSize() const;
 

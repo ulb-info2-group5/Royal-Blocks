@@ -13,6 +13,7 @@
 #include "../main_tui.hpp"
 #include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
+#include "vec2/vec2.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -209,6 +210,42 @@ ftxui::Component &GameDisplay::quitButton() {
     return quitButton_;
 }
 
+ftxui::Component &GameDisplay::holdTetromino() {
+    holdTetromino_ = ftxui::Renderer([this] {
+        size_t cellSize = static_cast<size_t>(CellSize::Big);
+        size_t width = ATetromino::MAX_DIMENSION * cellSize;
+        size_t height = ATetromino::MAX_DIMENSION * cellSize;
+
+        ftxui::Canvas canvas(width, height);
+        ftxui::Pixel pixel{};
+
+        size_t xOffset = cellSize;
+        size_t yOffset = cellSize;
+
+        const client::Tetromino *pHoldTetromino = getHoldTetromino();
+        if (pHoldTetromino != nullptr) {
+            pixel.background_color =
+                getFTXUIColor(colorIdToColor(pHoldTetromino->colorId));
+
+            for (const Vec2 &relCoord : pHoldTetromino->body) {
+                int x = relCoord.getX() * cellSize + xOffset;
+                int y = relCoord.getY() * cellSize + yOffset;
+
+                for (size_t dy = 0; dy < cellSize; ++dy) {
+                    for (size_t dx = 0; dx < cellSize; ++dx) {
+                        canvas.DrawBlock(x + dx, y + dy, true,
+                                         pixel.background_color);
+                    }
+                }
+            }
+        }
+
+        return ftxui::canvas(canvas) | ftxui::border | ftxui::center;
+    });
+
+    return holdTetromino_;
+}
+
 ftxui::Component &GameDisplay::leftPane() {
     if (isSpectating()) {
         leftPane_ = ftxui::Container::Vertical({
@@ -220,6 +257,8 @@ ftxui::Component &GameDisplay::leftPane() {
             playerInfo(),
             energy(),
 
+            holdTetromino(),
+
             penaltyInfo(),
             bonusInfo(),
 
@@ -229,6 +268,8 @@ ftxui::Component &GameDisplay::leftPane() {
         leftPane_ = ftxui::Container::Vertical({
             quitButton(),
             playerInfo(),
+
+            holdTetromino(),
         });
     }
 
@@ -728,6 +769,13 @@ GameDisplay::getTetrominoQueueNth(size_t tetrominoIdx) const {
 size_t GameDisplay::getTetrominoQueuesSize() const {
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.tetris.tetrominoQueue.queue.size();
+}
+
+const client::Tetromino *GameDisplay::getHoldTetromino() const {
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.tetris.holdTetromino
+        .transform([](const auto &holdTetromino) { return &holdTetromino; })
+        .value_or(nullptr);
 }
 
 std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
