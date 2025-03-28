@@ -576,28 +576,16 @@ size_t GameDisplay::getBoardHeight() const { return Board::getHeight(); }
 size_t GameDisplay::getBoardWidth() const { return Board::getWidth(); }
 
 Score GameDisplay::getSelfScore() const {
-    if (!std::holds_alternative<client::GameState>(gameState_)) {
-        return 0;
-    }
-
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.playerState.score;
 }
 
 std::optional<UserID> GameDisplay::getSelectedTarget() const {
-    if (!std::holds_alternative<client::GameState>(gameState_)) {
-        return std::nullopt;
-    }
-
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.playerState.penaltyTarget;
 }
 
 Energy GameDisplay::getSelfEnergy() const {
-    if (!std::holds_alternative<client::GameState>(gameState_)) {
-        return 0;
-    }
-
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.playerState.energy.value_or(0);
 }
@@ -609,10 +597,6 @@ GameMode GameDisplay::getGameMode() const {
 
 std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
 GameDisplay::selfCellInfoAt(int x, int y) const {
-    if (!std::holds_alternative<client::GameState>(gameState_)) {
-        return std::nullopt;
-    }
-
     const auto &gs = std::get<client::GameState>(gameState_);
 
     if (gs.self.tetris.board.get(x, y).getColorId().has_value()) {
@@ -659,10 +643,6 @@ GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
 }
 
 std::string GameDisplay::getSelfUsername() const {
-    if (!std::holds_alternative<client::GameState>(gameState_)) {
-        return std::string{};
-    }
-
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.playerState.username;
 }
