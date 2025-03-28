@@ -12,6 +12,7 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_tui.hpp"
 #include "player_state/player_state.hpp"
+#include "tetromino/tetromino.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -26,6 +27,7 @@
 #include <type_traits>
 #include <utility>
 #include <variant>
+#include <vector>
 
 Color colorIdToColor(unsigned colorID) {
     // TODO: remove those magic number
@@ -286,12 +288,82 @@ ftxui::Component &GameDisplay::gameMode() {
     return gameMode_;
 }
 
+ftxui::Component &GameDisplay::tetrominoQueue() {
+    tetrominoQueue_ = ftxui::Renderer([this] {
+        size_t queueSize = getTetrominoQueuesSize();
+        if (queueSize == 0) {
+            return ftxui::text("Queue is empty") | ftxui::center;
+        }
+
+        size_t cellSize = static_cast<size_t>(CellSize::Big);
+        size_t width = ATetromino::MAX_DIMENSION * cellSize;
+        size_t height = queueSize * cellSize * ATetromino::MAX_DIMENSION;
+
+        ftxui::Canvas canvas(width, height);
+        ftxui::Pixel pixel{};
+
+        const client::Tetromino &nextTetromino = getTetrominoQueueNth(0);
+        size_t highestBlockY =
+            std::max_element(nextTetromino.body.begin(),
+                             nextTetromino.body.end(),
+                             [](const Vec2 &a, const Vec2 &b) {
+                                 return a.getY() > b.getY();
+                             })
+                ->getY();
+
+        size_t yInitialOffset = highestBlockY * cellSize;
+
+        for (size_t idx = 0; idx < queueSize; ++idx) {
+            const client::Tetromino &tetromino = getTetrominoQueueNth(idx);
+            const std::vector<Vec2> &body = tetromino.body;
+
+            // x-offset
+            size_t leftmostBlockX =
+                -std::min_element(body.begin(), body.end(),
+                                  [](const Vec2 &a, const Vec2 &b) {
+                                      return a.getX() < b.getX();
+                                  })
+                     ->getX();
+
+            size_t xOffset = leftmostBlockX * cellSize;
+
+            // y-offset
+            size_t yOffset =
+                idx * ATetromino::MAX_DIMENSION * cellSize - yInitialOffset;
+
+            pixel.background_color =
+                getFTXUIColor(colorIdToColor(tetromino.colorId));
+
+            for (const auto &vec : body) {
+                int x = vec.getX() * cellSize + xOffset;
+                int y = vec.getY() * cellSize + yOffset;
+
+                for (size_t dy = 0; dy < cellSize; ++dy) {
+                    for (size_t dx = 0; dx < cellSize; ++dx) {
+                        canvas.DrawBlock(x + dx, y + dy, true,
+                                         pixel.background_color);
+                    }
+                }
+            }
+        }
+
+        return ftxui::canvas(canvas) | ftxui::border | ftxui::center;
+    });
+
+    return tetrominoQueue_;
+}
+
 ftxui::Component &GameDisplay::middlePane() {
-    middlePane_ = ftxui::Container::Vertical({
-        gameMode()
-            | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, WIDTH_CANVAS_BIG / 2)
-            | ftxui::center,
-        selfBoard(),
+    middlePane_ = ftxui::Container::Horizontal({
+        ftxui::Container::Vertical({
+            gameMode()
+                | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, WIDTH_CANVAS_BIG / 2)
+                | ftxui::center,
+            selfBoard(),
+        }),
+
+        tetrominoQueue(),
+
     });
 
     return middlePane_;
@@ -645,6 +717,17 @@ GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
 std::string GameDisplay::getSelfUsername() const {
     const auto &gs = std::get<client::GameState>(gameState_);
     return gs.self.playerState.username;
+}
+
+const client::Tetromino &
+GameDisplay::getTetrominoQueueNth(size_t tetrominoIdx) const {
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.tetris.tetrominoQueue.queue.at(tetrominoIdx);
+}
+
+size_t GameDisplay::getTetrominoQueuesSize() const {
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.tetris.tetrominoQueue.queue.size();
 }
 
 std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {

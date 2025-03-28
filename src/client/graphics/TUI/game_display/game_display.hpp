@@ -69,6 +69,7 @@ class GameDisplay final {
 
     ftxui::Component gameMode_;
     ftxui::Component selfBoard_;
+    ftxui::Component tetrominoQueue_;
     ftxui::Component middlePane_;
 
     ftxui::Component opponentsBoards_;
@@ -92,6 +93,7 @@ class GameDisplay final {
 
     ftxui::Component &gameMode();
     ftxui::Component &selfBoard(CellSize size = CellSize::Big);
+    ftxui::Component &tetrominoQueue();
     ftxui::Component &middlePane();
 
     ftxui::Component &opponentsBoards();
@@ -135,6 +137,10 @@ class GameDisplay final {
     std::string getOpponentUsername(size_t opponentIdx) const;
 
     size_t getNumOpponents() const;
+
+    const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
+
+    size_t getTetrominoQueuesSize() const;
 
     const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
 

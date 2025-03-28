@@ -36,6 +36,9 @@ enum class TetrominoMove { Left, Right, Down };
  *      implemented outside of this class.
  */
 class ATetromino {
+  public:
+    constexpr static size_t MAX_DIMENSION = 4;
+
   private:
     size_t width_ = 0;
     size_t height_ = 0;
