@@ -38,6 +38,8 @@ class Tetris {
     uint32_t lockDelayTicksNum_;
     uint32_t ticksSinceLockStart_;
 
+    bool canHold_;
+
     /**
      * @brief Updates the preview tetromino.
      */
@@ -69,12 +71,6 @@ class Tetris {
      * @param yRow The y-coordinate.
      */
     bool checkEmptyCell(size_t xCol, size_t yRow) const;
-
-    /**
-     * @brief Fetches the next tetromino from the queue and sets it as the
-     * active tetromino.
-     */
-    void fetchNewTetromino();
 
   public:
     // #### Constructors ####
@@ -169,6 +165,12 @@ class Tetris {
      * @brief Creates an return a new Tetromino located at the top of the board.
      */
     static TetrominoPtr createTetromino(TetrominoShape tetrominoShape);
+
+    /**
+     * @brief Computes the initial anchor point for a Tetromino of the given
+     * shape so that the Tetromino is positioned at the top of the board.
+     */
+    static Vec2 getTetrominoInitialAnchorPoint(TetrominoShape tetrominoShape);
 
     /**
      * @brief Destroys a random 2 by 2 square in

@@ -4,8 +4,8 @@
 #include "../board/board_update.hpp"
 #include "../tetromino/tetromino.hpp"
 #include "nlohmann/json_fwd.hpp"
+#include "vec2/vec2.hpp"
 
-#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
@@ -36,7 +36,8 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
             or absoluteVec2.getX() >= static_cast<int>(board_.getWidth())
             or absoluteVec2.getY() < 0
             or absoluteVec2.getY() >= static_cast<int>(board_.getHeight())
-            or !checkEmptyCell(static_cast<size_t>(absoluteVec2.getX()), static_cast<size_t>(absoluteVec2.getY())))
+            or !checkEmptyCell(static_cast<size_t>(absoluteVec2.getX()),
+                               static_cast<size_t>(absoluteVec2.getY())))
             return false;
     }
 
@@ -45,6 +46,7 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
 
 void Tetris::placeActive() {
     resetLockDelay();
+    canHold_ = true;
 
     if (!board_.checkInGrid(*activeTetromino_)) {
         for (auto &tetrisObserver : tetrisObservers_) {
@@ -62,12 +64,6 @@ bool Tetris::checkEmptyCell(size_t xCol, size_t yRow) const {
     return board_.get(static_cast<int>(xCol), static_cast<int>(yRow)).isEmpty();
 }
 
-void Tetris::fetchNewTetromino() {
-    // The queue will refill itself if there are too few Tetrominos
-    // inside. -> No need to do it here.
-    activeTetromino_ = tetrominoQueue_.fetchNext();
-}
-
 /*--------------------------------------------------
                      PUBLIC
 --------------------------------------------------*/
@@ -75,9 +71,9 @@ void Tetris::fetchNewTetromino() {
 // #### Constructors ####
 
 Tetris::Tetris()
-    : lockDelayTicksNum_{DEFAULT_LOCK_DELAY_TICKS_NUM},
-      ticksSinceLockStart_{0} {
-    fetchNewTetromino();
+    : lockDelayTicksNum_{DEFAULT_LOCK_DELAY_TICKS_NUM}, ticksSinceLockStart_{0},
+      canHold_{true} {
+    activeTetromino_ = tetrominoQueue_.fetchNext();
 }
 
 // #### TetrisObserver ####
@@ -100,7 +96,7 @@ size_t Tetris::eventClockTick() {
             // lock-delay has expired -> must place active now
             placeActive();
             numClearedRows = board_.update().getNumClearedRows();
-            fetchNewTetromino();
+            activeTetromino_ = tetrominoQueue_.fetchNext();
         } else {
             // lock-delay hasn't expired but a tick occured (don't place
             // active yet)
@@ -122,7 +118,7 @@ size_t Tetris::eventBigDrop() {
 
     placeActive();
     size_t numClearedRows = board_.update().getNumClearedRows();
-    fetchNewTetromino();
+    activeTetromino_ = tetrominoQueue_.fetchNext();
 
     updatePreviewTetromino();
 
@@ -137,7 +133,7 @@ size_t Tetris::eventTryMoveActive(TetrominoMove tetrominoMove) {
         placeActive();
         numClearedRows = board_.update().getNumClearedRows();
 
-        fetchNewTetromino();
+        activeTetromino_ = tetrominoQueue_.fetchNext();
     } else {
         activeTetromino_->move(tetrominoMove);
 
@@ -158,9 +154,9 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 
     bool isValid = false;
 
-    for (size_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
+    for (uint8_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
          ++testIdx) {
-        testTetromino = activeTetromino_->getNthOffset(static_cast<uint8_t>(testIdx));
+        testTetromino = activeTetromino_->getNthOffset(testIdx);
 
         if (board_.checkInGrid(*testTetromino)) {
             activeTetromino_ = std::move(testTetromino);
@@ -177,17 +173,30 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 }
 
 void Tetris::eventHoldNextTetromino() {
-    if (holdTetromino_ == nullptr) {
-        // If there is no hold, simply move the next to hold.
-        holdTetromino_ = tetrominoQueue_.fetchNext();
-    } else {
-        // If there is a hold, swap it with next tetromino.
-        std::swap(holdTetromino_, tetrominoQueue_.front());
+    if (!canHold_) {
+        return;
     }
+
+    canHold_ = false;
+
+    // Create a copy in order to make it be at the top of the board again
+    TetrominoPtr newHoldTetromino =
+        createTetromino(activeTetromino_->getShape());
+
+    if (holdTetromino_ != nullptr) {
+        activeTetromino_ = std::move(holdTetromino_);
+    } else {
+        activeTetromino_ = tetrominoQueue_.fetchNext();
+    }
+
+    holdTetromino_ = std::move(newHoldTetromino);
+
+    updatePreviewTetromino();
 }
 
 void Tetris::eventReceivePenaltyLines(int numPenalties) {
-    bool hasLost = !board_.receivePenaltyLines(static_cast<size_t>(numPenalties));
+    bool hasLost =
+        !board_.receivePenaltyLines(static_cast<size_t>(numPenalties));
     updatePreviewTetromino();
     if (hasLost) {
         for (auto &tetrisObserver : tetrisObservers_) {
@@ -205,16 +214,23 @@ void Tetris::insertNextTetromino(TetrominoPtr &&pTetromino) {
 }
 
 TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
-    // I & T tetromino should have its anchorPoint one row above compared to
-    // the others when spawned
-    int spawnRow = (tetrominoShape == TetrominoShape::I
-                    || tetrominoShape == TetrominoShape::T
-                    || tetrominoShape == TetrominoShape::MiniTetromino)
-                       ? Board::getHeight() - 1
-                       : Board::getHeight() - 2;
+    return ATetromino::makeTetromino(
+        tetrominoShape, getTetrominoInitialAnchorPoint(tetrominoShape));
+}
 
-    return ATetromino::makeTetromino(tetrominoShape,
-                                     Vec2(Board::getWidth() / 2 - 1, spawnRow));
+Vec2 Tetris::getTetrominoInitialAnchorPoint(TetrominoShape tetrominoShape) {
+    // I, T & mini-tetromino should have the anchorPoint one row above compared
+    // to the others when spawned.
+    int posY = Board::getHeight()
+               - ((tetrominoShape == TetrominoShape::I
+                   || tetrominoShape == TetrominoShape::T
+                   || tetrominoShape == TetrominoShape::MiniTetromino)
+                      ? 1
+                      : 2);
+
+    int posX = Board::getWidth() / 2 - 1;
+
+    return Vec2{Vec2(posX, posY)};
 }
 
 void Tetris::destroy2By2Occupied() { board_.destroy2By2Occupied(); }
