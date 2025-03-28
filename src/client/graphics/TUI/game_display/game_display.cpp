@@ -2,6 +2,7 @@
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "board/board.hpp"
+#include "core/in_game/effects/timed_bonus.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
 #include "effect/effect_type.hpp"
@@ -10,7 +11,6 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_tui.hpp"
-#include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
 #include <ftxui/component/component.hpp>
@@ -155,22 +155,14 @@ ftxui::Component &GameDisplay::energy() {
 
 ftxui::Component &GameDisplay::penaltyInfo() {
     penaltyInfo_ = ftxui::Renderer([this] {
+        const auto &gs = std::get<client::GameState>(gameState_);
+
         auto [penaltyName, elapsedTime] =
-            std::visit(
-                [](const auto &gameState)
-                    -> std::optional<std::pair<std::string, double>> {
-                    using T = std::decay_t<decltype(gameState)>;
-                    if constexpr (std::is_same_v<T, client::GameState>) {
-                        gameState.self.playerState.activePenalty.transform(
-                            [](const client::TimedPenalty &penalty) {
-                                return std::make_pair(
-                                    toString(penalty.penaltyType),
-                                    penalty.elapsedTime);
-                            });
-                    }
-                    return std::nullopt;
-                },
-                gameState_)
+            gs.self.playerState.activePenalty
+                .transform([](const client::TimedPenalty &penalty) {
+                    return std::make_pair(toString(penalty.penaltyType),
+                                          penalty.elapsedTime);
+                })
                 .value_or(std::make_pair(std::string{}, 0));
 
         return ftxui::vbox({ftxui::text("Penalty : " + penaltyName),
@@ -184,21 +176,14 @@ ftxui::Component &GameDisplay::penaltyInfo() {
 
 ftxui::Component &GameDisplay::bonusInfo() {
     bonusInfo_ = ftxui::Renderer([this] {
+        const auto &gs = std::get<client::GameState>(gameState_);
+
         auto [bonusName, elapsedTime] =
-            std::visit(
-                [](const auto &gameState)
-                    -> std::optional<std::pair<std::string, double>> {
-                    using T = std::decay_t<decltype(gameState)>;
-                    if constexpr (std::is_same_v<T, client::GameState>) {
-                        gameState.self.playerState.activeBonus.transform(
-                            [](const client::TimedBonus &bonus) {
-                                return std::make_pair(toString(bonus.bonusType),
-                                                      bonus.elapsedTime);
-                            });
-                    }
-                    return std::nullopt;
-                },
-                gameState_)
+            gs.self.playerState.activeBonus
+                .transform([](const client::TimedBonus &bonus) {
+                    return std::make_pair(toString(bonus.bonusType),
+                                          bonus.elapsedTime);
+                })
                 .value_or(std::make_pair(std::string{}, 0));
 
         return ftxui::vbox({ftxui::text("Bonus : " + bonusName),
@@ -591,103 +576,81 @@ size_t GameDisplay::getBoardHeight() const { return Board::getHeight(); }
 size_t GameDisplay::getBoardWidth() const { return Board::getWidth(); }
 
 Score GameDisplay::getSelfScore() const {
-    return std::visit(
-        [](const auto &gameState) -> Score {
-            using T = std::decay_t<decltype(gameState)>;
-            if constexpr (std::is_same_v<T, client::GameState>) {
-                return gameState.self.playerState.score;
-            } else {
-                return 0;
-            }
-        },
-        gameState_);
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return 0;
+    }
+
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.playerState.score;
 }
 
 std::optional<UserID> GameDisplay::getSelectedTarget() const {
-    return std::visit(
-        [](const auto &gameState) -> std::optional<UserID> {
-            using T = std::decay_t<decltype(gameState)>;
-            if constexpr (std::is_same_v<T, client::GameState>) {
-                return gameState.self.playerState.penaltyTarget;
-            } else {
-                return std::nullopt;
-            }
-        },
-        gameState_);
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return std::nullopt;
+    }
+
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.playerState.penaltyTarget;
 }
 
 Energy GameDisplay::getSelfEnergy() const {
-    return std::visit(
-        [](const auto &gameState) -> Energy {
-            using T = std::decay_t<decltype(gameState)>;
-            if constexpr (std::is_same_v<T, client::GameState>) {
-                return gameState.self.playerState.energy.value_or(0);
-            } else {
-                return 0;
-            }
-        },
-        gameState_);
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return 0;
+    }
 
-    return 0;
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.playerState.energy.value_or(0);
 }
 
 GameMode GameDisplay::getGameMode() const {
-    return std::visit(
-        [](const auto &gameState) -> GameMode { return gameState.gameMode; },
-        gameState_);
+    return std::visit([](const auto &gameState) { return gameState.gameMode; },
+                      gameState_);
 }
 
 std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
 GameDisplay::selfCellInfoAt(int x, int y) const {
-    return std::visit(
-        [x, y](const auto &gameState)
-            -> std::optional<std::pair<unsigned, GameDisplay::SelfCellType>> {
-            using T = std::decay_t<decltype(gameState)>;
-            if constexpr (std::is_same_v<T, client::GameState>) {
-                if (gameState.self.tetris.board.get(x, y)
-                        .getColorId()
-                        .has_value()) {
-                    return std::make_pair(gameState.self.tetris.board.get(x, y)
-                                              .getColorId()
-                                              .value(),
-                                          GameDisplay::SelfCellType::Placed);
-                }
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return std::nullopt;
+    }
 
-                auto &activeTetromino = gameState.self.tetris.activeTetromino;
-                if (activeTetromino.has_value()) {
-                    for (auto &vec : activeTetromino->body) {
-                        if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
-                            return std::make_optional(std::make_pair(
-                                activeTetromino->colorId,
-                                GameDisplay::SelfCellType::Active));
-                        }
-                    }
-                }
+    const auto &gs = std::get<client::GameState>(gameState_);
 
-                auto &previewTetromino = gameState.self.tetris.previewTetromino;
-                if (previewTetromino.has_value()) {
-                    for (auto &vec : previewTetromino->body) {
-                        if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
-                            return std::make_optional(std::make_pair(
-                                previewTetromino->colorId,
-                                GameDisplay::SelfCellType::Preview));
-                        }
-                    }
-                }
+    if (gs.self.tetris.board.get(x, y).getColorId().has_value()) {
+        return std::make_pair(
+            gs.self.tetris.board.get(x, y).getColorId().value(),
+            GameDisplay::SelfCellType::Placed);
+    }
 
-                return std::nullopt;
-            } else {
-                return std::nullopt;
+    auto &activeTetromino = gs.self.tetris.activeTetromino;
+    if (activeTetromino.has_value()) {
+        for (auto &vec : activeTetromino->body) {
+            if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(activeTetromino->colorId,
+                                   GameDisplay::SelfCellType::Active));
             }
-        },
-        gameState_);
+        }
+    }
+
+    auto &previewTetromino = gs.self.tetris.previewTetromino;
+    if (previewTetromino.has_value()) {
+        for (auto &vec : previewTetromino->body) {
+            if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
+                return std::make_optional(
+                    std::make_pair(previewTetromino->colorId,
+                                   GameDisplay::SelfCellType::Preview));
+            }
+        }
+    }
+
+    return std::nullopt;
 }
 
 std::optional<unsigned>
 GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
                                         int y) const {
     return std::visit(
-        [opponentIdx, x, y](const auto &gameState) -> std::optional<unsigned> {
+        [opponentIdx, x, y](const auto &gameState) {
             return gameState.externals.at(opponentIdx)
                 .tetris.board.get(x, y)
                 .getColorId();
@@ -696,21 +659,17 @@ GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
 }
 
 std::string GameDisplay::getSelfUsername() const {
-    return std::visit(
-        [](const auto &gameState) -> std::string {
-            using T = std::decay_t<decltype(gameState)>;
-            if constexpr (std::is_same_v<T, client::GameState>) {
-                return gameState.self.playerState.username;
-            } else {
-                return std::string{};
-            }
-        },
-        gameState_);
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return std::string{};
+    }
+
+    const auto &gs = std::get<client::GameState>(gameState_);
+    return gs.self.playerState.username;
 }
 
 std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
     return std::visit(
-        [opponentIdx](const auto &gameState) -> std::string {
+        [opponentIdx](const auto &gameState) {
             return gameState.externals.at(opponentIdx).playerState.username;
         },
         gameState_);
