@@ -16,7 +16,9 @@
 
 // #### Helpers ####
 
-GridCell &Board::at(int xCol, int yRow) { return getRow(yRow).at(static_cast<size_t>(xCol)); }
+GridCell &Board::at(int xCol, int yRow) {
+    return getRow(yRow).at(static_cast<size_t>(xCol));
+}
 
 std::array<GridCell, Board::width_> &Board::getRow(int yRow) {
     return grid_.at(getHeight() - 1 - static_cast<size_t>(yRow));
@@ -147,21 +149,17 @@ void Board::placeTetromino(TetrominoPtr tetromino) {
     Vec2 anchor = tetromino->getAnchorPoint();
 
     for (const Vec2 &relativeCoord : tetromino->getBody()) {
-        Vec2 absoluteCoord = anchor + relativeCoord;
-        at(absoluteCoord.getX(), absoluteCoord.getY())
-            .setColorId(tetromino->getColorId());
+        auto [x, y] = anchor + relativeCoord;
+        at(x, y).setColorId(tetromino->getColorId());
     }
 }
 
 bool Board::checkInGrid(ATetromino &tetromino) const {
     Vec2 anchor = tetromino.getAnchorPoint();
     for (const Vec2 &relativeCoord : tetromino.getBody()) {
-        Vec2 absoluteCoord = relativeCoord + anchor;
-        if (absoluteCoord.getX() < 0
-            || absoluteCoord.getX() >= static_cast<int>(getWidth())
-            || absoluteCoord.getY() < 0
-            || absoluteCoord.getY() >= static_cast<int>(getHeight())
-            || !(get(absoluteCoord.getX(), absoluteCoord.getY()).isEmpty())) {
+        auto [x, y] = relativeCoord + anchor;
+        if (x < 0 || x >= static_cast<int>(getWidth()) || y < 0
+            || y >= static_cast<int>(getHeight()) || !(get(x, y).isEmpty())) {
 
             return false;
         }
@@ -198,7 +196,8 @@ void Board::destroy2By2Occupied() {
     std::uniform_int_distribution<int> distrib(0, Board::getHeight()
                                                       * Board::getWidth());
     int tmp = distrib(gen);
-    int startY = static_cast<int>(static_cast<size_t>(tmp)/ Board::getHeight());
+    int startY =
+        static_cast<int>(static_cast<size_t>(tmp) / Board::getHeight());
     int startX = static_cast<int>(static_cast<size_t>(tmp) % Board::getWidth());
 
     bool found2By2 = false;

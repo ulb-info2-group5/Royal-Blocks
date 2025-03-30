@@ -52,11 +52,11 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
     int minX = std::numeric_limits<int>::max();
     int maxX = std::numeric_limits<int>::min();
 
-    for (const Vec2 &coord : body_) {
-        minY = std::min(minY, coord.getY());
-        minX = std::min(minX, coord.getX());
-        maxY = std::max(maxY, coord.getY());
-        maxX = std::max(maxX, coord.getX());
+    for (const auto [x, y] : body_) {
+        minY = std::min(minY, y);
+        minX = std::min(minX, x);
+        maxY = std::max(maxY, y);
+        maxX = std::max(maxX, x);
     }
 
     height_ = static_cast<size_t>(maxY - minY + 1);
@@ -142,8 +142,10 @@ uint8_t ATetromino::getNumOfTests() const noexcept {
 TetrominoPtr ATetromino::getNthOffset(uint8_t offsetIndex) const {
     TetrominoPtr copy = this->clone();
 
-    Vec2 offsetVal1 = offsetData_->at(static_cast<size_t>(prevRotationIdx_)).at(offsetIndex - 1);
-    Vec2 offsetVal2 = offsetData_->at(static_cast<size_t>(rotationIdx_)).at(offsetIndex - 1);
+    Vec2 offsetVal1 = offsetData_->at(static_cast<size_t>(prevRotationIdx_))
+                          .at(offsetIndex - 1);
+    Vec2 offsetVal2 =
+        offsetData_->at(static_cast<size_t>(rotationIdx_)).at(offsetIndex - 1);
 
     // Compute offset with offset data
     Vec2 offset = (offsetVal1 - offsetVal2);

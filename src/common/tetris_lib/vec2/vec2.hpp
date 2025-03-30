@@ -1,7 +1,6 @@
 #ifndef VEC2_HPP
 #define VEC2_HPP
 
-#include "nlohmann/json_fwd.hpp"
 #include <nlohmann/json.hpp>
 
 #include <iostream>
@@ -169,6 +168,16 @@ class Vec2 {
      */
     friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 
+    // #### Structure binding ####
+
+    template <size_t N> decltype(auto) get() const {
+        if constexpr (N == 0) {
+            return x_;
+        } else if constexpr (N == 1) {
+            return y_;
+        }
+    };
+
     /* ------------------------------------------------
      *          Serialization
      * ------------------------------------------------*/
@@ -183,5 +192,13 @@ class Vec2 {
 
     friend Vec2Test;
 };
+
+namespace std {
+    template <> struct tuple_size<Vec2> : std::integral_constant<size_t, 2> {};
+
+    template <std::size_t N> struct tuple_element<N, Vec2> {
+        using type = decltype(std::declval<Vec2>().get<N>());
+    };
+} // namespace std
 
 #endif // VEC2_HPP

@@ -28,16 +28,12 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
 
     anchorPoint.moveY(-1);
 
-    Vec2 absoluteVec2;
     for (const auto &relativeVec2 : tetromino.getBody()) {
-        absoluteVec2 = anchorPoint + relativeVec2;
+        auto [x, y] = anchorPoint + relativeVec2;
 
-        if (absoluteVec2.getX() < 0
-            or absoluteVec2.getX() >= static_cast<int>(board_.getWidth())
-            or absoluteVec2.getY() < 0
-            or absoluteVec2.getY() >= static_cast<int>(board_.getHeight())
-            or !checkEmptyCell(static_cast<size_t>(absoluteVec2.getX()),
-                               static_cast<size_t>(absoluteVec2.getY())))
+        if (x < 0 || x >= static_cast<int>(board_.getWidth()) || y < 0
+            || y >= static_cast<int>(board_.getHeight())
+            || !checkEmptyCell(static_cast<size_t>(x), static_cast<size_t>(y)))
             return false;
     }
 
