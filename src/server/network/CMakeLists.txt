@@ -11,8 +11,6 @@ add_library(network_lib STATIC ${SOURCES_NETWORK_LIB})
 
 target_include_directories(network_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-include(../../../third_party/bcrypt.cmake)
-
 find_package(Boost REQUIRED COMPONENTS system)
 
 target_link_libraries(network_lib PUBLIC
