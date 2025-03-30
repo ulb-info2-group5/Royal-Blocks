@@ -175,12 +175,24 @@ void GameServer::run() {
 }
 
 void GameServer::sendGameStates() {
-    for (auto player : pGameState_->getPlayerToTetris()) {
-        updateGamePlayer_(player.pPlayerState->getUserID(),
-                          bindings::GameStateMessage::serializeForPlayer(
-                              *pGameState_, player.pPlayerState->getUserID()));
-        std::cerr << "done serializing" << std::endl;
-    };
+    // for (auto player : pGameState_->getPlayerToTetris()) {
+    //     updateGamePlayer_(player.pPlayerState->getUserID(),
+    //                       bindings::GameStateMessage::serializeForPlayer(
+    //                           *pGameState_, player.pPlayerState->getUserID()));
+    //     std::cerr << "done serializing" << std::endl;
+    // };
+
+    for (auto pWeakClient : pClientLinks_) {
+        if (std::shared_ptr<ClientLink> pClientLink = pWeakClient.lock()) {
+            pClientLink->sendPackage(bindings::GameStateMessage::serializeForPlayer(
+                *pGameState_, pClientLink->getUserID()));
+        }
+    }
+}
+
+
+void GameServer::addClientLink(std::weak_ptr<ClientLink> clientLink){
+    pClientLinks_.push_back(clientLink);
 }
 
 // ==== getters ====

@@ -3,6 +3,7 @@
 
 #include "../../common/bindings/in_game/select_target.hpp"
 
+#include "../network/client_link/client_link.hpp"
 #include "game_engine/game_engine.hpp"
 #include "player_state/player_state.hpp"
 
@@ -12,6 +13,8 @@ using GameID = size_t;
 
 using UpdateGamePlayer = std::function<void(UserID, nlohmann::json)>;
 using CallBackFinishGame = std::function<void(GameID)>;
+
+class ClientLink;
 
 struct Player {
     UserID userID;
@@ -33,7 +36,7 @@ class GameServer {
 
     UpdateGamePlayer updateGamePlayer_;
     CallBackFinishGame callBackFinishGame_;
-
+    std::vector<std::weak_ptr<ClientLink>> pClientLinks_;
     /**
      * @brief Signals the engine that an engine tick occured. Resets the timer
      * for the next tick.
@@ -68,6 +71,11 @@ class GameServer {
      * finished.
      */
     void run();
+    
+
+    void addClientLink(std::weak_ptr<ClientLink> clientLink);
+    
+
 
     // === getters ===
 

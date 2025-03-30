@@ -99,6 +99,11 @@ void ClientLink::start() {
     read();
 }
 
+void ClientLink::jointGame(const std::weak_ptr<GameServer>& gameServer){
+    pGame_ = gameServer;
+}
+
+
 bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
 }
@@ -123,6 +128,10 @@ std::optional<GameMode> ClientLink::getGameMode(){
 }
 
 bindings::State ClientLink::getUserState() { return userState; }
+
+UserID ClientLink::getUserID(){
+    return clientId.value();
+}
 
 // ====== Client manager class ======
 // ---private ---
@@ -188,7 +197,7 @@ ClientManager::ClientManager(DataBase database)
             sendUpdatedRankingToClients();
         }),
     matchmaking_(
-        [this](std::vector<UserID> userIDs) { gameFindCallback(userIDs); }), 
+        [this](std::vector<UserID> userIDs, std::shared_ptr<GameServer> gameServer) { gameFindCallback(userIDs, gameServer); }), 
 
     socialService_(database.friendsManager, database.messagesManager, 
         [this](UserID userID)->bindings::User { return getUser(userID) ; })
@@ -207,11 +216,14 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
     
 
 }
-void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID) {
+void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID, std::shared_ptr<GameServer> gameServer) {
     std::cout << "== game find callback succcess ===" << std::endl;
+    
     for (auto id : playersID) {
         std::cout << "id player : " << id << std::endl;
         connectedClients_[id]->setUserState(bindings::State::InGame);
+        connectedClients_[id]->jointGame(gameServer);
+        gamesManager_.makeClientJoinGame(connectedClients_[id], gameServer);
     }
 }
 

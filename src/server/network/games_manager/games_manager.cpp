@@ -27,7 +27,7 @@ GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
       saveScoreCallback_(saveScoreCallback),
       updateRankingCallback_(updateRankingCallback) {}
 
-void GamesManager::startGameServeur(GameMode gameMode,
+std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
                                     std::vector<Player> players) {
     for (Player player : players) {
         std::cout << " id : " << player.userID << "name :" << player.username
@@ -44,6 +44,7 @@ void GamesManager::startGameServeur(GameMode gameMode,
     std::cout << " ==<< create a new game >>== gameServer id : " << nextGameId
               << std::endl;
     nextGameId += 1;
+    return gameServer;
 }
 
 void GamesManager::enqueueGameBinding(int clientId,
@@ -68,6 +69,13 @@ void GamesManager::callBackFinishGame(GameID gameId) {
     }
     deleteGame(gameId);
 }
+
+void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer){
+    gameServer->addClientLink(clientLink);
+    
+    
+}
+
 
 bool GamesManager::isThisClientInGame(UserID userId) {
     bool res = clientToGame_.find(userId) != clientToGame_.end();

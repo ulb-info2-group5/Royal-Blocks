@@ -69,9 +69,7 @@ void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager
     if (joinGame.bindGame.gameMode == GameMode::Endless) {
         std::vector<UserID> players;
         players.emplace_back(joinGame.player.userID);
-        
-        gamesManager.startGameServeur(GameMode::Endless, std::vector<Player>{joinGame.player});
-        gameFindCallback_(players);
+        gameFindCallback_(players, gamesManager.startGameServeur(GameMode::Endless, std::vector<Player>{joinGame.player}));
         return;
     }
 
@@ -110,7 +108,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,
         }
         if (it->isThisPartyReady()) {
             std::cout << "game ready" << std::endl;
-            gameFindCallback_(it->getPlayerIDs());
+            
             startGame(std::move(*it), gamesManager);
             it = games.erase(it);
         } else {
@@ -135,8 +133,8 @@ void Matchmaking::createAGame(RequestCreateGame createGame) {
         .push_back(GameCandidate{createGame});
 }
 
-void Matchmaking::startGame(GameCandidate &&gameCandidate,
-                            GamesManager &gamesManager) {
-    gamesManager.startGameServeur(gameCandidate.getGameMode(),
-                                  gameCandidate.getPlayers());
+void Matchmaking::startGame(GameCandidate &&gameCandidate,GamesManager &gamesManager) {
+    gameFindCallback_(gameCandidate.getPlayerIDs(), 
+    gamesManager.startGameServeur(gameCandidate.getGameMode(),gameCandidate.getPlayers()) );
+    
 }

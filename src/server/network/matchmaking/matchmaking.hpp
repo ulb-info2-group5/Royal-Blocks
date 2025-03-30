@@ -13,7 +13,7 @@ using NumberOfPlayers = size_t;
 
 
 using GameFindCallback =
-        std::function<void(std::vector<UserID>)>;
+        std::function<void(std::vector<UserID>, std::shared_ptr<GameServer>)>;
 
 
 constexpr NumberOfPlayers MAXPLAYERDUAL = 2;
