@@ -17,13 +17,12 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
 include(../../third_party/ftxui.cmake)
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost CONFIG)
 
 target_link_libraries(client_lib PUBLIC
     ftxui::screen
     ftxui::dom
     ftxui::component
-    Boost::system
     tetris_royal_lib
     Qt5::Widgets
     Qt5::Core

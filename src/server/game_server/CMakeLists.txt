@@ -11,9 +11,8 @@ add_library(game_server_lib STATIC ${SOURCES_GAME_SERVER_LIB})
 
 target_include_directories(game_server_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost CONFIG)
 
 target_link_libraries(game_server_lib PUBLIC
-    Boost::system
     tetris_royal_lib
 )
