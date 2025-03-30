@@ -59,23 +59,6 @@ class GameDisplay final {
 
     std::variant<client::GameState, client::GameStateViewer> gameState_;
 
-    ftxui::Component quitButton_;
-    ftxui::Component playerInfo_;
-    ftxui::Component energy_;
-    ftxui::Component availableEffects_;
-    ftxui::Component penaltyInfo_;
-    ftxui::Component bonusInfo_;
-    ftxui::Component leftPane_;
-
-    ftxui::Component gameMode_;
-    ftxui::Component selfBoard_;
-    ftxui::Component tetrominoQueue_;
-    ftxui::Component holdTetromino_;
-    ftxui::Component middlePane_;
-
-    ftxui::Component opponentsBoards_;
-    ftxui::Component rightPane_;
-
     ftxui::Component displayWindow_;
 
     /**
@@ -84,22 +67,22 @@ class GameDisplay final {
      */
     ftxui::Component createOpBoardDisplay(size_t index, CellSize cellSize);
 
-    ftxui::Component &quitButton();
-    ftxui::Component &playerInfo();
-    ftxui::Component &energy();
-    ftxui::Component &availableEffects();
-    ftxui::Component &penaltyInfo();
-    ftxui::Component &bonusInfo();
-    ftxui::Component &leftPane();
+    ftxui::Component quitButton();
+    ftxui::Component playerInfo();
+    ftxui::Component energy();
+    ftxui::Component availableEffects();
+    ftxui::Component penaltyInfo();
+    ftxui::Component bonusInfo();
+    ftxui::Component leftPane();
 
-    ftxui::Component &gameMode();
-    ftxui::Component &selfBoard(CellSize size = CellSize::Big);
-    ftxui::Component &tetrominoQueue();
-    ftxui::Component &middlePane();
+    ftxui::Component gameMode();
+    ftxui::Component selfBoard(CellSize size = CellSize::Big);
+    ftxui::Component tetrominoQueue();
+    ftxui::Component middlePane();
 
-    ftxui::Component &opponentsBoards();
+    ftxui::Component opponentsBoards();
 
-    ftxui::Component &rightPane();
+    ftxui::Component rightPane();
 
     ftxui::Component &drawEndlessMode();
 
@@ -141,7 +124,7 @@ class GameDisplay final {
 
     const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
 
-    ftxui::Component &holdTetromino();
+    ftxui::Component holdTetromino();
 
     const client::Tetromino *getHoldTetromino() const;
 

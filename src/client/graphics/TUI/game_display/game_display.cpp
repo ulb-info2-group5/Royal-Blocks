@@ -112,39 +112,33 @@ GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
 //                          Left Pane
 //----------------------------------------------------------------------------
 
-ftxui::Component &GameDisplay::playerInfo() {
-    playerInfo_ = ftxui::Renderer([&] {
+ftxui::Component GameDisplay::playerInfo() {
+    return ftxui::Renderer([&] {
         return ftxui::vbox(
                    {ftxui::text("Score : " + std::to_string(getSelfScore()))
                         | ftxui::center,
                     ftxui::text(getSelfUsername()) | ftxui::center})
                | ftxui::borderDashed;
     });
-
-    return playerInfo_;
 }
 
-ftxui::Component &GameDisplay::availableEffects() {
-    if (!availableEffects_) {
-        availableEffects_ = ftxui::Container::Vertical({});
-    }
-
-    availableEffects_->DetachAllChildren();
+ftxui::Component GameDisplay::availableEffects() {
+    ftxui::Component availableEffects = ftxui::Container::Vertical({});
 
     std::vector<std::pair<EffectType, Energy>> effectPrices = getEffectPrices();
 
     for (auto [effectType, effectPrice] : effectPrices) {
-        availableEffects_->Add(ftxui::Button(
+        availableEffects->Add(ftxui::Button(
             toString(effectType) + " " + std::to_string(effectPrice),
             [effectType, this]() { controller_.buyEffect(effectType); },
             GlobalButtonStyle()));
     }
 
-    return availableEffects_;
+    return availableEffects;
 }
 
-ftxui::Component &GameDisplay::energy() {
-    energy_ = ftxui::Renderer([this] {
+ftxui::Component GameDisplay::energy() {
+    return ftxui::Renderer([this] {
         std::vector<std::pair<EffectType, Energy>> effectPrices =
             getEffectPrices();
 
@@ -152,12 +146,10 @@ ftxui::Component &GameDisplay::energy() {
             {ftxui::text("Energy : " + std::to_string(getSelfEnergy()))
              | ftxui::borderRounded});
     });
-
-    return energy_;
 }
 
-ftxui::Component &GameDisplay::penaltyInfo() {
-    penaltyInfo_ = ftxui::Renderer([this] {
+ftxui::Component GameDisplay::penaltyInfo() {
+    return ftxui::Renderer([this] {
         const auto &gs = std::get<client::GameState>(gameState_);
 
         auto [penaltyName, elapsedTime] =
@@ -173,12 +165,10 @@ ftxui::Component &GameDisplay::penaltyInfo() {
                                 | ftxui::color(ftxui::Color::Red)
                                 | ftxui::borderRounded});
     });
-
-    return penaltyInfo_;
 }
 
-ftxui::Component &GameDisplay::bonusInfo() {
-    bonusInfo_ = ftxui::Renderer([this] {
+ftxui::Component GameDisplay::bonusInfo() {
+    return ftxui::Renderer([this] {
         const auto &gs = std::get<client::GameState>(gameState_);
 
         auto [bonusName, elapsedTime] =
@@ -194,24 +184,20 @@ ftxui::Component &GameDisplay::bonusInfo() {
                                 | ftxui::color(ftxui::Color::Green)
                                 | ftxui::borderRounded});
     });
-
-    return bonusInfo_;
 }
 
-ftxui::Component &GameDisplay::quitButton() {
-    quitButton_ = ftxui::Button(
+ftxui::Component GameDisplay::quitButton() {
+    return ftxui::Button(
         std::string(STR_QUIT_GAME),
         [&] {
             controller_.quitGame();
             mainTui_.stopRender();
         },
         GlobalButtonStyle());
-
-    return quitButton_;
 }
 
-ftxui::Component &GameDisplay::holdTetromino() {
-    holdTetromino_ = ftxui::Renderer([this] {
+ftxui::Component GameDisplay::holdTetromino() {
+    return ftxui::Renderer([this] {
         size_t cellSize = static_cast<size_t>(CellSize::Big);
         size_t width = ATetromino::MAX_DIMENSION * cellSize;
         size_t height = ATetromino::MAX_DIMENSION * cellSize;
@@ -242,17 +228,15 @@ ftxui::Component &GameDisplay::holdTetromino() {
 
         return ftxui::canvas(canvas) | ftxui::border | ftxui::center;
     });
-
-    return holdTetromino_;
 }
 
-ftxui::Component &GameDisplay::leftPane() {
+ftxui::Component GameDisplay::leftPane() {
     if (isSpectating()) {
-        leftPane_ = ftxui::Container::Vertical({
+        return ftxui::Container::Vertical({
             quitButton(),
         });
     } else if (getGameMode() == GameMode::RoyalCompetition) {
-        leftPane_ = ftxui::Container::Vertical({
+        return ftxui::Container::Vertical({
             quitButton(),
             playerInfo(),
             energy(),
@@ -265,25 +249,21 @@ ftxui::Component &GameDisplay::leftPane() {
             availableEffects(),
         });
     } else {
-        leftPane_ = ftxui::Container::Vertical({
+        return ftxui::Container::Vertical({
             quitButton(),
             playerInfo(),
 
             holdTetromino(),
         });
     }
-
-    return leftPane_;
 }
 
 //----------------------------------------------------------------------------
 //                          Middle Pane
 //----------------------------------------------------------------------------
 
-ftxui::Component &GameDisplay::selfBoard(CellSize size) {
-    selfBoard_ = ftxui::Container::Horizontal({});
-
-    selfBoard_ = ftxui::Renderer([size, this] {
+ftxui::Component GameDisplay::selfBoard(CellSize size) {
+    return ftxui::Renderer([size, this] {
         size_t cellSize = static_cast<size_t>(size);
 
         size_t height = getBoardHeight();
@@ -316,21 +296,17 @@ ftxui::Component &GameDisplay::selfBoard(CellSize size) {
 
         return ftxui::canvas(selfCanvas) | ftxui::border | ftxui::center;
     });
-
-    return selfBoard_;
 }
 
-ftxui::Component &GameDisplay::gameMode() {
-    gameMode_ = ftxui::Renderer([&] {
+ftxui::Component GameDisplay::gameMode() {
+    return ftxui::Renderer([&] {
         return ftxui::text(toString(getGameMode())) | ftxui::center
                | ftxui::border;
     });
-
-    return gameMode_;
 }
 
-ftxui::Component &GameDisplay::tetrominoQueue() {
-    tetrominoQueue_ = ftxui::Renderer([this] {
+ftxui::Component GameDisplay::tetrominoQueue() {
+    return ftxui::Renderer([this] {
         size_t queueSize = getTetrominoQueuesSize();
         if (queueSize == 0) {
             return ftxui::text("Queue is empty") | ftxui::center;
@@ -390,12 +366,10 @@ ftxui::Component &GameDisplay::tetrominoQueue() {
 
         return ftxui::canvas(canvas) | ftxui::border | ftxui::center;
     });
-
-    return tetrominoQueue_;
 }
 
-ftxui::Component &GameDisplay::middlePane() {
-    middlePane_ = ftxui::Container::Horizontal({
+ftxui::Component GameDisplay::middlePane() {
+    return ftxui::Container::Horizontal({
         ftxui::Container::Vertical({
             gameMode()
                 | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, WIDTH_CANVAS_BIG / 2)
@@ -406,8 +380,6 @@ ftxui::Component &GameDisplay::middlePane() {
         tetrominoQueue(),
 
     });
-
-    return middlePane_;
 }
 
 //----------------------------------------------------------------------------
@@ -447,7 +419,7 @@ ftxui::Component GameDisplay::createOpBoardDisplay(size_t index,
     });
 }
 
-ftxui::Component &GameDisplay::opponentsBoards() {
+ftxui::Component GameDisplay::opponentsBoards() {
     CellSize cellSize =
         (getGameMode() == GameMode::Dual) ? CellSize::Big : CellSize::Small;
 
@@ -477,7 +449,7 @@ ftxui::Component &GameDisplay::opponentsBoards() {
     size_t numCols = 4;
     size_t numRows = (opponentsBoards.size() + numCols - 1) / numCols;
 
-    opponentsBoards_ = ftxui::Container::Vertical({});
+    ftxui::Component opponentsBoards_ = ftxui::Container::Vertical({});
 
     for (size_t rowIdx = 0; rowIdx < numRows; rowIdx++) {
         ftxui::Components row;
@@ -493,12 +465,10 @@ ftxui::Component &GameDisplay::opponentsBoards() {
     return opponentsBoards_;
 }
 
-ftxui::Component &GameDisplay::rightPane() {
-    rightPane_ = ftxui::Container::Vertical({
+ftxui::Component GameDisplay::rightPane() {
+    return ftxui::Container::Vertical({
         opponentsBoards(),
     });
-
-    return rightPane_;
 }
 
 ftxui::Component &GameDisplay::drawEndlessMode() {
