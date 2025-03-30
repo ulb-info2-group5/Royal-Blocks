@@ -29,12 +29,10 @@ bool Tetris::checkCanDrop(const ATetromino &tetromino) const {
     anchorPoint.moveY(-1);
 
     for (const auto &relativeVec2 : tetromino.getBody()) {
-        auto [x, y] = anchorPoint + relativeVec2;
-
-        if (x < 0 || x >= static_cast<int>(board_.getWidth()) || y < 0
-            || y >= static_cast<int>(board_.getHeight())
-            || !checkEmptyCell(static_cast<size_t>(x), static_cast<size_t>(y)))
+        Vec2 absoluteCoord = anchorPoint + relativeVec2;
+        if (!board_.checkInGrid(absoluteCoord)) {
             return false;
+        }
     }
 
     return true;
@@ -215,8 +213,8 @@ TetrominoPtr Tetris::createTetromino(TetrominoShape tetrominoShape) {
 }
 
 Vec2 Tetris::getTetrominoInitialAnchorPoint(TetrominoShape tetrominoShape) {
-    // I, T & mini-tetromino should have the anchorPoint one row above compared
-    // to the others when spawned.
+    // I, T & mini-tetromino should have the anchorPoint one row above
+    // compared to the others when spawned.
     int posY = Board::getHeight()
                - ((tetrominoShape == TetrominoShape::I
                    || tetrominoShape == TetrominoShape::T

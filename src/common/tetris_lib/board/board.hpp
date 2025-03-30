@@ -226,6 +226,12 @@ class Board {
     void placeTetromino(TetrominoPtr tetromino);
 
     /**
+     * @brief Checks whether the cell at the given vec2 coordinate is in the
+     * grid and is empty.
+     */
+    bool checkInGrid(const Vec2 &vec) const;
+
+    /**
      * @brief Checks whether the specified Tetromino can fit in the grid given
      * its anchor-point and body.
      *
@@ -233,7 +239,7 @@ class Board {
      *
      * @return True if the given Tetromino fits; otherwise, false.
      */
-    bool checkInGrid(ATetromino &tetromino) const;
+    bool checkInGrid(const ATetromino &tetromino) const;
 
     /**
      * @brief Destroys a random 2 by 2 square in

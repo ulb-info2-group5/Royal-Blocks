@@ -154,13 +154,20 @@ void Board::placeTetromino(TetrominoPtr tetromino) {
     }
 }
 
-bool Board::checkInGrid(ATetromino &tetromino) const {
+bool Board::checkInGrid(const Vec2 &vec) const {
+    return                                            //
+        vec.getX() >= 0                               //
+        && vec.getX() < static_cast<int>(getWidth())  //
+        && vec.getY() >= 0                            //
+        && vec.getY() < static_cast<int>(getHeight()) //
+        && (get(vec.getX(), vec.getY()).isEmpty());
+}
+
+bool Board::checkInGrid(const ATetromino &tetromino) const {
     Vec2 anchor = tetromino.getAnchorPoint();
     for (const Vec2 &relativeCoord : tetromino.getBody()) {
-        auto [x, y] = relativeCoord + anchor;
-        if (x < 0 || x >= static_cast<int>(getWidth()) || y < 0
-            || y >= static_cast<int>(getHeight()) || !(get(x, y).isEmpty())) {
-
+        Vec2 absoluteCoord = relativeCoord + anchor;
+        if (!checkInGrid(absoluteCoord)) {
             return false;
         }
     }
