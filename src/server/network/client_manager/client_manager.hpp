@@ -71,7 +71,7 @@ class ClientManager {
                          nlohmann::json clientData);
 
 
-    void gameFindCallback(std::vector<PlayerID>& playersID, std::shared_ptr<GameServer> gameServer);
+    void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
     /*
      * @brief : manage of the packet received by the clientLink
      */

@@ -27,22 +27,19 @@ GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
       saveScoreCallback_(saveScoreCallback),
       updateRankingCallback_(updateRankingCallback) {}
 
+
+
 std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
                                     std::vector<Player> players) {
     for (Player player : players) {
-        std::cout << " id : " << player.userID << "name :" << player.username
-                  << std::endl;
         clientToGame_[player.userID] = nextGameId;
     }
+    
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
         gameMode, std::move(players), updateGamePlayer_, nextGameId,
         [this](GameID gameId) { callBackFinishGame(gameId); });
     gameSessions_[nextGameId] = gameServer;
-    gamethreads_[nextGameId] =
-        std::thread([gameServer]() { gameServer->run(); });
-    gameServer->sendGameStates();
-    std::cout << " ==<< create a new game >>== gameServer id : " << nextGameId
-              << std::endl;
+    gamethreads_[nextGameId] = std::thread([gameServer]() { gameServer->run(); });
     nextGameId += 1;
     return gameServer;
 }
@@ -71,6 +68,8 @@ void GamesManager::callBackFinishGame(GameID gameId) {
 
 void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer){
     gameServer->addClientLink(clientLink);
+    clientLink->setUserState(bindings::State::InGame);
+    clientLink->jointGame(gameServer);
     
     
 }

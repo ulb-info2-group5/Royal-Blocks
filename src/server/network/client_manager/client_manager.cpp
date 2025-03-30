@@ -73,7 +73,7 @@ ClientManager::ClientManager(DataBase database)
             sendUpdatedRankingToClients();
         }),
     matchmaking_(
-        [this](std::vector<UserID> userIDs, std::shared_ptr<GameServer> gameServer) { gameFindCallback(userIDs, gameServer); }), 
+        [this](std::vector<Player> players,GameMode gameMode ) { gameFindCallback(players, gameMode); }), 
 
     socialService_(database.friendsManager, database.messagesManager, 
         [this](UserID userID)->bindings::User { return getUser(userID) ; })
@@ -92,15 +92,14 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
     
 
 }
-void ClientManager::gameFindCallback(std::vector<PlayerID> &playersID, std::shared_ptr<GameServer> gameServer) {
+void ClientManager::gameFindCallback(std::vector<Player> &players,GameMode gameMode) {
     std::cout << "== game find callback succcess ===" << std::endl;
-    
-    for (auto id : playersID) {
-        std::cout << "id player : " << id << std::endl;
-        connectedClients_[id]->setUserState(bindings::State::InGame);
-        connectedClients_[id]->jointGame(gameServer);
-        gamesManager_.makeClientJoinGame(connectedClients_[id], gameServer);
+    std::shared_ptr<GameServer> gameServer = gamesManager_.startGameServeur(gameMode, players);
+    for (auto player : players) {
+        gamesManager_.makeClientJoinGame(connectedClients_[player.userID], gameServer);
     }
+    gameServer->sendGameStates();
+    
 }
 
 void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,

@@ -67,9 +67,9 @@ GameMode GameCandidate::getGameMode() { return gameMode; }
 
 void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager) {
     if (joinGame.bindGame.gameMode == GameMode::Endless) {
-        std::vector<UserID> players;
-        players.emplace_back(joinGame.player.userID);
-        gameFindCallback_(players, gamesManager.startGameServeur(GameMode::Endless, std::vector<Player>{joinGame.player}));
+        std::vector<Player> players;
+        players.emplace_back(joinGame.player);
+        gameFindCallback_(players, GameMode::Endless);
         return;
     }
 
@@ -134,7 +134,7 @@ void Matchmaking::createAGame(RequestCreateGame createGame) {
 }
 
 void Matchmaking::startGame(GameCandidate &&gameCandidate,GamesManager &gamesManager) {
-    gameFindCallback_(gameCandidate.getPlayerIDs(), 
-    gamesManager.startGameServeur(gameCandidate.getGameMode(),gameCandidate.getPlayers()) );
+
+    gameFindCallback_(gameCandidate.getPlayers(), gameCandidate.getGameMode());
     
 }
