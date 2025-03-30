@@ -532,6 +532,12 @@ void GameDisplay::handleKeys() {
                 keyPressed = "ArrowDown";
             } else if (event == ftxui::Event::Character(' ')) {
                 keyPressed = "Space";
+            } else if (event == ftxui::Event::Tab && getGameMode() = GameMode::RoyalCompetition) {
+                keyPressed = "EffectGoFoward";
+            } else if (event == ftxui::Event::TabReverse && getGameMode() = GameMode::RoyalCompetition){
+                keyPressed = "EffectGoBackwards";
+            } else if (event == ftxui::Event::Escape && getGameMode() = GameMode::RoyalCompetition){
+                keyPressed = "SendEffect";
             } else if (!event.character().empty()) {
                 keyPressed = event.input();
             }

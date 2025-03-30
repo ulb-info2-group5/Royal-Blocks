@@ -313,6 +313,12 @@ void Controller::handleKeypress(const std::string &pressedKey) {
         networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
     } else if (pressedKey == "g") {
         networkManager_.send(bindings::RotateActive{true}.to_json().dump());
+    } else if (pressedKey == "EffectGoForward"){
+        selectNextEffect();
+    } else if (pressedKey == "EffectGoBackwards"){
+        selectPrevEffect();
+    } else if (pressedKey == "SendEffect"){
+        
     }
 }
 
