@@ -125,3 +125,8 @@ bindings::State ClientLink::getUserState() { return userState; }
 UserID ClientLink::getUserID(){
     return clientId.value();
 }
+
+
+std::weak_ptr<GameServer> ClientLink::getGameServer(){
+    return pGame_;
+}

@@ -37,7 +37,7 @@ class GamesManager {
 
     void makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer);
 
-    void enqueueGameBinding(int clientId, const std::string &strBindings);
+    void enqueueGameBinding(const std::shared_ptr<ClientLink>& clientLink, const std::string &strBindings);
     std::shared_ptr<GameServer> startGameServeur(GameMode gameMode, std::vector<Player> players);
     void callBackFinishGame(GameID gameId);
     bool isThisClientInGame(UserID userId);

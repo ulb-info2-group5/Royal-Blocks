@@ -47,16 +47,15 @@ std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
     return gameServer;
 }
 
-void GamesManager::enqueueGameBinding(int clientId,
+void GamesManager::enqueueGameBinding(const std::shared_ptr<ClientLink>& clientLink,
                                       const std::string &strBindings) {
-    GameID gameId = clientToGame_[clientId];
-    auto gameServer = gameSessions_[gameId];
-    boost::asio::post(gameServer->getIoContext(),
-                      [gameServer, clientId, strBindings]() {
-                          gameServer->enqueueBinding(clientId, strBindings);
-                      });
-    std::cout << "player id : " << clientId << " game id : " << gameId
-              << " add : " << strBindings << std::endl;
+    UserID clientId = clientLink->getUserID();
+    if ( std::shared_ptr<GameServer> gameServer = clientLink->getGameServer().lock()){
+        boost::asio::post(gameServer->getIoContext(),[gameServer, clientId, strBindings]() {
+            gameServer->enqueueBinding(clientId, strBindings);
+        });
+    }
+    
 }
 
 void GamesManager::callBackFinishGame(GameID gameId) {

@@ -107,6 +107,8 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
 
     UserID getUserID();
 
+    std::weak_ptr<GameServer> getGameServer();
+
 };
 
 
