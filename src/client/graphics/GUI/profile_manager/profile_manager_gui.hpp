@@ -38,4 +38,6 @@ class ProfileManagerGui : public QWidget {
     signals:
         // Back to main menu
         void backToMainMenu();
-}
+};
+
+#endif
