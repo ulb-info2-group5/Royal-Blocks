@@ -11,7 +11,7 @@
 
 using GameID = size_t;
 
-using UpdateGamePlayer = std::function<void(UserID, nlohmann::json)>;
+
 using CallBackFinishGame = std::function<void(GameID)>;
 
 class ClientLink;
@@ -34,7 +34,7 @@ class GameServer {
     GameEngine engine;
     GameID gameId_;
 
-    UpdateGamePlayer updateGamePlayer_;
+    
     CallBackFinishGame callBackFinishGame_;
     std::vector<std::weak_ptr<ClientLink>> pClientLinks_;
     /**
@@ -48,7 +48,7 @@ class GameServer {
      * @brief Constructor.
      */
     GameServer(GameMode gameMode, std::vector<Player> &&players,
-               UpdateGamePlayer updateGamePlayer, GameID id,
+               GameID id,
                CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
@@ -82,6 +82,8 @@ class GameServer {
     boost::asio::io_context &getIoContext();
 
     std::vector<UserID> getVectorPlayersId();
+
+    const std::vector<std::weak_ptr<ClientLink>>& getClientLinks();
 
     GameMode getGameMode() const;
 

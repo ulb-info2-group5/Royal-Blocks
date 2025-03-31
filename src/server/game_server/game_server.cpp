@@ -47,7 +47,7 @@ void GameServer::onTimerTick() {
 // ----------------------------------------------------------------------------
 
 GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
-                       UpdateGamePlayer updateGamePlayer, GameID id,
+                       GameID id,
                        CallBackFinishGame callBackFinishGame)
     :
 
@@ -65,7 +65,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
                   });
               return playerStates;
           }())},
-      engine{pGameState_}, gameId_{id}, updateGamePlayer_{updateGamePlayer},
+      engine{pGameState_}, gameId_{id},
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
@@ -175,13 +175,6 @@ void GameServer::run() {
 }
 
 void GameServer::sendGameStates() {
-    // for (auto player : pGameState_->getPlayerToTetris()) {
-    //     updateGamePlayer_(player.pPlayerState->getUserID(),
-    //                       bindings::GameStateMessage::serializeForPlayer(
-    //                           *pGameState_, player.pPlayerState->getUserID()));
-    //     std::cerr << "done serializing" << std::endl;
-    // };
-
     for (auto pWeakClient : pClientLinks_) {
         if (std::shared_ptr<ClientLink> pClientLink = pWeakClient.lock()) {
             pClientLink->sendPackage(bindings::GameStateMessage::serializeForPlayer(
@@ -211,4 +204,8 @@ GameMode GameServer::getGameMode() const { return pGameState_->getGameMode(); }
 
 int GameServer::getPlayerScore(const UserID userId) const {
     return pGameState_->getPlayerState(userId)->getScore();
+}
+
+const std::vector<std::weak_ptr<ClientLink>>& GameServer::getClientLinks(){
+    return pClientLinks_;
 }

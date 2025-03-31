@@ -63,9 +63,6 @@ void ClientManager::sendUpdatedRankingToClients() const {
 ClientManager::ClientManager(DataBase database)
     : database_(database),
     gamesManager_(
-        [this](PlayerID playerId, nlohmann::json gameState) {
-            updateGamePlayer(playerId, gameState);
-        },
         [this](UserID user, int score) {
             database_.accountManager->updateScore(user, score);
         },
@@ -245,15 +242,7 @@ void ClientManager::updateMenu(UserID userID){
     
 }
 
-void ClientManager::updateGamePlayer(UserID userIds, nlohmann::json gameState) {
-    if (getUserState(userIds) != bindings::State::Offline){
-        if (gameState.at("type").get<bindings::BindingType>() == bindings::BindingType::GameOver){
-            connectedClients_[userIds]->setUserState(bindings::State::Menu);
-        } 
-        connectedClients_[userIds]->sendPackage(gameState);    
-    }
-    
-}
+
 
 bool ClientManager::isClientConnected(UserID userID) {
     return connectedClients_.find(userID) != connectedClients_.end();

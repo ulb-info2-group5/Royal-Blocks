@@ -3,10 +3,6 @@
 
 // ======== private methode ========
 void GamesManager::deleteGame(GameID gameId) {
-    for (auto user : gameSessions_[gameId]->getVectorPlayersId()) {
-        updateGamePlayer_(user, bindings::GameOver{}.to_json());
-        clientToGame_.erase(user);
-    }
     if (gamethreads_[gameId].joinable()) {
         if (std::this_thread::get_id() == gamethreads_[gameId].get_id()) {
             gamethreads_[gameId].detach();
@@ -20,23 +16,18 @@ void GamesManager::deleteGame(GameID gameId) {
 
 // ======== public methode ========
 
-GamesManager::GamesManager(UpdateGamePlayer updateGamePlayer,
-                           SaveScoreCallback saveScoreCallback,
+GamesManager::GamesManager(SaveScoreCallback saveScoreCallback,
                            UpdateRankingCallback updateRankingCallback)
-    : updateGamePlayer_(updateGamePlayer),
-      saveScoreCallback_(saveScoreCallback),
+    : saveScoreCallback_(saveScoreCallback),
       updateRankingCallback_(updateRankingCallback) {}
 
 
 
 std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
                                     std::vector<Player> players) {
-    for (Player player : players) {
-        clientToGame_[player.userID] = nextGameId;
-    }
     
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
-        gameMode, std::move(players), updateGamePlayer_, nextGameId,
+        gameMode, std::move(players), nextGameId,
         [this](GameID gameId) { callBackFinishGame(gameId); });
     gameSessions_[nextGameId] = gameServer;
     gamethreads_[nextGameId] = std::thread([gameServer]() { gameServer->run(); });
@@ -56,6 +47,13 @@ void GamesManager::enqueueGameBinding(const std::shared_ptr<ClientLink>& clientL
 }
 
 void GamesManager::callBackFinishGame(GameID gameId) {
+    for (auto &weakClient : gameSessions_[gameId]->getClientLinks()){
+        if (std::shared_ptr<ClientLink> clientLink = weakClient.lock()) {
+            clientLink->setUserState(bindings::State::Menu);
+        }
+    }
+
+
     if (gameSessions_[gameId]->getGameMode() == GameMode::Endless) {
         for (auto &user : gameSessions_[gameId]->getVectorPlayersId()) {
             int score = gameSessions_[gameId]->getPlayerScore(user);
@@ -75,8 +73,3 @@ void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, st
 }
 
 
-bool GamesManager::isThisClientInGame(UserID userId) {
-    bool res = clientToGame_.find(userId) != clientToGame_.end();
-    std::cout << res << std::endl;
-    return res;
-}

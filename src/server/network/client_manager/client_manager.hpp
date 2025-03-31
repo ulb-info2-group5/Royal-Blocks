@@ -99,7 +99,6 @@ class ClientManager {
 
     bool checkCredentials(nlohmann::json data);
 
-    void updateGamePlayer(UserID userIds, nlohmann::json gameState);
 
     bool isClientConnected(UserID userId);
 
