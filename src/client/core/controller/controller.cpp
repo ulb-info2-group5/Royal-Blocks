@@ -272,16 +272,13 @@ void Controller::selectTarget(UserID userId) {
 }
 
 void Controller::buyEffect(EffectType effectType, bool stashForLater) {
-
     std::visit(
         [this, stashForLater](auto &&effectType) {
             using T = std::decay_t<decltype(effectType)>;
             if constexpr (std::is_same_v<T, BonusType>) {
-                std::cerr << "buying effect : " << effectType << std::endl;
                 networkManager_.send(
                     bindings::BuyBonus{effectType}.to_json().dump());
             } else if constexpr (std::is_same_v<T, PenaltyType>) {
-                std::cerr << "buying effect : " << effectType << std::endl;
                 networkManager_.send(
                     bindings::BuyPenalty{effectType, stashForLater}
                         .to_json()
@@ -315,14 +312,15 @@ void Controller::handleKeypress(const std::string &pressedKey) {
         networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
     } else if (pressedKey == "g") {
         networkManager_.send(bindings::RotateActive{true}.to_json().dump());
-    } else if (pressedKey == "EffectGoForward"){
-        selectNextEffect();
-    } else if (pressedKey == "EffectGoBackwards"){
+    } else if (pressedKey == "e") {
         selectPrevEffect();
-    } else if (pressedKey == "SendEffect"){
+    } else if (pressedKey == "r") {
+        selectNextEffect();
+    } else if (pressedKey == "t") {
         emptyPenaltyStash();
-    } else if (pressedKey == "StackEffect"){
-        //buyEffect(, true);
+    } else if (pressedKey == "y") {
+        buyEffect(getEffectType());
+    } else if (pressedKey == "u") {
         buyEffect(getEffectType(), true);
     }
 }
@@ -337,7 +335,9 @@ size_t Controller::getNumEffects() const {
 EffectType Controller::getEffectType() {
     std::lock_guard<std::mutex> guard(mutex_);
     return std::visit(
-        [currentEffectIdx_](const auto &gameState) { return gameState.effectsPrice.at(currentEffectIdx_).first; },
+        [this](const auto &gameState) {
+            return gameState.effectsPrice.at(currentEffectIdx_).first;
+        },
         gameState_);
 }
 

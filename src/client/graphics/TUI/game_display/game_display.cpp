@@ -522,30 +522,22 @@ void GameDisplay::handleKeys() {
             return false;
         }
 
-        else { // Handle other keys
-            std::string keyPressed;
-            if (event == ftxui::Event::ArrowLeft) {
-                keyPressed = "ArrowLeft";
-            } else if (event == ftxui::Event::ArrowRight) {
-                keyPressed = "ArrowRight";
-            } else if (event == ftxui::Event::ArrowDown) {
-                keyPressed = "ArrowDown";
-            } else if (event == ftxui::Event::Character(' ')) {
-                keyPressed = "Space";
-            } else if (event == ftxui::Event::Tab && getGameMode() == GameMode::RoyalCompetition) {
-                keyPressed = "EffectGoFoward";
-            } else if (event == ftxui::Event::TabReverse && getGameMode() == GameMode::RoyalCompetition){
-                keyPressed = "EffectGoBackwards";
-            } else if (event == ftxui::Event::Escape && getGameMode() == GameMode::RoyalCompetition){
-                keyPressed = "StackEffect";
-            } else if ( event == ftxui::Event::Return && getGameMode() == GameMode::RoyalCompetition){
-                keyPressed = "SendEffect";
-            } else if (!event.character().empty()) {
-                keyPressed = event.input();
-            }
-            controller_.handleKeypress(keyPressed);
-            return true;
+        std::string keyPressed;
+        if (event == ftxui::Event::ArrowLeft) {
+            keyPressed = "ArrowLeft";
+        } else if (event == ftxui::Event::ArrowRight) {
+            keyPressed = "ArrowRight";
+        } else if (event == ftxui::Event::ArrowDown) {
+            keyPressed = "ArrowDown";
+        } else if (event == ftxui::Event::Character(' ')) {
+            keyPressed = "Space";
+        } else if (!event.character().empty()) {
+            keyPressed = event.input();
         }
+
+        controller_.handleKeypress(keyPressed);
+
+        return true;
     });
 }
 
