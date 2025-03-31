@@ -322,7 +322,8 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     } else if (pressedKey == "SendEffect"){
         emptyPenaltyStash();
     } else if (pressedKey == "StackEffect"){
-        tryBuyEffect(getEffectType(), true);
+        //buyEffect(, true);
+        buyEffect(getEffectType(), true);
     }
 }
 
@@ -330,6 +331,13 @@ size_t Controller::getNumEffects() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return std::visit(
         [](const auto &gameState) { return gameState.effectsPrice.size(); },
+        gameState_);
+}
+
+EffectType Controller::getEffectType() {
+    std::lock_guard<std::mutex> guard(mutex_);
+    return std::visit(
+        [currentEffectIdx_](const auto &gameState) { return gameState.effectsPrice.at(currentEffectIdx_).first; },
         gameState_);
 }
 
@@ -368,5 +376,3 @@ bool Controller::inGame() const {
 }
 
 size_t Controller::getCurrEffectIdx() { return currentEffectIdx_; }
-
-EffectType Controller::getEffectType() { return gameState.effectPrice.at(currentEffectIdx_); }

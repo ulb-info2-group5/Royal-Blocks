@@ -191,13 +191,13 @@ class Controller {
 
     size_t getNumEffects() const;
 
+    EffectType getEffectType();
+
     size_t getCurrEffectIdx();
 
     void selectNextEffect();
 
     void selectPrevEffect();
-
-    EffectType getEffectType();
 
     void bigDrop();
 
