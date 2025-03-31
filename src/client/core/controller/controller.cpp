@@ -238,11 +238,13 @@ const NameConversation Controller::getConversationWith(UserID userID) {
 void Controller::createGame(GameMode gameMode, size_t targetNumPlayers) {
     networkManager_.send(
         bindings::CreateGame{gameMode, targetNumPlayers}.to_json().dump());
+    if (gameMode == GameMode::RoyalCompetition) currentEffectIdx_ = 0;
 }
 
 void Controller::joinGame(GameMode gameMode, std::optional<UserID> friendID) {
     networkManager_.send(
         bindings::JoinGame{gameMode, friendID}.to_json().dump());
+    if (gameMode == GameMode::RoyalCompetition) currentEffectIdx_ = 0;
 }
 
 void Controller::bigDrop() {
@@ -318,7 +320,9 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     } else if (pressedKey == "EffectGoBackwards"){
         selectPrevEffect();
     } else if (pressedKey == "SendEffect"){
-        
+        emptyPenaltyStash();
+    } else if (pressedKey == "StackEffect"){
+        tryBuyEffect(getEffectType(), true);
     }
 }
 
@@ -362,3 +366,7 @@ bool Controller::inGame() const {
     return !std::visit(
         [](const auto &gameState) { return gameState.isFinished; }, gameState_);
 }
+
+size_t Controller::getCurrEffectIdx() { return currentEffectIdx_; }
+
+EffectType Controller::getEffectType() { return gameState.effectPrice.at(currentEffectIdx_); }

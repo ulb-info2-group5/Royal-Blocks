@@ -122,6 +122,8 @@ class GameDisplay final {
 
     size_t getNumOpponents() const;
 
+    size_t getEffectIdx();
+
     const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
 
     ftxui::Component holdTetromino();
