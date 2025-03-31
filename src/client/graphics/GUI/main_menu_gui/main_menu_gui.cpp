@@ -2,6 +2,7 @@
 
 #include "../qt_config/qt_config.hpp"
 #include "../friends_menu_gui/friends_menu_gui.hpp"
+#include "../message_menu_gui/message_menu_gui.hpp"
 #include "../main_gui.hpp"
 
 #include <QApplication>
@@ -9,7 +10,7 @@
 #include <QPushButton>
 
 MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui) {}
+    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui), messageMenuGui_(controller, mainGui) {}
 
 
 void MainMenuGui::run() {
@@ -32,6 +33,10 @@ void MainMenuGui::on_RankingButton_clicked() {
 
 void MainMenuGui::on_ManageFriendsListButton_clicked() {
     stackedWidget_->setCurrentWidget(&friendsMenuGui_);
+}
+
+void MainMenuGui::on_MessagesButton_clicked() {
+    stackedWidget_->setCurrentWidget(&messageMenuGui_);
 }
 
 void MainMenuGui::showMainMenu() {
@@ -62,6 +67,7 @@ void MainMenuGui::setup() {
     joinGameButton_.setFixedWidth(500);
 
     messagesButton_.setText("Messages");
+    connect(&messagesButton_, &QPushButton::clicked, this, &MainMenuGui::on_MessagesButton_clicked);
     messagesButton_.setFixedWidth(500);
 
     rankingButton_.setText("Ranking");
@@ -101,4 +107,7 @@ void MainMenuGui::setup() {
 
     connect(&friendsMenuGui_, &FriendsMenuGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
     stackedWidget_->addWidget(&friendsMenuGui_);
+
+    connect(&messageMenuGui_, &MessageMenuGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
+    stackedWidget_->addWidget(&messageMenuGui_);
 }

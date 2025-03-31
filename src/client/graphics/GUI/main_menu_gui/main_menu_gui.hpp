@@ -8,6 +8,7 @@
 
 #include "../rankinggui/rankinggui.hpp"
 #include "../friends_menu_gui/friends_menu_gui.hpp"
+#include "../message_menu_gui/message_menu_gui.hpp"
 
 class Controller; // Forward declaration
 
@@ -24,6 +25,8 @@ class MainMenuGui : public QWidget {
         RankingGui rankingGui_;
 
         FriendsMenuGui friendsMenuGui_;
+
+        MessageMenuGui messageMenuGui_;
 
         QPushButton createGameButton_;
         QPushButton joinGameButton_;
@@ -58,6 +61,11 @@ class MainMenuGui : public QWidget {
         * @brief Action to perform when the user click on the manage friendslist button
         */
         void on_ManageFriendsListButton_clicked();
+
+        /*
+        * @brief Action to perform when the user click on the messages button
+        */
+        void on_MessagesButton_clicked();
 
         /*
         * @brief Action to perform to show the main menu
