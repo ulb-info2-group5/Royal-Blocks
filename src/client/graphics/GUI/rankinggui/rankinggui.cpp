@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QScrollArea>
+#include <qnamespace.h>
 
 #include "../../../core/controller/controller.hpp"
 
@@ -58,7 +59,7 @@ void RankingGui::setupRankingGuiTable() {
     RankingGuiTable.setColumnCount(2);
     RankingGuiTable.setEditTriggers(QAbstractItemView::NoEditTriggers);
     RankingGuiTable.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    RankingGuiTable.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    RankingGuiTable.setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     RankingGuiTable.setFixedSize(500, 500);
     RankingGuiTable.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     RankingGuiTable.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
