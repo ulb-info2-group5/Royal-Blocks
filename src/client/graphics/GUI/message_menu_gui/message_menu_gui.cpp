@@ -8,11 +8,41 @@
 #include "../qt_config/qt_config.hpp"
 
 #include <QMessageBox>
+#include <QDebug>
 
 MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
     : controller_(controller), mainGui_(mainGui), QWidget(parent) {
     setupUI();
 }
+
+void MessageMenuGui::setupUI() {
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    friendsList_ = new QListWidget(this);
+    chatDisplay_ = new QTextBrowser(this);
+    messageInput_ = new QTextEdit(this);
+    sendButton_ = new QPushButton("Send", this);
+    backButton_ = new QPushButton("Back", this);
+
+    layout->addWidget(new QLabel("Friends List", this));
+    layout->addWidget(friendsList_);
+    layout->addWidget(new QLabel("Chat Display", this));
+    layout->addWidget(chatDisplay_);
+    layout->addWidget(new QLabel("Message Input", this));
+    layout->addWidget(messageInput_);
+    layout->addWidget(sendButton_);
+    layout->addWidget(backButton_);
+
+    setLayout(layout);
+
+    loadFriends();
+
+    connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::onFriendSelected);
+    connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
+    connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
+}
+
+/*
 
 void MessageMenuGui::setupUI() {
     stack_ = new QStackedWidget(this);
@@ -51,7 +81,7 @@ void MessageMenuGui::setupUI() {
     connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::onFriendSelected);
     connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
     connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
-}
+}*/
 
 void MessageMenuGui::loadFriends() {
     friendsList_->clear();
