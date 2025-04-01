@@ -22,7 +22,7 @@ void Messaging::createButtons() {
                 if (!newMessageBuffer_.empty()) {
                     getSelectedFriendId().transform([this](UserID userID) {
                         controller_.sendMessage(userID, newMessageBuffer_);
-                        return UserID{};
+                        return 0;
                     });
                     newMessageBuffer_.clear();
                 }
@@ -51,9 +51,9 @@ void Messaging::drawInputUser() {
         | ftxui::CatchEvent([&](ftxui::Event event) {
               if (event == ftxui::Event::Return) {
                   if (!newMessageBuffer_.empty()) {
-                      getSelectedFriendId().and_then([&](UserID userID) {
+                      getSelectedFriendId().transform([&](UserID userID) {
                           controller_.sendMessage(userID, newMessageBuffer_);
-                          return std::optional<UserID>{};
+                          return 0;
                       });
                       newMessageBuffer_.clear();
                   }
@@ -90,7 +90,7 @@ void Messaging::drawDisplay() {
 
     chatDisplay_ = ftxui::Renderer([&] {
         return getSelectedFriendId()
-            .and_then([this](auto id) -> std::optional<ftxui::Element> {
+            .transform([this](auto id) -> ftxui::Element {
                 ftxui::Elements chat_elements;
 
                 auto [name, conversation] = controller_.getConversationWith(id);

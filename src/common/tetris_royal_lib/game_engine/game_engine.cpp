@@ -39,7 +39,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
         }
     } else {
         // currently has no active bonus
-        playerTetris.pPlayerState->fetchGrantedBonus().and_then(
+        playerTetris.pPlayerState->fetchGrantedBonus().transform(
             [&playerTetris, this](BonusType bonusType) {
                 if (bonusType == BonusType::MiniTetrominoes) {
                     handleMiniTetrominoes(*playerTetris.pTetris);
@@ -48,7 +48,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
                         TimedBonus::makeBonus(bonusType));
                 }
 
-                return std::optional<BonusType>{};
+                return 0;
             });
     }
 
@@ -62,7 +62,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
         }
     } else {
         // currently has no active penalty
-        playerTetris.pPlayerState->fetchReceivedPenalty().and_then(
+        playerTetris.pPlayerState->fetchReceivedPenalty().transform(
             [&playerTetris, this](PenaltyType penaltyType) {
                 if (penaltyType == PenaltyType::Lightning) {
                     handleLightning(*playerTetris.pTetris);
@@ -71,7 +71,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
                         TimedPenalty::makePenalty(penaltyType));
                 }
 
-                return std::optional<PlayerTetris>{};
+                return 0;
             });
     }
 }
@@ -258,14 +258,14 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
 
     // TODO: remove code duplication with bigDrop
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().and_then([&](UserID targetID) {
+        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
             if (checkAlive(targetID) && numClearedRows >= 2) {
                 // For n (>= 2) rows cleared by the player, his target
                 // receives n-1 penalty rows.
                 sendPenaltyRows(*pPlayerState, numClearedRows - 1);
             }
 
-            return std::optional<UserID>{};
+            return 0;
         });
     }
 
@@ -381,14 +381,14 @@ void GameEngine::bigDrop(UserID userID) {
 
     // TODO: remove code duplication with tick
     if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().and_then([&](UserID targetID) {
+        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
             if (checkAlive(targetID) && numClearedRows >= 2) {
                 // For n (>= 2) rows cleared by the player, his target
                 // receives n-1 penalty rows.
                 sendPenaltyRows(*pPlayerState, numClearedRows - 1);
             }
 
-            return std::optional<UserID>{};
+            return 0;
         });
     }
 
