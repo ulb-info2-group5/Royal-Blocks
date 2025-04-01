@@ -22,7 +22,7 @@ class ScreenManager {
 
     UiChoice uiChoice_;
 
-    std::unique_ptr<MainTui> tui_;
+    std::unique_ptr<TUI::MainTui> tui_;
 
     std::unique_ptr<QApplication> app_;
 

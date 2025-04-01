@@ -9,7 +9,7 @@ ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice,
                              std::pair<int, char **> args)
     : controller_(controller), uiChoice_(uiChoice) {
     if (uiChoice_ == UiChoice::TUI) {
-        tui_ = std::make_unique<MainTui>(controller_);
+        tui_ = std::make_unique<TUI::MainTui>(controller_);
     } else {
         auto [argc, argv] = args;
         app_ = std::make_unique<QApplication>(argc, argv);

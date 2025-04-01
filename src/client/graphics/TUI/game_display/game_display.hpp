@@ -1,5 +1,5 @@
-#ifndef GAME_DISPLAY_HPP
-#define GAME_DISPLAY_HPP
+#ifndef TUI_GAME_DISPLAY_HPP
+#define TUI_GAME_DISPLAY_HPP
 
 #include "../../../../common/types/types.hpp"
 
@@ -11,69 +11,75 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
 
-enum class CellSize : size_t {
-    Small = 4,
-    Big = 8,
-};
+class Controller;
 
-constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
-                 HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
-                 WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
-                 HEIGHT_CANVAS_SMALL =
-                     static_cast<size_t>(CellSize::Small) * 20;
+namespace TUI {
 
-class MainTui; // Forward declaration
+    class MainTui;
 
-class Controller; // Forward declaration
+    enum class CellSize : size_t {
+        Small = 4,
+        Big = 8,
+    };
 
-class GameDisplay final : public AbstractGameDisplay {
-  private:
-    MainTui &mainTui_;
+    constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+                     HEIGHT_CANVAS_BIG =
+                         static_cast<size_t>(CellSize::Big) * 20,
+                     WIDTH_CANVAS_SMALL =
+                         static_cast<size_t>(CellSize::Small) * 10,
+                     HEIGHT_CANVAS_SMALL =
+                         static_cast<size_t>(CellSize::Small) * 20;
 
-    ftxui::Component displayWindow_;
+    class GameDisplay final : public AbstractGameDisplay {
+      private:
+        MainTui &mainTui_;
 
-    /**
-     * @brief Returns a new component containing the board of the index-th
-     * opponent.
-     */
-    ftxui::Component createOpBoardDisplay(size_t index, CellSize cellSize);
+        ftxui::Component displayWindow_;
 
-    ftxui::Component quitButton();
-    ftxui::Component playerInfo();
-    ftxui::Component energy();
-    ftxui::Component availableEffects();
-    ftxui::Component penaltyInfo();
-    ftxui::Component bonusInfo();
-    ftxui::Component holdTetromino();
-    ftxui::Component leftPane();
+        /**
+         * @brief Returns a new component containing the board of the index-th
+         * opponent.
+         */
+        ftxui::Component createOpBoardDisplay(size_t index, CellSize cellSize);
 
-    ftxui::Component gameMode();
-    ftxui::Component selfBoard(CellSize size = CellSize::Big);
-    ftxui::Component tetrominoQueue();
-    ftxui::Component middlePane();
+        ftxui::Component quitButton();
+        ftxui::Component playerInfo();
+        ftxui::Component energy();
+        ftxui::Component availableEffects();
+        ftxui::Component penaltyInfo();
+        ftxui::Component bonusInfo();
+        ftxui::Component holdTetromino();
+        ftxui::Component leftPane();
 
-    ftxui::Component opponentsBoards();
+        ftxui::Component gameMode();
+        ftxui::Component selfBoard(CellSize size = CellSize::Big);
+        ftxui::Component tetrominoQueue();
+        ftxui::Component middlePane();
 
-    ftxui::Component rightPane();
+        ftxui::Component opponentsBoards();
 
-    ftxui::Component &drawEndlessMode();
+        ftxui::Component rightPane();
 
-    ftxui::Component &drawMultiMode();
+        ftxui::Component &drawEndlessMode();
 
-    ftxui::Component &drawGameOver();
+        ftxui::Component &drawMultiMode();
 
-    ftxui::Component &drawWin();
+        ftxui::Component &drawGameOver();
 
-    ftxui::Component &drawSpectate();
+        ftxui::Component &drawWin();
 
-    void handleKeys();
+        ftxui::Component &drawSpectate();
 
-  public:
-    GameDisplay(MainTui &screenManager, Controller &controller);
+        void handleKeys();
 
-    ~GameDisplay() = default;
+      public:
+        GameDisplay(MainTui &screenManager, Controller &controller);
 
-    void render();
-};
+        ~GameDisplay() = default;
 
-#endif
+        void render();
+    };
+
+} // namespace TUI
+
+#endif // TUI_GAME_DISPLAY_HPP

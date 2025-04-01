@@ -1,5 +1,5 @@
-#ifndef MESSAGING_HPP
-#define MESSAGING_HPP
+#ifndef TUI_MESSAGING_HPP
+#define TUI_MESSAGING_HPP
 
 #include "../../../core/in_game/player_state/player_state_external.hpp"
 
@@ -7,81 +7,84 @@
 #include <string>
 #include <vector>
 
-class MainTui; // Forward declaration
+class Controller;
 
-class Controller; // Forward declaration
+namespace TUI {
 
-enum class MessagingState {
-    BACK,
-    NONE,
-};
+    class MainTui;
 
-class Messaging final {
-  private:
-    /*
-     * @brief The screen to use to render the components
-     */
-    MainTui &mainTui_;
+    enum class MessagingState {
+        BACK,
+        NONE,
+    };
 
-    /*
-     * @brief The controller to ask for the data to show to the user
-     */
-    Controller &controller_;
+    class Messaging final {
+      private:
+        /*
+         * @brief The screen to use to render the components
+         */
+        MainTui &mainTui_;
 
-    // std::map<std::string, std::vector<Message>> conversations_;
-    std::vector<std::string> friendNames_;
-    int selectedFriend_ = 0;
-    std::string newFriendBuffer_;
-    std::string newMessageBuffer_;
+        /*
+         * @brief The controller to ask for the data to show to the user
+         */
+        Controller &controller_;
 
-    MessagingState userState_;
+        std::vector<std::string> friendNames_;
+        int selectedFriend_ = 0;
+        std::string newFriendBuffer_;
+        std::string newMessageBuffer_;
 
-    ftxui::Component friendsMenu_;
+        MessagingState userState_;
 
-    ftxui::Component messageInput_;
+        ftxui::Component friendsMenu_;
 
-    ftxui::Component backButton_;
-    ftxui::Component sendButton_;
+        ftxui::Component messageInput_;
 
-    ftxui::Component sidebar_;
-    ftxui::Component chatDisplay_;
+        ftxui::Component backButton_;
+        ftxui::Component sendButton_;
 
-    ftxui::Component displayWindow_;
+        ftxui::Component sidebar_;
+        ftxui::Component chatDisplay_;
 
-    // just to simulate a user ID
-    int userId = 5;
+        ftxui::Component displayWindow_;
 
-    void createButtons();
+        // just to simulate a user ID
+        int userId = 5;
 
-    void drawInputUser();
+        void createButtons();
 
-    void drawMenu();
+        void drawInputUser();
 
-    void drawDisplay();
+        void drawMenu();
 
-    void drawWindow();
+        void drawDisplay();
 
-    std::optional<UserID> getSelectedFriendId();
+        void drawWindow();
 
-  public:
-    /*
-     * @brief Construct a new Messaging object
-     *
-     * @param screenManager The screen manager for asking to render the
-     * components
-     * @param controller The controller to interact with the server
-     */
-    Messaging(MainTui &mainTui, Controller &controller);
+        std::optional<UserID> getSelectedFriendId();
 
-    /*
-     * @brief Destroy the Messaging object
-     */
-    ~Messaging() = default;
+      public:
+        /*
+         * @brief Construct a new Messaging object
+         *
+         * @param screenManager The screen manager for asking to render the
+         * components
+         * @param controller The controller to interact with the server
+         */
+        Messaging(MainTui &mainTui, Controller &controller);
 
-    /*
-     * @brief Render the messaging screen with all the components
-     */
-    void render();
-};
+        /*
+         * @brief Destroy the Messaging object
+         */
+        ~Messaging() = default;
 
-#endif
+        /*
+         * @brief Render the messaging screen with all the components
+         */
+        void render();
+    };
+
+} // namespace TUI
+
+#endif // TUI_MESSAGING_HPP

@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef GAME_MENU_HPP
-#define GAME_MENU_HPP
+#ifndef TUI_GAME_MENU_HPP
+#define TUI_GAME_MENU_HPP
 
 #include <ftxui/component/component.hpp>
 
@@ -15,128 +15,132 @@
 
 #include "../../../../common/types/types.hpp"
 
-class Controller; // Forward declaration
+#include "game_mode/game_mode.hpp"
 
-class MainTui; // Forward declaration
+class Controller;
 
-enum class GameMode; // Forward declaration
+namespace TUI {
 
-enum class JoinType {
-    FRIEND,
-    RANDOM,
-    BACK,
-    NONE,
-};
+    class MainTui;
 
-enum class TypeGame {
-    CREATE_GAME,
-    JOIN_GAME,
-    NONE,
-};
+    enum class JoinType {
+        FRIEND,
+        RANDOM,
+        BACK,
+        NONE,
+    };
 
-/**
- * @brief Game menu class to show and select the game party
- *
- */
-class GameMenu {
-  private:
-    MainTui &mainTui_;
-
-    Controller &controller_;
-
-    std::unique_ptr<GameDisplay> gameDisplay_;
-
-    JoinType joinType_;
-
-    GameMode gameMode_;
-
-    TypeGame typeGame_;
-
-    bool quitMenu_;
+    enum class TypeGame {
+        CREATE_GAME,
+        JOIN_GAME,
+        NONE,
+    };
 
     /**
-     * @brief The button components that can be in the game menu
+     * @brief Game menu class to show and select the game party
      *
      */
-    ftxui::Component endlessButon_;
-    ftxui::Component duelButon_;
-    ftxui::Component classicButon_;
-    ftxui::Component royalButon_;
-    ftxui::Component backButton_;
-    ftxui::Component quitMenuButton_;
-    /*
-     * @brief Rend the all the game present in the game menu
-     */
-    void renderAllGames();
+    class GameMenu {
+      private:
+        MainTui &mainTui_;
 
-    /*
-     * @brief Rend the game menu with just the online games mods
-     */
-    void renderOnlineGames();
+        Controller &controller_;
 
-    /*
-     * @brief Screen to choose between joining a friend or a random game
-     */
-    void joinFriendOrRandomScreen();
+        std::unique_ptr<GameDisplay> gameDisplay_;
 
-    /*
-     * @brief Handle the choice of the user in the game menu
-     */
-    void handleChoice();
+        JoinType joinType_;
 
-    /*
-     * @brief Screen when the user is joining a friend, a list of the online
-     * friends is displayed and the user can select one
-     */
-    void joinFriendScreen();
+        GameMode gameMode_;
 
-    /*
-     * @brief Screen when the is waiting for a random game
-     */
-    void joinRandomScreen();
+        TypeGame typeGame_;
 
-    /*
-     * @brief Screen when the user is waiting for the matchmaking
-     */
-    void createGameScreen();
+        bool quitMenu_;
 
-    /*
-     * @brief Make a button to add a friend
-     */
-    ftxui::Component makeFriendButton(UserID userID,
-                                      const std::string &friendName);
+        /**
+         * @brief The button components that can be in the game menu
+         *
+         */
+        ftxui::Component endlessButon_;
+        ftxui::Component duelButon_;
+        ftxui::Component classicButon_;
+        ftxui::Component royalButon_;
+        ftxui::Component backButton_;
+        ftxui::Component quitMenuButton_;
+        /*
+         * @brief Rend the all the game present in the game menu
+         */
+        void renderAllGames();
 
-    /*
-     * @brief Screen when the user has choosen the friend and now waiting for
-     * the start of the game
-     */
-    void waitingFriendScreen();
+        /*
+         * @brief Rend the game menu with just the online games mods
+         */
+        void renderOnlineGames();
 
-    /*
-     * @brief The screen to select the number of player for the game
-     */
-    void selectPlayerCountScreen();
+        /*
+         * @brief Screen to choose between joining a friend or a random game
+         */
+        void joinFriendOrRandomScreen();
 
-  public:
-    /*
-     * @brief Construct a new Game Menu object
-     *
-     * @param mainTui The main TUI to render the components
-     * @param controller The controller to interact with the server
-     */
-    GameMenu(MainTui &mainTui, Controller &controller);
+        /*
+         * @brief Handle the choice of the user in the game menu
+         */
+        void handleChoice();
 
-    /*
-     * @brief Destroy the Game Menu object
-     */
-    ~GameMenu() = default;
+        /*
+         * @brief Screen when the user is joining a friend, a list of the online
+         * friends is displayed and the user can select one
+         */
+        void joinFriendScreen();
 
-    /*
-     * @brief Render the game menu
-     *
-     * @param typeGame The type of the game to render
-     */
-    void render(const TypeGame &typeGame);
-};
+        /*
+         * @brief Screen when the is waiting for a random game
+         */
+        void joinRandomScreen();
 
-#endif // GAME_MENU_HPP
+        /*
+         * @brief Screen when the user is waiting for the matchmaking
+         */
+        void createGameScreen();
+
+        /*
+         * @brief Make a button to add a friend
+         */
+        ftxui::Component makeFriendButton(UserID userID,
+                                          const std::string &friendName);
+
+        /*
+         * @brief Screen when the user has choosen the friend and now waiting
+         * for the start of the game
+         */
+        void waitingFriendScreen();
+
+        /*
+         * @brief The screen to select the number of player for the game
+         */
+        void selectPlayerCountScreen();
+
+      public:
+        /*
+         * @brief Construct a new Game Menu object
+         *
+         * @param mainTui The main TUI to render the components
+         * @param controller The controller to interact with the server
+         */
+        GameMenu(MainTui &mainTui, Controller &controller);
+
+        /*
+         * @brief Destroy the Game Menu object
+         */
+        ~GameMenu() = default;
+
+        /*
+         * @brief Render the game menu
+         *
+         * @param typeGame The type of the game to render
+         */
+        void render(const TypeGame &typeGame);
+    };
+
+} // namespace TUI
+
+#endif // TUI_GAME_MENU_HPP
