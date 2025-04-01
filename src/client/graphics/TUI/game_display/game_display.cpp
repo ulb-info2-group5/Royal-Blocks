@@ -11,6 +11,7 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_tui.hpp"
+#include "graphics/common/abstract_game_display.hpp"
 #include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
@@ -30,69 +31,70 @@
 #include <variant>
 #include <vector>
 
-Color colorIdToColor(unsigned colorID) {
+AbstractGameDisplay::Color colorIdToColor(unsigned colorID) {
     // TODO: remove those magic number
     switch (colorID) {
     case 0:
-        return Color::Red;
+        return AbstractGameDisplay::Color::Red;
     case 1:
-        return Color::Orange;
+        return AbstractGameDisplay::Color::Orange;
     case 2:
-        return Color::Yellow;
+        return AbstractGameDisplay::Color::Yellow;
     case 3:
-        return Color::Green;
+        return AbstractGameDisplay::Color::Green;
     case 4:
-        return Color::LightBlue;
+        return AbstractGameDisplay::Color::LightBlue;
     case 5:
-        return Color::DarkBlue;
+        return AbstractGameDisplay::Color::DarkBlue;
     case 6:
-        return Color::Purple;
+        return AbstractGameDisplay::Color::Purple;
     case 8: // MINI_TETROMINO
-        return Color::Pink;
+        return AbstractGameDisplay::Color::Pink;
     case PENALTY_BLOCKS_COLOR_ID:
-        return Color::Grey;
+        return AbstractGameDisplay::Color::Grey;
 
     default:
         throw std::runtime_error{"unknown color"};
     };
 }
 
-ftxui::Color getFTXUIColor(Color color, GameDisplay::SelfCellType selfCellType =
-                                            GameDisplay::SelfCellType::Placed) {
+ftxui::Color getFTXUIColor(AbstractGameDisplay::Color color,
+                           AbstractGameDisplay::SelfCellType selfCellType =
+                               GameDisplay::SelfCellType::Placed) {
     ftxui::Color returnValue = ftxui::Color::Blue;
 
     switch (color) {
-    case Color::Black:
+    case AbstractGameDisplay::Color::Black:
         returnValue = ftxui::Color::Black;
         break;
-    case Color::White:
+    case AbstractGameDisplay::Color::White:
         returnValue = ftxui::Color::White;
         break;
-    case Color::Grey:
+    case AbstractGameDisplay::Color::Grey:
         returnValue = ftxui::Color::Grey0;
         break;
-    case Color::DarkBlue:
+    case AbstractGameDisplay::Color::DarkBlue:
         returnValue = ftxui::Color::Blue3;
         break;
-    case Color::LightBlue:
+    case AbstractGameDisplay::Color::LightBlue:
         returnValue = ftxui::Color::Blue1;
         break;
-    case Color::Purple:
+    case AbstractGameDisplay::Color::Purple:
         returnValue = ftxui::Color::Purple3;
         break;
-    case Color::Red:
+    case AbstractGameDisplay::Color::Red:
         returnValue = ftxui::Color::Red;
         break;
-    case Color::Orange:
+    case AbstractGameDisplay::Color::Orange:
         returnValue = ftxui::Color::Orange1;
         break;
-    case Color::Pink:
+    case AbstractGameDisplay::Color::Pink:
         returnValue = ftxui::Color::Pink1;
         break;
-    case Color::Green:
+    case AbstractGameDisplay::Color::Green:
         returnValue = ftxui::Color::Green1;
         break;
-    case Color::Yellow:
+    case AbstractGameDisplay::Color::Yellow:
         returnValue = ftxui::Color::Yellow1;
         break;
     };
@@ -106,7 +108,7 @@ ftxui::Color getFTXUIColor(Color color, GameDisplay::SelfCellType selfCellType =
 }
 
 GameDisplay::GameDisplay(MainTui &mainTui, Controller &controller)
-    : mainTui_(mainTui), controller_(controller) {}
+    : AbstractGameDisplay(controller), mainTui_(mainTui) {}
 
 //----------------------------------------------------------------------------
 //                          Left Pane
@@ -492,14 +494,6 @@ ftxui::Component &GameDisplay::drawMultiMode() {
     return displayWindow_;
 }
 
-UserID GameDisplay::getNthOpponentUserID(size_t n) const {
-    return std::visit(
-        [n](const auto &gameState) {
-            return gameState.externals.at(n).playerState.userID;
-        },
-        gameState_);
-}
-
 ftxui::Component &GameDisplay::drawSpectate() {
     displayWindow_ = ftxui::Container::Horizontal({
                          leftPane(),
@@ -589,10 +583,6 @@ ftxui::Component &GameDisplay::drawWin() {
     return displayWindow_;
 }
 
-bool GameDisplay::isSpectating() {
-    return std::holds_alternative<client::GameStateViewer>(gameState_);
-}
-
 void GameDisplay::render() {
     ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
@@ -653,128 +643,3 @@ void GameDisplay::render() {
 
     mainTui_.render(render);
 }
-
-size_t GameDisplay::getBoardHeight() const { return Board::getHeight(); }
-
-size_t GameDisplay::getBoardWidth() const { return Board::getWidth(); }
-
-Score GameDisplay::getSelfScore() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.playerState.score;
-}
-
-std::optional<UserID> GameDisplay::getSelectedTarget() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.playerState.penaltyTarget;
-}
-
-Energy GameDisplay::getSelfEnergy() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.playerState.energy.value_or(0);
-}
-
-GameMode GameDisplay::getGameMode() const {
-    return std::visit([](const auto &gameState) { return gameState.gameMode; },
-                      gameState_);
-}
-
-std::optional<std::pair<unsigned, GameDisplay::SelfCellType>>
-GameDisplay::selfCellInfoAt(int x, int y) const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-
-    if (gs.self.tetris.board.get(x, y).getColorId().has_value()) {
-        return std::make_pair(
-            gs.self.tetris.board.get(x, y).getColorId().value(),
-            GameDisplay::SelfCellType::Placed);
-    }
-
-    auto &activeTetromino = gs.self.tetris.activeTetromino;
-    if (activeTetromino.has_value()) {
-        for (auto &vec : activeTetromino->body) {
-            if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
-                return std::make_optional(
-                    std::make_pair(activeTetromino->colorId,
-                                   GameDisplay::SelfCellType::Active));
-            }
-        }
-    }
-
-    auto &previewTetromino = gs.self.tetris.previewTetromino;
-    if (previewTetromino.has_value()) {
-        for (auto &vec : previewTetromino->body) {
-            if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {
-                return std::make_optional(
-                    std::make_pair(previewTetromino->colorId,
-                                   GameDisplay::SelfCellType::Preview));
-            }
-        }
-    }
-
-    return std::nullopt;
-}
-
-std::optional<unsigned>
-GameDisplay::opponentsBoardGetColorIdAt(size_t opponentIdx, int x,
-                                        int y) const {
-    return std::visit(
-        [opponentIdx, x, y](const auto &gameState) {
-            return gameState.externals.at(opponentIdx)
-                .tetris.board.get(x, y)
-                .getColorId();
-        },
-        gameState_);
-}
-
-std::string GameDisplay::getSelfUsername() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.playerState.username;
-}
-
-const client::Tetromino &
-GameDisplay::getTetrominoQueueNth(size_t tetrominoIdx) const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.tetris.tetrominoQueue.queue.at(tetrominoIdx);
-}
-
-size_t GameDisplay::getTetrominoQueuesSize() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.tetris.tetrominoQueue.queue.size();
-}
-
-const client::Tetromino *GameDisplay::getHoldTetromino() const {
-    const auto &gs = std::get<client::GameState>(gameState_);
-    return gs.self.tetris.holdTetromino
-        .transform([](const auto &holdTetromino) { return &holdTetromino; })
-        .value_or(nullptr);
-}
-
-std::string GameDisplay::getOpponentUsername(size_t opponentIdx) const {
-    return std::visit(
-        [opponentIdx](const auto &gameState) {
-            return gameState.externals.at(opponentIdx).playerState.username;
-        },
-        gameState_);
-}
-
-size_t GameDisplay::getNumOpponents() const {
-    return std::visit(
-        [](const auto &gameState) { return gameState.externals.size(); },
-        gameState_);
-}
-
-bool GameDisplay::inGame() const {
-    return std::visit(
-        [](const auto &gameState) { return gameState.isFinished; }, gameState_);
-}
-
-const std::vector<std::pair<EffectType, Energy>> &
-GameDisplay::getEffectPrices() const {
-    return std::visit(
-        [](const auto &gameState)
-            -> const std::vector<std::pair<EffectType, Energy>> & {
-            return gameState.effectsPrice;
-        },
-        gameState_);
-}
-
-size_t GameDisplay::getEffectIdx() { return controller_.getCurrEffectIdx(); }

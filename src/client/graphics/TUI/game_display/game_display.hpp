@@ -1,16 +1,15 @@
 #ifndef GAME_DISPLAY_HPP
 #define GAME_DISPLAY_HPP
 
-#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../../../common/types/types.hpp"
-#include "../../../core/in_game/game_state/game_state.hpp"
-#include "../../../core/in_game/game_state/game_state_viewer.hpp"
+
+#include "../../common/abstract_game_display.hpp"
+#include "graphics/common/abstract_game_display.hpp"
 
 #include <ftxui/component/component.hpp>
 
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <memory>
 
 enum class CellSize : size_t {
     Small = 4,
@@ -27,37 +26,9 @@ class MainTui; // Forward declaration
 
 class Controller; // Forward declaration
 
-enum class Color {
-    Black,
-    White,
-    Grey,
-    DarkBlue,
-    LightBlue,
-    Purple,
-    Red,
-    Orange,
-    Pink,
-    Green,
-    Yellow
-};
-
-class GameDisplay final {
-  public:
-    // Returned by selfCellInfoAt.
-    // Tells us whether the cell at (x,y) is the part of the active or preview
-    // or a placed Tetromino.
-    enum class SelfCellType {
-        Active,
-        Preview,
-        Placed,
-    };
-
+class GameDisplay final : public AbstractGameDisplay {
   private:
     MainTui &mainTui_;
-
-    Controller &controller_;
-
-    std::variant<client::GameState, client::GameStateViewer> gameState_;
 
     ftxui::Component displayWindow_;
 
@@ -73,6 +44,7 @@ class GameDisplay final {
     ftxui::Component availableEffects();
     ftxui::Component penaltyInfo();
     ftxui::Component bonusInfo();
+    ftxui::Component holdTetromino();
     ftxui::Component leftPane();
 
     ftxui::Component gameMode();
@@ -94,49 +66,7 @@ class GameDisplay final {
 
     ftxui::Component &drawSpectate();
 
-    UserID getNthOpponentUserID(size_t n) const;
-
     void handleKeys();
-
-    size_t getBoardHeight() const;
-
-    size_t getBoardWidth() const;
-
-    Energy getSelfScore() const;
-
-    std::optional<UserID> getSelectedTarget() const;
-
-    Score getSelfEnergy() const;
-
-    GameMode getGameMode() const;
-
-    std::optional<std::pair<unsigned, SelfCellType>>
-    selfCellInfoAt(int x, int y) const;
-
-    std::string getSelfUsername() const;
-
-    std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
-                                                       int x, int y) const;
-
-    std::string getOpponentUsername(size_t opponentIdx) const;
-
-    size_t getNumOpponents() const;
-
-    size_t getEffectIdx();
-
-    const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
-
-    ftxui::Component holdTetromino();
-
-    const client::Tetromino *getHoldTetromino() const;
-
-    size_t getTetrominoQueuesSize() const;
-
-    const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
-
-    bool inGame() const;
-
-    bool isSpectating();
 
   public:
     GameDisplay(MainTui &screenManager, Controller &controller);
