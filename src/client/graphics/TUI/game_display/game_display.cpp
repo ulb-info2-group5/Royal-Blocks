@@ -517,8 +517,8 @@ namespace TUI {
     void GameDisplay::handleKeys() {
         displayWindow_ =
             ftxui::CatchEvent(displayWindow_, [&](ftxui::Event event) {
-                if (event == ftxui::Event::Return) { // Keep Enter key for
-                                                     // his original action
+                if (event == ftxui::Event::Return) { // Keep Enter key for his
+                                                     // original action
                     return false;
                 }
 

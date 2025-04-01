@@ -7,6 +7,9 @@
 // #include <QLineEdit>
 // #include <QLabel>
 // #include <QImage> 
+// #include <QColor> 
+
+// #include "../qt_config/qt_config.hpp"
 
 // #include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 // #include "../../../../common/types/types.hpp"
@@ -15,12 +18,12 @@
 
 // #include <memory>
 
-
 // class Controller;
 
 // class MainGui;
 
 // class GameDisplayGUI : public QWidget {
+        
 //     Q_OBJECT
 
 //     private:
