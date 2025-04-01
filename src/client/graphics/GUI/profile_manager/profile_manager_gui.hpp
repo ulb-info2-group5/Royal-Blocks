@@ -6,10 +6,11 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QLabel>
+#include <QStackedWidget>
 
-class Controller;
+class Controller; // Forward declaration
 
-class MainGui;
+class MainGui; // Forward declaration
 
 class ProfileManagerGui : public QWidget {
     Q_OBJECT
@@ -40,4 +41,4 @@ class ProfileManagerGui : public QWidget {
         void backToMainMenu();
 };
 
-#endif
+#endif // PROFILE_MANAGER_GUI_HPP
