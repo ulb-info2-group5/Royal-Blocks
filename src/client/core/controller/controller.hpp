@@ -67,8 +67,6 @@ class Controller {
 
     std::variant<client::GameState, client::GameStateViewer> gameState_;
 
-    // TODO: this is not used currently, remove this and add this back when
-    // needed.
     size_t currentEffectIdx_;
 
     mutable std::mutex mutex_;
