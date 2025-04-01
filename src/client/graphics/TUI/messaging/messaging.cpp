@@ -19,12 +19,10 @@ void Messaging::createButtons() {
         ftxui::Button(
             std::string(STR_SEND),
             [&] {
-                if (!newMessageBuffer_.empty()
-                    // && TODO: lulu check valid friend (at least one)
-                ) {
-                    getSelectedFriendId().and_then([&](UserID userID) {
+                if (!newMessageBuffer_.empty()) {
+                    getSelectedFriendId().transform([this](UserID userID) {
                         controller_.sendMessage(userID, newMessageBuffer_);
-                        return std::optional<UserID>{};
+                        return UserID{};
                     });
                     newMessageBuffer_.clear();
                 }

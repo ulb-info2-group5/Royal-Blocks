@@ -13,8 +13,6 @@
 #include "../game_display/game_display.hpp"
 #include "../main_tui.hpp"
 
-// TODO: call gameDisplay_->render() only once and not in every screen (when quitting the screen)
-
 // ### Constructor ###
 
 GameMenu::GameMenu(MainTui &mainTui, Controller &controller)
@@ -261,11 +259,11 @@ void GameMenu::joinFriendScreen() {
     mainTui_.render(renderer);
 
     if (controller_.inGame()) {
-        gameDisplay_->render(); // The game has started because the friend screen has
-                            // been exited
+        gameDisplay_->render(); // The game has started because the friend
+                                // screen has been exited
 
-        quitMenu_ = true; // Set the quitMenu_ variable to true to exit the menu loop
-                        // when the game is finished
+        quitMenu_ = true; // Set the quitMenu_ variable to true to exit the menu
+                          // loop when the game is finished
     }
 }
 
@@ -326,7 +324,6 @@ ftxui::Component GameMenu::makeFriendButton(UserID userID,
 }
 
 void GameMenu::waitingFriendScreen() {
-    // TODO: communicate with the server to join the friend here ?
     ftxui::Component renderer =
         ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
             if (controller_.inGame()) {

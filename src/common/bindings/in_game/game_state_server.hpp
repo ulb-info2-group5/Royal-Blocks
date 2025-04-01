@@ -11,9 +11,6 @@
 namespace bindings {
 
     namespace GameStateMessage {
-        /**
-         * TODO
-         */
         nlohmann::json serializeForPlayer(const GameState &gameState,
                                           UserID userID) {
             return nlohmann::json{{"type", BindingType::GameState},
