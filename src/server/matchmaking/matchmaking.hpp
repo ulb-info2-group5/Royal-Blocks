@@ -1,9 +1,9 @@
 #ifndef MATCHMACKING_HPP
 #define MATHCMACKING_HPP
 
-#include "../../../common/bindings/create_game.hpp"
-#include "../../../common/bindings/join_game.hpp"
-#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../common/bindings/create_game.hpp"
+#include "../../common/bindings/join_game.hpp"
+#include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../games_manager/games_manager.hpp"
 #include <iostream>
 #include <string>

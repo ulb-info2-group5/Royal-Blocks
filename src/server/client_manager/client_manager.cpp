@@ -1,7 +1,7 @@
 
 #include "client_manager.hpp"
 
-#include "../../../common/bindings/ranking.hpp"
+#include "../../common/bindings/ranking.hpp"
 
 #include <bcrypt.h>
 

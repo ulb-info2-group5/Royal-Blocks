@@ -9,8 +9,8 @@
 #include <vector>
 
 
-#include "../../../common/bindings/user_state.hpp"
-#include "../../game_server/game_server.hpp"
+#include "../../common/bindings/user_state.hpp"
+#include "../game_server/game_server.hpp"
 
 
 using SaveScoreCallback = std::function<void(UserID, int)>;

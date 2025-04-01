@@ -9,23 +9,23 @@
 #include <unordered_map>
 
 
-#include "../../database/account_manager/account_manager.hpp"
-#include "../../database/database_manager/database_manager.hpp"
-#include "../../database/friends_manager/friends_manager.hpp"
-#include "../../database/messages_manager/messages_manager.hpp"
+#include "../database/account_manager/account_manager.hpp"
+#include "../database/database_manager/database_manager.hpp"
+#include "../database/friends_manager/friends_manager.hpp"
+#include "../database/messages_manager/messages_manager.hpp"
 
-#include "../../../common/bindings/user_state.hpp"
-#include "../../../common/bindings/user.hpp"
+#include "../../common/bindings/user_state.hpp"
+#include "../../common/bindings/user.hpp"
 
-#include "../../../common/bindings/binding_type.hpp"
-#include "../../../common/bindings/message.hpp"
-#include "../../../common/bindings/conversation.hpp"
-#include "../../../common/bindings/conversations.hpp"
-#include "../../../common/bindings/friends_list.hpp"
-#include "../../../common/bindings/friend_request.hpp"
-#include "../../../common/bindings/remove_friend.hpp"
-#include "../../../common/bindings/handle_friend_request.hpp"
-#include "../../../common/bindings/pending_friend_requests.hpp"
+#include "../../common/bindings/binding_type.hpp"
+#include "../../common/bindings/message.hpp"
+#include "../../common/bindings/conversation.hpp"
+#include "../../common/bindings/conversations.hpp"
+#include "../../common/bindings/friends_list.hpp"
+#include "../../common/bindings/friend_request.hpp"
+#include "../../common/bindings/remove_friend.hpp"
+#include "../../common/bindings/handle_friend_request.hpp"
+#include "../../common/bindings/pending_friend_requests.hpp"
 
 
 

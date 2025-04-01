@@ -9,19 +9,19 @@
 #include <unordered_map>
 
 
-#include "../../../common/bindings/authentication.hpp"
-#include "../../../common/bindings/authentication_response.hpp"
-#include "../../../common/bindings/in_game/quit_game.hpp"
+#include "../../common/bindings/authentication.hpp"
+#include "../../common/bindings/authentication_response.hpp"
+#include "../../common/bindings/in_game/quit_game.hpp"
 
-#include "../../../common/bindings/registration.hpp"
-#include "../../../common/bindings/registration_response.hpp"
-#include "../../../common/bindings/user_state.hpp"
-#include "../../../common/bindings/user.hpp"
-#include "../../server_bindings/remove_client.hpp"
+#include "../../common/bindings/registration.hpp"
+#include "../../common/bindings/registration_response.hpp"
+#include "../../common/bindings/user_state.hpp"
+#include "../../common/bindings/user.hpp"
+#include "../server_bindings/remove_client.hpp"
 
-#include "../../../common/bindings/create_game.hpp"
-#include "../../../common/bindings/join_game.hpp"
-#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../common/bindings/create_game.hpp"
+#include "../../common/bindings/join_game.hpp"
+#include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 
 using boost::asio::ip::tcp;
 

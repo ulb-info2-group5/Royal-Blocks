@@ -3,7 +3,7 @@
 
 #include "../../common/bindings/in_game/select_target.hpp"
 
-#include "../network/client_link/client_link.hpp"
+#include "../client_link/client_link.hpp"
 #include "game_engine/game_engine.hpp"
 #include "player_state/player_state.hpp"
 
