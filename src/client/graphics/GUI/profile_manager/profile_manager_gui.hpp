@@ -1,3 +1,5 @@
+/*Authors : Ernest Jonas Rafaou*/
+
 #ifndef PROFILE_MANAGER_GUI_HPP
 #define PROFILE_MANAGER_GUI_HPP
 
@@ -8,9 +10,9 @@
 #include <QLabel>
 #include <QStackedWidget>
 
-class Controller; // Forward declaration
+class Controller;
 
-class MainGui; // Forward declaration
+class MainGui;
 
 class ProfileManagerGui : public QWidget {
     Q_OBJECT
@@ -30,6 +32,10 @@ class ProfileManagerGui : public QWidget {
 
         QLabel changePasswordAndUsernameMsgLabel_;
 
+
+        // Methode
+        void changeName();
+        void changePassWord();
 
     public:
         ProfileManagerGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
