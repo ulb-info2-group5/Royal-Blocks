@@ -27,16 +27,12 @@ private:
     QStackedWidget *stack_;
     QWidget *mainWidget_;
 
-    QListWidget *friendsList_;
-    QTextBrowser *chatDisplay_;
-    QTextEdit *messageInput_;
+    QListWidget friendsList_;
+    QTextBrowser chatDisplay_;
+    QTextEdit messageInput_;
 
-    QPushButton *sendButton_;
-    QPushButton *backButton_;
-
-    QVBoxLayout *sidebarLayout_;
-    QVBoxLayout *chatLayout_;
-    QHBoxLayout *mainLayout_;
+    QPushButton sendButton_;
+    QPushButton backButton_;
 
     void setupUI();
     void loadFriends();

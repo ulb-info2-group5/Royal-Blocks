@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QThread>
 #include <QScrollBar>
+#include <qnamespace.h>
 
 MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
     : controller_(controller), mainGui_(mainGui), QWidget(parent) {
@@ -19,28 +20,26 @@ MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget
 void MessageMenuGui::setupUI() {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    friendsList_ = new QListWidget(this);
-    chatDisplay_ = new QTextBrowser(this);
-    messageInput_ = new QTextEdit(this);
-    sendButton_ = new QPushButton("Send", this);
-    backButton_ = new QPushButton("Back", this);
+    sendButton_.setText("Send");
+    backButton_.setText("Back");
+    messageInput_.setPlaceholderText("Type your message here...");
 
     layout->addWidget(new QLabel("Friends List", this));
-    layout->addWidget(friendsList_);
+    layout->addWidget(&friendsList_);
     layout->addWidget(new QLabel("Chat Display", this));
-    layout->addWidget(chatDisplay_);
+    layout->addWidget(&chatDisplay_);
     layout->addWidget(new QLabel("Message Input", this));
-    layout->addWidget(messageInput_);
-    layout->addWidget(sendButton_);
-    layout->addWidget(backButton_);
+    layout->addWidget(&messageInput_);
+    layout->addWidget(&sendButton_);
+    layout->addWidget(&backButton_);
 
     setLayout(layout);
 
     updateAll();
 
-    connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::updateChat);
-    connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
-    connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
+    connect(&friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::updateChat);
+    connect(&sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
+    connect(&backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
     connect(&mainGui_, &MainGui::updateConversations, this, &MessageMenuGui::updateChat);
     connect(&mainGui_, &MainGui::updateFriendsList, this, &MessageMenuGui::updateAll);
 }
@@ -51,35 +50,33 @@ void MessageMenuGui::updateAll() {
 }
 
 void MessageMenuGui::loadFriends() {
-    friendsList_->clear();
+    friendsList_.clear();
     std::vector<bindings::User> friends = controller_.getFriendsList();
 
     for (const auto &friendUser : friends) {
         QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(friendUser.username));
         item->setData(Qt::UserRole, QVariant::fromValue(friendUser.userID));
-        friendsList_->addItem(item);
+        friendsList_.addItem(item);
     }
-    if (friendsList_->count() > 0) {
-        friendsList_->setCurrentRow(0);
+    if (friendsList_.count() > 0) {
+        friendsList_.setCurrentRow(0);
     }
 }
 
 void MessageMenuGui::updateChat() {
-    int friendIndex = friendsList_->currentRow();
+    int friendIndex = friendsList_.currentRow();
     if (friendIndex >= 0) {
         loadMessages(friendIndex);
     } else {
-        chatDisplay_->clear();
+        chatDisplay_.clear();
     }
 }
 
 void MessageMenuGui::loadMessages(int friendIndex) {
-    if (!chatDisplay_) return;
-
-    QScrollBar *scrollBar = chatDisplay_->verticalScrollBar();
+    QScrollBar *scrollBar = chatDisplay_.verticalScrollBar();
     int previousScrollValue = scrollBar->value();
 
-    chatDisplay_->clear();
+    chatDisplay_.clear();
 
     std::vector<bindings::User> friends = controller_.getFriendsList();
     if (friendIndex < 0 || friendIndex >= static_cast<int>(friends.size())) return;
@@ -87,14 +84,14 @@ void MessageMenuGui::loadMessages(int friendIndex) {
     auto [name, conversation] = controller_.getConversationWith(friends[friendIndex].userID);
 
     if (conversation.senderMessages.empty()) {
-        chatDisplay_->setText("No messages yet");
+        chatDisplay_.setText("No messages yet");
     } else {
         QString chatHistory;
         for (const auto &[senderId, message] : conversation.senderMessages) {
             QString senderName = (senderId == friends[friendIndex].userID) ? QString::fromStdString(name) : "Me";
             chatHistory += senderName + ": " + QString::fromStdString(message) + "\n";
         }
-        chatDisplay_->setText(chatHistory);
+        chatDisplay_.setText(chatHistory);
     }
 
     scrollBar->setValue(previousScrollValue);
@@ -103,17 +100,17 @@ void MessageMenuGui::loadMessages(int friendIndex) {
 
 
 void MessageMenuGui::onSendMessage() {
-    int friendIndex = friendsList_->currentRow();
+    int friendIndex = friendsList_.currentRow();
     if (friendIndex < 0) return;
 
     std::vector<bindings::User> friends = controller_.getFriendsList();
     if (friendIndex >= static_cast<int>(friends.size())) return;
 
-    QString messageText = messageInput_->toPlainText().trimmed();
+    QString messageText = messageInput_.toPlainText().trimmed();
     if (messageText.isEmpty()) return;
 
     controller_.sendMessage(friends[friendIndex].userID, messageText.toStdString());
-    messageInput_->clear();
+    messageInput_.clear();
 
     loadMessages(friendIndex);
 }
