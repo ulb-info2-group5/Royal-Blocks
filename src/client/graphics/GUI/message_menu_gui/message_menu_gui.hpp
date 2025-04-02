@@ -46,6 +46,7 @@ private slots:
     void updateChat();
     void onSendMessage();
     void onBack();
+    void updateAll();
 
 public:
     MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);

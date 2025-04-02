@@ -36,13 +36,18 @@ void MessageMenuGui::setupUI() {
 
     setLayout(layout);
 
-    loadFriends();
+    updateAll();
 
     connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::updateChat);
     connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
     connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
-
     connect(&mainGui_, &MainGui::updateConversations, this, &MessageMenuGui::updateChat);
+    connect(&mainGui_, &MainGui::updateFriendsList, this, &MessageMenuGui::updateAll);
+}
+
+void MessageMenuGui::updateAll() {
+    loadFriends();
+    updateChat();
 }
 
 void MessageMenuGui::loadFriends() {
@@ -54,12 +59,17 @@ void MessageMenuGui::loadFriends() {
         item->setData(Qt::UserRole, QVariant::fromValue(friendUser.userID));
         friendsList_->addItem(item);
     }
+    if (friendsList_->count() > 0) {
+        friendsList_->setCurrentRow(0);
+    }
 }
 
 void MessageMenuGui::updateChat() {
     int friendIndex = friendsList_->currentRow();
     if (friendIndex >= 0) {
         loadMessages(friendIndex);
+    } else {
+        chatDisplay_->clear();
     }
 }
 
@@ -71,7 +81,7 @@ void MessageMenuGui::loadMessages(int friendIndex) {
 
     chatDisplay_->clear();
 
-    auto friends = controller_.getFriendsList();
+    std::vector<bindings::User> friends = controller_.getFriendsList();
     if (friendIndex < 0 || friendIndex >= static_cast<int>(friends.size())) return;
 
     auto [name, conversation] = controller_.getConversationWith(friends[friendIndex].userID);
@@ -96,7 +106,7 @@ void MessageMenuGui::onSendMessage() {
     int friendIndex = friendsList_->currentRow();
     if (friendIndex < 0) return;
 
-    auto friends = controller_.getFriendsList();
+    std::vector<bindings::User> friends = controller_.getFriendsList();
     if (friendIndex >= static_cast<int>(friends.size())) return;
 
     QString messageText = messageInput_->toPlainText().trimmed();
@@ -105,11 +115,7 @@ void MessageMenuGui::onSendMessage() {
     controller_.sendMessage(friends[friendIndex].userID, messageText.toStdString());
     messageInput_->clear();
 
-    // delay of 100ms to allow the message to be processed before refreshing the chat
-    QTimer::singleShot(100, this, [this, friendIndex]() {
-        loadMessages(friendIndex);
-    });
-
+    loadMessages(friendIndex);
 }
 
 
