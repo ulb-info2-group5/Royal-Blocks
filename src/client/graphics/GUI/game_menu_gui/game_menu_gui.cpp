@@ -1,3 +1,5 @@
+// Authors: Jonas, Ernest, Rafaou
+
 #include "game_menu_gui.hpp"
 #include "../qt_config/qt_config.hpp"
 #include "../../../core/controller/controller.hpp"

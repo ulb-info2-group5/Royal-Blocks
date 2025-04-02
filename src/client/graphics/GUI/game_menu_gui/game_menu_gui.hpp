@@ -1,3 +1,5 @@
+// Authors: Jonas, Ernest, Rafaou
+
 #ifndef GAME_MENU_GUI_HPP
 #define GAME_MENU_GUI_HPP
 
