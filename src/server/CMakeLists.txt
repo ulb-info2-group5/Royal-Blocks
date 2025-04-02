@@ -2,25 +2,28 @@
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 
-# network lib
+
 file(GLOB_RECURSE SERVER_SOURCES
-    *.cpp
+    client_link/*.cpp
+    client_manager/*.cpp
+    network/*.cpp
+    server_bindings/*.cpp
+    social_service/*.cpp
+    games_manager/*.cpp
+    game_server/*.cpp
+    matchmaking/*.cpp
 )
 
 add_library(server_lib STATIC ${SERVER_SOURCES})
-
+add_subdirectory(database)
 
 target_include_directories(server_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-include(../../third_party/nlohmann.cmake)
-find_package (SQLite3)
-find_package(Boost CONFIG)
 
 target_link_libraries(server_lib PUBLIC
     bcrypt
     tetris_royal_lib
-    PUBLIC nlohmann_json::nlohmann_json
-    PUBLIC sqlite3
+    database_lib
 )
 
 
