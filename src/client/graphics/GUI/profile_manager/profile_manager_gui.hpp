@@ -24,20 +24,25 @@ class ProfileManagerGui : public QWidget {
         QStackedWidget *stack_;
         QWidget *mainWidget_;
 
-        QPushButton submit_;
-        QPushButton back_;
+        QPushButton *submit_;
+        QPushButton *back_;
 
-        QLineEdit newUserName_;
-        QLineEdit newPassWord_;
+        QLineEdit *newUserName_;
+        QLineEdit *newPassWord_;
 
         QLabel changePasswordAndUsernameMsgLabel_;
 
 
         // Methode
+        void basicSetup();
         void changeName();
         void changePassWord();
         void basicSetup();
         void onBack();
+
+    private slots:
+        void onBack();
+    
 
     public:
         ProfileManagerGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);

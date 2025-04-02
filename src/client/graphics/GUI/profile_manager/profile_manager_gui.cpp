@@ -12,12 +12,20 @@ ProfileManagerGui::ProfileManagerGui(Controller &controller, MainGui &mainGui, Q
 }
 
 void ProfileManagerGui::basicSetup() {
+<<<<<<< HEAD
     submit_.setText("Submit");
     back_ .setText("Back");
+=======
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    newUserName_ = new QLineEdit(this);
+    newPassWord_ = new QLineEdit(this);
+>>>>>>> 5174def (profile manager)
 
     connect(&submit_, &QPushButton::clicked, this, &ProfileManagerGui::changeName);
     connect(&back_  , &QPushButton::clicked, this, &ProfileManagerGui::onBack);
 
+<<<<<<< HEAD
     newUserName_.setPlaceholderText("New Username");
     newPassWord_.setPlaceholderText("New Password");
     newUserName_.setMaxLength(20);
@@ -31,6 +39,17 @@ void ProfileManagerGui::basicSetup() {
     layout->addWidget(&back_);
 
     setLayout(layout);
+=======
+    layout->addWidget(newUserName_);
+    layout->addWidget(newPassWord_);
+    layout->addWidget(submit_);
+    layout->addWidget(back_);
+
+    setLayout(layout);
+
+    connect(back_, &QPushButton::clicked, this, &ProfileManagerGui::onBack);
+    
+>>>>>>> 5174def (profile manager)
 }
 
 void ProfileManagerGui::onBack() {
