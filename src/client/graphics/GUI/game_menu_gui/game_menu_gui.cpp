@@ -4,6 +4,7 @@
 #include "../main_gui.hpp"
 
 #include <QMessageBox>
+#include <QTimer>
 
 GameMenuGUI::GameMenuGUI(Controller &controller, MainGui &mainGui, QWidget *parent)
     : controller_(controller), mainGui_(mainGui), QWidget(parent),
@@ -31,8 +32,9 @@ void GameMenuGUI::setup()
     classicButton_.setFixedWidth(500);
     royalButton_.setText("Royal Competition Mode");
     royalButton_.setFixedWidth(500);
+    
     backButton_.setText("Back");
-    backButton_.setFixedWidth(500);
+    
     confirmButton_.setText("Confirm");
     confirmButton_.setFixedWidth(500);
     joinRandomButton_.setText("Join Random Game");
@@ -103,11 +105,23 @@ void GameMenuGUI::setup()
     friendsListLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     connect(&friendsList_, &QListWidget::itemDoubleClicked, this, &GameMenuGUI::onFriendSelected);
 
+    // Setup waiting screen
+    waitingWidget_ = new QWidget();
+    QVBoxLayout *waitingLayout = new QVBoxLayout(waitingWidget_);
+    waitingLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    waitingLayout->addWidget(createCenterBoldTitle("Waiting for Game"));
+    QLabel *waitingLabel = new QLabel("Please wait while we find players for your game...");
+    waitingLabel->setAlignment(Qt::AlignCenter);
+    waitingLayout->addWidget(waitingLabel, 0, Qt::AlignCenter);
+    waitingLayout->addWidget(&backButton_, 0, Qt::AlignCenter);
+    waitingLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
     // Add widgets to stack
     stack_->addWidget(selectModeWidget_);
     stack_->addWidget(playerCountWidget_);
     stack_->addWidget(joinTypeWidget_);
     stack_->addWidget(friendsListWidget_);
+    stack_->addWidget(waitingWidget_);
 
     // Set main layout
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -135,6 +149,21 @@ void GameMenuGUI::showFriendsListScreen()
 {
     updateFriendsList();
     stack_->setCurrentWidget(friendsListWidget_);
+}
+
+void GameMenuGUI::showWaitingScreen()
+{
+    stack_->setCurrentWidget(waitingWidget_);
+    
+    // Check periodically if we've joined a game
+    QTimer *gameCheckTimer = new QTimer(this);
+    connect(gameCheckTimer, &QTimer::timeout, [this, gameCheckTimer]() {
+        if (controller_.inGame()) {
+            gameCheckTimer->stop();
+            emit backToMainMenu();
+        }
+    });
+    gameCheckTimer->start(500); // Check every 500ms
 }
 
 void GameMenuGUI::updateFriendsList()
@@ -166,10 +195,10 @@ void GameMenuGUI::onEndlessButtonClicked()
     
     if (isCreateGame_) {
         controller_.createGame(selectedGameMode_, 1);
-        // We would show waiting screen here in later stages
+        showWaitingScreen();
     } else {
         controller_.joinGame(selectedGameMode_, std::nullopt);
-        // We would show waiting screen here in later stages
+        showWaitingScreen();
     }
 }
 
@@ -180,7 +209,7 @@ void GameMenuGUI::onDuelButtonClicked()
     if (isCreateGame_) {
         // Duel always has 2 players
         controller_.createGame(selectedGameMode_, 2);
-        // We would show waiting screen here in later stages
+        showWaitingScreen();
     } else {
         showJoinTypeScreen();
     }
@@ -218,19 +247,22 @@ void GameMenuGUI::onBackButtonClicked()
         showSelectModeScreen();
     } else if (stack_->currentWidget() == friendsListWidget_) {
         showJoinTypeScreen();
+    } else if (stack_->currentWidget() == waitingWidget_) {
+        controller_.quitGame();
+        showSelectModeScreen();
     }
 }
 
 void GameMenuGUI::onConfirmButtonClicked()
 {
     controller_.createGame(selectedGameMode_, playerCount_);
-    // We would show waiting screen here in later stages
+    showWaitingScreen();
 }
 
 void GameMenuGUI::onJoinRandomButtonClicked()
 {
     controller_.joinGame(selectedGameMode_, std::nullopt);
-    // We would show waiting screen here in later stages
+    showWaitingScreen();
 }
 
 void GameMenuGUI::onJoinFriendButtonClicked()
@@ -249,6 +281,6 @@ void GameMenuGUI::onFriendSelected(QListWidgetItem *item)
     if (item && item->flags() & Qt::ItemIsEnabled) {
         UserID friendId = item->data(Qt::UserRole).toULongLong();
         controller_.joinGame(selectedGameMode_, friendId);
-        // We would show waiting screen here in later stages
+        showWaitingScreen();
     }
 }
