@@ -189,9 +189,11 @@ class Controller {
 
     size_t getNumEffects() const;
 
-    EffectType getEffectType();
+    EffectType getSelectedEffectType() const;
 
-    size_t getCurrEffectIdx();
+    void setSelectedEffectType(EffectType effectType);
+
+    size_t getCurrEffectIdx() const;
 
     void selectNextEffect();
 

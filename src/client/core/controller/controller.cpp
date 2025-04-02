@@ -38,13 +38,12 @@
 #include "../../../common/tetris_lib/tetromino/tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
-#include "../../common/bindings/in_game/game_state_server.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
-#include "game_state/game_state.hpp"
 
 #include <algorithm>
+#include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -319,9 +318,9 @@ void Controller::handleKeypress(const std::string &pressedKey) {
     } else if (pressedKey == "t") {
         emptyPenaltyStash();
     } else if (pressedKey == "y") {
-        buyEffect(getEffectType());
+        buyEffect(getSelectedEffectType());
     } else if (pressedKey == "u") {
-        buyEffect(getEffectType(), true);
+        buyEffect(getSelectedEffectType(), true);
     }
 }
 
@@ -332,11 +331,30 @@ size_t Controller::getNumEffects() const {
         gameState_);
 }
 
-EffectType Controller::getEffectType() {
+EffectType Controller::getSelectedEffectType() const {
     std::lock_guard<std::mutex> guard(mutex_);
     return std::visit(
         [this](const auto &gameState) {
             return gameState.effectsPrice.at(currentEffectIdx_).first;
+        },
+        gameState_);
+}
+
+void Controller::setSelectedEffectType(EffectType effectType) {
+    std::lock_guard<std::mutex> guard(mutex_);
+    std::visit(
+        [this, effectType](const auto &gameState) {
+            auto &effectsPrice = gameState.effectsPrice;
+
+            auto it = std::find_if(
+                effectsPrice.begin(), effectsPrice.end(),
+                [effectType](auto &pair) { return pair.first == effectType; });
+
+            if (it != effectsPrice.end()) {
+                size_t dist = std::distance(effectsPrice.begin(), it);
+
+                currentEffectIdx_ = dist;
+            }
         },
         gameState_);
 }
@@ -375,4 +393,4 @@ bool Controller::inGame() const {
         [](const auto &gameState) { return gameState.isFinished; }, gameState_);
 }
 
-size_t Controller::getCurrEffectIdx() { return currentEffectIdx_; }
+size_t Controller::getCurrEffectIdx() const { return currentEffectIdx_; }

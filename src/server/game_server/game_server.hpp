@@ -11,7 +11,6 @@
 
 using GameID = size_t;
 
-
 using CallBackFinishGame = std::function<void(GameID)>;
 
 class ClientLink;
@@ -23,8 +22,8 @@ struct Player {
 
 class GameServer {
   private:
-    static constexpr size_t INITIAL_TICK_DELAY_MS = 700;
-    static constexpr size_t MIN_TICK_DELAY_MS = 200;
+    static constexpr size_t INITIAL_TICK_DELAY_MS = 1000;
+    static constexpr size_t MIN_TICK_DELAY_MS = 1000;
     static constexpr size_t DECREASE_TICK_DELAY_MS = 20;
     size_t tickDelayMs_;
 
@@ -34,7 +33,6 @@ class GameServer {
     GameEngine engine;
     GameID gameId_;
 
-    
     CallBackFinishGame callBackFinishGame_;
     std::vector<std::weak_ptr<ClientLink>> pClientLinks_;
     /**
@@ -47,8 +45,7 @@ class GameServer {
     /**
      * @brief Constructor.
      */
-    GameServer(GameMode gameMode, std::vector<Player> &&players,
-               GameID id,
+    GameServer(GameMode gameMode, std::vector<Player> &&players, GameID id,
                CallBackFinishGame callBackFinishGame);
     GameServer(const GameServer &) = delete;
     GameServer(GameServer &&) = delete;
@@ -71,11 +68,8 @@ class GameServer {
      * finished.
      */
     void run();
-    
 
     void addClientLink(std::weak_ptr<ClientLink> clientLink);
-    
-
 
     // === getters ===
 
@@ -83,7 +77,7 @@ class GameServer {
 
     std::vector<UserID> getVectorPlayersId();
 
-    const std::vector<std::weak_ptr<ClientLink>>& getClientLinks();
+    const std::vector<std::weak_ptr<ClientLink>> &getClientLinks();
 
     GameMode getGameMode() const;
 

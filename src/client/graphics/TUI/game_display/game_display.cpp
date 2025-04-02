@@ -130,10 +130,20 @@ ftxui::Component GameDisplay::availableEffects() {
     std::vector<std::pair<EffectType, Energy>> effectPrices = getEffectPrices();
 
     for (auto [effectType, effectPrice] : effectPrices) {
-        availableEffects->Add(ftxui::Button(
+
+        auto button = ftxui::Button(
             toString(effectType) + " " + std::to_string(effectPrice),
-            [effectType, this]() { controller_.buyEffect(effectType); },
-            GlobalButtonStyle()));
+            [effectType, this]() {
+                controller_.setSelectedEffectType(effectType);
+                controller_.buyEffect(effectType);
+            },
+            GlobalButtonStyle());
+
+        if (controller_.getSelectedEffectType() == effectType) {
+            button = button | ftxui::color(ftxui::Color::Yellow);
+        }
+
+        availableEffects->Add(button);
     }
 
     return availableEffects;
