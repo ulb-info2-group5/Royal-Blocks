@@ -1,6 +1,6 @@
 /*Authors : Ernest Jonas Rafaou*/
 
-#include <profile_manager_gui.hpp>
+#include "profile_manager_gui.hpp"
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
@@ -11,19 +11,26 @@ ProfileManagerGui::ProfileManagerGui(Controller &controller, MainGui &mainGui, Q
     basicSetup();
 }
 
-ProfileManagerGui::basicSetup() {
-    newUserName_ = new QLineEdit(this);
-    newPassWord_ = new QLineEdit(this);
+void ProfileManagerGui::basicSetup() {
+    submit_.setText("Submit");
+    back_ .setText("Back");
 
-    submit_ = new QPushButton("Submit", this);
-    back_ = new QPushButton("Back", this);
+    connect(&submit_, &QPushButton::clicked, this, &ProfileManagerGui::changeName);
+    connect(&back_  , &QPushButton::clicked, this, &ProfileManagerGui::onBack);
 
-    layout->addWidget(newUserName_)
-    layout->addWidget(newPassWord_)
-    layout->addWidget(submit_)
-    layout->addWidget(back_)
+    newUserName_.setPlaceholderText("New Username");
+    newPassWord_.setPlaceholderText("New Password");
+    newUserName_.setMaxLength(20);
+    newPassWord_.setMaxLength(20);
 
-    setLayout(layout)
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(new QLabel("Change Username and Password"));
+    layout->addWidget(&newUserName_);
+    layout->addWidget(&newPassWord_);
+    layout->addWidget(&submit_);
+    layout->addWidget(&back_);
+
+    setLayout(layout);
 }
 
 void ProfileManagerGui::onBack() {

@@ -36,6 +36,8 @@ class ProfileManagerGui : public QWidget {
         // Methode
         void changeName();
         void changePassWord();
+        void basicSetup();
+        void onBack();
 
     public:
         ProfileManagerGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
