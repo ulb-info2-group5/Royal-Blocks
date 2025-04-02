@@ -60,7 +60,7 @@ void MainMenuGui::showMainMenu() {
 
 void MainMenuGui::actionOnExit() {
     QMessageBox::StandardButton confirmExit;
-    confirmExit = QMessageBox::question(this, "Quit", "Are you sure you want to qut the game ?",
+    confirmExit = QMessageBox::question(this, "Quit", "Are you sure you want to quit the game ?",
                                     QMessageBox::Yes | QMessageBox::No);
     if (confirmExit == QMessageBox::Yes) {
         QApplication::quit();

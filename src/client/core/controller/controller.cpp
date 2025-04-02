@@ -90,6 +90,7 @@ void Controller::handlePacket(const std::string_view pack) {
     case bindings::BindingType::Conversations: {
         conversationsById_ =
             bindings::Conversations::from_json(j).conversationsById;
+        updateType = UpdateType::CONVERSATIONS;
         break;
     }
 

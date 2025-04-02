@@ -57,6 +57,11 @@ class MainGui : public QMainWindow {
         * @brief Signal to update the ranking
         */
         void updateRanking();
+
+        /*
+        * @brief Signal to update the conversations
+        */
+        void updateConversations();
 };
 
 #endif // MAIN_GUI_HPP

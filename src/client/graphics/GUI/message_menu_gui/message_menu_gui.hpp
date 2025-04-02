@@ -40,7 +40,6 @@ private:
 
     void setupUI();
     void loadFriends();
-    void setupMessageUpdater();
     void loadMessages(int friendIndex);
 
 private slots:

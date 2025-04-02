@@ -5,8 +5,6 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
-#include "message_updater.hpp"
-#include "../qt_config/qt_config.hpp"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -44,12 +42,12 @@ void MessageMenuGui::setupUI() {
     connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
     connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
 
-    setupMessageUpdater();
+    connect(&mainGui_, &MainGui::updateConversations, this, &MessageMenuGui::updateChat);
 }
 
 void MessageMenuGui::loadFriends() {
     friendsList_->clear();
-    auto friends = controller_.getFriendsList();
+    std::vector<bindings::User> friends = controller_.getFriendsList();
 
     for (const auto &friendUser : friends) {
         QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(friendUser.username));
@@ -64,20 +62,6 @@ void MessageMenuGui::updateChat() {
         loadMessages(friendIndex);
     }
 }
-
-
-void MessageMenuGui::setupMessageUpdater() {
-    QThread *workerThread = new QThread(this);
-    MessageUpdater *messageUpdater = new MessageUpdater(controller_);
-    
-    messageUpdater->moveToThread(workerThread);
-
-    connect(workerThread, &QThread::finished, messageUpdater, &QObject::deleteLater);
-    connect(messageUpdater, &MessageUpdater::newMessagesFetched, this, &MessageMenuGui::updateChat);
-
-    workerThread->start();
-}
-
 
 void MessageMenuGui::loadMessages(int friendIndex) {
     if (!chatDisplay_) return;

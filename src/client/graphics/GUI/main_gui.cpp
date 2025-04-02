@@ -28,6 +28,8 @@ void MainGui::forceRefresh(UpdateType updateType) {
         emit updateFriendRequestsList();
     } else if (updateType == UpdateType::RANKING) {
         emit updateRanking();
+    } else if (updateType == UpdateType::CONVERSATIONS) {
+        emit updateConversations();
     }
 }
 

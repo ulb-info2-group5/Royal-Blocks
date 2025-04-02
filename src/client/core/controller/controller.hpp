@@ -30,6 +30,7 @@ enum class UpdateType {
     FRIENDS_LIST,
     FRIEND_REQUESTS,
     RANKING,
+    CONVERSATIONS,
     OTHER,
 };
 
