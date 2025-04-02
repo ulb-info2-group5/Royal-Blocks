@@ -33,7 +33,11 @@ private:
     QPushButton duelButton_;
     QPushButton classicButton_;
     QPushButton royalButton_;
-    QPushButton backButton_;
+    QPushButton selectModeBackButton_;
+    QPushButton playerCountBackButton_;
+    QPushButton joinTypeBackButton_;
+    QPushButton friendsListBackButton_;
+    QPushButton waitingBackButton_;
     QPushButton confirmButton_;
     QPushButton joinRandomButton_;
     QPushButton joinFriendButton_;
