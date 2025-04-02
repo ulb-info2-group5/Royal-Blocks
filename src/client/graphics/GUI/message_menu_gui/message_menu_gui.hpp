@@ -40,10 +40,11 @@ private:
 
     void setupUI();
     void loadFriends();
+    void setupMessageUpdater();
     void loadMessages(int friendIndex);
 
 private slots:
-    void onFriendSelected();
+    void updateChat();
     void onSendMessage();
     void onBack();
 

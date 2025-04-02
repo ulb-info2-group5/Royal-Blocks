@@ -5,10 +5,13 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
+#include "message_updater.hpp"
 #include "../qt_config/qt_config.hpp"
 
 #include <QMessageBox>
-#include <QDebug>
+#include <QTimer>
+#include <QThread>
+#include <QScrollBar>
 
 MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
     : controller_(controller), mainGui_(mainGui), QWidget(parent) {
@@ -37,51 +40,12 @@ void MessageMenuGui::setupUI() {
 
     loadFriends();
 
-    connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::onFriendSelected);
+    connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::updateChat);
     connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
     connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
+
+    setupMessageUpdater();
 }
-
-/*
-
-void MessageMenuGui::setupUI() {
-    stack_ = new QStackedWidget(this);
-    mainWidget_ = new QWidget(this);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget_);
-
-    friendsList_ = new QListWidget(this);
-    chatDisplay_ = new QTextBrowser(this);
-    messageInput_ = new QTextEdit(this);
-
-    sendButton_ = new QPushButton("Send", this);
-    backButton_ = new QPushButton("Back", this);
-
-    sidebarLayout_ = new QVBoxLayout();
-    sidebarLayout_->addWidget(new QLabel("Friends List"));
-    sidebarLayout_->addWidget(friendsList_);
-
-    chatLayout_ = new QVBoxLayout();
-    chatLayout_->addWidget(new QLabel("Conversation"));
-    chatLayout_->addWidget(chatDisplay_);
-    chatLayout_->addWidget(messageInput_);
-    chatLayout_->addWidget(sendButton_);
-    chatLayout_->addWidget(backButton_);
-
-    mainLayout_ = new QHBoxLayout(mainWidget_);
-    mainLayout_->addLayout(sidebarLayout_);
-    mainLayout_->addLayout(chatLayout_);
-
-    stack_->addWidget(mainWidget_);
-    QVBoxLayout *globalLayout = new QVBoxLayout(this);
-    globalLayout->addWidget(stack_);
-
-    loadFriends();
-
-    connect(friendsList_, &QListWidget::currentRowChanged, this, &MessageMenuGui::onFriendSelected);
-    connect(sendButton_, &QPushButton::clicked, this, &MessageMenuGui::onSendMessage);
-    connect(backButton_, &QPushButton::clicked, this, &MessageMenuGui::onBack);
-}*/
 
 void MessageMenuGui::loadFriends() {
     friendsList_->clear();
@@ -94,15 +58,35 @@ void MessageMenuGui::loadFriends() {
     }
 }
 
-void MessageMenuGui::onFriendSelected() {
+void MessageMenuGui::updateChat() {
     int friendIndex = friendsList_->currentRow();
     if (friendIndex >= 0) {
         loadMessages(friendIndex);
     }
 }
 
+
+void MessageMenuGui::setupMessageUpdater() {
+    QThread *workerThread = new QThread(this);
+    MessageUpdater *messageUpdater = new MessageUpdater(controller_);
+    
+    messageUpdater->moveToThread(workerThread);
+
+    connect(workerThread, &QThread::finished, messageUpdater, &QObject::deleteLater);
+    connect(messageUpdater, &MessageUpdater::newMessagesFetched, this, &MessageMenuGui::updateChat);
+
+    workerThread->start();
+}
+
+
 void MessageMenuGui::loadMessages(int friendIndex) {
+    if (!chatDisplay_) return;
+
+    QScrollBar *scrollBar = chatDisplay_->verticalScrollBar();
+    int previousScrollValue = scrollBar->value();
+
     chatDisplay_->clear();
+
     auto friends = controller_.getFriendsList();
     if (friendIndex < 0 || friendIndex >= static_cast<int>(friends.size())) return;
 
@@ -118,7 +102,11 @@ void MessageMenuGui::loadMessages(int friendIndex) {
         }
         chatDisplay_->setText(chatHistory);
     }
+
+    scrollBar->setValue(previousScrollValue);
 }
+
+
 
 void MessageMenuGui::onSendMessage() {
     int friendIndex = friendsList_->currentRow();
@@ -132,8 +120,14 @@ void MessageMenuGui::onSendMessage() {
 
     controller_.sendMessage(friends[friendIndex].userID, messageText.toStdString());
     messageInput_->clear();
-    loadMessages(friendIndex);
+
+    // delay of 100ms to allow the message to be processed before refreshing the chat
+    QTimer::singleShot(100, this, [this, friendIndex]() {
+        loadMessages(friendIndex);
+    });
+
 }
+
 
 void MessageMenuGui::onBack() {
     emit backToMainMenu();
