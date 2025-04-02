@@ -10,9 +10,9 @@
 #include <QLabel>
 #include <QStackedWidget>
 
-class Controller;
+class Controller; // Forward declaration
 
-class MainGui;
+class MainGui; // Forward declaration
 
 class ProfileManagerGui : public QWidget {
     Q_OBJECT
@@ -24,21 +24,17 @@ class ProfileManagerGui : public QWidget {
         QStackedWidget *stack_;
         QWidget *mainWidget_;
 
-        QPushButton *submit_;
-        QPushButton *back_;
+        QPushButton submit_;
+        QPushButton back_;
 
-        QLineEdit *newUserName_;
-        QLineEdit *newPassWord_;
+        QLineEdit newUserName_;
+        QLineEdit newPassWord_;
 
         QLabel changePasswordAndUsernameMsgLabel_;
 
 
         // Methode
         void basicSetup();
-        void changeName();
-        void changePassWord();
-        void basicSetup();
-        void onBack();
 
     private slots:
         void onBack();
