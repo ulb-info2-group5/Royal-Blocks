@@ -20,7 +20,7 @@ class MainMenuGui : public QWidget {
     private:
         Controller &controller_;
 
-        QStackedWidget  *stackedWidget_;
+        QStackedWidget  stackedWidget_;
 
         QWidget mainMenu_;
 
@@ -33,14 +33,6 @@ class MainMenuGui : public QWidget {
         MessageMenuGui messageMenuGui_;
 
         ProfileManagerGui profileManagerGui_;
-
-        QPushButton createGameButton_;
-        QPushButton joinGameButton_;
-        QPushButton messagesButton_;
-        QPushButton rankingButton_;
-        QPushButton manageProfileButton_;
-        QPushButton manageFriendsListButton_;
-        QPushButton quitGameButton_;
 
         /*
         * @brief Action to perform when exiting the application for the eit at the login or at the main menu to quit the game
