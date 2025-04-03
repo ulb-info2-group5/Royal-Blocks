@@ -25,17 +25,17 @@ void FriendsMenuGui::refreshFriendRequestsList() {
 }
 
 void FriendsMenuGui::showMainFriendsMenu() {
-    stack_->setCurrentWidget(mainWidget_);
+    stack_.setCurrentIndex(0);
 }
 
 void FriendsMenuGui::showAddFriendScreen() {
     friendNameInput_.clear();
     addFriendMsgLabel_.clear();
-    stack_->setCurrentWidget(addFriendWidget_);
+    stack_.setCurrentIndex(1);
 }
 
 void FriendsMenuGui::showFriendRequestsScreen() {
-    stack_->setCurrentWidget(friendRequestsWidget_);
+    stack_.setCurrentIndex(2);
 }
 
 void FriendsMenuGui::sendFriendRequest() {
@@ -87,7 +87,18 @@ void FriendsMenuGui::declineRequest() {
 
 
 void FriendsMenuGui::setup() {
-    stack_ = new QStackedWidget(this);
+    QPushButton *addFriendButton_ = new QPushButton(this);
+    QPushButton *manageRequestsButton_ = new QPushButton(this);
+    QPushButton *backToMainMenuButton_ = new QPushButton(this);
+    QPushButton *submitAdd_ = new QPushButton(this);
+    QPushButton *backFromAdd_ = new QPushButton(this);
+    QPushButton *acceptButton_ = new QPushButton(this);
+    QPushButton *declineButton_ = new QPushButton(this);
+    QPushButton *backFromReqButton_ = new QPushButton(this);
+
+    QWidget *mainWidget_ = new QWidget(this);
+    QWidget *addFriendWidget_ = new QWidget(this);
+    QWidget *friendRequestsWidget_ = new QWidget(this);
 
     // Main Friends Menu
     mainWidget_ = new QWidget(this);
@@ -99,25 +110,25 @@ void FriendsMenuGui::setup() {
     noFriendsLabel_.setAlignment(Qt::AlignCenter);
     noFriendsLabel_.setVisible(true);
 
-    addFriendButton_.setText("Add Friend");
-    addFriendButton_.setFixedWidth(500);
-    manageRequestsButton_.setText("Manage Friend Requests");
-    manageRequestsButton_.setFixedWidth(500);
-    backToMainMenuButton_.setText("Back to Main Menu");
-    backToMainMenuButton_.setFixedWidth(500);
+    addFriendButton_->setText("Add Friend");
+    addFriendButton_->setFixedWidth(500);
+    manageRequestsButton_->setText("Manage Friend Requests");
+    manageRequestsButton_->setFixedWidth(500);
+    backToMainMenuButton_->setText("Back to Main Menu");
+    backToMainMenuButton_->setFixedWidth(500);
 
-    connect(&addFriendButton_, &QPushButton::clicked, this, &FriendsMenuGui::showAddFriendScreen);
-    connect(&manageRequestsButton_, &QPushButton::clicked, this, &FriendsMenuGui::showFriendRequestsScreen);
-    connect(&backToMainMenuButton_, &QPushButton::clicked, this, &FriendsMenuGui::backToMainMenu);
+    connect(addFriendButton_, &QPushButton::clicked, this, &FriendsMenuGui::showAddFriendScreen);
+    connect(manageRequestsButton_, &QPushButton::clicked, this, &FriendsMenuGui::showFriendRequestsScreen);
+    connect(backToMainMenuButton_, &QPushButton::clicked, this, &FriendsMenuGui::backToMainMenu);
     connect(&friendsList_, &QListWidget::itemDoubleClicked, this, &FriendsMenuGui::removeFriend);
 
     mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     mainLayout->addWidget(createCenterBoldTitle("Your Friends List"));
     mainLayout->addWidget(&noFriendsLabel_);
     mainLayout->addWidget(&friendsList_, 0, Qt::AlignCenter);
-    mainLayout->addWidget(&addFriendButton_, 0, Qt::AlignCenter);
-    mainLayout->addWidget(&manageRequestsButton_, 0, Qt::AlignCenter);
-    mainLayout->addWidget(&backToMainMenuButton_, 0, Qt::AlignCenter);
+    mainLayout->addWidget(addFriendButton_, 0, Qt::AlignCenter);
+    mainLayout->addWidget(manageRequestsButton_, 0, Qt::AlignCenter);
+    mainLayout->addWidget(backToMainMenuButton_, 0, Qt::AlignCenter);
     mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
 
@@ -129,22 +140,22 @@ void FriendsMenuGui::setup() {
     friendNameInput_.setFixedWidth(500);
     friendNameInput_.setAlignment(Qt::AlignCenter);
 
-    submitAdd_.setText("Send Request");
-    submitAdd_.setFixedWidth(500);
-    backFromAdd_.setText("Back");
-    backFromAdd_.setFixedWidth(500);
+    submitAdd_->setText("Send Request");
+    submitAdd_->setFixedWidth(500);
+    backFromAdd_->setText("Back");
+    backFromAdd_->setFixedWidth(500);
 
     addFriendMsgLabel_.setAlignment(Qt::AlignCenter);
 
-    connect(&submitAdd_, &QPushButton::clicked, this, &FriendsMenuGui::sendFriendRequest);
-    connect(&backFromAdd_, &QPushButton::clicked, this, &FriendsMenuGui::showMainFriendsMenu);
+    connect(submitAdd_, &QPushButton::clicked, this, &FriendsMenuGui::sendFriendRequest);
+    connect(backFromAdd_, &QPushButton::clicked, this, &FriendsMenuGui::showMainFriendsMenu);
 
     addLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     addLayout->addWidget(createCenterBoldTitle("Add a Friend"));
     addLayout->addWidget(&addFriendMsgLabel_);
     addLayout->addWidget(&friendNameInput_, 0, Qt::AlignCenter);
-    addLayout->addWidget(&submitAdd_, 0, Qt::AlignCenter);
-    addLayout->addWidget(&backFromAdd_, 0, Qt::AlignCenter);
+    addLayout->addWidget(submitAdd_, 0, Qt::AlignCenter);
+    addLayout->addWidget(backFromAdd_, 0, Qt::AlignCenter);
     addLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
 
@@ -158,34 +169,34 @@ void FriendsMenuGui::setup() {
     noRequestsLabel_.setAlignment(Qt::AlignCenter);
     noRequestsLabel_.setVisible(true);
 
-    acceptButton_.setText("Accept");
-    acceptButton_.setFixedWidth(500);
-    declineButton_.setText("Decline");
-    declineButton_.setFixedWidth(500);
-    backFromReqButton_.setText("Back");
-    backFromReqButton_.setFixedWidth(500);
+    acceptButton_->setText("Accept");
+    acceptButton_->setFixedWidth(500);
+    declineButton_->setText("Decline");
+    declineButton_->setFixedWidth(500);
+    backFromReqButton_->setText("Back");
+    backFromReqButton_->setFixedWidth(500);
 
-    connect(&acceptButton_, &QPushButton::clicked, this, &FriendsMenuGui::acceptRequest);
-    connect(&declineButton_, &QPushButton::clicked, this, &FriendsMenuGui::declineRequest);
-    connect(&backFromReqButton_, &QPushButton::clicked, this, &FriendsMenuGui::showMainFriendsMenu);
+    connect(acceptButton_, &QPushButton::clicked, this, &FriendsMenuGui::acceptRequest);
+    connect(declineButton_, &QPushButton::clicked, this, &FriendsMenuGui::declineRequest);
+    connect(backFromReqButton_, &QPushButton::clicked, this, &FriendsMenuGui::showMainFriendsMenu);
 
     requestLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     requestLayout->addWidget(createCenterBoldTitle("Pending Friend Requests"));
     requestLayout->addWidget(&noRequestsLabel_);
     requestLayout->addWidget(&friendRequestsList_, 0, Qt::AlignCenter);
-    requestLayout->addWidget(&acceptButton_, 0, Qt::AlignCenter);
-    requestLayout->addWidget(&declineButton_, 0, Qt::AlignCenter);
-    requestLayout->addWidget(&backFromReqButton_, 0, Qt::AlignCenter);
+    requestLayout->addWidget(acceptButton_, 0, Qt::AlignCenter);
+    requestLayout->addWidget(declineButton_, 0, Qt::AlignCenter);
+    requestLayout->addWidget(backFromReqButton_, 0, Qt::AlignCenter);
     requestLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
 
     // Add all pages to stacked widget
-    stack_->addWidget(mainWidget_);
-    stack_->addWidget(addFriendWidget_);
-    stack_->addWidget(friendRequestsWidget_);
+    stack_.addWidget(mainWidget_); // 0
+    stack_.addWidget(addFriendWidget_); // 1
+    stack_.addWidget(friendRequestsWidget_); // 2
 
     QVBoxLayout *mainLayoutGlobal = new QVBoxLayout(this);
-    mainLayoutGlobal->addWidget(stack_);
+    mainLayoutGlobal->addWidget(&stack_);
     mainLayoutGlobal->setAlignment(Qt::AlignCenter);
 
 

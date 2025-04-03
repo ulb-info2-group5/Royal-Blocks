@@ -20,22 +20,10 @@ class FriendsMenuGui : public QWidget {
         Controller &controller_;
         MainGui &mainGui_;
 
-        QStackedWidget *stack_;
-        QWidget *mainWidget_;
-        QWidget *addFriendWidget_;
-        QWidget *friendRequestsWidget_;
+        QStackedWidget stack_;
 
         QListWidget friendsList_;
         QListWidget friendRequestsList_;
-
-        QPushButton addFriendButton_;
-        QPushButton manageRequestsButton_;
-        QPushButton backToMainMenuButton_;
-        QPushButton submitAdd_;
-        QPushButton backFromAdd_;
-        QPushButton acceptButton_;
-        QPushButton declineButton_;
-        QPushButton backFromReqButton_;
 
         QLineEdit friendNameInput_;
         QLabel addFriendMsgLabel_;
