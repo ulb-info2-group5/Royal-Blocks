@@ -3,11 +3,6 @@
 
 #include <QWidget>
 #include <QTableWidget>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QResizeEvent>
-#include <qstackedwidget.h>
 
 class Controller; // Forward declaration
 
@@ -21,11 +16,12 @@ class RankingGui : public QWidget {
         
         MainGui &mainGui_;
 
-        QStackedWidget *stack_;
-
         QTableWidget RankingGuiTable;
 
-        QPushButton backButton;
+        /*
+        * @brief Setup the UI
+        */
+        void setupUI();
 
         /*
         * @brief Setup the ranking Table

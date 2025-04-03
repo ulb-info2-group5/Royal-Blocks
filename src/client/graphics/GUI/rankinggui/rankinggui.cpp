@@ -9,23 +9,37 @@
 
 RankingGui::RankingGui(Controller &controller, MainGui &mainGui,QWidget *parent)
     : controller_(controller), mainGui_(mainGui), QWidget(parent) {
+    setupUI();
+    }
+
+void RankingGui::on_BackButtonClicked() {
+    emit backToMainMenu();
+}
+
+/*--------------------------------------------------------
+                    Private Methods
+---------------------------------------------------------*/
+
+void RankingGui::setupUI() {
+    QPushButton *backButton = new QPushButton(this);
+
 
     connect(&mainGui_, &MainGui::updateRanking, this, &RankingGui::updateRankingGuiTable);
 
-    backButton.setText("Back");
-    backButton.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    backButton.setFixedWidth(500);
+    backButton->setText("Back");
+    backButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    backButton->setFixedWidth(500);
 
     setupRankingGuiTable();
     updateRankingGuiTable();
 
-    connect(&backButton, &QPushButton::clicked, this, &RankingGui::on_BackButtonClicked);
+    connect(backButton, &QPushButton::clicked, this, &RankingGui::on_BackButtonClicked);
 
     QWidget *scrollWidget = new QWidget();
     QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
     scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     scrollLayout->addWidget(&RankingGuiTable, 0, Qt::AlignCenter);
-    scrollLayout->addWidget(&backButton, 0, Qt::AlignCenter);
+    scrollLayout->addWidget(backButton, 0, Qt::AlignCenter);
     scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
     scrollWidget->setLayout(scrollLayout);
 
@@ -42,14 +56,6 @@ RankingGui::RankingGui(Controller &controller, MainGui &mainGui,QWidget *parent)
     
     setLayout(layout);
 }
-
-void RankingGui::on_BackButtonClicked() {
-    emit backToMainMenu();
-}
-
-/*--------------------------------------------------------
-                    Private Methods
----------------------------------------------------------*/
 
 
 void RankingGui::setupRankingGuiTable() {
