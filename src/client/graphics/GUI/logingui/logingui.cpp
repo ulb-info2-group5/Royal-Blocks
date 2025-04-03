@@ -130,6 +130,34 @@ void LoginGui::on_SendButtonLogin_clicked() {
     }
 }
 
+void LoginGui::on_UsernameInputRegister_EnterPressed() {
+    if (usernameInputRegister_.hasFocus()) {
+        passwordInputRegister_.setFocus();
+    }
+}
+
+void LoginGui::on_UsernameInputLogin_EnterPressed() {
+    if (usernameInputLogin_.hasFocus()) {
+        passwordInputLogin_.setFocus();
+    }
+}
+
+void LoginGui::on_PasswordInputRegister_EnterPressed() {
+    if (passwordInputRegister_.hasFocus()) {
+        if (!passwordInputRegister_.text().isEmpty() && !usernameInputRegister_.text().isEmpty()) {
+            sendButtonRegister_.click();
+        }
+    }
+}
+
+void LoginGui::on_PasswordInputLogin_EnterPressed() {
+    if (passwordInputLogin_.hasFocus()) {
+        if (!passwordInputLogin_.text().isEmpty() && !usernameInputLogin_.text().isEmpty()) {
+            sendButtonLogin_.click();
+        }
+    }
+}
+
 
 /*-------------------------------------------------------
                     Private Methods
@@ -209,7 +237,10 @@ void LoginGui::setup() {
     connect(&backButtonRegister_, &QPushButton::clicked, this, &LoginGui::on_BackButtonRegister_clicked);
     connect(&sendButtonRegister_, &QPushButton::clicked, this, &LoginGui::on_SendButtonRegister_clicked);
     connect(&sendButtonLogin_, &QPushButton::clicked, this, &LoginGui::on_SendButtonLogin_clicked);
-
+    connect(&usernameInputRegister_, &QLineEdit::returnPressed, this, &LoginGui::on_UsernameInputRegister_EnterPressed);
+    connect(&usernameInputLogin_, &QLineEdit::returnPressed, this, &LoginGui::on_UsernameInputLogin_EnterPressed);
+    connect(&passwordInputRegister_, &QLineEdit::returnPressed, this, &LoginGui::on_PasswordInputRegister_EnterPressed);
+    connect(&passwordInputLogin_, &QLineEdit::returnPressed, this, &LoginGui::on_PasswordInputLogin_EnterPressed);
 
     usernameInputRegister_.setAlignment(Qt::AlignCenter);
     usernameInputRegister_.setFixedWidth(500);

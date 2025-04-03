@@ -100,6 +100,26 @@ class LoginGui : public QWidget {
         */
         void on_SendButtonLogin_clicked();
 
+        /*
+        * @brief Action to perform when the user click on the enter key in the username input
+        */
+        void on_UsernameInputRegister_EnterPressed();
+
+        /*
+        * @brief Action to perform when the user click on the enter key in the username input
+        */
+        void on_UsernameInputLogin_EnterPressed();
+
+        /*
+        * @brief Action to perform when the user click on the enter key in the password input
+        */
+        void on_PasswordInputRegister_EnterPressed();
+
+        /*
+        * @brief Action to perform when the user click on the enter key in the password input
+        */
+        void on_PasswordInputLogin_EnterPressed();
+
     public:
         LoginGui(Controller &controller, QWidget *parent = nullptr);
         
