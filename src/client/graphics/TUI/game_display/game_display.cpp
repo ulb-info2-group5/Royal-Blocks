@@ -21,7 +21,7 @@
 #include <ftxui/dom/deprecated.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
-#include <ftxui/screen/pixel.hpp>
+
 #include <memory>
 #include <optional>
 #include <stdexcept>
@@ -205,14 +205,13 @@ ftxui::Component GameDisplay::holdTetromino() {
         size_t height = ATetromino::MAX_DIMENSION * cellSize;
 
         ftxui::Canvas canvas(width, height);
-        ftxui::Pixel pixel{};
 
         size_t xOffset = cellSize;
         size_t yOffset = cellSize;
 
         const client::Tetromino *pHoldTetromino = getHoldTetromino();
         if (pHoldTetromino != nullptr) {
-            pixel.background_color =
+            ftxui::Color color =
                 getFTXUIColor(colorIdToColor(pHoldTetromino->colorId));
 
             for (const Vec2 &relCoord : pHoldTetromino->body) {
@@ -221,8 +220,7 @@ ftxui::Component GameDisplay::holdTetromino() {
 
                 for (size_t dy = 0; dy < cellSize; ++dy) {
                     for (size_t dx = 0; dx < cellSize; ++dx) {
-                        canvas.DrawBlock(x + dx, y + dy, true,
-                                         pixel.background_color);
+                        canvas.DrawBlock(x + dx, y + dy, true, color);
                     }
                 }
             }
@@ -273,12 +271,10 @@ ftxui::Component GameDisplay::selfBoard(CellSize size) {
 
         ftxui::Canvas selfCanvas(cellSize * width, cellSize * height);
 
-        ftxui::Pixel pixel{};
-
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
 
-                pixel.background_color =
+                ftxui::Color color =
                     selfCellInfoAt(x, y)
                         .transform([](auto cellInfo) {
                             return getFTXUIColor(colorIdToColor(cellInfo.first),
@@ -290,7 +286,7 @@ ftxui::Component GameDisplay::selfBoard(CellSize size) {
                     for (uint32_t dx = 0; dx < cellSize; ++dx) {
                         selfCanvas.DrawBlock(x * cellSize + dx,
                                              (height - 1 - y) * cellSize + dy,
-                                             true, pixel.background_color);
+                                             true, color);
                     }
                 }
             }
@@ -319,7 +315,6 @@ ftxui::Component GameDisplay::tetrominoQueue() {
         size_t height = queueSize * cellSize * ATetromino::MAX_DIMENSION;
 
         ftxui::Canvas canvas(width, height);
-        ftxui::Pixel pixel{};
 
         const client::Tetromino &nextTetromino = getTetrominoQueueNth(0);
         size_t highestBlockY =
@@ -350,7 +345,7 @@ ftxui::Component GameDisplay::tetrominoQueue() {
             size_t yOffset =
                 idx * ATetromino::MAX_DIMENSION * cellSize - yInitialOffset;
 
-            pixel.background_color =
+            ftxui::Color color =
                 getFTXUIColor(colorIdToColor(tetromino.colorId));
 
             for (const auto &vec : body) {
@@ -359,8 +354,7 @@ ftxui::Component GameDisplay::tetrominoQueue() {
 
                 for (size_t dy = 0; dy < cellSize; ++dy) {
                     for (size_t dx = 0; dx < cellSize; ++dx) {
-                        canvas.DrawBlock(x + dx, y + dy, true,
-                                         pixel.background_color);
+                        canvas.DrawBlock(x + dx, y + dy, true, color);
                     }
                 }
             }
@@ -397,12 +391,10 @@ ftxui::Component GameDisplay::createOpBoardDisplay(size_t index,
     return ftxui::Renderer([index, cellSize, width, height, this] {
         ftxui::Canvas opCanvas(cellSize * width, cellSize * height);
 
-        ftxui::Pixel pixel{};
-
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
 
-                pixel.background_color = getFTXUIColor(
+                ftxui::Color color = getFTXUIColor(
                     opponentsBoardGetColorIdAt(index, x, y)
                         .transform([](auto id) { return colorIdToColor(id); })
                         .value_or(Color::Black));
@@ -411,7 +403,7 @@ ftxui::Component GameDisplay::createOpBoardDisplay(size_t index,
                     for (uint32_t dx = 0; dx < cellSize; ++dx) {
                         opCanvas.DrawBlock(x * cellSize + dx,
                                            (height - 1 - y) * cellSize + dy,
-                                           true, pixel.background_color);
+                                           true, color);
                     }
                 }
             }
