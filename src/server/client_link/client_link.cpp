@@ -33,20 +33,9 @@ void ClientLink::handleReading() {
 
 void ClientLink::handleErrorReading() {
     std::cout << "erreor reading " << std::endl;
-    nlohmann::json removeClient = bindings::RemoveClient{}.to_json();
-    if (getUserState() == bindings::State::Offline) {
-        mustBeDeletedFromTheWaitingForAuthList_ = false;
-        authPacketHandler_(removeClient.at("type").get<bindings::BindingType>(),
-                           removeClient);
-    }else if (getUserState() == bindings::State::InGame){
-        packetHandler_(bindings::QuitGame{}.to_json().dump(), clientId.value());
-        setUserState(bindings::State::Offline);
-        packetHandler_(removeClient.dump(), clientId.value());
-    } 
-    
-    else {
-        packetHandler_(removeClient.dump(), clientId.value());
-    }
+    mustBeDeletedFromTheWaitingForAuthList_ = true;
+    removeClientCallback_(clientId);
+
 }
 
 void ClientLink::handleAuthentication(std::string &packet) {
@@ -79,11 +68,12 @@ void ClientLink::writeSocket(std::string &content) {
 // --- public ---
 ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
                        AuthPacketHandler authPacketHandler,
-                       AuthSuccessCallback authSuccessCallback)
+                       AuthSuccessCallback authSuccessCallback, RemoveClientCallback removeClientCallback)
     : socket_(std::move(socket)), userState(bindings::State::Offline),
       clientId(std::nullopt),gameMode_(std::nullopt), packetHandler_(packetHandler),
       authPacketHandler_(authPacketHandler),
-      authSuccessCallback_(authSuccessCallback) {
+      authSuccessCallback_(authSuccessCallback), 
+      removeClientCallback_(removeClientCallback) {
     start();
 }
 
@@ -103,7 +93,6 @@ bool ClientLink::shouldItBeDeletedFromTheList() {
 
 void ClientLink::sendPackage(nlohmann::json gameState) {
     buffer_ = gameState.dump() + "\n";
-    std::cout << "package send : " << gameState.dump() << std::endl;
     writeSocket(buffer_);
 }
 

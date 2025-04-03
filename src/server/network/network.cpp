@@ -25,6 +25,9 @@ void Network::accept() {
                 [this](std::shared_ptr<ClientLink> clientLink,
                        nlohmann::json clientData) {
                     clientManager_.authSuccessCall(clientLink, clientData);
+                },
+                [this](std::optional<UserID> userID){
+                    clientManager_.removeClient(userID);
                 });
 
             clientManager_.addClientInWaitingForAuth(std::move(newLink));

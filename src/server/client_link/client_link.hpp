@@ -43,6 +43,8 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     using AuthSuccessCallback =
         std::function<void(std::shared_ptr<ClientLink>, nlohmann::json)>;
 
+    using RemoveClientCallback = std::function<void(std::optional<UserID>)>;
+
   private:
     tcp::socket socket_;
     std::string buffer_;
@@ -61,6 +63,8 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     AuthPacketHandler authPacketHandler_;
     // callback to notify clientManager that the client is authenticated
     AuthSuccessCallback authSuccessCallback_;
+
+    RemoveClientCallback removeClientCallback_;
     /*
      *@brief : call if client is not logged in, send package to ClientManager
      *and wait for a response
@@ -82,7 +86,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
   public:
     explicit ClientLink(tcp::socket socket, PacketHandler packetHandler,
                         AuthPacketHandler authPacketHandler,
-                        AuthSuccessCallback authSuccessCallback);
+                        AuthSuccessCallback authSuccessCallback, RemoveClientCallback removeClientCallback);
     void start();
 
     void sendPackage(nlohmann::json gameState);

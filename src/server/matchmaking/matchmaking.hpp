@@ -40,11 +40,14 @@ class GameCandidate {
     GameCandidate(RequestJoinGame joinGame);
     GameCandidate(RequestCreateGame createGame);
 
+    void removePlayer(UserID playerID);
+
     ~GameCandidate() = default;
     bool isThisPartyReady();
     bool isthisPlayerInThisGame(UserID userId);
     bool tryToAddPlayer(RequestJoinGame joinGame);
     bool isThereRoomInThisGame();
+    bool isEmpty();
 
     std::vector<Player> &getPlayers();
     std::vector<UserID> getPlayerIDs();
@@ -69,6 +72,9 @@ class Matchmaking {
     Matchmaking(GameFindCallback gameFindCallback) ;
     ~Matchmaking() = default;
     void addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager);
+    void removePlayer(UserID playerID, GameMode gameMode);
+
+
     void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame,
                    GamesManager &gamesManager);
     void createAGame(RequestCreateGame createGame);

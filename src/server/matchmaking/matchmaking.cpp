@@ -34,12 +34,32 @@ bool GameCandidate::tryToAddPlayer(RequestJoinGame joinGame) {
     return false;
 }
 
+void GameCandidate::removePlayer(UserID playerID){
+    auto it = players_.begin();
+    while (it  != players_.end()){
+        if (it->userID == playerID){
+            std::cout << "delete client " << std::endl;
+            players_.erase(it);
+            numberOfPlayerTotale_ --;
+            std::cout << numberOfPlayerTotale_ << std::endl;
+            return;
+        }else {
+            it++;
+        }
+    }   
+    
+}
+
+
 bool GameCandidate::isThereRoomInThisGame() {
     return numberOfPlayerTotale_ < numberOfPlayersMax_;
 }
 
 bool GameCandidate::isThisPartyReady() {
     return numberOfPlayersMax_ == numberOfPlayerTotale_;
+}
+bool GameCandidate::isEmpty(){
+    return numberOfPlayerTotale_ == 0;
 }
 
 bool GameCandidate::isthisPlayerInThisGame(UserID userId) {
@@ -92,9 +112,7 @@ std::vector<GameCandidate> &Matchmaking::getGame(GameMode gameMode) {
     throw std::runtime_error("incorect gamesMode"); 
 }
 
-void Matchmaking::findaGame(std::vector<GameCandidate> &games,
-                            RequestJoinGame joinGame,
-                            GamesManager &gamesManager) {
+void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame joinGame, GamesManager &gamesManager) {
     bool joinFriend = joinGame.bindGame.friendId.has_value(), findGame = false;
     auto it = games.begin();
     while (it != games.end() && !findGame) {
@@ -132,6 +150,26 @@ void Matchmaking::createAGame(RequestCreateGame createGame) {
     getGame(createGame.bindCreateGame.gameMode)
         .push_back(GameCandidate{createGame});
 }
+
+
+void Matchmaking::removePlayer(UserID playerID, GameMode gameMode){
+    auto& gameList = getGame(gameMode);
+    auto it = gameList.begin();
+    while (it != gameList.end()){
+        if (it->isthisPlayerInThisGame(playerID)){
+            std::cout << "find client " << std::endl;
+            it->removePlayer(playerID);
+            if (it->isEmpty()){
+                gameList.erase(it);
+            }
+            return ;
+        }else {
+            it ++;
+        }
+    }
+}
+
+
 
 void Matchmaking::startGame(GameCandidate &&gameCandidate,GamesManager &gamesManager) {
 

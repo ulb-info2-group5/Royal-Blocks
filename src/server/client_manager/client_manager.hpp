@@ -50,7 +50,7 @@ class ClientManager {
 
     void disconnectClient(const UserID &userID);
 
-    void removeConnection(const UserID &userID);
+    
 
     /*
     * @brief : send the ranking to all the connected clients
@@ -72,6 +72,8 @@ class ClientManager {
 
 
     void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
+
+    void removeClient(std::optional<UserID> userID);
     /*
      * @brief : manage of the packet received by the clientLink
      */

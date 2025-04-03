@@ -41,14 +41,28 @@ void ClientManager::disconnectClient(const UserID &userID) {
 
         connectedClients_[userID]->setUserState(bindings::State::Offline);
         addClientInWaitingForAuth(std::move(connectedClients_[userID]));
-        removeConnection(userID);
+        connectedClients_.erase(userID);
     }
 }
 
-void ClientManager::removeConnection(const UserID &userID) {
-    std::cout << "remove connection call " << std::endl;
-    connectedClients_.erase(userID);
+
+void ClientManager::removeClient(std::optional<UserID> userID){
+    if (userID.has_value()){
+        
+        switch(getUserState(userID.value())){
+            case bindings::State::InGame: 
+                gamesManager_.enqueueGameBinding(connectedClients_[userID.value()], bindings::QuitGame{}.to_json().dump());
+                break;
+            case bindings::State::Matchmaking: 
+                matchmaking_.removePlayer(userID.value(), connectedClients_[userID.value()]->getGameMode().value());
+                break;
+        }
+        
+        disconnectClient(userID.value());
+    }
+    removeClientsFromTheWaintingList();
 }
+
 
 void ClientManager::sendUpdatedRankingToClients() const {
     std::vector<std::pair<std::string, size_t>> ranking = database_.accountManager->getRanking();
@@ -126,8 +140,6 @@ nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
                        ? bindings::RegistrationResponse{true}.to_json()
                        : bindings::RegistrationResponse{false}.to_json();
         break;
-    case bindings::BindingType::RemoveClient:
-        removeClientsFromTheWaintingList();
     default:
         break;
     }
@@ -188,9 +200,6 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         socialService_.handleRemoveFriend(clientId, bindings::RemoveFriend::from_json(jPack));
         updateMenu(clientId);
         updateMenu(jPack.at("data").at("playerId").get<UserID>());
-        break;
-    case bindings::BindingType::RemoveClient:
-        removeConnection(clientId);
         break;
     default:
         
