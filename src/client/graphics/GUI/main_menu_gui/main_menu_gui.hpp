@@ -91,7 +91,7 @@ class MainMenuGui : public QWidget {
         /*
         * @brief Action to perform show profile manager
         */
-        void on_ProfileManager_clicked();
+        void on_ProfileManagerBouton_clicked();
 
     public:
         MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);

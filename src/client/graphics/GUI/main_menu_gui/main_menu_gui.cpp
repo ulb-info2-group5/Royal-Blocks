@@ -50,13 +50,14 @@ void MainMenuGui::on_JoinGameButton_clicked() {
     stackedWidget_->setCurrentWidget(&gameMenuGui_);
 }
 
+void MainMenuGui::on_ProfileManagerBouton_clicked() {
+    stackedWidget_->setCurrentWidget(&profileManagerGui_);
+}
+
 void MainMenuGui::showMainMenu() {
     stackedWidget_->setCurrentWidget(&mainMenu_);
 }
 
-void MainMenuGui::on_ProfileManager_clicked() {
-    stackedWidget_->setCurrentWidget(&profileManagerGui_);
-}
 
 /*---------------------------------------------
                 Private Methods
@@ -90,6 +91,7 @@ void MainMenuGui::setup() {
     rankingButton_.setFixedWidth(500);
 
     manageProfileButton_.setText("Manage Profile");
+    connect(&manageProfileButton_, &QPushButton::clicked, this, &MainMenuGui::on_ProfileManagerBouton_clicked);
     manageProfileButton_.setFixedWidth(500);
 
     manageFriendsListButton_.setText("Manage Friends List");
@@ -125,6 +127,9 @@ void MainMenuGui::setup() {
 
     connect(&messageMenuGui_, &MessageMenuGui::backToMainMenu, this, &MainMenuGui::showMainMenu);
     stackedWidget_->addWidget(&messageMenuGui_);
+
+    connect(&profileManagerGui_, &ProfileManagerGui::backToMainMenu,this, &MainMenuGui::showMainMenu);
+    stackedWidget_->addWidget(&profileManagerGui_);
 
     connect(&createGameButton_, &QPushButton::clicked, this, &MainMenuGui::on_CreateGameButton_clicked);
     connect(&joinGameButton_, &QPushButton::clicked, this, &MainMenuGui::on_JoinGameButton_clicked);
