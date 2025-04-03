@@ -34,3 +34,7 @@ void ProfileManagerGui::basicSetup() {
 void ProfileManagerGui::onBack() {
     emit backToMainMenu();
 }
+
+void changePasswordUsername(){
+    
+}

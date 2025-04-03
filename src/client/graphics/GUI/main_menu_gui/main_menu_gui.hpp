@@ -10,6 +10,7 @@
 #include "../friends_menu_gui/friends_menu_gui.hpp"
 #include "../message_menu_gui/message_menu_gui.hpp"
 #include "../game_menu_gui/game_menu_gui.hpp"
+#include "../profile_manager/profile_manager_gui.hpp"
 
 class Controller; // Forward declaration
 
@@ -30,6 +31,8 @@ class MainMenuGui : public QWidget {
         FriendsMenuGui friendsMenuGui_;
 
         MessageMenuGui messageMenuGui_;
+
+        ProfileManagerGui profileManagerGui_;
 
         QPushButton createGameButton_;
         QPushButton joinGameButton_;
@@ -84,6 +87,11 @@ class MainMenuGui : public QWidget {
         * @brief Action to perform to show the main menu
         */
         void showMainMenu();
+
+        /*
+        * @brief Action to perform show profile manager
+        */
+        void on_ProfileManager_clicked();
 
     public:
         MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);

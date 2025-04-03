@@ -35,6 +35,7 @@ class ProfileManagerGui : public QWidget {
 
         // Methode
         void basicSetup();
+        void changePasswordUsername();
 
     private slots:
         void onBack();

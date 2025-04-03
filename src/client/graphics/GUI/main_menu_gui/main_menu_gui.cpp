@@ -5,13 +5,14 @@
 #include "../message_menu_gui/message_menu_gui.hpp"
 #include "../game_menu_gui/game_menu_gui.hpp"
 #include "../main_gui.hpp"
+#include "../profile_manager/profile_manager_gui.hpp"
 
 #include <QApplication>
 #include <QMessageBox>
 #include <QPushButton>
 
 MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui), messageMenuGui_(controller, mainGui), gameMenuGui_(controller, mainGui) {}
+    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui), messageMenuGui_(controller, mainGui), gameMenuGui_(controller, mainGui), profileManagerGui_(controller,mainGui) {}
 
 void MainMenuGui::run() {
     setup();
@@ -51,6 +52,10 @@ void MainMenuGui::on_JoinGameButton_clicked() {
 
 void MainMenuGui::showMainMenu() {
     stackedWidget_->setCurrentWidget(&mainMenu_);
+}
+
+void MainMenuGui::on_ProfileManager_clicked() {
+    stackedWidget_->setCurrentWidget(&profileManagerGui_);
 }
 
 /*---------------------------------------------
