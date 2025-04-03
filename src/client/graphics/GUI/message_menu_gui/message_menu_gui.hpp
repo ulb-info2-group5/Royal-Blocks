@@ -13,6 +13,7 @@
 #include <QListWidget>
 #include <QTextEdit>
 #include <QTextBrowser>
+#include <qboxlayout.h>
 
 class Controller; // Forward declaration
 class MainGui; // Forward declaration
@@ -24,15 +25,9 @@ private:
     Controller &controller_;
     MainGui &mainGui_;
 
-    QStackedWidget *stack_;
-    QWidget *mainWidget_;
-
     QListWidget friendsList_;
     QTextBrowser chatDisplay_;
-    QTextEdit messageInput_;
-
-    QPushButton sendButton_;
-    QPushButton backButton_;
+    QLineEdit messageInput_;
 
     void setupUI();
     void loadFriends();
@@ -43,6 +38,7 @@ private slots:
     void onSendMessage();
     void onBack();
     void updateAll();
+    void onEnterKeyPressedInInput();
 
 public:
     MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
