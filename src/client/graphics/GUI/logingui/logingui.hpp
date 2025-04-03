@@ -3,10 +3,8 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStackedWidget>
-#include <QCheckBox>
 #include <string>
 
 
@@ -18,25 +16,13 @@ class LoginGui : public QWidget {
     private:
         Controller &controller_;
 
-        QStackedWidget  *stackedWidget_;
+        QStackedWidget stackedWidget_;
 
         QLineEdit usernameInputRegister_;
         QLineEdit passwordInputRegister_;
         QLineEdit usernameInputLogin_;
         QLineEdit passwordInputLogin_;
 
-        QCheckBox showPasswordLogin_;
-        QCheckBox showPasswordRegister_;
-
-        QWidget *mainPage_;
-        QWidget *loginPage_;
-        QWidget *registerPage_;
-
-        QPushButton exitButton_;
-        QPushButton loginButton_;
-        QPushButton registerButton_;
-        QPushButton backButtonLogin_;
-        QPushButton backButtonRegister_;
         QPushButton sendButtonRegister_;
         QPushButton sendButtonLogin_;
 
