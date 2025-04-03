@@ -1,127 +1,118 @@
-// #ifndef GAME_DISPLAY_GUI_HPP
-// #define GAME_DISPLAY_GUI_HPP
+#ifndef GAME_DISPLAY_GUI_HPP
+#define GAME_DISPLAY_GUI_HPP
 
-// #include <QWidget>
-// #include <QPushButton>
-// #include <QVBoxLayout>
-// #include <QLineEdit>
-// #include <QLabel>
-// #include <QImage> 
-// #include <QColor> 
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
+#include <QImage> 
+#include <QColor> 
+#include <QProgressBar>
 
-// #include "../qt_config/qt_config.hpp"
+#include "../../common/abstract_game_display.hpp"
 
-// #include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-// #include "../../../../common/types/types.hpp"
-// #include "../../../core/in_game/game_state/game_state.hpp"
-// #include "../../../core/in_game/game_state/game_state_viewer.hpp"
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../../../common/types/types.hpp"
+#include "../../../core/in_game/game_state/game_state.hpp"
+#include "../../../core/in_game/game_state/game_state_viewer.hpp"
 
-// #include <memory>
+#include <memory>
+#include <variant>
 
-// class Controller;
+class Controller;
 
-// class MainGui;
+class MainGui;
 
-// class GameDisplayGUI : public QWidget {
+enum class CellSize : size_t {
+    Small = 4,
+    Big = 8,
+};
+
+constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+                 HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
+                 WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
+                 HEIGHT_CANVAS_SMALL =
+                     static_cast<size_t>(CellSize::Small) * 20;
+
+
+class GameDisplayGUI final : public QWidget, public AbstractGameDisplay {
         
-//     Q_OBJECT
+    Q_OBJECT
 
-//     private:
+    private:
 
-//     Controller &controller_;
-//     MainGui &mainGui_;
+    Controller &controller_;
+    MainGui &mainGui_;
 
-//     std::variant<client::GameState, client::gameStateViewer> gameState_;
+    QWidget *mainWidget_;
 
-//     QWidget *mainWidget_;
+    QPushButton quitButton_;
+    QLabel playerInfo_;
+    //std::vector<QPushButton> effectsButtons_;
+    QProgressBar energy_;
+    QProgressBar penalty_;
+    QProgressBar bonus_;
+    QImage holdTetromino_;
 
-//     QPushButton quitButton_;
-//     QImage selfBoard_;
-//     std::vector<QImage> opBoards_;
+    QImage selfBoard_;
+    QLabel mode_;
+    QImage tetrominoQueue_;
 
-//     std::vector<QPushButton> targetButtons_;
-//     std::vector<QPushButton> effectsButtons_;
-//     QVBoxLayout effectsLayout_;
+    std::vector<QImage> opBoards_;
+    std::vector<QPushButton> targetButtons_;
+    QGridLayout opLayout_;
+    //QVBoxLayout effectsLayout_;
 
-//     //std::vector<QLabel> targetLabels_;
+    //std::vector<QLabel> targetLabels_;
 
-//     void quitButton();
-//     void playerInfo();
-//     void energy();
-//     void availableEffects();
-//     void penaltyInfo();
-//     void bonusInfo();
-//     void holdTetromino();
-//     void leftPane();
+    void quitButton();
+    void playerInfo();
+    void energy();
+    //void availableEffects();
+    void penaltyInfo();
+    void bonusInfo();
+    void holdTetromino();
+    void leftPane();
 
-//     void gameMode();
-//     void selBoard();
-//     void tetrominoQueue();
-//     void middlePane();
+    void gameMode();
+    void selfBoard(CellSize size = CellSize::Big);
+    void tetrominoQueue();
+    void middlePane();
 
-//     void opponentsBoard();
+    void opponentsBoard();
 
-//     void rightPane();
+    void rightPane();
 
-//     void drawEndlessMode();
-//     void drawMultiMode();
+    void drawEndlessMode();
+    void drawMultiMode();
 
-//     void drawGameOver();
-//     void drawWin();
-//     void drawSpectate();
+    void drawGameOver();
+    void drawWin();
+    void drawSpectate();
 
-//     UserID getNthOpponentUserID(size_t n) const;
+    void handleKeys();
 
-//     void handleKeys();
+private slots:
 
-//     size_t getBoardHeight() const;
+        // add the functions for the buttons
 
-//     size_t getBoardWidth() const;
+        void changeTarget(unsigned targetIdx = 0);
 
-//     Energy getSelfScore() const;
+        void refreshScreen();
 
-//     std::optional<UserID> getSelectedTarget() const;
+    public:
 
-//     Score getSelfEnergy() const;
+        GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
 
-//     GameMode getGameMode() const;
+        ~GameDisplayGUI() = default;
 
-//     std::string getSelfUsername() const;
+    signals:
 
-//     std::optional<unsigned> opponentsBoardGetColorIdAt(size_t opponentIdx,
-//                                                        int x, int y) const;
-
-//     std::string getOpponentUsername(size_t opponentIdx) const;
-
-//     size_t getNumOpponents() const;
-
-//     const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;
-
-//     const client::Tetromino *getHoldTetromino() const;
-
-//     size_t getTetrominoQueuesSize() const;
-
-//     const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
-
-//     bool inGame() const;
-
-//     bool isSpectating();
-
-// private slots:
-
-//         // add the functions for the buttons
-
-//     public:
-
-//         GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
-
-//         ~GameDisplayGUI() = default;
-
-//     signals:
-
-//         void quitGame();
+        void quitGame();
 
 
-// };
+};
 
-// #endif
+#endif

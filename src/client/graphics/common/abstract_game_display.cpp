@@ -3,6 +3,33 @@
 AbstractGameDisplay::AbstractGameDisplay(Controller &controller)
     : controller_{controller} {}
 
+AbstractGameDisplay::Color AbstractGameDisplay::colorIdToColor(unsigned colorID){
+        // TODO: remove those magic number
+        switch (colorID) {
+            case 0:
+                return AbstractGameDisplay::Color::Red;
+            case 1:
+                return AbstractGameDisplay::Color::Orange;
+            case 2:
+                return AbstractGameDisplay::Color::Yellow;
+            case 3:
+                return AbstractGameDisplay::Color::Green;
+            case 4:
+                return AbstractGameDisplay::Color::LightBlue;
+            case 5:
+                return AbstractGameDisplay::Color::DarkBlue;
+            case 6:
+                return AbstractGameDisplay::Color::Purple;
+            case 8: // MINI_TETROMINO
+                return AbstractGameDisplay::Color::Pink;
+            case PENALTY_BLOCKS_COLOR_ID:
+                return AbstractGameDisplay::Color::Grey;
+        
+        default:
+            throw std::runtime_error{"unknown color"};
+        };
+}
+
 bool AbstractGameDisplay::isSpectating() {
     return std::holds_alternative<client::GameStateViewer>(gameState_);
 }

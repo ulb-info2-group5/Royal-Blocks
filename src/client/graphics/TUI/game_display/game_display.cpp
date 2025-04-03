@@ -1,7 +1,6 @@
 #include "game_display.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
-#include "board/board.hpp"
 #include "core/in_game/effects/timed_bonus.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
@@ -24,39 +23,11 @@
 
 #include <memory>
 #include <optional>
-#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include <variant>
 #include <vector>
-
-AbstractGameDisplay::Color colorIdToColor(unsigned colorID) {
-    // TODO: remove those magic number
-    switch (colorID) {
-    case 0:
-        return AbstractGameDisplay::Color::Red;
-    case 1:
-        return AbstractGameDisplay::Color::Orange;
-    case 2:
-        return AbstractGameDisplay::Color::Yellow;
-    case 3:
-        return AbstractGameDisplay::Color::Green;
-    case 4:
-        return AbstractGameDisplay::Color::LightBlue;
-    case 5:
-        return AbstractGameDisplay::Color::DarkBlue;
-    case 6:
-        return AbstractGameDisplay::Color::Purple;
-    case 8: // MINI_TETROMINO
-        return AbstractGameDisplay::Color::Pink;
-    case PENALTY_BLOCKS_COLOR_ID:
-        return AbstractGameDisplay::Color::Grey;
-
-    default:
-        throw std::runtime_error{"unknown color"};
-    };
-}
 
 namespace TUI {
 
