@@ -26,12 +26,15 @@
 // #include <vector>
 
 // #include <QWidget>
-// #include <QPushButton>
 // #include <QVBoxLayout>
+// #include <QHBoxLayout>
+// #include <QGridLayout>
+// #include <QPushButton>
 // #include <QLineEdit>
 // #include <QLabel>
 // #include <QImage> 
 // #include <QColor> 
+// #include <QProgressBar>
 
 // QColor getQColor(AbstractGameDisplay::Color col, selfCellType selfCellType) {
 
@@ -80,4 +83,71 @@
 //         return returnValue;
 // }
 
-// GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+// GameDisplayGUI::GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr) :
+//     AbstractGameDisplay(controller), mainGui_(mainGui), QWidget(parent) {}
+
+// // private methods 
+
+// //void GameDisplayGUI::quitButton();
+
+// void GameDisplayGUI::playerInfo();
+
+// void GameDisplayGUI::energy();
+
+// //void GameDisplayGUI::availableEffects();
+
+// void GameDisplayGUI::penaltyInfo();
+
+// void GameDisplayGUI::bonusInfo();
+
+// void GameDisplayGUI::holdTetromino();
+
+// void GameDisplayGUI::leftPane();
+
+// void GameDisplayGUI::drawBoard(CellSize size = CellSize::Big, Qimage &board);
+
+// void GameDisplayGUI::tetrominoQueue();
+
+// void GameDisplayGUI::middlePane();
+
+// void GameDisplayGUI::opponentsBoard();
+
+// void GameDisplayGUI::rightPane();
+
+// void GameDisplayGUI::drawEndlessMode();
+
+// void GameDisplayGUI::drawMultiMode();
+
+// void GameDisplayGUI::drawGameOver();
+
+// void GameDisplayGUI::drawWin();
+
+// void GameDisplayGUI::drawSpectate();
+
+// void GameDisplayGUI::handleKeys();
+
+// void GameDisplayGUI::updateScreen();
+
+// void GameDisplayGUI::setup() {
+//     QPushButton *quitButton_ = new QPushButton(this);
+        
+//     if (getGameMode() == GameMode::RoyalCompetition || 
+//     getGameMode() == GameMode::Classic){
+//         for (int i = 0; i < getNumOpponents(); i++){
+//             QPushButton *targetButton = new QPushButton(this);
+//             targetButtons_.push_back(targetButton);
+//         }
+//     }
+
+//     //if (getGameMode() == GameMode::RoyalCompetition) {} effects lol
+// }
+
+// // private slots 
+
+// void GameDisplayGUI::changeTarget(unsigned targetIdx = 0);
+
+// void GameDisplayGUI::refreshScreen();
+
+// // signals
+
+// void GameDisplayGUI::quitGame();

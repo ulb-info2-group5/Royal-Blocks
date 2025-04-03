@@ -1,118 +1,124 @@
-#ifndef GAME_DISPLAY_GUI_HPP
-#define GAME_DISPLAY_GUI_HPP
+// #ifndef GAME_DISPLAY_GUI_HPP
+// #define GAME_DISPLAY_GUI_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
-#include <QImage> 
-#include <QColor> 
-#include <QProgressBar>
+// #include <QWidget>
+// #include <QVBoxLayout>
+// #include <QHBoxLayout>
+// #include <QGridLayout>
+// #include <QPushButton>
+// #include <QLineEdit>
+// #include <QLabel>
+// #include <QImage> 
+// #include <QColor> 
+// #include <QProgressBar>
 
-#include "../../common/abstract_game_display.hpp"
+// #include "../../common/abstract_game_display.hpp"
 
-#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../../../common/types/types.hpp"
-#include "../../../core/in_game/game_state/game_state.hpp"
-#include "../../../core/in_game/game_state/game_state_viewer.hpp"
+// #include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+// #include "../../../../common/types/types.hpp"
+// #include "../../../core/in_game/game_state/game_state.hpp"
+// #include "../../../core/in_game/game_state/game_state_viewer.hpp"
 
-#include <memory>
-#include <variant>
+// #include <memory>
+// #include <variant>
+// #include <vector>
 
-class Controller;
+// class Controller;
 
-class MainGui;
+// class MainGui;
 
-enum class CellSize : size_t {
-    Small = 4,
-    Big = 8,
-};
+// enum class CellSize : size_t {
+//     Small = 4,
+//     Big = 8,
+// };
 
-constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
-                 HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
-                 WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
-                 HEIGHT_CANVAS_SMALL =
-                     static_cast<size_t>(CellSize::Small) * 20;
+// constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+//                  HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
+//                  WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
+//                  HEIGHT_CANVAS_SMALL =
+//                      static_cast<size_t>(CellSize::Small) * 20;
 
 
-class GameDisplayGUI final : public QWidget, public AbstractGameDisplay {
+// class GameDisplayGUI final : public QWidget, public AbstractGameDisplay {
         
-    Q_OBJECT
+//     Q_OBJECT
 
-    private:
+//     private:
 
-    Controller &controller_;
-    MainGui &mainGui_;
+//     Controller &controller_;
+//     MainGui &mainGui_;
 
-    QWidget *mainWidget_;
+//     QWidget *mainWidget_;
+//     QHBoxLayout mainLayout_;
+//     QVBoxLayout leftPane_;
+//     QVBoxLayout middlePane_;
+//     QGridLayout opLayout_;
 
-    QPushButton quitButton_;
-    QLabel playerInfo_;
-    //std::vector<QPushButton> effectsButtons_;
-    QProgressBar energy_;
-    QProgressBar penalty_;
-    QProgressBar bonus_;
-    QImage holdTetromino_;
+//     QPushButton quitButton_;
+//     QLabel playerInfo_;
+//     //std::vector<QPushButton> effectsButtons_;
+//     //QVBoxLayout effectsLayout_;
+//     QProgressBar energy_;
+//     QProgressBar penalty_;
+//     QProgressBar bonus_;
+//     QImage holdTetromino_;
 
-    QImage selfBoard_;
-    QLabel mode_;
-    QImage tetrominoQueue_;
+//     QImage selfBoard_;
+//     QLabel mode_;
+//     QImage tetrominoQueue_;
 
-    std::vector<QImage> opBoards_;
-    std::vector<QPushButton> targetButtons_;
-    QGridLayout opLayout_;
-    //QVBoxLayout effectsLayout_;
+//     std::vector<QImage> opBoards_;
+//     std::vector<QPushButton> targetButtons_;
 
-    //std::vector<QLabel> targetLabels_;
+//     //void quitButton();
+//     void playerInfo();
+//     void energy();
+//     //void availableEffects();
+//     void penaltyInfo();
+//     void bonusInfo();
+//     void holdTetromino();
+//     void leftPane();
 
-    void quitButton();
-    void playerInfo();
-    void energy();
-    //void availableEffects();
-    void penaltyInfo();
-    void bonusInfo();
-    void holdTetromino();
-    void leftPane();
+//     void drawBoard(QImage &board, CellSize size = CellSize::Big);
+//     void tetrominoQueue();
+//     void middlePane();
 
-    void gameMode();
-    void selfBoard(CellSize size = CellSize::Big);
-    void tetrominoQueue();
-    void middlePane();
+//     void opponentsBoard();
 
-    void opponentsBoard();
+//     void rightPane();
 
-    void rightPane();
+//     void drawEndlessMode();
+//     void drawMultiMode();
 
-    void drawEndlessMode();
-    void drawMultiMode();
+//     void drawGameOver();
+//     void drawWin();
+//     void drawSpectate();
 
-    void drawGameOver();
-    void drawWin();
-    void drawSpectate();
+//     void handleKeys();
 
-    void handleKeys();
+//     void updateScreen();
 
-private slots:
+//     void setup();
 
-        // add the functions for the buttons
+// private slots:
 
-        void changeTarget(unsigned targetIdx = 0);
+//         // add the functions for the buttons
 
-        void refreshScreen();
+//         void changeTarget(unsigned int targetIdx);
 
-    public:
+//         void refreshScreen();
 
-        GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+//     public:
 
-        ~GameDisplayGUI() = default;
+//         GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
 
-    signals:
+//         ~GameDisplayGUI() = default;
 
-        void quitGame();
+//     signals:
+
+//         void quitGame();
 
 
-};
+// };
 
-#endif
+// #endif
