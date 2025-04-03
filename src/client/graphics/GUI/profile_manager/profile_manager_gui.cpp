@@ -15,6 +15,7 @@ void ProfileManagerGui::basicSetup() {
     submit_.setText("Submit");
     back_ .setText("Back");
 
+    connect(&submit_, &QPushButton::clicked, this, &ProfileManagerGui::changePasswordUsername);
     connect(&back_, &QPushButton::clicked, this, &ProfileManagerGui::onBack);
 
     newUserName_.setPlaceholderText("New Username");
@@ -36,6 +37,23 @@ void ProfileManagerGui::onBack() {
     emit backToMainMenu();
 }
 
-void changePasswordUsername(){
-    
+void ProfileManagerGui::changePasswordUsername(){
+    QString newUsername = newUserName_.text();
+    QString newPassword = newPassWord_.text();
+
+    // Vérifier que les champs ne sont pas vides
+    if (newUsername.isEmpty() || newPassword.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez remplir tous les champs.");
+        return;
+    }
+
+    // Conversion de QString en std::string
+    std::string newUsernameStd = newUsername.toStdString();
+    std::string newPasswordStd = newPassword.toStdString();
+
+    // Passer les informations au contrôleur (par exemple, à une méthode de mise à jour du profil)
+    controller_.changeProfile(newUsernameStd, newPasswordStd);
+
+    // Affiche le message de confirmation
+    QMessageBox::information(this, "Info", "Votre nom d'utilisateur et votre mot de passe ont été changés avec succès");
 }
