@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QStackedWidget>
+#include <QCheckBox>
 
 class Controller; // Forward declaration
 

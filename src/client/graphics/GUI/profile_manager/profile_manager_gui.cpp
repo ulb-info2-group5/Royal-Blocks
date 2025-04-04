@@ -20,13 +20,27 @@ void ProfileManagerGui::basicSetup() {
 
     newUserName_.setPlaceholderText("New Username");
     newPassWord_.setPlaceholderText("New Password");
+    newPassWord_.setEchoMode(QLineEdit::Password);  // Masquer le mot de passe
     newUserName_.setMaxLength(20);
     newPassWord_.setMaxLength(20);
+
+    // Création de la case à cocher pour afficher/masquer le mot de passe
+    QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
+
+    // Connecter la case à cocher pour basculer entre afficher/masquer
+    connect(showPasswordCheckBox, &QCheckBox::toggled, this, [this](bool checked) {
+        if (checked) {
+            newPassWord_.setEchoMode(QLineEdit::Normal);  // Afficher le mot de passe
+        } else {
+            newPassWord_.setEchoMode(QLineEdit::Password);  // Masquer le mot de passe
+        }
+    });
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(new QLabel("Change Username and Password"));
     layout->addWidget(&newUserName_);
     layout->addWidget(&newPassWord_);
+    layout->addWidget(showPasswordCheckBox, 0, Qt::AlignHCenter);
     layout->addWidget(&submit_);
     layout->addWidget(&back_);
 
