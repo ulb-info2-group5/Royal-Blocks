@@ -50,6 +50,7 @@ void GamesManager::callBackFinishGame(GameID gameId) {
     for (auto &weakClient : gameSessions_[gameId]->getClientLinks()){
         if (std::shared_ptr<ClientLink> clientLink = weakClient.lock()) {
             clientLink->setUserState(bindings::State::Menu);
+            clientLink->setGameMode(std::nullopt);
         }
     }
 

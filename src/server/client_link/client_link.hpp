@@ -17,7 +17,6 @@
 #include "../../common/bindings/registration_response.hpp"
 #include "../../common/bindings/user_state.hpp"
 #include "../../common/bindings/user.hpp"
-#include "../server_bindings/remove_client.hpp"
 
 #include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/join_game.hpp"
@@ -100,7 +99,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void setClientId(const int id);
 
     void setUserState(bindings::State newState);
-    void setGameMode(GameMode newGameMode);
+    void setGameMode(std::optional<GameMode> newGameMode);
 
 
     void jointGame(const std::weak_ptr<GameServer>& gameServer);

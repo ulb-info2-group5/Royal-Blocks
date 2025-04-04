@@ -101,7 +101,7 @@ void ClientLink::setClientId(const int id) { clientId = id; }
 void ClientLink::setUserState(bindings::State newState) {
     userState = newState;
 }
-void ClientLink::setGameMode(GameMode newGameMode){
+void ClientLink::setGameMode(std::optional<GameMode> newGameMode){
     gameMode_ = newGameMode;
 }
 
