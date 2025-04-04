@@ -9,7 +9,7 @@
 #include <QTimer>
 
 GameMenuGUI::GameMenuGUI(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), mainGui_(mainGui), QWidget(parent),
+    : QWidget(parent), controller_(controller), mainGui_(mainGui),
       playerCount_(4), isCreateGame_(false)
 {
     setup();

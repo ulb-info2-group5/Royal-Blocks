@@ -6,7 +6,7 @@
 #include "../main_gui.hpp"
 
 ProfileManagerGui::ProfileManagerGui(Controller &controller, MainGui &mainGui, QWidget *parent) 
-    : controller_(controller), mainGui_(mainGui),  QWidget(parent)
+    : QWidget(parent), controller_(controller),  mainGui_(mainGui)
 {
     basicSetup();
 }

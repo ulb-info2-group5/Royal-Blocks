@@ -23,7 +23,7 @@ constexpr char TYPE_MESSAGE_TEXT[] = "Type your message here...";
 constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
 
 MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), mainGui_(mainGui), QWidget(parent) {
+    : QWidget(parent), controller_(controller), mainGui_(mainGui) {
     setupUI();
 }
 

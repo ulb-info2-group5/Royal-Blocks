@@ -11,7 +11,7 @@
 #include <QHeaderView>
 
 MainGui::MainGui(Controller &controller, QWidget *parent)
-    : controller_(controller), QMainWindow(parent) {}
+    : QMainWindow(parent), controller_(controller) {}
 
 
 void MainGui::run() {

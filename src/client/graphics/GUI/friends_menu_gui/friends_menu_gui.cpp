@@ -8,7 +8,7 @@
 #include <vector>
 
 FriendsMenuGui::FriendsMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), mainGui_(mainGui), QWidget(parent) {
+    : QWidget(parent), controller_(controller), mainGui_(mainGui) {
     setup();
 
     connect(&mainGui_, &MainGui::updateFriendsList, this, &FriendsMenuGui::refreshFriendsList);

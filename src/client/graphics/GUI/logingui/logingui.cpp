@@ -10,7 +10,7 @@ const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 constexpr int INPUT_BUTTON_WIDTH = 500;
 
 LoginGui::LoginGui(Controller &controller, QWidget *parent)
-    : controller_(controller), QWidget(parent) {}
+    : QWidget(parent), controller_(controller) {}
 
 void LoginGui::run() {
     setup();

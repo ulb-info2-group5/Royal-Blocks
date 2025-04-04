@@ -8,7 +8,7 @@
 #include "../../../core/controller/controller.hpp"
 
 RankingGui::RankingGui(Controller &controller, MainGui &mainGui,QWidget *parent)
-    : controller_(controller), mainGui_(mainGui), QWidget(parent) {
+    : QWidget(parent), controller_(controller), mainGui_(mainGui) {
     setupUI();
     }
 

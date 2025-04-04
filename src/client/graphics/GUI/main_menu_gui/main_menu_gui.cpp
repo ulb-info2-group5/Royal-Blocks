@@ -12,7 +12,7 @@
 #include <QPushButton>
 
 MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui, QWidget *parent)
-    : controller_(controller), rankingGui_(controller_, mainGui), QWidget(parent), friendsMenuGui_(controller, mainGui), messageMenuGui_(controller, mainGui), gameMenuGui_(controller, mainGui), profileManagerGui_(controller,mainGui) {}
+    : QWidget(parent), controller_(controller), rankingGui_(controller_, mainGui), gameMenuGui_(controller, mainGui), friendsMenuGui_(controller, mainGui), messageMenuGui_(controller, mainGui), profileManagerGui_(controller,mainGui) {}
 
 void MainMenuGui::run() {
     setup();
