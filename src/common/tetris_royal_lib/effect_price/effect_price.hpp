@@ -11,6 +11,10 @@ using EffectType = std::variant<BonusType, PenaltyType>;
 
 constexpr Energy DEFAULT_EFFECT_PRICE = 3;
 
+/**
+ * @brief Returns the given effect's price.
+ * Defaults to DEFAULT_EFFECT_PRICE if no price is specified.
+ */
 Energy getEffectPrice(EffectType effectType);
 
 #endif // EFFECT_PRICE_HPP
