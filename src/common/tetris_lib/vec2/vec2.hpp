@@ -168,7 +168,7 @@ class Vec2 {
      */
     friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 
-    // #### Structure binding ####
+    // #### Structured binding ####
 
     template <size_t N> decltype(auto) get() const {
         if constexpr (N == 0) {
@@ -182,8 +182,14 @@ class Vec2 {
      *          Serialization
      * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes a Vec2 to json.
+     */
     nlohmann::json serialize() const;
 
+    /**
+     * @brief Deserializes a Vec2 from json.
+     */
     void deserialize(const nlohmann::json &j);
 
     /* ------------------------------------------------
@@ -192,6 +198,8 @@ class Vec2 {
 
     friend Vec2Test;
 };
+
+// #### Structured binding ####
 
 namespace std {
     template <> struct tuple_size<Vec2> : std::integral_constant<size_t, 2> {};
