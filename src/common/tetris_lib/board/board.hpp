@@ -274,25 +274,15 @@ class Board {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serialize() const {
-        nlohmann::json j_grid = nlohmann::json::array();
-        for (const auto &row : grid_) {
-            nlohmann::json j_row = nlohmann::json::array();
-            for (const auto &cell : row) {
-                j_row.push_back(cell.serialize());
-            }
-            j_grid.push_back(j_row);
-        }
-        return j_grid;
-    }
+    /**
+     * @brief Serializes the Board to json.
+     */
+    nlohmann::json serialize() const;
 
-    void deserialize(const nlohmann::json &j) {
-        for (size_t y = 0; y < height_; ++y) {
-            for (size_t x = 0; x < width_; ++x) {
-                grid_.at(y).at(x).deserialize(j[y][x]);
-            }
-        }
-    }
+    /**
+     * @brief Deserializes the Board from json.
+     */
+    void deserialize(const nlohmann::json &j);
 
     /* ------------------------------------------------
      *          Test Fixture Class

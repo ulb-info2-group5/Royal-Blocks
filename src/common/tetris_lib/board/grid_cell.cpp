@@ -16,3 +16,28 @@ void GridCell::setColorId(unsigned colorIndex) noexcept {
 }
 
 void GridCell::setEmpty() noexcept { colorId_.reset(); };
+
+/* ------------------------------------------------
+ *          Serialization
+ * ------------------------------------------------*/
+
+nlohmann::json GridCell::serialize() const {
+    nlohmann::json j;
+    if (colorId_) {
+        j["colorId"] = *colorId_;
+    } else {
+        j["colorId"] = nullptr;
+    }
+    return j;
+}
+
+/**
+ * @brief Deserializes the GridCell from json.
+ */
+void GridCell::deserialize(const nlohmann::json &j) {
+    if (j.contains("colorId") && !j["colorId"].is_null()) {
+        colorId_ = j.at("colorId").get<unsigned>();
+    } else {
+        colorId_ = std::nullopt;
+    }
+}

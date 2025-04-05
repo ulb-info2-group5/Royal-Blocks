@@ -67,23 +67,14 @@ class GridCell {
      *          Serialization
      * ------------------------------------------------*/
 
-    nlohmann::json serialize() const {
-        nlohmann::json j;
-        if (colorId_) {
-            j["colorId"] = *colorId_;
-        } else {
-            j["colorId"] = nullptr;
-        }
-        return j;
-    }
-
-    void deserialize(const nlohmann::json &j) {
-        if (j.contains("colorId") && !j["colorId"].is_null()) {
-            colorId_ = j.at("colorId").get<unsigned>();
-        } else {
-            colorId_ = std::nullopt;
-        }
-    }
+    /**
+     * @brief Serializes the GridCell to json.
+     */
+    nlohmann::json serialize() const;
+    /**
+     * @brief Deserializes the GridCell from json.
+     */
+    void deserialize(const nlohmann::json &j);
 };
 
 #endif
