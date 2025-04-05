@@ -286,4 +286,4 @@ class ATetromino {
     friend TetrominoTest;
 };
 
-#endif
+#endif // TETROMINO_HPP

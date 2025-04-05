@@ -10,12 +10,13 @@
  */
 class RotationIndex {
   private:
-    int8_t index_;
+    uint8_t index_;
+    static constexpr uint8_t NUM_ROTATIONS = 4;
 
   public:
     // #### Constructors ####
 
-    RotationIndex(int8_t rotationIdx = 0);
+    RotationIndex(uint8_t rotationIdx = 0);
     RotationIndex(const RotationIndex &) = default;
     RotationIndex(RotationIndex &&) = default;
 
@@ -30,8 +31,8 @@ class RotationIndex {
 
     // #### Operators ####
 
-    void operator+=(int8_t rotationToAdd);
-    operator int8_t() const;
+    void operator+=(uint8_t rotationToAdd);
+    operator uint8_t() const;
 };
 
 #endif

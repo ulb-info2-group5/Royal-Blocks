@@ -1,11 +1,12 @@
 #include "rotation_index.hpp"
 #include <cstdint>
 
-RotationIndex::RotationIndex(int8_t rotationIdx) : index_{rotationIdx} {}
+RotationIndex::RotationIndex(uint8_t rotationIdx) : index_{rotationIdx} {}
 
-void RotationIndex::operator+=(int8_t rotationToAdd) {
+void RotationIndex::operator+=(uint8_t rotationToAdd) {
     index_ += rotationToAdd;
-    index_ = static_cast<int8_t>((index_ % 4 + 4) % 4);
+    index_ = static_cast<uint8_t>((index_ % NUM_ROTATIONS + NUM_ROTATIONS)
+                                  % NUM_ROTATIONS);
 }
 
-RotationIndex::operator int8_t() const { return index_; }
+RotationIndex::operator uint8_t() const { return index_; }
