@@ -1,5 +1,5 @@
-#ifndef TETROMINO_HPP
-#define TETROMINO_HPP
+#ifndef ABSTRACT_TETROMINO_HPP
+#define ABSTRACT_TETROMINO_HPP
 
 #include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"
@@ -286,4 +286,4 @@ class ATetromino {
     friend TetrominoTest;
 };
 
-#endif // TETROMINO_HPP
+#endif // ABSTRACT_TETROMINO_HPP

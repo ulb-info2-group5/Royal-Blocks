@@ -8,7 +8,7 @@
 #include "player_state/player_state.hpp"
 #include "player_tetris/player_tetris.hpp"
 #include "tetris/tetris.hpp"
-#include "tetromino/tetromino.hpp"
+#include "tetromino/abstract_tetromino.hpp"
 #include "tetromino/tetromino_shapes.hpp"
 
 #include <cassert>

@@ -1,7 +1,7 @@
 #include "tetromino_queue.hpp"
 #include "../tetris/tetris.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
-#include "tetromino/tetromino.hpp"
+#include "tetromino/abstract_tetromino.hpp"
 
 #include <random>
 

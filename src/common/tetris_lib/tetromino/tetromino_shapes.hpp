@@ -1,7 +1,7 @@
 #ifndef TETROMINO_SHAPES_HPP
 #define TETROMINO_SHAPES_HPP
 
-#include "tetromino.hpp"
+#include "abstract_tetromino.hpp"
 
 #include <iostream>
 

@@ -2,8 +2,7 @@
 
 #include "../board/board.hpp"
 #include "../board/board_update.hpp"
-#include "../tetromino/tetromino.hpp"
-#include "nlohmann/json_fwd.hpp"
+#include "../tetromino/abstract_tetromino.hpp"
 #include "vec2/vec2.hpp"
 
 #include <cstdint>

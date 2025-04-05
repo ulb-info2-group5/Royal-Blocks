@@ -2,7 +2,7 @@
 #define TETRIS_HPP
 
 #include "../board/board.hpp"
-#include "../tetromino/tetromino.hpp"
+#include "../tetromino/abstract_tetromino.hpp"
 #include "../tetromino_queue/tetromino_queue.hpp"
 #include "tetris_observer.hpp"
 #include "tetromino/tetromino_shapes.hpp"

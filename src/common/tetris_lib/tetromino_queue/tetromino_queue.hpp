@@ -3,7 +3,7 @@
 
 #include <deque>
 
-#include "../tetromino/tetromino.hpp"
+#include "../tetromino/abstract_tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 
 class TetrominoQueue {

@@ -1,4 +1,4 @@
-#include "tetromino.hpp"
+#include "abstract_tetromino.hpp"
 
 #include "../vec2/vec2.hpp"
 #include "rotation_index/rotation_index.hpp"

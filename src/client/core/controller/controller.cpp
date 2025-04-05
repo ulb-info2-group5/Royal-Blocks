@@ -27,7 +27,7 @@
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
-#include "../../../common/tetris_lib/tetromino/tetromino.hpp"
+#include "../../../common/tetris_lib/tetromino/abstract_tetromino.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
 #include "core/in_game/game_state/game_state.hpp"

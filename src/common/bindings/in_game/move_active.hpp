@@ -1,7 +1,7 @@
 #ifndef BINDINGS_MOVE_ACTIVE_HPP
 #define BINDINGS_MOVE_ACTIVE_HPP
 
-#include "../../tetris_lib/tetromino/tetromino.hpp"
+#include "../../tetris_lib/tetromino/abstract_tetromino.hpp"
 
 #include "../binding_type.hpp"
 

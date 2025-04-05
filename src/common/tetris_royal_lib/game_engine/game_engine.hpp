@@ -10,7 +10,7 @@
 #include "player_state/player_state.hpp"
 #include "player_tetris/player_tetris.hpp"
 #include "tetris/tetris.hpp"
-#include "tetromino/tetromino.hpp"
+#include "tetromino/abstract_tetromino.hpp"
 
 #include <array>
 #include <bitset>
@@ -265,8 +265,7 @@ class GameEngine {
     /**
      * @brief Quits the game for the given player.
      */
-    void quitGame(const UserID userID);                       
-
+    void quitGame(const UserID userID);
 };
 
 #endif // GAME_ENGINE_HPP

@@ -1,6 +1,6 @@
 #include "board.hpp"
 
-#include "../tetromino/tetromino.hpp"
+#include "../tetromino/abstract_tetromino.hpp"
 #include "../vec2/vec2.hpp"
 #include "board_update.hpp"
 #include "grid_cell.hpp"

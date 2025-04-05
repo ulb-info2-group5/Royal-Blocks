@@ -12,7 +12,6 @@
 #include "../main_tui.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "player_state/player_state.hpp"
-#include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
 
 #include <ftxui/component/component.hpp>

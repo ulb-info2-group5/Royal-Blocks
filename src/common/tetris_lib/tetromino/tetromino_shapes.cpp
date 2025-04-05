@@ -1,7 +1,7 @@
 #include "tetromino_shapes.hpp"
 
 #include "../vec2/vec2.hpp"
-#include "tetromino.hpp"
+#include "abstract_tetromino.hpp"
 
 /*--------------------------------------------------
              TetrominoShapes

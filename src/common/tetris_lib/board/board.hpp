@@ -1,7 +1,7 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include "../tetromino/tetromino.hpp"
+#include "../tetromino/abstract_tetromino.hpp"
 #include "../tetromino/tetromino_shapes.hpp"
 #include "board_update.hpp"
 #include "grid_cell.hpp"
