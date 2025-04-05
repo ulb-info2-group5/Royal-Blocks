@@ -94,10 +94,12 @@ class Board {
     void setRow(const std::array<GridCell, width_> &row, size_t yRow);
 
     /**
-     * @brief Sets the given row to a penalty line.
-     * Doesn't check whether the line was empty before doing so.
+     * @brief Replaces the given row by a penalty row.
+     * Doesn't check whether the row was empty before doing so.
+     *
+     * @param row A reference to the row.
      */
-    void setPenaltyLine(std::array<GridCell, width_> &row);
+    void setPenaltyRow(std::array<GridCell, width_> &row);
 
     /**
      * @brief Checks whether the row at the given y-coordinate is empty.
@@ -247,16 +249,16 @@ class Board {
      */
     void destroy2By2Occupied();
 
-    // #### Penalty Lines ####
+    // #### Penalty Rows ####
 
     /**
-     * Adds penalty lines, making all rows go up.
+     * Adds penalty rows, making all rows go up.
      * If it causes blocks to go outside the Board, doesn't do anything and
      * returns false (meaning the player has lost).
      *
      * @return False if any occupied tile goes out of the board
      */
-    bool receivePenaltyLines(size_t numPenalty = 1);
+    bool receivePenaltyRows(size_t numPenalty = 1);
 
     // #### Update Board State ####
 

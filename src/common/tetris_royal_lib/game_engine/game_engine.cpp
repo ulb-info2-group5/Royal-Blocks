@@ -183,7 +183,7 @@ void GameEngine::sendPenaltyRows(const PlayerState &playerStateSender,
             "sendPenaltyRows: Penalty target's tetris not found."};
     }
 
-    pTetrisTarget->eventReceivePenaltyLines(numRows);
+    pTetrisTarget->eventReceivePenaltyRows(numRows);
 }
 
 bool GameEngine::checkCanBuyEffect(const PlayerState &playerState,

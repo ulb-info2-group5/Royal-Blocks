@@ -41,7 +41,7 @@ void Board::dropRowsAbove(int yRow) {
 void Board::liftRowsFrom(int yRow, size_t numRows) {
     const int topRow = getHeight() - 1;
 
-    for (size_t lineCount = 0; lineCount < numRows; lineCount++) {
+    for (size_t rowCount = 0; rowCount < numRows; rowCount++) {
         for (int y = topRow; y > static_cast<int>(yRow); y--) {
             setRow(getRow(y - 1), static_cast<size_t>(y));
         }
@@ -50,7 +50,7 @@ void Board::liftRowsFrom(int yRow, size_t numRows) {
     emptyRow(yRow);
 }
 
-void Board::setPenaltyLine(std::array<GridCell, width_> &row) {
+void Board::setPenaltyRow(std::array<GridCell, width_> &row) {
     constexpr int firstCol = 0;
     const int lastCol = getWidth() - 1;
 
@@ -229,21 +229,21 @@ void Board::destroy2By2Occupied() {
     }
 }
 
-// #### Penalty Lines ####
+// #### Penalty Rows ####
 
-bool Board::receivePenaltyLines(size_t numPenaltyLines) {
-    if (!checkEmptyRow(static_cast<int>(getHeight() - numPenaltyLines))) {
+bool Board::receivePenaltyRows(size_t numPenaltyRows) {
+    if (!checkEmptyRow(static_cast<int>(getHeight() - numPenaltyRows))) {
         return false;
     }
 
     constexpr int bottomRow = 0;
-    // Lift rows from the bottom to make room for the penalty lines.
-    liftRowsFrom(bottomRow, numPenaltyLines);
+    // Lift rows from the bottom to make room for the penalty rows.
+    liftRowsFrom(bottomRow, numPenaltyRows);
 
-    // Fill the newly freed lines with penalty lines.
-    for (size_t penaltyLinesCount = 0; penaltyLinesCount < numPenaltyLines;
-         penaltyLinesCount++) {
-        setPenaltyLine(getRow(static_cast<int>(penaltyLinesCount)));
+    // Fill the newly freed rows with penalty rows.
+    for (size_t penaltyRowCount = 0; penaltyRowCount < numPenaltyRows;
+         penaltyRowCount++) {
+        setPenaltyRow(getRow(static_cast<int>(penaltyRowCount)));
     }
 
     return true;

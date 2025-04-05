@@ -142,10 +142,10 @@ class Tetris {
     void eventHoldNextTetromino();
 
     /**
-     * @brief Adds penalty lines, sets isAlive flag to false if it made the
+     * @brief Adds penalty rows, sets isAlive flag to false if it made the
      * player lose.
      */
-    void eventReceivePenaltyLines(int numPenalties);
+    void eventReceivePenaltyRows(int numPenalties);
 
     // #### Getters ####
 

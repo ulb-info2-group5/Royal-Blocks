@@ -188,9 +188,9 @@ void Tetris::eventHoldNextTetromino() {
     updatePreviewTetromino();
 }
 
-void Tetris::eventReceivePenaltyLines(int numPenalties) {
+void Tetris::eventReceivePenaltyRows(int numPenalties) {
     bool hasLost =
-        !board_.receivePenaltyLines(static_cast<size_t>(numPenalties));
+        !board_.receivePenaltyRows(static_cast<size_t>(numPenalties));
     updatePreviewTetromino();
     if (hasLost) {
         for (auto &tetrisObserver : tetrisObservers_) {
