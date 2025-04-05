@@ -1,7 +1,7 @@
 #include "placement_timed_effect.hpp"
 
 PlacementTimedEffect::PlacementTimedEffect(size_t placementsNum)
-    : AbstractTimedEffect(), numPlacements_(placementsNum),
+    : ATimedEffect{}, numPlacements_(placementsNum),
       remainingPlacements_(placementsNum) {}
 
 PlacementTimedEffect::PlacementTimedEffect(const PlacementTimedEffect &other)

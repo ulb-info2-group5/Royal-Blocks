@@ -11,7 +11,7 @@ class PenaltyTest;
 class TimedPenalty;
 using TimedPenaltyPtr = std::shared_ptr<TimedPenalty>;
 
-class TimedPenalty : public virtual AbstractTimedEffect {
+class TimedPenalty : public virtual ATimedEffect {
   protected:
     TimedPenalty(PenaltyType penaltyType);
     TimedPenalty(const TimedPenalty &) = delete;

@@ -13,7 +13,7 @@ class BonusTest;
 class TimedBonus;
 using TimedBonusPtr = std::shared_ptr<TimedBonus>;
 
-class TimedBonus : public virtual AbstractTimedEffect {
+class TimedBonus : public virtual ATimedEffect {
   protected:
     TimedBonus(BonusType bonusType);
     TimedBonus(const TimedBonus &) = default;

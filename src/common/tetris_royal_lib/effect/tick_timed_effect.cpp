@@ -1,7 +1,7 @@
 #include "tick_timed_effect.hpp"
 
 TickTimedEffect::TickTimedEffect(size_t ticksNum)
-    : AbstractTimedEffect(), numTicks_(ticksNum), remainingTicks_(ticksNum) {}
+    : ATimedEffect{}, numTicks_(ticksNum), remainingTicks_(ticksNum) {}
 
 TickTimedEffect::TickTimedEffect(const TickTimedEffect &other)
     : TickTimedEffect{other.remainingTicks_} {}

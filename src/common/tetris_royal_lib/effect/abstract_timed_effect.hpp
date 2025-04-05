@@ -5,17 +5,17 @@
 
 #include <nlohmann/json.hpp>
 
-class AbstractTimedEffect {
+class ATimedEffect {
 
   protected:
-    AbstractTimedEffect() = default;
-    AbstractTimedEffect(const AbstractTimedEffect &) = delete;
-    AbstractTimedEffect(AbstractTimedEffect &&) = delete;
-    AbstractTimedEffect &operator=(const AbstractTimedEffect &) = delete;
-    AbstractTimedEffect &operator=(AbstractTimedEffect &&) = delete;
+    ATimedEffect() = default;
+    ATimedEffect(const ATimedEffect &) = delete;
+    ATimedEffect(ATimedEffect &&) = delete;
+    ATimedEffect &operator=(const ATimedEffect &) = delete;
+    ATimedEffect &operator=(ATimedEffect &&) = delete;
 
   public:
-    virtual ~AbstractTimedEffect() = default;
+    virtual ~ATimedEffect() = default;
 
     /**
      * @brief Notifies that a clock tick has occurred.
@@ -45,6 +45,6 @@ class AbstractTimedEffect {
     virtual nlohmann::json serialize() const = 0;
 };
 
-using AbstractTimedEffectPtr = std::shared_ptr<AbstractTimedEffect>;
+using ATimedEffectPtr = std::shared_ptr<ATimedEffect>;
 
 #endif // ABSTRACT_TIMED_EFFECT_HPP

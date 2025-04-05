@@ -8,7 +8,7 @@
 
 class TickTimedEffectTest;
 
-class TickTimedEffect : public virtual AbstractTimedEffect {
+class TickTimedEffect : public virtual ATimedEffect {
   private:
     size_t numTicks_;
     // Number of ticks left before the effect expires
