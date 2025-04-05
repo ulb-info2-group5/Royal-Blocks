@@ -187,7 +187,7 @@ class ATetromino {
      *
      * @return The number of tests as a uint8_t
      */
-    uint8_t getNumOfTests() const noexcept;
+    uint8_t getNumOffsetTests() const noexcept;
 
     /**
      * @brief Creates and returns a unique pointer to a new Tetromino,
@@ -200,7 +200,7 @@ class ATetromino {
      * @return A unique pointer to the newly created Tetromino, adjusted
      *         by the specified offset.
      */
-    TetrominoPtr getNthOffset(uint8_t offsetIndex) const;
+    TetrominoPtr getNthOffsetTest(uint8_t offsetIndex) const;
 
     // #### Setters ####
 

@@ -136,11 +136,11 @@ const CyclicIndex &ATetromino::getPrevRotationIndex() const noexcept {
     return prevRotationIdx_;
 }
 
-uint8_t ATetromino::getNumOfTests() const noexcept {
+uint8_t ATetromino::getNumOffsetTests() const noexcept {
     return static_cast<uint8_t>(offsetData_->at(0).size());
 }
 
-TetrominoPtr ATetromino::getNthOffset(uint8_t offsetIndex) const {
+TetrominoPtr ATetromino::getNthOffsetTest(uint8_t offsetIndex) const {
     TetrominoPtr copy = this->clone();
 
     Vec2 offsetVal1 = offsetData_->at(static_cast<size_t>(prevRotationIdx_))

@@ -147,9 +147,10 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
 
     bool isValid = false;
 
-    for (uint8_t testIdx = 1; testIdx <= activeTetromino_->getNumOfTests();
-         ++testIdx) {
-        testTetromino = activeTetromino_->getNthOffset(testIdx);
+    for (uint8_t offsetTestIdx = 1;
+         offsetTestIdx <= activeTetromino_->getNumOffsetTests();
+         ++offsetTestIdx) {
+        testTetromino = activeTetromino_->getNthOffsetTest(offsetTestIdx);
 
         if (board_.checkInGrid(*testTetromino)) {
             activeTetromino_ = std::move(testTetromino);
