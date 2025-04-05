@@ -14,10 +14,7 @@
 
 #include <array>
 #include <bitset>
-#include <memory>
 #include <optional>
-
-using GameStatePtr = std::shared_ptr<GameState>;
 
 class GameEngine {
   public:
@@ -34,6 +31,9 @@ class GameEngine {
     static constexpr size_t numGameMode =
         static_cast<size_t>(GameMode::NumGameMode);
 
+    /**
+     * @brief Types used for constant-time feature lookup per GameMode.
+     */
     using FeaturesBitset = std::bitset<GameEngine::numFeatures>;
     using FeaturesMap = std::array<FeaturesBitset, numGameMode>;
 
@@ -44,6 +44,9 @@ class GameEngine {
 
     // #### Features-related ####
 
+    /**
+     * @brief Generates a FeaturesBitsets at compile time.
+     */
     static constexpr auto genFeaturesBitset =
         [](std::initializer_list<GameEngine::GameModeFeature> enabledFeatures)
         -> GameEngine::FeaturesBitset {
@@ -206,10 +209,6 @@ class GameEngine {
      */
     void selectTarget(UserID userID, UserID target);
 
-    // void selectEffect(UserID userID, EffectType effectType);
-    // void selectNextEffect(UserID userID);
-    // void selectPrevEffect(UserID userID);
-
     /**
      * @brief Moves the player's active Tetromino in the given direction if
      * possible.
@@ -253,6 +252,9 @@ class GameEngine {
      */
     bool checkAlive(UserID userID) const;
 
+    /**
+     * @brief Returns true if the game is finished.
+     */
     bool gameIsFinished() const;
 
     /**

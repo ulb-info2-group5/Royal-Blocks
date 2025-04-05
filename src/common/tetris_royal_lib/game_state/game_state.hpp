@@ -69,4 +69,6 @@ class GameState {
     nlohmann::json serializeForViewer() const;
 };
 
+using GameStatePtr = std::shared_ptr<GameState>;
+
 #endif // GAME_STATE_HPP
