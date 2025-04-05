@@ -11,7 +11,7 @@ enum class GameMode {
     NumGameMode,
 };
 
-/*
+/**
  * @brief Converts a GameMode to a string
  *
  * @param mode the GameMode to convert

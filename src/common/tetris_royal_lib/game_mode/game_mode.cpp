@@ -11,6 +11,6 @@ std::string toString(GameMode mode) {
     case GameMode::RoyalCompetition:
         return "Royal Competition";
     default:
-        return "Unknown";
+        return "Unknown game mode";
     }
 }
