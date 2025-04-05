@@ -26,7 +26,7 @@ class ScreenManager {
 
     std::unique_ptr<QApplication> app_;
 
-    std::unique_ptr<MainGui> gui_;
+    std::unique_ptr<GUI::MainGui> gui_;
 
   public:
     /*

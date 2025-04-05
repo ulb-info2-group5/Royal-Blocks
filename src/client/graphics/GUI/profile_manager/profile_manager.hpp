@@ -1,24 +1,26 @@
 /*Authors : Ernest Jonas Rafaou*/
 
-#ifndef PROFILE_MANAGER_GUI_HPP
-#define PROFILE_MANAGER_GUI_HPP
+#ifndef GUI_PROFILE_MANAGER_HPP
+#define GUI_PROFILE_MANAGER_HPP
 
 #include <QApplication>
-#include <QPushButton>
-#include <QWidget>
-#include <QLineEdit>
-#include <QLabel>
-#include <QStackedWidget>
 #include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QStackedWidget>
+#include <QWidget>
 
-class Controller; // Forward declaration
+class Controller;
 
-class MainGui; // Forward declaration
+namespace GUI {
 
-class ProfileManagerGui : public QWidget {
-    Q_OBJECT
+    class MainGui;
 
-    private:
+    class ProfileManagerGui : public QWidget {
+        Q_OBJECT
+
+      private:
         Controller &controller_;
         MainGui &mainGui_;
 
@@ -33,23 +35,24 @@ class ProfileManagerGui : public QWidget {
 
         QLabel changePasswordAndUsernameMsgLabel_;
 
-
         // Methode
         void basicSetup();
         void changePasswordUsername();
 
-    private slots:
+      private slots:
         void onBack();
-    
 
-    public:
-        ProfileManagerGui(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+      public:
+        ProfileManagerGui(Controller &controller, MainGui &mainGui,
+                          QWidget *parent = nullptr);
 
         ~ProfileManagerGui() = default;
 
-    signals:
+      signals:
         // Back to main menu
         void backToMainMenu();
-};
+    };
 
-#endif // PROFILE_MANAGER_GUI_HPP
+} // namespace GUI
+
+#endif // GUI_PROFILE_MANAGER_HPP

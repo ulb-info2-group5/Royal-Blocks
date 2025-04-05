@@ -13,7 +13,7 @@ ScreenManager::ScreenManager(Controller &controller, UiChoice uiChoice,
     } else {
         auto [argc, argv] = args;
         app_ = std::make_unique<QApplication>(argc, argv);
-        gui_ = std::make_unique<MainGui>(controller_);
+        gui_ = std::make_unique<GUI::MainGui>(controller_);
     }
 }
 

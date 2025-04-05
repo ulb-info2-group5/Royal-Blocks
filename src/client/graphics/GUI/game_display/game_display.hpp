@@ -1,5 +1,5 @@
-// #ifndef GAME_DISPLAY_GUI_HPP
-// #define GAME_DISPLAY_GUI_HPP
+// #ifndef GUI_GAME_DISPLAY_HPP
+// #define GUI_GAME_DISPLAY_HPP
 
 // #include <QWidget>
 // #include <QVBoxLayout>
@@ -8,8 +8,8 @@
 // #include <QPushButton>
 // #include <QLineEdit>
 // #include <QLabel>
-// #include <QImage> 
-// #include <QColor> 
+// #include <QImage>
+// #include <QColor>
 // #include <QProgressBar>
 
 // #include "../../common/abstract_game_display.hpp"
@@ -34,13 +34,12 @@
 
 // constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
 //                  HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
-//                  WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) * 10,
-//                  HEIGHT_CANVAS_SMALL =
+//                  WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) *
+//                  10, HEIGHT_CANVAS_SMALL =
 //                      static_cast<size_t>(CellSize::Small) * 20;
 
-
 // class GameDisplayGUI final : public QWidget, public AbstractGameDisplay {
-        
+
 //     Q_OBJECT
 
 //     private:
@@ -110,14 +109,14 @@
 
 //     public:
 
-//         GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr);
+//         GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget
+//         *parent = nullptr);
 
 //         ~GameDisplayGUI() = default;
 
 //     signals:
 
 //         void quitGame();
-
 
 // };
 

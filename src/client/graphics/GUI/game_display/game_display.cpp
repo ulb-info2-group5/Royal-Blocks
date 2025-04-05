@@ -32,8 +32,8 @@
 // #include <QPushButton>
 // #include <QLineEdit>
 // #include <QLabel>
-// #include <QImage> 
-// #include <QColor> 
+// #include <QImage>
+// #include <QColor>
 // #include <QProgressBar>
 
 // QColor getQColor(AbstractGameDisplay::Color col, selfCellType selfCellType) {
@@ -75,18 +75,19 @@
 //             returnValue = QColor::fromRgb(255,255,0);
 //             break;
 //         };
-    
+
 //         if (selfCellType == SelfCellType::Preview) {
 //             returnValue = QColor::fromRgb(128,128,128,200);
 //         }
-    
+
 //         return returnValue;
 // }
 
-// GameDisplayGUI::GameDisplayGUI(Controller &controller, MainGui &mainGui, QWidget *parent = nullptr) :
+// GameDisplayGUI::GameDisplayGUI(Controller &controller, MainGui &mainGui,
+// QWidget *parent = nullptr) :
 //     AbstractGameDisplay(controller), mainGui_(mainGui), QWidget(parent) {}
 
-// // private methods 
+// // private methods
 
 // //void GameDisplayGUI::quitButton();
 
@@ -130,8 +131,8 @@
 
 // void GameDisplayGUI::setup() {
 //     QPushButton *quitButton_ = new QPushButton(this);
-        
-//     if (getGameMode() == GameMode::RoyalCompetition || 
+
+//     if (getGameMode() == GameMode::RoyalCompetition ||
 //     getGameMode() == GameMode::Classic){
 //         for (int i = 0; i < getNumOpponents(); i++){
 //             QPushButton *targetButton = new QPushButton(this);
@@ -142,7 +143,7 @@
 //     //if (getGameMode() == GameMode::RoyalCompetition) {} effects lol
 // }
 
-// // private slots 
+// // private slots
 
 // void GameDisplayGUI::changeTarget(unsigned targetIdx = 0);
 
