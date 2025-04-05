@@ -1,7 +1,7 @@
 #include "abstract_tetromino.hpp"
 
 #include "../vec2/vec2.hpp"
-#include "rotation_index/rotation_index.hpp"
+#include "cyclic_index/cyclic_index.hpp"
 #include "tetromino_shapes.hpp"
 
 #include <algorithm>
@@ -45,7 +45,8 @@ ATetromino::ATetromino(Vec2 &&anchorPoint, std::vector<Vec2> &&body,
                        const std::vector<std::vector<Vec2>> *offsetData,
                        TetrominoShape shape)
     : shape_(shape), anchorPoint_{std::move(anchorPoint)},
-      body_{std::move(body)}, offsetData_(offsetData) {
+      body_{std::move(body)}, rotationIdx_(NUM_ROTATIONS),
+      prevRotationIdx_(NUM_ROTATIONS), offsetData_(offsetData) {
 
     int minY = std::numeric_limits<int>::max();
     int maxY = std::numeric_limits<int>::min();
@@ -127,11 +128,11 @@ unsigned ATetromino::getColorId() const noexcept {
     return static_cast<unsigned>(getShape());
 }
 
-const RotationIndex &ATetromino::getRotationIndex() const noexcept {
+const CyclicIndex &ATetromino::getRotationIndex() const noexcept {
     return rotationIdx_;
 }
 
-const RotationIndex &ATetromino::getPrevRotationIndex() const noexcept {
+const CyclicIndex &ATetromino::getPrevRotationIndex() const noexcept {
     return prevRotationIdx_;
 }
 

@@ -22,10 +22,8 @@
  *
  * @brief All possible shapes a tetromino can have.
  *
- * @note
- *
- *  NumTetrominoShape & NumBasicTetrominoShape are not actual Shapes. They are
- *  just used to iterate over all types of shapes and separate special
+ * @note NumTetrominoShape & NumBasicTetrominoShape are not actual Shapes. They
+ * are just used to iterate over all types of shapes and separate special
  * tetrominoes from normal tetrominoes.
  */
 enum class TetrominoShape {
@@ -213,4 +211,4 @@ class MiniTetromino final : public ATetromino {
     }
 };
 
-#endif
+#endif // TETROMINO_SHAPES_HPP

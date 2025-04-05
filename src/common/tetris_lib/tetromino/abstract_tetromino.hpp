@@ -2,7 +2,7 @@
 #define ABSTRACT_TETROMINO_HPP
 
 #include "../vec2/vec2.hpp"
-#include "rotation_index/rotation_index.hpp"
+#include "cyclic_index/cyclic_index.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -38,6 +38,7 @@ enum class TetrominoMove { Left, Right, Down };
 class ATetromino {
   public:
     constexpr static size_t MAX_DIMENSION = 4;
+    static constexpr uint8_t NUM_ROTATIONS = 4;
 
   private:
     size_t width_ = 0;
@@ -48,8 +49,8 @@ class ATetromino {
 
     // #### SRS-related ####
 
-    RotationIndex rotationIdx_;
-    RotationIndex prevRotationIdx_;
+    CyclicIndex rotationIdx_;
+    CyclicIndex prevRotationIdx_;
     const std::vector<std::vector<Vec2>> *offsetData_;
 
   protected:
@@ -171,14 +172,14 @@ class ATetromino {
      *
      * @return The rotation-index.
      */
-    const RotationIndex &getRotationIndex() const noexcept;
+    const CyclicIndex &getRotationIndex() const noexcept;
 
     /**
      * @brief Returns the Tetromino's previous rotation index.
      *
      * @return The previous rotation-index.
      */
-    const RotationIndex &getPrevRotationIndex() const noexcept;
+    const CyclicIndex &getPrevRotationIndex() const noexcept;
 
     /**
      * @brief Returns the number of offset-tests that this Tetromino can do
