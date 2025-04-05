@@ -16,6 +16,7 @@ TimedBonusPtr TimedBonus::makeBonus(BonusType bonusType) {
         pBonus = std::make_unique<SlowDown>();
         break;
     default:
+        std::cerr << "unknown timed bonus type" << std::endl;
         break;
     }
 
@@ -23,11 +24,6 @@ TimedBonusPtr TimedBonus::makeBonus(BonusType bonusType) {
 }
 
 BonusType TimedBonus::getBonusType() const { return bonusType_; }
-
-std::ostream &operator<<(std::ostream &os, const TimedBonus &bonus) {
-    os << "Bonus(" << bonus.getBonusType() << ")";
-    return os;
-}
 
 /* ------------------------------------------------
  *          Serialization

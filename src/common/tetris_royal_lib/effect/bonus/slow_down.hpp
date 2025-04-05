@@ -22,6 +22,10 @@ class SlowDown final : public TimedBonus, public TickTimedEffect {
 
     ~SlowDown() = default;
 
+    /**
+     * @brief Returns true if the engine tick should be ignored for the player
+     * that has this effect.
+     */
     bool shouldIgnoreTick();
 };
 

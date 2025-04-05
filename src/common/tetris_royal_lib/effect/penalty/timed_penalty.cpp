@@ -4,6 +4,7 @@
 #include "reverse_controls.hpp"
 #include "speed_up.hpp"
 
+#include <iostream>
 #include <memory>
 
 TimedPenalty::TimedPenalty(PenaltyType penaltyType)
@@ -26,6 +27,8 @@ TimedPenaltyPtr TimedPenalty::makePenalty(PenaltyType penaltyType) {
         pPenalty = std::make_unique<Blackout>();
         break;
     default:
+        std::cerr << "unknown timed penalty type" << std::endl;
+        ;
         break;
     }
 

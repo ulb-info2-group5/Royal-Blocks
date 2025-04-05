@@ -12,6 +12,9 @@ enum class PenaltyType {
     NumPenaltyType,
 };
 
+/**
+ * @brief Converts the given PenaltyType to a string.
+ */
 std::string toString(PenaltyType type);
 
 std::ostream &operator<<(std::ostream &os, PenaltyType type);

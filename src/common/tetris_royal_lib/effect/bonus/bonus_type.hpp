@@ -9,6 +9,9 @@ enum class BonusType {
     NumBonusType,
 };
 
+/**
+ * @brief Converts the given BonusType to a string.
+ */
 std::string toString(BonusType type);
 
 std::ostream &operator<<(std::ostream &os, BonusType type);

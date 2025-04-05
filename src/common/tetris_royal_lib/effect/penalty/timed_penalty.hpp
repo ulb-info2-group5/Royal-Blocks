@@ -12,6 +12,9 @@ class TimedPenalty;
 using TimedPenaltyPtr = std::shared_ptr<TimedPenalty>;
 
 class TimedPenalty : public virtual ATimedEffect {
+  private:
+    PenaltyType penaltyType_;
+
   protected:
     TimedPenalty(PenaltyType penaltyType);
     TimedPenalty(const TimedPenalty &) = delete;
@@ -24,16 +27,19 @@ class TimedPenalty : public virtual ATimedEffect {
 
     static TimedPenaltyPtr makePenalty(PenaltyType bonusType);
 
+    /**
+     * @brief Returns the penalty's type.
+     */
     PenaltyType getPenaltyType() const;
 
     /* ------------------------------------------------
      *          Serialization
      * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes the penalty to json.
+     */
     nlohmann::json serialize() const;
-
-  private:
-    PenaltyType penaltyType_;
 
     friend PenaltyTest;
 };

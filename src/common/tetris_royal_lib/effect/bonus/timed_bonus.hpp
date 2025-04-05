@@ -14,6 +14,9 @@ class TimedBonus;
 using TimedBonusPtr = std::shared_ptr<TimedBonus>;
 
 class TimedBonus : public virtual ATimedEffect {
+  private:
+    BonusType bonusType_;
+
   protected:
     TimedBonus(BonusType bonusType);
     TimedBonus(const TimedBonus &) = default;
@@ -24,27 +27,24 @@ class TimedBonus : public virtual ATimedEffect {
   public:
     virtual ~TimedBonus() = default;
 
+    /**
+     * @brief Creates a new Bonus instance.
+     */
     static TimedBonusPtr makeBonus(BonusType bonusType);
 
-    BonusType getBonusType() const;
-
     /**
-     * @brief Outputs the bonus to a stream.
-     *
-     * @param os The output stream.
-     * @param bonus The Bonus to output.
-     * @return A reference to the output stream.
+     * @brief Returns the bonus's type.
      */
-    friend std::ostream &operator<<(std::ostream &os, const TimedBonus &bonus);
+    BonusType getBonusType() const;
 
     /* ------------------------------------------------
      *          Serialization
      * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes the bonus to json.
+     */
     nlohmann::json serialize() const;
-
-  private:
-    BonusType bonusType_;
 
     friend BonusTest;
 };

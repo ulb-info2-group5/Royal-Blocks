@@ -6,7 +6,6 @@
 #include <nlohmann/json.hpp>
 
 class ATimedEffect {
-
   protected:
     ATimedEffect() = default;
     ATimedEffect(const ATimedEffect &) = delete;
@@ -42,6 +41,9 @@ class ATimedEffect {
      *          Serialization
      * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes the ATimedEffect to json.
+     */
     virtual nlohmann::json serialize() const = 0;
 };
 
