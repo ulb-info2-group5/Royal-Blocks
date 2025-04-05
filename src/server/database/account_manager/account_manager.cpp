@@ -110,6 +110,23 @@ void AccountManager::updateScore(const int userId, const int newScore) {
         {newScore, userId});
 }
 
+bool AccountManager::updateUsername(const int userID , std::string &newUsername){
+    if (checkUsernameExists(newUsername)){
+        std::cout << "a user already has this nickname" << std::endl;
+        return false;
+    }else {
+        dbManager_->executeSqlChangeData(
+            "UPDATE users SET username = ? WHERE id = ? ", {newUsername, userID});
+        return true;
+    }
+}
+
+void AccountManager::updatePassword(const int userID , std::string &newPassword){
+    dbManager_->executeSqlChangeData(
+        "UPDATE users SET password = ? WHERE id = ? ", {newPassword, userID});
+}
+
+
 int AccountManager::getUserId(const std::string &username) const {
     std::string sql = "SELECT id FROM users WHERE username = ?";
     int userId = -1;

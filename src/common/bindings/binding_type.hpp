@@ -22,6 +22,7 @@ namespace bindings {
         PendingFriendRequests,
         ChangeUsername,
         ChangePassword,
+        ChangeUsernameResponse,
 
         // in game
         GameState,

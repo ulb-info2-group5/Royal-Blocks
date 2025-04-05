@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "../social_service/social_service.hpp"
-
+#include "../account_service/account_service.hpp"
 
 
 #include "../matchmaking/matchmaking.hpp"
@@ -33,6 +33,8 @@ class ClientManager {
     GamesManager gamesManager_;
     Matchmaking matchmaking_;
     SocialService socialService_;
+    AccountService accountService_;
+    
 
 
     // contains client who are not yet authenticated
@@ -84,8 +86,7 @@ class ClientManager {
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
      */
-    nlohmann::json authPacketHandler(bindings::BindingType type,
-                                     nlohmann::json data);
+    nlohmann::json authPacketHandler(nlohmann::json binding );
 
     void handleMessage(nlohmann::json message);
 

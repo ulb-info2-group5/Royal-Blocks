@@ -38,7 +38,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     using PacketHandler =
         std::function<void(const std::string &, const int clientId)>;
     using AuthPacketHandler =
-        std::function<nlohmann::json(bindings::BindingType, nlohmann::json)>;
+        std::function<nlohmann::json(nlohmann::json)>;
     using AuthSuccessCallback =
         std::function<void(std::shared_ptr<ClientLink>, nlohmann::json)>;
 

@@ -105,6 +105,10 @@ class AccountManager {
      */
     void updateScore(const int userId, const int newScore);
 
+    bool updateUsername(const int userID , std::string &newUsername);
+
+    void updatePassword(const int userID , std::string &newPassword);
+
     /*
      * @brief Get the user ID from the username
      *

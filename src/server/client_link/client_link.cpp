@@ -41,8 +41,7 @@ void ClientLink::handleErrorReading() {
 void ClientLink::handleAuthentication(std::string &packet) {
     nlohmann::json jsonPacket = nlohmann::json::parse(packet);
     nlohmann::json response =
-        authPacketHandler_(jsonPacket.at("type").get<bindings::BindingType>(),
-                           jsonPacket.at("data"));
+        authPacketHandler_(jsonPacket);
     sendPackage(response);
     std::cout << response.dump() << std::endl;
     if (response.at("type").get<bindings::BindingType>()

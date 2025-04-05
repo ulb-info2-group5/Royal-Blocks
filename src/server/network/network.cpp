@@ -18,9 +18,8 @@ void Network::accept() {
                 [this](const std::string &packet, const int clientId) {
                     clientManager_.handlePacket(packet, clientId);
                 },
-                [this](bindings::BindingType type,
-                       nlohmann::json data) -> nlohmann::json {
-                    return clientManager_.authPacketHandler(type, data);
+                [this](nlohmann::json binding) -> nlohmann::json {
+                    return clientManager_.authPacketHandler(binding);
                 },
                 [this](std::shared_ptr<ClientLink> clientLink,
                        nlohmann::json clientData) {

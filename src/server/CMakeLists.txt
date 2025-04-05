@@ -12,6 +12,7 @@ file(GLOB_RECURSE SERVER_SOURCES
     games_manager/*.cpp
     game_server/*.cpp
     matchmaking/*.cpp
+    account_service/*.cpp
 )
 
 add_library(server_lib STATIC ${SERVER_SOURCES})

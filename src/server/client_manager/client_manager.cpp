@@ -87,7 +87,8 @@ ClientManager::ClientManager(DataBase database)
         [this](std::vector<Player> players,GameMode gameMode ) { gameFindCallback(players, gameMode); }), 
 
     socialService_(database.friendsManager, database.messagesManager, 
-        [this](UserID userID)->bindings::User { return getUser(userID) ; })
+        [this](UserID userID)->bindings::User { return getUser(userID) ; }),
+    accountService_(database.accountManager)
      {}
 
 
@@ -126,19 +127,17 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
     
 }
 
-nlohmann::json ClientManager::authPacketHandler(bindings::BindingType type,
-                                                nlohmann::json data) {
+nlohmann::json ClientManager::authPacketHandler(nlohmann::json binding) {
     nlohmann::json response;
+    
+    bindings::BindingType type =  binding.at("type").get<bindings::BindingType>(); 
     switch (type) {
     case bindings::BindingType::Authentication:
-        response = (checkCredentials(data))
-                       ? bindings::AuthenticationResponse{true}.to_json()
-                       : bindings::AuthenticationResponse{false}.to_json();
+        response = accountService_.authenticationAttempt(bindings::Authentication::from_json(binding),
+        [this](UserID userID)->bool { return isClientConnected(userID) ; }).to_json();
         break;
     case bindings::BindingType::Registration:
-        response = (attemptCreateAccount(data))
-                       ? bindings::RegistrationResponse{true}.to_json()
-                       : bindings::RegistrationResponse{false}.to_json();
+        response = accountService_.attemptCreateAccount(bindings::Registration::from_json(binding)).to_json();
         break;
     default:
         break;
@@ -201,6 +200,14 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         updateMenu(clientId);
         updateMenu(jPack.at("data").at("playerId").get<UserID>());
         break;
+    case bindings::BindingType::ChangePassword:
+        accountService_.changePassword(clientId, bindings::ChangePassword::from_json(jPack));
+        break;
+    case bindings::BindingType::ChangeUsername:
+        connectedClients_[clientId]->sendPackage(accountService_.attemptChangeUsername(clientId, bindings::ChangeUsername::from_json(jPack), 
+        [this](UserID userID){updateThisUserWithAllhisFriends(userID);}).to_json());        
+        break;
+        
     default:
         
         break;
@@ -274,7 +281,6 @@ void ClientManager::updateThisUserWithAllhisFriends(UserID userId){
 }
 
 bindings::User ClientManager::getUser(UserID userID){
-
     return bindings::User{
         userID, 
         database_.accountManager->getUsername(userID), 
