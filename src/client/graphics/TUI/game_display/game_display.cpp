@@ -107,10 +107,9 @@ namespace TUI {
 
             ftxui::Component button = ftxui::Button(
                 toString(effectType) + " " + std::to_string(effectPrice),
-                [&]() {
+                [this, effectType]() {
                     controller_.setSelectedEffectType(effectType);
                     controller_.buyEffect(effectType);
-                    availableEffects->SetActiveChild(button);
                 },
                 GlobalButtonStyle());
 
