@@ -9,6 +9,7 @@
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
 #include <ostream>
@@ -65,8 +66,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
               return playerStates;
           }())},
       engine{pGameState_}, gameId_{id},
-      callBackFinishGame_{callBackFinishGame} {
-}
+      callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     // Translate bindingStr to nlohmann::json
@@ -150,6 +150,15 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
 
     case bindings::BindingType::QuitGame:
         engine.quitGame(userId);
+
+        std::erase_if(pClientLinks_, [userId](auto pWeakClientLink) {
+            if (std::shared_ptr<ClientLink> pClientLink =
+                    pWeakClientLink.lock()) {
+                return pClientLink->getUserID() == userId;
+            }
+            return true;
+        });
+
         break;
 
     default:
