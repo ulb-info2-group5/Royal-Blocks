@@ -25,6 +25,64 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
                                            gameModeFeature);
 }
 
+Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) const {
+    // TODO: Adapt this to what the assistant asked
+    return numClearedRows * 100;
+}
+
+Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) const {
+    // TODO: Adapt this to what the assistant asked
+    return numClearedRows;
+}
+
+bool GameEngine::checkAlive(const PlayerStatePtr &pPlayerState) const {
+    if (pPlayerState == nullptr) {
+        return false;
+    }
+
+    return pPlayerState->isAlive();
+}
+
+void GameEngine::tick(PlayerTetris &playerTetris) {
+    playerTetris.pPlayerState->notifyEngineTick();
+
+    if (!playerTetris.pPlayerState->isGameTick()) {
+        return;
+    }
+
+    if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
+        // ignore tick (slowdown bonus)
+        if (shouldIgnoreTick(*playerTetris.pPlayerState)) {
+            return;
+        }
+    }
+
+    const TetrisPtr &pTetris = playerTetris.pTetris;
+    const PlayerStatePtr &pPlayerState = playerTetris.pPlayerState;
+
+    size_t numClearedRows = pTetris->eventClockTick();
+    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
+    pPlayerState->increaseScore(earnedPoints);
+
+    // TODO: remove code duplication with bigDrop
+    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
+        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
+            if (checkAlive(targetID) && numClearedRows >= 2) {
+                // For n (>= 2) rows cleared by the player, his target
+                // receives n-1 penalty rows.
+                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
+            }
+
+            return 0;
+        });
+    }
+
+    if (checkFeatureEnabled(GameModeFeature::Effects)) {
+        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
+        pPlayerState->increaseEnergy(earnedEnergy);
+    }
+}
+
 void GameEngine::handlePlayerTimedBonus(PlayerTetris &playerTetris) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
@@ -230,64 +288,6 @@ void GameEngine::handleLightning(Tetris &tetris) {
     }
 
     tetris.destroy2By2Occupied();
-}
-
-Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) const {
-    // TODO: Adapt this to what the assistant asked
-    return numClearedRows * 100;
-}
-
-Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) const {
-    // TODO: Adapt this to what the assistant asked
-    return numClearedRows;
-}
-
-bool GameEngine::checkAlive(const PlayerStatePtr &pPlayerState) const {
-    if (pPlayerState == nullptr) {
-        return false;
-    }
-
-    return pPlayerState->isAlive();
-}
-
-void GameEngine::tick(PlayerTetris &playerTetris) {
-    playerTetris.pPlayerState->notifyEngineTick();
-
-    if (!playerTetris.pPlayerState->isGameTick()) {
-        return;
-    }
-
-    if (checkFeatureEnabled(GameEngine::GameModeFeature::Effects)) {
-        // ignore tick (slowdown bonus)
-        if (shouldIgnoreTick(*playerTetris.pPlayerState)) {
-            return;
-        }
-    }
-
-    const TetrisPtr &pTetris = playerTetris.pTetris;
-    const PlayerStatePtr &pPlayerState = playerTetris.pPlayerState;
-
-    size_t numClearedRows = pTetris->eventClockTick();
-    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-    pPlayerState->increaseScore(earnedPoints);
-
-    // TODO: remove code duplication with bigDrop
-    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
-            if (checkAlive(targetID) && numClearedRows >= 2) {
-                // For n (>= 2) rows cleared by the player, his target
-                // receives n-1 penalty rows.
-                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
-            }
-
-            return 0;
-        });
-    }
-
-    if (checkFeatureEnabled(GameModeFeature::Effects)) {
-        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
-        pPlayerState->increaseEnergy(earnedEnergy);
-    }
 }
 
 /* ------------------------------------------------

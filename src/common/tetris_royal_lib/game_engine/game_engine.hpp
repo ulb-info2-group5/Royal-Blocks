@@ -97,6 +97,28 @@ class GameEngine {
      */
     bool checkFeatureEnabled(GameModeFeature gameModeFeature) const;
 
+    /**
+     * @brief Returns the number of points awarded for clearing
+     * the given number of rows.
+     */
+    Score calculatePointsClearedRows(size_t numClearedRows) const;
+
+    /**
+     * @brief Returns the amount of Energy awarded to the player for
+     * clearing the given number of rows.
+     */
+    Energy calculateEnergyClearedRows(size_t numClearedRows) const;
+
+    /**
+     * @brief Checks that the given player is alive.
+     */
+    bool checkAlive(const PlayerStatePtr &pPlayerState) const;
+
+    /**
+     * @brief Makes an engine tick happen for the given player.
+     */
+    void tick(PlayerTetris &playerTetris);
+
     // #### Effects Helpers ####
 
     /**
@@ -166,28 +188,6 @@ class GameEngine {
      * if there one was found;otherwise, doesn't do anything.
      */
     void handleLightning(Tetris &tetris);
-
-    /**
-     * @brief Returns the number of points awarded for clearing
-     * the given number of rows.
-     */
-    Score calculatePointsClearedRows(size_t numClearedRows) const;
-
-    /**
-     * @brief Returns the amount of Energy awarded to the player for
-     * clearing the given number of rows.
-     */
-    Energy calculateEnergyClearedRows(size_t numClearedRows) const;
-
-    /**
-     * @brief Checks that the given player is alive.
-     */
-    bool checkAlive(const PlayerStatePtr &pPlayerState) const;
-
-    /**
-     * @brief Makes an engine tick happen for the given player.
-     */
-    void tick(PlayerTetris &playerTetris);
 
   public:
     /**
