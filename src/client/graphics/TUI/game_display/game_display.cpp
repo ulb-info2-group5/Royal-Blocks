@@ -570,8 +570,6 @@ namespace TUI {
     void GameDisplay::render() {
         ftxui::Component gameContainer = ftxui::Container::Vertical({});
 
-        bool isWinner = false;
-
         auto updateGame = [&] {
             gameContainer->DetachAllChildren();
 
@@ -580,11 +578,10 @@ namespace TUI {
             if (std::visit(
                     [](const auto &gameState) { return gameState.isFinished; },
                     gameState_)) {
-                if (getGameMode() == GameMode::Endless || !isWinner
-                    || isSpectating()) {
-                    gameContainer->Add(drawGameOver());
-                } else {
+                if (isWinner()) {
                     gameContainer->Add(drawWin());
+                } else {
+                    gameContainer->Add(drawGameOver());
                 }
 
                 return;
@@ -594,8 +591,6 @@ namespace TUI {
                 [&](const auto &gameState) {
                     using T = std::decay_t<decltype(gameState)>;
                     if constexpr (std::is_same_v<T, client::GameState>) {
-                        isWinner = gameState.self.playerState.isAlive;
-
                         if (getGameMode() == GameMode::Endless) {
                             drawEndlessMode();
                         } else {

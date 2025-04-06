@@ -41,6 +41,7 @@
 #include <optional>
 #include <string>
 #include <thread>
+#include <variant>
 #include <vector>
 
 // ### Private methods ###
@@ -115,12 +116,6 @@ void Controller::handlePacket(const std::string_view pack) {
     case bindings::BindingType::Ranking: {
         ranking_ = bindings::Ranking::from_json(j).ranking;
         updateType = UpdateType::RANKING;
-        break;
-    }
-
-    case bindings::BindingType::GameOver: {
-        std::visit([](auto &gameState) { gameState.isFinished = true; },
-                   gameState_);
         break;
     }
 
@@ -282,6 +277,16 @@ void Controller::buyEffect(EffectType effectType, bool stashForLater) {
 
 void Controller::quitGame() {
     networkManager_.send(bindings::QuitGame{}.to_json().dump());
+    std::visit(
+        [](auto &gameState) {
+            using T = std::decay_t<decltype(gameState)>;
+            if constexpr (std::is_same_v<T, client::GameState>) {
+                gameState.self.playerState.isAlive = false;
+            }
+
+            gameState.isFinished = true;
+        },
+        gameState_);
 }
 
 void Controller::handleKeypress(const std::string &pressedKey) {

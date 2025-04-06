@@ -30,16 +30,15 @@ class AbstractGameDisplay {
         Pink,
         Green,
         Yellow
-      };
-      
-      
+    };
+
   protected:
     AbstractGameDisplay(Controller &controller);
-      
+
     Controller &controller_;
-      
+
     std::variant<client::GameState, client::GameStateViewer> gameState_;
-      
+
     static Color colorIdToColor(unsigned colorID);
 
     UserID getNthOpponentUserID(size_t n) const;
@@ -78,8 +77,9 @@ class AbstractGameDisplay {
 
     bool inGame() const;
 
-    bool isSpectating();
+    bool isSpectating() const;
 
+    bool isWinner() const;
 };
 
 #endif // ABSTRACT_GAME_DISPLAY_HPP

@@ -3,34 +3,35 @@
 AbstractGameDisplay::AbstractGameDisplay(Controller &controller)
     : controller_{controller} {}
 
-AbstractGameDisplay::Color AbstractGameDisplay::colorIdToColor(unsigned colorID){
-        // TODO: remove those magic number
-        switch (colorID) {
-            case 0:
-                return AbstractGameDisplay::Color::Red;
-            case 1:
-                return AbstractGameDisplay::Color::Orange;
-            case 2:
-                return AbstractGameDisplay::Color::Yellow;
-            case 3:
-                return AbstractGameDisplay::Color::Green;
-            case 4:
-                return AbstractGameDisplay::Color::LightBlue;
-            case 5:
-                return AbstractGameDisplay::Color::DarkBlue;
-            case 6:
-                return AbstractGameDisplay::Color::Purple;
-            case 8: // MINI_TETROMINO
-                return AbstractGameDisplay::Color::Pink;
-            case PENALTY_BLOCKS_COLOR_ID:
-                return AbstractGameDisplay::Color::Grey;
-        
-        default:
-            throw std::runtime_error{"unknown color"};
-        };
+AbstractGameDisplay::Color
+AbstractGameDisplay::colorIdToColor(unsigned colorID) {
+    // TODO: remove those magic number
+    switch (colorID) {
+    case 0:
+        return AbstractGameDisplay::Color::Red;
+    case 1:
+        return AbstractGameDisplay::Color::Orange;
+    case 2:
+        return AbstractGameDisplay::Color::Yellow;
+    case 3:
+        return AbstractGameDisplay::Color::Green;
+    case 4:
+        return AbstractGameDisplay::Color::LightBlue;
+    case 5:
+        return AbstractGameDisplay::Color::DarkBlue;
+    case 6:
+        return AbstractGameDisplay::Color::Purple;
+    case 8: // MINI_TETROMINO
+        return AbstractGameDisplay::Color::Pink;
+    case PENALTY_BLOCKS_COLOR_ID:
+        return AbstractGameDisplay::Color::Grey;
+
+    default:
+        throw std::runtime_error{"unknown color"};
+    };
 }
 
-bool AbstractGameDisplay::isSpectating() {
+bool AbstractGameDisplay::isSpectating() const {
     return std::holds_alternative<client::GameStateViewer>(gameState_);
 }
 
@@ -164,6 +165,19 @@ AbstractGameDisplay::getEffectPrices() const {
         [](const auto &gameState)
             -> const std::vector<std::pair<EffectType, Energy>> & {
             return gameState.effectsPrice;
+        },
+        gameState_);
+}
+
+bool AbstractGameDisplay::isWinner() const {
+    return std::visit(
+        [](const auto &gameState) {
+            using T = std::decay_t<decltype(gameState)>;
+            if constexpr (std::is_same_v<T, client::GameState>) {
+                return gameState.self.playerState.isAlive;
+            } else {
+                return false;
+            }
         },
         gameState_);
 }
