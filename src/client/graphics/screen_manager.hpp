@@ -33,6 +33,8 @@ class ScreenManager {
      * @brief Construct a new Screen Manager object
      *
      * @param controller The controller to ask for the data to show to the user
+     * @param uiChoice The choice of the UI to use (TUI or GUI)
+     * @param args The arguments of the program needed to create the GUI with Qt
      */
     ScreenManager(Controller &controller, UiChoice uiChoice,
                   std::pair<int, char **> args);
@@ -45,11 +47,15 @@ class ScreenManager {
     /*
      * @brief Run the screen manager to manage the screens to show to the user
      *
-     * @param updateType The type of the update
      * @return The exit code of the program of the tui or gui
      */
     int run();
 
+    /*
+     * @brief Update the screen manager with the new data
+     *
+     * @param updateType The type of update to do (needed for the GUI with Qt)
+     */
     void forceRefresh(UpdateType updateType);
 };
 

@@ -1,11 +1,3 @@
-/**
- * @file main_menu.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief MainMenu class declaration file
- * @date 2025-02-12
- *
- */
-
 #ifndef TUI_MAIN_MENU_HPP
 #define TUI_MAIN_MENU_HPP
 
@@ -53,6 +45,9 @@ namespace TUI {
 
         MainMenuState state_;
 
+        /*
+         * @brief The classes needed to display the different menus (friends, messages, game)
+         */
         FriendsMenu friendsMenu_;
         Messaging messagingMenu_;
         GameMenu gameMenu_;
@@ -90,14 +85,29 @@ namespace TUI {
          */
         void handleChoice();
 
+        /*
+         * @brief Create the main menu buttons (play, join game, send messages to friends, look ranking, manage profile, manage friends list, exit)
+         */
         void createMainMenuButtons();
 
+        /*
+         * @brief Display the main window of the main menu
+         */
         void displayMainWindow();
 
+        /*
+         * @brief Display the ranking window of the Endless mode
+         */
         void displayRankingWindow();
 
+        /*
+         * @brief Display the buttons of the proile manager
+         */
         void displayProfileManagerButton();
 
+        /*
+         * @brief Display the window of the proile manager
+         */
         void displayProfileManagerWindow();
 
         /*

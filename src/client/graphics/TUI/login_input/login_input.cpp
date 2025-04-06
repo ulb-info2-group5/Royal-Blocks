@@ -1,11 +1,3 @@
-/**
- * @file login_input.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief LoginInput class definition file
- * @date 2025-02-12
- *
- */
-
 #include "login_input.hpp"
 
 #include "../../../core/controller/controller.hpp"
@@ -72,7 +64,7 @@ namespace TUI {
         buttonSubmit_ = ftxui::Button(
             std::string(STR_SUBMIT),
             [&] {
-                if (isValidUsername()) {
+                if (isValidUsernamePassword()) {
 
                     std::thread loginThread;
 
@@ -179,7 +171,7 @@ namespace TUI {
             });
     }
 
-    bool LoginInput::isValidUsername() {
+    bool LoginInput::isValidUsernamePassword() {
         errorMessage_.clear();
 
         if (username_.length() < 4) {

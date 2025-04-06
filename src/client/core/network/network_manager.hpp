@@ -1,11 +1,3 @@
-/**
- * @file network_manager.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief Network manager class header file
- * @date 2025-02-24
- *
- */
-
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 

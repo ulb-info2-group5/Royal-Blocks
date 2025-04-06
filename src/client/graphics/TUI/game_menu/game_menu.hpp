@@ -1,11 +1,3 @@
-/**
- * @file game_menu.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief Game menu class declaration file
- * @date 2025-02-24
- *
- */
-
 #ifndef TUI_GAME_MENU_HPP
 #define TUI_GAME_MENU_HPP
 
@@ -104,6 +96,9 @@ namespace TUI {
 
         /*
          * @brief Make a button to add a friend
+         *
+         * @param userID The ID of the friend
+         * @param friendName The name of the friend
          */
         ftxui::Component makeFriendButton(UserID userID,
                                           const std::string &friendName);

@@ -1,11 +1,3 @@
-/**
- * @file execute_sql.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief Class DatabaseManager definition
- * @date 2025-02-05
- *
- */
-
 #ifndef EXECUTE_SQL_HPP
 #define EXECUTE_SQL_HPP
 

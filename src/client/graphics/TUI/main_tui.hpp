@@ -50,6 +50,11 @@ namespace TUI {
         ftxui::Component handleCtrl(ftxui::Component &component);
 
       public:
+        /*
+         * @brief Construct a new Main Tui object
+         *
+         * @param controller The controller to use to interact with the game
+         */
         MainTui(Controller &controller);
 
         ~MainTui() = default;

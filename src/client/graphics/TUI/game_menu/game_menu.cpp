@@ -1,11 +1,3 @@
-/**
- * @file game_menu.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief Game menu class definition file
- * @date 2025-02-24
- *
- */
-
 #include "game_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"

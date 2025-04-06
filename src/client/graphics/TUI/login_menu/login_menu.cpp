@@ -1,11 +1,3 @@
-/**
- * @file login_menu.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief LoginMenu class definition file
- * @date 2025-02-12
- *
- */
-
 #include "login_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"

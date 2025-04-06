@@ -1,11 +1,3 @@
-/**
- * @file account_manager.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief Account Manager class definition
- * @date 05/02/2025
- *
- */
-
 #include "account_manager.hpp"
 #include <iostream>
 #include <memory>

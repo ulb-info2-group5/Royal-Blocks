@@ -1,11 +1,3 @@
-/**
- * @file friends_menu.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief FriendsMenu class definition file
- * @date 2025-02-24
- *
- */
-
 #include "friends_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"

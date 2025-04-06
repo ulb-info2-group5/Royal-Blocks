@@ -1,11 +1,3 @@
-/**
- * @file login_input.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief LoginInput class header file
- * @date 2025-02-12
- *
- */
-
 #ifndef TUI_LOGIN_INPUT_HPP
 #define TUI_LOGIN_INPUT_HPP
 
@@ -90,13 +82,27 @@ namespace TUI {
         ftxui::Component inputPassword_;
         ftxui::Component displayWindow_;
 
+        /*
+         * @brief Create the Button Back component with the action to go back
+         */
         void createButtonBack();
 
+        /*
+         * @brief Create the Button Submit component with the action for submit
+         */
         void createButtonSubmit();
 
+        /*
+         * @brief Display the window of the login/register input
+         */
         void displayWindow();
 
-        bool isValidUsername();
+        /*
+         * @brief Check if the username and password are valid to create an account
+         * 
+          * @return true if the username and password are valid, false otherwise 
+         */
+        bool isValidUsernamePassword();
 
       public:
         /*

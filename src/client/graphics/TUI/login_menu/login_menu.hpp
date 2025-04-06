@@ -1,11 +1,3 @@
-/**
- * @file login_menu.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief LoginMenu class header file
- * @date 2025-02-12
- *
- */
-
 #ifndef TUI_LOGIN_MENU_HPP
 #define TUI_LOGIN_MENU_HPP
 
@@ -71,8 +63,14 @@ namespace TUI {
 
         ftxui::Component displayWindow_;
 
+        /*
+         * @brief Create the buttons needed for the login menu
+         */
         void createButtons();
 
+        /*
+         * @brief Display the window of the login menu with all the components
+         */
         void displayWindow();
 
       public:

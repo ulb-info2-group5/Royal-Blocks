@@ -1,11 +1,3 @@
-/**
- * @file controller.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief Controller class definition file
- * @date 2025-02-24
- *
- */
-
 #include "controller.hpp"
 #include "../../graphics/screen_manager.hpp"
 #include "..//in_game/player_state/player_state_external.hpp"

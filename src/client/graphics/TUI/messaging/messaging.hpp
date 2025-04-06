@@ -52,16 +52,36 @@ namespace TUI {
         // just to simulate a user ID
         int userId = 5;
 
+        /*
+         * @brief Create all the buttons needed for the messaging screen
+         */
         void createButtons();
 
+        /*
+         * @brief Draw the input to write a message
+         */
         void drawInputUser();
 
+        /*
+         * @brief Draw the menu of the messaging screen
+         */
         void drawMenu();
 
+        /*
+         * @brief Draw the display of the messaging screen
+         */
         void drawDisplay();
 
+        /*
+         * @brief Draw the window of the messaging screen
+         */
         void drawWindow();
 
+        /*
+         * @brief Get the selected friend ID
+         *
+         * @return std::optional<UserID> The ID of the selected friend
+         */
         std::optional<UserID> getSelectedFriendId();
 
       public:

@@ -1,9 +1,3 @@
-/**
- * @file test_account_manager.cpp
- * @authors Rafaou, Ernest, Jonas
- * @brief Unit tests for AccountManager with CppUnit.
- */
-
 #include "test_account_manager.hpp"
 #include <memory>
 

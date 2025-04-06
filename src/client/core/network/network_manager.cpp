@@ -1,11 +1,3 @@
-/**
- * @file network_manager.cpp
- * @author Ethan Van Ruyskensvelde
- * @brief Network manager class definition file
- * @date 2025-02-24
- *
- */
-
 #include "network_manager.hpp"
 #include <boost/asio/ip/basic_resolver.hpp>
 #include <boost/asio/ip/tcp.hpp>

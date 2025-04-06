@@ -73,10 +73,19 @@ namespace TUI {
         void handleKeys();
 
       public:
+        /*
+         * @brief Constructor for the GameDisplay class
+         *
+         * @param screenManager The screen manager to use
+         * @param controller The controller to use
+         */
         GameDisplay(MainTui &screenManager, Controller &controller);
 
         ~GameDisplay() = default;
 
+        /*
+         * @brief Render the game display
+         */
         void render();
     };
 

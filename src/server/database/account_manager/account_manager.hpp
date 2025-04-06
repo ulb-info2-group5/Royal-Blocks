@@ -1,11 +1,3 @@
-/**
- * @file account_manager.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief Account Manager class definition
- * @date 05/02/2025
- *
- */
-
 #ifndef ACCOUNT_MANAGER_HPP
 #define ACCOUNT_MANAGER_HPP
 

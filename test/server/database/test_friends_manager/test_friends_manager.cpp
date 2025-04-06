@@ -1,9 +1,3 @@
-/**
- * @file test_friends_manager.cpp
- * @authors Rafaou, Ernest, Jonas
- * @brief Unit tests for FriendsManager class with CppUnit.
- */
-
 #include "test_friends_manager.hpp"
 
 void FriendsManagerTest::setUp() {

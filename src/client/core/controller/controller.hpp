@@ -1,11 +1,3 @@
-/**
- * @file controller.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief Controller class header file
- * @date 2025-02-24
- *
- */
-
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 

@@ -1,9 +1,3 @@
-/**
- * @file test_friends_manager.hpp
- * @authors Rafaou, Ernest, Jonas
- * @brief Unit tests for FriendsManager class with CppUnit.
- */
-
 #ifndef FRIENDS_MANAGER_TEST_HPP
 #define FRIENDS_MANAGER_TEST_HPP
 

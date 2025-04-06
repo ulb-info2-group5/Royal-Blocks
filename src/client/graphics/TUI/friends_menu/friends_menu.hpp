@@ -1,11 +1,3 @@
-/**
- * @file friends_menu.hpp
- * @author Ethan Van Ruyskensvelde
- * @brief FriendsMenu class declaration file
- * @date 2025-02-24
- *
- */
-
 #ifndef TUI_FRIENDS_MENU_HPP
 #define TUI_FRIENDS_MENU_HPP
 
