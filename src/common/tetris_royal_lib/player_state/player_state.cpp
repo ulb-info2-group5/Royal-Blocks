@@ -12,30 +12,11 @@ PlayerState::PlayerState(UserID userID, std::string username, Score score)
                                 : username},
 
       penaltyTarget_{std::nullopt}, energy_{std::nullopt},
-      receivedPenaltiesQueue_{std::nullopt}, grantedBonusesQueue_{std::nullopt},
-      pActiveBonus_{nullptr}, pActivePenalty_{nullptr},
-      engineTicksSinceLastTick_{0} {}
+      receivedPenaltiesQueue_{}, grantedBonusesQueue_{}, pActiveBonus_{nullptr},
+      pActivePenalty_{nullptr}, engineTicksSinceLastTick_{0} {}
 
 void PlayerState::toggleEffects(bool activated) {
-    if (activated) {
-        energy_ = Energy{};
-    } else {
-        energy_ = std::nullopt;
-    }
-
-    if (activated) {
-        receivedPenaltiesQueue_ = std::queue<PenaltyType>{};
-        grantedBonusesQueue_ = std::queue<BonusType>{};
-    } else {
-        receivedPenaltiesQueue_ = std::nullopt;
-        grantedBonusesQueue_ = std::nullopt;
-    }
-
-    if (activated) {
-        stashedPenalties_ = std::deque<PenaltyType>{};
-    } else {
-        stashedPenalties_ = std::nullopt;
-    }
+    energy_ = activated ? std::make_optional<Energy>(0) : std::nullopt;
 }
 
 /* ------------------------------------------------
@@ -93,49 +74,37 @@ void PlayerState::decreaseEnergy(Energy amount) {
 }
 
 void PlayerState::grantBonus(BonusType bonus) {
-    if (!grantedBonusesQueue_.has_value()) {
-        return;
-    }
-
-    grantedBonusesQueue_->push(bonus);
+    grantedBonusesQueue_.push(bonus);
 }
 
 void PlayerState::receivePenalty(PenaltyType penalty) {
-    if (!receivedPenaltiesQueue_.has_value()) {
-        return;
-    }
-
-    receivedPenaltiesQueue_->push(penalty);
+    receivedPenaltiesQueue_.push(penalty);
 }
 
 std::optional<BonusType> PlayerState::fetchGrantedBonus() {
-    return grantedBonusesQueue_.and_then([](auto &queue) {
-        std::optional<BonusType> ret;
+    std::optional<BonusType> ret;
 
-        if (queue.empty()) {
-            ret = std::nullopt;
-        } else {
-            ret = queue.front();
-            queue.pop();
-        }
+    if (grantedBonusesQueue_.empty()) {
+        ret = std::nullopt;
+    } else {
+        ret = grantedBonusesQueue_.front();
+        grantedBonusesQueue_.pop();
+    }
 
-        return ret;
-    });
+    return ret;
 }
 
 std::optional<PenaltyType> PlayerState::fetchReceivedPenalty() {
-    return receivedPenaltiesQueue_.and_then([](auto &queue) {
-        std::optional<PenaltyType> ret;
+    std::optional<PenaltyType> ret;
 
-        if (queue.empty()) {
-            ret = std::nullopt;
-        } else {
-            ret = queue.front();
-            queue.pop();
-        }
+    if (receivedPenaltiesQueue_.empty()) {
+        ret = std::nullopt;
+    } else {
+        ret = receivedPenaltiesQueue_.front();
+        receivedPenaltiesQueue_.pop();
+    }
 
-        return ret;
-    });
+    return ret;
 }
 
 void PlayerState::setActivePenalty(const TimedPenaltyPtr &pTimedPenalty) {
@@ -151,11 +120,12 @@ TimedBonusPtr &PlayerState::getActiveBonus() { return pActiveBonus_; }
 TimedPenaltyPtr &PlayerState::getActivePenalty() { return pActivePenalty_; }
 
 void PlayerState::stashPenalty(PenaltyType penalty) {
-    stashedPenalties_->push_back(penalty);
+    stashedPenalties_.push_back(penalty);
 }
 
 std::deque<PenaltyType> PlayerState::getStashedPenalties() {
-    return std::move(stashedPenalties_.value());
+    return stashedPenalties_;
+    stashedPenalties_.clear();
 }
 
 bool PlayerState::isGameTick() {
@@ -231,15 +201,11 @@ nlohmann::json PlayerState::serializeSelf() const {
         j["energy"] = nullptr;
     }
 
-    if (stashedPenalties_) {
-        nlohmann::json j_stashedPenalties = nlohmann::json::array();
-        for (const auto &stashedPenalty : *stashedPenalties_) {
-            j_stashedPenalties.push_back(stashedPenalty);
-        }
-        j["stashedPenalties"] = j_stashedPenalties;
-    } else {
-        j["stashedPenalties"] = nullptr;
+    nlohmann::json j_stashedPenalties = nlohmann::json::array();
+    for (const auto &stashedPenalty : stashedPenalties_) {
+        j_stashedPenalties.push_back(stashedPenalty);
     }
+    j["stashedPenalties"] = j_stashedPenalties;
 
     if (pActiveBonus_) {
         j["activeBonus"] = pActiveBonus_->serialize();

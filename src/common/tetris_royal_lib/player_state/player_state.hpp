@@ -41,11 +41,11 @@ class PlayerState final : public TetrisObserver {
 
     // Penalties/Bonuses that the player has received/granted himself and will
     // be applied as soon as the current Penalty/Bonus is finished.
-    std::optional<std::queue<PenaltyType>> receivedPenaltiesQueue_;
-    std::optional<std::queue<BonusType>> grantedBonusesQueue_;
+    std::queue<PenaltyType> receivedPenaltiesQueue_;
+    std::queue<BonusType> grantedBonusesQueue_;
 
     // Store stacked effects
-    std::optional<std::deque<PenaltyType>> stashedPenalties_;
+    std::deque<PenaltyType> stashedPenalties_;
 
     // Currently active bonus & penalty (no optional needed, just make it
     // nullptr)
@@ -63,6 +63,9 @@ class PlayerState final : public TetrisObserver {
 
     ~PlayerState() = default;
 
+    /**
+     * @brief Toggles the effects-related things such as energy member.
+     */
     void toggleEffects(bool activated);
 
     /* ------------------------------------------------
