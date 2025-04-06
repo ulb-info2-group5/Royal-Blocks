@@ -103,6 +103,14 @@ TimedBonusPtr &PlayerState::getActiveBonus() { return pActiveBonus_; }
 
 TimedPenaltyPtr &PlayerState::getActivePenalty() { return pActivePenalty_; }
 
+const TimedBonusPtr &PlayerState::getActiveBonus() const {
+    return pActiveBonus_;
+}
+
+const TimedPenaltyPtr &PlayerState::getActivePenalty() const {
+    return pActivePenalty_;
+}
+
 void PlayerState::stashPenalty(PenaltyType penalty) {
     stashedPenalties_.push_back(penalty);
 }

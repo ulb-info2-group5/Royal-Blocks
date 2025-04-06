@@ -91,7 +91,7 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
     handlePlayerTimedPenalty(playerTetris);
 }
 
-bool GameEngine::shouldReverseControls(PlayerState &playerState) {
+bool GameEngine::shouldReverseControls(const PlayerState &playerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
@@ -104,12 +104,12 @@ bool GameEngine::shouldReverseControls(PlayerState &playerState) {
     return pPenalty->getPenaltyType() == PenaltyType::ReverseControls;
 }
 
-bool GameEngine::shouldLockInput(PlayerState &playerState) {
+bool GameEngine::shouldLockInput(const PlayerState &playerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
 
-    TimedPenaltyPtr &pPenalty = playerState.getActivePenalty();
+    const TimedPenaltyPtr &pPenalty = playerState.getActivePenalty();
     if (pPenalty == nullptr) {
         return false;
     }
@@ -131,12 +131,12 @@ GameEngine::invertTetrominoMove(TetrominoMove tetrominoMove) const {
     }
 }
 
-bool GameEngine::shouldIgnoreTick(PlayerState &playerState) {
+bool GameEngine::shouldIgnoreTick(const PlayerState &playerState) const {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return false;
     }
 
-    TimedBonusPtr &pActiveBonus = playerState.getActiveBonus();
+    const TimedBonusPtr &pActiveBonus = playerState.getActiveBonus();
     if (pActiveBonus == nullptr) {
         return false;
     }

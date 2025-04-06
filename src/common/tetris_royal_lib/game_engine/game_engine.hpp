@@ -118,13 +118,13 @@ class GameEngine {
      * @brief Returns true if the given player currently has the inverted
      * controls penalty.
      */
-    bool shouldReverseControls(PlayerState &playerState);
+    bool shouldReverseControls(const PlayerState &playerState) const;
 
     /**
      * @brief Returns true if the given player currently has the input lock
      * penalty.
      */
-    bool shouldLockInput(PlayerState &playerState);
+    bool shouldLockInput(const PlayerState &playerState) const;
 
     /**
      * @brief Returns the opposite move of the given TetrominioMove
@@ -135,7 +135,7 @@ class GameEngine {
      * @brief Returns true if the tick should be ignored for the given
      * player. (Due to slowdown bonus).
      */
-    bool shouldIgnoreTick(PlayerState &playerState);
+    bool shouldIgnoreTick(const PlayerState &playerState) const;
 
     /**
      * @brief Sends the given penalty to the sender's selected target.
