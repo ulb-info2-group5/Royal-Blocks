@@ -5,15 +5,12 @@
 #include "../effects/timed_bonus.hpp"
 #include "../effects/timed_penalty.hpp"
 #include "abstract_player_state.hpp"
+#include "effect_price/effect_price.hpp"
 
 #include <nlohmann/json.hpp>
 
 #include <deque>
 #include <optional>
-#include <variant>
-
-using EffectType = std::variant<BonusType, PenaltyType>;
-using EffectPrice = std::pair<EffectType, Energy>;
 
 namespace client {
 

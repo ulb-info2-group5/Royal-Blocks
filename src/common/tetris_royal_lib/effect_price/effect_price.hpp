@@ -2,12 +2,9 @@
 #define EFFECT_PRICE_HPP
 
 #include "../../types/types.hpp"
-#include "../effect/bonus/bonus_type.hpp"
-#include "../effect/penalty/penalty_type.hpp"
+#include "../effect/effect_type.hpp"
 
-#include <variant>
-
-using EffectType = std::variant<BonusType, PenaltyType>;
+using EffectPrice = std::pair<EffectType, Energy>;
 
 constexpr Energy DEFAULT_EFFECT_PRICE = 3;
 

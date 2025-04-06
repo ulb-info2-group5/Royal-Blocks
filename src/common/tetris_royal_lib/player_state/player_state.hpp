@@ -14,11 +14,6 @@
 #include <string_view>
 #include <sys/types.h>
 
-class PlayerState;
-using PlayerStatePtr = std::shared_ptr<PlayerState>;
-
-using EffectPrice = std::pair<EffectType, Energy>;
-
 constexpr std::string_view DEFAULT_USERNAME_PREFIX = "player ";
 
 class PlayerState final : public TetrisObserver {
@@ -232,5 +227,7 @@ class PlayerState final : public TetrisObserver {
 
     nlohmann::json serializeSelf() const;
 };
+
+using PlayerStatePtr = std::shared_ptr<PlayerState>;
 
 #endif // PLAYER_STATE_HPP
