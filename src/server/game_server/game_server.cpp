@@ -66,8 +66,6 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
           }())},
       engine{pGameState_}, gameId_{id},
       callBackFinishGame_{callBackFinishGame} {
-
-    pGameState_->getPlayerState(53)->increaseEnergy(10000);
 }
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
