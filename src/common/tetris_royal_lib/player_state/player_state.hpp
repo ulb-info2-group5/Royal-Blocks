@@ -44,9 +44,6 @@ class PlayerState final : public TetrisObserver {
     std::optional<std::queue<PenaltyType>> receivedPenaltiesQueue_;
     std::optional<std::queue<BonusType>> grantedBonusesQueue_;
 
-    // Penalties/Bonuses the player can buy
-    std::vector<EffectPrice> effectsPrice;
-
     // Store stacked effects
     std::optional<std::deque<PenaltyType>> stashedPenalties_;
 
