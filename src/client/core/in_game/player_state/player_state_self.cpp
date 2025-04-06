@@ -1,6 +1,7 @@
 #include "player_state_self.hpp"
-#include <deque>
+
 #include <optional>
+#include <queue>
 
 void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
     j.at("playerID").get_to(userID);
@@ -22,11 +23,8 @@ void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
         energy = std::nullopt;
     }
 
-    if (!j.at("stashedPenalties").is_null()) {
-        stashedPenalties = std::make_optional(std::deque<PenaltyType>{});
-        stashedPenalties = j.at("stashedPenalties");
-    } else {
-        stashedPenalties = std::nullopt;
+    for (auto &penalty : j.at("stashedPenalties")) {
+        stashedPenalties.push(penalty);
     }
 
     if (!j.at("activeBonus").is_null()) {

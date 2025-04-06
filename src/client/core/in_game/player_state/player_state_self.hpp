@@ -9,8 +9,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include <deque>
 #include <optional>
+#include <queue>
 
 namespace client {
 
@@ -19,9 +19,7 @@ namespace client {
 
         std::optional<Energy> energy;
 
-        std::vector<EffectPrice> effectsPrice;
-
-        std::optional<std::deque<PenaltyType>> stashedPenalties;
+        std::queue<PenaltyType> stashedPenalties;
 
         std::optional<client::TimedBonus> activeBonus;
         std::optional<client::TimedPenalty> activePenalty;
