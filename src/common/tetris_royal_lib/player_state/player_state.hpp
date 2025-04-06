@@ -68,10 +68,6 @@ class PlayerState final : public TetrisObserver {
      */
     void toggleEffects(bool activated);
 
-    /* ------------------------------------------------
-     *              Common to all GameModes
-     * ------------------------------------------------*/
-
     /**
      * @brief Returns the player's ID.
      */
@@ -96,10 +92,6 @@ class PlayerState final : public TetrisObserver {
      * @brief Sets the isAlive member to the given value.
      */
     void setAlive(bool isAlive);
-
-    /* ------------------------------------------------
-     *      Classic & RoyalCompetition Specific
-     * ------------------------------------------------*/
 
     /**
      * @brief Returns the player's target.
@@ -223,8 +215,17 @@ class PlayerState final : public TetrisObserver {
      *          Serialization
      * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes the PlayerState to json for someone that is not the
+     * player himself. This hides information about the player that only the
+     * player himself should see.
+     */
     nlohmann::json serializeExternal() const;
 
+    /**
+     * @brief Serializes the PlayerState to json for the player himself (not
+     * hiding information).
+     */
     nlohmann::json serializeSelf() const;
 };
 

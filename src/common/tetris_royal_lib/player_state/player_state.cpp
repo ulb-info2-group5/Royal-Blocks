@@ -19,10 +19,6 @@ void PlayerState::toggleEffects(bool activated) {
     energy_ = activated ? std::make_optional<Energy>(0) : std::nullopt;
 }
 
-/* ------------------------------------------------
- *              Common to all GameModes
- * ------------------------------------------------*/
-
 UserID PlayerState::getUserID() const { return userID_; }
 
 Score PlayerState::getScore() const { return score_; }
@@ -33,23 +29,11 @@ bool PlayerState::isAlive() const { return isAlive_; }
 
 void PlayerState::setAlive(bool isAlive) { isAlive_ = isAlive; }
 
-/* ------------------------------------------------
- *      Classic & RoyalCompetition Specific
- * ------------------------------------------------*/
-
 std::optional<UserID> PlayerState::getPenaltyTarget() const {
     return penaltyTarget_;
 }
 
-void PlayerState::setPenaltyTarget(UserID userID) {
-    // WARN: This member could be nullopt for multiple reasons:
-    // 1. The GameMode is neither Classic nor RoyalCompetition.
-    // 2. Viewers shouldn't see other players's target.
-    // 3. Players shouldn't see other player's target.
-    // 4. There is no player selected at the beginning. (Depending on what we
-    // choose later)
-    penaltyTarget_ = userID;
-}
+void PlayerState::setPenaltyTarget(UserID userID) { penaltyTarget_ = userID; }
 
 /* ------------------------------------------------
  *      RoyalCompetition Specific
