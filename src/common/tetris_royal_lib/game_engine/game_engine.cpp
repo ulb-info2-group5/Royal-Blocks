@@ -25,7 +25,7 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
                                            gameModeFeature);
 }
 
-void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
+void GameEngine::handlePlayerTimedBonus(PlayerTetris &playerTetris) {
     if (!checkFeatureEnabled(GameModeFeature::Effects)) {
         return;
     }
@@ -34,8 +34,8 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
     if (pActiveBonus != nullptr) {
         // currently has an active bonus
         pActiveBonus->tick();
-        if (playerTetris.pPlayerState->getActiveBonus()->isFinished()) {
-            playerTetris.pPlayerState->getActiveBonus().reset();
+        if (pActiveBonus->isFinished()) {
+            pActiveBonus.reset();
         }
     } else {
         // currently has no active bonus
@@ -51,14 +51,20 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
                 return 0;
             });
     }
+}
+
+void GameEngine::handlePlayerTimedPenalty(PlayerTetris &playerTetris) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return;
+    }
 
     TimedPenaltyPtr &pActivePenalty =
         playerTetris.pPlayerState->getActivePenalty();
     if (pActivePenalty != nullptr) {
         // currently has an active penalty
         pActivePenalty->tick();
-        if (playerTetris.pPlayerState->getActivePenalty()->isFinished()) {
-            playerTetris.pPlayerState->getActivePenalty().reset();
+        if (pActivePenalty->isFinished()) {
+            pActivePenalty.reset();
         }
     } else {
         // currently has no active penalty
@@ -74,6 +80,15 @@ void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
                 return 0;
             });
     }
+}
+
+void GameEngine::handlePlayerTimedEffect(PlayerTetris &playerTetris) {
+    if (!checkFeatureEnabled(GameModeFeature::Effects)) {
+        return;
+    }
+
+    handlePlayerTimedBonus(playerTetris);
+    handlePlayerTimedPenalty(playerTetris);
 }
 
 bool GameEngine::shouldReverseControls(PlayerState &playerState) {
@@ -200,10 +215,10 @@ void GameEngine::handleMiniTetrominoes(Tetris &tetris) {
         return;
     }
 
-    constexpr int NUM_MINI_TETROMINOS = 2;
+    constexpr size_t NUM_MINI_TETROMINOS = 2;
 
     // Push 2 MiniTetrominoes at the front of the player's queue.
-    for (int i = 0; i < NUM_MINI_TETROMINOS; i++) {
+    for (size_t i = 0; i < NUM_MINI_TETROMINOS; i++) {
         tetris.insertNextTetromino(
             Tetris::createTetromino(TetrominoShape::MiniTetromino));
     }

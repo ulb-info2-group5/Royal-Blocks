@@ -100,6 +100,16 @@ class GameEngine {
     // #### Effects Helpers ####
 
     /**
+     * @brief Handles the timed bonus for the given player (one tick).
+     */
+    void handlePlayerTimedBonus(PlayerTetris &playerTetris);
+
+    /**
+     * @brief Handles the timed penalty for the given player (one tick).
+     */
+    void handlePlayerTimedPenalty(PlayerTetris &playerTetris);
+
+    /**
      * @brief Handles the timed effects for the given player (one tick).
      */
     void handlePlayerTimedEffect(PlayerTetris &playerTetris);
