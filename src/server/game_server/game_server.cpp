@@ -203,8 +203,8 @@ void GameServer::addClientLink(std::weak_ptr<ClientLink> clientLink) {
 
 std::vector<UserID> GameServer::getVectorPlayersId() {
     std::vector<UserID> userIds;
-    for (auto player : pGameState_->getPlayerToTetris()) {
-        userIds.push_back(player.pPlayerState->getUserID());
+    for (auto [userId, _] : pGameState_->getUserToPlayerTetris()) {
+        userIds.push_back(userId);
     }
     return userIds;
 }

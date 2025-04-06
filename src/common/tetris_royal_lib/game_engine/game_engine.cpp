@@ -471,14 +471,15 @@ bool GameEngine::checkFeatureEnabled(GameMode gameMode,
 }
 
 void GameEngine::tick() {
-    auto alivePlayers = pGameState_->getPlayerToTetris()
-                        | std::views::filter([](const auto &pt) {
-                              return pt.pPlayerState->isAlive();
-                          });
+    auto alivePlayers = pGameState_->getUserToPlayerTetris()
+                        | std::views::filter([](const auto &pair) {
+                              return pair.second.pPlayerState->isAlive();
+                          })
+                        | std::views::transform(
+                            [](auto &pair) -> auto & { return pair.second; });
 
     for (auto &playerTetris : alivePlayers) {
         handlePlayerTimedEffect(playerTetris);
-
         tick(playerTetris);
     }
 }
@@ -493,24 +494,26 @@ std::optional<UserID> GameEngine::getWinner() const {
         return std::nullopt;
     }
 
-    auto alivePlayers = pGameState_->getPlayerToTetris()
-                        | std::views::filter([](const auto &pt) {
-                              return pt.pPlayerState->isAlive();
-                          });
+    auto aliveIdPlayers = pGameState_->getUserToPlayerTetris()
+                          | std::views::filter([](const auto &pair) {
+                                return pair.second.pPlayerState->isAlive();
+                            });
 
-    assert(std::ranges::distance(alivePlayers) >= 1);
+    assert(std::ranges::distance(aliveIdPlayers) >= 1);
 
-    if (std::ranges::distance(alivePlayers) > 1) {
+    if (std::ranges::distance(aliveIdPlayers) > 1) {
         return std::nullopt;
     }
 
-    return alivePlayers.begin()->pPlayerState->getUserID();
+    return aliveIdPlayers.begin()->first;
 }
 
 bool GameEngine::gameIsFinished() const {
     if (pGameState_->getGameMode() == GameMode::Endless) {
         // Return whether the single player is alive
-        return !pGameState_->getPlayerToTetris().at(0).pPlayerState->isAlive();
+        return !(pGameState_->getUserToPlayerTetris()
+                     .begin()
+                     ->second.pPlayerState->isAlive());
     } else {
         return getWinner() != std::nullopt;
     }

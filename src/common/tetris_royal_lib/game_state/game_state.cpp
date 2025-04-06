@@ -1,5 +1,6 @@
 #include "game_state.hpp"
 #include "effect/bonus/bonus_type.hpp"
+#include "effect_price/effect_price.hpp"
 #include "game_engine/game_engine.hpp"
 #include "game_mode/game_mode.hpp"
 #include "nlohmann/json_fwd.hpp"
@@ -13,15 +14,18 @@
 GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
     : isFinished_{false}, gameMode_{gameMode} {
 
+    size_t numPlayers = playerStates.size();
     for (size_t i = 0; i < playerStates.size(); i++) {
         PlayerState &playerState = playerStates.at(i);
-        size_t numPlayers = playerStates.size();
 
         playerState.setPenaltyTarget(
             playerStates.at((i + 1) % numPlayers).getUserID());
+
         playerState.toggleEffects(GameEngine::checkFeatureEnabled(
             gameMode, GameEngine::GameModeFeature::Effects));
-        playerToTetris_.emplace_back(
+
+        userToPlayerTetris_.emplace(
+            playerState.getUserID(),
             PlayerTetris{std::make_shared<PlayerState>(playerState)});
     }
 }
@@ -36,7 +40,7 @@ std::optional<UserID> GameState::getWinner() const {
 
     std::optional<UserID> winner;
 
-    for (const PlayerTetris &playerStateTetris : playerToTetris_) {
+    for (const auto &[_, playerStateTetris] : userToPlayerTetris_) {
         if (playerStateTetris.pPlayerState->isAlive()) {
             if (winner.has_value()) {
                 // had already found a player that is
@@ -53,27 +57,17 @@ std::optional<UserID> GameState::getWinner() const {
 }
 
 PlayerStatePtr GameState::getPlayerState(UserID userID) {
-    for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState->getUserID() == userID) {
-            return playerStateTetris.pPlayerState;
-        }
-    }
-
-    return nullptr;
+    auto it = userToPlayerTetris_.find(userID);
+    return it != userToPlayerTetris_.end() ? it->second.pPlayerState : nullptr;
 }
 
 TetrisPtr GameState::getTetris(UserID userID) {
-    for (PlayerTetris &playerStateTetris : playerToTetris_) {
-        if (playerStateTetris.pPlayerState->getUserID() == userID) {
-            return playerStateTetris.pTetris;
-        }
-    }
-
-    return nullptr;
+    auto it = userToPlayerTetris_.find(userID);
+    return it != userToPlayerTetris_.end() ? it->second.pTetris : nullptr;
 }
 
-std::vector<PlayerTetris> &GameState::getPlayerToTetris() {
-    return playerToTetris_;
+std::unordered_map<UserID, PlayerTetris> &GameState::getUserToPlayerTetris() {
+    return userToPlayerTetris_;
 }
 
 void GameState::setIsFinished(bool isFinished) { isFinished_ = isFinished; }
@@ -88,7 +82,7 @@ nlohmann::json GameState::serializeForPlayer(UserID userID) const {
     j["gameMode"] = gameMode_;
     j["externals"] = nlohmann::json::array();
 
-    for (const auto &playerTetris : playerToTetris_) {
+    for (const auto &[_, playerTetris] : userToPlayerTetris_) {
         if (playerTetris.pPlayerState->getUserID() == userID) {
             j["self"] = playerTetris.serializeSelf();
         } else {
@@ -128,7 +122,7 @@ nlohmann::json GameState::serializeForViewer() const {
 
     j["externals"] = nlohmann::json::array();
 
-    for (const auto &playerTetris : playerToTetris_) {
+    for (const auto &[_, playerTetris] : userToPlayerTetris_) {
         j["externals"].push_back(playerTetris.serializeExternal());
     }
 

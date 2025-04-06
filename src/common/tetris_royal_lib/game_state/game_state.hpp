@@ -8,13 +8,14 @@
 
 #include <nlohmann/json.hpp>
 
+#include <unordered_map>
 #include <vector>
 
 class GameState {
   private:
     bool isFinished_;
     const GameMode gameMode_;
-    std::vector<PlayerTetris> playerToTetris_;
+    std::unordered_map<UserID, PlayerTetris> userToPlayerTetris_;
 
   public:
     /**
@@ -60,9 +61,9 @@ class GameState {
     TetrisPtr getTetris(UserID userID);
 
     /**
-     * @brief Returns the playerToTetris vector member.
+     * @brief Returns the user to playerTetris map.
      */
-    std::vector<PlayerTetris> &getPlayerToTetris();
+    std::unordered_map<UserID, PlayerTetris> &getUserToPlayerTetris();
 
     /**
      * @brief Sets the `isFinished_` flag to the specified value.
