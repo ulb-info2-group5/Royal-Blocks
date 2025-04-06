@@ -85,6 +85,10 @@ void ClientLink::jointGame(const std::weak_ptr<GameServer>& gameServer){
     pGame_ = gameServer;
 }
 
+void ClientLink::resetGame(){
+    pGame_.reset();
+}
+
 
 bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;

@@ -90,6 +90,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
 
     void sendPackage(nlohmann::json gameState);
 
+    void resetGame();
     /*
      *@brief : return true if the client is authenticated
      */
