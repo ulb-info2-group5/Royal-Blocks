@@ -115,6 +115,12 @@ class GameEngine {
     bool checkAlive(const PlayerStatePtr &pPlayerState) const;
 
     /**
+     * @brief Handles energy and PenaltyRows for the given player when his
+     * Tetromino gets placed.
+     */
+    void onTetrominoPlaced(PlayerState &playerState, size_t numClearedRows);
+
+    /**
      * @brief Makes an engine tick happen for the given player.
      */
     void tick(PlayerTetris &playerTetris);

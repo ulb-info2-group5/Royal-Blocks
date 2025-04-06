@@ -43,6 +43,29 @@ bool GameEngine::checkAlive(const PlayerStatePtr &pPlayerState) const {
     return pPlayerState->isAlive();
 }
 
+void GameEngine::onTetrominoPlaced(PlayerState &playerState,
+                                   size_t numClearedRows) {
+    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
+    playerState.increaseScore(earnedPoints);
+
+    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
+        playerState.getPenaltyTarget().transform([&](UserID targetID) {
+            if (checkAlive(targetID) && numClearedRows >= 2) {
+                // For n (>= 2) rows cleared by the player, his target
+                // receives n-1 penalty rows.
+                sendPenaltyRows(playerState, numClearedRows - 1);
+            }
+
+            return 0;
+        });
+    }
+
+    if (checkFeatureEnabled(GameModeFeature::Effects)) {
+        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
+        playerState.increaseEnergy(earnedEnergy);
+    }
+}
+
 void GameEngine::tick(PlayerTetris &playerTetris) {
     playerTetris.pPlayerState->notifyEngineTick();
 
@@ -61,26 +84,8 @@ void GameEngine::tick(PlayerTetris &playerTetris) {
     const PlayerStatePtr &pPlayerState = playerTetris.pPlayerState;
 
     size_t numClearedRows = pTetris->eventClockTick();
-    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-    pPlayerState->increaseScore(earnedPoints);
 
-    // TODO: remove code duplication with bigDrop
-    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
-            if (checkAlive(targetID) && numClearedRows >= 2) {
-                // For n (>= 2) rows cleared by the player, his target
-                // receives n-1 penalty rows.
-                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
-            }
-
-            return 0;
-        });
-    }
-
-    if (checkFeatureEnabled(GameModeFeature::Effects)) {
-        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
-        pPlayerState->increaseEnergy(earnedEnergy);
-    }
+    onTetrominoPlaced(*pPlayerState, numClearedRows);
 }
 
 void GameEngine::handlePlayerTimedBonus(PlayerTetris &playerTetris) {
@@ -391,26 +396,7 @@ void GameEngine::bigDrop(UserID userID) {
     }
 
     size_t numClearedRows = pGameState_->getTetris(userID)->eventBigDrop();
-    Score earnedPoints = calculatePointsClearedRows(numClearedRows);
-    pPlayerState->increaseScore(earnedPoints);
-
-    // TODO: remove code duplication with tick
-    if (checkFeatureEnabled(GameModeFeature::PenaltyRows)) {
-        pPlayerState->getPenaltyTarget().transform([&](UserID targetID) {
-            if (checkAlive(targetID) && numClearedRows >= 2) {
-                // For n (>= 2) rows cleared by the player, his target
-                // receives n-1 penalty rows.
-                sendPenaltyRows(*pPlayerState, numClearedRows - 1);
-            }
-
-            return 0;
-        });
-    }
-
-    if (checkFeatureEnabled(GameModeFeature::Effects)) {
-        Energy earnedEnergy = calculateEnergyClearedRows(numClearedRows);
-        pPlayerState->increaseEnergy(earnedEnergy);
-    }
+    onTetrominoPlaced(*pPlayerState, numClearedRows);
 }
 
 void GameEngine::holdNextTetromino(UserID userID) {
