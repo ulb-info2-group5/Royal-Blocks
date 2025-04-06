@@ -1,6 +1,7 @@
 #include "game_state.hpp"
 #include "effect/bonus/bonus_type.hpp"
 #include "game_engine/game_engine.hpp"
+#include "game_mode/game_mode.hpp"
 #include "nlohmann/json_fwd.hpp"
 #include "player_state/player_state.hpp"
 #include "player_tetris/player_tetris.hpp"
@@ -28,6 +29,11 @@ GameState::GameState(GameMode gameMode, std::vector<PlayerState> &&playerStates)
 GameMode GameState::getGameMode() const { return gameMode_; }
 
 std::optional<UserID> GameState::getWinner() const {
+    if (gameMode_ == GameMode::Endless) {
+        // There can't be any winner in Endless mode
+        return std::nullopt;
+    }
+
     std::optional<UserID> winner;
 
     for (const PlayerTetris &playerStateTetris : playerToTetris_) {
