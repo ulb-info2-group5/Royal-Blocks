@@ -3,23 +3,30 @@
 
 #include "player_state/player_state.hpp"
 #include "tetris/tetris.hpp"
-#include <memory>
 
 struct PlayerTetris {
     PlayerStatePtr pPlayerState;
     TetrisPtr pTetris;
 
-    PlayerTetris(PlayerStatePtr &&pPlayerState)
-        : pPlayerState{pPlayerState}, pTetris{std::make_shared<Tetris>()} {
+    /**
+     * @brief PlayerTetris Constructor
+     */
+    PlayerTetris(PlayerStatePtr &&pPlayerState);
 
-        // Register the player state as an observer of the Tetris instance.
-        // This allows the player state to be notified of game events such as
-        // defeat.
-        pTetris->addObserver(pPlayerState);
-    }
+    /* ------------------------------------------------
+     *          Serialization
+     * ------------------------------------------------*/
 
+    /**
+     * @brief Serializes the PlayerTetris to json without hiding information.
+     */
     nlohmann::json serializeSelf() const;
 
+    /**
+     * @brief Serializes the PlayerTetris to json (hiding information as this
+     * is meant to be used for players that aren't the player corresponding to
+     * this PlayerTetris).
+     */
     nlohmann::json serializeExternal() const;
 };
 
