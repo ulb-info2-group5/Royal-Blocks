@@ -1,4 +1,4 @@
-// #include "game_display_gui.hpp"
+// #include "game_display.hpp"
 // #include "../qt_config/qt_config.hpp"
 
 // #include "board/board.hpp"
@@ -35,6 +35,20 @@
 // #include <QImage>
 // #include <QColor>
 // #include <QProgressBar>
+
+// namespace GUI {
+
+//     constexpr int QUITGAME_BUTTON_WIDTH = 150;
+//     constexpr int OP_BUTTON_WIDTH = 25;
+//     constexpr int MODE_LABEL_WIDTH = 150;
+//     constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+//                      HEIGHT_CANVAS_BIG =
+//                          static_cast<size_t>(CellSize::Big) * 20,
+//                      WIDTH_CANVAS_SMALL =
+//                          static_cast<size_t>(CellSize::Small) * 10,
+//                      HEIGHT_CANVAS_SMALL =
+//                          static_cast<size_t>(CellSize::Small) * 20;
+
 
 // QColor getQColor(AbstractGameDisplay::Color col, selfCellType selfCellType) {
 
@@ -83,72 +97,126 @@
 //         return returnValue;
 // }
 
-// GameDisplayGUI::GameDisplayGUI(Controller &controller, MainGui &mainGui,
+// GameDisplay::GameDisplay(Controller &controller, MainGui &mainGui,
 // QWidget *parent = nullptr) :
 //     AbstractGameDisplay(controller), mainGui_(mainGui), QWidget(parent) {}
 
 // // private methods
 
-// //void GameDisplayGUI::quitButton();
+// //void GameDisplay::quitButton();
 
-// void GameDisplayGUI::playerInfo();
+// void GameDisplay::playerInfo();
 
-// void GameDisplayGUI::energy();
+// void GameDisplay::energy();
 
-// //void GameDisplayGUI::availableEffects();
+// //void GameDisplay::availableEffects();
 
-// void GameDisplayGUI::penaltyInfo();
+// void GameDisplay::penaltyInfo();
 
-// void GameDisplayGUI::bonusInfo();
+// void GameDisplay::bonusInfo();
 
-// void GameDisplayGUI::holdTetromino();
+// void GameDisplay::holdTetromino();
 
-// void GameDisplayGUI::leftPane();
+// void GameDisplay::leftPane();
 
-// void GameDisplayGUI::drawBoard(CellSize size = CellSize::Big, Qimage &board);
+// QImage GameDisplay::drawBoard(CellSize size = CellSize::Big) {
 
-// void GameDisplayGUI::tetrominoQueue();
+//     size_t height = getBoardHeight();
+//     size_t width = getBoardWidth();
+//     size_t cellSize = static_cast<size_t>(size);
 
-// void GameDisplayGUI::middlePane();
+//     // maybe not working because this format only works with color palette
+//     QImage selfBoard(cellSize * width, cellSize * height, QImage::Format_ARGB32);
 
-// void GameDisplayGUI::opponentsBoard();
+//     for (uint32_t y = 0; y < height; ++y) {
+//         for (uint32_t x = 0; x < width; ++x) {
+//             QColor color = selfCellInfoAt(x,y)
+//                 .transform([](auto cellInfo) {
+//                 return getQColor(colorIdToColor(cellInfo.first), cellInfo.second);
+//             })
+//                 .value_or(getQColor(Color::Black));
 
-// void GameDisplayGUI::rightPane();
+//             for (uint32_t dy = 0; dy < cellSize; ++dy) {
+//                 for (uint32_t dx = 0; dx < cellSize; ++dx) {
+//                     selfCanvas.setPixelColor(
+//                         x * cellSize + dx, 
+//                         (height - 1 - y) * cellSize + dy,
+//                         color);
+//                 }
+//             }
+//         }
+//     }
 
-// void GameDisplayGUI::drawEndlessMode();
+//     return selfBoard;
+// }
 
-// void GameDisplayGUI::drawMultiMode();
+// void GameDisplay::tetrominoQueue();
 
-// void GameDisplayGUI::drawGameOver();
+// void GameDisplay::middlePane();
 
-// void GameDisplayGUI::drawWin();
+// void GameDisplay::opponentsBoard();
 
-// void GameDisplayGUI::drawSpectate();
+// void GameDisplay::rightPane();
 
-// void GameDisplayGUI::handleKeys();
+// void GameDisplay::drawEndlessMode();
 
-// void GameDisplayGUI::updateScreen();
+// void GameDisplay::drawMultiMode();
 
-// void GameDisplayGUI::setup() {
+// void GameDisplay::drawGameOver();
+
+// void GameDisplay::drawWin();
+
+// void GameDisplay::drawSpectate();
+
+// void GameDisplay::handleKeys();
+
+// void GameDisplay::updateScreen();
+
+// void GameDisplay::setup() {
 //     QPushButton *quitButton_ = new QPushButton(this);
+//     quitButton_->setText("Quit Game");
+//     quitButton_->setFixedWidth(QUITGAME_BUTTON_WIDTH);
+//     connect(quitButton_, &QPushButton::clicked, this, &GameDisplay::on_QuitGameButton_clicked);
+
 
 //     if (getGameMode() == GameMode::RoyalCompetition ||
 //     getGameMode() == GameMode::Classic){
+//         //verify the linkage
 //         for (int i = 0; i < getNumOpponents(); i++){
 //             QPushButton *targetButton = new QPushButton(this);
+//             targetButton->setText(getOpponentUsername(i));
+//             connect(targetButton, &QPushButton::clicked, [i, this]() {
+//                on_changeTarget_Clicked(i); 
+//             })
 //             targetButtons_.push_back(targetButton);
 //         }
 //     }
+
+//     mode_->setText(to_string(getGameMode()));
+//     mode_->setFixedWidth(MODE_LABEL_WIDTH);
 
 //     //if (getGameMode() == GameMode::RoyalCompetition) {} effects lol
 // }
 
 // // private slots
 
-// void GameDisplayGUI::changeTarget(unsigned targetIdx = 0);
+// void GameDisplay::on_changeTarget_Clicked(size_t index) {
+//     controller_.selectTarget(getNthOpponentUserID(index));
 
-// void GameDisplayGUI::refreshScreen();
+//     // if (getSelectedTarget() == getNthOpponentUserID(index)) {
+//     //     targetButtons_.at(index).set
+//     // }
+// }
+
+// void GameDisplay::on_QuitGameButton_clicked() {
+//     controller_.quitGame();
+//     mainGui_.stopRender();
+// }
+
+// void GameDisplay::refreshScreen();
 
 // // signals
 
-// void GameDisplayGUI::quitGame();
+// void GameDisplay::quitGame();
+
+// }

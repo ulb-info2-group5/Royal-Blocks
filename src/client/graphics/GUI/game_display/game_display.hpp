@@ -25,6 +25,8 @@
 
 // class Controller;
 
+// namespace GUI {
+
 // class MainGui;
 
 // enum class CellSize : size_t {
@@ -32,13 +34,13 @@
 //     Big = 8,
 // };
 
-// constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
-//                  HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
-//                  WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) *
-//                  10, HEIGHT_CANVAS_SMALL =
-//                      static_cast<size_t>(CellSize::Small) * 20;
+// // constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 10,
+// //                  HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) * 20,
+// //                  WIDTH_CANVAS_SMALL = static_cast<size_t>(CellSize::Small) *
+// //                  10, HEIGHT_CANVAS_SMALL =
+// //                      static_cast<size_t>(CellSize::Small) * 20;
 
-// class GameDisplayGUI final : public QWidget, public AbstractGameDisplay {
+// class GameDisplay final : public QWidget, public AbstractGameDisplay {
 
 //     Q_OBJECT
 
@@ -46,6 +48,8 @@
 
 //     Controller &controller_;
 //     MainGui &mainGui_;
+
+//     size_t opIndex_ = 0;
 
 //     QWidget *mainWidget_;
 //     QHBoxLayout mainLayout_;
@@ -62,11 +66,11 @@
 //     QProgressBar bonus_;
 //     QImage holdTetromino_;
 
-//     QImage selfBoard_;
+//     //QImage selfBoard_;
 //     QLabel mode_;
 //     QImage tetrominoQueue_;
 
-//     std::vector<QImage> opBoards_;
+//     //std::vector<QImage> opBoards_;
 //     std::vector<QPushButton> targetButtons_;
 
 //     //void quitButton();
@@ -78,13 +82,15 @@
 //     void holdTetromino();
 //     void leftPane();
 
-//     void drawBoard(QImage &board, CellSize size = CellSize::Big);
+//     QImage drawBoard(CellSize size = CellSize::Big);
 //     void tetrominoQueue();
 //     void middlePane();
 
+//     QImage createOpBoardDisplay(size_t index, CellSize size);
 //     void opponentsBoard();
 
 //     void rightPane();
+//     void middlePane();
 
 //     void drawEndlessMode();
 //     void drawMultiMode();
@@ -99,13 +105,19 @@
 
 //     void setup();
 
+//     void actionOnExit();
+
+//     void changeTarget();
+
 // private slots:
 
 //         // add the functions for the buttons
 
-//         void changeTarget(unsigned int targetIdx);
+//         void on_changeTarget_Clicked(size_t index);
 
 //         void refreshScreen();
+
+//         void on_QuitGameButton_clicked();
 
 //     public:
 
@@ -119,5 +131,7 @@
 //         void quitGame();
 
 // };
+
+// }
 
 // #endif
