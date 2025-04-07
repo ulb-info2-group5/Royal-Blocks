@@ -154,9 +154,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         std::erase_if(pClientLinks_, [userId](auto pWeakClientLink) {
             if (std::shared_ptr<ClientLink> pClientLink =
                     pWeakClientLink.lock()) {
-                        pClientLink->setUserState(bindings::State::Menu);
-                        pClientLink->setGameMode(std::nullopt);
-                        pClientLink->resetGame();
+                        pClientLink->exitGame();
                 return pClientLink->getUserID() == userId;
             }
             return true;

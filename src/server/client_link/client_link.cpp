@@ -85,9 +85,16 @@ void ClientLink::jointGame(const std::weak_ptr<GameServer>& gameServer){
     pGame_ = gameServer;
 }
 
+void ClientLink::exitGame(){
+    setUserState(bindings::State::Menu);
+    setGameMode(std::nullopt);
+    resetGame();
+}
+
 void ClientLink::resetGame(){
     pGame_.reset();
 }
+
 
 
 bool ClientLink::shouldItBeDeletedFromTheList() {
