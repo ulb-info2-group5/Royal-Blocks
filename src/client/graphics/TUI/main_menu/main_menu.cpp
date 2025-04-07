@@ -5,7 +5,6 @@
 #include "../main_tui.hpp"
 
 namespace TUI {
-
     // ### Constructor ###
     MainMenu::MainMenu(MainTui &mainTui, Controller &controller)
         : mainTui_(mainTui), controller_(controller),

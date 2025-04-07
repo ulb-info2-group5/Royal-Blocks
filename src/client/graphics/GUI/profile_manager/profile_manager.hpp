@@ -34,10 +34,13 @@ namespace GUI {
         QLineEdit newPassWord_;
 
         QLabel changePasswordAndUsernameMsgLabel_;
+        
+        std::string errorMessage_;
 
         // Methode
         void basicSetup();
         void changePasswordUsername();
+        bool isValidUsernamePassword();
 
       private slots:
         void onBack();
