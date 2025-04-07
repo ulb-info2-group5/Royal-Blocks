@@ -25,22 +25,22 @@ namespace GUI {
         newUserName_.setPlaceholderText("New Username");
         newPassWord_.setPlaceholderText("New Password");
         newPassWord_.setEchoMode(
-            QLineEdit::Password); // Masquer le mot de passe
+            QLineEdit::Password); // Hide the password by default
         newUserName_.setMaxLength(20);
         newPassWord_.setMaxLength(20);
 
-        // Création de la case à cocher pour afficher/masquer le mot de passe
+        // Create a checkbox to show/hide the password
         QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
 
-        // Connecter la case à cocher pour basculer entre afficher/masquer
+        // Connect the checkbox to the password field
         connect(showPasswordCheckBox, &QCheckBox::toggled, this,
                 [this](bool checked) {
                     if (checked) {
                         newPassWord_.setEchoMode(
-                            QLineEdit::Normal); // Afficher le mot de passe
+                            QLineEdit::Normal); // Show the password
                     } else {
                         newPassWord_.setEchoMode(
-                            QLineEdit::Password); // Masquer le mot de passe
+                            QLineEdit::Password); // Hide the password
                     }
                 });
 
@@ -61,25 +61,24 @@ namespace GUI {
         QString newUsername = newUserName_.text();
         QString newPassword = newPassWord_.text();
 
-        // Vérifier que les champs ne sont pas vides
+        // Verify if the fields are empty
         if (newUsername.isEmpty() || newPassword.isEmpty()) {
-            QMessageBox::warning(this, "Erreur",
-                                 "Veuillez remplir tous les champs.");
+            QMessageBox::warning(this, "Error",
+                                 "Please fill in all fields");
             return;
         }
 
-        // Conversion de QString en std::string
         std::string newUsernameStd = newUsername.toStdString();
         std::string newPasswordStd = newPassword.toStdString();
 
-        // Passer les informations au contrôleur (par exemple, à une méthode de
-        // mise à jour du profil)
+
         controller_.changeProfile(newUsernameStd, newPasswordStd);
 
-        // Affiche le message de confirmation
         QMessageBox::information(this, "Info",
-                                 "Votre nom d'utilisateur et votre mot de "
-                                 "passe ont été changés avec succès");
+                                 "Your username and password have been changed");
+                                 
+        newUserName_.clear();
+        newPassWord_.clear();
     }
 
 } // namespace GUI
