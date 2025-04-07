@@ -65,6 +65,8 @@ class AbstractGameDisplay {
 
     const std::string &getOpponentUsername(size_t opponentIdx) const;
 
+    bool checkOpponentAlive(size_t opponentIdx) const;
+
     size_t getNumOpponents() const;
 
     const client::Tetromino &getTetrominoQueueNth(size_t tetrominoIdx) const;

@@ -409,7 +409,9 @@ namespace TUI {
         for (size_t index = 0; index < getNumOpponents(); index++) {
 
             auto button = ftxui::Button(
-                getOpponentUsername(index),
+                getOpponentUsername(index)
+                    + std::string{checkOpponentAlive(index) ? ""
+                                                            : STR_PLAYER_DEAD},
                 [index, this] {
                     controller_.selectTarget(getNthOpponentUserID(index));
                 },

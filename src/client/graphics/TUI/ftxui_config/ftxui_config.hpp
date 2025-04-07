@@ -52,7 +52,8 @@ namespace TUI {
         STR_ADD_FRIEND_TITLE = "-- Add a friend --",
         STR_MANAGE_FRIENDS_REQUESTS = "Manage friends requests",
         STR_NO_FRIEND_REQUEST = "You don't have any friend request",
-        STR_RETURN_TO_MAIN_MENU = "Return to main menu";
+        STR_RETURN_TO_MAIN_MENU = "Return to main menu",
+        STR_PLAYER_DEAD = " ☠️ ";
 
     const ftxui::Element WELCOME_TITLE = ftxui::vbox({
         ftxui::text(

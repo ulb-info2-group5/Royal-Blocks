@@ -1,4 +1,5 @@
 #include "abstract_game_display.hpp"
+#include <cstddef>
 
 AbstractGameDisplay::AbstractGameDisplay(Controller &controller)
     : controller_{controller} {}
@@ -144,6 +145,14 @@ AbstractGameDisplay::getOpponentUsername(size_t opponentIdx) const {
     return std::visit(
         [opponentIdx](const auto &gameState) -> const std::string & {
             return gameState.externals.at(opponentIdx).playerState.username;
+        },
+        gameState_);
+}
+
+bool AbstractGameDisplay::checkOpponentAlive(size_t opponentIdx) const {
+    return std::visit(
+        [opponentIdx](const auto &gameState) -> bool {
+            return gameState.externals.at(opponentIdx).playerState.isAlive;
         },
         gameState_);
 }
