@@ -66,7 +66,7 @@ TetrisPtr GameState::getTetris(UserID userID) {
     return it != userToPlayerTetris_.end() ? it->second.pTetris : nullptr;
 }
 
-std::unordered_map<UserID, PlayerTetris> &GameState::getUserToPlayerTetris() {
+std::map<UserID, PlayerTetris> &GameState::getUserToPlayerTetris() {
     return userToPlayerTetris_;
 }
 
