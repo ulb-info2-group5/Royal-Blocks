@@ -355,6 +355,16 @@ namespace TUI {
     }
 
     ftxui::Component GameDisplay::middlePane() {
+        if (isSpectating()) {
+           return ftxui::Container::Vertical({
+                gameMode()
+                    | ftxui::size(ftxui::WIDTH, ftxui::EQUAL,
+                                  WIDTH_CANVAS_BIG / 2)
+                    | ftxui::center,
+                selfBoard(),
+            });
+        }
+
         return ftxui::Container::Horizontal({
             ftxui::Container::Vertical({
                 gameMode()
