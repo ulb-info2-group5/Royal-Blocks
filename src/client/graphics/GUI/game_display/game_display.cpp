@@ -162,7 +162,25 @@
 
 // void GameDisplay::drawMultiMode();
 
-// void GameDisplay::drawGameOver();
+void GameDisplay::drawGameOver(){
+
+    // Creat new space
+    // The layout is directly charged
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    // Creat label for the text
+    QLabel *label = new QLabel("Game Over");
+
+    // Choose the police
+    QFont font("Arial", 30, QFont::Bold); // Police Arial, taille 50, gras
+    label->setFont(font);
+
+    // Center the text
+    label->setAlignment(Qt::AlignCenter);
+
+    // Add the QLabel to the layout
+    layout->addWidget(label);
+};
 
 // void GameDisplay::drawWin();
 
