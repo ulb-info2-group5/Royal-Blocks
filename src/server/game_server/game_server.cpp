@@ -149,16 +149,17 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     }
 
     case bindings::BindingType::QuitGame:
-        engine.quitGame(userId);
-
         std::erase_if(pClientLinks_, [userId](auto pWeakClientLink) {
-            if (std::shared_ptr<ClientLink> pClientLink =
-                    pWeakClientLink.lock()) {
-                        pClientLink->exitGame();
-                return pClientLink->getUserID() == userId;
+            if (std::shared_ptr<ClientLink> pClientLink =pWeakClientLink.lock()) {
+                if (pClientLink->getUserID() == userId){
+                    pClientLink->exitGame();
+                    return true;
+                }
+                return false;               
             }
             return true;
         });
+        engine.quitGame(userId);
 
         break;
 
