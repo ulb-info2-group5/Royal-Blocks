@@ -73,8 +73,6 @@ class GameServer {
 
     // === getters ===
 
-    boost::asio::io_context &getIoContext();
-
     std::vector<UserID> getVectorPlayersId();
 
     const std::vector<std::weak_ptr<ClientLink>> &getClientLinks();

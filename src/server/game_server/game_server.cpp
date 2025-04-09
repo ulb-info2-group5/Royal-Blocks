@@ -200,8 +200,6 @@ void GameServer::addClientLink(std::weak_ptr<ClientLink> clientLink) {
 
 // ==== getters ====
 
-boost::asio::io_context &GameServer::getIoContext() { return context_; }
-
 std::vector<UserID> GameServer::getVectorPlayersId() {
     std::vector<UserID> userIds;
     for (auto player : pGameState_->getPlayerToTetris()) {

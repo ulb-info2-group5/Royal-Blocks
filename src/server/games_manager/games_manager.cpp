@@ -39,9 +39,7 @@ void GamesManager::enqueueGameBinding(const std::shared_ptr<ClientLink>& clientL
                                       const std::string &strBindings) {
     UserID clientId = clientLink->getUserID();
     if ( std::shared_ptr<GameServer> gameServer = clientLink->getGameServer().lock()){
-        boost::asio::post(gameServer->getIoContext(),[gameServer, clientId, strBindings]() {
-            gameServer->enqueueBinding(clientId, strBindings);
-        });
+        gameServer->enqueueBinding(clientId, strBindings);
     }
     
 }
