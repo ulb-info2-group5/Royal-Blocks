@@ -41,6 +41,7 @@ namespace GUI {
         QHBoxLayout mainLayout_;
 
         QLCDNumber scoreLCD_;
+        QLCDNumber energyLCD_;
         QVBoxLayout leftPane_;
 
         QLabel selfBoard_;
@@ -55,6 +56,8 @@ namespace GUI {
         void selfBoard(CellSize size = CellSize::Big);
 
         void scoreLCD();
+
+        void energyLCD();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

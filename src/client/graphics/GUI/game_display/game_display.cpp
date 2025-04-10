@@ -482,9 +482,14 @@ namespace GUI {
         emit backToMainMenu();
     }
 
-    void GameDisplay::scoreLCD() {
+    void GameDisplay::energyLCD() {
         scoreLCD_.display(static_cast<int>(getSelfScore()));
         scoreLCD_.setSegmentStyle(QLCDNumber::Filled);
+    }
+
+    void GameDisplay::scoreLCD() {
+        energyLCD_.display(static_cast<int>(getSelfEnergy()));
+        energyLCD_.setSegmentStyle(QLCDNumber::Filled);
     }
 
     void GameDisplay::selfBoard(CellSize size) {
@@ -536,6 +541,10 @@ namespace GUI {
 
         selfBoard();
         scoreLCD();
+
+        if (getGameMode() == GameMode::RoyalCompetition) {
+            energyLCD();
+        }
     }
 
     void GameDisplay::setup() {
@@ -548,12 +557,15 @@ namespace GUI {
         rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
 
-        // ------------RIGHT_PANE----------------
+        // ------------LEFT_PANE----------------
 
         QPushButton *quitButton = new QPushButton{tr("&Quit")};
 
         leftPane_.addWidget(quitButton);
         leftPane_.addWidget(&scoreLCD_);
+        if (getGameMode() == GameMode::RoyalCompetition) {
+            leftPane_.addWidget(&energyLCD_);
+        }
 
         // ------------MIDDLE_PANE---------------
 
