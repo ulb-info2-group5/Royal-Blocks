@@ -32,6 +32,8 @@ namespace GUI {
             emit updateRanking();
         } else if (updateType == UpdateType::CONVERSATIONS) {
             emit updateConversations();
+        } else if (updateType == UpdateType::GAME_STATE) {
+            emit updateGameState();
         }
     }
 

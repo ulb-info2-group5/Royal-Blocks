@@ -31,6 +31,7 @@ enum class UpdateType {
     FRIEND_REQUESTS,
     RANKING,
     CONVERSATIONS,
+    GAME_STATE,
     OTHER,
 };
 

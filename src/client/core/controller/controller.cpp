@@ -111,6 +111,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
     case bindings::BindingType::GameState: {
         gameState_ = bindings::GameStateMessage::deserialize(j);
+        updateType = UpdateType::GAME_STATE;
         break;
     }
 

@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <qlabel.h>
+#include <qpixmap.h>
 #include <variant>
 #include <vector>
 
@@ -52,14 +53,20 @@ namespace GUI {
 
         QHBoxLayout mainLayout_;
 
-        QPushButton quitButton_;
         QVBoxLayout leftPane_;
 
+        QLabel *selfBoard_;
         QVBoxLayout middlePane_;
 
         QVBoxLayout rightPane_;
 
-        QGridLayout opLayout_;
+        /**
+         * @brief Redraws the board pixmap and returns a pointer to the QLable
+         * containing the board pixmap.
+         */
+        void selfBoard();
+
+        // QGridLayout opLayout_;
         // QLabel playerInfo_;
         // QProgressBar penalty_;
         // QImage holdTetromino_;
@@ -111,6 +118,8 @@ namespace GUI {
       private slots:
 
         void on_QuitButtonClicked();
+
+        void updateGameState();
 
         // add the functions for the buttons
 

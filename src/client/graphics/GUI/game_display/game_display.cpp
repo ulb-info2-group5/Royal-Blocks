@@ -16,17 +16,10 @@
 #include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
 
-#include <format>
-#include <memory>
-#include <optional>
-#include <qchar.h>
-#include <qlabel.h>
-#include <stdexcept>
-#include <string>
-#include <type_traits>
-#include <utility>
-#include <variant>
-#include <vector>
+#include <QColor>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
 
 #include <QColor>
 #include <QGridLayout>
@@ -38,6 +31,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qcolor.h>
+#include <qpushbutton.h>
 
 namespace GUI {
 
@@ -440,24 +435,75 @@ namespace GUI {
         emit backToMainMenu();
     }
 
-    void GameDisplay::setup() {
-        quitButton_.setText(tr("&Quit"));
+    void GameDisplay::selfBoard() {
+        QPixmap selfBoardMap(static_cast<size_t>(CellSize::Big) * 20,
+                             static_cast<size_t>(CellSize::Big) * 20);
 
-        leftPane_.addWidget(&quitButton_);
+        // draw the board
+        QPainter painter(&selfBoardMap);
+        painter.fillRect(selfBoardMap.rect(), QColor::fromRgb(200, 0, 0));
+        painter.end();
+
+        selfBoard_->setPixmap(selfBoardMap);
+    }
+
+    void GameDisplay::updateGameState() {
+        std::cout << "updating board" << std::endl;
+        selfBoard();
+    }
+
+    void GameDisplay::setup() {
+        // initialize class members;
+        selfBoard_ = new QLabel;
+
+        // --------------------------------------
+
+        // first spacers
+        leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                          QSizePolicy::Expanding));
+        middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                            QSizePolicy::Expanding));
+        rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                           QSizePolicy::Expanding));
+
+        // --------------------------------------
+
+        QPushButton quitButton{tr("&Quit")};
+
+        leftPane_.addWidget(&quitButton);
 
         QLabel *gameMode =
             new QLabel{QString::fromStdString(toString(getGameMode()))};
 
-        rightPane_.addWidget(gameMode);
+        middlePane_.addWidget(gameMode);
+
+        middlePane_.addWidget(selfBoard_);
+
+        // --------------------------------------
+
+        // second spacers
+        leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                          QSizePolicy::Expanding));
+        middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                            QSizePolicy::Expanding));
+        rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                           QSizePolicy::Expanding));
+
+        // --------------------------------------
 
         // divide into three panes
         mainLayout_.addLayout(&leftPane_);
         mainLayout_.addLayout(&middlePane_);
         mainLayout_.addLayout(&rightPane_);
 
+        // --------------------------------------
+
         setLayout(&mainLayout_);
 
-        connect(&quitButton_, &QPushButton::clicked, this,
+        connect(&mainGui_, &MainGui::updateGameState, this,
+                &GameDisplay::updateGameState);
+
+        connect(&quitButton, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
 
         // QVBoxLayout *leftPane_ = new QVBoxLayout;
