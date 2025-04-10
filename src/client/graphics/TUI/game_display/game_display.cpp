@@ -34,7 +34,7 @@ namespace TUI {
     ftxui::Color getFTXUIColor(AbstractGameDisplay::Color color,
                                AbstractGameDisplay::SelfCellType selfCellType =
                                    AbstractGameDisplay::SelfCellType::Placed) {
-        ftxui::Color returnValue = ftxui::Color::Blue;
+        ftxui::Color returnValue;
 
         switch (color) {
         case AbstractGameDisplay::Color::Black:
