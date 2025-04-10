@@ -30,62 +30,75 @@ namespace GUI {
         connect(&gameDisplay_, &GameDisplay::backToMainMenu, this,
                 [this] { emit backToMainMenu(); });
 
+        QPushButton *endlessButton_ = new QPushButton(this);
+        QPushButton *duelButton_ = new QPushButton(this);
+        QPushButton *classicButton_ = new QPushButton(this);
+        QPushButton *royalButton_ = new QPushButton(this);
+        QPushButton *selectModeBackButton_ = new QPushButton(this);
+        QPushButton *playerCountBackButton_ = new QPushButton(this);
+        QPushButton *joinTypeBackButton_ = new QPushButton(this);
+        QPushButton *friendsListBackButton_ = new QPushButton(this);
+        QPushButton *waitingBackButton_ = new QPushButton(this);
+        QPushButton *confirmButton_ = new QPushButton(this);
+        QPushButton *joinRandomButton_ = new QPushButton(this);
+        QPushButton *joinFriendButton_ = new QPushButton(this);
+
         // Configure buttons
-        endlessButton_.setText("Endless Mode");
-        endlessButton_.setFixedWidth(500);
-        duelButton_.setText("Duel Mode");
-        duelButton_.setFixedWidth(500);
-        classicButton_.setText("Classic Mode");
-        classicButton_.setFixedWidth(500);
-        royalButton_.setText("Royal Competition Mode");
-        royalButton_.setFixedWidth(500);
+        endlessButton_->setText("Endless Mode");
+        endlessButton_->setFixedWidth(500);
+        duelButton_->setText("Duel Mode");
+        duelButton_->setFixedWidth(500);
+        classicButton_->setText("Classic Mode");
+        classicButton_->setFixedWidth(500);
+        royalButton_->setText("Royal Competition Mode");
+        royalButton_->setFixedWidth(500);
 
         // Set up separate back buttons for each screen
-        selectModeBackButton_.setText("Back");
-        selectModeBackButton_.setFixedWidth(500);
-        playerCountBackButton_.setText("Back");
-        playerCountBackButton_.setFixedWidth(500);
-        joinTypeBackButton_.setText("Back");
-        joinTypeBackButton_.setFixedWidth(500);
-        friendsListBackButton_.setText("Back");
-        friendsListBackButton_.setFixedWidth(500);
-        waitingBackButton_.setText("Back");
-        waitingBackButton_.setFixedWidth(500);
+        selectModeBackButton_->setText("Back");
+        selectModeBackButton_->setFixedWidth(500);
+        playerCountBackButton_->setText("Back");
+        playerCountBackButton_->setFixedWidth(500);
+        joinTypeBackButton_->setText("Back");
+        joinTypeBackButton_->setFixedWidth(500);
+        friendsListBackButton_->setText("Back");
+        friendsListBackButton_->setFixedWidth(500);
+        waitingBackButton_->setText("Back");
+        waitingBackButton_->setFixedWidth(500);
 
-        confirmButton_.setText("Confirm");
-        confirmButton_.setFixedWidth(500);
-        joinRandomButton_.setText("Join Random Game");
-        joinRandomButton_.setFixedWidth(500);
-        joinFriendButton_.setText("Join Friend's Game");
-        joinFriendButton_.setFixedWidth(500);
+        confirmButton_->setText("Confirm");
+        confirmButton_->setFixedWidth(500);
+        joinRandomButton_->setText("Join Random Game");
+        joinRandomButton_->setFixedWidth(500);
+        joinFriendButton_->setText("Join Friend's Game");
+        joinFriendButton_->setFixedWidth(500);
 
         // Connect signals for game mode buttons
-        connect(&endlessButton_, &QPushButton::clicked, this,
+        connect(endlessButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onEndlessButtonClicked);
-        connect(&duelButton_, &QPushButton::clicked, this,
+        connect(duelButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onDuelButtonClicked);
-        connect(&classicButton_, &QPushButton::clicked, this,
+        connect(classicButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onClassicButtonClicked);
-        connect(&royalButton_, &QPushButton::clicked, this,
+        connect(royalButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onRoyalButtonClicked);
 
         // Connect all back buttons to the same slot
-        connect(&selectModeBackButton_, &QPushButton::clicked, this,
+        connect(selectModeBackButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onBackButtonClicked);
-        connect(&playerCountBackButton_, &QPushButton::clicked, this,
+        connect(playerCountBackButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onBackButtonClicked);
-        connect(&joinTypeBackButton_, &QPushButton::clicked, this,
+        connect(joinTypeBackButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onBackButtonClicked);
-        connect(&friendsListBackButton_, &QPushButton::clicked, this,
+        connect(friendsListBackButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onBackButtonClicked);
-        connect(&waitingBackButton_, &QPushButton::clicked, this,
+        connect(waitingBackButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onBackButtonClicked);
 
-        connect(&confirmButton_, &QPushButton::clicked, this,
+        connect(confirmButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onConfirmButtonClicked);
-        connect(&joinRandomButton_, &QPushButton::clicked, this,
+        connect(joinRandomButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onJoinRandomButtonClicked);
-        connect(&joinFriendButton_, &QPushButton::clicked, this,
+        connect(joinFriendButton_, &QPushButton::clicked, this,
                 &GameMenuGUI::onJoinFriendButtonClicked);
 
         // Setup select mode screen
@@ -94,11 +107,11 @@ namespace GUI {
         selectModeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
         selectModeLayout->addWidget(createCenterBoldTitle("Select Game Mode"));
-        selectModeLayout->addWidget(&endlessButton_, 0, Qt::AlignCenter);
-        selectModeLayout->addWidget(&duelButton_, 0, Qt::AlignCenter);
-        selectModeLayout->addWidget(&classicButton_, 0, Qt::AlignCenter);
-        selectModeLayout->addWidget(&royalButton_, 0, Qt::AlignCenter);
-        selectModeLayout->addWidget(&selectModeBackButton_, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(endlessButton_, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(duelButton_, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(classicButton_, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(royalButton_, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(selectModeBackButton_, 0, Qt::AlignCenter);
         selectModeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
 
@@ -121,8 +134,8 @@ namespace GUI {
             createCenterBoldTitle("Select Player Count"));
         playerCountLayout->addWidget(playerCountLabel_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(playerCountSlider_, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(&confirmButton_, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(&playerCountBackButton_, 0,
+        playerCountLayout->addWidget(confirmButton_, 0, Qt::AlignCenter);
+        playerCountLayout->addWidget(playerCountBackButton_, 0,
                                      Qt::AlignCenter);
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
@@ -133,9 +146,9 @@ namespace GUI {
         joinTypeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
         joinTypeLayout->addWidget(createCenterBoldTitle("Join Game"));
-        joinTypeLayout->addWidget(&joinRandomButton_, 0, Qt::AlignCenter);
-        joinTypeLayout->addWidget(&joinFriendButton_, 0, Qt::AlignCenter);
-        joinTypeLayout->addWidget(&joinTypeBackButton_, 0, Qt::AlignCenter);
+        joinTypeLayout->addWidget(joinRandomButton_, 0, Qt::AlignCenter);
+        joinTypeLayout->addWidget(joinFriendButton_, 0, Qt::AlignCenter);
+        joinTypeLayout->addWidget(joinTypeBackButton_, 0, Qt::AlignCenter);
         joinTypeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
 
@@ -147,7 +160,7 @@ namespace GUI {
                                                    QSizePolicy::Expanding));
         friendsListLayout->addWidget(createCenterBoldTitle("Select a Friend"));
         friendsListLayout->addWidget(&friendsList_, 0, Qt::AlignCenter);
-        friendsListLayout->addWidget(&friendsListBackButton_, 0,
+        friendsListLayout->addWidget(friendsListBackButton_, 0,
                                      Qt::AlignCenter);
         friendsListLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
@@ -164,7 +177,7 @@ namespace GUI {
             new QLabel("Please wait while we find players for your game...");
         waitingLabel->setAlignment(Qt::AlignCenter);
         waitingLayout->addWidget(waitingLabel, 0, Qt::AlignCenter);
-        waitingLayout->addWidget(&waitingBackButton_, 0, Qt::AlignCenter);
+        waitingLayout->addWidget(waitingBackButton_, 0, Qt::AlignCenter);
         waitingLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
 

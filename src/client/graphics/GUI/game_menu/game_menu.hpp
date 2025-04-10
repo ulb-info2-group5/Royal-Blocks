@@ -36,19 +36,6 @@ namespace GUI {
         QWidget *friendsListWidget_;
         QWidget *waitingWidget_;
 
-        QPushButton endlessButton_;
-        QPushButton duelButton_;
-        QPushButton classicButton_;
-        QPushButton royalButton_;
-        QPushButton selectModeBackButton_;
-        QPushButton playerCountBackButton_;
-        QPushButton joinTypeBackButton_;
-        QPushButton friendsListBackButton_;
-        QPushButton waitingBackButton_;
-        QPushButton confirmButton_;
-        QPushButton joinRandomButton_;
-        QPushButton joinFriendButton_;
-
         QSlider *playerCountSlider_;
         QLabel *playerCountLabel_;
         QListWidget friendsList_;
