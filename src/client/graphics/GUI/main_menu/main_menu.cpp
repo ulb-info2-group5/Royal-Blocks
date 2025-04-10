@@ -6,6 +6,7 @@
 #include "../message_menu/message_menu.hpp"
 #include "../profile_manager/profile_manager.hpp"
 #include "../qt_config/qt_config.hpp"
+#include "graphics/GUI/game_display/game_display.hpp"
 
 #include <QApplication>
 #include <QMessageBox>

@@ -102,7 +102,9 @@ namespace GUI {
 
     GameDisplay::GameDisplay(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
-        : QWidget(parent), AbstractGameDisplay(controller), mainGui_(mainGui) {}
+        : QWidget(parent), AbstractGameDisplay(controller), mainGui_(mainGui) {
+        setup();
+    }
 
     // // private methods
     //
@@ -431,11 +433,21 @@ namespace GUI {
 
     // void GameDisplay::updateScreen();
 
-    void GameDisplay::setup() {
-        std::cout << "setup called" << std::endl;
+    void GameDisplay::on_QuitButtonClicked() {
+        controller_.quitGame();
+        emit backToMainMenu();
+    }
 
-        quitButton_ = new QPushButton(tr("&Quit"));
-        quitButton_->setFocusPolicy(Qt::NoFocus);
+    void GameDisplay::setup() {
+        quitButton_.setText(tr("&Quit"));
+        mainLayout_.addWidget(&quitButton_);
+        setLayout(&mainLayout_);
+
+        connect(&quitButton_, &QPushButton::clicked, this,
+                &GameDisplay::on_QuitButtonClicked);
+
+        // QVBoxLayout *leftPane_ = new QVBoxLayout;
+        // QVBoxLayout *middlePane_ = new QVBoxLayout;
 
         // quitButton_->setText("Quit Game");
         // quitButton_->setFixedWidth(QUITGAME_BUTTON_WIDTH);
@@ -445,9 +457,6 @@ namespace GUI {
         // mode_.setText(to_string(getGameMode()));
         // mode_.setFixedWidth(MODE_LABEL_WIDTH);
 
-        // QHBoxLayout *mainLayout_ = new QHBoxLayout;
-        // QVBoxLayout *leftPane_ = new QVBoxLayout;
-        // QVBoxLayout *middlePane_ = new QVBoxLayout;
         // if (getGameMode() != GameMode::Endless)
         //     (QGridLayout *opLayout_ = new QGridLayout;)
         // if (getGameMode() == GameMode::RoyalCompetition) {} effects lol

@@ -49,29 +49,30 @@ namespace GUI {
       private:
         MainGui &mainGui_;
 
-        QWidget *mainWidget_;
         QHBoxLayout mainLayout_;
         QVBoxLayout leftPane_;
         QVBoxLayout middlePane_;
+        QVBoxLayout rightPane_;
+
         QGridLayout opLayout_;
 
-        QPushButton *quitButton_;
-        QLabel playerInfo_;
-        QProgressBar penalty_;
-        QImage holdTetromino_;
+        QPushButton quitButton_;
+        // QLabel playerInfo_;
+        // QProgressBar penalty_;
+        // QImage holdTetromino_;
 
         // std::vector<QPushButton> effectsButtons_;
         // QVBoxLayout effectsLayout_;
-        QProgressBar energy_;
-        QProgressBar bonus_;
+        // QProgressBar energy_;
+        // QProgressBar bonus_;
 
-        QImage selfBoard_;
-        QLabel mode_;
-        QImage tetrominoQueue_;
+        // QImage selfBoard_;
+        // QLabel mode_;
+        // QImage tetrominoQueue_;
 
-        std::vector<QImage> opBoards_;
-        std::vector<QPushButton> targetButtons_;
-        std::vector<QVBoxLayout> opSingularDisplay_;
+        // std::vector<QImage> opBoards_;
+        // std::vector<QPushButton> targetButtons_;
+        // std::vector<QVBoxLayout> opSingularDisplay_;
 
         // void playerInfo();
         // void penaltyInfo();
@@ -106,6 +107,8 @@ namespace GUI {
 
       private slots:
 
+        void on_QuitButtonClicked();
+
         // add the functions for the buttons
 
         // void on_changeTarget_Clicked(size_t index);
@@ -122,7 +125,7 @@ namespace GUI {
 
       signals:
 
-        void quitGame();
+        void backToMainMenu();
     };
 
 } // namespace GUI

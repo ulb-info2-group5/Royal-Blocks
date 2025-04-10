@@ -27,6 +27,9 @@ namespace GUI {
     void GameMenuGUI::setup() {
         stack_ = new QStackedWidget();
 
+        connect(&gameDisplay_, &GameDisplay::backToMainMenu, this,
+                [this] { emit backToMainMenu(); });
+
         // Configure buttons
         endlessButton_.setText("Endless Mode");
         endlessButton_.setFixedWidth(500);
