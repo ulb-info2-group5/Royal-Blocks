@@ -24,9 +24,6 @@ namespace GUI {
         Controller &controller_;
         MainGui &mainGui_;
 
-        QStackedWidget *stack_;
-        QWidget *mainWidget_;
-
         QPushButton submit_;
         QPushButton back_;
 
