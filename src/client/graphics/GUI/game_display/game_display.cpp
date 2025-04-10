@@ -601,7 +601,9 @@ namespace GUI {
     //     mainGui_.stopRender();
     // }
 
-    // void GameDisplay::refreshScreen();
+    // void GameDisplay::refreshScreen(){
+    //     this->update();
+    // }
 
     // signals
 
