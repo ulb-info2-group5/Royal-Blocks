@@ -55,7 +55,7 @@ namespace GUI {
         QVBoxLayout middlePane_;
         QGridLayout opLayout_;
 
-        QPushButton quitButton_;
+        QPushButton *quitButton_;
         QLabel playerInfo_;
         QProgressBar penalty_;
         QImage holdTetromino_;
@@ -73,50 +73,50 @@ namespace GUI {
         std::vector<QPushButton> targetButtons_;
         std::vector<QVBoxLayout> opSingularDisplay_;
 
-        void playerInfo();
+        // void playerInfo();
         // void penaltyInfo();
         // void bonusInfo();
-        void energy();
+        // void energy();
         // void availableEffects();
-        void holdTetromino();
-        void leftPane();
+        // void holdTetromino();
+        // void leftPane();
 
-        void drawBoard(CellSize size = CellSize::Big);
-        void tetrominoQueue();
-        void middlePane();
+        // void drawBoard(CellSize size = CellSize::Big);
+        // void tetrominoQueue();
+        // void middlePane();
 
-        void createOpBoardDisplay(size_t index, CellSize size);
-        void opponentsBoard();
-        void rightPane();
+        // void createOpBoardDisplay(size_t index, CellSize size);
+        // void opponentsBoard();
+        // void rightPane();
 
-        void drawMainLayout();
+        // void drawMainLayout();
 
         // void drawGameOver();
         // void drawWin();
 
-        void handleKeys();
+        // void handleKeys();
 
-        void updateScreen();
+        // void updateScreen();
 
         void setup();
 
-        void actionOnExit();
+        // void actionOnExit();
 
-        void changeTarget();
+        // void changeTarget();
 
       private slots:
 
         // add the functions for the buttons
 
-        void on_changeTarget_Clicked(size_t index);
+        // void on_changeTarget_Clicked(size_t index);
 
-        void refreshScreen();
+        // void refreshScreen();
 
-        void on_QuitGameButton_clicked();
+        // void on_QuitGameButton_clicked();
 
       public:
         GameDisplay(Controller &controller, MainGui &mainGui,
-                       QWidget *parent = nullptr);
+                    QWidget *parent = nullptr);
 
         ~GameDisplay() = default;
 

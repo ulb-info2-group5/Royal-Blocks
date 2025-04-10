@@ -4,6 +4,7 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
+#include "graphics/GUI/game_display/game_display.hpp"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -12,8 +13,9 @@ namespace GUI {
 
     GameMenuGUI::GameMenuGUI(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui),
-          playerCount_(4), isCreateGame_(false) {
+        : QWidget(parent), gameDisplay_{controller_, mainGui_, this},
+          controller_(controller), mainGui_(mainGui), playerCount_(4),
+          isCreateGame_(false) {
         setup();
     }
 
@@ -169,6 +171,7 @@ namespace GUI {
         stack_->addWidget(joinTypeWidget_);
         stack_->addWidget(friendsListWidget_);
         stack_->addWidget(waitingWidget_);
+        stack_->addWidget(&gameDisplay_);
 
         // Set main layout
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -202,7 +205,7 @@ namespace GUI {
         connect(gameCheckTimer, &QTimer::timeout, [this, gameCheckTimer]() {
             if (controller_.inGame()) {
                 gameCheckTimer->stop();
-                emit backToMainMenu();
+                stack_->setCurrentWidget(&gameDisplay_);
             }
         });
         gameCheckTimer->start(500); // Check every 500ms
