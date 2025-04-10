@@ -35,6 +35,7 @@
 #include <qnamespace.h>
 #include <qpushbutton.h>
 #include <stdexcept>
+#include <string>
 
 namespace GUI {
 
@@ -481,6 +482,11 @@ namespace GUI {
         emit backToMainMenu();
     }
 
+    void GameDisplay::scoreLCD() {
+        scoreLCD_.display(static_cast<int>(getSelfScore()));
+        scoreLCD_.setSegmentStyle(QLCDNumber::Filled);
+    }
+
     void GameDisplay::selfBoard(CellSize size) {
         size_t cellSize = static_cast<size_t>(size);
         size_t height = getBoardHeight();
@@ -529,6 +535,7 @@ namespace GUI {
         gameState_ = controller_.getGameState();
 
         selfBoard();
+        scoreLCD();
     }
 
     void GameDisplay::setup() {
@@ -546,6 +553,7 @@ namespace GUI {
         QPushButton *quitButton = new QPushButton{tr("&Quit")};
 
         leftPane_.addWidget(quitButton);
+        leftPane_.addWidget(&scoreLCD_);
 
         // ------------MIDDLE_PANE---------------
 

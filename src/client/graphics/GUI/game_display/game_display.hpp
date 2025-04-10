@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QImage>
+#include <QLCDNumber>
 #include <QLabel>
 #include <QLineEdit>
 #include <QProgressBar>
@@ -14,16 +15,10 @@
 
 #include "../../common/abstract_game_display.hpp"
 
-#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../../../common/types/types.hpp"
-#include "../../../core/in_game/game_state/game_state.hpp"
-#include "../../../core/in_game/game_state/game_state_viewer.hpp"
 
-#include <memory>
 #include <qlabel.h>
 #include <qpixmap.h>
-#include <variant>
-#include <vector>
 
 class Controller;
 
@@ -36,14 +31,6 @@ namespace GUI {
         Big = 40,
     };
 
-    // constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) *
-    // 10,
-    //                  HEIGHT_CANVAS_BIG = static_cast<size_t>(CellSize::Big) *
-    //                  20, WIDTH_CANVAS_SMALL =
-    //                  static_cast<size_t>(CellSize::Small) * 10,
-    //                  HEIGHT_CANVAS_SMALL =
-    //                      static_cast<size_t>(CellSize::Small) * 20;
-
     class GameDisplay final : public QWidget, public AbstractGameDisplay {
 
         Q_OBJECT
@@ -53,6 +40,7 @@ namespace GUI {
 
         QHBoxLayout mainLayout_;
 
+        QLCDNumber scoreLCD_;
         QVBoxLayout leftPane_;
 
         QLabel selfBoard_;
@@ -65,6 +53,8 @@ namespace GUI {
          * containing the board pixmap.
          */
         void selfBoard(CellSize size = CellSize::Big);
+
+        void scoreLCD();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;
