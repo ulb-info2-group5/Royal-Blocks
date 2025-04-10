@@ -432,7 +432,7 @@ namespace GUI {
 
     // void GameDisplay::updateScreen(){
     //      repaint();
-    // };
+    // }
 
     QColor getQColor(AbstractGameDisplay::Color color) {
         QColor returnValue;
@@ -609,6 +609,13 @@ namespace GUI {
 
     // signals
 
-    // void GameDisplay::quitGame();
+    //void GameDisplay::quitGame(){
+    //    QMessageBox::StandardButton reply;
+    //    reply = QMessageBox::question(this, "Quite the game ?", "Are you sure ?", 
+    //                              QMessageBox::Yes | QMessageBox::No);
+    //    if (reply == QMessageBox::Yes) {
+    //        GameDisplay::on_QuitGameButton_clicked();
+    //    }
+    //};
 
 } // namespace GUI
