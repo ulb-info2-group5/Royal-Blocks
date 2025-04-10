@@ -444,7 +444,7 @@ namespace GUI {
         painter.fillRect(selfBoardMap.rect(), QColor::fromRgb(200, 0, 0));
         painter.end();
 
-        selfBoard_->setPixmap(selfBoardMap);
+        selfBoard_.setPixmap(selfBoardMap);
     }
 
     void GameDisplay::updateGameState() {
@@ -453,12 +453,8 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
-        // initialize class members;
-        selfBoard_ = new QLabel;
+        // ------------FIRST_SPACERS------------
 
-        // --------------------------------------
-
-        // first spacers
         leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding));
         middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -466,22 +462,24 @@ namespace GUI {
         rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
 
-        // --------------------------------------
+        // ------------RIGHT_PANE----------------
 
         QPushButton quitButton{tr("&Quit")};
 
         leftPane_.addWidget(&quitButton);
 
+        // ------------MIDDLE_PANE---------------
+
         QLabel *gameMode =
             new QLabel{QString::fromStdString(toString(getGameMode()))};
 
         middlePane_.addWidget(gameMode);
+        middlePane_.addWidget(&selfBoard_);
 
-        middlePane_.addWidget(selfBoard_);
+        // ------------RIGHT_PANE----------------
 
-        // --------------------------------------
+        // ------------END_SPACERS--------------
 
-        // second spacers
         leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding));
         middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -489,9 +487,8 @@ namespace GUI {
         rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
 
-        // --------------------------------------
+        // ------------SPLIT_3_PANES-------------
 
-        // divide into three panes
         mainLayout_.addLayout(&leftPane_);
         mainLayout_.addLayout(&middlePane_);
         mainLayout_.addLayout(&rightPane_);

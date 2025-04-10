@@ -55,7 +55,7 @@ namespace GUI {
 
         QVBoxLayout leftPane_;
 
-        QLabel *selfBoard_;
+        QLabel selfBoard_;
         QVBoxLayout middlePane_;
 
         QVBoxLayout rightPane_;
