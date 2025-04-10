@@ -430,7 +430,9 @@ namespace GUI {
 
     // void GameDisplay::handleKeys(QKeyEvent *event);
 
-    // void GameDisplay::updateScreen();
+    // void GameDisplay::updateScreen(){
+    //      repaint();
+    // };
 
     QColor getQColor(AbstractGameDisplay::Color color) {
         QColor returnValue;
