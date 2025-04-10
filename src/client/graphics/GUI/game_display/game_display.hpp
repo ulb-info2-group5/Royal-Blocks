@@ -17,6 +17,7 @@
 
 #include "../../../../common/types/types.hpp"
 
+#include <qgridlayout.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 
@@ -48,6 +49,7 @@ namespace GUI {
         QLabel selfBoard_;
         QVBoxLayout middlePane_;
 
+        QGridLayout oppBoards_;
         QLabel tetrominoQueue_;
         QVBoxLayout rightPane_;
 
@@ -64,6 +66,10 @@ namespace GUI {
         void energyLCD();
 
         void tetrominoQueue();
+
+        QLabel *createOppBoard(size_t index, CellSize size);
+
+        void oppBoards();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

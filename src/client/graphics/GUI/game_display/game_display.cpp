@@ -35,10 +35,11 @@
 #include <QWidget>
 #include <qchar.h>
 #include <qcolor.h>
+#include <qgridlayout.h>
+#include <qlabel.h>
 #include <qnamespace.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
-#include <stdexcept>
 #include <string>
 
 namespace GUI {
@@ -481,6 +482,51 @@ namespace GUI {
         return returnValue;
     }
 
+    QLabel *GameDisplay::createOppBoard(size_t index, CellSize size) {
+        size_t cellSize = static_cast<size_t>(size);
+        size_t height = getBoardHeight();
+        size_t width = getBoardWidth();
+
+        QLabel *oppBoard = new QLabel;
+        QPixmap oppBoardMap(cellSize * width, cellSize * height);
+
+        QPainter painter(&oppBoardMap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        oppBoardMap.fill(Qt::black);
+
+        for (uint32_t y = 0; y < height; ++y) {
+            for (uint32_t x = 0; x < width; ++x) {
+                auto opt = opponentsBoardGetColorIdAt(index, x, y);
+                if (!opt.has_value()) {
+                    continue;
+                }
+
+                QColor color = getQColor(colorIdToColor(opt.value()));
+                painter.setBrush(color);
+                painter.setPen(Qt::NoPen);
+
+                painter.drawRect(QRect(x * cellSize,
+                                       (height - 1 - y) * cellSize, cellSize,
+                                       cellSize));
+            };
+        }
+
+        painter.end();
+
+        oppBoard->setPixmap(oppBoardMap);
+
+        return oppBoard;
+    }
+
+    void GameDisplay::oppBoards() {
+        // TODO: empty the layout;
+
+        // push the new opponent boards
+        // for (size_t index = 0; index < getNumOpponents(); index++) {
+        //     oppBoards_.addWidget(createOppBoard(index, CellSize::Small));
+        // }
+    }
+
     void GameDisplay::tetrominoQueue() {
         size_t queueSize = getTetrominoQueuesSize();
 
@@ -658,6 +704,7 @@ namespace GUI {
         scoreLCD();
         holdTetromino();
         tetrominoQueue();
+        oppBoards();
 
         if (getGameMode() == GameMode::RoyalCompetition) {
             energyLCD();
