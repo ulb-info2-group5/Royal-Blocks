@@ -115,10 +115,10 @@ namespace GUI {
         void on_QuitGameButton_clicked();
 
       public:
-        GameDisplayGUI(Controller &controller, MainGui &mainGui,
+        GameDisplay(Controller &controller, MainGui &mainGui,
                        QWidget *parent = nullptr);
 
-        ~GameDisplayGUI() = default;
+        ~GameDisplay() = default;
 
       signals:
 

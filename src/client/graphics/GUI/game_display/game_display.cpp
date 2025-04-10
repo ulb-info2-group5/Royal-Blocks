@@ -16,6 +16,7 @@
 #include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
 
+#include <format>
 #include <memory>
 #include <optional>
 #include <stdexcept>
@@ -105,8 +106,11 @@ namespace GUI {
     // private methods
 
     void GameDisplay::playerInfo() {
-        playerInfo_.setText(getSelfUsername() + " : "
-                            + std::to_string(getSelfScore()));
+        playerInfo_.setText(QString::fromStdString(
+            getSelfUsername() + " : " + std::to_string(getSelfScore())));
+
+        playerInfo_.setText(QString::fromStdString(std::format(
+            "{} : {}", getSelfUsername(), std::to_string(getSelfScore()))));
         playerInfo_.setFixedWidth(PLAYER_INFO_LABEL_WIDTH);
     }
 
@@ -419,7 +423,7 @@ namespace GUI {
     //    layout->addWidget(label);
     // };
 
-    void GameDisplay::handleKeys();
+    void GameDisplay::handleKeys(QKeyEvent *event);
 
     void GameDisplay::updateScreen();
 
