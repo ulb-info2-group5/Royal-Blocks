@@ -437,8 +437,6 @@ namespace GUI {
     QColor getQColor(AbstractGameDisplay::Color color) {
         QColor returnValue;
 
-        // TODO: check that svg is fine here
-
         switch (color) {
         case AbstractGameDisplay::Color::Black:
             returnValue = Qt::black;
@@ -583,49 +581,6 @@ namespace GUI {
 
         connect(quitButton, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
-
-        // QVBoxLayout *leftPane_ = new QVBoxLayout;
-        // QVBoxLayout *middlePane_ = new QVBoxLayout;
-
-        // quitButton_->setText("Quit Game");
-        // quitButton_->setFixedWidth(QUITGAME_BUTTON_WIDTH);
-        // connect(quitButton_, &QPushButton::clicked, this,
-        //         &GameDisplay::on_QuitGameButton_clicked);
-
-        // mode_.setText(to_string(getGameMode()));
-        // mode_.setFixedWidth(MODE_LABEL_WIDTH);
-
-        // if (getGameMode() != GameMode::Endless)
-        //     (QGridLayout *opLayout_ = new QGridLayout;)
-        // if (getGameMode() == GameMode::RoyalCompetition) {} effects
-        // lol
     }
-
-    // private slots
-
-    // void GameDisplay::on_changeTarget_Clicked(size_t index) {
-    //     controller_.selectTarget(getNthOpponentUserID(index));
-    // }
-
-    // void GameDisplay::on_QuitGameButton_clicked() {
-    //     controller_.quitGame();
-    //     mainGui_.stopRender();
-    // }
-
-    // void GameDisplay::refreshScreen(){
-    //     this->update();
-    // }
-
-    // signals
-
-    // void GameDisplay::quitGame(){
-    //     QMessageBox::StandardButton reply;
-    //     reply = QMessageBox::question(this, "Quite the game ?", "Are you sure
-    //     ?",
-    //                               QMessageBox::Yes | QMessageBox::No);
-    //     if (reply == QMessageBox::Yes) {
-    //         GameDisplay::on_QuitGameButton_clicked();
-    //     }
-    // };
 
 } // namespace GUI
