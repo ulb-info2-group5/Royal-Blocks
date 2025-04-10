@@ -491,26 +491,36 @@ namespace GUI {
         QPixmap selfBoardMap(cellSize * width, cellSize * height);
 
         QPainter painter(&selfBoardMap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        selfBoardMap.fill(Qt::black);
 
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
+                auto optPair = selfCellInfoAt(x, y);
+                if (!optPair.has_value()) {
+                    continue;
+                }
 
-                QColor color =
-                    getQColor(selfCellInfoAt(x, y)
-                                  .transform([](auto cellInfo) {
-                                      return colorIdToColor(cellInfo.first);
-                                  })
-                                  .value_or(Color::Black));
+                auto [colorId, cellType] = optPair.value();
 
-                painter.setBrush(color);
+                bool isPreview = (cellType == SelfCellType::Preview);
 
-                painter.drawRect(QRect(x * cellSize,
-                                       (height - 1 - y) * cellSize, cellSize,
-                                       cellSize));
+                QColor color = getQColor(colorIdToColor(colorId));
+
+                if (isPreview) {
+                    painter.setPen(QPen(color, 1, Qt::SolidLine, Qt::RoundCap,
+                                        Qt::RoundJoin));
+                    painter.setBrush(Qt::NoBrush);
+                } else {
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(color);
+                }
+
+                painter.drawRect(QRectF(x * cellSize,
+                                        (height - 1 - y) * cellSize, cellSize,
+                                        cellSize));
             }
         }
-
-        std::cout << "endFor" << std::endl;
 
         painter.end();
 
@@ -519,7 +529,6 @@ namespace GUI {
 
     void GameDisplay::updateGameState() {
         gameState_ = controller_.getGameState();
-        std::cout << "updated GameDisplay's board" << std::endl;
 
         selfBoard();
     }
@@ -609,13 +618,14 @@ namespace GUI {
 
     // signals
 
-    //void GameDisplay::quitGame(){
-    //    QMessageBox::StandardButton reply;
-    //    reply = QMessageBox::question(this, "Quite the game ?", "Are you sure ?", 
-    //                              QMessageBox::Yes | QMessageBox::No);
-    //    if (reply == QMessageBox::Yes) {
-    //        GameDisplay::on_QuitGameButton_clicked();
-    //    }
-    //};
+    // void GameDisplay::quitGame(){
+    //     QMessageBox::StandardButton reply;
+    //     reply = QMessageBox::question(this, "Quite the game ?", "Are you sure
+    //     ?",
+    //                               QMessageBox::Yes | QMessageBox::No);
+    //     if (reply == QMessageBox::Yes) {
+    //         GameDisplay::on_QuitGameButton_clicked();
+    //     }
+    // };
 
 } // namespace GUI
