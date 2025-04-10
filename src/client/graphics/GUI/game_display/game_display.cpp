@@ -33,6 +33,7 @@
 #include <QWidget>
 #include <qcolor.h>
 #include <qnamespace.h>
+#include <qpainter.h>
 #include <qpushbutton.h>
 #include <stdexcept>
 #include <string>
@@ -525,9 +526,9 @@ namespace GUI {
                     painter.setBrush(color);
                 }
 
-                painter.drawRect(QRectF(x * cellSize,
-                                        (height - 1 - y) * cellSize, cellSize,
-                                        cellSize));
+                painter.drawRect(QRect(x * cellSize,
+                                       (height - 1 - y) * cellSize, cellSize,
+                                       cellSize));
             }
         }
 
@@ -536,11 +537,44 @@ namespace GUI {
         selfBoard_.setPixmap(selfBoardMap);
     }
 
+    void GameDisplay::holdTetromino() {
+        size_t cellSize = static_cast<size_t>(CellSize::Big);
+        size_t width = ATetromino::MAX_DIMENSION;
+        size_t height = ATetromino::MAX_DIMENSION;
+
+        QPixmap holdTetrominoMap(width * cellSize, height * cellSize);
+        QPainter painter(&holdTetrominoMap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        holdTetrominoMap.fill(Qt::black);
+
+        size_t xOffset = cellSize;
+        size_t yOffset = cellSize;
+
+        const client::Tetromino *pHoldTetromino = getHoldTetromino();
+        if (pHoldTetromino != nullptr) {
+            QColor color = getQColor(colorIdToColor(pHoldTetromino->colorId));
+            painter.setBrush(color);
+            painter.setPen(Qt::NoPen);
+
+            for (const Vec2 &relCoord : pHoldTetromino->body) {
+                int x = relCoord.getX() * cellSize + xOffset;
+                int y = (height - 1 - relCoord.getY()) * cellSize + yOffset;
+
+                painter.drawRect(QRect(x, y, cellSize, cellSize));
+            }
+        }
+
+        painter.end();
+
+        holdTetromino_.setPixmap(holdTetrominoMap);
+    }
+
     void GameDisplay::updateGameState() {
         gameState_ = controller_.getGameState();
 
         selfBoard();
         scoreLCD();
+        holdTetromino();
 
         if (getGameMode() == GameMode::RoyalCompetition) {
             energyLCD();
@@ -566,6 +600,7 @@ namespace GUI {
         if (getGameMode() == GameMode::RoyalCompetition) {
             leftPane_.addWidget(&energyLCD_);
         }
+        leftPane_.addWidget(&holdTetromino_);
 
         // ------------MIDDLE_PANE---------------
 

@@ -42,6 +42,7 @@ namespace GUI {
 
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
+        QLabel holdTetromino_;
         QVBoxLayout leftPane_;
 
         QLabel selfBoard_;
@@ -56,6 +57,8 @@ namespace GUI {
         void selfBoard(CellSize size = CellSize::Big);
 
         void scoreLCD();
+
+        void holdTetromino();
 
         void energyLCD();
 
