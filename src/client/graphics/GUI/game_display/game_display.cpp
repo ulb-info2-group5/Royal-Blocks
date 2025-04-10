@@ -561,7 +561,7 @@ namespace GUI {
 
             for (const Vec2 &relCoord : pHoldTetromino->body) {
                 int x = relCoord.getX() * cellSize + xOffset;
-                int y = (height - 1 - relCoord.getY()) * cellSize + yOffset;
+                int y = relCoord.getY() * cellSize + yOffset;
 
                 painter.drawRect(QRect(x, y, cellSize, cellSize));
             }
@@ -577,23 +577,18 @@ namespace GUI {
 
         switch (event->key()) {
         case Qt::Key_Left:
-            std::cout << "left" << std::endl;
             keyPressed = "ArrowLeft";
             break;
         case Qt::Key_Right:
-            std::cout << "right" << std::endl;
             keyPressed = "ArrowRight";
             break;
         case Qt::Key_Down:
-            std::cout << "down" << std::endl;
             keyPressed = "ArrowDown";
             break;
         case Qt::Key_Space:
-            std::cout << "space" << std::endl;
             keyPressed = "Space";
             break;
         default:
-            std::cout << "other" << std::endl;
             keyPressed = event->text().toStdString();
         }
 
