@@ -8,6 +8,7 @@
 
 #include <QMessageBox>
 #include <QTimer>
+#include <qslider.h>
 
 namespace GUI {
 
@@ -102,8 +103,7 @@ namespace GUI {
                 &GameMenuGUI::onJoinFriendButtonClicked);
 
         // Setup select mode screen
-        selectModeWidget_ = new QWidget();
-        QVBoxLayout *selectModeLayout = new QVBoxLayout(selectModeWidget_);
+        QVBoxLayout *selectModeLayout = new QVBoxLayout(&selectModeWidget_);
         selectModeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
         selectModeLayout->addWidget(createCenterBoldTitle("Select Game Mode"));
@@ -116,24 +116,22 @@ namespace GUI {
                                                   QSizePolicy::Expanding));
 
         // Setup player count screen
-        playerCountWidget_ = new QWidget();
-        QVBoxLayout *playerCountLayout = new QVBoxLayout(playerCountWidget_);
-        playerCountSlider_ = new QSlider(Qt::Horizontal);
-        playerCountSlider_->setMinimum(2);
-        playerCountSlider_->setMaximum(9);
-        playerCountSlider_->setValue(4);
-        playerCountSlider_->setFixedWidth(500);
-        playerCountLabel_ = new QLabel("Player Count: 4");
-        playerCountLabel_->setAlignment(Qt::AlignCenter);
-        connect(playerCountSlider_, &QSlider::valueChanged, this,
+        QVBoxLayout *playerCountLayout = new QVBoxLayout(&playerCountWidget_);
+        QSlider *playerCountSlider = new QSlider(Qt::Horizontal);
+        playerCountSlider->setMinimum(2);
+        playerCountSlider->setMaximum(9);
+        playerCountSlider->setValue(4);
+        playerCountSlider->setFixedWidth(500);
+        playerCountLabel_.setAlignment(Qt::AlignCenter);
+        connect(playerCountSlider, &QSlider::valueChanged, this,
                 &GameMenuGUI::onPlayerCountChanged);
 
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
         playerCountLayout->addWidget(
             createCenterBoldTitle("Select Player Count"));
-        playerCountLayout->addWidget(playerCountLabel_, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(playerCountSlider_, 0, Qt::AlignCenter);
+        playerCountLayout->addWidget(&playerCountLabel_, 0, Qt::AlignCenter);
+        playerCountLayout->addWidget(playerCountSlider, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(confirmButton_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(playerCountBackButton_, 0,
                                      Qt::AlignCenter);
@@ -141,8 +139,7 @@ namespace GUI {
                                                    QSizePolicy::Expanding));
 
         // Setup join type screen
-        joinTypeWidget_ = new QWidget();
-        QVBoxLayout *joinTypeLayout = new QVBoxLayout(joinTypeWidget_);
+        QVBoxLayout *joinTypeLayout = new QVBoxLayout(&joinTypeWidget_);
         joinTypeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
         joinTypeLayout->addWidget(createCenterBoldTitle("Join Game"));
@@ -153,8 +150,7 @@ namespace GUI {
                                                 QSizePolicy::Expanding));
 
         // Setup friends list screen
-        friendsListWidget_ = new QWidget();
-        QVBoxLayout *friendsListLayout = new QVBoxLayout(friendsListWidget_);
+        QVBoxLayout *friendsListLayout = new QVBoxLayout(&friendsListWidget_);
         friendsList_.setFixedWidth(500);
         friendsListLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
@@ -168,8 +164,7 @@ namespace GUI {
                 &GameMenuGUI::onFriendSelected);
 
         // Setup waiting screen
-        waitingWidget_ = new QWidget();
-        QVBoxLayout *waitingLayout = new QVBoxLayout(waitingWidget_);
+        QVBoxLayout *waitingLayout = new QVBoxLayout(&waitingWidget_);
         waitingLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
         waitingLayout->addWidget(createCenterBoldTitle("Waiting for Game"));
@@ -182,11 +177,11 @@ namespace GUI {
                                                QSizePolicy::Expanding));
 
         // Add widgets to stack
-        stack_->addWidget(selectModeWidget_);
-        stack_->addWidget(playerCountWidget_);
-        stack_->addWidget(joinTypeWidget_);
-        stack_->addWidget(friendsListWidget_);
-        stack_->addWidget(waitingWidget_);
+        stack_->addWidget(&selectModeWidget_);
+        stack_->addWidget(&playerCountWidget_);
+        stack_->addWidget(&joinTypeWidget_);
+        stack_->addWidget(&friendsListWidget_);
+        stack_->addWidget(&waitingWidget_);
         stack_->addWidget(&gameDisplay_);
 
         // Set main layout
@@ -197,24 +192,24 @@ namespace GUI {
 
     // Screen display methods
     void GameMenuGUI::showSelectModeScreen() {
-        stack_->setCurrentWidget(selectModeWidget_);
+        stack_->setCurrentWidget(&selectModeWidget_);
     }
 
     void GameMenuGUI::showPlayerCountScreen() {
-        stack_->setCurrentWidget(playerCountWidget_);
+        stack_->setCurrentWidget(&playerCountWidget_);
     }
 
     void GameMenuGUI::showJoinTypeScreen() {
-        stack_->setCurrentWidget(joinTypeWidget_);
+        stack_->setCurrentWidget(&joinTypeWidget_);
     }
 
     void GameMenuGUI::showFriendsListScreen() {
         updateFriendsList();
-        stack_->setCurrentWidget(friendsListWidget_);
+        stack_->setCurrentWidget(&friendsListWidget_);
     }
 
     void GameMenuGUI::showWaitingScreen() {
-        stack_->setCurrentWidget(waitingWidget_);
+        stack_->setCurrentWidget(&waitingWidget_);
 
         // Check periodically if we've joined a game
         QTimer *gameCheckTimer = new QTimer(this);
@@ -300,15 +295,15 @@ namespace GUI {
     }
 
     void GameMenuGUI::onBackButtonClicked() {
-        if (stack_->currentWidget() == selectModeWidget_) {
+        if (stack_->currentWidget() == &selectModeWidget_) {
             emit backToMainMenu();
-        } else if (stack_->currentWidget() == playerCountWidget_) {
+        } else if (stack_->currentWidget() == &playerCountWidget_) {
             showSelectModeScreen();
-        } else if (stack_->currentWidget() == joinTypeWidget_) {
+        } else if (stack_->currentWidget() == &joinTypeWidget_) {
             showSelectModeScreen();
-        } else if (stack_->currentWidget() == friendsListWidget_) {
+        } else if (stack_->currentWidget() == &friendsListWidget_) {
             showJoinTypeScreen();
-        } else if (stack_->currentWidget() == waitingWidget_) {
+        } else if (stack_->currentWidget() == &waitingWidget_) {
             controller_.quitGame();
             showSelectModeScreen();
         }
@@ -328,7 +323,7 @@ namespace GUI {
 
     void GameMenuGUI::onPlayerCountChanged(int value) {
         playerCount_ = value;
-        playerCountLabel_->setText(QString("Player Count: %1").arg(value));
+        playerCountLabel_.setText(QString("Player Count: %1").arg(value));
     }
 
     void GameMenuGUI::onFriendSelected(QListWidgetItem *item) {

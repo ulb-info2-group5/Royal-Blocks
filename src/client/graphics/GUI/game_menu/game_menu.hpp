@@ -30,14 +30,13 @@ namespace GUI {
         GameDisplay gameDisplay_;
 
         QStackedWidget *stack_;
-        QWidget *selectModeWidget_;
-        QWidget *playerCountWidget_;
-        QWidget *joinTypeWidget_;
-        QWidget *friendsListWidget_;
-        QWidget *waitingWidget_;
+        QWidget selectModeWidget_;
+        QWidget playerCountWidget_;
+        QWidget joinTypeWidget_;
+        QWidget friendsListWidget_;
+        QWidget waitingWidget_;
 
-        QSlider *playerCountSlider_;
-        QLabel *playerCountLabel_;
+        QLabel playerCountLabel_;
         QListWidget friendsList_;
 
         GameMode selectedGameMode_;
