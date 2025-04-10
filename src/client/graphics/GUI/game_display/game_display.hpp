@@ -32,8 +32,8 @@ namespace GUI {
     class MainGui;
 
     enum class CellSize : size_t {
-        Small = 4,
-        Big = 8,
+        Small = 10,
+        Big = 40,
     };
 
     // constexpr size_t WIDTH_CANVAS_BIG = static_cast<size_t>(CellSize::Big) *
@@ -64,7 +64,7 @@ namespace GUI {
          * @brief Redraws the board pixmap and returns a pointer to the QLable
          * containing the board pixmap.
          */
-        void selfBoard();
+        void selfBoard(CellSize size = CellSize::Big);
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

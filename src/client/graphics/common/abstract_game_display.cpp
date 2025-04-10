@@ -80,7 +80,8 @@ AbstractGameDisplay::selfCellInfoAt(int x, int y) const {
             AbstractGameDisplay::SelfCellType::Placed);
     }
 
-    auto &activeTetromino = gs.self.tetris.activeTetromino;
+    const std::optional<client::Tetromino> &activeTetromino =
+        gs.self.tetris.activeTetromino;
     if (activeTetromino.has_value()) {
         for (auto &vec : activeTetromino->body) {
             if (activeTetromino->anchorPoint + vec == Vec2{x, y}) {
@@ -91,7 +92,8 @@ AbstractGameDisplay::selfCellInfoAt(int x, int y) const {
         }
     }
 
-    auto &previewTetromino = gs.self.tetris.previewTetromino;
+    const std::optional<client::Tetromino> &previewTetromino =
+        gs.self.tetris.previewTetromino;
     if (previewTetromino.has_value()) {
         for (auto &vec : previewTetromino->body) {
             if (previewTetromino->anchorPoint + vec == Vec2{x, y}) {

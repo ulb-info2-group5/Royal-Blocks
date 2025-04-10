@@ -32,7 +32,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <qcolor.h>
+#include <qnamespace.h>
 #include <qpushbutton.h>
+#include <stdexcept>
 
 namespace GUI {
 
@@ -430,25 +432,93 @@ namespace GUI {
 
     // void GameDisplay::updateScreen();
 
+    QColor getQColor(AbstractGameDisplay::Color color) {
+        QColor returnValue;
+
+        // TODO: check that svg is fine here
+
+        switch (color) {
+        case AbstractGameDisplay::Color::Black:
+            returnValue = Qt::black;
+            break;
+        case AbstractGameDisplay::Color::White:
+            returnValue = Qt::white;
+            break;
+        case AbstractGameDisplay::Color::Grey:
+            returnValue = Qt::gray;
+            break;
+        case AbstractGameDisplay::Color::DarkBlue:
+            returnValue = Qt::darkBlue;
+            break;
+        case AbstractGameDisplay::Color::LightBlue:
+            returnValue = Qt::blue;
+            break;
+        case AbstractGameDisplay::Color::Purple:
+            returnValue = Qt::magenta;
+            break;
+        case AbstractGameDisplay::Color::Red:
+            returnValue = Qt::red;
+            break;
+        case AbstractGameDisplay::Color::Orange:
+            returnValue = QColorConstants::Svg::orange;
+            break;
+        case AbstractGameDisplay::Color::Pink:
+            returnValue = QColorConstants::Svg::pink;
+            break;
+        case AbstractGameDisplay::Color::Green:
+            returnValue = Qt::green;
+            break;
+        case AbstractGameDisplay::Color::Yellow:
+            returnValue = Qt::yellow;
+            break;
+        };
+
+        return returnValue;
+    }
+
     void GameDisplay::on_QuitButtonClicked() {
         controller_.quitGame();
         emit backToMainMenu();
     }
 
-    void GameDisplay::selfBoard() {
-        QPixmap selfBoardMap(static_cast<size_t>(CellSize::Big) * 20,
-                             static_cast<size_t>(CellSize::Big) * 20);
+    void GameDisplay::selfBoard(CellSize size) {
+        size_t cellSize = static_cast<size_t>(size);
+        size_t height = getBoardHeight();
+        size_t width = getBoardWidth();
 
-        // draw the board
+        QPixmap selfBoardMap(cellSize * width, cellSize * height);
+
         QPainter painter(&selfBoardMap);
-        painter.fillRect(selfBoardMap.rect(), QColor::fromRgb(200, 0, 0));
+
+        for (uint32_t y = 0; y < height; ++y) {
+            for (uint32_t x = 0; x < width; ++x) {
+
+                QColor color =
+                    getQColor(selfCellInfoAt(x, y)
+                                  .transform([](auto cellInfo) {
+                                      return colorIdToColor(cellInfo.first);
+                                  })
+                                  .value_or(Color::Black));
+
+                painter.setBrush(color);
+
+                painter.drawRect(QRect(x * cellSize,
+                                       (height - 1 - y) * cellSize, cellSize,
+                                       cellSize));
+            }
+        }
+
+        std::cout << "endFor" << std::endl;
+
         painter.end();
 
         selfBoard_.setPixmap(selfBoardMap);
     }
 
     void GameDisplay::updateGameState() {
-        std::cout << "updating board" << std::endl;
+        gameState_ = controller_.getGameState();
+        std::cout << "updated GameDisplay's board" << std::endl;
+
         selfBoard();
     }
 
@@ -516,7 +586,8 @@ namespace GUI {
 
         // if (getGameMode() != GameMode::Endless)
         //     (QGridLayout *opLayout_ = new QGridLayout;)
-        // if (getGameMode() == GameMode::RoyalCompetition) {} effects lol
+        // if (getGameMode() == GameMode::RoyalCompetition) {} effects
+        // lol
     }
 
     // private slots
