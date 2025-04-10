@@ -125,6 +125,9 @@ namespace GUI {
 
         // void on_QuitGameButton_clicked();
 
+      protected:
+        void keyPressEvent(QKeyEvent *event);
+
       public:
         GameDisplay(Controller &controller, MainGui &mainGui,
                     QWidget *parent = nullptr);

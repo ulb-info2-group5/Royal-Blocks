@@ -17,6 +17,8 @@
 #include "vec2/vec2.hpp"
 
 #include <QColor>
+#include <QKeyEvent>
+#include <QKeySequence>
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
@@ -31,6 +33,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qchar.h>
 #include <qcolor.h>
 #include <qnamespace.h>
 #include <qpainter.h>
@@ -569,6 +572,34 @@ namespace GUI {
         holdTetromino_.setPixmap(holdTetrominoMap);
     }
 
+    void GameDisplay::keyPressEvent(QKeyEvent *event) {
+        std::string keyPressed;
+
+        switch (event->key()) {
+        case Qt::Key_Left:
+            std::cout << "left" << std::endl;
+            keyPressed = "ArrowLeft";
+            break;
+        case Qt::Key_Right:
+            std::cout << "right" << std::endl;
+            keyPressed = "ArrowRight";
+            break;
+        case Qt::Key_Down:
+            std::cout << "down" << std::endl;
+            keyPressed = "ArrowDown";
+            break;
+        case Qt::Key_Space:
+            std::cout << "space" << std::endl;
+            keyPressed = "Space";
+            break;
+        default:
+            std::cout << "other" << std::endl;
+            keyPressed = event->text().toStdString();
+        }
+
+        controller_.handleKeypress(keyPressed);
+    }
+
     void GameDisplay::updateGameState() {
         gameState_ = controller_.getGameState();
 
@@ -582,6 +613,8 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
+        setFocusPolicy(Qt::StrongFocus);
+
         // ------------FIRST_SPACERS------------
 
         leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
