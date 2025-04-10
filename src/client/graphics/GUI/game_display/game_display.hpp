@@ -48,6 +48,7 @@ namespace GUI {
         QLabel selfBoard_;
         QVBoxLayout middlePane_;
 
+        QLabel tetrominoQueue_;
         QVBoxLayout rightPane_;
 
         /**
@@ -61,6 +62,8 @@ namespace GUI {
         void holdTetromino();
 
         void energyLCD();
+
+        void tetrominoQueue();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

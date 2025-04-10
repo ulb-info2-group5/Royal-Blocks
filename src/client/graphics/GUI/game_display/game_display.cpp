@@ -481,6 +481,62 @@ namespace GUI {
         return returnValue;
     }
 
+    void GameDisplay::tetrominoQueue() {
+        size_t queueSize = getTetrominoQueuesSize();
+
+        size_t cellSize = static_cast<size_t>(CellSize::Big);
+        size_t width = ATetromino::MAX_DIMENSION;
+        size_t height = queueSize * ATetromino::MAX_DIMENSION;
+
+        QPixmap tetrominoQueueMap(width * cellSize, height * cellSize);
+        QPainter painter(&tetrominoQueueMap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        tetrominoQueueMap.fill(Qt::black);
+
+        const client::Tetromino &nextTetromino = getTetrominoQueueNth(0);
+        size_t highestBlockY =
+            std::max_element(nextTetromino.body.begin(),
+                             nextTetromino.body.end(),
+                             [](const Vec2 &a, const Vec2 &b) {
+                                 return a.getY() > b.getY();
+                             })
+                ->getY();
+
+        size_t yInitialOffset = highestBlockY * cellSize;
+
+        for (size_t idx = 0; idx < queueSize; ++idx) {
+            const client::Tetromino &tetromino = getTetrominoQueueNth(idx);
+            const std::vector<Vec2> &body = tetromino.body;
+
+            // x-offset
+            size_t leftmostBlockX =
+                -std::min_element(body.begin(), body.end(),
+                                  [](const Vec2 &a, const Vec2 &b) {
+                                      return a.getX() < b.getX();
+                                  })
+                     ->getX();
+
+            size_t xOffset = leftmostBlockX * cellSize;
+
+            // y-offset
+            size_t yOffset =
+                idx * ATetromino::MAX_DIMENSION * cellSize - yInitialOffset;
+
+            QColor color = getQColor(colorIdToColor(tetromino.colorId));
+            painter.setBrush(color);
+            painter.setPen(Qt::NoPen);
+
+            for (const auto &vec : body) {
+                int x = vec.getX() * cellSize + xOffset;
+                int y = vec.getY() * cellSize + yOffset;
+
+                painter.drawRect(QRect(x, y, cellSize, cellSize));
+            }
+        }
+
+        tetrominoQueue_.setPixmap(tetrominoQueueMap);
+    }
+
     void GameDisplay::on_QuitButtonClicked() {
         controller_.quitGame();
         emit backToMainMenu();
@@ -601,6 +657,7 @@ namespace GUI {
         selfBoard();
         scoreLCD();
         holdTetromino();
+        tetrominoQueue();
 
         if (getGameMode() == GameMode::RoyalCompetition) {
             energyLCD();
@@ -639,6 +696,8 @@ namespace GUI {
         middlePane_.addWidget(&selfBoard_);
 
         // ------------RIGHT_PANE----------------
+
+        rightPane_.addWidget(&tetrominoQueue_);
 
         // ------------END_SPACERS--------------
 
