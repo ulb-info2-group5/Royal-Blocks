@@ -20,6 +20,7 @@
 #include "../../../core/in_game/game_state/game_state_viewer.hpp"
 
 #include <memory>
+#include <qlabel.h>
 #include <variant>
 #include <vector>
 
@@ -50,13 +51,15 @@ namespace GUI {
         MainGui &mainGui_;
 
         QHBoxLayout mainLayout_;
+
+        QPushButton quitButton_;
         QVBoxLayout leftPane_;
+
         QVBoxLayout middlePane_;
+
         QVBoxLayout rightPane_;
 
         QGridLayout opLayout_;
-
-        QPushButton quitButton_;
         // QLabel playerInfo_;
         // QProgressBar penalty_;
         // QImage holdTetromino_;

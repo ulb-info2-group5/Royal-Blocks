@@ -19,6 +19,8 @@
 #include <format>
 #include <memory>
 #include <optional>
+#include <qchar.h>
+#include <qlabel.h>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -440,7 +442,19 @@ namespace GUI {
 
     void GameDisplay::setup() {
         quitButton_.setText(tr("&Quit"));
-        mainLayout_.addWidget(&quitButton_);
+
+        leftPane_.addWidget(&quitButton_);
+
+        QLabel *gameMode =
+            new QLabel{QString::fromStdString(toString(getGameMode()))};
+
+        rightPane_.addWidget(gameMode);
+
+        // divide into three panes
+        mainLayout_.addLayout(&leftPane_);
+        mainLayout_.addLayout(&middlePane_);
+        mainLayout_.addLayout(&rightPane_);
+
         setLayout(&mainLayout_);
 
         connect(&quitButton_, &QPushButton::clicked, this,
