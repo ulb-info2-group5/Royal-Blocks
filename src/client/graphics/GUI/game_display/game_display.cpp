@@ -545,9 +545,9 @@ namespace GUI {
 
         // ------------RIGHT_PANE----------------
 
-        QPushButton quitButton{tr("&Quit")};
+        QPushButton *quitButton = new QPushButton{tr("&Quit")};
 
-        leftPane_.addWidget(&quitButton);
+        leftPane_.addWidget(quitButton);
 
         // ------------MIDDLE_PANE---------------
 
@@ -581,7 +581,7 @@ namespace GUI {
         connect(&mainGui_, &MainGui::updateGameState, this,
                 &GameDisplay::updateGameState);
 
-        connect(&quitButton, &QPushButton::clicked, this,
+        connect(quitButton, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
 
         // QVBoxLayout *leftPane_ = new QVBoxLayout;
