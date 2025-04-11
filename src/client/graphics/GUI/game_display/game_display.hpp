@@ -16,6 +16,7 @@
 #include "../../common/abstract_game_display.hpp"
 
 #include "../../../../common/types/types.hpp"
+#include "effect_info.hpp"
 #include "opponent_widget.hpp"
 
 #include <qgridlayout.h>
@@ -47,6 +48,8 @@ namespace GUI {
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
         QLabel holdTetromino_;
+        EffectInfo bonusInfo_;
+        EffectInfo penaltyInfo_;
         QVBoxLayout leftPane_;
 
         QLabel gameMode_;
@@ -73,11 +76,15 @@ namespace GUI {
 
         void tetrominoQueue();
 
-        void effectGauge();
-
         OpponentWidget *createOppBoard(size_t index, CellSize size);
 
         void oppBoards();
+
+        void bonusInfo();
+
+        void penaltyInfo();
+
+        void effectsInfo();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

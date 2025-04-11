@@ -11,9 +11,9 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
+#include "effect_info.hpp"
 #include "graphics/GUI/game_display/opponent_widget.hpp"
 #include "graphics/common/abstract_game_display.hpp"
-#include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
 
@@ -129,8 +129,6 @@ namespace GUI {
         painter.end();
 
         bool isSelected = getSelectedTarget() == getNthOpponentUserID(index);
-        std::println("idx: {} -> isSelected: {}", index, isSelected);
-
         return new OpponentWidget(
             oppBoardMap, QString::fromStdString(getOpponentUsername(index)),
             isSelected);
@@ -349,22 +347,50 @@ namespace GUI {
 
         if (getGameMode() == GameMode::RoyalCompetition) {
             energyLCD();
+            effectsInfo();
         }
     }
 
-    void GameDisplay::effectGauge() {
-        // Créer une barre de progression
-        QProgressBar *progressBar = new QProgressBar(this); // 'this' est le parent (la fenêtre existante)
-    
-        // Configurer la barre de progression
-        progressBar->setRange(0, 100);
-        progressBar->setValue(50);
-        progressBar->setOrientation(Qt::Vertical);
-        progressBar->setFixedSize(50, 200);
-        progressBar->move(0, 0);
+    void GameDisplay::bonusInfo() {
+        const auto &gs = std::get<client::GameState>(gameState_);
 
-        // Afficher le widget
-        progressBar->show();
+        auto [bonusName, elapsedTime] =
+            gs.self.playerState.activeBonus
+                .transform([](const client::TimedBonus &bonus) {
+                    return std::make_pair(toString(bonus.bonusType),
+                                          bonus.elapsedTime);
+                })
+                .value_or(std::make_pair(std::string{}, 0));
+
+        bonusInfo_.setName(QString::fromStdString(bonusName));
+        bonusInfo_.setProgress(elapsedTime);
+
+        bonusInfo_.setFrameStyle(QFrame::Panel | QFrame::Raised);
+        bonusInfo_.setStyleSheet("QFrame { border: 3px solid green; }");
+    }
+
+    void GameDisplay::penaltyInfo() {
+        const auto &gs = std::get<client::GameState>(gameState_);
+
+        auto [penaltyName, elapsedTime] =
+            gs.self.playerState.activePenalty
+                .transform([](const client::TimedPenalty &penalty) {
+                    return std::make_pair(toString(penalty.penaltyType),
+                                          penalty.elapsedTime);
+                })
+                .value_or(std::make_pair(std::string{}, 0));
+
+        penaltyInfo_.setName(QString::fromStdString(penaltyName));
+        penaltyInfo_.setProgress(elapsedTime);
+
+        penaltyInfo_.setFrameStyle(QFrame::Panel | QFrame::Raised);
+        penaltyInfo_.setStyleSheet("QFrame { border: 3px solid red; }");
+    }
+
+    void GameDisplay::effectsInfo() {
+        std::println("in effectsInfo");
+        bonusInfo();
+        penaltyInfo();
     }
 
     void GameDisplay::setup() {
@@ -394,6 +420,9 @@ namespace GUI {
         // }
 
         leftPane_.addWidget(&holdTetromino_);
+
+        leftPane_.addWidget(&bonusInfo_);
+        leftPane_.addWidget(&penaltyInfo_);
 
         // ------------MIDDLE_PANE---------------
 
