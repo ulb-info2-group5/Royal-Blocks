@@ -16,6 +16,7 @@
 #include "../../common/abstract_game_display.hpp"
 
 #include "../../../../common/types/types.hpp"
+#include "opponent_widget.hpp"
 
 #include <qgridlayout.h>
 #include <qlabel.h>
@@ -72,7 +73,7 @@ namespace GUI {
 
         void tetrominoQueue();
 
-        QLabel *createOppBoard(size_t index, CellSize size);
+        OpponentWidget *createOppBoard(size_t index, CellSize size);
 
         void oppBoards();
 

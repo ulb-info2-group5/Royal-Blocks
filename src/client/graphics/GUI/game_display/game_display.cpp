@@ -11,6 +11,7 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
+#include "graphics/GUI/game_display/opponent_widget.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "player_state/player_state.hpp"
 #include "tetromino/tetromino.hpp"
@@ -34,6 +35,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <print>
 #include <qchar.h>
 #include <qcolor.h>
 #include <qgridlayout.h>
@@ -93,12 +95,11 @@ namespace GUI {
         return returnValue;
     }
 
-    QLabel *GameDisplay::createOppBoard(size_t index, CellSize size) {
+    OpponentWidget *GameDisplay::createOppBoard(size_t index, CellSize size) {
         size_t cellSize = static_cast<size_t>(size);
         size_t height = getBoardHeight();
         size_t width = getBoardWidth();
 
-        QLabel *oppBoard = new QLabel;
         QPixmap oppBoardMap(cellSize * width, cellSize * height);
 
         QPainter painter(&oppBoardMap);
@@ -127,24 +128,40 @@ namespace GUI {
 
         painter.end();
 
-        oppBoard->setPixmap(oppBoardMap);
+        bool isSelected = getSelectedTarget() == getNthOpponentUserID(index);
+        std::println("idx: {} -> isSelected: {}", index, isSelected);
 
-        return oppBoard;
+        return new OpponentWidget(
+            oppBoardMap, QString::fromStdString(getOpponentUsername(index)),
+            isSelected);
     }
 
     void GameDisplay::oppBoards() {
         constexpr size_t numCols = 4;
-        for (size_t i = 0; i < getNumOpponents(); ++i) {
 
+        for (int i = 0; i < oppBoards_.count(); ++i) {
+            auto tmp = oppBoards_.takeAt(i);
+            if (tmp != nullptr) {
+                std::println("!nullptr");
+                tmp->widget()->deleteLater();
+            }
+        }
+
+        for (size_t i = 0; i < getNumOpponents(); ++i) {
             CellSize cellSize = (getGameMode() == GameMode::Dual)
                                     ? CellSize::Big
                                     : CellSize::Small;
 
-            QLabel *board = createOppBoard(i, cellSize);
+            OpponentWidget *opponentWidget = createOppBoard(i, cellSize);
 
             int row = static_cast<int>(i) / numCols;
             int col = static_cast<int>(i) % numCols;
-            oppBoards_.addWidget(board, row, col);
+
+            oppBoards_.addWidget(opponentWidget, row, col);
+
+            connect(opponentWidget, &OpponentWidget::clicked, this, [i, this] {
+                controller_.selectTarget(getNthOpponentUserID(i));
+            });
         }
     }
 
