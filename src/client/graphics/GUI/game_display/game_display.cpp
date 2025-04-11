@@ -361,9 +361,7 @@ namespace GUI {
         progressBar->setValue(50);
         progressBar->setOrientation(Qt::Vertical);
         progressBar->setFixedSize(50, 200);
-
-        // Positionner la barre dans la fenêtre (optionnel si vous utilisez un layout)
-        progressBar->move(0, 0); // Position relative dans le parent (x: 50, y: 50)
+        progressBar->move(0, 0);
 
         // Afficher le widget
         progressBar->show();
