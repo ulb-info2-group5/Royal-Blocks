@@ -21,7 +21,12 @@ void EffectSelector::setEffectPrices(
     clear();
 
     for (auto [effectType, effectPrice] : effectPrices) {
-        layout_.addWidget(new QPushButton(QString::fromStdString(
-            std::format("{} {}", toString(effectType), effectPrice))));
+        auto *button = new QPushButton(QString::fromStdString(
+            std::format("{} {}", toString(effectType), effectPrice)));
+
+        layout_.addWidget(button);
+
+        connect(button, &QPushButton::clicked, this,
+                [this, effectType]() { emit buyEffect(effectType); });
     }
 }

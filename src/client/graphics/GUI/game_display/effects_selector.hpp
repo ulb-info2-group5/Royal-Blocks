@@ -26,6 +26,9 @@ class EffectSelector : public QFrame {
 
     void setEffectPrices(
         const std::vector<std::pair<EffectType, Energy>> &effectPrices);
+
+  signals:
+    void buyEffect(EffectType);
 };
 
 #endif // GUI_EFFECT_SELECTOR_HPP

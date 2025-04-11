@@ -224,6 +224,10 @@ namespace GUI {
         tetrominoQueue_.setPixmap(tetrominoQueueMap);
     }
 
+    void GameDisplay::on_EffectBought(EffectType effect) {
+        controller_.buyEffect(effect);
+    }
+
     void GameDisplay::on_QuitButtonClicked() {
         controller_.quitGame();
         emit backToMainMenu();
@@ -475,6 +479,9 @@ namespace GUI {
 
         connect(&quitButton_, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
+
+        connect(&effectSelector_, &EffectSelector::buyEffect, this,
+                &GameDisplay::on_EffectBought);
     }
 
 } // namespace GUI

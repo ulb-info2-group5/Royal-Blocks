@@ -143,6 +143,8 @@ namespace GUI {
 
         void on_QuitButtonClicked();
 
+        void on_EffectBought(EffectType effect);
+
         void updateGameState();
 
         // add the functions for the buttons
