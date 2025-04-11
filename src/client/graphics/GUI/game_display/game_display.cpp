@@ -129,9 +129,15 @@ namespace GUI {
         painter.end();
 
         bool isSelected = getSelectedTarget() == getNthOpponentUserID(index);
-        return new OpponentWidget(
-            oppBoardMap, QString::fromStdString(getOpponentUsername(index)),
-            isSelected);
+
+        auto ret = new OpponentWidget(
+            oppBoardMap, QString::fromStdString(getOpponentUsername(index)));
+        if (isSelected) {
+            ret->setFrameStyle(QFrame::Panel | QFrame::Raised);
+            ret->setStyleSheet("QFrame { border: 3px solid yellow; }");
+        }
+
+        return ret;
     }
 
     void GameDisplay::oppBoards() {

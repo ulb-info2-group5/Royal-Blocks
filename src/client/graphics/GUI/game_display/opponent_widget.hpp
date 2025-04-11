@@ -31,7 +31,7 @@ class OpponentWidget : public QFrame {
 
   public:
     OpponentWidget(const QPixmap &pixmap, const QString &nickname,
-                   bool isSelected, QWidget *parent = nullptr);
+                   QWidget *parent = nullptr);
 
   signals:
     void clicked();

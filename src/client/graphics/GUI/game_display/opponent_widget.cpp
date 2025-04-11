@@ -3,7 +3,7 @@
 #include <print>
 
 OpponentWidget::OpponentWidget(const QPixmap &pixmap, const QString &nickname,
-                               bool isSelected, QWidget *parent)
+                               QWidget *parent)
     : QFrame(parent) {
 
     std::println("creating new OpponentWidget");
@@ -17,14 +17,6 @@ OpponentWidget::OpponentWidget(const QPixmap &pixmap, const QString &nickname,
     layout_.addWidget(&boardLabel_);
     layout_.addWidget(&nameLabel_);
     setLayout(&layout_);
-
-    if (isSelected) {
-        setFrameStyle(QFrame::Panel | QFrame::Raised);
-        setStyleSheet("QFrame { border: 3px solid red; }");
-    } else {
-        setFrameStyle(QFrame::Panel | QFrame::Raised);
-        setStyleSheet("QFrame { border: 3px solid yellow; }");
-    }
 }
 
 void OpponentWidget::mousePressEvent(QMouseEvent *event) {
