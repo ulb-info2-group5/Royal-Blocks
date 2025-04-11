@@ -146,7 +146,6 @@ namespace GUI {
         for (int i = 0; i < oppBoards_.count(); ++i) {
             auto tmp = oppBoards_.takeAt(i);
             if (tmp != nullptr) {
-                std::println("!nullptr");
                 tmp->widget()->deleteLater();
             }
         }
@@ -394,7 +393,6 @@ namespace GUI {
     }
 
     void GameDisplay::effectsInfo() {
-        std::println("in effectsInfo");
         bonusInfo();
         penaltyInfo();
     }
