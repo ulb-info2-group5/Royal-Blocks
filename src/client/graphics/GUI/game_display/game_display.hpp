@@ -17,6 +17,7 @@
 
 #include "../../../../common/types/types.hpp"
 #include "effect_info.hpp"
+#include "graphics/GUI/game_display/effects_selector.hpp"
 #include "opponent_widget.hpp"
 
 #include <qgridlayout.h>
@@ -50,6 +51,7 @@ namespace GUI {
         QLabel holdTetromino_;
         EffectInfo bonusInfo_;
         EffectInfo penaltyInfo_;
+        EffectSelector effectSelector_;
         QVBoxLayout leftPane_;
 
         QLabel gameMode_;
@@ -85,6 +87,8 @@ namespace GUI {
         void penaltyInfo();
 
         void effectsInfo();
+
+        void effectSelector();
 
         // QGridLayout opLayout_;
         // QLabel playerInfo_;

@@ -353,7 +353,12 @@ namespace GUI {
         if (getGameMode() == GameMode::RoyalCompetition) {
             energyLCD();
             effectsInfo();
+            effectSelector();
         }
+    }
+
+    void GameDisplay::effectSelector() {
+        effectSelector_.setEffectPrices(getEffectPrices());
     }
 
     void GameDisplay::bonusInfo() {
@@ -427,6 +432,8 @@ namespace GUI {
 
         leftPane_.addWidget(&bonusInfo_);
         leftPane_.addWidget(&penaltyInfo_);
+
+        leftPane_.addWidget(&effectSelector_);
 
         // ------------MIDDLE_PANE---------------
 
