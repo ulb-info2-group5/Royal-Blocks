@@ -388,6 +388,11 @@ namespace TUI {
             createGameScreen();
             mainTui_.stopRender();
             return;
+        } else if (gameMode_ == GameMode::Endless) {
+            controller_.joinGame(gameMode_, std::nullopt);
+            createGameScreen();
+            mainTui_.stopRender();
+            return;
         }
         const int minPlayers = 3;
         const int maxPlayers = 9;
