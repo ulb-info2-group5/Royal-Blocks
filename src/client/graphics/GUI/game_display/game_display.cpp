@@ -359,9 +359,9 @@ namespace GUI {
 
         // ------------LEFT_PANE----------------
 
-        QPushButton *quitButton = new QPushButton{tr("&Quit")};
+        quitButton_.setText(tr("&Quit"));
 
-        leftPane_.addWidget(quitButton);
+        leftPane_.addWidget(&quitButton_);
         leftPane_.addWidget(&scoreLCD_);
 
         // FIXME: This is wrong in both cases:
@@ -375,10 +375,9 @@ namespace GUI {
 
         // ------------MIDDLE_PANE---------------
 
-        QLabel *gameMode =
-            new QLabel{QString::fromStdString(toString(getGameMode()))};
+        gameMode_.setText({QString::fromStdString(toString(getGameMode()))});
 
-        middlePaneLeftVBox_.addWidget(gameMode);
+        middlePaneLeftVBox_.addWidget(&gameMode_);
         middlePaneLeftVBox_.addWidget(&selfBoard_);
 
         middlePaneHBox_.addLayout(&middlePaneLeftVBox_);
@@ -415,7 +414,7 @@ namespace GUI {
         connect(&mainGui_, &MainGui::updateGameState, this,
                 &GameDisplay::updateGameState);
 
-        connect(quitButton, &QPushButton::clicked, this,
+        connect(&quitButton_, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
     }
 

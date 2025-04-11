@@ -42,11 +42,13 @@ namespace GUI {
 
         QHBoxLayout mainLayout_;
 
+        QPushButton quitButton_;
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
         QLabel holdTetromino_;
         QVBoxLayout leftPane_;
 
+        QLabel gameMode_;
         QLabel selfBoard_;
         QLabel tetrominoQueue_;
         QHBoxLayout middlePaneHBox_;
