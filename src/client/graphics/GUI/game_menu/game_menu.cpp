@@ -253,13 +253,8 @@ namespace GUI {
     void GameMenuGUI::onEndlessButtonClicked() {
         selectedGameMode_ = GameMode::Endless;
 
-        if (isCreateGame_) {
-            controller_.createGame(selectedGameMode_, 1);
-            showWaitingScreen();
-        } else {
-            controller_.joinGame(selectedGameMode_, std::nullopt);
-            showWaitingScreen();
-        }
+        controller_.joinGame(selectedGameMode_, std::nullopt);
+        showWaitingScreen();
     }
 
     void GameMenuGUI::onDuelButtonClicked() {
