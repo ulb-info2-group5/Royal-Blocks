@@ -424,6 +424,7 @@ namespace GUI {
 
         leftPane_.addWidget(&quitButton_);
         leftPane_.addWidget(&scoreLCD_);
+        leftPane_.addWidget(&progressBar_);
 
         // FIXME: This is wrong in both cases:
         // If commented it will always be there in all GameModes.

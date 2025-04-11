@@ -64,6 +64,9 @@ namespace GUI {
         QGridLayout oppBoards_;
         QVBoxLayout rightPane_;
 
+        // Barre de progression
+        QProgressBar progressBar_;
+
         /**
          * @brief Redraws the board pixmap and returns a pointer to the QLable
          * containing the board pixmap.
