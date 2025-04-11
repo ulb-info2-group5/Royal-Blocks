@@ -352,6 +352,23 @@ namespace GUI {
         }
     }
 
+    void GameDisplay::effectGauge() {
+        // Créer une barre de progression
+        QProgressBar *progressBar = new QProgressBar(this); // 'this' est le parent (la fenêtre existante)
+    
+        // Configurer la barre de progression
+        progressBar->setRange(0, 100);
+        progressBar->setValue(50);
+        progressBar->setOrientation(Qt::Vertical);
+        progressBar->setFixedSize(50, 200);
+
+        // Positionner la barre dans la fenêtre (optionnel si vous utilisez un layout)
+        progressBar->move(0, 0); // Position relative dans le parent (x: 50, y: 50)
+
+        // Afficher le widget
+        progressBar->show();
+    }
+
     void GameDisplay::setup() {
         setFocusPolicy(Qt::StrongFocus);
 

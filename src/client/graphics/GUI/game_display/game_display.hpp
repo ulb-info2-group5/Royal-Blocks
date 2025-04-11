@@ -73,6 +73,8 @@ namespace GUI {
 
         void tetrominoQueue();
 
+        void effectGauge();
+
         OpponentWidget *createOppBoard(size_t index, CellSize size);
 
         void oppBoards();
