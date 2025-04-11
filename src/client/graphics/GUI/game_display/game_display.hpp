@@ -20,6 +20,7 @@
 #include <qgridlayout.h>
 #include <qlabel.h>
 #include <qpixmap.h>
+#include <qwidget.h>
 
 class Controller;
 
@@ -47,10 +48,12 @@ namespace GUI {
         QVBoxLayout leftPane_;
 
         QLabel selfBoard_;
+        QLabel tetrominoQueue_;
+        QHBoxLayout middlePaneHBox_;
+        QVBoxLayout middlePaneLeftVBox_;
         QVBoxLayout middlePane_;
 
         QGridLayout oppBoards_;
-        QLabel tetrominoQueue_;
         QVBoxLayout rightPane_;
 
         /**
