@@ -23,7 +23,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <optional>
-#include <print>
 
 #include <QColor>
 #include <QGridLayout>
@@ -134,28 +133,19 @@ namespace GUI {
     }
 
     void GameDisplay::oppBoards() {
-        QLabel *helloText = new QLabel("hello");
-        std::println("adding helloText");
-        oppBoards_.addWidget(helloText);
+        constexpr size_t numCols = 4;
+        for (size_t i = 0; i < getNumOpponents(); ++i) {
 
-        // This works, but isn't what I want.
-        // rightPane_.addWidget(createOppBoard(0, CellSize::Big));
+            CellSize cellSize = (getGameMode() == GameMode::Dual)
+                                    ? CellSize::Big
+                                    : CellSize::Small;
 
-        // This should work but doesn't.
-        // size_t numCols = 4;
-        //
-        // for (size_t i = 0; i < getNumOpponents(); ++i) {
-        //
-        //     CellSize cellSize = (getGameMode() == GameMode::Dual)
-        //                             ? CellSize::Big
-        //                             : CellSize::Small;
-        //
-        //     QLabel *board = createOppBoard(i, cellSize);
-        //
-        //     int row = static_cast<int>(i) / numCols;
-        //     int col = static_cast<int>(i) % numCols;
-        //     oppBoards_.addWidget(board, row, col);
-        // }
+            QLabel *board = createOppBoard(i, cellSize);
+
+            int row = static_cast<int>(i) / numCols;
+            int col = static_cast<int>(i) % numCols;
+            oppBoards_.addWidget(board, row, col);
+        }
     }
 
     void GameDisplay::tetrominoQueue() {
@@ -387,10 +377,7 @@ namespace GUI {
 
         // ------------RIGHT_PANE----------------
 
-        // if (getGameMode() != GameMode::Endless) {
-        std::println("adding oppBoards_ layout");
         rightPane_.addLayout(&oppBoards_);
-        // }
 
         // ------------END_SPACERS--------------
 
