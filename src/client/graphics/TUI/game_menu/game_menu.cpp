@@ -53,10 +53,6 @@ namespace TUI {
             std::string(STR_BACK),
             [&] {
                 joinType_ = JoinType::BACK;
-                if (controller_.inGame()) {
-                    std::cerr << "Game is in progress, quitting game" << std::endl;
-                    controller_.quitGame();
-                }
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
