@@ -9,7 +9,6 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <qslider.h>
-#include <QDebug>
 
 namespace GUI {
 
@@ -121,7 +120,7 @@ namespace GUI {
         playerCountSlider_ = new QSlider(Qt::Horizontal);
         playerCountSlider_->setMinimum(2);
 
-        // Condition qui change la valeur minimal du Slider
+        // If royal mode selected also minimal value of players become 3
         connect(royalButton, &QPushButton::clicked, this, &GameMenuGUI::changeMinSlider);
 
         playerCountSlider_->setMaximum(9);
@@ -198,10 +197,6 @@ namespace GUI {
 
     // If royal mode selected
     void GameMenuGUI::changeMinSlider(){
-        if (!playerCountSlider_) {
-            qDebug() << "Erreur : playerCountSlider_ n'est pas initialisé.";
-            return;
-        }
         playerCountSlider_->setMinimum(3);
     }
 
