@@ -1,11 +1,19 @@
 #include "effects_selector.hpp"
 
 #include <QPushButton>
+#include <qlayout.h>
+#include <qlayoutitem.h>
+#include <qobject.h>
+#include <qpushbutton.h>
 
 namespace GUI {
 
     EffectSelector::EffectSelector(QWidget *parent) : QFrame(parent) {
         setLayout(&layout_);
+
+        for (int i = 0; i < 7; i++) {
+            layout_.addWidget(new QPushButton{});
+        }
     }
 
     void EffectSelector::clear() {
@@ -20,16 +28,41 @@ namespace GUI {
     void EffectSelector::setEffectPrices(
         const std::vector<std::pair<EffectType, Energy>> &effectPrices) {
 
-        clear();
+        for (size_t i = 0; i < effectPrices.size(); i++) {
+            auto [effectType, effectPrice] = effectPrices.at(i);
 
-        for (auto [effectType, effectPrice] : effectPrices) {
-            auto *button = new QPushButton(QString::fromStdString(
-                std::format("{} {}", toString(effectType), effectPrice)));
+            QString buttonText = QString::fromStdString(
+                std::format("{} {}", toString(effectType), effectPrice));
 
-            layout_.addWidget(button);
+            if (QLayoutItem *pItem = layout_.itemAt(i)) {
+                if (auto pWidget = pItem->widget()) {
+                    if (auto pButton = qobject_cast<QPushButton *>(pWidget)) {
+                        pButton->setText(buttonText);
 
-            connect(button, &QPushButton::clicked, this,
-                    [this, effectType]() { emit buyEffect(effectType); });
+                        disconnect(pButton, nullptr, nullptr, nullptr);
+                        connect(pButton, &QPushButton::clicked, this,
+                                [this, effectType]() {
+                                    emit buyEffect(effectType);
+                                });
+                    }
+                }
+            } else { // not enough buttons in the layout yet.
+                QPushButton *pButton = new QPushButton(buttonText);
+
+                connect(pButton, &QPushButton::clicked, this,
+                        [this, effectType]() { emit buyEffect(effectType); });
+
+                layout_.addWidget(pButton);
+            }
+        }
+
+        while (layout_.count() > static_cast<int>(effectPrices.size())) {
+            if (auto *pItem = layout_.takeAt(layout_.count() - 1)) {
+                if (auto *pWidget = pItem->widget()) {
+                    pWidget->deleteLater();
+                }
+                delete pItem;
+            }
         }
     }
 
