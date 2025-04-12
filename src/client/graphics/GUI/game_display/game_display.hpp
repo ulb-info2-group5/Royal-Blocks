@@ -43,8 +43,6 @@ namespace GUI {
       private:
         MainGui &mainGui_;
 
-        QHBoxLayout mainLayout_;
-
         QPushButton quitButton_;
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
@@ -52,17 +50,14 @@ namespace GUI {
         EffectInfo bonusInfo_;
         EffectInfo penaltyInfo_;
         EffectSelector effectSelector_;
-        QVBoxLayout leftPane_;
 
         QLabel gameMode_;
         QLabel selfBoard_;
         QLabel tetrominoQueue_;
         QHBoxLayout middlePaneHBox_;
         QVBoxLayout middlePaneLeftVBox_;
-        QVBoxLayout middlePane_;
 
         QGridLayout oppBoards_;
-        QVBoxLayout rightPane_;
 
         // Barre de progression
         QProgressBar progressBar_;

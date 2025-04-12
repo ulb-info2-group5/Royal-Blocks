@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <print>
+#include <qboxlayout.h>
 #include <qchar.h>
 #include <qcolor.h>
 #include <qgridlayout.h>
@@ -404,22 +405,26 @@ namespace GUI {
     void GameDisplay::setup() {
         setFocusPolicy(Qt::StrongFocus);
 
+        QVBoxLayout *leftPane = new QVBoxLayout();
+        QVBoxLayout *middlePane = new QVBoxLayout();
+        QVBoxLayout *rightPane =new QVBoxLayout();
+
         // ------------FIRST_SPACERS------------
 
-        leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        leftPane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding));
-        middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        middlePane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
-        rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        rightPane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
 
         // ------------LEFT_PANE----------------
 
         quitButton_.setText(tr("&Quit"));
 
-        leftPane_.addWidget(&quitButton_);
-        leftPane_.addWidget(&scoreLCD_);
-        leftPane_.addWidget(&progressBar_);
+        leftPane->addWidget(&quitButton_);
+        leftPane->addWidget(&scoreLCD_);
+        leftPane->addWidget(&progressBar_);
 
         // FIXME: This is wrong in both cases:
         // If commented it will always be there in all GameModes.
@@ -428,12 +433,12 @@ namespace GUI {
         // leftPane_.addWidget(&energyLCD_);
         // }
 
-        leftPane_.addWidget(&holdTetromino_);
+        leftPane->addWidget(&holdTetromino_);
 
-        leftPane_.addWidget(&bonusInfo_);
-        leftPane_.addWidget(&penaltyInfo_);
+        leftPane->addWidget(&bonusInfo_);
+        leftPane->addWidget(&penaltyInfo_);
 
-        leftPane_.addWidget(&effectSelector_);
+        leftPane->addWidget(&effectSelector_);
 
         // ------------MIDDLE_PANE---------------
 
@@ -445,30 +450,32 @@ namespace GUI {
         middlePaneHBox_.addLayout(&middlePaneLeftVBox_);
         middlePaneHBox_.addWidget(&tetrominoQueue_);
 
-        middlePane_.addLayout(&middlePaneHBox_);
+        middlePane->addLayout(&middlePaneHBox_);
 
         // ------------RIGHT_PANE----------------
 
-        rightPane_.addLayout(&oppBoards_);
+        rightPane->addLayout(&oppBoards_);
 
         // ------------END_SPACERS--------------
 
-        leftPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        leftPane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                           QSizePolicy::Expanding));
-        middlePane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        middlePane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
-        rightPane_.addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+        rightPane->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
 
         // ------------SPLIT_3_PANES-------------
 
-        mainLayout_.addLayout(&leftPane_);
-        mainLayout_.addLayout(&middlePane_);
-        mainLayout_.addLayout(&rightPane_);
+        QHBoxLayout *mainLayout = new QHBoxLayout(this);
+
+        mainLayout->addLayout(leftPane);
+        mainLayout->addLayout(middlePane);
+        mainLayout->addLayout(rightPane);
 
         // --------------------------------------
 
-        setLayout(&mainLayout_);
+        setLayout(mainLayout);
 
         connect(&mainGui_, &MainGui::updateGameState, this,
                 &GameDisplay::updateGameState);
