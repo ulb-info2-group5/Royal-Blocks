@@ -25,10 +25,6 @@ namespace GUI {
         const std::vector<std::pair<EffectType, Energy>> &effectPrices,
         EffectType selectedEffectType) {
 
-        QString selectedStyle{"background-color: blue;"};
-
-        QString defaultStyle{"background-color: gray;"};
-
         for (size_t i = 0; i < effectPrices.size(); i++) {
             auto [effectType, effectPrice] = effectPrices.at(i);
 
@@ -43,9 +39,9 @@ namespace GUI {
                         pButton->setText(buttonText);
 
                         if (isSelected) {
-                            pButton->setStyleSheet(selectedStyle);
+                            pButton->setStyleSheet(selectedStyleSheet_);
                         } else {
-                            pButton->setStyleSheet(defaultStyle);
+                            pButton->setStyleSheet(defaultStyleSheet_);
                         }
 
                         disconnect(pButton, nullptr, nullptr, nullptr);

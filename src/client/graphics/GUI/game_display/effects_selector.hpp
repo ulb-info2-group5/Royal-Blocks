@@ -8,9 +8,9 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QWidget>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QWidget>
 
 namespace GUI {
 
@@ -19,6 +19,10 @@ namespace GUI {
 
       private:
         QVBoxLayout layout_;
+
+        const QString selectedStyleSheet_{"background-color: blue;"};
+
+        const QString defaultStyleSheet_{"background-color: gray;"};
 
       public:
         EffectSelector(QWidget *parent = nullptr);
