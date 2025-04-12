@@ -299,7 +299,7 @@ namespace GUI {
         } else if (stack_->currentWidget() == &friendsListWidget_) {
             showJoinTypeScreen();
         } else if (stack_->currentWidget() == &waitingWidget_) {
-            controller_.quitGame();
+            controller_.abortMatchmaking();
             showSelectModeScreen();
         }
     }
