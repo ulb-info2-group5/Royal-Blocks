@@ -35,6 +35,10 @@ namespace GUI {
         OpponentWidget(const QPixmap &pixmap, const QString &nickname,
                        QWidget *parent = nullptr);
 
+        void setBoardMap(const QPixmap &pixmap);
+
+        void setName(const QString &name);
+
       signals:
         void clicked();
 
@@ -42,7 +46,7 @@ namespace GUI {
         void mousePressEvent(QMouseEvent *event) override;
 
       private:
-        QVBoxLayout layout_;
+        QGridLayout layout_;
         QLabel boardLabel_;
         QLabel nameLabel_;
     };

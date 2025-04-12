@@ -18,7 +18,7 @@
 #include "../../../../common/types/types.hpp"
 #include "effect_info.hpp"
 #include "graphics/GUI/game_display/effects_selector.hpp"
-#include "opponent_widget.hpp"
+#include "opponents_grid.hpp"
 
 #include <qgridlayout.h>
 #include <qlabel.h>
@@ -57,7 +57,7 @@ namespace GUI {
         QHBoxLayout middlePaneHBox_;
         QVBoxLayout middlePaneLeftVBox_;
 
-        QGridLayout oppBoards_;
+        OpponentsGrid opponentsGrid_;
 
         // Barre de progression
         QProgressBar progressBar_;
@@ -76,7 +76,7 @@ namespace GUI {
 
         void tetrominoQueue();
 
-        OpponentWidget *createOppBoard(size_t index, CellSize size);
+        QPixmap *createOppBoardMap(size_t index, CellSize size);
 
         void oppBoards();
 

@@ -24,4 +24,12 @@ namespace GUI {
         QWidget::mousePressEvent(event);
     }
 
+    void OpponentWidget::setBoardMap(const QPixmap &pixmap) {
+        boardLabel_.setPixmap(pixmap);
+    }
+
+    void OpponentWidget::setName(const QString &name) {
+        nameLabel_.setText(name);
+    }
+
 } // namespace GUI

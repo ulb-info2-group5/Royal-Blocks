@@ -8,7 +8,6 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "effect_info.hpp"
-#include "graphics/GUI/game_display/opponent_widget.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "vec2/vec2.hpp"
 
@@ -38,6 +37,7 @@
 #include <qlabel.h>
 #include <qnamespace.h>
 #include <qpainter.h>
+#include <qpixmap.h>
 #include <qpushbutton.h>
 #include <string>
 
@@ -91,16 +91,16 @@ namespace GUI {
         return returnValue;
     }
 
-    OpponentWidget *GameDisplay::createOppBoard(size_t index, CellSize size) {
+    QPixmap *GameDisplay::createOppBoardMap(size_t index, CellSize size) {
         size_t cellSize = static_cast<size_t>(size);
         size_t height = getBoardHeight();
         size_t width = getBoardWidth();
 
-        QPixmap oppBoardMap(cellSize * width, cellSize * height);
+        QPixmap *oppBoardMap = new QPixmap(cellSize * width, cellSize * height);
 
-        QPainter painter(&oppBoardMap);
+        QPainter painter(oppBoardMap);
         painter.setRenderHint(QPainter::Antialiasing, true);
-        oppBoardMap.fill(Qt::black);
+        oppBoardMap->fill(Qt::black);
 
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
@@ -124,43 +124,25 @@ namespace GUI {
 
         painter.end();
 
-        bool isSelected = getSelectedTarget() == getNthOpponentUserID(index);
-
-        auto ret = new OpponentWidget(
-            oppBoardMap, QString::fromStdString(getOpponentUsername(index)));
-        if (isSelected) {
-            ret->setFrameStyle(QFrame::Panel | QFrame::Raised);
-            ret->setStyleSheet("QFrame { border: 3px solid yellow; }");
-        }
-
-        return ret;
+        return oppBoardMap;
     }
 
     void GameDisplay::oppBoards() {
-        constexpr size_t numCols = 4;
+        size_t numOpponents = getNumOpponents();
 
-        for (int i = 0; i < oppBoards_.count(); ++i) {
-            auto tmp = oppBoards_.takeAt(i);
-            if (tmp != nullptr) {
-                tmp->widget()->deleteLater();
-            }
-        }
+        opponentsGrid_.setNumOpponents(numOpponents);
 
-        for (size_t i = 0; i < getNumOpponents(); ++i) {
+        for (size_t i = 0; i < numOpponents; ++i) {
             CellSize cellSize = (getGameMode() == GameMode::Dual)
                                     ? CellSize::Big
                                     : CellSize::Small;
 
-            OpponentWidget *opponentWidget = createOppBoard(i, cellSize);
+            QPixmap *opponentBoardMap = createOppBoardMap(i, cellSize);
 
-            int row = static_cast<int>(i) / numCols;
-            int col = static_cast<int>(i) % numCols;
-
-            oppBoards_.addWidget(opponentWidget, row, col);
-
-            connect(opponentWidget, &OpponentWidget::clicked, this, [i, this] {
-                controller_.selectTarget(getNthOpponentUserID(i));
-            });
+            bool isSelected = getSelectedTarget() == getNthOpponentUserID(i);
+            opponentsGrid_.setNthOpponent(
+                i, opponentBoardMap,
+                QString::fromStdString(getOpponentUsername(i)), isSelected);
         }
     }
 
@@ -461,7 +443,7 @@ namespace GUI {
 
         // ------------RIGHT_PANE----------------
 
-        rightPane->addLayout(&oppBoards_);
+        rightPane->addWidget(&opponentsGrid_);
 
         // ------------END_SPACERS--------------
 
