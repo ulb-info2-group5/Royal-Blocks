@@ -169,10 +169,17 @@ void Matchmaking::removePlayer(UserID playerID, GameMode gameMode){
     }
 }
 
-
-
 void Matchmaking::startGame(GameCandidate &&gameCandidate,GamesManager &gamesManager) {
 
     gameFindCallback_(gameCandidate.getPlayers(), gameCandidate.getGameMode());
     
+}
+
+void Matchmaking::abortMatchmaking( const std::shared_ptr<ClientLink>& clientLink ) {
+    if (clientLink->getUserState() != bindings::State::Matchmaking){
+        std::cerr << "Player not in Matchmaking " << std::endl;
+    } else {
+        removePlayer(clientLink->getUserID(), clientLink->getGameMode().value());
+        clientLink->setUserState(bindings::State::Menu);
+    }
 }

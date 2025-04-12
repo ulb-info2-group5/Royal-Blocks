@@ -78,6 +78,8 @@ class Matchmaking {
     void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame,
                    GamesManager &gamesManager);
     void createAGame(RequestCreateGame createGame);
+
+    void abortMatchmaking( const std::shared_ptr<ClientLink>& clientLink ); 
 };
 
 #endif

@@ -56,6 +56,8 @@ void ClientManager::removeClient(std::optional<UserID> userID){
             case bindings::State::Matchmaking: 
                 matchmaking_.removePlayer(userID.value(), connectedClients_[userID.value()]->getGameMode().value());
                 break;
+            default:
+                break;
         }
         
         disconnectClient(userID.value());
@@ -207,7 +209,9 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         connectedClients_[clientId]->sendPackage(accountService_.attemptChangeUsername(clientId, bindings::ChangeUsername::from_json(jPack), 
         [this](UserID userID){updateThisUserWithAllhisFriends(userID);}).to_json());        
         break;
-        
+    case bindings::BindingType::AbortMatchMaking:
+        matchmaking_.abortMatchmaking(connectedClients_[clientId]);
+        updateThisUserWithAllhisFriends(clientId);
     default:
         
         break;
