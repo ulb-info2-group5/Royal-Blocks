@@ -30,9 +30,7 @@
 
 namespace TUI {
 
-    ftxui::Color getFTXUIColor(AbstractGameDisplay::Color color,
-                               AbstractGameDisplay::SelfCellType selfCellType =
-                                   AbstractGameDisplay::SelfCellType::Placed) {
+    ftxui::Color getFTXUIColor(AbstractGameDisplay::Color color) {
         ftxui::Color returnValue;
 
         switch (color) {
@@ -70,11 +68,6 @@ namespace TUI {
             returnValue = ftxui::Color::Yellow1;
             break;
         };
-
-        if (selfCellType == AbstractGameDisplay::SelfCellType::Preview) {
-            returnValue = ftxui::Color::Blend(returnValue,
-                                              ftxui::Color::RGB(128, 128, 128));
-        }
 
         return returnValue;
     }
@@ -257,20 +250,33 @@ namespace TUI {
             for (uint32_t y = 0; y < height; ++y) {
                 for (uint32_t x = 0; x < width; ++x) {
 
-                    ftxui::Color color =
+                    auto [isPreview, color] =
                         selfCellInfoAt(x, y)
-                            .transform([](auto cellInfo) {
-                                return getFTXUIColor(
-                                    colorIdToColor(cellInfo.first),
-                                    cellInfo.second);
+                            .transform([&](auto cellInfo)
+                                           -> std::pair<bool, ftxui::Color> {
+                                return std::make_pair(
+                                    cellInfo.second == SelfCellType::Preview,
+                                    getFTXUIColor(
+                                        colorIdToColor(cellInfo.first)));
                             })
-                            .value_or(getFTXUIColor(Color::Black));
+                            .value_or(
+                                std::make_pair(false, ftxui::Color::Black));
 
                     for (uint32_t dy = 0; dy < cellSize; ++dy) {
                         for (uint32_t dx = 0; dx < cellSize; ++dx) {
-                            selfCanvas.DrawBlock(
-                                x * cellSize + dx,
-                                (height - 1 - y) * cellSize + dy, true, color);
+                            if (isPreview) {
+                                if ((dx + dy) % 2 == 0) {
+                                    selfCanvas.DrawPoint(
+                                        x * cellSize + dx,
+                                        (height - 1 - y) * cellSize + dy, true,
+                                        ftxui::Color::LightSkyBlue1);
+                                }
+                            } else {
+                                selfCanvas.DrawBlock(x * cellSize + dx,
+                                                     (height - 1 - y) * cellSize
+                                                         + dy,
+                                                     true, color);
+                            }
                         }
                     }
                 }
