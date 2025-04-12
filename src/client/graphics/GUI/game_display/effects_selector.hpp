@@ -9,9 +9,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QWidget>
-#include <qchar.h>
-#include <qprogressbar.h>
-#include <qpushbutton.h>
+#include <QProgressBar>
+#include <QPushButton>
 
 namespace GUI {
 
@@ -27,7 +26,10 @@ namespace GUI {
         void clear();
 
         void setEffectPrices(
-            const std::vector<std::pair<EffectType, Energy>> &effectPrices);
+            const std::vector<std::pair<EffectType, Energy>> &effectPrices,
+            EffectType selectedEffectType);
+
+        void setSelected();
 
       signals:
         void buyEffect(EffectType);

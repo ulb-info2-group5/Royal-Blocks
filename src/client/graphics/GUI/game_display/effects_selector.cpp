@@ -1,10 +1,10 @@
 #include "effects_selector.hpp"
 
+#include <QLayout>
+#include <QLayoutItem>
+#include <QObject>
 #include <QPushButton>
-#include <qlayout.h>
-#include <qlayoutitem.h>
-#include <qobject.h>
-#include <qpushbutton.h>
+#include <QStyle>
 
 namespace GUI {
 
@@ -26,7 +26,12 @@ namespace GUI {
     }
 
     void EffectSelector::setEffectPrices(
-        const std::vector<std::pair<EffectType, Energy>> &effectPrices) {
+        const std::vector<std::pair<EffectType, Energy>> &effectPrices,
+        EffectType selectedEffectType) {
+
+        QString selectedStyle{"background-color: blue;"};
+
+        QString defaultStyle{"background-color: gray;"};
 
         for (size_t i = 0; i < effectPrices.size(); i++) {
             auto [effectType, effectPrice] = effectPrices.at(i);
@@ -34,10 +39,18 @@ namespace GUI {
             QString buttonText = QString::fromStdString(
                 std::format("{} {}", toString(effectType), effectPrice));
 
+            bool isSelected = effectType == selectedEffectType;
+
             if (QLayoutItem *pItem = layout_.itemAt(i)) {
                 if (auto pWidget = pItem->widget()) {
                     if (auto pButton = qobject_cast<QPushButton *>(pWidget)) {
                         pButton->setText(buttonText);
+
+                        if (isSelected) {
+                            pButton->setStyleSheet(selectedStyle);
+                        } else {
+                            pButton->setStyleSheet(defaultStyle);
+                        }
 
                         disconnect(pButton, nullptr, nullptr, nullptr);
                         connect(pButton, &QPushButton::clicked, this,

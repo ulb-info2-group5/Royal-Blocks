@@ -221,6 +221,7 @@ namespace GUI {
     }
 
     void GameDisplay::on_EffectBought(EffectType effect) {
+        controller_.setSelectedEffectType(effect);
         controller_.buyEffect(effect);
     }
 
@@ -368,7 +369,8 @@ namespace GUI {
     }
 
     void GameDisplay::effectSelector() {
-        effectSelector_.setEffectPrices(getEffectPrices());
+        effectSelector_.setEffectPrices(getEffectPrices(),
+                                        controller_.getSelectedEffectType());
     }
 
     void GameDisplay::bonusInfo() {
