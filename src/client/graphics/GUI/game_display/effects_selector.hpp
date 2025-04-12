@@ -21,8 +21,7 @@ namespace GUI {
         QVBoxLayout layout_;
 
         const QString selectedStyleSheet_{"background-color: blue;"};
-
-        const QString defaultStyleSheet_{"background-color: gray;"};
+        const QString defaultStyleSheet_{""};
 
       public:
         EffectSelector(QWidget *parent = nullptr);
