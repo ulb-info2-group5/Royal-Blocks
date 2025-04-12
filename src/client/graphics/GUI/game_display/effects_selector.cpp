@@ -10,10 +10,6 @@ namespace GUI {
 
     EffectSelector::EffectSelector(QWidget *parent) : QFrame(parent) {
         setLayout(&layout_);
-
-        for (int i = 0; i < 7; i++) {
-            layout_.addWidget(new QPushButton{});
-        }
     }
 
     void EffectSelector::clear() {
