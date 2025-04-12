@@ -4,6 +4,7 @@
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../game_display/game_display.hpp"
 #include "../main_tui.hpp"
+#include <ftxui/dom/elements.hpp>
 
 namespace TUI {
 
@@ -52,6 +53,10 @@ namespace TUI {
             std::string(STR_BACK),
             [&] {
                 joinType_ = JoinType::BACK;
+                if (controller_.inGame()) {
+                    std::cerr << "Game is in progress, quitting game" << std::endl;
+                    controller_.quitGame();
+                }
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -196,9 +201,11 @@ namespace TUI {
             else if (joinType_ == JoinType::RANDOM) {
                 joinRandomScreen(); // We can exit the random screen when the
                                     // game just if the game has started
-                gameDisplay_->render(); // The game has started because the
+                if (joinType_!= JoinType::BACK) {
+                    gameDisplay_->render(); // The game has started because the
                                         // random screen has been exited
-                quitMenu_ = true;
+                    quitMenu_ = true;
+                }
                 break;
             }
             joinFriendOrRandomScreen(); // If the user goes back to the previous
@@ -264,7 +271,7 @@ namespace TUI {
 
     void GameMenu::joinRandomScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -274,6 +281,8 @@ namespace TUI {
                                | ftxui::center | ftxui::bold,
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
+                            ftxui::separator(),
+                            backButton_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -284,7 +293,7 @@ namespace TUI {
 
     void GameMenu::createGameScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -294,6 +303,8 @@ namespace TUI {
                                | ftxui::bold,
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
+                            ftxui::separator(),
+                            backButton_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -301,9 +312,11 @@ namespace TUI {
 
         mainTui_.render(renderer);
 
-        gameDisplay_->render(); // The game has started because the game has
+        if (joinType_ != JoinType::BACK) {
+            gameDisplay_->render(); // The game has started because the game has
                                 // been launched
-        quitMenu_ = true;
+            quitMenu_ = true;
+        }
     }
 
     ftxui::Component GameMenu::makeFriendButton(UserID userID,
@@ -320,7 +333,7 @@ namespace TUI {
 
     void GameMenu::waitingFriendScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -329,6 +342,8 @@ namespace TUI {
                                | ftxui::center | ftxui::bold,
                            ftxui::separator(),
                            ftxui::text(std::string(STR_WAIT)) | ftxui::center,
+                           ftxui::separator(),
+                            backButton_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
