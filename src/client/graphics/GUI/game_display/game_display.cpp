@@ -1,12 +1,8 @@
 #include "game_display.hpp"
-#include "../qt_config/qt_config.hpp"
 
-#include "board/board.hpp"
 #include "core/in_game/effects/timed_bonus.hpp"
 #include "core/in_game/game_state/game_state.hpp"
-#include "core/in_game/game_state/game_state_viewer.hpp"
 #include "effect/effect_type.hpp"
-#include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
 
 #include "../../../core/controller/controller.hpp"
@@ -14,7 +10,6 @@
 #include "effect_info.hpp"
 #include "graphics/GUI/game_display/opponent_widget.hpp"
 #include "graphics/common/abstract_game_display.hpp"
-#include "tetromino/tetromino.hpp"
 #include "vec2/vec2.hpp"
 
 #include <QColor>
