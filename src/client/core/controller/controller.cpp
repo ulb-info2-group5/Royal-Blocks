@@ -28,6 +28,7 @@
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
 #include "../../../common/tetris_lib/tetromino/abstract_tetromino.hpp"
+#include "../../../common/bindings/abort_matchmaking.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../common/bindings/in_game/game_state_client.hpp"
 #include "core/in_game/game_state/game_state.hpp"
@@ -378,6 +379,10 @@ void Controller::declineFriendRequest(UserID userId) {
         userId, bindings::HandleFriendRequest::Action::Decline}
                              .to_json()
                              .dump());
+}
+
+void Controller::abortMatchmaking() {
+    networkManager_.send(bindings::AbortMatchMaking{}.to_json().dump());
 }
 
 std::variant<client::GameState, client::GameStateViewer>

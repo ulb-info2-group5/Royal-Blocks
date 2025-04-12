@@ -16,7 +16,7 @@ namespace TUI {
 
         gameDisplay_ = std::make_unique<GameDisplay>(mainTui_, controller_);
 
-        endlessButon_ = ftxui::Button(
+        endlessButton_ = ftxui::Button(
             std::string(STR_ENDLESS),
             [&] {
                 gameMode_ = GameMode::Endless;
@@ -25,7 +25,7 @@ namespace TUI {
             },
             GlobalButtonStyle());
 
-        duelButon_ = ftxui::Button(
+        duelButton_ = ftxui::Button(
             std::string(STR_DUAL),
             [&] {
                 gameMode_ = GameMode::Dual;
@@ -33,7 +33,7 @@ namespace TUI {
             },
             GlobalButtonStyle());
 
-        classicButon_ = ftxui::Button(
+        classicButton_ = ftxui::Button(
             std::string(STR_CLASSIC),
             [&] {
                 gameMode_ = GameMode::Classic;
@@ -41,7 +41,7 @@ namespace TUI {
             },
             GlobalButtonStyle());
 
-        royalButon_ = ftxui::Button(
+        royalButton_ = ftxui::Button(
             std::string(STR_ROYAL),
             [&] {
                 gameMode_ = GameMode::RoyalCompetition;
@@ -53,6 +53,15 @@ namespace TUI {
             std::string(STR_BACK),
             [&] {
                 joinType_ = JoinType::BACK;
+                mainTui_.stopRender();
+            },
+            GlobalButtonStyle());
+
+        backButtonWaintingScreen_ = ftxui::Button(
+            std::string(STR_BACK),
+            [&] {
+                joinType_ = JoinType::BACK_WAITING_SCREEN;
+                controller_.abortMatchmaking();
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -72,10 +81,10 @@ namespace TUI {
     void GameMenu::renderAllGames() {
 
         ftxui::Component container = ftxui::Container::Vertical({
-            endlessButon_,
-            duelButon_,
-            classicButon_,
-            royalButon_,
+            endlessButton_,
+            duelButton_,
+            classicButton_,
+            royalButton_,
             quitMenuButton_,
         });
 
@@ -84,10 +93,10 @@ namespace TUI {
                        ftxui::text(std::string(STR_SELECT_MOD)) | ftxui::center
                            | ftxui::bold,
                        ftxui::separator(),
-                       endlessButon_->Render(),
-                       duelButon_->Render(),
-                       classicButon_->Render(),
-                       royalButon_->Render(),
+                       endlessButton_->Render(),
+                       duelButton_->Render(),
+                       classicButton_->Render(),
+                       royalButton_->Render(),
                        ftxui::separator(),
                        quitMenuButton_->Render(),
                    })
@@ -105,9 +114,9 @@ namespace TUI {
 
     void GameMenu::renderOnlineGames() {
         ftxui::Component container = ftxui::Container::Vertical({
-            duelButon_,
-            classicButon_,
-            royalButon_,
+            duelButton_,
+            classicButton_,
+            royalButton_,
             quitMenuButton_,
         });
 
@@ -116,9 +125,9 @@ namespace TUI {
                        ftxui::text(std::string(STR_SELECT_MOD)) | ftxui::center
                            | ftxui::bold,
                        ftxui::separator(),
-                       duelButon_->Render(),
-                       classicButon_->Render(),
-                       royalButon_->Render(),
+                       duelButton_->Render(),
+                       classicButton_->Render(),
+                       royalButton_->Render(),
                        ftxui::separator(),
                        quitMenuButton_->Render(),
                    })
@@ -197,12 +206,12 @@ namespace TUI {
             else if (joinType_ == JoinType::RANDOM) {
                 joinRandomScreen(); // We can exit the random screen when the
                                     // game just if the game has started
-                if (joinType_!= JoinType::BACK) {
+                if (joinType_!= JoinType::BACK_WAITING_SCREEN) {
                     gameDisplay_->render(); // The game has started because the
                                         // random screen has been exited
                     quitMenu_ = true;
+                    break;
                 }
-                break;
             }
             joinFriendOrRandomScreen(); // If the user goes back to the previous
                                         // screen
@@ -259,7 +268,6 @@ namespace TUI {
         if (controller_.inGame()) {
             gameDisplay_->render(); // The game has started because the friend
                                     // screen has been exited
-
             quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
                               // menu loop when the game is finished
         }
@@ -267,7 +275,7 @@ namespace TUI {
 
     void GameMenu::joinRandomScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -278,7 +286,7 @@ namespace TUI {
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
                             ftxui::separator(),
-                            backButton_->Render(),
+                            backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -289,7 +297,7 @@ namespace TUI {
 
     void GameMenu::createGameScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -300,7 +308,7 @@ namespace TUI {
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
                             ftxui::separator(),
-                            backButton_->Render(),
+                            backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -308,7 +316,7 @@ namespace TUI {
 
         mainTui_.render(renderer);
 
-        if (joinType_ != JoinType::BACK) {
+        if (joinType_ != JoinType::BACK_WAITING_SCREEN) {
             gameDisplay_->render(); // The game has started because the game has
                                 // been launched
             quitMenu_ = true;
@@ -329,7 +337,7 @@ namespace TUI {
 
     void GameMenu::waitingFriendScreen() {
         ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButton_}), [&] {
+            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -339,7 +347,7 @@ namespace TUI {
                            ftxui::separator(),
                            ftxui::text(std::string(STR_WAIT)) | ftxui::center,
                            ftxui::separator(),
-                            backButton_->Render(),
+                            backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -404,6 +412,9 @@ namespace TUI {
             [&] {
                 controller_.createGame(gameMode_, playerCount);
                 createGameScreen();
+                if (joinType_ == JoinType::BACK_WAITING_SCREEN && !controller_.inGame()) {
+                    return;
+                }
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());

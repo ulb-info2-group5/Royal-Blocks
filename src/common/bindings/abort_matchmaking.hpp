@@ -1,7 +1,7 @@
 #ifndef ABORT_MATCHMAKING_HPP
 #define ABORT_MATCHMAKING_HPP
 
-#include "../binding_type.hpp"
+#include "binding_type.hpp"
 
 #include <nlohmann/json.hpp>
 

@@ -2,6 +2,7 @@
 #define TUI_GAME_MENU_HPP
 
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
 
 #include "../game_display/game_display.hpp"
 
@@ -19,6 +20,7 @@ namespace TUI {
         FRIEND,
         RANDOM,
         BACK,
+        BACK_WAITING_SCREEN,
         NONE,
     };
 
@@ -52,11 +54,12 @@ namespace TUI {
          * @brief The button components that can be in the game menu
          *
          */
-        ftxui::Component endlessButon_;
-        ftxui::Component duelButon_;
-        ftxui::Component classicButon_;
-        ftxui::Component royalButon_;
+        ftxui::Component endlessButton_;
+        ftxui::Component duelButton_;
+        ftxui::Component classicButton_;
+        ftxui::Component royalButton_;
         ftxui::Component backButton_;
+        ftxui::Component backButtonWaintingScreen_;
         ftxui::Component quitMenuButton_;
         /*
          * @brief Rend the all the game present in the game menu

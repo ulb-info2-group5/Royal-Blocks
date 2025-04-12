@@ -214,6 +214,8 @@ class Controller {
 
     void declineFriendRequest(UserID userId);
 
+    void abortMatchmaking();
+
     std::variant<client::GameState, client::GameStateViewer> getGameState();
 
     bool inGame() const;
