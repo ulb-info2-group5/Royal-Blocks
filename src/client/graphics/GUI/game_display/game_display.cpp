@@ -354,6 +354,16 @@ namespace GUI {
             energyLCD();
             effectsInfo();
             effectSelector();
+
+            energyLCD_.show();
+            bonusInfo_.show();
+            penaltyInfo_.show();
+            effectSelector_.show();
+        } else {
+            energyLCD_.hide();
+            bonusInfo_.hide();
+            penaltyInfo_.hide();
+            effectSelector_.hide();
         }
     }
 
@@ -426,12 +436,7 @@ namespace GUI {
         leftPane->addWidget(&scoreLCD_);
         leftPane->addWidget(&progressBar_);
 
-        // FIXME: This is wrong in both cases:
-        // If commented it will always be there in all GameModes.
-        // If not commented it will never be there even in RoyalCompetition.
-        // if (getGameMode() == GameMode::RoyalCompetition) {
-        // leftPane_.addWidget(&energyLCD_);
-        // }
+        leftPane->addWidget(&energyLCD_);
 
         leftPane->addWidget(&holdTetromino_);
 
