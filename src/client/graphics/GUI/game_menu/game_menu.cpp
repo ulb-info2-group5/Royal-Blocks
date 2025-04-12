@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <qslider.h>
+#include <QDebug>
 
 namespace GUI {
 
@@ -117,21 +118,26 @@ namespace GUI {
 
         // Setup player count screen
         QVBoxLayout *playerCountLayout = new QVBoxLayout(&playerCountWidget_);
-        QSlider *playerCountSlider = new QSlider(Qt::Horizontal);
-        playerCountSlider->setMinimum(2);
-        playerCountSlider->setMaximum(9);
-        playerCountSlider->setValue(4);
-        playerCountSlider->setFixedWidth(500);
+        playerCountSlider_ = new QSlider(Qt::Horizontal);
+        playerCountSlider_->setMinimum(2);
+
+        // Condition qui change la valeur minimal du Slider
+        connect(royalButton, &QPushButton::clicked, this, &GameMenuGUI::changeMinSlider);
+
+        playerCountSlider_->setMaximum(9);
+        playerCountSlider_->setValue(4);
+        playerCountSlider_->setFixedWidth(500);
         playerCountLabel_.setAlignment(Qt::AlignCenter);
-        connect(playerCountSlider, &QSlider::valueChanged, this,
+        connect(playerCountSlider_, &QSlider::valueChanged, this,
                 &GameMenuGUI::onPlayerCountChanged);
+
 
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
         playerCountLayout->addWidget(
             createCenterBoldTitle("Select Player Count"));
         playerCountLayout->addWidget(&playerCountLabel_, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(playerCountSlider, 0, Qt::AlignCenter);
+        playerCountLayout->addWidget(playerCountSlider_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(confirmButton, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(playerCountBackButton, 0,
                                      Qt::AlignCenter);
@@ -188,6 +194,15 @@ namespace GUI {
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
         mainLayout->addWidget(stack_);
         setLayout(mainLayout);
+    }
+
+    // If royal mode selected
+    void GameMenuGUI::changeMinSlider(){
+        if (!playerCountSlider_) {
+            qDebug() << "Erreur : playerCountSlider_ n'est pas initialisé.";
+            return;
+        }
+        playerCountSlider_->setMinimum(3);
     }
 
     // Screen display methods

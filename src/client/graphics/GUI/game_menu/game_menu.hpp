@@ -39,6 +39,9 @@ namespace GUI {
         QLabel playerCountLabel_;
         QListWidget friendsList_;
 
+        // Slider
+        QSlider *playerCountSlider_;
+
         GameMode selectedGameMode_;
         int playerCount_;
         bool isCreateGame_;
@@ -62,6 +65,7 @@ namespace GUI {
         void onJoinFriendButtonClicked();
         void onPlayerCountChanged(int value);
         void onFriendSelected(QListWidgetItem *item);
+        void changeMinSlider();
 
       public:
         GameMenuGUI(Controller &controller, MainGui &mainGui,
