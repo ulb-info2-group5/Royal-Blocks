@@ -143,6 +143,8 @@ namespace GUI {
 
         void on_EffectBought(EffectType effect);
 
+        void on_TargetSelected(size_t targetIdx);
+
         void updateGameState();
 
         // add the functions for the buttons

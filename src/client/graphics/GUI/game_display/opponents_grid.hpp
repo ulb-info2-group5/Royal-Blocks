@@ -17,7 +17,9 @@ namespace GUI {
         OpponentsGrid(QWidget *parent = nullptr);
 
         void setNthOpponent(size_t index, QPixmap *boardMap,
-                            const QString &name, bool isSelected);
+                            const QString &name);
+
+        void setSelectedTarget(int selectedOppIdx);
 
         void setNumOpponents(size_t numOpponents);
 

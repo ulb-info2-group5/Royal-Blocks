@@ -18,7 +18,7 @@ namespace GUI {
     }
 
     void OpponentsGrid::setNthOpponent(size_t index, QPixmap *boardMap,
-                                       const QString &name, bool isSelected) {
+                                       const QString &name) {
         QString selectedStyleSheet{"background-color: blue;"};
         QString defaultStyleSheet{"background-color: none;"};
 
@@ -28,6 +28,28 @@ namespace GUI {
                     pOppWidget->setBoardMap(*boardMap);
                     pOppWidget->setName(name);
 
+                    disconnect(pOppWidget, nullptr, nullptr, nullptr);
+                    connect(pOppWidget, &OpponentWidget::clicked, this,
+                            [index, this] { emit selectTarget(index); });
+                }
+            }
+        } else { // not enough widgets in the layout yet.
+            OpponentWidget *pOppWidget = new OpponentWidget{*boardMap, name};
+
+            connect(pOppWidget, &OpponentWidget::clicked, this,
+                    [index, this] { emit selectTarget(index); });
+
+            layout_.addWidget(pOppWidget);
+        }
+    }
+
+    void OpponentsGrid::setSelectedTarget(int selectedOppIdx) {
+        for (int i = 0; i < layout_.count(); i++) {
+            if (QLayoutItem *pItem = layout_.itemAt(i)) {
+                if (OpponentWidget *pOppWidget =
+                        qobject_cast<OpponentWidget *>(pItem->widget())) {
+                    bool isSelected = selectedOppIdx == i;
+
                     if (isSelected) {
                         pOppWidget->setFrameStyle(QFrame::Panel
                                                   | QFrame::Raised);
@@ -35,28 +57,10 @@ namespace GUI {
                             "QFrame { border: 3px solid yellow; }");
                     } else {
                         pOppWidget->setFrameStyle(QFrame::NoFrame);
+                        pOppWidget->setStyleSheet("");
                     }
-
-                    disconnect(pOppWidget, nullptr, nullptr, nullptr);
-                    connect(pOppWidget, &OpponentWidget::clicked, this,
-                            [index, this] {
-                                std::println(std::cerr,
-                                             "sending signal: selected {}",
-                                             index);
-                                emit selectTarget(index);
-                            });
                 }
             }
-        } else { // not enough widgets in the layout yet.
-            std::println(std::cerr, "new OpponentWidget");
-            OpponentWidget *pOppWidget = new OpponentWidget{*boardMap, name};
-
-            connect(pOppWidget, &OpponentWidget::clicked, this, [index, this] {
-                std::println(std::cerr, "sending signal: selected {}", index);
-                emit selectTarget(index);
-            });
-
-            layout_.addWidget(pOppWidget);
         }
     }
 

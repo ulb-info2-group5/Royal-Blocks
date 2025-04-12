@@ -8,6 +8,7 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "effect_info.hpp"
+#include "graphics/GUI/game_display/opponents_grid.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "vec2/vec2.hpp"
 
@@ -29,6 +30,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <ostream>
 #include <print>
 #include <qboxlayout.h>
 #include <qchar.h>
@@ -139,10 +141,15 @@ namespace GUI {
 
             QPixmap *opponentBoardMap = createOppBoardMap(i, cellSize);
 
-            bool isSelected = getSelectedTarget() == getNthOpponentUserID(i);
             opponentsGrid_.setNthOpponent(
                 i, opponentBoardMap,
-                QString::fromStdString(getOpponentUsername(i)), isSelected);
+                QString::fromStdString(getOpponentUsername(i)));
+
+            // TODO: improve this
+            bool isSelected = getSelectedTarget() == getNthOpponentUserID(i);
+            if (isSelected) {
+                opponentsGrid_.setSelectedTarget(i);
+            }
         }
     }
 
@@ -200,6 +207,10 @@ namespace GUI {
         }
 
         tetrominoQueue_.setPixmap(tetrominoQueueMap);
+    }
+
+    void GameDisplay::on_TargetSelected(size_t targetIdx) {
+        controller_.selectTarget(getNthOpponentUserID(targetIdx));
     }
 
     void GameDisplay::on_EffectBought(EffectType effect) {
@@ -474,6 +485,9 @@ namespace GUI {
 
         connect(&effectSelector_, &EffectSelector::buyEffect, this,
                 &GameDisplay::on_EffectBought);
+
+        connect(&opponentsGrid_, &OpponentsGrid::selectTarget, this,
+                &GameDisplay::on_TargetSelected);
     }
 
 } // namespace GUI
