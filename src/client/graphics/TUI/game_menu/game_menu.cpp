@@ -316,7 +316,7 @@ namespace TUI {
 
         mainTui_.render(renderer);
 
-        if (joinType_ != JoinType::BACK_WAITING_SCREEN) {
+        if (controller_.inGame()) {
             gameDisplay_->render(); // The game has started because the game has
                                 // been launched
             quitMenu_ = true;
@@ -417,7 +417,7 @@ namespace TUI {
             [&] {
                 controller_.createGame(gameMode_, playerCount);
                 createGameScreen();
-                if (joinType_ == JoinType::BACK_WAITING_SCREEN && !controller_.inGame()) {
+                if (joinType_ == JoinType::BACK_WAITING_SCREEN && !controller_.inGame() && !quitMenu_) {
                     return;
                 }
                 mainTui_.stopRender();
