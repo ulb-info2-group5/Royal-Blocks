@@ -13,22 +13,26 @@
 #include <qprogressbar.h>
 #include <qpushbutton.h>
 
-class EffectSelector : public QFrame {
-    Q_OBJECT
+namespace GUI {
 
-  private:
-    QVBoxLayout layout_;
+    class EffectSelector : public QFrame {
+        Q_OBJECT
 
-  public:
-    EffectSelector(QWidget *parent = nullptr);
+      private:
+        QVBoxLayout layout_;
 
-    void clear();
+      public:
+        EffectSelector(QWidget *parent = nullptr);
 
-    void setEffectPrices(
-        const std::vector<std::pair<EffectType, Energy>> &effectPrices);
+        void clear();
 
-  signals:
-    void buyEffect(EffectType);
-};
+        void setEffectPrices(
+            const std::vector<std::pair<EffectType, Energy>> &effectPrices);
+
+      signals:
+        void buyEffect(EffectType);
+    };
+
+} // namespace GUI
 
 #endif // GUI_EFFECT_SELECTOR_HPP

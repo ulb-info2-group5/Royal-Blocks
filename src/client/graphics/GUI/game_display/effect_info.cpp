@@ -1,21 +1,25 @@
 #include "effect_info.hpp"
 #include <qwidget.h>
 
-EffectInfo::EffectInfo(QWidget *parent) : QFrame(parent) {
-    progressBar_.setRange(MIN_PROGRESS, MAX_PROGRESS);
+namespace GUI {
 
-    layout_.addWidget(&effectName_);
-    layout_.addWidget(&progressBar_);
+    EffectInfo::EffectInfo(QWidget *parent) : QFrame(parent) {
+        progressBar_.setRange(MIN_PROGRESS, MAX_PROGRESS);
 
-    setLayout(&layout_);
-}
+        layout_.addWidget(&effectName_);
+        layout_.addWidget(&progressBar_);
 
-void EffectInfo::setName(const QString &effectName) {
-    effectName_.setText(effectName);
-}
+        setLayout(&layout_);
+    }
 
-void EffectInfo::setProgress(double progress) {
-    constexpr double percentageMultiplicator = 100;
+    void EffectInfo::setName(const QString &effectName) {
+        effectName_.setText(effectName);
+    }
 
-    progressBar_.setValue(percentageMultiplicator * progress);
-}
+    void EffectInfo::setProgress(double progress) {
+        constexpr double percentageMultiplicator = 100;
+
+        progressBar_.setValue(percentageMultiplicator * progress);
+    }
+
+} // namespace GUI

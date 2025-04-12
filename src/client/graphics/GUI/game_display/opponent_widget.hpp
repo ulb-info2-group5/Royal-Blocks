@@ -26,23 +26,27 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 
-class OpponentWidget : public QFrame {
-    Q_OBJECT
+namespace GUI {
 
-  public:
-    OpponentWidget(const QPixmap &pixmap, const QString &nickname,
-                   QWidget *parent = nullptr);
+    class OpponentWidget : public QFrame {
+        Q_OBJECT
 
-  signals:
-    void clicked();
+      public:
+        OpponentWidget(const QPixmap &pixmap, const QString &nickname,
+                       QWidget *parent = nullptr);
 
-  protected:
-    void mousePressEvent(QMouseEvent *event) override;
+      signals:
+        void clicked();
 
-  private:
-    QVBoxLayout layout_;
-    QLabel boardLabel_;
-    QLabel nameLabel_;
-};
+      protected:
+        void mousePressEvent(QMouseEvent *event) override;
+
+      private:
+        QVBoxLayout layout_;
+        QLabel boardLabel_;
+        QLabel nameLabel_;
+    };
+
+} // namespace GUI
 
 #endif // GUI_OPPONENT_WIDGET_HPP

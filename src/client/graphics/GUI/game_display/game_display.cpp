@@ -407,7 +407,7 @@ namespace GUI {
 
         QVBoxLayout *leftPane = new QVBoxLayout();
         QVBoxLayout *middlePane = new QVBoxLayout();
-        QVBoxLayout *rightPane =new QVBoxLayout();
+        QVBoxLayout *rightPane = new QVBoxLayout();
 
         // ------------FIRST_SPACERS------------
 

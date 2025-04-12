@@ -2,22 +2,26 @@
 
 #include <print>
 
-OpponentWidget::OpponentWidget(const QPixmap &pixmap, const QString &nickname,
-                               QWidget *parent)
-    : QFrame(parent) {
+namespace GUI {
 
-    boardLabel_.setPixmap(pixmap);
-    boardLabel_.setAlignment(Qt::AlignCenter);
+    OpponentWidget::OpponentWidget(const QPixmap &pixmap,
+                                   const QString &nickname, QWidget *parent)
+        : QFrame(parent) {
 
-    nameLabel_.setAlignment(Qt::AlignCenter);
-    nameLabel_.setText(nickname);
+        boardLabel_.setPixmap(pixmap);
+        boardLabel_.setAlignment(Qt::AlignCenter);
 
-    layout_.addWidget(&boardLabel_);
-    layout_.addWidget(&nameLabel_);
-    setLayout(&layout_);
-}
+        nameLabel_.setAlignment(Qt::AlignCenter);
+        nameLabel_.setText(nickname);
 
-void OpponentWidget::mousePressEvent(QMouseEvent *event) {
-    emit clicked();
-    QWidget::mousePressEvent(event);
-}
+        layout_.addWidget(&boardLabel_);
+        layout_.addWidget(&nameLabel_);
+        setLayout(&layout_);
+    }
+
+    void OpponentWidget::mousePressEvent(QMouseEvent *event) {
+        emit clicked();
+        QWidget::mousePressEvent(event);
+    }
+
+} // namespace GUI

@@ -7,22 +7,26 @@
 #include <qchar.h>
 #include <qprogressbar.h>
 
-class EffectInfo : public QFrame {
-    Q_OBJECT
+namespace GUI {
 
-  private:
-    QHBoxLayout layout_;
-    QLabel effectName_;
-    QProgressBar progressBar_;
-    static constexpr int MIN_PROGRESS = 0;
-    static constexpr int MAX_PROGRESS = 100;
+    class EffectInfo : public QFrame {
+        Q_OBJECT
 
-  public:
-    EffectInfo(QWidget *parent = nullptr);
+      private:
+        QHBoxLayout layout_;
+        QLabel effectName_;
+        QProgressBar progressBar_;
+        static constexpr int MIN_PROGRESS = 0;
+        static constexpr int MAX_PROGRESS = 100;
 
-    void setName(const QString &effectName);
+      public:
+        EffectInfo(QWidget *parent = nullptr);
 
-    void setProgress(double progress);
-};
+        void setName(const QString &effectName);
+
+        void setProgress(double progress);
+    };
+
+} // namespace GUI
 
 #endif // GUI_EFFECT_INFO_HPP
