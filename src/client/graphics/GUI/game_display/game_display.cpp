@@ -433,7 +433,6 @@ namespace GUI {
         QPushButton *quitButton = new QPushButton(tr("&Quit"));
         quitButton->setFocusPolicy(Qt::NoFocus);
         quitButton->setFixedWidth(100);
-        scoreLCD_.setFixedWidth(100);
         progressBar_.setFixedWidth(100);
 
         leftPane->addWidget(quitButton);
@@ -497,7 +496,6 @@ namespace GUI {
             QSizePolicy::Expanding));
         gameOverLayout->addWidget(
         createCenterBoldTitle("Game Over"));
-        gameOverLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
         gameOverLayout->addWidget(GameOverReturnToMainMenuButton, 0, Qt::AlignCenter);
         gameOverLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
@@ -508,7 +506,6 @@ namespace GUI {
             QSizePolicy::Expanding));
         gameWinLayout->addWidget(
         createCenterBoldTitle("You Win"));
-        gameWinLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
         gameWinLayout->addWidget(WinReturnToMainMenuButton, 0, Qt::AlignCenter);
         gameWinLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
