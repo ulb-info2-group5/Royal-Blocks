@@ -13,7 +13,9 @@
 namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
-        : QMainWindow(parent), controller_(controller) {}
+        : QMainWindow(parent), controller_(controller) {
+        showFullScreen();
+    }
 
     void MainGui::run() {
         LoginGui *loginGui = new LoginGui(controller_);
