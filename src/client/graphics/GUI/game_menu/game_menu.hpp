@@ -39,12 +39,14 @@ namespace GUI {
         QLabel playerCountLabel_;
         QListWidget friendsList_;
 
-        // Slider
         QSlider *playerCountSlider_;
 
         GameMode selectedGameMode_;
         int playerCount_;
         bool isCreateGame_;
+
+        static constexpr size_t MAX_NUM_PLAYERS_CLASSIC_ROYAL = 9;
+        static constexpr size_t MIN_NUM_PLAYERS_CLASSIC_ROYAL = 3;
 
         void setup();
         void showSelectModeScreen();
@@ -65,7 +67,6 @@ namespace GUI {
         void onJoinFriendButtonClicked();
         void onPlayerCountChanged(int value);
         void onFriendSelected(QListWidgetItem *item);
-        void changeMinSlider();
 
       public:
         GameMenuGUI(Controller &controller, MainGui &mainGui,

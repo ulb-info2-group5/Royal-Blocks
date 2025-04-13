@@ -118,14 +118,9 @@ namespace GUI {
         // Setup player count screen
         QVBoxLayout *playerCountLayout = new QVBoxLayout(&playerCountWidget_);
         playerCountSlider_ = new QSlider(Qt::Horizontal);
-        playerCountSlider_->setMinimum(2);
-
-        // Royal Mode -> update min number of players to 3
-        connect(royalButton, &QPushButton::clicked, this,
-                &GameMenuGUI::changeMinSlider);
-
-        playerCountSlider_->setMaximum(9);
-        playerCountSlider_->setValue(4);
+        playerCountSlider_->setMinimum(MIN_NUM_PLAYERS_CLASSIC_ROYAL);
+        playerCountSlider_->setMaximum(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
+        playerCountSlider_->setValue(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
         playerCountSlider_->setFixedWidth(500);
         playerCountLabel_.setAlignment(Qt::AlignCenter);
         connect(playerCountSlider_, &QSlider::valueChanged, this,
@@ -192,9 +187,6 @@ namespace GUI {
         mainLayout->addWidget(stack_);
         setLayout(mainLayout);
     }
-
-    // If royal mode selected
-    void GameMenuGUI::changeMinSlider() { playerCountSlider_->setMinimum(3); }
 
     // Screen display methods
     void GameMenuGUI::showSelectModeScreen() {
