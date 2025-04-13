@@ -17,10 +17,10 @@ namespace GUI {
     MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
         : QWidget(parent), controller_(controller),
-          rankingGui_(controller_, mainGui), gameMenu_(controller, mainGui),
-          friendsMenuGui_(controller, mainGui),
-          messageMenuGui_(controller, mainGui),
-          profileManagerGui_(controller, mainGui) {}
+          ranking_(controller_, mainGui), gameMenu_(controller, mainGui),
+          friendsMenu_(controller, mainGui),
+          messageMenu_(controller, mainGui),
+          profileManager_(controller, mainGui) {}
 
     void MainMenuGui::run() {
         setup();
@@ -35,15 +35,15 @@ namespace GUI {
     void MainMenuGui::on_QuitGameButton_clicked() { actionOnExit(); }
 
     void MainMenuGui::on_RankingButton_clicked() {
-        stackedWidget_.setCurrentWidget(&rankingGui_);
+        stackedWidget_.setCurrentWidget(&ranking_);
     }
 
     void MainMenuGui::on_ManageFriendsListButton_clicked() {
-        stackedWidget_.setCurrentWidget(&friendsMenuGui_);
+        stackedWidget_.setCurrentWidget(&friendsMenu_);
     }
 
     void MainMenuGui::on_MessagesButton_clicked() {
-        stackedWidget_.setCurrentWidget(&messageMenuGui_);
+        stackedWidget_.setCurrentWidget(&messageMenu_);
     }
 
     void MainMenuGui::on_CreateGameButton_clicked() {
@@ -57,7 +57,7 @@ namespace GUI {
     }
 
     void MainMenuGui::on_ProfileManagerBouton_clicked() {
-        stackedWidget_.setCurrentWidget(&profileManagerGui_);
+        stackedWidget_.setCurrentWidget(&profileManager_);
     }
 
     void MainMenuGui::showMainMenu() {
@@ -136,19 +136,19 @@ namespace GUI {
         mainMenu_.setLayout(menu);
 
         stackedWidget_.addWidget(&mainMenu_);
-        stackedWidget_.addWidget(&rankingGui_);
-        stackedWidget_.addWidget(&friendsMenuGui_);
-        stackedWidget_.addWidget(&messageMenuGui_);
-        stackedWidget_.addWidget(&profileManagerGui_);
+        stackedWidget_.addWidget(&ranking_);
+        stackedWidget_.addWidget(&friendsMenu_);
+        stackedWidget_.addWidget(&messageMenu_);
+        stackedWidget_.addWidget(&profileManager_);
         stackedWidget_.addWidget(&gameMenu_);
 
-        connect(&rankingGui_, &RankingGui::backToMainMenu, this,
+        connect(&ranking_, &Ranking::backToMainMenu, this,
                 &MainMenuGui::showMainMenu);
-        connect(&friendsMenuGui_, &FriendsMenuGui::backToMainMenu, this,
+        connect(&friendsMenu_, &FriendsMenu::backToMainMenu, this,
                 &MainMenuGui::showMainMenu);
-        connect(&messageMenuGui_, &MessageMenuGui::backToMainMenu, this,
+        connect(&messageMenu_, &MessageMenu::backToMainMenu, this,
                 &MainMenuGui::showMainMenu);
-        connect(&profileManagerGui_, &ProfileManagerGui::backToMainMenu, this,
+        connect(&profileManager_, &ProfileManager::backToMainMenu, this,
                 &MainMenuGui::showMainMenu);
         connect(createGameButton_, &QPushButton::clicked, this,
                 &MainMenuGui::on_CreateGameButton_clicked);

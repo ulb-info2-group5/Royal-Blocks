@@ -21,7 +21,7 @@ namespace GUI {
 
     class MainGui;
 
-    class MessageMenuGui : public QWidget {
+    class MessageMenu : public QWidget {
         Q_OBJECT
 
       private:
@@ -44,9 +44,9 @@ namespace GUI {
         void onEnterKeyPressedInInput();
 
       public:
-        MessageMenuGui(Controller &controller, MainGui &mainGui,
+        MessageMenu(Controller &controller, MainGui &mainGui,
                        QWidget *parent = nullptr);
-        ~MessageMenuGui() = default;
+        ~MessageMenu() = default;
 
       signals:
         void backToMainMenu();

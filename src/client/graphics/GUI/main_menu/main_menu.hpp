@@ -26,15 +26,15 @@ namespace GUI {
 
         QWidget mainMenu_;
 
-        RankingGui rankingGui_;
+        Ranking ranking_;
 
         GameMenu gameMenu_;
 
-        FriendsMenuGui friendsMenuGui_;
+        FriendsMenu friendsMenu_;
 
-        MessageMenuGui messageMenuGui_;
+        MessageMenu messageMenu_;
 
-        ProfileManagerGui profileManagerGui_;
+        ProfileManager profileManager_;
 
         /*
          * @brief Action to perform when exiting the application for the eit at

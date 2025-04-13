@@ -24,13 +24,13 @@ namespace GUI {
     constexpr char TYPE_MESSAGE_TEXT[] = "Type your message here...";
     constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
 
-    MessageMenuGui::MessageMenuGui(Controller &controller, MainGui &mainGui,
+    MessageMenu::MessageMenu(Controller &controller, MainGui &mainGui,
                                    QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         setupUI();
     }
 
-    void MessageMenuGui::setupUI() {
+    void MessageMenu::setupUI() {
         QVBoxLayout *chatWriteLayout_ = new QVBoxLayout;
         QVBoxLayout *friendsListLayout_ = new QVBoxLayout;
         QHBoxLayout *mainLayout_ = new QHBoxLayout;
@@ -74,31 +74,31 @@ namespace GUI {
         updateAll();
 
         connect(&friendsList_, &QListWidget::currentRowChanged, this,
-                &MessageMenuGui::updateChat);
+                &MessageMenu::updateChat);
         connect(sendButton_, &QPushButton::clicked, this,
-                &MessageMenuGui::onSendMessage);
+                &MessageMenu::onSendMessage);
         connect(backButton_, &QPushButton::clicked, this,
-                &MessageMenuGui::onBack);
+                &MessageMenu::onBack);
         connect(&mainGui_, &MainGui::updateConversations, this,
-                &MessageMenuGui::updateChat);
+                &MessageMenu::updateChat);
         connect(&mainGui_, &MainGui::updateFriendsList, this,
-                &MessageMenuGui::updateAll);
+                &MessageMenu::updateAll);
         connect(&messageInput_, &QLineEdit::returnPressed, this,
-                &MessageMenuGui::onEnterKeyPressedInInput);
+                &MessageMenu::onEnterKeyPressedInInput);
     }
 
-    void MessageMenuGui::onEnterKeyPressedInInput() {
+    void MessageMenu::onEnterKeyPressedInInput() {
         if (messageInput_.hasFocus() && !messageInput_.text().isEmpty()) {
             onSendMessage();
         }
     }
 
-    void MessageMenuGui::updateAll() {
+    void MessageMenu::updateAll() {
         loadFriends();
         updateChat();
     }
 
-    void MessageMenuGui::loadFriends() {
+    void MessageMenu::loadFriends() {
         friendsList_.clear();
         std::vector<bindings::User> friends = controller_.getFriendsList();
 
@@ -113,7 +113,7 @@ namespace GUI {
         }
     }
 
-    void MessageMenuGui::updateChat() {
+    void MessageMenu::updateChat() {
         int friendIndex = friendsList_.currentRow();
         if (friendIndex >= 0) {
             loadMessages(friendIndex);
@@ -122,7 +122,7 @@ namespace GUI {
         }
     }
 
-    void MessageMenuGui::loadMessages(int friendIndex) {
+    void MessageMenu::loadMessages(int friendIndex) {
         QScrollBar *scrollBar = chatDisplay_.verticalScrollBar();
         int previousScrollValue = scrollBar->value();
 
@@ -153,7 +153,7 @@ namespace GUI {
         scrollBar->setValue(previousScrollValue);
     }
 
-    void MessageMenuGui::onSendMessage() {
+    void MessageMenu::onSendMessage() {
         int friendIndex = friendsList_.currentRow();
         if (friendIndex < 0) return;
 
@@ -170,6 +170,6 @@ namespace GUI {
         loadMessages(friendIndex);
     }
 
-    void MessageMenuGui::onBack() { emit backToMainMenu(); }
+    void MessageMenu::onBack() { emit backToMainMenu(); }
 
 } // namespace GUI

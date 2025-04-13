@@ -15,7 +15,7 @@ namespace GUI {
 
     class MainGui;
 
-    class FriendsMenuGui : public QWidget {
+    class FriendsMenu : public QWidget {
         Q_OBJECT
 
       private:
@@ -69,10 +69,10 @@ namespace GUI {
         void refreshFriendRequestsList();
 
       public:
-        FriendsMenuGui(Controller &controller, MainGui &mainGui,
+        FriendsMenu(Controller &controller, MainGui &mainGui,
                        QWidget *parent = nullptr);
 
-        ~FriendsMenuGui() = default;
+        ~FriendsMenu() = default;
 
       signals:
         /*

@@ -9,23 +9,23 @@
 
 namespace GUI {
 
-    RankingGui::RankingGui(Controller &controller, MainGui &mainGui,
+    Ranking::Ranking(Controller &controller, MainGui &mainGui,
                            QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         setupUI();
     }
 
-    void RankingGui::on_BackButtonClicked() { emit backToMainMenu(); }
+    void Ranking::on_BackButtonClicked() { emit backToMainMenu(); }
 
     /*--------------------------------------------------------
                         Private Methods
     ---------------------------------------------------------*/
 
-    void RankingGui::setupUI() {
+    void Ranking::setupUI() {
         QPushButton *backButton = new QPushButton(this);
 
         connect(&mainGui_, &MainGui::updateRanking, this,
-                &RankingGui::updateRankingGuiTable);
+                &Ranking::updateRankingGuiTable);
 
         backButton->setText("Back");
         backButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -35,7 +35,7 @@ namespace GUI {
         updateRankingGuiTable();
 
         connect(backButton, &QPushButton::clicked, this,
-                &RankingGui::on_BackButtonClicked);
+                &Ranking::on_BackButtonClicked);
 
         QWidget *scrollWidget = new QWidget();
         QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
@@ -60,7 +60,7 @@ namespace GUI {
         setLayout(layout);
     }
 
-    void RankingGui::setupRankingGuiTable() {
+    void Ranking::setupRankingGuiTable() {
         std::vector<std::pair<std::string, Score>> RankingGuiData =
             controller_.getRanking();
 
@@ -85,7 +85,7 @@ namespace GUI {
             1, QHeaderView::Stretch);
     }
 
-    void RankingGui::updateRankingGuiTable() {
+    void Ranking::updateRankingGuiTable() {
         std::vector<std::pair<std::string, Score>> RankingGuiData =
             controller_.getRanking();
 

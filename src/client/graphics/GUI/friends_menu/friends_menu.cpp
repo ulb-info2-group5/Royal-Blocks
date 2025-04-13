@@ -9,36 +9,36 @@
 
 namespace GUI {
 
-    FriendsMenuGui::FriendsMenuGui(Controller &controller, MainGui &mainGui,
+    FriendsMenu::FriendsMenu(Controller &controller, MainGui &mainGui,
                                    QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         setup();
 
         connect(&mainGui_, &MainGui::updateFriendsList, this,
-                &FriendsMenuGui::refreshFriendsList);
+                &FriendsMenu::refreshFriendsList);
         connect(&mainGui_, &MainGui::updateFriendRequestsList, this,
-                &FriendsMenuGui::refreshFriendRequestsList);
+                &FriendsMenu::refreshFriendRequestsList);
     }
 
-    void FriendsMenuGui::refreshFriendsList() { updateFriendsList(); }
+    void FriendsMenu::refreshFriendsList() { updateFriendsList(); }
 
-    void FriendsMenuGui::refreshFriendRequestsList() {
+    void FriendsMenu::refreshFriendRequestsList() {
         updateFriendRequestsList();
     }
 
-    void FriendsMenuGui::showMainFriendsMenu() { stack_.setCurrentIndex(0); }
+    void FriendsMenu::showMainFriendsMenu() { stack_.setCurrentIndex(0); }
 
-    void FriendsMenuGui::showAddFriendScreen() {
+    void FriendsMenu::showAddFriendScreen() {
         friendNameInput_.clear();
         addFriendMsgLabel_.clear();
         stack_.setCurrentIndex(1);
     }
 
-    void FriendsMenuGui::showFriendRequestsScreen() {
+    void FriendsMenu::showFriendRequestsScreen() {
         stack_.setCurrentIndex(2);
     }
 
-    void FriendsMenuGui::sendFriendRequest() {
+    void FriendsMenu::sendFriendRequest() {
         QString name = friendNameInput_.text();
         if (name.isEmpty()) {
             QMessageBox::warning(this, "Error", "Please enter a username");
@@ -50,7 +50,7 @@ namespace GUI {
         friendNameInput_.clear();
     }
 
-    void FriendsMenuGui::removeFriend() {
+    void FriendsMenu::removeFriend() {
         QListWidgetItem *item = friendsList_.currentItem();
         if (!item) return;
 
@@ -66,7 +66,7 @@ namespace GUI {
         }
     }
 
-    void FriendsMenuGui::acceptRequest() {
+    void FriendsMenu::acceptRequest() {
         QListWidgetItem *item = friendRequestsList_.currentItem();
         if (!item) return;
 
@@ -74,7 +74,7 @@ namespace GUI {
         controller_.acceptFriendRequest(userID);
     }
 
-    void FriendsMenuGui::declineRequest() {
+    void FriendsMenu::declineRequest() {
         QListWidgetItem *item = friendRequestsList_.currentItem();
         if (!item) return;
 
@@ -86,7 +86,7 @@ namespace GUI {
                         Private methods
     -----------------------------------------------------------*/
 
-    void FriendsMenuGui::setup() {
+    void FriendsMenu::setup() {
         QPushButton *addFriendButton_ = new QPushButton(this);
         QPushButton *manageRequestsButton_ = new QPushButton(this);
         QPushButton *backToMainMenuButton_ = new QPushButton(this);
@@ -118,13 +118,13 @@ namespace GUI {
         backToMainMenuButton_->setFixedWidth(500);
 
         connect(addFriendButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::showAddFriendScreen);
+                &FriendsMenu::showAddFriendScreen);
         connect(manageRequestsButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::showFriendRequestsScreen);
+                &FriendsMenu::showFriendRequestsScreen);
         connect(backToMainMenuButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::backToMainMenu);
+                &FriendsMenu::backToMainMenu);
         connect(&friendsList_, &QListWidget::itemDoubleClicked, this,
-                &FriendsMenuGui::removeFriend);
+                &FriendsMenu::removeFriend);
 
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
@@ -153,9 +153,9 @@ namespace GUI {
         addFriendMsgLabel_.setAlignment(Qt::AlignCenter);
 
         connect(submitAdd_, &QPushButton::clicked, this,
-                &FriendsMenuGui::sendFriendRequest);
+                &FriendsMenu::sendFriendRequest);
         connect(backFromAdd_, &QPushButton::clicked, this,
-                &FriendsMenuGui::showMainFriendsMenu);
+                &FriendsMenu::showMainFriendsMenu);
 
         addLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                            QSizePolicy::Expanding));
@@ -185,11 +185,11 @@ namespace GUI {
         backFromReqButton_->setFixedWidth(500);
 
         connect(acceptButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::acceptRequest);
+                &FriendsMenu::acceptRequest);
         connect(declineButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::declineRequest);
+                &FriendsMenu::declineRequest);
         connect(backFromReqButton_, &QPushButton::clicked, this,
-                &FriendsMenuGui::showMainFriendsMenu);
+                &FriendsMenu::showMainFriendsMenu);
 
         requestLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                QSizePolicy::Expanding));
@@ -219,7 +219,7 @@ namespace GUI {
         showMainFriendsMenu();
     }
 
-    void FriendsMenuGui::updateFriendsList() {
+    void FriendsMenu::updateFriendsList() {
         friendsList_.clear();
 
         const std::vector<bindings::User> friendsList =
@@ -241,7 +241,7 @@ namespace GUI {
         }
     }
 
-    void FriendsMenuGui::updateFriendRequestsList() {
+    void FriendsMenu::updateFriendRequestsList() {
         friendRequestsList_.clear();
 
         const std::vector<bindings::User> pendingFriendsList =

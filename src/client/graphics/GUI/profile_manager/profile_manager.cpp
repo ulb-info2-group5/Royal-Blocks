@@ -10,22 +10,22 @@ namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
 
-    ProfileManagerGui::ProfileManagerGui(Controller &controller,
+    ProfileManager::ProfileManager(Controller &controller,
                                          MainGui &mainGui, QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         basicSetup();
     }
 
-    void ProfileManagerGui::basicSetup() {
+    void ProfileManager::basicSetup() {
         submit_.setText("Submit");
         back_.setText("Back");
         submit_.setFixedWidth(INPUT_BUTTON_WIDTH);
         back_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
         connect(&submit_, &QPushButton::clicked, this,
-                &ProfileManagerGui::changePasswordUsername);
+                &ProfileManager::changePasswordUsername);
         connect(&back_, &QPushButton::clicked, this,
-                &ProfileManagerGui::onBack);
+                &ProfileManager::onBack);
 
         newUserName_.setPlaceholderText("New Username");
         newPassWord_.setPlaceholderText("New Password");
@@ -77,9 +77,9 @@ namespace GUI {
         setLayout(layout);
     }
 
-    void ProfileManagerGui::onBack() { emit backToMainMenu(); }
+    void ProfileManager::onBack() { emit backToMainMenu(); }
 
-    void ProfileManagerGui::changePasswordUsername() {
+    void ProfileManager::changePasswordUsername() {
         if (!isValidUsernamePassword()) {
             QMessageBox::warning(this, "NAccount Update Failed", errorMessage_.c_str());
             return;
@@ -97,7 +97,7 @@ namespace GUI {
         newPassWord_.clear();
     }
 
-    bool ProfileManagerGui::isValidUsernamePassword() {
+    bool ProfileManager::isValidUsernamePassword() {
         errorMessage_.clear();
 
         if (newUserName_.text().length() < 4) {

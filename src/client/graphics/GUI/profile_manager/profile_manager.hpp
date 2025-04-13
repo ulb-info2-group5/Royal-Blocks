@@ -17,7 +17,7 @@ namespace GUI {
 
     class MainGui;
 
-    class ProfileManagerGui : public QWidget {
+    class ProfileManager : public QWidget {
         Q_OBJECT
 
       private:
@@ -43,10 +43,10 @@ namespace GUI {
         void onBack();
 
       public:
-        ProfileManagerGui(Controller &controller, MainGui &mainGui,
+        ProfileManager(Controller &controller, MainGui &mainGui,
                           QWidget *parent = nullptr);
 
-        ~ProfileManagerGui() = default;
+        ~ProfileManager() = default;
 
       signals:
         // Back to main menu

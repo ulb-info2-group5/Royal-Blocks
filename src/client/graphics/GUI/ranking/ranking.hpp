@@ -10,7 +10,7 @@ namespace GUI {
 
     class MainGui;
 
-    class RankingGui : public QWidget {
+    class Ranking : public QWidget {
         Q_OBJECT
 
       private:
@@ -36,10 +36,10 @@ namespace GUI {
         void updateRankingGuiTable();
 
       public:
-        RankingGui(Controller &controller, MainGui &mainGui,
+        Ranking(Controller &controller, MainGui &mainGui,
                    QWidget *parent = nullptr);
 
-        ~RankingGui() = default;
+        ~Ranking() = default;
 
       signals:
         /*
