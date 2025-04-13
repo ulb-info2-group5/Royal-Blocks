@@ -216,12 +216,12 @@ namespace GUI {
         emit backToMainMenu();
     }
 
-    void GameDisplay::energyLCD() {
+    void GameDisplay::scoreLCD() {
         scoreLCD_.display(static_cast<int>(getSelfScore()));
         scoreLCD_.setSegmentStyle(QLCDNumber::Filled);
     }
 
-    void GameDisplay::scoreLCD() {
+    void GameDisplay::energyLCD() {
         energyLCD_.display(static_cast<int>(getSelfEnergy()));
         energyLCD_.setSegmentStyle(QLCDNumber::Filled);
     }
