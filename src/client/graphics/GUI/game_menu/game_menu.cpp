@@ -14,8 +14,8 @@ namespace GUI {
 
     GameMenuGUI::GameMenuGUI(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
-        : QWidget(parent), gameDisplay_{controller_, mainGui_, this},
-          controller_(controller), mainGui_(mainGui), playerCount_(4),
+        : QWidget(parent), controller_(controller), mainGui_(mainGui),
+          gameDisplay_{controller_, mainGui_, this}, playerCount_(4),
           isCreateGame_(false) {
         setup();
     }
@@ -120,8 +120,9 @@ namespace GUI {
         playerCountSlider_ = new QSlider(Qt::Horizontal);
         playerCountSlider_->setMinimum(2);
 
-        // If royal mode selected also minimal value of players become 3
-        connect(royalButton, &QPushButton::clicked, this, &GameMenuGUI::changeMinSlider);
+        // Royal Mode -> update min number of players to 3
+        connect(royalButton, &QPushButton::clicked, this,
+                &GameMenuGUI::changeMinSlider);
 
         playerCountSlider_->setMaximum(9);
         playerCountSlider_->setValue(4);
@@ -130,7 +131,6 @@ namespace GUI {
         connect(playerCountSlider_, &QSlider::valueChanged, this,
                 &GameMenuGUI::onPlayerCountChanged);
 
-
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
         playerCountLayout->addWidget(
@@ -138,8 +138,7 @@ namespace GUI {
         playerCountLayout->addWidget(&playerCountLabel_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(playerCountSlider_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(confirmButton, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(playerCountBackButton, 0,
-                                     Qt::AlignCenter);
+        playerCountLayout->addWidget(playerCountBackButton, 0, Qt::AlignCenter);
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
 
@@ -161,8 +160,7 @@ namespace GUI {
                                                    QSizePolicy::Expanding));
         friendsListLayout->addWidget(createCenterBoldTitle("Select a Friend"));
         friendsListLayout->addWidget(&friendsList_, 0, Qt::AlignCenter);
-        friendsListLayout->addWidget(friendsListBackButton, 0,
-                                     Qt::AlignCenter);
+        friendsListLayout->addWidget(friendsListBackButton, 0, Qt::AlignCenter);
         friendsListLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
         connect(&friendsList_, &QListWidget::itemDoubleClicked, this,
@@ -196,9 +194,7 @@ namespace GUI {
     }
 
     // If royal mode selected
-    void GameMenuGUI::changeMinSlider(){
-        playerCountSlider_->setMinimum(3);
-    }
+    void GameMenuGUI::changeMinSlider() { playerCountSlider_->setMinimum(3); }
 
     // Screen display methods
     void GameMenuGUI::showSelectModeScreen() {
