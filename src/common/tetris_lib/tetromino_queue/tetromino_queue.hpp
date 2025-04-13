@@ -4,13 +4,11 @@
 #include <deque>
 
 #include "../tetromino/abstract_tetromino.hpp"
-#include "../tetromino/tetromino_shapes.hpp"
 
 class TetrominoQueue {
   private:
     std::deque<TetrominoPtr> queue_;
-    static constexpr size_t NUM_SERIALIZED_TETROMINOES =
-        static_cast<size_t>(TetrominoShape::NumBasicTetrominoShape);
+    static constexpr size_t NUM_SERIALIZED_TETROMINOES = 6;
 
   public:
     TetrominoQueue();
