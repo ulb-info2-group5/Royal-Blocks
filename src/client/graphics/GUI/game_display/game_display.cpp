@@ -1,5 +1,7 @@
 #include "game_display.hpp"
 
+#include "../qt_config/qt_config.hpp"
+
 #include "core/in_game/effects/timed_bonus.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "effect/effect_type.hpp"
@@ -18,8 +20,6 @@
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
-#include <optional>
-
 #include <QColor>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -30,18 +30,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <ostream>
+
 #include <print>
-#include <qboxlayout.h>
-#include <qchar.h>
-#include <qcolor.h>
-#include <qgridlayout.h>
-#include <qlabel.h>
-#include <qnamespace.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 #include <qpushbutton.h>
 #include <string>
+#include <optional>
 
 namespace GUI {
 
@@ -335,6 +328,15 @@ namespace GUI {
     void GameDisplay::updateGameState() {
         gameState_ = controller_.getGameState();
 
+        if (gameIsFinished()) {
+            if (isWinner()) {
+                stackedWidget_->setCurrentWidget(&gameWinWidget_);
+            } else {
+                stackedWidget_->setCurrentWidget(&gameOverWidget_);
+            }
+            return;
+        }
+
         selfBoard();
         scoreLCD();
         holdTetromino();
@@ -408,11 +410,14 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
-        setFocusPolicy(Qt::StrongFocus);
+        stackedWidget_ = new QStackedWidget(this);
 
         QVBoxLayout *leftPane = new QVBoxLayout();
+        leftPane->setAlignment(Qt::AlignCenter);
         QVBoxLayout *middlePane = new QVBoxLayout();
+        middlePane->setAlignment(Qt::AlignCenter);
         QVBoxLayout *rightPane = new QVBoxLayout();
+        rightPane->setAlignment(Qt::AlignCenter);
 
         // ------------FIRST_SPACERS------------
 
@@ -425,9 +430,13 @@ namespace GUI {
 
         // ------------LEFT_PANE----------------
 
-        quitButton_.setText(tr("&Quit"));
+        QPushButton *quitButton = new QPushButton(tr("&Quit"));
+        quitButton->setFocusPolicy(Qt::NoFocus);
+        quitButton->setFixedWidth(100);
+        scoreLCD_.setFixedWidth(100);
+        progressBar_.setFixedWidth(100);
 
-        leftPane->addWidget(&quitButton_);
+        leftPane->addWidget(quitButton);
         leftPane->addWidget(&scoreLCD_);
         leftPane->addWidget(&progressBar_);
 
@@ -448,12 +457,12 @@ namespace GUI {
         middlePaneLeftVBox_.addWidget(&selfBoard_);
 
         middlePaneHBox_.addLayout(&middlePaneLeftVBox_);
+        tetrominoQueue_.setMaximumHeight(1000);
         middlePaneHBox_.addWidget(&tetrominoQueue_);
 
         middlePane->addLayout(&middlePaneHBox_);
 
         // ------------RIGHT_PANE----------------
-
         rightPane->addWidget(&opponentsGrid_);
 
         // ------------END_SPACERS--------------
@@ -467,20 +476,60 @@ namespace GUI {
 
         // ------------SPLIT_3_PANES-------------
 
-        QHBoxLayout *mainLayout = new QHBoxLayout(this);
+        QHBoxLayout *gameLayout = new QHBoxLayout(&gameWidget_);
 
-        mainLayout->addLayout(leftPane);
-        mainLayout->addLayout(middlePane);
-        mainLayout->addLayout(rightPane);
+        gameLayout->addLayout(leftPane);
+        gameLayout->addLayout(middlePane);
+        gameLayout->addLayout(rightPane);
 
-        // --------------------------------------
+
+        // -----Game Win and Game Lose Widget-----
+        QPushButton *returnToMainMenuButton =
+            new QPushButton("Return to Main Menu");
+        returnToMainMenuButton->setFixedWidth(500);
+
+        QVBoxLayout *gameOverLayout = new QVBoxLayout();
+        gameOverLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+            QSizePolicy::Expanding));
+        gameOverLayout->addWidget(
+        createCenterBoldTitle("Game Over"));
+        gameOverLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
+        gameOverLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
+        gameOverLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+            QSizePolicy::Expanding));
+        gameOverWidget_.setLayout(gameOverLayout);
+
+        QVBoxLayout *gameWinLayout = new QVBoxLayout();
+        gameWinLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+            QSizePolicy::Expanding));
+        gameWinLayout->addWidget(
+        createCenterBoldTitle("You Win"));
+        gameWinLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
+        gameWinLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
+        gameWinLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+            QSizePolicy::Expanding));
+        gameWinWidget_.setLayout(gameWinLayout);
+
+
+        // ----set StackedWidget and mainLayout----
+
+        stackedWidget_->addWidget(&gameWidget_);
+        stackedWidget_->addWidget(&gameOverWidget_);
+        stackedWidget_->addWidget(&gameWinWidget_);
+        stackedWidget_->setCurrentWidget(&gameWidget_);
+
+        QVBoxLayout *mainLayout = new QVBoxLayout(this);
+        mainLayout->addWidget(stackedWidget_, 0, Qt::AlignCenter);
+        mainLayout->setAlignment(Qt::AlignCenter);
 
         setLayout(mainLayout);
+
+        // --------------------------------------
 
         connect(&mainGui_, &MainGui::updateGameState, this,
                 &GameDisplay::updateGameState);
 
-        connect(&quitButton_, &QPushButton::clicked, this,
+        connect(quitButton, &QPushButton::clicked, this,
                 &GameDisplay::on_QuitButtonClicked);
 
         connect(&effectSelector_, &EffectSelector::buyEffect, this,
@@ -488,6 +537,12 @@ namespace GUI {
 
         connect(&opponentsGrid_, &OpponentsGrid::selectTarget, this,
                 &GameDisplay::on_TargetSelected);
+        connect(returnToMainMenuButton, &QPushButton::clicked, this, &GameDisplay::on_ReturnToMainMenuButtonClicked);
+        
+    }
+
+    void GameDisplay::on_ReturnToMainMenuButtonClicked() {
+        emit backToMainMenu();
     }
 
 } // namespace GUI

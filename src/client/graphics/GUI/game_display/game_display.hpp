@@ -23,6 +23,7 @@
 #include <qgridlayout.h>
 #include <qlabel.h>
 #include <qpixmap.h>
+#include <qstackedwidget.h>
 #include <qwidget.h>
 
 class Controller;
@@ -43,7 +44,12 @@ namespace GUI {
       private:
         MainGui &mainGui_;
 
-        QPushButton quitButton_;
+        QStackedWidget *stackedWidget_;
+
+        QWidget gameWidget_;
+        QWidget gameOverWidget_;
+        QWidget gameWinWidget_;
+
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
         QLabel holdTetromino_;
@@ -124,9 +130,6 @@ namespace GUI {
 
         // void drawMainLayout();
 
-        // void drawGameOver();
-        // void drawWin();
-
         // void handleKeys();
 
         // void updateScreen();
@@ -144,6 +147,8 @@ namespace GUI {
         void on_EffectBought(EffectType effect);
 
         void on_TargetSelected(size_t targetIdx);
+
+        void on_ReturnToMainMenuButtonClicked();
 
         void updateGameState();
 
