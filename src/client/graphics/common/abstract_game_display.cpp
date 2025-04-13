@@ -192,3 +192,8 @@ bool AbstractGameDisplay::isWinner() const {
         },
         gameState_);
 }
+
+bool AbstractGameDisplay::gameIsFinished() const {
+    return std::visit(
+        [](const auto &gameState) { return gameState.isFinished; }, gameState_);
+}

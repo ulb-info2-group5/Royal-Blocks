@@ -82,6 +82,8 @@ class AbstractGameDisplay {
     bool isSpectating() const;
 
     bool isWinner() const;
+
+    bool gameIsFinished() const;
 };
 
 #endif // ABSTRACT_GAME_DISPLAY_HPP

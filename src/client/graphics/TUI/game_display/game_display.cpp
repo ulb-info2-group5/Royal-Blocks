@@ -356,7 +356,7 @@ namespace TUI {
 
     ftxui::Component GameDisplay::middlePane() {
         if (isSpectating()) {
-           return ftxui::Container::Vertical({
+            return ftxui::Container::Vertical({
                 gameMode()
                     | ftxui::size(ftxui::WIDTH, ftxui::EQUAL,
                                   WIDTH_CANVAS_BIG / 2)
@@ -591,9 +591,7 @@ namespace TUI {
 
             gameState_ = controller_.getGameState();
 
-            if (std::visit(
-                    [](const auto &gameState) { return gameState.isFinished; },
-                    gameState_)) {
+            if (gameIsFinished()) {
                 if (isWinner()) {
                     gameContainer->Add(drawWin());
                 } else {
