@@ -28,7 +28,7 @@ namespace GUI {
 
         RankingGui rankingGui_;
 
-        GameMenuGUI gameMenuGui_;
+        GameMenu gameMenu_;
 
         FriendsMenuGui friendsMenuGui_;
 

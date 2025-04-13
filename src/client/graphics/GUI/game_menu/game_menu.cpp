@@ -12,7 +12,7 @@
 
 namespace GUI {
 
-    GameMenuGUI::GameMenuGUI(Controller &controller, MainGui &mainGui,
+    GameMenu::GameMenu(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui),
           gameDisplay_{controller_, mainGui_, this}, playerCount_(4),
@@ -20,12 +20,12 @@ namespace GUI {
         setup();
     }
 
-    void GameMenuGUI::run(bool isCreateGame) {
+    void GameMenu::run(bool isCreateGame) {
         isCreateGame_ = isCreateGame;
         showSelectModeScreen();
     }
 
-    void GameMenuGUI::setup() {
+    void GameMenu::setup() {
         stack_ = new QStackedWidget();
 
         connect(&gameDisplay_, &GameDisplay::backToMainMenu, this,
@@ -75,32 +75,32 @@ namespace GUI {
 
         // Connect signals for game mode buttons
         connect(endlessButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onEndlessButtonClicked);
+                &GameMenu::onEndlessButtonClicked);
         connect(duelButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onDuelButtonClicked);
+                &GameMenu::onDuelButtonClicked);
         connect(classicButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onClassicButtonClicked);
+                &GameMenu::onClassicButtonClicked);
         connect(royalButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onRoyalButtonClicked);
+                &GameMenu::onRoyalButtonClicked);
 
         // Connect all back buttons to the same slot
         connect(selectModeBackButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onBackButtonClicked);
+                &GameMenu::onBackButtonClicked);
         connect(playerCountBackButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onBackButtonClicked);
+                &GameMenu::onBackButtonClicked);
         connect(joinTypeBackButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onBackButtonClicked);
+                &GameMenu::onBackButtonClicked);
         connect(friendsListBackButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onBackButtonClicked);
+                &GameMenu::onBackButtonClicked);
         connect(waitingBackButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onBackButtonClicked);
+                &GameMenu::onBackButtonClicked);
 
         connect(confirmButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onConfirmButtonClicked);
+                &GameMenu::onConfirmButtonClicked);
         connect(joinRandomButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onJoinRandomButtonClicked);
+                &GameMenu::onJoinRandomButtonClicked);
         connect(joinFriendButton, &QPushButton::clicked, this,
-                &GameMenuGUI::onJoinFriendButtonClicked);
+                &GameMenu::onJoinFriendButtonClicked);
 
         // Setup select mode screen
         QVBoxLayout *selectModeLayout = new QVBoxLayout(&selectModeWidget_);
@@ -124,7 +124,7 @@ namespace GUI {
         playerCountSlider_->setFixedWidth(500);
         playerCountLabel_.setAlignment(Qt::AlignCenter);
         connect(playerCountSlider_, &QSlider::valueChanged, this,
-                &GameMenuGUI::onPlayerCountChanged);
+                &GameMenu::onPlayerCountChanged);
 
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
@@ -159,7 +159,7 @@ namespace GUI {
         friendsListLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                    QSizePolicy::Expanding));
         connect(&friendsList_, &QListWidget::itemDoubleClicked, this,
-                &GameMenuGUI::onFriendSelected);
+                &GameMenu::onFriendSelected);
 
         // Setup waiting screen
         QVBoxLayout *waitingLayout = new QVBoxLayout(&waitingWidget_);
@@ -189,24 +189,24 @@ namespace GUI {
     }
 
     // Screen display methods
-    void GameMenuGUI::showSelectModeScreen() {
+    void GameMenu::showSelectModeScreen() {
         stack_->setCurrentWidget(&selectModeWidget_);
     }
 
-    void GameMenuGUI::showPlayerCountScreen() {
+    void GameMenu::showPlayerCountScreen() {
         stack_->setCurrentWidget(&playerCountWidget_);
     }
 
-    void GameMenuGUI::showJoinTypeScreen() {
+    void GameMenu::showJoinTypeScreen() {
         stack_->setCurrentWidget(&joinTypeWidget_);
     }
 
-    void GameMenuGUI::showFriendsListScreen() {
+    void GameMenu::showFriendsListScreen() {
         updateFriendsList();
         stack_->setCurrentWidget(&friendsListWidget_);
     }
 
-    void GameMenuGUI::showWaitingScreen() {
+    void GameMenu::showWaitingScreen() {
         stack_->setCurrentWidget(&waitingWidget_);
 
         // Check periodically if we've joined a game
@@ -220,7 +220,7 @@ namespace GUI {
         gameCheckTimer->start(500); // Check every 500ms
     }
 
-    void GameMenuGUI::updateFriendsList() {
+    void GameMenu::updateFriendsList() {
         friendsList_.clear();
 
         const std::vector<bindings::User> friendsList =
@@ -248,14 +248,14 @@ namespace GUI {
     }
 
     // Slot implementations
-    void GameMenuGUI::onEndlessButtonClicked() {
+    void GameMenu::onEndlessButtonClicked() {
         selectedGameMode_ = GameMode::Endless;
 
         controller_.joinGame(selectedGameMode_, std::nullopt);
         showWaitingScreen();
     }
 
-    void GameMenuGUI::onDuelButtonClicked() {
+    void GameMenu::onDuelButtonClicked() {
         selectedGameMode_ = GameMode::Dual;
 
         if (isCreateGame_) {
@@ -267,7 +267,7 @@ namespace GUI {
         }
     }
 
-    void GameMenuGUI::onClassicButtonClicked() {
+    void GameMenu::onClassicButtonClicked() {
         selectedGameMode_ = GameMode::Classic;
 
         if (isCreateGame_) {
@@ -277,7 +277,7 @@ namespace GUI {
         }
     }
 
-    void GameMenuGUI::onRoyalButtonClicked() {
+    void GameMenu::onRoyalButtonClicked() {
         selectedGameMode_ = GameMode::RoyalCompetition;
 
         if (isCreateGame_) {
@@ -287,7 +287,7 @@ namespace GUI {
         }
     }
 
-    void GameMenuGUI::onBackButtonClicked() {
+    void GameMenu::onBackButtonClicked() {
         if (stack_->currentWidget() == &selectModeWidget_) {
             emit backToMainMenu();
         } else if (stack_->currentWidget() == &playerCountWidget_) {
@@ -302,24 +302,24 @@ namespace GUI {
         }
     }
 
-    void GameMenuGUI::onConfirmButtonClicked() {
+    void GameMenu::onConfirmButtonClicked() {
         controller_.createGame(selectedGameMode_, playerCount_);
         showWaitingScreen();
     }
 
-    void GameMenuGUI::onJoinRandomButtonClicked() {
+    void GameMenu::onJoinRandomButtonClicked() {
         controller_.joinGame(selectedGameMode_, std::nullopt);
         showWaitingScreen();
     }
 
-    void GameMenuGUI::onJoinFriendButtonClicked() { showFriendsListScreen(); }
+    void GameMenu::onJoinFriendButtonClicked() { showFriendsListScreen(); }
 
-    void GameMenuGUI::onPlayerCountChanged(int value) {
+    void GameMenu::onPlayerCountChanged(int value) {
         playerCount_ = value;
         playerCountLabel_.setText(QString("Player Count: %1").arg(value));
     }
 
-    void GameMenuGUI::onFriendSelected(QListWidgetItem *item) {
+    void GameMenu::onFriendSelected(QListWidgetItem *item) {
         if (item && item->flags() & Qt::ItemIsEnabled) {
             UserID friendId = item->data(Qt::UserRole).toULongLong();
             controller_.joinGame(selectedGameMode_, friendId);

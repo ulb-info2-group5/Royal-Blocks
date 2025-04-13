@@ -21,7 +21,7 @@ namespace GUI {
 
     class MainGui;
 
-    class GameMenuGUI : public QWidget {
+    class GameMenu : public QWidget {
         Q_OBJECT
 
       private:
@@ -69,9 +69,9 @@ namespace GUI {
         void onFriendSelected(QListWidgetItem *item);
 
       public:
-        GameMenuGUI(Controller &controller, MainGui &mainGui,
+        GameMenu(Controller &controller, MainGui &mainGui,
                     QWidget *parent = nullptr);
-        ~GameMenuGUI() = default;
+        ~GameMenu() = default;
 
         void run(bool isCreateGame);
 
