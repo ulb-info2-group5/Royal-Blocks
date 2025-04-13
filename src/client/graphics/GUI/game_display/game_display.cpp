@@ -484,9 +484,13 @@ namespace GUI {
 
 
         // -----Game Win and Game Lose Widget-----
-        QPushButton *returnToMainMenuButton =
+        QPushButton *GameOverReturnToMainMenuButton =
             new QPushButton("Return to Main Menu");
-        returnToMainMenuButton->setFixedWidth(500);
+        GameOverReturnToMainMenuButton->setFixedWidth(500);
+        QPushButton *WinReturnToMainMenuButton =
+            new QPushButton("Return to Main Menu");
+        WinReturnToMainMenuButton->setFixedWidth(500);
+        
 
         QVBoxLayout *gameOverLayout = new QVBoxLayout();
         gameOverLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -494,7 +498,7 @@ namespace GUI {
         gameOverLayout->addWidget(
         createCenterBoldTitle("Game Over"));
         gameOverLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
-        gameOverLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
+        gameOverLayout->addWidget(GameOverReturnToMainMenuButton, 0, Qt::AlignCenter);
         gameOverLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
         gameOverWidget_.setLayout(gameOverLayout);
@@ -505,7 +509,7 @@ namespace GUI {
         gameWinLayout->addWidget(
         createCenterBoldTitle("You Win"));
         gameWinLayout->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
-        gameWinLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
+        gameWinLayout->addWidget(WinReturnToMainMenuButton, 0, Qt::AlignCenter);
         gameWinLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
             QSizePolicy::Expanding));
         gameWinWidget_.setLayout(gameWinLayout);
@@ -537,8 +541,10 @@ namespace GUI {
 
         connect(&opponentsGrid_, &OpponentsGrid::selectTarget, this,
                 &GameDisplay::on_TargetSelected);
-        connect(returnToMainMenuButton, &QPushButton::clicked, this, &GameDisplay::on_ReturnToMainMenuButtonClicked);
         
+        connect(WinReturnToMainMenuButton, &QPushButton::clicked, this, &GameDisplay::on_ReturnToMainMenuButtonClicked);
+        
+        connect(GameOverReturnToMainMenuButton, &QPushButton::clicked, this, &GameDisplay::on_ReturnToMainMenuButtonClicked);
     }
 
     void GameDisplay::on_ReturnToMainMenuButtonClicked() {

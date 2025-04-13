@@ -252,6 +252,7 @@ namespace GUI {
         selectedGameMode_ = GameMode::Endless;
 
         controller_.joinGame(selectedGameMode_, std::nullopt);
+        stack_->setCurrentWidget(&gameDisplay_);
     }
 
     void GameMenu::onDuelButtonClicked() {
