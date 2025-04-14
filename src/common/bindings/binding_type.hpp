@@ -24,6 +24,7 @@ namespace bindings {
         ChangePassword,
         ChangeUsernameResponse,
         AbortMatchMaking,
+        ViewGame,
 
         // in game
         GameState,

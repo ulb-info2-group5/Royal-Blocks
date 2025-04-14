@@ -211,6 +211,15 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
     case bindings::BindingType::AbortMatchMaking:
         matchmaking_.abortMatchmaking(connectedClients_[clientId]);
         updateThisUserWithAllhisFriends(clientId);
+        break;
+
+    case bindings::BindingType::ViewGame:
+        gamesManager_.joinGameAsViewer(connectedClients_[clientId],
+            connectedClients_[jPack.at("data").at("targetUser").get<UserID>()]
+            );
+
+    case bindings::BindingType::QuitGame:
+        gamesManager_.quiGameAsViewer(connectedClients_[clientId]);
     default:
         
         break;
