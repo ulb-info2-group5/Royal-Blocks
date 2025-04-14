@@ -1,3 +1,8 @@
+find_package(nlohmann_json QUIET)
+if (nlohmann_json_FOUND)
+  return()
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(json

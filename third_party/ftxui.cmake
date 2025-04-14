@@ -1,8 +1,13 @@
+find_package(ftxui 6.0.2 QUIET)
+if (ftxui_FOUND)
+  return()
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG 8519e9b0f31ac8f5765a3fc63c3b80a5cfbe9d6d
+  GIT_TAG 07fd3e685ade6275f718913720345134ed2e8242
   GIT_SHALLOW FALSE
 )
 
