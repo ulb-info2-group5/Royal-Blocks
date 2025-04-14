@@ -85,7 +85,7 @@ GameMode GameCandidate::getGameMode() { return gameMode; }
 // ======= matchmaking class =======
 
 
-void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager) {
+void Matchmaking::addPlayer(RequestJoinGame joinGame) {
     if (joinGame.bindGame.gameMode == GameMode::Endless) {
         std::vector<Player> players;
         players.emplace_back(joinGame.player);
@@ -93,7 +93,7 @@ void Matchmaking::addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager
         return;
     }
 
-    findaGame(getGame(joinGame.bindGame.gameMode), joinGame, gamesManager);
+    findaGame(getGame(joinGame.bindGame.gameMode), joinGame);
 }
 
 std::vector<GameCandidate> &Matchmaking::getGame(GameMode gameMode) {
@@ -112,7 +112,7 @@ std::vector<GameCandidate> &Matchmaking::getGame(GameMode gameMode) {
     throw std::runtime_error("incorect gamesMode"); 
 }
 
-void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame joinGame, GamesManager &gamesManager) {
+void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame joinGame) {
     bool joinFriend = joinGame.bindGame.friendId.has_value(), findGame = false;
     auto it = games.begin();
     while (it != games.end() && !findGame) {
@@ -127,7 +127,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame jo
         if (it->isThisPartyReady()) {
             std::cout << "game ready" << std::endl;
             
-            startGame(std::move(*it), gamesManager);
+            startGame(std::move(*it));
             it = games.erase(it);
         } else {
             ++it;
@@ -169,7 +169,7 @@ void Matchmaking::removePlayer(UserID playerID, GameMode gameMode){
     }
 }
 
-void Matchmaking::startGame(GameCandidate &&gameCandidate,GamesManager &gamesManager) {
+void Matchmaking::startGame(GameCandidate &&gameCandidate) {
 
     gameFindCallback_(gameCandidate.getPlayers(), gameCandidate.getGameMode());
     

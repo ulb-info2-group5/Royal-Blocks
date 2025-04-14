@@ -51,8 +51,8 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
     bindings::State userState;
-    std::optional<GameMode> gameMode_;
     std::optional<UserID> clientId;
+    std::optional<GameMode> gameMode_;
     std::weak_ptr<GameServer> pGame_;
 
 

@@ -7,8 +7,6 @@
 
 using json = nlohmann::json;
 
-using boost::asio::ip::tcp;
-
 // ====== Client manager class ======
 // ---private ---
 
@@ -171,7 +169,7 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         updateThisUserWithAllhisFriends(clientId);
         matchmaking_.addPlayer(RequestJoinGame{
             Player{clientId,database_.accountManager->getUsername(clientId),},
-            bindings::JoinGame::from_json(jPack)},gamesManager_);
+            bindings::JoinGame::from_json(jPack)});
         break;
     case bindings::BindingType::CreateGame:
         connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);

@@ -1,12 +1,11 @@
-#ifndef MATCHMACKING_HPP
 #define MATHCMACKING_HPP
+#ifndef MATCHMACKING_HPP
 
 #include "../../common/bindings/create_game.hpp"
 #include "../../common/bindings/join_game.hpp"
 #include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../games_manager/games_manager.hpp"
-#include <iostream>
-#include <string>
+
 #include <vector>
 
 using NumberOfPlayers = size_t;
@@ -65,18 +64,17 @@ class Matchmaking {
 
     void createNewGameCandidate(std::vector<GameCandidate> &games,
                                 RequestJoinGame joinGame);
-    void startGame(GameCandidate &&gameCandidate, GamesManager &gamesManager);
+    void startGame(GameCandidate &&gameCandidate);
     std::vector<GameCandidate> &getGame(GameMode gameMode);
 
   public:
     Matchmaking(GameFindCallback gameFindCallback) ;
     ~Matchmaking() = default;
-    void addPlayer(RequestJoinGame joinGame, GamesManager &gamesManager);
+    void addPlayer(RequestJoinGame joinGame);
     void removePlayer(UserID playerID, GameMode gameMode);
 
 
-    void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame,
-                   GamesManager &gamesManager);
+    void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame);
     void createAGame(RequestCreateGame createGame);
 
     void abortMatchmaking( const std::shared_ptr<ClientLink>& clientLink ); 

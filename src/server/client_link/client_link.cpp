@@ -9,7 +9,7 @@
 void ClientLink::read() {
     boost::asio::async_read_until(
         socket_, streamBuffer_, '\n',
-        [this](boost::system::error_code ec, std::size_t length) {
+        [this](boost::system::error_code ec, std::size_t) {
             if (!ec) {
                 handleReading();
             } else if (ec == boost::asio::error::eof) {
