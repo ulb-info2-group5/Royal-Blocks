@@ -2,6 +2,7 @@
 #include "client_manager.hpp"
 
 #include "../../common/bindings/ranking.hpp"
+#include "../../common/bindings/in_game/quit_game.hpp"
 
 #include <bcrypt.h>
 

@@ -3,8 +3,7 @@
 #include "../../../core/controller/controller.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../main_tui.hpp"
-#include "core/in_game/game_state/game_state.hpp"
-#include "core/in_game/game_state/game_state_viewer.hpp"
+
 #include "effect/effect_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
@@ -21,7 +20,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <variant>
 #include <vector>

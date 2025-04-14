@@ -1,5 +1,5 @@
-#ifndef EXECUTE_SQL_HPP
-#define EXECUTE_SQL_HPP
+#ifndef DATABASE_MANAGER_HPP
+#define DATABASE_MANAGER_HPP
 
 #include <sqlite3.h>
 #include <string>
@@ -102,4 +102,4 @@ class DatabaseManager {
     bool findUserInDatabase(const std::string &table, const int userId);
 };
 
-#endif // EXECUTE_SQL_HPP
+#endif // DATABASE_MANAGER_HPP

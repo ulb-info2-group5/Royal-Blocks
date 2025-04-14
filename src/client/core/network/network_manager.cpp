@@ -39,7 +39,7 @@ void NetworkManager::disconnect() {
 void NetworkManager::send(const std::string &message) {
     boost::asio::async_write(
         socket_, boost::asio::buffer(message + "\n"),
-        [this](boost::system::error_code ec, std::size_t /*length*/) {
+        [](boost::system::error_code ec, std::size_t /*length*/) {
             if (ec) {
                 std::cerr << "error while sending packet: " << ec << std::endl;
             }

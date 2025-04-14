@@ -1,18 +1,21 @@
 #include "login_menu.hpp"
 
+#include <string>
+
 #include "../../../core/controller/controller.hpp"
 #include "../main_tui.hpp"
 
 #include "../ftxui_config/ftxui_config.hpp"
+#include "graphics/TUI/login_input/login_input.hpp"
 
 namespace TUI {
 
     // ### constructor ###
     LoginMenu::LoginMenu(MainTui &mainTui, Controller &controller)
         : mainTui_(mainTui), controller_(controller),
-          loginInput_{mainTui_, controller_, LOGIN_INPUT_TITLE,
+          loginInput_{mainTui_, controller_, std::string(LOGIN_INPUT_TITLE),
                       LoginType::LOGIN},
-          registerInput_{mainTui_, controller_, REGISTER_INPUT_TITLE,
+          registerInput_{mainTui_, controller_, std::string(REGISTER_INPUT_TITLE),
                          LoginType::REGISTER} {
         loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
         registerInput_.addInstruction(REGISTER_INSTRUCTIONS);

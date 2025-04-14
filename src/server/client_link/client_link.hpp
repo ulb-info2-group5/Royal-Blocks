@@ -2,30 +2,17 @@
 #define CLIENT_LINK_HPP
 
 #include <boost/asio.hpp>
-#include <iostream>
-#include <mutex>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <unordered_map>
 
-
-#include "../../common/bindings/authentication.hpp"
-#include "../../common/bindings/authentication_response.hpp"
-#include "../../common/bindings/in_game/quit_game.hpp"
-
-#include "../../common/bindings/registration.hpp"
-#include "../../common/bindings/registration_response.hpp"
 #include "../../common/bindings/user_state.hpp"
 #include "../../common/bindings/user.hpp"
 
-#include "../../common/bindings/create_game.hpp"
-#include "../../common/bindings/join_game.hpp"
 #include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 
 using boost::asio::ip::tcp;
 
 class GameServer;
-
 
 /*
 ClientLink : Represents a single client connection. Inherits

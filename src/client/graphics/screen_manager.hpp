@@ -5,6 +5,7 @@
 #include "TUI/main_tui.hpp"
 
 #include <QApplication>
+
 #include <memory>
 
 class Controller; // Forward declaration

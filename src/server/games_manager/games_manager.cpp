@@ -1,5 +1,4 @@
 #include "games_manager.hpp"
-#include "../../common/bindings/in_game/game_over.hpp"
 
 // ======== private methode ========
 void GamesManager::deleteGame(GameID gameId) {

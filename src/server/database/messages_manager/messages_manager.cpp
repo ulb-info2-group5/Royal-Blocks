@@ -1,12 +1,5 @@
-/**
- * @file messages_manager.cpp
- *
- * @brief Friends Manager class definition
- *
- *
- */
-
 #include "messages_manager.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <ostream>

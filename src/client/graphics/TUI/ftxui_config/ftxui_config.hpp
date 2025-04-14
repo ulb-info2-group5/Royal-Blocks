@@ -53,7 +53,12 @@ namespace TUI {
         STR_MANAGE_FRIENDS_REQUESTS = "Manage friends requests",
         STR_NO_FRIEND_REQUEST = "You don't have any friend request",
         STR_RETURN_TO_MAIN_MENU = "Return to main menu",
-        STR_PLAYER_DEAD = " ☠️ ";
+        STR_PLAYER_DEAD = " ☠️ ",
+        LOGIN_INPUT_TITLE = "Login",
+        REGISTER_INPUT_TITLE = "Register",
+        LOGIN_INSTRUCTIONS = "Please enter your username and password to login.",
+        REGISTER_INSTRUCTIONS = "Please enter a username and a password to create an account.",
+        LOGIN_MESSAGE = "Your account has been created successfully! You can now login.";
 
     const ftxui::Element WELCOME_TITLE = ftxui::vbox({
         ftxui::text(

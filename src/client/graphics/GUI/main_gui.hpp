@@ -69,7 +69,9 @@ namespace GUI {
          */
         void updateConversations();
 
-        // TODO
+        /*
+         * @brief Signal to update the game state
+         */
         void updateGameState();
     };
 

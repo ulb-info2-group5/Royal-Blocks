@@ -1,8 +1,3 @@
-/**
- * @file Messages_manager.hpp
- * @brief Messages Manager class definition
- **/
-
 #ifndef MESSAGE_MANAGER_HPP
 #define MESSAGE_MANAGER_HPP
 
@@ -22,8 +17,8 @@ struct Message {
         return nlohmann::json{{"senderId", senderId}, {"content", content}};
     }
     static Message from_json(const nlohmann::json &j) {
-        return Message{{j.at("senderId").get<int>()},
-                       {j.at("content").get<std::string>()}};
+        return Message{(j.at("senderId").get<int>()),
+                       (j.at("content").get<std::string>())};
     }
 };
 

@@ -2,7 +2,6 @@
 #define TUI_LOGIN_MENU_HPP
 
 #include <ftxui/component/component.hpp>
-#include <string_view>
 
 #include "../login_input/login_input.hpp"
 
@@ -22,15 +21,6 @@ namespace TUI {
         EXIT,
         NONE,
     };
-
-    constexpr char LOGIN_INPUT_TITLE[] = "Login";
-    constexpr char REGISTER_INPUT_TITLE[] = "Register";
-    constexpr std::string_view LOGIN_INSTRUCTIONS =
-        "Please enter your username and password to login.";
-    constexpr std::string_view REGISTER_INSTRUCTIONS =
-        "Please enter a username and a password to create an account.";
-    constexpr std::string_view LOGIN_MESSAGE =
-        "Your account has been created successfully! You can now login.";
 
     /**
      * @brief LoginMenu class to show the login menu screen with choices to

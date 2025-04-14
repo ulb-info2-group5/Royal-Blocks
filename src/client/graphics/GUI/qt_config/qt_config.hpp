@@ -1,7 +1,6 @@
 #ifndef GUI_QT_CONFIG_HPP
 #define GUI_QT_CONFIG_HPP
 
-#include <QColor>
 #include <QLabel>
 
 #include <string_view>

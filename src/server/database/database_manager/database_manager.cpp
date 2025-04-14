@@ -1,4 +1,5 @@
 #include "database_manager.hpp"
+
 #include <iostream>
 #include <sqlite3.h>
 #include <string>
