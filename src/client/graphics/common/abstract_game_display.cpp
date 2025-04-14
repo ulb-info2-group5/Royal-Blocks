@@ -112,7 +112,7 @@ void AbstractGameDisplay::selectTarget(size_t targetIndex) {
 }
 
 void AbstractGameDisplay::handleKeyPress(const std::string &key) {
-    controller_.handleKeypress(key);
+    controller_.handleKeyPress(key);
 }
 
 void AbstractGameDisplay::quitGame() { controller_.quitGame(); }

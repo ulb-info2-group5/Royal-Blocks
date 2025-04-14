@@ -35,6 +35,20 @@ enum class UpdateType {
     OTHER,
 };
 
+// TODO: @note to explain that it manages the effect selector.
+/**
+ * @brief Controller/driver of the client program.
+ *
+ * @note Uses NetworkManager to get and send packets,
+ * usess the GUI or TUI frontend to display the game.
+ * Stores and keeps up to date the data which is displayed.
+ *
+ * @note Controls the keybinds to make the keybindings the same between both TUI
+ * and GUI.
+ *
+ * @note Handles the selected effect index (used for keybinding effect
+ * selection).
+ */
 class Controller {
   public:
     enum class AuthState {
@@ -70,12 +84,12 @@ class Controller {
     std::vector<std::pair<std::string, Score>> ranking_;
     std::vector<bindings::User> pendingFriendRequests_;
 
-    /*
+    /**
      * @brief The network manager to manage the connection with the server
      */
     NetworkManager networkManager_;
 
-    /*
+    /**
      * @brief The screen manager to manage the screens to show to the user
      */
     std::unique_ptr<ScreenManager> screenManager_;
@@ -88,12 +102,12 @@ class Controller {
     void updateFriendState(const bindings::User &updatedFriend);
 
   public:
-    /*
+    /**
      * @brief Construct a new Controller object
      */
     Controller(UiChoice uiChoice, std::pair<int, char **> args);
 
-    /*
+    /**
      * @brief Destroy the Controller object
      */
     ~Controller() = default;
@@ -108,14 +122,14 @@ class Controller {
      */
     AuthState getAuthState() const;
 
-    /*
+    /**
      * @brief Run the controller to manage the game
      *
      * @return The exit code of the program of the tui or gui
      */
     int run();
 
-    /*
+    /**
      * @brief Makes a registration request to the server.
      *
      * @param username The username of the user
@@ -123,7 +137,7 @@ class Controller {
      */
     void tryRegister(const std::string &username, const std::string &password);
 
-    /*
+    /**
      * @brief Makes a login request to the server.
      *
      * @param username The username of the user
@@ -131,12 +145,12 @@ class Controller {
      */
     void tryLogin(const std::string &username, const std::string &password);
 
-    /*
+    /**
      * @brief Get the ranking of the players of the Endless mode
      */
     std::vector<std::pair<std::string, Score>> getRanking() const;
 
-    /*
+    /**
      * @brief Change the profile of the user by changing the username and
      * password
      *
@@ -146,28 +160,31 @@ class Controller {
     void changeProfile(const std::string &username,
                        const std::string &password);
 
-    /*
+    /**
      * @brief Get the friends list of the user
      */
     const std::vector<bindings::User> getFriendsList() const;
 
+    /**
+     * @brief Returns the pending friend-requests as a vector of users.
+     */
     std::vector<bindings::User> getPendingFriendRequests() const;
 
-    /*
+    /**
      * @brief Add a friend to the friends list of the user
      *
      * @param username The name of the friend to add
      */
     void sendFriendRequest(const std::string &username);
 
-    /*
+    /**
      * @brief Remove a friend from the friends list of the user
      *
      * @param userID The id of the player to remove.
      */
     void removeFriend(UserID userID);
 
-    /*
+    /**
      * @brief Send a message to a friend
      *
      * @param recipientId The UserID of the friend to send the message
@@ -175,50 +192,125 @@ class Controller {
      */
     void sendMessage(UserID recipientId, const std::string &message);
 
+    /**
+     * @brief Creates a new game in the given game-mode and with the given
+     * number of players.
+     */
     void createGame(GameMode gameMode, size_t targetNumPlayers);
 
+    /**
+     * @brief Joins a game in the given GameMode (optionally join a friend if
+     * one specified).
+     */
     void joinGame(GameMode gameMode, std::optional<UserID> friendID);
 
+    /**
+     * @brief Returns the name and conversation history with the specified user.
+     */
     const NameConversation getConversationWith(UserID userID);
 
+    /**
+     * @brief Returns the number of effects in the GameState.
+     */
     size_t getNumEffects() const;
 
+    /**
+     * @brief Returns the selected effect-type.
+     */
     EffectType getSelectedEffectType() const;
 
+    /**
+     * @brief Sets the selected effect-type to the given effect-type
+     */
     void setSelectedEffectType(EffectType effectType);
 
+    /**
+     * @brief Returns the index of the currently selected effect.
+     */
     size_t getCurrEffectIdx() const;
 
+    /**
+     * @brief Selects the next effect.
+     */
     void selectNextEffect();
 
+    /**
+     * @brief Selects the previous effect.
+     */
     void selectPrevEffect();
 
+    /**
+     * @brief BigDrop action.
+     * @see Tetris for description.
+     */
     void bigDrop();
 
+    /**
+     * @brief Moves the active tetromino.
+     * @see Tetris for description.
+     */
     void moveActive(TetrominoMove tetrominoMove);
 
+    /**
+     * @brief Rotates the active tetromino.
+     * @see Tetris for description.
+     */
     void rotateActive(bool clockwise);
 
+    /**
+     * @brief Selects the given user ass target.
+     */
     void selectTarget(UserID userId);
 
+    /**
+     * @brief Empties the penalty stash on the selected target.
+     */
     void emptyPenaltyStash();
 
+    /**
+     * @brief Holds the active tetromino.
+     */
     void holdNextTetromino();
 
+    /**
+     * @brief Buys the given effect (stashes if stashForLater).
+     */
     void buyEffect(EffectType effectType, bool stashForLater = false);
 
+    /**
+     * @brief Quits the game.
+     */
     void quitGame();
 
-    void handleKeypress(const std::string &pressedKey);
+    /**
+     * @brief Handles the given key.
+     */
+    void handleKeyPress(const std::string &pressedKey);
 
+    /**
+     * @brief Accepts the friend request from userID.
+     */
     void acceptFriendRequest(UserID userId);
 
+    /**
+     * @brief Decline the friend request from userID.
+     */
     void declineFriendRequest(UserID userId);
 
+    /**
+     * @brief Aborts the matchmaking process.
+     */
     void abortMatchmaking();
 
+    /**
+     * @brief Returns a copy of the GameState.
+     */
     std::variant<client::GameState, client::GameStateViewer> getGameState();
 
+    /**
+     * @brief Returns true if the gamestate indicates that the game is not
+     * finished yet.
+     */
     bool inGame() const;
 };
 
