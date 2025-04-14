@@ -14,7 +14,10 @@
 namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
-        : QMainWindow(parent), controller_(controller) {}
+        : QMainWindow(parent), controller_(controller) {
+            setAttribute(Qt::WA_DeleteOnClose);
+            show();
+        }
 
     void MainGui::run() {
         loginGui_ = std::make_unique<LoginGui>(controller_);
