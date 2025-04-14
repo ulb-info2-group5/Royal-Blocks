@@ -4,10 +4,14 @@
 #include "../common/types/types.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
+#include <optional>
 
 class Controller;
 
 class AbstractGameDisplay {
+  private:
+    std::variant<client::GameState, client::GameStateViewer> gameState_;
+
   public:
     // Returned by selfCellInfoAt.
     // Tells us whether the cell at (x,y) is a part of the active or preview
@@ -37,13 +41,18 @@ class AbstractGameDisplay {
 
     Controller &controller_;
 
-    std::variant<client::GameState, client::GameStateViewer> gameState_;
-
     static Color colorIdToColor(unsigned colorID);
 
     UserID getNthOpponentUserID(size_t n) const;
 
     size_t getBoardHeight() const;
+
+    void
+    setGameState(const std::variant<client::GameState, client::GameStateViewer>
+                     &newGameState);
+
+    const std::variant<client::GameState, client::GameStateViewer> &
+    getGameState();
 
     size_t getBoardWidth() const;
 
@@ -76,6 +85,12 @@ class AbstractGameDisplay {
     size_t getTetrominoQueuesSize() const;
 
     const std::vector<std::pair<EffectType, Energy>> &getEffectPrices() const;
+
+    // pair<penalty-name, elapsedTime>
+    std::optional<std::pair<std::string, double>> getPenaltyInfo() const;
+
+    // pair<bonus-name, elapsedTime>
+    std::optional<std::pair<std::string, double>> getBonusInfo() const;
 
     bool inGame() const;
 

@@ -1,15 +1,11 @@
 #include "game_display.hpp"
 
-#include "../qt_config/qt_config.hpp"
-
-#include "core/in_game/effects/timed_bonus.hpp"
-#include "core/in_game/game_state/game_state.hpp"
-#include "effect/effect_type.hpp"
-#include "game_mode/game_mode.hpp"
-
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
+#include "../qt_config/qt_config.hpp"
+#include "effect/effect_type.hpp"
 #include "effect_info.hpp"
+#include "game_mode/game_mode.hpp"
 #include "graphics/GUI/game_display/opponents_grid.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "vec2/vec2.hpp"
@@ -27,8 +23,15 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-
 #include <optional>
+#include <qboxlayout.h>
+#include <qchar.h>
+#include <qcolor.h>
+#include <qgridlayout.h>
+#include <qlabel.h>
+#include <qnamespace.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
 #include <string>
 
 namespace GUI {
@@ -321,7 +324,7 @@ namespace GUI {
     }
 
     void GameDisplay::updateGameState() {
-        gameState_ = controller_.getGameState();
+        setGameState(controller_.getGameState());
 
         if (gameIsFinished()) {
             QPushButton *returnToMainMenuButton =
@@ -394,15 +397,8 @@ namespace GUI {
     }
 
     void GameDisplay::bonusInfo() {
-        const auto &gs = std::get<client::GameState>(gameState_);
-
         auto [bonusName, elapsedTime] =
-            gs.self.playerState.activeBonus
-                .transform([](const client::TimedBonus &bonus) {
-                    return std::make_pair(toString(bonus.bonusType),
-                                          bonus.elapsedTime);
-                })
-                .value_or(std::make_pair(std::string{}, 0));
+            getBonusInfo().value_or(std::make_pair(std::string{}, 0));
 
         bonusInfo_.setName(QString::fromStdString(bonusName));
         bonusInfo_.setProgress(elapsedTime);
@@ -412,15 +408,8 @@ namespace GUI {
     }
 
     void GameDisplay::penaltyInfo() {
-        const auto &gs = std::get<client::GameState>(gameState_);
-
         auto [penaltyName, elapsedTime] =
-            gs.self.playerState.activePenalty
-                .transform([](const client::TimedPenalty &penalty) {
-                    return std::make_pair(toString(penalty.penaltyType),
-                                          penalty.elapsedTime);
-                })
-                .value_or(std::make_pair(std::string{}, 0));
+            getPenaltyInfo().value_or(std::make_pair(std::string{}, 0));
 
         penaltyInfo_.setName(QString::fromStdString(penaltyName));
         penaltyInfo_.setProgress(elapsedTime);

@@ -1,15 +1,13 @@
 #include "game_display.hpp"
-#include "../ftxui_config/ftxui_config.hpp"
 
-#include "core/in_game/effects/timed_bonus.hpp"
+#include "../../../core/controller/controller.hpp"
+#include "../ftxui_config/ftxui_config.hpp"
+#include "../main_tui.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
 #include "effect/effect_type.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
-
-#include "../../../core/controller/controller.hpp"
-#include "../main_tui.hpp"
 #include "graphics/common/abstract_game_display.hpp"
 #include "player_state/player_state.hpp"
 #include "vec2/vec2.hpp"
@@ -128,15 +126,8 @@ namespace TUI {
 
     ftxui::Component GameDisplay::penaltyInfo() {
         return ftxui::Renderer([this] {
-            const auto &gs = std::get<client::GameState>(gameState_);
-
             auto [penaltyName, elapsedTime] =
-                gs.self.playerState.activePenalty
-                    .transform([](const client::TimedPenalty &penalty) {
-                        return std::make_pair(toString(penalty.penaltyType),
-                                              penalty.elapsedTime);
-                    })
-                    .value_or(std::make_pair(std::string{}, 0));
+                getPenaltyInfo().value_or(std::make_pair(std::string{}, 0));
 
             return ftxui::vbox({ftxui::text("Penalty : " + penaltyName),
                                 ftxui::gaugeRight(elapsedTime)
@@ -147,15 +138,8 @@ namespace TUI {
 
     ftxui::Component GameDisplay::bonusInfo() {
         return ftxui::Renderer([this] {
-            const auto &gs = std::get<client::GameState>(gameState_);
-
             auto [bonusName, elapsedTime] =
-                gs.self.playerState.activeBonus
-                    .transform([](const client::TimedBonus &bonus) {
-                        return std::make_pair(toString(bonus.bonusType),
-                                              bonus.elapsedTime);
-                    })
-                    .value_or(std::make_pair(std::string{}, 0));
+                getBonusInfo().value_or(std::make_pair(std::string{}, 0));
 
             return ftxui::vbox({ftxui::text("Bonus : " + bonusName),
                                 ftxui::gaugeRight(elapsedTime)
@@ -589,7 +573,7 @@ namespace TUI {
         auto updateGame = [&] {
             gameContainer->DetachAllChildren();
 
-            gameState_ = controller_.getGameState();
+            setGameState(controller_.getGameState());
 
             if (gameIsFinished()) {
                 if (isWinner()) {
@@ -617,7 +601,7 @@ namespace TUI {
                         drawSpectate();
                     }
                 },
-                gameState_);
+                getGameState());
 
             gameContainer->Add(displayWindow_);
         };

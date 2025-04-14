@@ -1,5 +1,10 @@
 #include "abstract_game_display.hpp"
+
+#include "core/in_game/effects/timed_penalty.hpp"
+#include "core/in_game/game_state/game_state.hpp"
+
 #include <cstddef>
+#include <variant>
 
 AbstractGameDisplay::AbstractGameDisplay(Controller &controller)
     : controller_{controller} {}
@@ -34,6 +39,48 @@ AbstractGameDisplay::colorIdToColor(unsigned colorID) {
 
 bool AbstractGameDisplay::isSpectating() const {
     return std::holds_alternative<client::GameStateViewer>(gameState_);
+}
+
+void AbstractGameDisplay::setGameState(
+    const std::variant<client::GameState, client::GameStateViewer>
+        &newGameState) {
+    gameState_ = newGameState;
+}
+
+const std::variant<client::GameState, client::GameStateViewer> &
+AbstractGameDisplay::getGameState() {
+    return gameState_;
+}
+
+// pair<penalty-name, elapsedTime>
+std::optional<std::pair<std::string, double>>
+AbstractGameDisplay::getPenaltyInfo() const {
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return std::nullopt;
+    }
+
+    const auto &gs = std::get<client::GameState>(gameState_);
+
+    return gs.self.playerState.activePenalty.transform(
+        [](const client::TimedPenalty &penalty) {
+            return std::make_pair(toString(penalty.penaltyType),
+                                  penalty.elapsedTime);
+        });
+}
+
+// pair<bonus-name, elapsedTime>
+std::optional<std::pair<std::string, double>>
+AbstractGameDisplay::getBonusInfo() const {
+    if (!std::holds_alternative<client::GameState>(gameState_)) {
+        return std::nullopt;
+    }
+
+    const auto &gs = std::get<client::GameState>(gameState_);
+
+    return gs.self.playerState.activeBonus.transform(
+        [](const client::TimedBonus &bonus) {
+            return std::make_pair(toString(bonus.bonusType), bonus.elapsedTime);
+        });
 }
 
 UserID AbstractGameDisplay::getNthOpponentUserID(size_t n) const {

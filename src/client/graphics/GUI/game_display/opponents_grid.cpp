@@ -1,4 +1,5 @@
 #include "opponents_grid.hpp"
+
 #include "opponent_widget.hpp"
 
 #include <QChar>
@@ -6,9 +7,6 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QWidget>
-
-#include <iostream>
-#include <qframe.h>
 
 namespace GUI {
 

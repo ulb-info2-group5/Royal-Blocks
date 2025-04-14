@@ -1,5 +1,6 @@
 #include "effect_info.hpp"
-#include <qwidget.h>
+
+#include <QWidget>
 
 namespace GUI {
 
