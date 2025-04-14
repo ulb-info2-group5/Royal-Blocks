@@ -44,7 +44,7 @@ namespace GUI {
       private:
         MainGui &mainGui_;
 
-        QStackedWidget *stackedWidget_;
+        QStackedWidget stackedWidget_;
 
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;

@@ -32,9 +32,6 @@
 #include <QWidget>
 
 #include <print>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwidget.h>
 #include <string>
 #include <optional>
 
@@ -362,8 +359,8 @@ namespace GUI {
                     20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
             }
             finishWidget->setLayout(finishLayout);
-            stackedWidget_->addWidget(finishWidget);
-            stackedWidget_->setCurrentWidget(finishWidget);
+            stackedWidget_.addWidget(finishWidget);
+            stackedWidget_.setCurrentWidget(finishWidget);
             return;
         }
 
@@ -440,8 +437,6 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
-        stackedWidget_ = new QStackedWidget(this);
-
         QVBoxLayout *leftPane = new QVBoxLayout();
         leftPane->setAlignment(Qt::AlignCenter);
         QVBoxLayout *middlePane = new QVBoxLayout();
@@ -513,11 +508,11 @@ namespace GUI {
 
         // ----set StackedWidget and mainLayout----
 
-        stackedWidget_->addWidget(gameWidget);
-        stackedWidget_->setCurrentWidget(gameWidget);
+        stackedWidget_.addWidget(gameWidget);
+        stackedWidget_.setCurrentWidget(gameWidget);
 
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
-        mainLayout->addWidget(stackedWidget_, 0, Qt::AlignCenter);
+        mainLayout->addWidget(&stackedWidget_, 0, Qt::AlignCenter);
         mainLayout->setAlignment(Qt::AlignCenter);
 
         setLayout(mainLayout);
