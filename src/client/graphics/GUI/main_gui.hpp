@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStackedWidget>
+#include <memory>
 #include <qobjectdefs.h>
 
 class Controller;
@@ -20,6 +21,9 @@ namespace GUI {
 
       private:
         Controller &controller_;
+
+        std::unique_ptr<LoginGui> loginGui_;
+        std::unique_ptr<MainMenuGui> mainMenuGui_;
 
       public:
         MainGui(Controller &controller, QWidget *parent = nullptr);

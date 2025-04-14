@@ -9,6 +9,7 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QTableWidget>
+#include <memory>
 
 namespace GUI {
 
@@ -18,11 +19,11 @@ namespace GUI {
     }
 
     void MainGui::run() {
-        LoginGui *loginGui = new LoginGui(controller_);
-        connect(loginGui, &LoginGui::loginSuccessful, this,
+        loginGui_ = std::make_unique<LoginGui>(controller_);
+        connect(loginGui_.get(), &LoginGui::loginSuccessful, this,
                 &MainGui::showMainMenu);
-        loginGui->run();
-        setCentralWidget(loginGui);
+        loginGui_->run();
+        setCentralWidget(loginGui_.get());
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {
@@ -40,9 +41,10 @@ namespace GUI {
     }
 
     void MainGui::showMainMenu() {
-        MainMenuGui *mainMenuGui = new MainMenuGui(controller_, *this);
-        mainMenuGui->run();
-        setCentralWidget(mainMenuGui);
+        loginGui_.reset(); // Login has finish so we don't need it anymore
+        mainMenuGui_ = std::make_unique<MainMenuGui>(controller_, *this);
+        mainMenuGui_->run();
+        setCentralWidget(mainMenuGui_.get());
     }
 
 } // namespace GUI
