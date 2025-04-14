@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 #include <optional>
 
+<<<<<<< HEAD
 /**
  * For an overview of the bindings system and the list of available binding, see
  * bindings_type.hpp.
@@ -19,6 +20,12 @@ namespace bindings {
      */
     struct ViewGame {
         UserID targetUser; // the user to spectate
+=======
+namespace bindings {
+
+    struct ViewGame{
+        UserID targetUser;
+>>>>>>> 7f185a13 (add bindings viewGame)
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::ViewGame},
                                   {"data",
@@ -37,7 +44,13 @@ namespace bindings {
                 data.at("targetUser").get<UserID>(),
             };
         }
+<<<<<<< HEAD
     };
+=======
+    
+    };
+        
+>>>>>>> 7f185a13 (add bindings viewGame)
 
 } // namespace bindings
 
