@@ -8,15 +8,14 @@
 
 #include <QMessageBox>
 #include <QTimer>
+#include <memory>
 #include <qslider.h>
 
 namespace GUI {
 
     GameMenu::GameMenu(Controller &controller, MainGui &mainGui,
                              QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui),
-          gameDisplay_{controller_, mainGui_, this}, playerCount_(4),
-          isCreateGame_(false) {
+        : QWidget(parent), controller_(controller), mainGui_(mainGui), playerCount_(4), isCreateGame_(false) {
         setup();
     }
 
@@ -27,9 +26,6 @@ namespace GUI {
 
     void GameMenu::setup() {
         stack_ = new QStackedWidget();
-
-        connect(&gameDisplay_, &GameDisplay::backToMainMenu, this,
-                [this] { emit backToMainMenu(); });
 
         QPushButton *endlessButton = new QPushButton(this);
         QPushButton *duelButton = new QPushButton(this);
@@ -180,7 +176,6 @@ namespace GUI {
         stack_->addWidget(&joinTypeWidget_);
         stack_->addWidget(&friendsListWidget_);
         stack_->addWidget(&waitingWidget_);
-        stack_->addWidget(&gameDisplay_);
 
         // Set main layout
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -214,7 +209,8 @@ namespace GUI {
         connect(gameCheckTimer, &QTimer::timeout, [this, gameCheckTimer]() {
             if (controller_.inGame()) {
                 gameCheckTimer->stop();
-                stack_->setCurrentWidget(&gameDisplay_);
+                gameCheckTimer->deleteLater();
+                createAndShowGameDisplay();
             }
         });
         gameCheckTimer->start(500); // Check every 500ms
@@ -247,12 +243,24 @@ namespace GUI {
         }
     }
 
+    void GameMenu::createAndShowGameDisplay() {
+        gameDisplay_ = std::make_unique<GameDisplay>(controller_, mainGui_, this);
+        connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
+            stack_->removeWidget(gameDisplay_.get());
+            gameDisplay_.reset();
+            emit backToMainMenu();
+        });   
+        stack_->addWidget(gameDisplay_.get());
+        stack_->setCurrentWidget(gameDisplay_.get());
+    }
+
     // Slot implementations
     void GameMenu::onEndlessButtonClicked() {
         selectedGameMode_ = GameMode::Endless;
 
         controller_.joinGame(selectedGameMode_, std::nullopt);
-        stack_->setCurrentWidget(&gameDisplay_);
+        
+        createAndShowGameDisplay();
     }
 
     void GameMenu::onDuelButtonClicked() {

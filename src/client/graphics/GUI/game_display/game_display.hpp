@@ -46,10 +46,6 @@ namespace GUI {
 
         QStackedWidget *stackedWidget_;
 
-        QWidget gameWidget_;
-        QWidget gameOverWidget_;
-        QWidget gameWinWidget_;
-
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
         QLabel holdTetromino_;
