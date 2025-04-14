@@ -187,6 +187,11 @@ class Controller {
     void joinGame(GameMode gameMode, std::optional<UserID> friendID);
 
     /**
+     * @brief Joins the game that the specified user is playing as a viewer.
+     */
+    void joinGameAsViewer(UserID targetId);
+
+    /**
      * @brief Returns the name and conversation history with the specified user.
      */
     const NameConversation getConversationWith(UserID userID);

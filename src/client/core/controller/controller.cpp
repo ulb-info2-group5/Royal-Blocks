@@ -27,6 +27,7 @@
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
+#include "../../../common/bindings/view_game.hpp"
 #include "../../../common/tetris_lib/tetromino/abstract_tetromino.hpp"
 #include "../../../common/tetris_royal_lib/effect_price/effect_price.hpp"
 #include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
@@ -229,6 +230,10 @@ void Controller::joinGame(GameMode gameMode, std::optional<UserID> friendID) {
     networkManager_.send(
         bindings::JoinGame{gameMode, friendID}.to_json().dump());
     if (gameMode == GameMode::RoyalCompetition) currentEffectIdx_ = 0;
+}
+
+void Controller::joinGameAsViewer(UserID targetId) {
+    networkManager_.send(bindings::ViewGame{targetId}.to_json().dump());
 }
 
 void Controller::bigDrop() {
