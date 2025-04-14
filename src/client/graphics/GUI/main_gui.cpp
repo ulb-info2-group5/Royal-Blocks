@@ -15,7 +15,6 @@ namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
         : QMainWindow(parent), controller_(controller) {
-            setAttribute(Qt::WA_DeleteOnClose);
             show();
         }
 
