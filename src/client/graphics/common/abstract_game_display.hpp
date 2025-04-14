@@ -4,6 +4,8 @@
 #include "../common/types/types.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
+#include "effect/effect_type.hpp"
+
 #include <optional>
 
 class Controller;
@@ -11,6 +13,8 @@ class Controller;
 class AbstractGameDisplay {
   private:
     std::variant<client::GameState, client::GameStateViewer> gameState_;
+
+    Controller &controller_;
 
   public:
     // Returned by selfCellInfoAt.
@@ -39,20 +43,25 @@ class AbstractGameDisplay {
   protected:
     AbstractGameDisplay(Controller &controller);
 
-    Controller &controller_;
-
     static Color colorIdToColor(unsigned colorID);
 
     UserID getNthOpponentUserID(size_t n) const;
 
     size_t getBoardHeight() const;
 
-    void
-    setGameState(const std::variant<client::GameState, client::GameStateViewer>
-                     &newGameState);
+    void selectTarget(size_t targetIndex);
 
-    const std::variant<client::GameState, client::GameStateViewer> &
-    getGameState();
+    void handleKeyPress(const std::string &key);
+
+    void quitGame();
+
+    EffectType getSelectedEffectType() const;
+
+    void setSelectedEffectType(EffectType effectType);
+
+    void buyEffect(EffectType effectType);
+
+    void updateGameState();
 
     size_t getBoardWidth() const;
 

@@ -1,5 +1,6 @@
 #include "abstract_game_display.hpp"
 
+#include "../../core/controller/controller.hpp"
 #include "core/in_game/effects/timed_penalty.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 
@@ -39,17 +40,6 @@ AbstractGameDisplay::colorIdToColor(unsigned colorID) {
 
 bool AbstractGameDisplay::isSpectating() const {
     return std::holds_alternative<client::GameStateViewer>(gameState_);
-}
-
-void AbstractGameDisplay::setGameState(
-    const std::variant<client::GameState, client::GameStateViewer>
-        &newGameState) {
-    gameState_ = newGameState;
-}
-
-const std::variant<client::GameState, client::GameStateViewer> &
-AbstractGameDisplay::getGameState() {
-    return gameState_;
 }
 
 // pair<penalty-name, elapsedTime>
@@ -115,6 +105,32 @@ Energy AbstractGameDisplay::getSelfEnergy() const {
 GameMode AbstractGameDisplay::getGameMode() const {
     return std::visit([](const auto &gameState) { return gameState.gameMode; },
                       gameState_);
+}
+
+void AbstractGameDisplay::selectTarget(size_t targetIndex) {
+    controller_.selectTarget(getNthOpponentUserID(targetIndex));
+}
+
+void AbstractGameDisplay::handleKeyPress(const std::string &key) {
+    controller_.handleKeypress(key);
+}
+
+void AbstractGameDisplay::quitGame() { controller_.quitGame(); }
+
+EffectType AbstractGameDisplay::getSelectedEffectType() const {
+    return controller_.getSelectedEffectType();
+}
+
+void AbstractGameDisplay::setSelectedEffectType(EffectType effectType) {
+    controller_.setSelectedEffectType(effectType);
+}
+
+void AbstractGameDisplay::buyEffect(EffectType effectType) {
+    controller_.buyEffect(effectType);
+}
+
+void AbstractGameDisplay::updateGameState() {
+    gameState_ = controller_.getGameState();
 }
 
 std::optional<std::pair<unsigned, AbstractGameDisplay::SelfCellType>>

@@ -98,14 +98,14 @@ namespace TUI {
             ftxui::Component button = ftxui::Button(
                 toString(effectType) + " " + std::to_string(effectPrice),
                 [this, effectType]() {
-                    controller_.setSelectedEffectType(effectType);
-                    controller_.buyEffect(effectType);
+                    setSelectedEffectType(effectType);
+                    buyEffect(effectType);
                 },
                 GlobalButtonStyle());
 
             availableEffects->Add(button);
 
-            if (controller_.getSelectedEffectType() == effectType) {
+            if (getSelectedEffectType() == effectType) {
                 availableEffects->SetActiveChild(button);
             }
         }
@@ -152,7 +152,7 @@ namespace TUI {
         return ftxui::Button(
             std::string(STR_QUIT_GAME),
             [&] {
-                controller_.quitGame();
+                quitGame();
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -411,9 +411,7 @@ namespace TUI {
                 getOpponentUsername(index)
                     + std::string{checkOpponentAlive(index) ? ""
                                                             : STR_PLAYER_DEAD},
-                [index, this] {
-                    controller_.selectTarget(getNthOpponentUserID(index));
-                },
+                [index, this] { selectTarget(getNthOpponentUserID(index)); },
                 ftxui::ButtonOption::Animated(ftxui::Color::Yellow1));
 
             if (getSelectedTarget() == getNthOpponentUserID(index)) {
@@ -511,7 +509,7 @@ namespace TUI {
                     keyPressed = event.input();
                 }
 
-                controller_.handleKeypress(keyPressed);
+                handleKeyPress(keyPressed);
 
                 return true;
             });
@@ -573,7 +571,7 @@ namespace TUI {
         auto updateGame = [&] {
             gameContainer->DetachAllChildren();
 
-            setGameState(controller_.getGameState());
+            updateGameState();
 
             if (gameIsFinished()) {
                 if (isWinner()) {
@@ -585,23 +583,17 @@ namespace TUI {
                 return;
             }
 
-            std::visit(
-                [&](const auto &gameState) {
-                    using T = std::decay_t<decltype(gameState)>;
-                    if constexpr (std::is_same_v<T, client::GameState>) {
-                        if (getGameMode() == GameMode::Endless) {
-                            drawEndlessMode();
-                        } else {
-                            drawMultiMode();
-                        }
+            if (isSpectating()) {
+                drawSpectate();
+            } else {
+                if (getGameMode() == GameMode::Endless) {
+                    drawEndlessMode();
+                } else {
+                    drawMultiMode();
+                }
+            }
 
-                        handleKeys();
-                    } else if constexpr (std::is_same_v<
-                                             T, client::GameStateViewer>) {
-                        drawSpectate();
-                    }
-                },
-                getGameState());
+            handleKeys();
 
             gameContainer->Add(displayWindow_);
         };

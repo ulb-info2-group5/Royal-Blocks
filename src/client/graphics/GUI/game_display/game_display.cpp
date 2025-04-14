@@ -196,16 +196,16 @@ namespace GUI {
     }
 
     void GameDisplay::on_TargetSelected(size_t targetIdx) {
-        controller_.selectTarget(getNthOpponentUserID(targetIdx));
+        selectTarget(getNthOpponentUserID(targetIdx));
     }
 
     void GameDisplay::on_EffectBought(EffectType effect) {
-        controller_.setSelectedEffectType(effect);
-        controller_.buyEffect(effect);
+        setSelectedEffectType(effect);
+        buyEffect(effect);
     }
 
     void GameDisplay::on_QuitButtonClicked() {
-        controller_.quitGame();
+        quitGame();
         emit backToMainMenu();
     }
 
@@ -315,11 +315,11 @@ namespace GUI {
             keyPressed = event->text().toStdString();
         }
 
-        controller_.handleKeypress(keyPressed);
+        handleKeyPress(keyPressed);
     }
 
     void GameDisplay::updateGameState() {
-        setGameState(controller_.getGameState());
+        AbstractGameDisplay::updateGameState();
 
         if (gameIsFinished()) {
             QPushButton *returnToMainMenuButton =
@@ -388,7 +388,7 @@ namespace GUI {
 
     void GameDisplay::effectSelector() {
         effectSelector_.setEffectPrices(getEffectPrices(),
-                                        controller_.getSelectedEffectType());
+                                        getSelectedEffectType());
     }
 
     void GameDisplay::bonusInfo() {
