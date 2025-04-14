@@ -3,6 +3,12 @@
 #ifndef GUI_GAME_MENU_HPP
 #define GUI_GAME_MENU_HPP
 
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../../../common/types/types.hpp"
+#include "graphics/GUI/game_display/game_display.hpp"
+
+#include <memory>
+
 #include <QLabel>
 #include <QListWidget>
 #include <QPushButton>
@@ -10,11 +16,6 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <memory>
-
-#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../../../common/types/types.hpp"
-#include "graphics/GUI/game_display/game_display.hpp"
 
 class Controller;
 
@@ -72,7 +73,7 @@ namespace GUI {
 
       public:
         GameMenu(Controller &controller, MainGui &mainGui,
-                    QWidget *parent = nullptr);
+                 QWidget *parent = nullptr);
         ~GameMenu() = default;
 
         void run(bool isCreateGame);

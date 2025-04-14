@@ -18,7 +18,7 @@ namespace GUI {
 
         MainGui &mainGui_;
 
-        QTableWidget RankingGuiTable;
+        QTableWidget rankingTable_;
 
         /*
          * @brief Setup the UI
@@ -28,16 +28,16 @@ namespace GUI {
         /*
          * @brief Setup the ranking Table
          */
-        void setupRankingGuiTable();
+        void setupRankingTable();
 
         /*
          * @brief Update the ranking Table
          */
-        void updateRankingGuiTable();
+        void updateRankingTable();
 
       public:
         Ranking(Controller &controller, MainGui &mainGui,
-                   QWidget *parent = nullptr);
+                QWidget *parent = nullptr);
 
         ~Ranking() = default;
 

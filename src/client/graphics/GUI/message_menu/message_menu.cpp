@@ -6,11 +6,11 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 
+#include <QBoxLayout>
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QThread>
 #include <QTimer>
-#include <qboxlayout.h>
 
 namespace GUI {
 
@@ -25,7 +25,7 @@ namespace GUI {
     constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
 
     MessageMenu::MessageMenu(Controller &controller, MainGui &mainGui,
-                                   QWidget *parent)
+                             QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         setupUI();
     }
@@ -77,8 +77,7 @@ namespace GUI {
                 &MessageMenu::updateChat);
         connect(sendButton_, &QPushButton::clicked, this,
                 &MessageMenu::onSendMessage);
-        connect(backButton_, &QPushButton::clicked, this,
-                &MessageMenu::onBack);
+        connect(backButton_, &QPushButton::clicked, this, &MessageMenu::onBack);
         connect(&mainGui_, &MainGui::updateConversations, this,
                 &MessageMenu::updateChat);
         connect(&mainGui_, &MainGui::updateFriendsList, this,

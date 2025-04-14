@@ -15,4 +15,3 @@ namespace GUI {
     }
 
 } // namespace GUI
-

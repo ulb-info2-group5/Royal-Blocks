@@ -1,17 +1,18 @@
 #ifndef GUI_LOGIN_HPP
 #define GUI_LOGIN_HPP
 
+#include <string>
+
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QWidget>
-#include <string>
 
 class Controller;
 
 namespace GUI {
 
-    class LoginGui : public QWidget {
+    class Login : public QWidget {
         Q_OBJECT
 
       private:
@@ -117,9 +118,9 @@ namespace GUI {
         void on_PasswordInputLogin_EnterPressed();
 
       public:
-        LoginGui(Controller &controller, QWidget *parent = nullptr);
+        Login(Controller &controller, QWidget *parent = nullptr);
 
-        ~LoginGui() = default;
+        ~Login() = default;
 
         /*
          * @brief Run the login Gui

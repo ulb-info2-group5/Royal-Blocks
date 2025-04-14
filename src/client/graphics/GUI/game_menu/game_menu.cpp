@@ -1,21 +1,22 @@
 // Authors: Jonas, Ernest, Rafaou
 
 #include "game_menu.hpp"
+
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
 #include "graphics/GUI/game_display/game_display.hpp"
 
 #include <QMessageBox>
+#include <QSlider>
 #include <QTimer>
-#include <memory>
-#include <qslider.h>
 
 namespace GUI {
 
     GameMenu::GameMenu(Controller &controller, MainGui &mainGui,
-                             QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui), playerCount_(4), isCreateGame_(false) {
+                       QWidget *parent)
+        : QWidget(parent), controller_(controller), mainGui_(mainGui),
+          playerCount_(4), isCreateGame_(false) {
         setup();
     }
 
@@ -244,12 +245,13 @@ namespace GUI {
     }
 
     void GameMenu::createAndShowGameDisplay() {
-        gameDisplay_ = std::make_unique<GameDisplay>(controller_, mainGui_, this);
+        gameDisplay_ =
+            std::make_unique<GameDisplay>(controller_, mainGui_, this);
         connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
             stack_->removeWidget(gameDisplay_.get());
             gameDisplay_.reset();
             emit backToMainMenu();
-        });   
+        });
         stack_->addWidget(gameDisplay_.get());
         stack_->setCurrentWidget(gameDisplay_.get());
     }
@@ -259,7 +261,7 @@ namespace GUI {
         selectedGameMode_ = GameMode::Endless;
 
         controller_.joinGame(selectedGameMode_, std::nullopt);
-        
+
         createAndShowGameDisplay();
     }
 

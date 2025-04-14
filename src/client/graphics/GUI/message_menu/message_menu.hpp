@@ -4,6 +4,7 @@
 #ifndef GUI_MESSAGE_MENU_HPP
 #define GUI_MESSAGE_MENU_HPP
 
+#include <QBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
@@ -13,7 +14,6 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
 
 class Controller;
 
@@ -45,7 +45,7 @@ namespace GUI {
 
       public:
         MessageMenu(Controller &controller, MainGui &mainGui,
-                       QWidget *parent = nullptr);
+                    QWidget *parent = nullptr);
         ~MessageMenu() = default;
 
       signals:

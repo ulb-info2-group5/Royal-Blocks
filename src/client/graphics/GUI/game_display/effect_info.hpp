@@ -1,11 +1,11 @@
 #ifndef GUI_EFFECT_INFO_HPP
 #define GUI_EFFECT_INFO_HPP
 
+#include <QChar>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QProgressBar>
 #include <QWidget>
-#include <qchar.h>
-#include <qprogressbar.h>
 
 namespace GUI {
 

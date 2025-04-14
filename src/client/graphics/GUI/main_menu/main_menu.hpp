@@ -1,22 +1,22 @@
 #ifndef GUI_MAIN_MENU_HPP
 #define GUI_MAIN_MENU_HPP
 
-#include <QLabel>
-#include <QStackedWidget>
-#include <QVBoxLayout>
-#include <QWidget>
-
 #include "../friends_menu/friends_menu.hpp"
 #include "../game_menu/game_menu.hpp"
 #include "../message_menu/message_menu.hpp"
 #include "../profile_manager/profile_manager.hpp"
 #include "../ranking/ranking.hpp"
 
+#include <QLabel>
+#include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QWidget>
+
 class Controller;
 
 namespace GUI {
 
-    class MainMenuGui : public QWidget {
+    class MainMenu : public QWidget {
         Q_OBJECT
 
       private:
@@ -91,10 +91,10 @@ namespace GUI {
         void on_ProfileManagerBouton_clicked();
 
       public:
-        MainMenuGui(Controller &controller, MainGui &mainGui,
-                    QWidget *parent = nullptr);
+        MainMenu(Controller &controller, MainGui &mainGui,
+                 QWidget *parent = nullptr);
 
-        ~MainMenuGui() = default;
+        ~MainMenu() = default;
 
         /*
          * @brief Run the Main Menu Gui

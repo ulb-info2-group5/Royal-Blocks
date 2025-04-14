@@ -1,16 +1,15 @@
 #include "ranking.hpp"
+
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QScrollArea>
 #include <QVBoxLayout>
-#include <qnamespace.h>
 
 #include "../../../core/controller/controller.hpp"
 
 namespace GUI {
 
-    Ranking::Ranking(Controller &controller, MainGui &mainGui,
-                           QWidget *parent)
+    Ranking::Ranking(Controller &controller, MainGui &mainGui, QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         setupUI();
     }
@@ -25,14 +24,14 @@ namespace GUI {
         QPushButton *backButton = new QPushButton(this);
 
         connect(&mainGui_, &MainGui::updateRanking, this,
-                &Ranking::updateRankingGuiTable);
+                &Ranking::updateRankingTable);
 
         backButton->setText("Back");
         backButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         backButton->setFixedWidth(500);
 
-        setupRankingGuiTable();
-        updateRankingGuiTable();
+        setupRankingTable();
+        updateRankingTable();
 
         connect(backButton, &QPushButton::clicked, this,
                 &Ranking::on_BackButtonClicked);
@@ -41,7 +40,7 @@ namespace GUI {
         QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
         scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                               QSizePolicy::Expanding));
-        scrollLayout->addWidget(&RankingGuiTable, 0, Qt::AlignCenter);
+        scrollLayout->addWidget(&rankingTable_, 0, Qt::AlignCenter);
         scrollLayout->addWidget(backButton, 0, Qt::AlignCenter);
         scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                               QSizePolicy::Expanding));
@@ -60,36 +59,36 @@ namespace GUI {
         setLayout(layout);
     }
 
-    void Ranking::setupRankingGuiTable() {
+    void Ranking::setupRankingTable() {
         std::vector<std::pair<std::string, Score>> RankingGuiData =
             controller_.getRanking();
 
-        RankingGuiTable.setRowCount(RankingGuiData.size());
-        RankingGuiTable.setColumnCount(2);
-        RankingGuiTable.setEditTriggers(QAbstractItemView::NoEditTriggers);
-        RankingGuiTable.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        RankingGuiTable.setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        RankingGuiTable.setFixedSize(500, 500);
-        RankingGuiTable.horizontalHeader()->setSectionResizeMode(
+        rankingTable_.setRowCount(RankingGuiData.size());
+        rankingTable_.setColumnCount(2);
+        rankingTable_.setEditTriggers(QAbstractItemView::NoEditTriggers);
+        rankingTable_.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        rankingTable_.setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        rankingTable_.setFixedSize(500, 500);
+        rankingTable_.horizontalHeader()->setSectionResizeMode(
             QHeaderView::Fixed);
-        RankingGuiTable.verticalHeader()->setSectionResizeMode(
+        rankingTable_.verticalHeader()->setSectionResizeMode(
             QHeaderView::Fixed);
 
         QStringList headers;
         headers << "Player" << "Score";
-        RankingGuiTable.setHorizontalHeaderLabels(headers);
+        rankingTable_.setHorizontalHeaderLabels(headers);
 
-        RankingGuiTable.horizontalHeader()->setSectionResizeMode(
+        rankingTable_.horizontalHeader()->setSectionResizeMode(
             0, QHeaderView::Stretch);
-        RankingGuiTable.horizontalHeader()->setSectionResizeMode(
+        rankingTable_.horizontalHeader()->setSectionResizeMode(
             1, QHeaderView::Stretch);
     }
 
-    void Ranking::updateRankingGuiTable() {
+    void Ranking::updateRankingTable() {
         std::vector<std::pair<std::string, Score>> RankingGuiData =
             controller_.getRanking();
 
-        RankingGuiTable.setRowCount(RankingGuiData.size());
+        rankingTable_.setRowCount(RankingGuiData.size());
 
         for (size_t i = 0; i < RankingGuiData.size(); ++i) {
             QTableWidgetItem *playerItem = new QTableWidgetItem(
@@ -97,8 +96,8 @@ namespace GUI {
             QTableWidgetItem *scoreItem =
                 new QTableWidgetItem(QString::number(RankingGuiData[i].second));
 
-            RankingGuiTable.setItem(i, 0, playerItem);
-            RankingGuiTable.setItem(i, 1, scoreItem);
+            rankingTable_.setItem(i, 0, playerItem);
+            rankingTable_.setItem(i, 1, scoreItem);
         }
     }
 

@@ -1,30 +1,20 @@
 #ifndef GUI_OPPONENT_WIDGET_HPP
 #define GUI_OPPONENT_WIDGET_HPP
 
+#include <QChar>
 #include <QColor>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QImage>
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
-
-#include <QColor>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QImage>
-#include <QLabel>
-#include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qchar.h>
-#include <qcolor.h>
-#include <qgridlayout.h>
-#include <qlabel.h>
-#include <qnamespace.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
 
 namespace GUI {
 

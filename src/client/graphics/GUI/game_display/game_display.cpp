@@ -10,6 +10,11 @@
 #include "graphics/common/abstract_game_display.hpp"
 #include "vec2/vec2.hpp"
 
+#include <optional>
+#include <string>
+
+#include <QBoxLayout>
+#include <QChar>
 #include <QColor>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -23,16 +28,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <optional>
-#include <qboxlayout.h>
-#include <qchar.h>
-#include <qcolor.h>
-#include <qgridlayout.h>
-#include <qlabel.h>
-#include <qnamespace.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <string>
 
 namespace GUI {
 
@@ -462,8 +457,8 @@ namespace GUI {
 
         // ------------MIDDLE_PANE---------------
 
-        
-        QLabel *gameMode = createCenterBoldTitle(toString(getGameMode()).c_str());
+        QLabel *gameMode =
+            createCenterBoldTitle(toString(getGameMode()).c_str());
 
         middlePaneLeftVBox_.addWidget(gameMode, 0, Qt::AlignCenter);
         middlePaneLeftVBox_.addWidget(&selfBoard_);

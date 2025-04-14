@@ -1,6 +1,12 @@
 #ifndef GUI_GAME_DISPLAY_HPP
 #define GUI_GAME_DISPLAY_HPP
 
+#include "../../../../common/types/types.hpp"
+#include "../../common/abstract_game_display.hpp"
+#include "effect_info.hpp"
+#include "graphics/GUI/game_display/effects_selector.hpp"
+#include "opponents_grid.hpp"
+
 #include <QColor>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -8,23 +14,12 @@
 #include <QLCDNumber>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
-
-#include "../../common/abstract_game_display.hpp"
-
-#include "../../../../common/types/types.hpp"
-#include "effect_info.hpp"
-#include "graphics/GUI/game_display/effects_selector.hpp"
-#include "opponents_grid.hpp"
-
-#include <qgridlayout.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qstackedwidget.h>
-#include <qwidget.h>
 
 class Controller;
 

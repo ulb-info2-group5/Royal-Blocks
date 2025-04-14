@@ -5,14 +5,15 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
-#include <qpushbutton.h>
+
+#include <QPushButton>
 
 namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
 
-    ProfileManager::ProfileManager(Controller &controller,
-                                         MainGui &mainGui, QWidget *parent)
+    ProfileManager::ProfileManager(Controller &controller, MainGui &mainGui,
+                                   QWidget *parent)
         : QWidget(parent), controller_(controller), mainGui_(mainGui) {
         basicSetup();
     }
@@ -27,8 +28,7 @@ namespace GUI {
 
         connect(submit, &QPushButton::clicked, this,
                 &ProfileManager::changePasswordUsername);
-        connect(back, &QPushButton::clicked, this,
-                &ProfileManager::onBack);
+        connect(back, &QPushButton::clicked, this, &ProfileManager::onBack);
 
         newUserName_.setPlaceholderText("New Username");
         newPassWord_.setPlaceholderText("New Password");
@@ -43,11 +43,12 @@ namespace GUI {
 
         connect(&newUserName_, &QLineEdit::returnPressed, this,
                 [&]() { newPassWord_.setFocus(); });
-        connect(&newPassWord_, &QLineEdit::returnPressed, this,
-                [&]() { 
-                    if (!newPassWord_.text().isEmpty() && !newUserName_.text().isEmpty()) {
-                        submit->click();
-                    }});
+        connect(&newPassWord_, &QLineEdit::returnPressed, this, [&]() {
+            if (!newPassWord_.text().isEmpty()
+                && !newUserName_.text().isEmpty()) {
+                submit->click();
+            }
+        });
 
         // Create a checkbox to show/hide the password
         QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
@@ -67,8 +68,8 @@ namespace GUI {
         QVBoxLayout *layout = new QVBoxLayout(this);
         layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                         QSizePolicy::Expanding));
-        layout->addWidget(createCenterBoldTitle("Change Username and Password"), 0,
-                          Qt::AlignHCenter);
+        layout->addWidget(createCenterBoldTitle("Change Username and Password"),
+                          0, Qt::AlignHCenter);
         layout->addWidget(&newUserName_, 0, Qt::AlignHCenter);
         layout->addWidget(&newPassWord_, 0, Qt::AlignHCenter);
         layout->addWidget(showPasswordCheckBox, 0, Qt::AlignHCenter);
@@ -84,7 +85,8 @@ namespace GUI {
 
     void ProfileManager::changePasswordUsername() {
         if (!isValidUsernamePassword()) {
-            QMessageBox::warning(this, "NAccount Update Failed", errorMessage_.c_str());
+            QMessageBox::warning(this, "NAccount Update Failed",
+                                 errorMessage_.c_str());
             return;
         }
 
@@ -93,8 +95,8 @@ namespace GUI {
 
         controller_.changeProfile(newUsernameStd, newPasswordStd);
 
-        QMessageBox::information(this, "Info",
-                                 "Your username and password have been changed");
+        QMessageBox::information(
+            this, "Info", "Your username and password have been changed");
 
         newUserName_.clear();
         newPassWord_.clear();

@@ -14,15 +14,14 @@
 
 namespace GUI {
 
-    MainMenuGui::MainMenuGui(Controller &controller, MainGui &mainGui,
-                             QWidget *parent)
+    MainMenu::MainMenu(Controller &controller, MainGui &mainGui,
+                       QWidget *parent)
         : QWidget(parent), controller_(controller),
           ranking_(controller_, mainGui), gameMenu_(controller, mainGui),
-          friendsMenu_(controller, mainGui),
-          messageMenu_(controller, mainGui),
+          friendsMenu_(controller, mainGui), messageMenu_(controller, mainGui),
           profileManager_(controller, mainGui) {}
 
-    void MainMenuGui::run() {
+    void MainMenu::run() {
         setup();
 
         QVBoxLayout *layout = new QVBoxLayout();
@@ -32,35 +31,35 @@ namespace GUI {
         show();
     }
 
-    void MainMenuGui::on_QuitGameButton_clicked() { actionOnExit(); }
+    void MainMenu::on_QuitGameButton_clicked() { actionOnExit(); }
 
-    void MainMenuGui::on_RankingButton_clicked() {
+    void MainMenu::on_RankingButton_clicked() {
         stackedWidget_.setCurrentWidget(&ranking_);
     }
 
-    void MainMenuGui::on_ManageFriendsListButton_clicked() {
+    void MainMenu::on_ManageFriendsListButton_clicked() {
         stackedWidget_.setCurrentWidget(&friendsMenu_);
     }
 
-    void MainMenuGui::on_MessagesButton_clicked() {
+    void MainMenu::on_MessagesButton_clicked() {
         stackedWidget_.setCurrentWidget(&messageMenu_);
     }
 
-    void MainMenuGui::on_CreateGameButton_clicked() {
+    void MainMenu::on_CreateGameButton_clicked() {
         gameMenu_.run(true);
         stackedWidget_.setCurrentWidget(&gameMenu_);
     }
 
-    void MainMenuGui::on_JoinGameButton_clicked() {
+    void MainMenu::on_JoinGameButton_clicked() {
         gameMenu_.run(false);
         stackedWidget_.setCurrentWidget(&gameMenu_);
     }
 
-    void MainMenuGui::on_ProfileManagerBouton_clicked() {
+    void MainMenu::on_ProfileManagerBouton_clicked() {
         stackedWidget_.setCurrentWidget(&profileManager_);
     }
 
-    void MainMenuGui::showMainMenu() {
+    void MainMenu::showMainMenu() {
         stackedWidget_.setCurrentWidget(&mainMenu_);
     }
 
@@ -68,7 +67,7 @@ namespace GUI {
                     Private Methods
     ----------------------------------------------*/
 
-    void MainMenuGui::actionOnExit() {
+    void MainMenu::actionOnExit() {
         QMessageBox::StandardButton confirmExit;
         confirmExit = QMessageBox::question(
             this, "Quit", "Are you sure you want to quit the game ?",
@@ -78,7 +77,7 @@ namespace GUI {
         }
     }
 
-    void MainMenuGui::setup() {
+    void MainMenu::setup() {
         QPushButton *createGameButton_ = new QPushButton(this);
         QPushButton *joinGameButton_ = new QPushButton(this);
         QPushButton *messagesButton_ = new QPushButton(this);
@@ -95,28 +94,28 @@ namespace GUI {
 
         messagesButton_->setText("Messages");
         connect(messagesButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_MessagesButton_clicked);
+                &MainMenu::on_MessagesButton_clicked);
         messagesButton_->setFixedWidth(500);
 
         rankingButton_->setText("Ranking");
         connect(rankingButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_RankingButton_clicked);
+                &MainMenu::on_RankingButton_clicked);
         rankingButton_->setFixedWidth(500);
 
         manageProfileButton_->setText("Manage Profile");
         connect(manageProfileButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_ProfileManagerBouton_clicked);
+                &MainMenu::on_ProfileManagerBouton_clicked);
         manageProfileButton_->setFixedWidth(500);
 
         manageFriendsListButton_->setText("Manage Friends List");
         connect(manageFriendsListButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_ManageFriendsListButton_clicked);
+                &MainMenu::on_ManageFriendsListButton_clicked);
         manageFriendsListButton_->setFixedWidth(500);
 
         quitGameButton_->setText("Quit Game");
         quitGameButton_->setFixedWidth(500);
         connect(quitGameButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_QuitGameButton_clicked);
+                &MainMenu::on_QuitGameButton_clicked);
 
         QVBoxLayout *menu = new QVBoxLayout();
         menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -143,19 +142,19 @@ namespace GUI {
         stackedWidget_.addWidget(&gameMenu_);
 
         connect(&ranking_, &Ranking::backToMainMenu, this,
-                &MainMenuGui::showMainMenu);
+                &MainMenu::showMainMenu);
         connect(&friendsMenu_, &FriendsMenu::backToMainMenu, this,
-                &MainMenuGui::showMainMenu);
+                &MainMenu::showMainMenu);
         connect(&messageMenu_, &MessageMenu::backToMainMenu, this,
-                &MainMenuGui::showMainMenu);
+                &MainMenu::showMainMenu);
         connect(&profileManager_, &ProfileManager::backToMainMenu, this,
-                &MainMenuGui::showMainMenu);
+                &MainMenu::showMainMenu);
         connect(createGameButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_CreateGameButton_clicked);
+                &MainMenu::on_CreateGameButton_clicked);
         connect(joinGameButton_, &QPushButton::clicked, this,
-                &MainMenuGui::on_JoinGameButton_clicked);
+                &MainMenu::on_JoinGameButton_clicked);
         connect(&gameMenu_, &GameMenu::backToMainMenu, this,
-                &MainMenuGui::showMainMenu);
+                &MainMenu::showMainMenu);
     }
 
 } // namespace GUI

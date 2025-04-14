@@ -26,7 +26,7 @@ namespace GUI {
 
         QLineEdit newUserName_;
         QLineEdit newPassWord_;
-        
+
         std::string errorMessage_;
 
         // Methode
@@ -39,7 +39,7 @@ namespace GUI {
 
       public:
         ProfileManager(Controller &controller, MainGui &mainGui,
-                          QWidget *parent = nullptr);
+                       QWidget *parent = nullptr);
 
         ~ProfileManager() = default;
 

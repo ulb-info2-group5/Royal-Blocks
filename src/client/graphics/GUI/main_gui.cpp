@@ -1,29 +1,29 @@
 #include "main_gui.hpp"
 
 #include "../../core/controller/controller.hpp"
-
 #include "login/login.hpp"
 #include "main_menu/main_menu.hpp"
+
+#include <memory>
 
 #include <QApplication>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QTableWidget>
-#include <memory>
 
 namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
         : QMainWindow(parent), controller_(controller) {
-            show();
-        }
+        show();
+    }
 
     void MainGui::run() {
-        loginGui_ = std::make_unique<LoginGui>(controller_);
-        connect(loginGui_.get(), &LoginGui::loginSuccessful, this,
+        login_ = std::make_unique<Login>(controller_);
+        connect(login_.get(), &Login::loginSuccessful, this,
                 &MainGui::showMainMenu);
-        loginGui_->run();
-        setCentralWidget(loginGui_.get());
+        login_->run();
+        setCentralWidget(login_.get());
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {
@@ -41,10 +41,10 @@ namespace GUI {
     }
 
     void MainGui::showMainMenu() {
-        loginGui_.reset(); // Login has finish so we don't need it anymore
-        mainMenuGui_ = std::make_unique<MainMenuGui>(controller_, *this);
-        mainMenuGui_->run();
-        setCentralWidget(mainMenuGui_.get());
+        login_.reset(); // Login has finish so we don't need it anymore
+        mainMenu_ = std::make_unique<MainMenu>(controller_, *this);
+        mainMenu_->run();
+        setCentralWidget(mainMenu_.get());
     }
 
 } // namespace GUI

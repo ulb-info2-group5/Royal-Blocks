@@ -3,7 +3,7 @@
 
 #include <QFrame>
 #include <QGridLayout>
-#include <qwidget.h>
+#include <QWidget>
 
 namespace GUI {
 

@@ -11,10 +11,10 @@ namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
 
-    LoginGui::LoginGui(Controller &controller, QWidget *parent)
+    Login::Login(Controller &controller, QWidget *parent)
         : QWidget(parent), controller_(controller) {}
 
-    void LoginGui::run() {
+    void Login::run() {
         setup();
 
         QVBoxLayout *layout = new QVBoxLayout();
@@ -24,27 +24,27 @@ namespace GUI {
         show();
     }
 
-    void LoginGui::on_ExitButton_clicked() { actionOnExit(); }
+    void Login::on_ExitButton_clicked() { actionOnExit(); }
 
-    void LoginGui::on_LoginButton_clicked() {
+    void Login::on_LoginButton_clicked() {
         stackedWidget_.setCurrentIndex(2); // Login page
     }
 
-    void LoginGui::on_RegisterButton_clicked() {
+    void Login::on_RegisterButton_clicked() {
         stackedWidget_.setCurrentIndex(1); // Register page
     }
 
-    void LoginGui::on_BackButtonLogin_clicked() {
+    void Login::on_BackButtonLogin_clicked() {
         clearInputs();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
 
-    void LoginGui::on_BackButtonRegister_clicked() {
+    void Login::on_BackButtonRegister_clicked() {
         clearInputs();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
 
-    void LoginGui::on_SendButtonRegister_clicked() {
+    void Login::on_SendButtonRegister_clicked() {
         QString username = usernameInputRegister_.text();
         QString password = passwordInputRegister_.text();
 
@@ -90,7 +90,7 @@ namespace GUI {
         }
     }
 
-    void LoginGui::on_SendButtonLogin_clicked() {
+    void Login::on_SendButtonLogin_clicked() {
         QString username = usernameInputLogin_.text();
         QString password = passwordInputLogin_.text();
 
@@ -126,19 +126,19 @@ namespace GUI {
         }
     }
 
-    void LoginGui::on_UsernameInputRegister_EnterPressed() {
+    void Login::on_UsernameInputRegister_EnterPressed() {
         if (usernameInputRegister_.hasFocus()) {
             passwordInputRegister_.setFocus();
         }
     }
 
-    void LoginGui::on_UsernameInputLogin_EnterPressed() {
+    void Login::on_UsernameInputLogin_EnterPressed() {
         if (usernameInputLogin_.hasFocus()) {
             passwordInputLogin_.setFocus();
         }
     }
 
-    void LoginGui::on_PasswordInputRegister_EnterPressed() {
+    void Login::on_PasswordInputRegister_EnterPressed() {
         if (passwordInputRegister_.hasFocus()) {
             if (!passwordInputRegister_.text().isEmpty()
                 && !usernameInputRegister_.text().isEmpty()) {
@@ -147,7 +147,7 @@ namespace GUI {
         }
     }
 
-    void LoginGui::on_PasswordInputLogin_EnterPressed() {
+    void Login::on_PasswordInputLogin_EnterPressed() {
         if (passwordInputLogin_.hasFocus()) {
             if (!passwordInputLogin_.text().isEmpty()
                 && !usernameInputLogin_.text().isEmpty()) {
@@ -160,7 +160,7 @@ namespace GUI {
                         Private Methods
     -------------------------------------------------------*/
 
-    void LoginGui::clearInputs() {
+    void Login::clearInputs() {
         usernameInputRegister_.clear();
         passwordInputRegister_.clear();
 
@@ -168,7 +168,7 @@ namespace GUI {
         passwordInputLogin_.clear();
     }
 
-    void LoginGui::actionOnExit() {
+    void Login::actionOnExit() {
         QMessageBox::StandardButton confirmExit;
         confirmExit = QMessageBox::question(
             this, "Quit", "Are you sure you want to qut the game ?",
@@ -178,7 +178,7 @@ namespace GUI {
         }
     }
 
-    bool LoginGui::isValidRegister() {
+    bool Login::isValidRegister() {
         errorMessage_.clear();
 
         if (usernameInputRegister_.text().length() < 4) {
@@ -217,7 +217,7 @@ namespace GUI {
         return true;
     }
 
-    void LoginGui::setup() {
+    void Login::setup() {
         QWidget *mainPage_ = new QWidget();
         QWidget *loginPage_ = new QWidget();
         QWidget *registerPage_ = new QWidget();
@@ -247,27 +247,27 @@ namespace GUI {
         sendButtonLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
         connect(exitButton_, &QPushButton::clicked, this,
-                &LoginGui::on_ExitButton_clicked);
+                &Login::on_ExitButton_clicked);
         connect(loginButton_, &QPushButton::clicked, this,
-                &LoginGui::on_LoginButton_clicked);
+                &Login::on_LoginButton_clicked);
         connect(registerButton_, &QPushButton::clicked, this,
-                &LoginGui::on_RegisterButton_clicked);
+                &Login::on_RegisterButton_clicked);
         connect(backButtonLogin_, &QPushButton::clicked, this,
-                &LoginGui::on_BackButtonLogin_clicked);
+                &Login::on_BackButtonLogin_clicked);
         connect(backButtonRegister_, &QPushButton::clicked, this,
-                &LoginGui::on_BackButtonRegister_clicked);
+                &Login::on_BackButtonRegister_clicked);
         connect(&sendButtonRegister_, &QPushButton::clicked, this,
-                &LoginGui::on_SendButtonRegister_clicked);
+                &Login::on_SendButtonRegister_clicked);
         connect(&sendButtonLogin_, &QPushButton::clicked, this,
-                &LoginGui::on_SendButtonLogin_clicked);
+                &Login::on_SendButtonLogin_clicked);
         connect(&usernameInputRegister_, &QLineEdit::returnPressed, this,
-                &LoginGui::on_UsernameInputRegister_EnterPressed);
+                &Login::on_UsernameInputRegister_EnterPressed);
         connect(&usernameInputLogin_, &QLineEdit::returnPressed, this,
-                &LoginGui::on_UsernameInputLogin_EnterPressed);
+                &Login::on_UsernameInputLogin_EnterPressed);
         connect(&passwordInputRegister_, &QLineEdit::returnPressed, this,
-                &LoginGui::on_PasswordInputRegister_EnterPressed);
+                &Login::on_PasswordInputRegister_EnterPressed);
         connect(&passwordInputLogin_, &QLineEdit::returnPressed, this,
-                &LoginGui::on_PasswordInputLogin_EnterPressed);
+                &Login::on_PasswordInputLogin_EnterPressed);
 
         usernameInputRegister_.setAlignment(Qt::AlignCenter);
         usernameInputRegister_.setFixedWidth(INPUT_BUTTON_WIDTH);
