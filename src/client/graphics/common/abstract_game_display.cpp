@@ -228,11 +228,6 @@ size_t AbstractGameDisplay::getNumOpponents() const {
         gameState_);
 }
 
-bool AbstractGameDisplay::inGame() const {
-    return std::visit(
-        [](const auto &gameState) { return gameState.isFinished; }, gameState_);
-}
-
 const std::vector<std::pair<EffectType, Energy>> &
 AbstractGameDisplay::getEffectPrices() const {
     return std::visit(
