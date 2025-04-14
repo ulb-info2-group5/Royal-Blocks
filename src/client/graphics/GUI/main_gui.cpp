@@ -14,9 +14,7 @@
 namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
-        : QMainWindow(parent), controller_(controller) {
-        showFullScreen();
-    }
+        : QMainWindow(parent), controller_(controller) {}
 
     void MainGui::run() {
         loginGui_ = std::make_unique<LoginGui>(controller_);

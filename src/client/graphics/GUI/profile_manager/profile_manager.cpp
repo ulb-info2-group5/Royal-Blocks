@@ -5,6 +5,7 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
+#include <qpushbutton.h>
 
 namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
@@ -17,14 +18,16 @@ namespace GUI {
     }
 
     void ProfileManager::basicSetup() {
-        submit_.setText("Submit");
-        back_.setText("Back");
-        submit_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        back_.setFixedWidth(INPUT_BUTTON_WIDTH);
+        QPushButton *submit = new QPushButton(this);
+        QPushButton *back = new QPushButton(this);
+        submit->setText("Submit");
+        back->setText("Back");
+        submit->setFixedWidth(INPUT_BUTTON_WIDTH);
+        back->setFixedWidth(INPUT_BUTTON_WIDTH);
 
-        connect(&submit_, &QPushButton::clicked, this,
+        connect(submit, &QPushButton::clicked, this,
                 &ProfileManager::changePasswordUsername);
-        connect(&back_, &QPushButton::clicked, this,
+        connect(back, &QPushButton::clicked, this,
                 &ProfileManager::onBack);
 
         newUserName_.setPlaceholderText("New Username");
@@ -43,7 +46,7 @@ namespace GUI {
         connect(&newPassWord_, &QLineEdit::returnPressed, this,
                 [&]() { 
                     if (!newPassWord_.text().isEmpty() && !newUserName_.text().isEmpty()) {
-                        submit_.click();
+                        submit->click();
                     }});
 
         // Create a checkbox to show/hide the password
@@ -69,8 +72,8 @@ namespace GUI {
         layout->addWidget(&newUserName_, 0, Qt::AlignHCenter);
         layout->addWidget(&newPassWord_, 0, Qt::AlignHCenter);
         layout->addWidget(showPasswordCheckBox, 0, Qt::AlignHCenter);
-        layout->addWidget(&submit_, 0, Qt::AlignHCenter);
-        layout->addWidget(&back_, 0, Qt::AlignHCenter);
+        layout->addWidget(submit, 0, Qt::AlignHCenter);
+        layout->addWidget(back, 0, Qt::AlignHCenter);
         layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                         QSizePolicy::Expanding));
 

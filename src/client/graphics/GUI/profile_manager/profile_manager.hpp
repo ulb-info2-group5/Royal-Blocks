@@ -24,13 +24,8 @@ namespace GUI {
         Controller &controller_;
         MainGui &mainGui_;
 
-        QPushButton submit_;
-        QPushButton back_;
-
         QLineEdit newUserName_;
         QLineEdit newPassWord_;
-
-        QLabel changePasswordAndUsernameMsgLabel_;
         
         std::string errorMessage_;
 
