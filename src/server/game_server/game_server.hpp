@@ -41,6 +41,10 @@ class GameServer {
      */
     void onTimerTick();
 
+    void erasmePlayer(UserID userID);
+
+    
+
   public:
     /**
      * @brief Constructor.
@@ -70,6 +74,9 @@ class GameServer {
     void run();
 
     void addClientLink(std::weak_ptr<ClientLink> clientLink);
+
+    void quitGameAsViewer(UserID userID);
+
 
     // === getters ===
 

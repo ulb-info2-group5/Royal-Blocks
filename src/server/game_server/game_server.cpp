@@ -43,6 +43,19 @@ void GameServer::onTimerTick() {
     });
 }
 
+void GameServer::erasmePlayer(UserID userID){
+    std::erase_if(pClientLinks_, [userID](auto pWeakClientLink) {
+        if (std::shared_ptr<ClientLink> pClientLink =pWeakClientLink.lock()) {
+            if (pClientLink->getUserID() == userID){
+                pClientLink->exitGame();
+                return true;
+            }
+            return false;               
+        }
+        return true;
+    });
+}
+
 // ----------------------------------------------------------------------------
 //                          PUBLIC METHODS
 // ----------------------------------------------------------------------------
@@ -149,18 +162,8 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     }
 
     case bindings::BindingType::QuitGame:
-        std::erase_if(pClientLinks_, [userId](auto pWeakClientLink) {
-            if (std::shared_ptr<ClientLink> pClientLink =pWeakClientLink.lock()) {
-                if (pClientLink->getUserID() == userId){
-                    pClientLink->exitGame();
-                    return true;
-                }
-                return false;               
-            }
-            return true;
-        });
+        erasmePlayer(userId);
         engine.quitGame(userId);
-
         break;
 
     default:
@@ -188,15 +191,28 @@ void GameServer::run() {
 void GameServer::sendGameStates() {
     for (auto pWeakClient : pClientLinks_) {
         if (std::shared_ptr<ClientLink> pClientLink = pWeakClient.lock()) {
-            pClientLink->sendPackage(
-                bindings::GameStateMessage::serializeForPlayer(
-                    *pGameState_, pClientLink->getUserID()));
+            if (pClientLink->getUserState() == bindings::State::InGame){
+                pClientLink->sendPackage(
+                    bindings::GameStateMessage::serializeForPlayer(
+                        *pGameState_, pClientLink->getUserID()));
+            }else if (pClientLink->getUserState() == bindings::State::Viewer){
+                pClientLink->sendPackage(
+                    bindings::GameStateMessage::serializeForViewer(
+                        *pGameState_
+                    ));
+            }
+            
         }
     }
 }
 
 void GameServer::addClientLink(std::weak_ptr<ClientLink> clientLink) {
     pClientLinks_.push_back(clientLink);
+}
+
+
+void GameServer::quitGameAsViewer(UserID userID){
+    erasmePlayer(userID);
 }
 
 // ==== getters ====

@@ -70,3 +70,22 @@ void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, st
 }
 
 
+void GamesManager::joinGameAsViewer(const std::shared_ptr<ClientLink>& viewerLink, const std::shared_ptr<ClientLink>& friendLink){
+    if (friendLink->getUserState() == bindings::State::InGame){
+        viewerLink->setUserState(bindings::State::Viewer);
+        if (std::shared_ptr<GameServer> gameServer = friendLink->getGameServer().lock()){
+            gameServer->addClientLink(viewerLink);
+            viewerLink->jointGame(gameServer);
+        }
+    }
+}
+
+void GamesManager::quiGameAsViewer(const std::shared_ptr<ClientLink>& viewerLink){
+    if ( viewerLink->getUserState() == bindings::State::Viewer){
+        if (std::shared_ptr<GameServer> gameServer = viewerLink->getGameServer().lock()){
+            gameServer->quitGameAsViewer(viewerLink->getUserID());
+            viewerLink->exitGame();
+            
+        }
+    }
+}

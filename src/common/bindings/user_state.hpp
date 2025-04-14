@@ -18,6 +18,7 @@ namespace bindings {
         Menu,
         Matchmaking,
         InGame,
+        Viewer,
     };
 };
 
