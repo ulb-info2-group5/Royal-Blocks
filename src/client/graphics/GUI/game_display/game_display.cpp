@@ -15,25 +15,21 @@
 #include "vec2/vec2.hpp"
 
 #include <QColor>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QImage>
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QLabel>
 #include <QPainter>
-#include <QPixmap>
-#include <QColor>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QImage>
-#include <QLabel>
 #include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <print>
-#include <string>
 #include <optional>
+#include <string>
 
 namespace GUI {
 
@@ -330,29 +326,31 @@ namespace GUI {
         if (gameIsFinished()) {
             QPushButton *returnToMainMenuButton =
                 new QPushButton("Return to Main Menu");
-            returnToMainMenuButton->setFixedWidth(500);  
+            returnToMainMenuButton->setFixedWidth(500);
             connect(returnToMainMenuButton, &QPushButton::clicked, this,
                     &GameDisplay::on_ReturnToMainMenuButtonClicked);
 
             QWidget *finishWidget = new QWidget();
             QVBoxLayout *finishLayout = new QVBoxLayout();
-            finishLayout->addItem(new QSpacerItem(
-                20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+            finishLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                                  QSizePolicy::Expanding));
 
             if (isWinner()) {
+                finishLayout->addWidget(createCenterBoldTitle("You Win"));
                 finishLayout->addWidget(
-                    createCenterBoldTitle("You Win"));
-                finishLayout->addWidget(new QLabel("Your score was : " +
-                    QString::number(getSelfScore())), 0, Qt::AlignCenter);
+                    new QLabel("Your score was : "
+                               + QString::number(getSelfScore())),
+                    0, Qt::AlignCenter);
                 finishLayout->addWidget(returnToMainMenuButton, 0,
                                         Qt::AlignCenter);
                 finishLayout->addItem(new QSpacerItem(
                     20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
             } else {
+                finishLayout->addWidget(createCenterBoldTitle("Game Over"));
                 finishLayout->addWidget(
-                    createCenterBoldTitle("Game Over"));
-                finishLayout->addWidget(new QLabel("Your score was : " +
-                    QString::number(getSelfScore())), 0, Qt::AlignCenter);
+                    new QLabel("Your score was : "
+                               + QString::number(getSelfScore())),
+                    0, Qt::AlignCenter);
                 finishLayout->addWidget(returnToMainMenuButton, 0,
                                         Qt::AlignCenter);
                 finishLayout->addItem(new QSpacerItem(

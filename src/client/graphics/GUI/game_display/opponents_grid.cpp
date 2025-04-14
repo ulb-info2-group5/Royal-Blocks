@@ -8,7 +8,6 @@
 #include <QWidget>
 
 #include <iostream>
-#include <print>
 #include <qframe.h>
 
 namespace GUI {

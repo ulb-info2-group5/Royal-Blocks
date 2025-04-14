@@ -1,7 +1,5 @@
 #include "opponent_widget.hpp"
 
-#include <print>
-
 namespace GUI {
 
     OpponentWidget::OpponentWidget(const QPixmap &pixmap,
