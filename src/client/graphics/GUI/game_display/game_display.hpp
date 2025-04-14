@@ -53,7 +53,6 @@ namespace GUI {
         EffectInfo penaltyInfo_;
         EffectSelector effectSelector_;
 
-        QLabel gameMode_;
         QLabel selfBoard_;
         QLabel tetrominoQueue_;
         QHBoxLayout middlePaneHBox_;

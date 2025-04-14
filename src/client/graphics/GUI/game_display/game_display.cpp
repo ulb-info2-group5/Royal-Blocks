@@ -462,9 +462,10 @@ namespace GUI {
 
         // ------------MIDDLE_PANE---------------
 
-        gameMode_.setText({QString::fromStdString(toString(getGameMode()))});
+        
+        QLabel *gameMode = createCenterBoldTitle(toString(getGameMode()).c_str());
 
-        middlePaneLeftVBox_.addWidget(&gameMode_);
+        middlePaneLeftVBox_.addWidget(gameMode, 0, Qt::AlignCenter);
         middlePaneLeftVBox_.addWidget(&selfBoard_);
 
         middlePaneHBox_.addLayout(&middlePaneLeftVBox_);
