@@ -334,26 +334,20 @@ namespace GUI {
                                                   QSizePolicy::Expanding));
 
             if (isWinner()) {
-                finishLayout->addWidget(createCenterBoldTitle("You Win"));
-                finishLayout->addWidget(
-                    new QLabel("Your score was : "
-                               + QString::number(getSelfScore())),
-                    0, Qt::AlignCenter);
-                finishLayout->addWidget(returnToMainMenuButton, 0,
-                                        Qt::AlignCenter);
-                finishLayout->addItem(new QSpacerItem(
-                    20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+                finishLayout->addWidget(createCenterBoldTitle("You Win !"));
             } else {
                 finishLayout->addWidget(createCenterBoldTitle("Game Over"));
-                finishLayout->addWidget(
-                    new QLabel("Your score was : "
-                               + QString::number(getSelfScore())),
-                    0, Qt::AlignCenter);
-                finishLayout->addWidget(returnToMainMenuButton, 0,
-                                        Qt::AlignCenter);
-                finishLayout->addItem(new QSpacerItem(
-                    20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
             }
+
+            finishLayout->addWidget(
+                new QLabel("Your score was : "
+                           + QString::number(getSelfScore())),
+                0, Qt::AlignCenter);
+            finishLayout->addWidget(returnToMainMenuButton, 0,
+                                    Qt::AlignCenter);
+            finishLayout->addItem(new QSpacerItem(
+                20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
             finishWidget->setLayout(finishLayout);
             stackedWidget_.addWidget(finishWidget);
             stackedWidget_.setCurrentWidget(finishWidget);
@@ -440,20 +434,20 @@ namespace GUI {
         QPushButton *quitButton = new QPushButton(tr("&Quit"));
         quitButton->setFocusPolicy(Qt::NoFocus);
         quitButton->setFixedWidth(100);
-        progressBar_.setFixedWidth(100);
 
-        leftPane->addWidget(quitButton);
-        leftPane->addWidget(&scoreLCD_);
-        leftPane->addWidget(&progressBar_);
+        scoreLCD_.setFixedWidth(100);
 
-        leftPane->addWidget(&energyLCD_);
+        leftPane->addWidget(quitButton, 0, Qt::AlignCenter);
+        leftPane->addWidget(&scoreLCD_, 0, Qt::AlignCenter);
 
-        leftPane->addWidget(&holdTetromino_);
+        leftPane->addWidget(&energyLCD_, 0, Qt::AlignCenter);
 
-        leftPane->addWidget(&bonusInfo_);
-        leftPane->addWidget(&penaltyInfo_);
+        leftPane->addWidget(&holdTetromino_, 0, Qt::AlignCenter);
 
-        leftPane->addWidget(&effectSelector_);
+        leftPane->addWidget(&bonusInfo_, 0, Qt::AlignCenter);
+        leftPane->addWidget(&penaltyInfo_, 0, Qt::AlignCenter);
+
+        leftPane->addWidget(&effectSelector_, 0, Qt::AlignCenter);
 
         // ------------MIDDLE_PANE---------------
 
@@ -461,16 +455,15 @@ namespace GUI {
             createCenterBoldTitle(toString(getGameMode()).c_str());
 
         middlePaneLeftVBox_.addWidget(gameMode, 0, Qt::AlignCenter);
-        middlePaneLeftVBox_.addWidget(&selfBoard_);
+        middlePaneLeftVBox_.addWidget(&selfBoard_, 0, Qt::AlignCenter);
 
         middlePaneHBox_.addLayout(&middlePaneLeftVBox_);
-        tetrominoQueue_.setMaximumHeight(1000);
-        middlePaneHBox_.addWidget(&tetrominoQueue_);
+        middlePaneHBox_.addWidget(&tetrominoQueue_, 0, Qt::AlignCenter);
 
         middlePane->addLayout(&middlePaneHBox_);
 
         // ------------RIGHT_PANE----------------
-        rightPane->addWidget(&opponentsGrid_);
+        rightPane->addWidget(&opponentsGrid_, 0, Qt::AlignCenter);
 
         // ------------END_SPACERS--------------
 

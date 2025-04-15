@@ -61,7 +61,7 @@ namespace GUI {
 
       private slots:
         void onEndlessButtonClicked();
-        void onDuelButtonClicked();
+        void onDualButtonClicked();
         void onClassicButtonClicked();
         void onRoyalButtonClicked();
         void onBackButtonClicked();

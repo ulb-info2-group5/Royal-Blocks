@@ -29,7 +29,7 @@ namespace GUI {
         stack_ = new QStackedWidget();
 
         QPushButton *endlessButton = new QPushButton(this);
-        QPushButton *duelButton = new QPushButton(this);
+        QPushButton *dualButton = new QPushButton(this);
         QPushButton *classicButton = new QPushButton(this);
         QPushButton *royalButton = new QPushButton(this);
         QPushButton *selectModeBackButton = new QPushButton(this);
@@ -44,8 +44,8 @@ namespace GUI {
         // Configure buttons
         endlessButton->setText("Endless Mode");
         endlessButton->setFixedWidth(500);
-        duelButton->setText("Duel Mode");
-        duelButton->setFixedWidth(500);
+        dualButton->setText("Dual Mode");
+        dualButton->setFixedWidth(500);
         classicButton->setText("Classic Mode");
         classicButton->setFixedWidth(500);
         royalButton->setText("Royal Competition Mode");
@@ -73,8 +73,8 @@ namespace GUI {
         // Connect signals for game mode buttons
         connect(endlessButton, &QPushButton::clicked, this,
                 &GameMenu::onEndlessButtonClicked);
-        connect(duelButton, &QPushButton::clicked, this,
-                &GameMenu::onDuelButtonClicked);
+        connect(dualButton, &QPushButton::clicked, this,
+                &GameMenu::onDualButtonClicked);
         connect(classicButton, &QPushButton::clicked, this,
                 &GameMenu::onClassicButtonClicked);
         connect(royalButton, &QPushButton::clicked, this,
@@ -105,7 +105,7 @@ namespace GUI {
                                                   QSizePolicy::Expanding));
         selectModeLayout->addWidget(createCenterBoldTitle("Select Game Mode"));
         selectModeLayout->addWidget(endlessButton, 0, Qt::AlignCenter);
-        selectModeLayout->addWidget(duelButton, 0, Qt::AlignCenter);
+        selectModeLayout->addWidget(dualButton, 0, Qt::AlignCenter);
         selectModeLayout->addWidget(classicButton, 0, Qt::AlignCenter);
         selectModeLayout->addWidget(royalButton, 0, Qt::AlignCenter);
         selectModeLayout->addWidget(selectModeBackButton, 0, Qt::AlignCenter);
@@ -265,11 +265,11 @@ namespace GUI {
         createAndShowGameDisplay();
     }
 
-    void GameMenu::onDuelButtonClicked() {
+    void GameMenu::onDualButtonClicked() {
         selectedGameMode_ = GameMode::Dual;
 
         if (isCreateGame_) {
-            // Duel always has 2 players
+            // dual always has 2 players
             controller_.createGame(selectedGameMode_, 2);
             showWaitingScreen();
         } else {
