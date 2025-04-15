@@ -1,6 +1,6 @@
 #include "controller.hpp"
 #include "../../graphics/screen_manager.hpp"
-#include "..//in_game/player_state/player_state_external.hpp"
+#include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
 #include "../../../common/bindings/abort_matchmaking.hpp"
