@@ -196,7 +196,7 @@ namespace GUI {
     }
 
     void GameDisplay::on_TargetSelected(size_t targetIdx) {
-        selectTarget(getNthOpponentUserID(targetIdx));
+        selectTarget(targetIdx);
     }
 
     void GameDisplay::on_EffectBought(EffectType effect) {

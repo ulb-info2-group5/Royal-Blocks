@@ -409,7 +409,7 @@ namespace TUI {
                 getOpponentUsername(index)
                     + std::string{checkOpponentAlive(index) ? ""
                                                             : STR_PLAYER_DEAD},
-                [index, this] { selectTarget(getNthOpponentUserID(index)); },
+                [index, this] { selectTarget(index); },
                 ftxui::ButtonOption::Animated(ftxui::Color::Yellow1));
 
             if (getSelectedTarget() == getNthOpponentUserID(index)) {
