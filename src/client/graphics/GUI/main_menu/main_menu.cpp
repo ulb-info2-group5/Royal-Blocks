@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QPushButton>
+#include <qobjectdefs.h>
 
 namespace GUI {
 
@@ -31,7 +32,9 @@ namespace GUI {
         show();
     }
 
-    void MainMenu::on_QuitGameButton_clicked() { actionOnExit(); }
+    void MainMenu::on_QuitGameButton_clicked() { 
+        emit quitGame();
+     }
 
     void MainMenu::on_RankingButton_clicked() {
         stackedWidget_.setCurrentWidget(&ranking_);
@@ -66,17 +69,6 @@ namespace GUI {
     /*---------------------------------------------
                     Private Methods
     ----------------------------------------------*/
-
-    void MainMenu::actionOnExit() {
-        QMessageBox::StandardButton confirmExit;
-        confirmExit = QMessageBox::question(
-            this, "Quit", "Are you sure you want to quit the game ?",
-            QMessageBox::Yes | QMessageBox::No);
-        if (confirmExit == QMessageBox::Yes) {
-            QApplication::quit();
-        }
-    }
-
     void MainMenu::setup() {
         QPushButton *createGameButton_ = new QPushButton(this);
         QPushButton *joinGameButton_ = new QPushButton(this);

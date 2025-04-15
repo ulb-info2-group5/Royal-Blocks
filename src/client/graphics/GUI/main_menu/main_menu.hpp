@@ -11,6 +11,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qobjectdefs.h>
 
 class Controller;
 
@@ -35,12 +36,6 @@ namespace GUI {
         MessageMenu messageMenu_;
 
         ProfileManager profileManager_;
-
-        /*
-         * @brief Action to perform when exiting the application for the eit at
-         * the login or at the main menu to quit the game
-         */
-        void actionOnExit();
 
         /*
          * @brief Setup the Login Gui
@@ -100,6 +95,12 @@ namespace GUI {
          * @brief Run the Main Menu Gui
          */
         void run();
+
+      signals:
+        /*
+         * @brief Signal to quit the game
+         */
+        void quitGame();
     };
 
 } // namespace GUI

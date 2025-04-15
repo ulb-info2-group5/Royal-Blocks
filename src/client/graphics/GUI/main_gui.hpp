@@ -22,8 +22,9 @@ namespace GUI {
       private:
         Controller &controller_;
 
-        std::unique_ptr<Login> login_;
-        std::unique_ptr<MainMenu> mainMenu_;
+        Login *login_;
+
+        MainMenu *mainMenu_;
 
       public:
         MainGui(Controller &controller, QWidget *parent = nullptr);
@@ -41,6 +42,11 @@ namespace GUI {
          * @param updateType The type of the update
          */
         void forceRefresh(UpdateType updateType);
+
+        /*
+          * @brief Action to perform when exiting the gui
+         */
+        void quitGui();
 
       public slots:
         /*

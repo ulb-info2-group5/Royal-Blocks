@@ -4,8 +4,6 @@
 #include "login/login.hpp"
 #include "main_menu/main_menu.hpp"
 
-#include <memory>
-
 #include <QApplication>
 #include <QHeaderView>
 #include <QMessageBox>
@@ -15,15 +13,17 @@ namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
         : QMainWindow(parent), controller_(controller) {
-        show();
+        setWindowTitle("Tetris Royal");
+        setMinimumSize(500, 500);
+        showMaximized();
     }
 
     void MainGui::run() {
-        login_ = std::make_unique<Login>(controller_);
-        connect(login_.get(), &Login::loginSuccessful, this,
-                &MainGui::showMainMenu);
+        login_ = new Login(controller_);
         login_->run();
-        setCentralWidget(login_.get());
+        setCentralWidget(login_);
+        connect(login_, &Login::loginSuccessful, this,
+                &MainGui::showMainMenu);
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {
@@ -41,10 +41,24 @@ namespace GUI {
     }
 
     void MainGui::showMainMenu() {
-        login_.reset(); // Login has finish so we don't need it anymore
-        mainMenu_ = std::make_unique<MainMenu>(controller_, *this);
+        if (login_) {
+            login_->deleteLater(); // Delete login because we don't need it anymore
+        }
+        mainMenu_ = new MainMenu(controller_, *this);
         mainMenu_->run();
-        setCentralWidget(mainMenu_.get());
+        setCentralWidget(mainMenu_);
+        connect(mainMenu_, &MainMenu::quitGame, this,
+                &MainGui::quitGui);
+    }
+
+    void MainGui::quitGui() {
+        QMessageBox::StandardButton confirmExit;
+        confirmExit = QMessageBox::question(
+            this, "Quit", "Are you sure you want to quit the game ?",
+            QMessageBox::Yes | QMessageBox::No);
+        if (confirmExit == QMessageBox::Yes) {
+            QApplication::quit();
+        }
     }
 
 } // namespace GUI
