@@ -19,6 +19,8 @@
 
 #include <memory>
 #include <optional>
+#include <ostream>
+#include <print>
 #include <string>
 #include <utility>
 #include <variant>
@@ -566,6 +568,8 @@ namespace TUI {
             gameContainer->DetachAllChildren();
 
             updateGameState();
+
+            std::println(std::cerr, "getGameMode: {}", toString(getGameMode()));
 
             if (gameIsFinished()) {
                 if (isWinner()) {

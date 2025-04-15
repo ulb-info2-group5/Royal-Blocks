@@ -5,6 +5,8 @@
 #include "../game_display/game_display.hpp"
 #include "../main_tui.hpp"
 #include <ftxui/dom/elements.hpp>
+#include <ostream>
+#include <print>
 
 namespace TUI {
 
@@ -107,7 +109,7 @@ namespace TUI {
         mainTui_.render(renderer);
 
         if (!quitMenu_) {
-            joinFriendOrRandomScreen();
+            joinTypeScreen();
             handleChoice();
         }
     }
@@ -142,7 +144,7 @@ namespace TUI {
         }
     }
 
-    void GameMenu::joinFriendOrRandomScreen() {
+    void GameMenu::joinTypeScreen() {
         if (gameMode_ == GameMode::Endless) {
             return; // Endless mode is directly started without waiting for a
                     // friend or a random game
@@ -152,6 +154,7 @@ namespace TUI {
             std::string(STR_JOIN_FRIEND),
             [&] {
                 joinType_ = JoinType::FRIEND;
+                std::println(std::cerr, "setting joinType to FRIEND");
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -164,8 +167,18 @@ namespace TUI {
             },
             GlobalButtonStyle());
 
-        ftxui::Component container = ftxui::Container::Vertical(
-            {joinFriendButton, joinRandomButton, backButton_});
+        ftxui::Component spectateFriendButton = ftxui::Button(
+            std::string(STR_SPECTATE_FRIEND),
+            [&] {
+                joinType_ = JoinType::SPECTATE_FRIEND;
+                std::println(std::cerr, "setting joinType to SPECTATE_FRIEND");
+                mainTui_.stopRender();
+            },
+            GlobalButtonStyle());
+
+        ftxui::Component container =
+            ftxui::Container::Vertical({joinFriendButton, joinRandomButton,
+                                        spectateFriendButton, backButton_});
 
         ftxui::Component renderer = ftxui::Renderer(container, [&] {
             return ftxui::vbox({
@@ -174,6 +187,7 @@ namespace TUI {
                        ftxui::separator(),
                        joinFriendButton->Render(),
                        joinRandomButton->Render(),
+                       spectateFriendButton->Render(),
                        ftxui::separator(),
                        backButton_->Render(),
                    })
@@ -213,8 +227,16 @@ namespace TUI {
                     break;
                 }
             }
-            joinFriendOrRandomScreen(); // If the user goes back to the previous
-                                        // screen
+
+            else if (joinType_ == JoinType::SPECTATE_FRIEND) {
+                joinFriendScreen();
+                if (quitMenu_) {
+                    break;
+                }
+            }
+
+            joinTypeScreen(); // If the user goes back to the previous
+                              // screen
         }
     }
 
@@ -266,6 +288,8 @@ namespace TUI {
         mainTui_.render(renderer);
 
         if (controller_.inGame()) {
+
+            std::println(std::cerr, "calling gameDisplay->render()");
             gameDisplay_->render(); // The game has started because the friend
                                     // screen has been exited
             quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
@@ -325,10 +349,21 @@ namespace TUI {
 
     ftxui::Component GameMenu::makeFriendButton(UserID userID,
                                                 const std::string &friendName) {
+        if (joinType_ == JoinType::SPECTATE_FRIEND) {
+            std::println(std::cerr, "creating button with spectateFriend");
+        }
+
         return ftxui::Button(
             friendName,
             [this, userID] {
-                controller_.joinGame(gameMode_, userID);
+                if (joinType_ == JoinType::SPECTATE_FRIEND) {
+                    std::println(std::cerr, "spectate_friend button pressed");
+                    controller_.joinGameAsViewer(userID);
+                } else {
+                    std::println(std::cerr, "NOT join_friend button pressed");
+                    controller_.joinGame(gameMode_, userID);
+                }
+
                 waitingFriendScreen();
                 mainTui_.stopRender();
             },

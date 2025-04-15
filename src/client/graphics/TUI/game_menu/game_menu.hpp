@@ -16,14 +16,21 @@ namespace TUI {
 
     class MainTui;
 
+    /**
+     * @brief Join a friend or join a random a game.
+     */
     enum class JoinType {
         FRIEND,
         RANDOM,
+        SPECTATE_FRIEND,
         BACK,
         BACK_WAITING_SCREEN,
         NONE,
     };
 
+    /**
+     * @brief Create a new game or join an existing game.
+     */
     enum class TypeGame {
         CREATE_GAME,
         JOIN_GAME,
@@ -72,9 +79,10 @@ namespace TUI {
         void renderOnlineGames();
 
         /*
-         * @brief Screen to choose between joining a friend or a random game
+         * @brief Screen to choose between joining a random game, joining a
+         * friend, or spectate a friend.
          */
-        void joinFriendOrRandomScreen();
+        void joinTypeScreen();
 
         /*
          * @brief Handle the choice of the user in the game menu

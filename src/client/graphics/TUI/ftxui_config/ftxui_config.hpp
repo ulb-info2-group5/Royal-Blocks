@@ -21,6 +21,7 @@ namespace TUI {
         STR_SELECT_MOD = "Select a game mode",
         STR_JOIN_FRIEND = "Join a friend",
         STR_JOIN_RANDOM = "Join a random game",
+        STR_SPECTATE_FRIEND = "Spectate a friend",
         STR_WAITING_FRIEND = "Waiting for the friend to start the game",
         STR_WAIT = "Please wait ...",
         STR_JOIN_FRIEND_OR_RANDOM = "Join a friend or a random game",

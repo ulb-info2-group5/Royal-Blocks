@@ -1,4 +1,5 @@
 #include "controller.hpp"
+
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
@@ -40,6 +41,8 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <ostream>
+#include <print>
 #include <string>
 #include <thread>
 #include <variant>
@@ -111,6 +114,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
     case bindings::BindingType::GameState: {
         gameState_ = bindings::GameStateMessage::deserialize(j);
+        std::println(std::cerr, "gamestate received");
         updateType = UpdateType::GAME_STATE;
         break;
     }
@@ -233,6 +237,7 @@ void Controller::joinGame(GameMode gameMode, std::optional<UserID> friendID) {
 }
 
 void Controller::joinGameAsViewer(UserID targetId) {
+    std::println(std::cerr, "joining as viewer");
     networkManager_.send(bindings::ViewGame{targetId}.to_json().dump());
 }
 
