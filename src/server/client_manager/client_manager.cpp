@@ -217,9 +217,10 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &cl
         gamesManager_.joinGameAsViewer(connectedClients_[clientId],
             connectedClients_[jPack.at("data").at("targetUser").get<UserID>()]
             );
-
+        break;
     case bindings::BindingType::QuitGame:
         gamesManager_.quiGameAsViewer(connectedClients_[clientId]);
+        break;
     default:
         
         break;

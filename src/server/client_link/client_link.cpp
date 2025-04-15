@@ -103,6 +103,10 @@ bool ClientLink::shouldItBeDeletedFromTheList() {
 
 void ClientLink::sendPackage(nlohmann::json gameState) {
     buffer_ = gameState.dump() + "\n";
+
+    std::cout << static_cast<int>(userState) << "\n" << std::endl;
+    std::cout << gameState<< std::endl;
+
     writeSocket(buffer_);
 }
 

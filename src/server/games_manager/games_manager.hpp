@@ -34,7 +34,7 @@ class GamesManager {
     std::shared_ptr<GameServer> startGameServeur(GameMode gameMode, std::vector<Player> players);
     void callBackFinishGame(GameID gameId);
 
-    void joinGameAsViewer(const std::shared_ptr<ClientLink>& viewerLink, const std::shared_ptr<ClientLink>& friendLink);
+    void joinGameAsViewer(const std::shared_ptr<ClientLink> viewerLink, const std::shared_ptr<ClientLink> friendLink);
 
     void quiGameAsViewer(const std::shared_ptr<ClientLink>& viewerLink);
 };

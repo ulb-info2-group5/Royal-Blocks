@@ -25,6 +25,7 @@ class GameServer {
     static constexpr size_t INITIAL_TICK_DELAY_MS = 1000;
     static constexpr size_t MIN_TICK_DELAY_MS = 1000;
     static constexpr size_t DECREASE_TICK_DELAY_MS = 20;
+    std::mutex gameMutex_;
     size_t tickDelayMs_;
 
     boost::asio::io_context context_;
