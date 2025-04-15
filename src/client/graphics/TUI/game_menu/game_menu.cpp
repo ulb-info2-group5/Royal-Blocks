@@ -206,9 +206,9 @@ namespace TUI {
             else if (joinType_ == JoinType::RANDOM) {
                 joinRandomScreen(); // We can exit the random screen when the
                                     // game just if the game has started
-                if (joinType_!= JoinType::BACK_WAITING_SCREEN) {
+                if (joinType_ != JoinType::BACK_WAITING_SCREEN) {
                     gameDisplay_->render(); // The game has started because the
-                                        // random screen has been exited
+                                            // random screen has been exited
                     quitMenu_ = true;
                     break;
                 }
@@ -274,8 +274,8 @@ namespace TUI {
     }
 
     void GameMenu::joinRandomScreen() {
-        ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
+        ftxui::Component renderer = ftxui::Renderer(
+            ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -285,8 +285,8 @@ namespace TUI {
                                | ftxui::center | ftxui::bold,
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
-                            ftxui::separator(),
-                            backButtonWaintingScreen_->Render(),
+                           ftxui::separator(),
+                           backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -296,8 +296,8 @@ namespace TUI {
     }
 
     void GameMenu::createGameScreen() {
-        ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
+        ftxui::Component renderer = ftxui::Renderer(
+            ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -307,8 +307,8 @@ namespace TUI {
                                | ftxui::bold,
                            ftxui::separator(),
                            ftxui::text("Please wait ...") | ftxui::center,
-                            ftxui::separator(),
-                            backButtonWaintingScreen_->Render(),
+                           ftxui::separator(),
+                           backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -318,7 +318,7 @@ namespace TUI {
 
         if (controller_.inGame()) {
             gameDisplay_->render(); // The game has started because the game has
-                                // been launched
+                                    // been launched
             quitMenu_ = true;
         }
     }
@@ -336,8 +336,8 @@ namespace TUI {
     }
 
     void GameMenu::waitingFriendScreen() {
-        ftxui::Component renderer =
-            ftxui::Renderer(ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
+        ftxui::Component renderer = ftxui::Renderer(
+            ftxui::Container::Vertical({backButtonWaintingScreen_}), [&] {
                 if (controller_.inGame()) {
                     mainTui_.stopRender();
                 }
@@ -347,7 +347,7 @@ namespace TUI {
                            ftxui::separator(),
                            ftxui::text(std::string(STR_WAIT)) | ftxui::center,
                            ftxui::separator(),
-                            backButtonWaintingScreen_->Render(),
+                           backButtonWaintingScreen_->Render(),
                        })
                        | ftxui::borderHeavy | ftxui::center
                        | ftxui::bgcolor(ftxui::Color::Black);
@@ -417,7 +417,8 @@ namespace TUI {
             [&] {
                 controller_.createGame(gameMode_, playerCount);
                 createGameScreen();
-                if (joinType_ == JoinType::BACK_WAITING_SCREEN && !controller_.inGame() && !quitMenu_) {
+                if (joinType_ == JoinType::BACK_WAITING_SCREEN
+                    && !controller_.inGame() && !quitMenu_) {
                     return;
                 }
                 mainTui_.stopRender();

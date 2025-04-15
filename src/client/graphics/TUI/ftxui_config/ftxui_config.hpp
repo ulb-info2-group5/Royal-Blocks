@@ -11,8 +11,9 @@ namespace TUI {
     constexpr std::string_view
         STR_BACK_TO_MAIN_MENU = "Back to main menu",
         STR_ADD = "Add", STR_ADD_A_FRIEND = "Add a friend",
-        STR_REMOVE_A_FRIEND = "Remove a friend", STR_BACK = "Back", STR_CANCEL = "Cancel",
-        STR_NAME_OF_FRIEND = "Name of friend", STR_NO = "No", STR_YES = "Yes",
+        STR_REMOVE_A_FRIEND = "Remove a friend", STR_BACK = "Back",
+        STR_CANCEL = "Cancel", STR_NAME_OF_FRIEND = "Name of friend",
+        STR_NO = "No", STR_YES = "Yes",
         STR_NO_FRIEND = "You don't have friends yet",
         STR_FRIENDS_LIST = "Friends list", STR_FRIENDS = "Your friends",
         STR_QUIT_GAME = "Quit Game", STR_ENDLESS = "Endless", STR_DUAL = "Dual",
@@ -53,12 +54,14 @@ namespace TUI {
         STR_MANAGE_FRIENDS_REQUESTS = "Manage friends requests",
         STR_NO_FRIEND_REQUEST = "You don't have any friend request",
         STR_RETURN_TO_MAIN_MENU = "Return to main menu",
-        STR_PLAYER_DEAD = " ☠️ ",
-        LOGIN_INPUT_TITLE = "Login",
+        STR_PLAYER_DEAD = " ☠️ ", LOGIN_INPUT_TITLE = "Login",
         REGISTER_INPUT_TITLE = "Register",
-        LOGIN_INSTRUCTIONS = "Please enter your username and password to login.",
-        REGISTER_INSTRUCTIONS = "Please enter a username and a password to create an account.",
-        LOGIN_MESSAGE = "Your account has been created successfully! You can now login.";
+        LOGIN_INSTRUCTIONS =
+            "Please enter your username and password to login.",
+        REGISTER_INSTRUCTIONS =
+            "Please enter a username and a password to create an account.",
+        LOGIN_MESSAGE =
+            "Your account has been created successfully! You can now login.";
 
     const ftxui::Element WELCOME_TITLE = ftxui::vbox({
         ftxui::text(

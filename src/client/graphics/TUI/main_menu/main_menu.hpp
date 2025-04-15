@@ -46,7 +46,8 @@ namespace TUI {
         MainMenuState state_;
 
         /*
-         * @brief The classes needed to display the different menus (friends, messages, game)
+         * @brief The classes needed to display the different menus (friends,
+         * messages, game)
          */
         FriendsMenu friendsMenu_;
         Messaging messagingMenu_;
@@ -86,7 +87,8 @@ namespace TUI {
         void handleChoice();
 
         /*
-         * @brief Create the main menu buttons (play, join game, send messages to friends, look ranking, manage profile, manage friends list, exit)
+         * @brief Create the main menu buttons (play, join game, send messages
+         * to friends, look ranking, manage profile, manage friends list, exit)
          */
         void createMainMenuButtons();
 

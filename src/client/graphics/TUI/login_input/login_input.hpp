@@ -98,9 +98,10 @@ namespace TUI {
         void displayWindow();
 
         /*
-         * @brief Check if the username and password are valid to create an account
-         * 
-          * @return true if the username and password are valid, false otherwise 
+         * @brief Check if the username and password are valid to create an
+         * account
+         *
+         * @return true if the username and password are valid, false otherwise
          */
         bool isValidUsernamePassword();
 

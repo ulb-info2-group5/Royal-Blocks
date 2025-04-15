@@ -15,7 +15,8 @@ namespace TUI {
         : mainTui_(mainTui), controller_(controller),
           loginInput_{mainTui_, controller_, std::string(LOGIN_INPUT_TITLE),
                       LoginType::LOGIN},
-          registerInput_{mainTui_, controller_, std::string(REGISTER_INPUT_TITLE),
+          registerInput_{mainTui_, controller_,
+                         std::string(REGISTER_INPUT_TITLE),
                          LoginType::REGISTER} {
         loginInput_.addInstruction(LOGIN_INSTRUCTIONS);
         registerInput_.addInstruction(REGISTER_INSTRUCTIONS);
