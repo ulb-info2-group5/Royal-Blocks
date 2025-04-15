@@ -35,13 +35,11 @@ enum class UpdateType {
     OTHER,
 };
 
-// TODO: @note to explain that it manages the effect selector.
 /**
  * @brief Controller/driver of the client program.
  *
- * @note Uses NetworkManager to get and send packets,
- * usess the GUI or TUI frontend to display the game.
- * Stores and keeps up to date the data which is displayed.
+ * @note Uses NetworkManager to receive/send packets.
+ * Stores and keeps up to date the data which gets displayed.
  *
  * @note Controls the keybinds to make the keybindings the same between both TUI
  * and GUI.
