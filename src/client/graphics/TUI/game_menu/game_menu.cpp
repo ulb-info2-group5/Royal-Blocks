@@ -4,9 +4,8 @@
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../game_display/game_display.hpp"
 #include "../main_tui.hpp"
+
 #include <ftxui/dom/elements.hpp>
-#include <ostream>
-#include <print>
 
 namespace TUI {
 
@@ -154,7 +153,6 @@ namespace TUI {
             std::string(STR_JOIN_FRIEND),
             [&] {
                 joinType_ = JoinType::FRIEND;
-                std::println(std::cerr, "setting joinType to FRIEND");
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -171,7 +169,6 @@ namespace TUI {
             std::string(STR_SPECTATE_FRIEND),
             [&] {
                 joinType_ = JoinType::SPECTATE_FRIEND;
-                std::println(std::cerr, "setting joinType to SPECTATE_FRIEND");
                 mainTui_.stopRender();
             },
             GlobalButtonStyle());
@@ -289,7 +286,6 @@ namespace TUI {
 
         if (controller_.inGame()) {
 
-            std::println(std::cerr, "calling gameDisplay->render()");
             gameDisplay_->render(); // The game has started because the friend
                                     // screen has been exited
             quitMenu_ = true; // Set the quitMenu_ variable to true to exit the
@@ -349,18 +345,12 @@ namespace TUI {
 
     ftxui::Component GameMenu::makeFriendButton(UserID userID,
                                                 const std::string &friendName) {
-        if (joinType_ == JoinType::SPECTATE_FRIEND) {
-            std::println(std::cerr, "creating button with spectateFriend");
-        }
-
         return ftxui::Button(
             friendName,
             [this, userID] {
                 if (joinType_ == JoinType::SPECTATE_FRIEND) {
-                    std::println(std::cerr, "spectate_friend button pressed");
                     controller_.joinGameAsViewer(userID);
                 } else {
-                    std::println(std::cerr, "NOT join_friend button pressed");
                     controller_.joinGame(gameMode_, userID);
                 }
 

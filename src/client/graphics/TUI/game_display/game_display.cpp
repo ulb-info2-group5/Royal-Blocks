@@ -19,8 +19,6 @@
 
 #include <memory>
 #include <optional>
-#include <ostream>
-#include <print>
 #include <string>
 #include <utility>
 #include <variant>
@@ -411,10 +409,17 @@ namespace TUI {
                 getOpponentUsername(index)
                     + std::string{checkOpponentAlive(index) ? ""
                                                             : STR_PLAYER_DEAD},
-                [index, this] { selectTarget(index); },
-                ftxui::ButtonOption::Animated(ftxui::Color::Yellow1));
+                [index, this] {
+                    if (!isSpectating()) {
+                        selectTarget(index);
+                    }
+                },
+                ftxui::ButtonOption::Animated(ftxui::Color::Yellow1)
 
-            if (getSelectedTarget() == getNthOpponentUserID(index)) {
+            );
+
+            if (!isSpectating()
+                && getSelectedTarget() == getNthOpponentUserID(index)) {
                 button = button | ftxui::borderDouble;
             } else {
                 button = button | ftxui::borderLight;
@@ -525,13 +530,18 @@ namespace TUI {
             std::string(STR_RETURN_TO_MAIN_MENU),
             [&] { mainTui_.stopRender(); }, GlobalButtonStyle());
 
-        displayWindow_ = ftxui::Container::Vertical({
-            title,
-            ftxui::Renderer([] { return ftxui::separator(); }),
-            scoreText,
-            ftxui::Renderer([] { return ftxui::separator(); }),
-            button,
-        });
+        ftxui::Components components;
+        components.push_back(title);
+        components.push_back(
+            ftxui::Renderer([] { return ftxui::separator(); }));
+        if (!isSpectating()) {
+            components.push_back(scoreText);
+            components.push_back(
+                ftxui::Renderer([] { return ftxui::separator(); }));
+        }
+        components.push_back(button);
+
+        displayWindow_ = ftxui::Container::Vertical({components});
 
         return displayWindow_;
     }
@@ -569,8 +579,6 @@ namespace TUI {
 
             updateGameState();
 
-            std::println(std::cerr, "getGameMode: {}", toString(getGameMode()));
-
             if (gameIsFinished()) {
                 if (isWinner()) {
                     gameContainer->Add(drawWin());
@@ -583,6 +591,7 @@ namespace TUI {
 
             if (isSpectating()) {
                 drawSpectate();
+
             } else {
                 if (getGameMode() == GameMode::Endless) {
                     drawEndlessMode();

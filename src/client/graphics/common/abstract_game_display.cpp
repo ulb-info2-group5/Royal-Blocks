@@ -240,7 +240,7 @@ AbstractGameDisplay::getEffectPrices() const {
 
 bool AbstractGameDisplay::isWinner() const {
     return std::visit(
-        [](const auto &gameState) {
+        [this](const auto &gameState) {
             using T = std::decay_t<decltype(gameState)>;
             if constexpr (std::is_same_v<T, client::GameState>) {
                 return gameState.self.playerState.isAlive;

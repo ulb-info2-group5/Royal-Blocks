@@ -42,7 +42,6 @@
 #include <mutex>
 #include <optional>
 #include <ostream>
-#include <print>
 #include <string>
 #include <thread>
 #include <variant>
@@ -113,8 +112,13 @@ void Controller::handlePacket(const std::string_view pack) {
     }
 
     case bindings::BindingType::GameState: {
-        gameState_ = bindings::GameStateMessage::deserialize(j);
-        std::println(std::cerr, "gamestate received");
+        gameState_ = bindings::GameStateMessage::deserializeForPlayer(j);
+        updateType = UpdateType::GAME_STATE;
+        break;
+    }
+
+    case bindings::BindingType::GameStateViewer: {
+        gameState_ = bindings::GameStateMessage::deserializeForViewer(j);
         updateType = UpdateType::GAME_STATE;
         break;
     }
@@ -126,7 +130,7 @@ void Controller::handlePacket(const std::string_view pack) {
     }
 
     default:
-        std::cerr << "unknown bindingType" << std::endl;
+        std::cerr << "unknown bindingType " << j.at("type") << std::endl;
     }
 
     pAbstractDisplay_->forceRefresh(updateType);
@@ -237,7 +241,6 @@ void Controller::joinGame(GameMode gameMode, std::optional<UserID> friendID) {
 }
 
 void Controller::joinGameAsViewer(UserID targetId) {
-    std::println(std::cerr, "joining as viewer");
     networkManager_.send(bindings::ViewGame{targetId}.to_json().dump());
 }
 

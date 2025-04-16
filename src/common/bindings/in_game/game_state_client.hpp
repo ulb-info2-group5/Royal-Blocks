@@ -42,18 +42,6 @@ namespace bindings {
             return gameStateViewerBinding;
         };
 
-        std::variant<client::GameState, client::GameStateViewer>
-        deserialize(const nlohmann::json &j) {
-            std::variant<client::GameState, client::GameStateViewer> ret;
-            if (j.at("type") == BindingType::GameStateViewer) {
-                return GameStateMessage::deserializeForViewer(j);
-            } else if (j.at("type") == BindingType::GameState) {
-                return GameStateMessage::deserializeForPlayer(j);
-            } else {
-                throw std::runtime_error("Invalid type field in JSON");
-            }
-        }
-
     } // namespace GameStateMessage
 
 } // namespace bindings
