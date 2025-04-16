@@ -444,11 +444,7 @@ namespace TUI {
         return opponentsBoards_;
     }
 
-    ftxui::Component GameDisplay::rightPane() {
-        return ftxui::Container::Vertical({
-            opponentsBoards(),
-        });
-    }
+    ftxui::Component GameDisplay::rightPane() { return opponentsBoards(); }
 
     ftxui::Component &GameDisplay::drawEndlessMode() {
         displayWindow_ = ftxui::Container::Horizontal({
