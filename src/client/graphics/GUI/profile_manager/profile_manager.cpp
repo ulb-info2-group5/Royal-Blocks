@@ -20,7 +20,9 @@ namespace GUI {
 
     void ProfileManager::basicSetup() {
         QPushButton *submit = new QPushButton(this);
+        submit->setAutoDefault(true);
         QPushButton *back = new QPushButton(this);
+        back->setAutoDefault(true);
         submit->setText("Submit");
         back->setText("Back");
         submit->setFixedWidth(INPUT_BUTTON_WIDTH);

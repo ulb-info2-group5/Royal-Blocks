@@ -35,7 +35,9 @@ namespace GUI {
         QVBoxLayout *friendsListLayout = new QVBoxLayout;
         QHBoxLayout *mainLayout = new QHBoxLayout;
         QPushButton *sendButton = new QPushButton;
+        sendButton->setAutoDefault(true);
         QPushButton *backButton = new QPushButton;
+        backButton->setAutoDefault(true);
         QLabel *friendsListLabel = new QLabel;
         QLabel *chatDisplayLabel = new QLabel;
         QLabel *messageInputLabel = new QLabel;

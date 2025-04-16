@@ -22,6 +22,7 @@ namespace GUI {
 
     void Ranking::setupUI() {
         QPushButton *backButton = new QPushButton(this);
+        backButton->setAutoDefault(true);
 
         connect(&mainGui_, &MainGui::updateRanking, this,
                 &Ranking::updateRankingTable);

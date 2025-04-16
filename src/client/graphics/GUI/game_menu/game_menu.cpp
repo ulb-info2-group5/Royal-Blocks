@@ -29,17 +29,29 @@ namespace GUI {
         stack_ = new QStackedWidget();
 
         QPushButton *endlessButton = new QPushButton(this);
+        endlessButton->setAutoDefault(true);
         QPushButton *dualButton = new QPushButton(this);
+        dualButton->setAutoDefault(true);
         QPushButton *classicButton = new QPushButton(this);
+        classicButton->setAutoDefault(true);
         QPushButton *royalButton = new QPushButton(this);
+        royalButton->setAutoDefault(true);
         QPushButton *selectModeBackButton = new QPushButton(this);
+        selectModeBackButton->setAutoDefault(true);
         QPushButton *playerCountBackButton = new QPushButton(this);
+        playerCountBackButton->setAutoDefault(true);
         QPushButton *joinTypeBackButton = new QPushButton(this);
+        joinTypeBackButton->setAutoDefault(true);
         QPushButton *friendsListBackButton = new QPushButton(this);
+        friendsListBackButton->setAutoDefault(true);
         QPushButton *waitingBackButton = new QPushButton(this);
+        waitingBackButton->setAutoDefault(true);
         QPushButton *confirmButton = new QPushButton(this);
+        confirmButton->setAutoDefault(true);
         QPushButton *joinRandomButton = new QPushButton(this);
+        joinRandomButton->setAutoDefault(true);
         QPushButton *joinFriendButton = new QPushButton(this);
+        joinFriendButton->setAutoDefault(true);
 
         // Configure buttons
         endlessButton->setText("Endless Mode");

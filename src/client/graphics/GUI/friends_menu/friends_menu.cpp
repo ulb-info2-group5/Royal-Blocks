@@ -88,13 +88,21 @@ namespace GUI {
 
     void FriendsMenu::setup() {
         QPushButton *addFriendButton_ = new QPushButton(this);
+        addFriendButton_->setAutoDefault(true);
         QPushButton *manageRequestsButton_ = new QPushButton(this);
+        manageRequestsButton_->setAutoDefault(true);
         QPushButton *backToMainMenuButton_ = new QPushButton(this);
+        backToMainMenuButton_->setAutoDefault(true);
         QPushButton *submitAdd_ = new QPushButton(this);
+        submitAdd_->setAutoDefault(true);
         QPushButton *backFromAdd_ = new QPushButton(this);
-        QPushButton *acceptButton_ = new QPushButton(this);
-        QPushButton *declineButton_ = new QPushButton(this);
+        backFromAdd_->setAutoDefault(true);
+        QPushButton *acceptButton_ = new QPushButton(this); 
+        acceptButton_->setAutoDefault(true);
+        QPushButton *declineButton_ = new QPushButton(this);   
+        declineButton_->setAutoDefault(true);
         QPushButton *backFromReqButton_ = new QPushButton(this);
+        backFromReqButton_->setAutoDefault(true);
 
         QWidget *mainWidget_ = new QWidget(this);
         QWidget *addFriendWidget_ = new QWidget(this);
