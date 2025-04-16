@@ -71,12 +71,19 @@ namespace GUI {
     ----------------------------------------------*/
     void MainMenu::setup() {
         QPushButton *createGameButton_ = new QPushButton(this);
+        createGameButton_->setAutoDefault(true);
         QPushButton *joinGameButton_ = new QPushButton(this);
+        joinGameButton_->setAutoDefault(true);
         QPushButton *messagesButton_ = new QPushButton(this);
+        messagesButton_->setAutoDefault(true);
         QPushButton *rankingButton_ = new QPushButton(this);
+        rankingButton_->setAutoDefault(true);
         QPushButton *manageProfileButton_ = new QPushButton(this);
+        manageProfileButton_->setAutoDefault(true);
         QPushButton *manageFriendsListButton_ = new QPushButton(this);
+        manageFriendsListButton_->setAutoDefault(true);
         QPushButton *quitGameButton_ = new QPushButton(this);
+        quitGameButton_->setAutoDefault(true);
 
         createGameButton_->setText("Create a Game");
         createGameButton_->setFixedWidth(500);
