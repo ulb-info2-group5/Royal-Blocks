@@ -31,53 +31,53 @@ namespace GUI {
     }
 
     void MessageMenu::setupUI() {
-        QVBoxLayout *chatWriteLayout_ = new QVBoxLayout;
-        QVBoxLayout *friendsListLayout_ = new QVBoxLayout;
-        QHBoxLayout *mainLayout_ = new QHBoxLayout;
-        QPushButton *sendButton_ = new QPushButton;
-        QPushButton *backButton_ = new QPushButton;
-        QLabel *friendsListLabel_ = new QLabel;
-        QLabel *chatDisplayLabel_ = new QLabel;
-        QLabel *messageInputLabel_ = new QLabel;
+        QVBoxLayout *chatWriteLayout = new QVBoxLayout;
+        QVBoxLayout *friendsListLayout = new QVBoxLayout;
+        QHBoxLayout *mainLayout = new QHBoxLayout;
+        QPushButton *sendButton = new QPushButton;
+        QPushButton *backButton = new QPushButton;
+        QLabel *friendsListLabel = new QLabel;
+        QLabel *chatDisplayLabel = new QLabel;
+        QLabel *messageInputLabel = new QLabel;
 
         friendsList_.setFixedWidth(FRIENDSLIST_WIDTH);
         messageInput_.setFixedHeight(MESSAGE_INPUT_HEIGHT);
         messageInput_.setAlignment(Qt::AlignHCenter);
         chatDisplay_.setReadOnly(true);
 
-        sendButton_->setText(SEND_TEXT);
-        backButton_->setText(BACK_TEXT);
+        sendButton->setText(SEND_TEXT);
+        backButton->setText(BACK_TEXT);
         messageInput_.setPlaceholderText(TYPE_MESSAGE_TEXT);
 
-        friendsListLabel_->setText(FRIENDSLIST_LABEL);
-        friendsListLabel_->setAlignment(Qt::AlignCenter);
-        chatDisplayLabel_->setText(CHAT_DISPLAY_LABEL);
-        chatDisplayLabel_->setAlignment(Qt::AlignCenter);
-        messageInputLabel_->setText(MESSAGE_INPUT_LABEL);
-        messageInputLabel_->setAlignment(Qt::AlignCenter);
+        friendsListLabel->setText(FRIENDSLIST_LABEL);
+        friendsListLabel->setAlignment(Qt::AlignCenter);
+        chatDisplayLabel->setText(CHAT_DISPLAY_LABEL);
+        chatDisplayLabel->setAlignment(Qt::AlignCenter);
+        messageInputLabel->setText(MESSAGE_INPUT_LABEL);
+        messageInputLabel->setAlignment(Qt::AlignCenter);
 
-        friendsListLayout_->addWidget(friendsListLabel_);
-        friendsListLayout_->addWidget(&friendsList_);
-        chatWriteLayout_->addWidget(chatDisplayLabel_);
-        chatWriteLayout_->addWidget(&chatDisplay_);
-        chatWriteLayout_->addWidget(messageInputLabel_);
-        chatWriteLayout_->addWidget(&messageInput_);
-        chatWriteLayout_->addWidget(sendButton_);
-        chatWriteLayout_->addWidget(backButton_);
+        friendsListLayout->addWidget(friendsListLabel);
+        friendsListLayout->addWidget(&friendsList_);
+        chatWriteLayout->addWidget(chatDisplayLabel);
+        chatWriteLayout->addWidget(&chatDisplay_);
+        chatWriteLayout->addWidget(messageInputLabel);
+        chatWriteLayout->addWidget(&messageInput_);
+        chatWriteLayout->addWidget(sendButton);
+        chatWriteLayout->addWidget(backButton);
 
-        mainLayout_->addLayout(friendsListLayout_);
-        mainLayout_->addLayout(chatWriteLayout_);
-        mainLayout_->setAlignment(Qt::AlignCenter);
+        mainLayout->addLayout(friendsListLayout);
+        mainLayout->addLayout(chatWriteLayout);
+        mainLayout->setAlignment(Qt::AlignCenter);
 
-        setLayout(mainLayout_);
+        setLayout(mainLayout);
 
         updateAll();
 
         connect(&friendsList_, &QListWidget::currentRowChanged, this,
                 &MessageMenu::updateChat);
-        connect(sendButton_, &QPushButton::clicked, this,
+        connect(sendButton, &QPushButton::clicked, this,
                 &MessageMenu::onSendMessage);
-        connect(backButton_, &QPushButton::clicked, this, &MessageMenu::onBack);
+        connect(backButton, &QPushButton::clicked, this, &MessageMenu::onBack);
         connect(&mainGui_, &MainGui::updateConversations, this,
                 &MessageMenu::updateChat);
         connect(&mainGui_, &MainGui::updateFriendsList, this,
