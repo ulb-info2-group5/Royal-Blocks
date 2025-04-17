@@ -19,7 +19,7 @@ namespace GUI {
         darkThemeButton->setAutoDefault(true);
         QPushButton *lightThemeButton = new QPushButton("Light Theme");
         lightThemeButton->setFixedWidth(500);
-        darkThemeButton->setAutoDefault(true);
+        lightThemeButton->setAutoDefault(true);
         QPushButton *backButton = new QPushButton("Back");
         backButton->setFixedWidth(500);
         backButton->setAutoDefault(true);
