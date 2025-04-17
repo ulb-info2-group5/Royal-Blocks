@@ -70,7 +70,7 @@ namespace GUI {
 
       public:
         FriendsMenu(Controller &controller, MainGui &mainGui,
-                       QWidget *parent = nullptr);
+                    QWidget *parent = nullptr);
 
         ~FriendsMenu() = default;
 

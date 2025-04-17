@@ -4,7 +4,8 @@
 accounts.db
 auth
 build/
-tetris_royal_client
+tetris_gui
+tetris_tui
 tetris_royal_server
 tetris_royal_tests
 tetris_tests

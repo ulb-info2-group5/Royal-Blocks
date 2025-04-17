@@ -1,8 +1,8 @@
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-# set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 # ---------------------------
 #         Client Core
@@ -46,16 +46,18 @@ target_link_libraries(tetris_tui
 #            GUI
 # ---------------------------
 
+file (GLOB_RECURSE SOURCES_CLIENT_GUI
+    graphics/common/*.cpp
+    graphics/GUI/*.cpp
+    gui.cpp
+)
 
-# file (GLOB_RECURSE SOURCES_CLIENT_GUI
-#     graphics/GUI/*.cpp
-#     graphics/common/*.cpp
-# )
-#
-# find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
-# add_executable(tetris_gui ${SOURCES_CLIENT_GUI})
-# target_link_libraries(tetris_tui
-#     Qt5::Widgets
-#     Qt5::Core
-#     Qt5::Gui
-# )
+find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
+
+add_executable(tetris_gui ${SOURCES_CLIENT_GUI})
+target_link_libraries(tetris_gui
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
+    client_core_lib
+)

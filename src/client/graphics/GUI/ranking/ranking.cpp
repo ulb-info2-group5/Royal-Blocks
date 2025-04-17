@@ -1,7 +1,10 @@
 #include "ranking.hpp"
 
+#include "../main_gui.hpp"
+
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QVBoxLayout>
 

@@ -3,7 +3,9 @@
 #include "../../../core/controller/controller.hpp"
 #include "../qt_config/qt_config.hpp"
 
+#include <QApplication>
 #include <QCheckBox>
+#include <QMessageBox>
 #include <QVBoxLayout>
 
 namespace GUI {

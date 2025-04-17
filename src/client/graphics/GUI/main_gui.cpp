@@ -13,13 +13,7 @@
 
 namespace GUI {
 
-    MainGui::MainGui(Controller &controller, QWidget *parent)
-        : QMainWindow(parent), controller_(controller) {
-
-        QApplication app_(argc, argv);
-
-        app_.setApplicationName("Royal Tetris");
-        app_.setApplicationDisplayName("Royal Tetris");
+    MainGui::MainGui(QWidget *parent) : QMainWindow(parent) {
 
         QSettings settings("Royal Tetris", "Royal Tetris");
         if (settings.value("theme/darkMode", true).toBool()) {
@@ -32,13 +26,15 @@ namespace GUI {
         showMaximized();
         setWindowTitle("Tetris Royal");
 
-        run();
         show();
     }
 
-    void MainGui::run() {
-        login_ = new Login(controller_);
+    void MainGui::run(Controller &controller) {
+        login_ = new Login(controller);
         login_->run();
+
+        mainMenu_ = new MainMenu(controller, *this);
+
         this->setCentralWidget(login_);
         connect(login_, &Login::loginSuccessful, this, &MainGui::showMainMenu);
     }
@@ -62,7 +58,6 @@ namespace GUI {
             login_->deleteLater(); // Delete login because we don't need it
                                    // anymore
         }
-        mainMenu_ = new MainMenu(controller_, *this);
         mainMenu_->run();
         this->setCentralWidget(mainMenu_);
         connect(mainMenu_, &MainMenu::quitGame, this, &MainGui::quitGui);

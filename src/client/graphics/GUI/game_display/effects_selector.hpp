@@ -1,10 +1,11 @@
 #ifndef GUI_EFFECT_SELECTOR_HPP
 #define GUI_EFFECT_SELECTOR_HPP
 
-#include "effect/effect_type.hpp"
-#include "effect_price/effect_price.hpp"
-#include "graphics/common/abstract_game_display.hpp"
-#include "player_state/player_state.hpp"
+#include "../../../../common/tetris_royal_lib/effect/effect_type.hpp"
+#include "../../../../common/tetris_royal_lib/effect_price/effect_price.hpp"
+#include "../../../core/in_game/player_state/player_state_external.hpp"
+#include "../../../core/in_game/player_state/player_state_self.hpp"
+#include "../../common/abstract_game_display.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>

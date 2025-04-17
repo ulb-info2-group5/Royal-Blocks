@@ -20,8 +20,6 @@ namespace GUI {
         Q_OBJECT
 
       private:
-        Controller &controller_;
-
         Login *login_;
 
         MainMenu *mainMenu_;
@@ -32,14 +30,14 @@ namespace GUI {
         void setLightMode();
 
       public:
-        MainGui(Controller &controller, QWidget *parent = nullptr);
+        MainGui(QWidget *parent = nullptr);
 
         ~MainGui() = default;
 
         /*
          * @brief Run the main Gui
          */
-        virtual void run() override;
+        virtual void run(Controller &controller) override;
 
         /*
          * @brief Update the screen manager with the new data
