@@ -4,7 +4,8 @@
 #include "../../../common/bindings/conversation.hpp"
 #include "../../../common/bindings/ranking.hpp"
 #include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../graphics/screen_manager.hpp"
+#include "../../graphics/common/abstract_display.hpp"
+#include "../in_game/game_state/game_state.hpp"
 #include "../in_game/game_state/game_state_viewer.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
@@ -24,15 +25,6 @@ enum class UiChoice {
     GUI,
     TUI,
     NONE,
-};
-
-enum class UpdateType {
-    FRIENDS_LIST,
-    FRIEND_REQUESTS,
-    RANKING,
-    CONVERSATIONS,
-    GAME_STATE,
-    OTHER,
 };
 
 /**
@@ -62,9 +54,6 @@ class Controller {
     };
 
   private:
-    UiChoice uiChoice_;
-    std::pair<int, char **> args_;
-
     boost::asio::io_context context_;
     std::thread ioThread_;
 
@@ -72,6 +61,8 @@ class Controller {
     AuthState authState_;
 
     std::variant<client::GameState, client::GameStateViewer> gameState_;
+
+    std::shared_ptr<AbstractDisplay> pAbstractDisplay_;
 
     size_t currentEffectIdx_;
 
@@ -88,11 +79,6 @@ class Controller {
     NetworkManager networkManager_;
 
     /**
-     * @brief The screen manager to manage the screens to show to the user
-     */
-    std::unique_ptr<ScreenManager> screenManager_;
-
-    /**
      * @brief Handles the received packet
      */
     void handlePacket(const std::string_view pack);
@@ -103,7 +89,7 @@ class Controller {
     /**
      * @brief Construct a new Controller object
      */
-    Controller(UiChoice uiChoice, std::pair<int, char **> args);
+    Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
 
     /**
      * @brief Destroy the Controller object
@@ -122,10 +108,8 @@ class Controller {
 
     /**
      * @brief Run the controller to manage the game
-     *
-     * @return The exit code of the program of the tui or gui
      */
-    int run();
+    void run();
 
     /**
      * @brief Makes a registration request to the server.

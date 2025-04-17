@@ -304,14 +304,13 @@ namespace GUI {
                 passwordInputLogin_.setEchoMode(QLineEdit::Password);
             }
         });
-        connect(showPasswordRegister, &QCheckBox::stateChanged,
-                [&](int state) {
-                    if (state == Qt::Checked) {
-                        passwordInputRegister_.setEchoMode(QLineEdit::Normal);
-                    } else {
-                        passwordInputRegister_.setEchoMode(QLineEdit::Password);
-                    }
-                });
+        connect(showPasswordRegister, &QCheckBox::stateChanged, [&](int state) {
+            if (state == Qt::Checked) {
+                passwordInputRegister_.setEchoMode(QLineEdit::Normal);
+            } else {
+                passwordInputRegister_.setEchoMode(QLineEdit::Password);
+            }
+        });
 
         // Create the main page
         mainPage = new QWidget();
@@ -337,8 +336,7 @@ namespace GUI {
                                       Qt::AlignCenter);
         registerPageLayout->addWidget(&passwordInputRegister_, 0,
                                       Qt::AlignCenter);
-        registerPageLayout->addWidget(showPasswordRegister, 0,
-                                      Qt::AlignCenter);
+        registerPageLayout->addWidget(showPasswordRegister, 0, Qt::AlignCenter);
         registerPageLayout->addWidget(&sendButtonRegister_, 0, Qt::AlignCenter);
         registerPageLayout->addWidget(backButtonRegister, 0, Qt::AlignCenter);
         registerPageLayout->addItem(new QSpacerItem(

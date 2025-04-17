@@ -1,10 +1,9 @@
 #ifndef ABSTRACT_GAME_DISPLAY_HPP
 #define ABSTRACT_GAME_DISPLAY_HPP
 
-#include "../common/types/types.hpp"
-#include "core/in_game/game_state/game_state.hpp"
-#include "core/in_game/game_state/game_state_viewer.hpp"
-#include "effect/effect_type.hpp"
+#include "../../../common/types/types.hpp"
+#include "../../core/in_game/game_state/game_state.hpp"
+#include "../../core/in_game/game_state/game_state_viewer.hpp"
 
 #include <optional>
 
@@ -29,9 +28,9 @@ class AbstractGameDisplay {
 
   public:
     /**
-         * @brief Extra metadata (besides color) for a Tetris cell belonging to
-       the local player.
-         */
+     * @brief Extra metadata (besides color) for a Tetris cell belonging to the
+     * local player.
+     * */
     enum class SelfCellType {
         Active,  // Part of the active tetromino
         Preview, // Part of the preview tetromino

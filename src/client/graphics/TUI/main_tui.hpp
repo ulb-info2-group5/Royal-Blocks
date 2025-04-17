@@ -3,26 +3,16 @@
 
 #include <ftxui/component/screen_interactive.hpp>
 
+#include "../../core/controller/update_type.hpp"
+#include "../common/abstract_display.hpp"
 #include "login_menu/login_menu.hpp"
 #include "main_menu/main_menu.hpp"
 
 namespace TUI {
 
-    class MainTui {
+    class MainTui : public AbstractDisplay {
       private:
-        Controller &controller_;
-
         ftxui::ScreenInteractive screen_;
-
-        /*
-         * @brief The login menu to show to the user
-         */
-        LoginMenu loginMenu_;
-
-        /*
-         * @brief The main menu to show to the user
-         */
-        MainMenu mainMenu_;
 
         /*
          * @brief The current window to show to the user
@@ -55,11 +45,9 @@ namespace TUI {
          *
          * @param controller The controller to use to interact with the game
          */
-        MainTui(Controller &controller);
+        MainTui();
 
         ~MainTui() = default;
-
-        void run();
 
         /*
          * @brief Render the component in the screen
@@ -73,10 +61,9 @@ namespace TUI {
          */
         void stopRender();
 
-        /*
-         * @brief Force the screen to refresh
-         */
-        void forceRefresh();
+        virtual void run(Controller &controller) override;
+
+        virtual void forceRefresh(UpdateType updateType) override;
 
         /*
          * @brief Simulate the tab key press

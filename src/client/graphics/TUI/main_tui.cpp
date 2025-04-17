@@ -2,23 +2,24 @@
 
 #include "../../core/controller/controller.hpp"
 #include "ftxui_config/ftxui_config.hpp"
+#include "graphics/TUI/login_menu/login_menu.hpp"
 
 namespace TUI {
 
-    MainTui::MainTui(Controller &controller)
-        : controller_(controller),
-          screen_(ftxui::ScreenInteractive::Fullscreen()),
-          loginMenu_{*this, controller_}, mainMenu_{*this, controller_} {
+    MainTui::MainTui() : screen_(ftxui::ScreenInteractive::Fullscreen()) {
         screen_.ForceHandleCtrlC(false);
         screen_.ForceHandleCtrlZ(false);
     }
 
-    void MainTui::run() {
+    void MainTui::run(Controller &controller) {
+        LoginMenu loginMenu(*this, controller);
+        MainMenu mainMenu(*this, controller);
+
         drawStartScreen();
 
         // Handle the login menu
-        if (loginMenu_.render() == LoginResult::SUCCESS) {
-            mainMenu_.render();
+        if (loginMenu.render() == LoginResult::SUCCESS) {
+            mainMenu.render();
         }
         drawEndScreen();
     }
@@ -30,7 +31,9 @@ namespace TUI {
 
     void MainTui::stopRender() { screen_.ExitLoopClosure()(); }
 
-    void MainTui::forceRefresh() { screen_.PostEvent(ftxui::Event::Custom); }
+    void MainTui::forceRefresh(UpdateType /* updateType */) {
+        screen_.PostEvent(ftxui::Event::Custom);
+    }
 
     void MainTui::simulateTab() { screen_.PostEvent(ftxui::Event::Tab); }
 
@@ -48,8 +51,8 @@ namespace TUI {
         std::thread([&] {
             std::this_thread::sleep_for(std::chrono::seconds(3));
             exit = true;
-            forceRefresh(); // Refresh the screen to exit
-                            // the display after 3 seconds
+            forceRefresh(UpdateType::OTHER); // Refresh the screen to exit
+                                             // the display after 3 seconds
             stopRender();
         }).detach();
 
@@ -67,8 +70,8 @@ namespace TUI {
         std::thread([&] {
             std::this_thread::sleep_for(std::chrono::seconds(2));
             exit = true;
-            forceRefresh(); // Refresh the screen to exit
-                            // the display after 2 seconds
+            forceRefresh(UpdateType::OTHER); // Refresh the screen to exit
+                                             // the display after 2 seconds
             stopRender();
         }).detach();
 
@@ -81,7 +84,7 @@ namespace TUI {
                 return true;
             } else if (event == ftxui::Event::Character('\x03')
                        || event == ftxui::Event::Character('\x1A')) {
-                forceRefresh();
+                forceRefresh(UpdateType::OTHER);
                 return true;
             }
             return false;

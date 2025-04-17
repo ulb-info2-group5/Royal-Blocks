@@ -1,8 +1,8 @@
 #include "abstract_game_display.hpp"
 
 #include "../../core/controller/controller.hpp"
-#include "core/in_game/effects/timed_penalty.hpp"
-#include "core/in_game/game_state/game_state.hpp"
+#include "../../core/in_game/effects/timed_penalty.hpp"
+#include "../../core/in_game/game_state/game_state.hpp"
 
 #include <cstddef>
 #include <variant>

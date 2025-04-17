@@ -4,12 +4,12 @@
 #include "../ftxui_config/ftxui_config.hpp"
 #include "../main_tui.hpp"
 
-#include "effect/effect_type.hpp"
-#include "effect_price/effect_price.hpp"
-#include "game_mode/game_mode.hpp"
-#include "graphics/common/abstract_game_display.hpp"
-#include "player_state/player_state.hpp"
-#include "vec2/vec2.hpp"
+#include "../../../../common/tetris_lib/vec2/vec2.hpp"
+#include "../../../../common/tetris_royal_lib/effect/effect_type.hpp"
+#include "../../../../common/tetris_royal_lib/effect_price/effect_price.hpp"
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
+#include "../../../../common/tetris_royal_lib/player_state/player_state.hpp"
+#include "../../common/abstract_game_display.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>

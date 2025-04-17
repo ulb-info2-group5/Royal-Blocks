@@ -1,6 +1,7 @@
 #include "login_input.hpp"
 
 #include "../../../core/controller/controller.hpp"
+#include "../../../core/controller/update_type.hpp"
 #include "../ftxui_config/ftxui_config.hpp"
 
 #include "../main_tui.hpp"
@@ -87,8 +88,9 @@ namespace TUI {
                             }
                             errorMessage_ = "Registration failed !";
                             message_.clear();
-                            mainTui_
-                                .forceRefresh(); // Post event to update screen
+                            mainTui_.forceRefresh(
+                                UpdateType::OTHER); // Post event to update
+                                                    // screen
                         });
 
                     } else if (loginType_ == LoginType::LOGIN) {
@@ -110,8 +112,9 @@ namespace TUI {
                             }
                             errorMessage_ = "Login failed !";
                             message_.clear();
-                            mainTui_
-                                .forceRefresh(); // Post event to update screen
+                            mainTui_.forceRefresh(
+                                UpdateType::OTHER); // Post event to update
+                                                    // screen
                         });
                     }
 

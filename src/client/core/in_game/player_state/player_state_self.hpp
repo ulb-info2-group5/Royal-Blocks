@@ -5,7 +5,6 @@
 #include "../effects/timed_bonus.hpp"
 #include "../effects/timed_penalty.hpp"
 #include "abstract_player_state.hpp"
-#include "effect_price/effect_price.hpp"
 
 #include <nlohmann/json.hpp>
 

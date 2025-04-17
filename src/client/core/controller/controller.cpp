@@ -1,5 +1,4 @@
 #include "controller.hpp"
-#include "../../graphics/screen_manager.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
 
@@ -34,6 +33,7 @@
 #include "core/in_game/game_state/game_state.hpp"
 #include "effect_price/effect_price.hpp"
 #include "game_mode/game_mode.hpp"
+#include "graphics/common/abstract_display.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -125,15 +125,15 @@ void Controller::handlePacket(const std::string_view pack) {
         std::cerr << "unknown bindingType" << std::endl;
     }
 
-    screenManager_->forceRefresh(updateType);
+    pAbstractDisplay_->forceRefresh(updateType);
 }
 
 // ### Public methods ###
 
-Controller::Controller(UiChoice uiChoice, std::pair<int, char **> args)
-    : uiChoice_(uiChoice), args_(args),
-      registrationState_{Controller::RegistrationState::Unregistered},
+Controller::Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay)
+    : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
+      pAbstractDisplay_(std::move(pAbstractDisplay)),
       networkManager_{context_, [this](const std::string_view packet) {
                           handlePacket(packet);
                       }} {};
@@ -148,25 +148,21 @@ Controller::AuthState Controller::getAuthState() const {
     return authState_;
 }
 
-int Controller::run() {
+void Controller::run() {
     if (!networkManager_.connect()) {
         std::cerr << "Failed to connect to server" << std::endl;
-        return -1; // We failed to connect to the server so we can't do anything
-                   // so we end the program
+        // TODO: throw ?
+        return;
     };
-
-    screenManager_ = std::make_unique<ScreenManager>(*this, uiChoice_, args_);
 
     ioThread_ = std::thread([this]() { context_.run(); });
 
-    int result = screenManager_->run();
+    pAbstractDisplay_->run(*this);
 
     context_.stop();
     if (ioThread_.joinable()) {
         ioThread_.join();
     }
-
-    return result;
 }
 
 void Controller::tryRegister(const std::string &username,

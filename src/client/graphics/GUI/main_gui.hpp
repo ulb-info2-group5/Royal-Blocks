@@ -1,13 +1,14 @@
 #ifndef GUI_MAIN_GUI_HPP
 #define GUI_MAIN_GUI_HPP
 
+#include "../common/abstract_display.hpp"
 #include "login/login.hpp"
 #include "main_menu/main_menu.hpp"
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QStackedWidget>
 #include <QSettings>
+#include <QStackedWidget>
 
 class Controller;
 
@@ -15,7 +16,7 @@ enum class UpdateType;
 
 namespace GUI {
 
-    class MainGui : public QMainWindow {
+    class MainGui : public QMainWindow, public AbstractDisplay {
         Q_OBJECT
 
       private:
@@ -38,17 +39,18 @@ namespace GUI {
         /*
          * @brief Run the main Gui
          */
-        void run();
+        virtual void run() override;
 
         /*
-         * @brief Force the refresh of the GUI (QT)
+         * @brief Update the screen manager with the new data
          *
-         * @param updateType The type of the update
+         * @param updateType The type of update to do (needed for the GUI with
+         * Qt)
          */
-        void forceRefresh(UpdateType updateType);
+        virtual void forceRefresh(UpdateType updateType) override;
 
         /*
-          * @brief Action to perform when exiting the gui
+         * @brief Action to perform when exiting the gui
          */
         void quitGui();
 

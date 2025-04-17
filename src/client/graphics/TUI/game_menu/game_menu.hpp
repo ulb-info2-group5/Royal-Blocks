@@ -8,7 +8,7 @@
 
 #include "../../../../common/types/types.hpp"
 
-#include "game_mode/game_mode.hpp"
+#include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 
 class Controller;
 

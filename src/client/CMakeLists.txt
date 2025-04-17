@@ -1,38 +1,61 @@
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTORCC ON)
+
+# ---------------------------
+#         Client Core
+# ---------------------------
 
 # client lib
-file(GLOB_RECURSE SOURCES_CLIENT_LIB
-    *.cpp
+file(GLOB_RECURSE SOURCES_CLIENT_CORE_LIB
+    core/*.cpp
 )
 
-add_library(client_lib STATIC ${SOURCES_CLIENT_LIB})
+add_library(client_core_lib STATIC ${SOURCES_CLIENT_CORE_LIB})
+target_link_libraries(client_core_lib PUBLIC tetris_royal_lib)
+target_include_directories(client_core_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_include_directories(client_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
+# TODO: NOT SURE THIS IS REQUIRED
+find_package(Boost CONFIG)
+
+
+# ---------------------------
+#            TUI
+# ---------------------------
+
+file (GLOB_RECURSE SOURCES_CLIENT_TUI
+    graphics/common/*.cpp
+    graphics/TUI/*.cpp
+    tui.cpp
+)
 
 include(../../third_party/ftxui.cmake)
 
-find_package(Boost CONFIG)
-
-target_link_libraries(client_lib PUBLIC
+add_executable(tetris_tui ${SOURCES_CLIENT_TUI})
+target_link_libraries(tetris_tui
+    client_core_lib
     ftxui::screen
     ftxui::dom
     ftxui::component
-    tetris_royal_lib
-    Qt5::Widgets
-    Qt5::Core
-    Qt5::Gui
 )
 
-# client binary
-set(SOURCES_CLIENT_MAIN main.cpp)
+# ---------------------------
+#            GUI
+# ---------------------------
 
-add_executable(${PROJECT_NAME}_client ${SOURCES_CLIENT_MAIN})
 
-target_link_libraries(${PROJECT_NAME}_client client_lib)
-
+# file (GLOB_RECURSE SOURCES_CLIENT_GUI
+#     graphics/GUI/*.cpp
+#     graphics/common/*.cpp
+# )
+#
+# find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
+# add_executable(tetris_gui ${SOURCES_CLIENT_GUI})
+# target_link_libraries(tetris_tui
+#     Qt5::Widgets
+#     Qt5::Core
+#     Qt5::Gui
+# )

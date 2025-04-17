@@ -6,7 +6,7 @@
 #include "../main_tui.hpp"
 
 #include "../ftxui_config/ftxui_config.hpp"
-#include "graphics/TUI/login_input/login_input.hpp"
+#include "../login_input/login_input.hpp"
 
 namespace TUI {
 

@@ -4,7 +4,6 @@
 #include "../../../../common/types/types.hpp"
 
 #include "../../common/abstract_game_display.hpp"
-#include "graphics/common/abstract_game_display.hpp"
 
 #include <ftxui/component/component.hpp>
 

@@ -8,14 +8,18 @@
 #include <QApplication>
 #include <QHeaderView>
 #include <QMessageBox>
-#include <QTableWidget>
 #include <QStyleFactory>
+#include <QTableWidget>
 
 namespace GUI {
 
     MainGui::MainGui(Controller &controller, QWidget *parent)
         : QMainWindow(parent), controller_(controller) {
-        this->setWindowTitle("Tetris Royal");
+
+        QApplication app_(argc, argv);
+
+        app_.setApplicationName("Royal Tetris");
+        app_.setApplicationDisplayName("Royal Tetris");
 
         QSettings settings("Royal Tetris", "Royal Tetris");
         if (settings.value("theme/darkMode", true).toBool()) {
@@ -24,16 +28,19 @@ namespace GUI {
             setLightMode();
         }
 
-        this->setMinimumSize(600, 500);
-        this->showMaximized();
-     }
+        setMinimumSize(600, 500);
+        showMaximized();
+        setWindowTitle("Tetris Royal");
+
+        run();
+        show();
+    }
 
     void MainGui::run() {
         login_ = new Login(controller_);
         login_->run();
         this->setCentralWidget(login_);
-        connect(login_, &Login::loginSuccessful, this,
-                &MainGui::showMainMenu);
+        connect(login_, &Login::loginSuccessful, this, &MainGui::showMainMenu);
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {
@@ -52,16 +59,18 @@ namespace GUI {
 
     void MainGui::showMainMenu() {
         if (login_) {
-            login_->deleteLater(); // Delete login because we don't need it anymore
+            login_->deleteLater(); // Delete login because we don't need it
+                                   // anymore
         }
         mainMenu_ = new MainMenu(controller_, *this);
         mainMenu_->run();
         this->setCentralWidget(mainMenu_);
-        connect(mainMenu_, &MainMenu::quitGame, this,
-                &MainGui::quitGui);
+        connect(mainMenu_, &MainMenu::quitGame, this, &MainGui::quitGui);
 
-        connect(mainMenu_, &MainMenu::applyDarkTheme, this, &MainGui::setDarkMode);
-        connect(mainMenu_, &MainMenu::applyLightTheme, this, &MainGui::setLightMode);
+        connect(mainMenu_, &MainMenu::applyDarkTheme, this,
+                &MainGui::setDarkMode);
+        connect(mainMenu_, &MainMenu::applyLightTheme, this,
+                &MainGui::setLightMode);
     }
 
     void MainGui::quitGui() {
@@ -70,14 +79,15 @@ namespace GUI {
             this, "Quit", "Are you sure you want to quit the game ?",
             QMessageBox::Yes | QMessageBox::No);
         if (confirmExit == QMessageBox::Yes) {
-           QApplication::quit();
+            QApplication::quit();
         }
     }
 
     void MainGui::setDarkMode() {
         qApp->setStyle(QStyleFactory::create("Fusion"));
         qApp->setPalette(createDarkPalette());
-        qApp->setStyleSheet("QToolTip { color: white; background-color: black; border: 1px solid white; }");
+        qApp->setStyleSheet("QToolTip { color: white; background-color: black; "
+                            "border: 1px solid white; }");
         QSettings settings("Royal Tetris", "Royal Tetris");
         settings.setValue("theme/darkMode", true);
     }
@@ -85,7 +95,8 @@ namespace GUI {
     void MainGui::setLightMode() {
         qApp->setStyle(QStyleFactory::create("Fusion"));
         qApp->setPalette(createLightPalette());
-        qApp->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
+        qApp->setStyleSheet("QToolTip { color: black; background-color: white; "
+                            "border: 1px solid black; }");
         QSettings settings("Royal Tetris", "Royal Tetris");
         settings.setValue("theme/darkMode", false);
     }
