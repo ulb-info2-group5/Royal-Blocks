@@ -45,7 +45,7 @@ UiChoice handleArguments(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
     try {    
-        UiChoice choice = UiChoice::GUI;
+        UiChoice choice = handleArguments(argc, argv);
         if (choice == UiChoice::NONE) {
             return EXIT_SUCCESS;
         }
