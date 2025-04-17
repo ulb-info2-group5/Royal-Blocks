@@ -15,7 +15,7 @@
 namespace GUI {
 
     constexpr int FRIENDSLIST_WIDTH = 150;
-    constexpr int MESSAGE_INPUT_HEIGHT = 50;
+    constexpr int MESSAGE_INPUT_HEIGHT = 30;
     constexpr char SEND_TEXT[] = "Send";
     constexpr char BACK_TEXT[] = "Back";
     constexpr char FRIENDSLIST_LABEL[] = "Friends List";

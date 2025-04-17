@@ -14,7 +14,7 @@ namespace GUI {
     MainGui::MainGui(Controller &controller, QWidget *parent)
         : QMainWindow(parent), controller_(controller) {
         setWindowTitle("Tetris Royal");
-        setMinimumSize(500, 500);
+        setMinimumSize(600, 500);
         showMaximized();
     }
 
