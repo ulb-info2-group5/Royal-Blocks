@@ -7,6 +7,7 @@
 #include "../profile_manager/profile_manager.hpp"
 #include "../qt_config/qt_config.hpp"
 #include "graphics/GUI/game_display/game_display.hpp"
+#include "../theme_manager/theme_manager.hpp"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -20,16 +21,16 @@ namespace GUI {
         : QWidget(parent), controller_(controller),
           ranking_(controller_, mainGui), gameMenu_(controller, mainGui),
           friendsMenu_(controller, mainGui), messageMenu_(controller, mainGui),
-          profileManager_(controller, mainGui) {}
+          profileManager_(controller, mainGui), themeManager_(this) {}
 
     void MainMenu::run() {
         setup();
 
         QVBoxLayout *layout = new QVBoxLayout();
         layout->addWidget(&stackedWidget_);
-        setLayout(layout);
+        this->setLayout(layout);
 
-        show();
+        this->show();
     }
 
     void MainMenu::on_QuitGameButton_clicked() { 
@@ -62,6 +63,10 @@ namespace GUI {
         stackedWidget_.setCurrentWidget(&profileManager_);
     }
 
+    void MainMenu::on_ThemeManagerButton_clicked() {
+        stackedWidget_.setCurrentWidget(&themeManager_);
+    }
+
     void MainMenu::showMainMenu() {
         stackedWidget_.setCurrentWidget(&mainMenu_);
     }
@@ -70,50 +75,57 @@ namespace GUI {
                     Private Methods
     ----------------------------------------------*/
     void MainMenu::setup() {
-        QPushButton *createGameButton_ = new QPushButton(this);
-        createGameButton_->setAutoDefault(true);
-        QPushButton *joinGameButton_ = new QPushButton(this);
-        joinGameButton_->setAutoDefault(true);
-        QPushButton *messagesButton_ = new QPushButton(this);
-        messagesButton_->setAutoDefault(true);
-        QPushButton *rankingButton_ = new QPushButton(this);
-        rankingButton_->setAutoDefault(true);
-        QPushButton *manageProfileButton_ = new QPushButton(this);
-        manageProfileButton_->setAutoDefault(true);
-        QPushButton *manageFriendsListButton_ = new QPushButton(this);
-        manageFriendsListButton_->setAutoDefault(true);
-        QPushButton *quitGameButton_ = new QPushButton(this);
-        quitGameButton_->setAutoDefault(true);
+        QPushButton *createGameButton = new QPushButton(this);
+        createGameButton->setAutoDefault(true);
+        QPushButton *joinGameButton = new QPushButton(this);
+        joinGameButton->setAutoDefault(true);
+        QPushButton *messagesButton = new QPushButton(this);
+        messagesButton->setAutoDefault(true);
+        QPushButton *rankingButton = new QPushButton(this);
+        rankingButton->setAutoDefault(true);
+        QPushButton *manageProfileButton = new QPushButton(this);
+        manageProfileButton->setAutoDefault(true);
+        QPushButton *manageFriendsListButton = new QPushButton(this);
+        manageFriendsListButton->setAutoDefault(true);
+        QPushButton *quitGameButton = new QPushButton(this);
+        quitGameButton->setAutoDefault(true);
+        QPushButton *themeButton = new QPushButton(this);
+        themeButton->setAutoDefault(true);
 
-        createGameButton_->setText("Create a Game");
-        createGameButton_->setFixedWidth(500);
+        createGameButton->setText("Create a Game");
+        createGameButton->setFixedWidth(500);
 
-        joinGameButton_->setText("Join a Game");
-        joinGameButton_->setFixedWidth(500);
+        joinGameButton->setText("Join a Game");
+        joinGameButton->setFixedWidth(500);
 
-        messagesButton_->setText("Messages");
-        connect(messagesButton_, &QPushButton::clicked, this,
+        messagesButton->setText("Messages");
+        connect(messagesButton, &QPushButton::clicked, this,
                 &MainMenu::on_MessagesButton_clicked);
-        messagesButton_->setFixedWidth(500);
+        messagesButton->setFixedWidth(500);
 
-        rankingButton_->setText("Ranking");
-        connect(rankingButton_, &QPushButton::clicked, this,
+        rankingButton->setText("Ranking");
+        connect(rankingButton, &QPushButton::clicked, this,
                 &MainMenu::on_RankingButton_clicked);
-        rankingButton_->setFixedWidth(500);
+        rankingButton->setFixedWidth(500);
 
-        manageProfileButton_->setText("Manage Profile");
-        connect(manageProfileButton_, &QPushButton::clicked, this,
+        manageProfileButton->setText("Manage Profile");
+        connect(manageProfileButton, &QPushButton::clicked, this,
                 &MainMenu::on_ProfileManagerBouton_clicked);
-        manageProfileButton_->setFixedWidth(500);
+        manageProfileButton->setFixedWidth(500);
 
-        manageFriendsListButton_->setText("Manage Friends List");
-        connect(manageFriendsListButton_, &QPushButton::clicked, this,
+        manageFriendsListButton->setText("Manage Friends List");
+        connect(manageFriendsListButton, &QPushButton::clicked, this,
                 &MainMenu::on_ManageFriendsListButton_clicked);
-        manageFriendsListButton_->setFixedWidth(500);
+        manageFriendsListButton->setFixedWidth(500);
 
-        quitGameButton_->setText("Quit Game");
-        quitGameButton_->setFixedWidth(500);
-        connect(quitGameButton_, &QPushButton::clicked, this,
+        themeButton->setText("Change Theme");
+        connect(themeButton, &QPushButton::clicked, this,
+                &MainMenu::on_ThemeManagerButton_clicked);
+        themeButton->setFixedWidth(500);
+
+        quitGameButton->setText("Quit Game");
+        quitGameButton->setFixedWidth(500);
+        connect(quitGameButton, &QPushButton::clicked, this,
                 &MainMenu::on_QuitGameButton_clicked);
 
         QVBoxLayout *menu = new QVBoxLayout();
@@ -121,13 +133,14 @@ namespace GUI {
                                       QSizePolicy::Expanding));
         menu->addWidget(createCenterBoldTitle(
             "Welcome to the main menu of Tetris Royal !"));
-        menu->addWidget(createGameButton_, 0, Qt::AlignCenter);
-        menu->addWidget(joinGameButton_, 0, Qt::AlignCenter);
-        menu->addWidget(messagesButton_, 0, Qt::AlignCenter);
-        menu->addWidget(rankingButton_, 0, Qt::AlignCenter);
-        menu->addWidget(manageProfileButton_, 0, Qt::AlignCenter);
-        menu->addWidget(manageFriendsListButton_, 0, Qt::AlignCenter);
-        menu->addWidget(quitGameButton_, 0, Qt::AlignCenter);
+        menu->addWidget(createGameButton, 0, Qt::AlignCenter);
+        menu->addWidget(joinGameButton, 0, Qt::AlignCenter);
+        menu->addWidget(messagesButton, 0, Qt::AlignCenter);
+        menu->addWidget(rankingButton, 0, Qt::AlignCenter);
+        menu->addWidget(manageProfileButton, 0, Qt::AlignCenter);
+        menu->addWidget(manageFriendsListButton, 0, Qt::AlignCenter);
+        menu->addWidget(themeButton, 0, Qt::AlignCenter);
+        menu->addWidget(quitGameButton, 0, Qt::AlignCenter);
         menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                       QSizePolicy::Expanding));
 
@@ -138,6 +151,7 @@ namespace GUI {
         stackedWidget_.addWidget(&friendsMenu_);
         stackedWidget_.addWidget(&messageMenu_);
         stackedWidget_.addWidget(&profileManager_);
+        stackedWidget_.addWidget(&themeManager_);
         stackedWidget_.addWidget(&gameMenu_);
 
         connect(&ranking_, &Ranking::backToMainMenu, this,
@@ -148,12 +162,19 @@ namespace GUI {
                 &MainMenu::showMainMenu);
         connect(&profileManager_, &ProfileManager::backToMainMenu, this,
                 &MainMenu::showMainMenu);
-        connect(createGameButton_, &QPushButton::clicked, this,
+        connect(createGameButton, &QPushButton::clicked, this,
                 &MainMenu::on_CreateGameButton_clicked);
-        connect(joinGameButton_, &QPushButton::clicked, this,
+        connect(joinGameButton, &QPushButton::clicked, this,
                 &MainMenu::on_JoinGameButton_clicked);
         connect(&gameMenu_, &GameMenu::backToMainMenu, this,
                 &MainMenu::showMainMenu);
+        connect(&themeManager_, &ThemeManager::backToMainMenu, this,
+                &MainMenu::showMainMenu);
+
+        connect(&themeManager_, &ThemeManager::applyLightTheme, this,
+                [this] {emit applyLightTheme(); });
+        connect(&themeManager_, &ThemeManager::applyDarkTheme, this,
+                [this] {emit applyDarkTheme(); });
     }
 
 } // namespace GUI

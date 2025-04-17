@@ -4,11 +4,10 @@
 #include "login/login.hpp"
 #include "main_menu/main_menu.hpp"
 
-#include <memory>
-
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStackedWidget>
+#include <QSettings>
 
 class Controller;
 
@@ -25,6 +24,11 @@ namespace GUI {
         Login *login_;
 
         MainMenu *mainMenu_;
+
+        QSettings settings_;
+
+        void setDarkMode();
+        void setLightMode();
 
       public:
         MainGui(Controller &controller, QWidget *parent = nullptr);

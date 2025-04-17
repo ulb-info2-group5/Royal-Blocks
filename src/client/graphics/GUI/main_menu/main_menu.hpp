@@ -6,12 +6,12 @@
 #include "../message_menu/message_menu.hpp"
 #include "../profile_manager/profile_manager.hpp"
 #include "../ranking/ranking.hpp"
+#include "graphics/GUI/theme_manager/theme_manager.hpp"
 
 #include <QLabel>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qobjectdefs.h>
 
 class Controller;
 
@@ -36,6 +36,8 @@ namespace GUI {
         MessageMenu messageMenu_;
 
         ProfileManager profileManager_;
+
+        ThemeManager themeManager_;
 
         /*
          * @brief Setup the Login Gui
@@ -85,6 +87,11 @@ namespace GUI {
          */
         void on_ProfileManagerBouton_clicked();
 
+        /*
+         * @brief Action to perform show theme manager
+         */
+        void on_ThemeManagerButton_clicked();
+
       public:
         MainMenu(Controller &controller, MainGui &mainGui,
                  QWidget *parent = nullptr);
@@ -101,6 +108,16 @@ namespace GUI {
          * @brief Signal to quit the game
          */
         void quitGame();
+
+        /*
+         * @brief Signal to apply the dark theme
+         */
+        void applyDarkTheme();
+
+        /*
+         * @brief Signal to apply the light theme
+         */
+        void applyLightTheme();
     };
 
 } // namespace GUI
