@@ -10,7 +10,6 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 #include <QTableWidget>
-#include <print>
 #include <qapplication.h>
 
 namespace GUI {

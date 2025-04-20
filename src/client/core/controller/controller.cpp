@@ -39,7 +39,6 @@
 #include <memory>
 #include <mutex>
 #include <optional>
-#include <print>
 #include <string>
 #include <thread>
 #include <variant>
@@ -61,8 +60,6 @@ void Controller::updateFriendState(const bindings::User &updatedFriend) {
 }
 
 void Controller::handlePacket(const std::string_view pack) {
-    std::println(std::cerr, "received packet {}", pack);
-
     nlohmann::json j = nlohmann::json::parse(pack);
 
     std::lock_guard<std::mutex> guard(mutex_);
@@ -157,17 +154,9 @@ void Controller::run() {
         return;
     };
 
-    ioThread_ = std::thread([this]() {
-        std::println(std::cerr, "starting context_.run()");
-        int ret = context_.run();
+    ioThread_ = std::thread([this]() { context_.run(); });
 
-        std::println(std::cerr,
-                     "returned from context_.run(), {} handlers executed", ret);
-    });
-
-    std::println(std::cerr, "calling from pAbstractDisplay_->run(); ");
     pAbstractDisplay_->run(*this);
-    std::println(std::cerr, "returned from pAbstractDisplay_->run(); ");
 
     context_.stop();
     if (ioThread_.joinable()) {
