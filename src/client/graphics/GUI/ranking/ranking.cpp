@@ -1,6 +1,6 @@
 #include "ranking.hpp"
 
-#include "../main_gui.hpp"
+#include "graphics/GUI/tetris_window.hpp"
 
 #include <QHeaderView>
 #include <QMessageBox>
@@ -12,8 +12,10 @@
 
 namespace GUI {
 
-    Ranking::Ranking(Controller &controller, MainGui &mainGui, QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui) {
+    Ranking::Ranking(Controller &controller, TetrisWindow &tetrisWindow,
+                     QWidget *parent)
+        : QWidget(parent), controller_(controller),
+          tetrisWindow_(tetrisWindow) {
         setupUI();
     }
 
@@ -27,7 +29,7 @@ namespace GUI {
         QPushButton *backButton = new QPushButton(this);
         backButton->setAutoDefault(true);
 
-        connect(&mainGui_, &MainGui::updateRanking, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateRanking, this,
                 &Ranking::updateRankingTable);
 
         backButton->setText("Back");

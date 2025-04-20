@@ -93,7 +93,7 @@ namespace GUI {
         void on_ThemeManagerButton_clicked();
 
       public:
-        MainMenu(Controller &controller, MainGui &mainGui,
+        MainMenu(Controller &controller, TetrisWindow &tetrisWindow,
                  QWidget *parent = nullptr);
 
         ~MainMenu() = default;

@@ -31,9 +31,10 @@
 
 namespace GUI {
 
-    GameDisplay::GameDisplay(Controller &controller, MainGui &mainGui,
+    GameDisplay::GameDisplay(Controller &controller, TetrisWindow &tetrisWindow,
                              QWidget *parent)
-        : QWidget(parent), AbstractGameDisplay(controller), mainGui_(mainGui) {
+        : QWidget(parent), AbstractGameDisplay(controller),
+          tetrisWindow_(tetrisWindow) {
         setup();
     }
 
@@ -344,10 +345,9 @@ namespace GUI {
                 new QLabel("Your score was : "
                            + QString::number(getSelfScore())),
                 0, Qt::AlignCenter);
-            finishLayout->addWidget(returnToMainMenuButton, 0,
-                                    Qt::AlignCenter);
-            finishLayout->addItem(new QSpacerItem(
-                20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+            finishLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
+            finishLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                                  QSizePolicy::Expanding));
 
             finishWidget->setLayout(finishLayout);
             stackedWidget_.addWidget(finishWidget);
@@ -496,7 +496,7 @@ namespace GUI {
 
         // --------------------------------------
 
-        connect(&mainGui_, &MainGui::updateGameState, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateGameState, this,
                 &GameDisplay::updateGameState);
 
         connect(quitButton, &QPushButton::clicked, this,

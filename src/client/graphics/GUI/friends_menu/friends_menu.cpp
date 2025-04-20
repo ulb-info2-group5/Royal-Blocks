@@ -1,22 +1,23 @@
 #include "friends_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
+#include "../tetris_window.hpp"
 
 #include <QMessageBox>
 #include <vector>
 
 namespace GUI {
 
-    FriendsMenu::FriendsMenu(Controller &controller, MainGui &mainGui,
-                                   QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui) {
+    FriendsMenu::FriendsMenu(Controller &controller, TetrisWindow &tetrisWindow,
+                             QWidget *parent)
+        : QWidget(parent), controller_(controller),
+          tetrisWindow_(tetrisWindow) {
         setup();
 
-        connect(&mainGui_, &MainGui::updateFriendsList, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateFriendsList, this,
                 &FriendsMenu::refreshFriendsList);
-        connect(&mainGui_, &MainGui::updateFriendRequestsList, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateFriendRequestsList, this,
                 &FriendsMenu::refreshFriendRequestsList);
     }
 
@@ -34,9 +35,7 @@ namespace GUI {
         stack_.setCurrentIndex(1);
     }
 
-    void FriendsMenu::showFriendRequestsScreen() {
-        stack_.setCurrentIndex(2);
-    }
+    void FriendsMenu::showFriendRequestsScreen() { stack_.setCurrentIndex(2); }
 
     void FriendsMenu::sendFriendRequest() {
         QString name = friendNameInput_.text();
@@ -97,9 +96,9 @@ namespace GUI {
         submitAdd_->setAutoDefault(true);
         QPushButton *backFromAdd_ = new QPushButton(this);
         backFromAdd_->setAutoDefault(true);
-        QPushButton *acceptButton_ = new QPushButton(this); 
+        QPushButton *acceptButton_ = new QPushButton(this);
         acceptButton_->setAutoDefault(true);
-        QPushButton *declineButton_ = new QPushButton(this);   
+        QPushButton *declineButton_ = new QPushButton(this);
         declineButton_->setAutoDefault(true);
         QPushButton *backFromReqButton_ = new QPushButton(this);
         backFromReqButton_->setAutoDefault(true);

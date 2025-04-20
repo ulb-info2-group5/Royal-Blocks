@@ -6,8 +6,8 @@
 #include "../message_menu/message_menu.hpp"
 #include "../profile_manager/profile_manager.hpp"
 #include "../qt_config/qt_config.hpp"
-#include "graphics/GUI/game_display/game_display.hpp"
 #include "../theme_manager/theme_manager.hpp"
+#include "graphics/GUI/game_display/game_display.hpp"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -16,12 +16,14 @@
 
 namespace GUI {
 
-    MainMenu::MainMenu(Controller &controller, MainGui &mainGui,
+    MainMenu::MainMenu(Controller &controller, TetrisWindow &tetrisWindow,
                        QWidget *parent)
         : QWidget(parent), controller_(controller),
-          ranking_(controller_, mainGui), gameMenu_(controller, mainGui),
-          friendsMenu_(controller, mainGui), messageMenu_(controller, mainGui),
-          profileManager_(controller, mainGui), themeManager_(this) {}
+          ranking_(controller_, tetrisWindow),
+          gameMenu_(controller, tetrisWindow),
+          friendsMenu_(controller, tetrisWindow),
+          messageMenu_(controller, tetrisWindow),
+          profileManager_(controller, tetrisWindow), themeManager_(this) {}
 
     void MainMenu::run() {
         setup();
@@ -33,9 +35,7 @@ namespace GUI {
         this->show();
     }
 
-    void MainMenu::on_QuitGameButton_clicked() { 
-        emit quitGame();
-     }
+    void MainMenu::on_QuitGameButton_clicked() { emit quitGame(); }
 
     void MainMenu::on_RankingButton_clicked() {
         stackedWidget_.setCurrentWidget(&ranking_);
@@ -172,9 +172,9 @@ namespace GUI {
                 &MainMenu::showMainMenu);
 
         connect(&themeManager_, &ThemeManager::applyLightTheme, this,
-                [this] {emit applyLightTheme(); });
+                [this] { emit applyLightTheme(); });
         connect(&themeManager_, &ThemeManager::applyDarkTheme, this,
-                [this] {emit applyDarkTheme(); });
+                [this] { emit applyDarkTheme(); });
     }
 
 } // namespace GUI

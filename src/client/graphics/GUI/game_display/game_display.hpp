@@ -25,7 +25,7 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     enum class CellSize : size_t {
         Small = 10,
@@ -37,7 +37,7 @@ namespace GUI {
         Q_OBJECT
 
       private:
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
 
         QStackedWidget stackedWidget_;
 
@@ -151,7 +151,7 @@ namespace GUI {
         void keyPressEvent(QKeyEvent *event);
 
       public:
-        GameDisplay(Controller &controller, MainGui &mainGui,
+        GameDisplay(Controller &controller, TetrisWindow &tetrisWindow,
                     QWidget *parent = nullptr);
 
         ~GameDisplay() = default;

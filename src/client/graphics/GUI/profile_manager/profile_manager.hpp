@@ -15,14 +15,14 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     class ProfileManager : public QWidget {
         Q_OBJECT
 
       private:
         Controller &controller_;
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
 
         QLineEdit newUserName_;
         QLineEdit newPassWord_;
@@ -38,7 +38,7 @@ namespace GUI {
         void onBack();
 
       public:
-        ProfileManager(Controller &controller, MainGui &mainGui,
+        ProfileManager(Controller &controller, TetrisWindow &tetrisWindow,
                        QWidget *parent = nullptr);
 
         ~ProfileManager() = default;

@@ -12,9 +12,10 @@ namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
 
-    ProfileManager::ProfileManager(Controller &controller, MainGui &mainGui,
-                                   QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui) {
+    ProfileManager::ProfileManager(Controller &controller,
+                                   TetrisWindow &tetrisWindow, QWidget *parent)
+        : QWidget(parent), controller_(controller),
+          tetrisWindow_(tetrisWindow) {
         basicSetup();
     }
 

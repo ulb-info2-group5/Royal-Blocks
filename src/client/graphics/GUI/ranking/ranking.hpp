@@ -8,7 +8,7 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     class Ranking : public QWidget {
         Q_OBJECT
@@ -16,7 +16,7 @@ namespace GUI {
       private:
         Controller &controller_;
 
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
 
         QTableWidget rankingTable_;
 
@@ -36,7 +36,7 @@ namespace GUI {
         void updateRankingTable();
 
       public:
-        Ranking(Controller &controller, MainGui &mainGui,
+        Ranking(Controller &controller, TetrisWindow &tetrisWindow,
                 QWidget *parent = nullptr);
 
         ~Ranking() = default;

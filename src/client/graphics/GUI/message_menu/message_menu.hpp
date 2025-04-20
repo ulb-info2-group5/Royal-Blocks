@@ -19,14 +19,14 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     class MessageMenu : public QWidget {
         Q_OBJECT
 
       private:
         Controller &controller_;
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
 
         QListWidget friendsList_;
         QTextBrowser chatDisplay_;
@@ -44,7 +44,7 @@ namespace GUI {
         void onEnterKeyPressedInInput();
 
       public:
-        MessageMenu(Controller &controller, MainGui &mainGui,
+        MessageMenu(Controller &controller, TetrisWindow &tetrisWindow,
                     QWidget *parent = nullptr);
         ~MessageMenu() = default;
 

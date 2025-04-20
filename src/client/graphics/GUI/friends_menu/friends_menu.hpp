@@ -13,14 +13,14 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     class FriendsMenu : public QWidget {
         Q_OBJECT
 
       private:
         Controller &controller_;
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
 
         QStackedWidget stack_;
 
@@ -69,7 +69,7 @@ namespace GUI {
         void refreshFriendRequestsList();
 
       public:
-        FriendsMenu(Controller &controller, MainGui &mainGui,
+        FriendsMenu(Controller &controller, TetrisWindow &tetrisWindow,
                     QWidget *parent = nullptr);
 
         ~FriendsMenu() = default;

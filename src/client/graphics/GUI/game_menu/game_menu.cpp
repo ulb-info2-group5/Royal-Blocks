@@ -13,9 +13,9 @@
 
 namespace GUI {
 
-    GameMenu::GameMenu(Controller &controller, MainGui &mainGui,
+    GameMenu::GameMenu(Controller &controller, TetrisWindow &tetrisWindow,
                        QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui),
+        : QWidget(parent), controller_(controller), tetrisWindow_(tetrisWindow),
           playerCount_(4), isCreateGame_(false) {
         setup();
     }
@@ -258,7 +258,7 @@ namespace GUI {
 
     void GameMenu::createAndShowGameDisplay() {
         gameDisplay_ =
-            std::make_unique<GameDisplay>(controller_, mainGui_, this);
+            std::make_unique<GameDisplay>(controller_, tetrisWindow_, this);
         connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
             stack_->removeWidget(gameDisplay_.get());
             gameDisplay_.reset();

@@ -21,14 +21,14 @@ class Controller;
 
 namespace GUI {
 
-    class MainGui;
+    class TetrisWindow;
 
     class GameMenu : public QWidget {
         Q_OBJECT
 
       private:
         Controller &controller_;
-        MainGui &mainGui_;
+        TetrisWindow &tetrisWindow_;
         std::unique_ptr<GameDisplay> gameDisplay_;
 
         QStackedWidget *stack_;
@@ -72,7 +72,7 @@ namespace GUI {
         void onFriendSelected(QListWidgetItem *item);
 
       public:
-        GameMenu(Controller &controller, MainGui &mainGui,
+        GameMenu(Controller &controller, TetrisWindow &tetrisWindow,
                  QWidget *parent = nullptr);
         ~GameMenu() = default;
 

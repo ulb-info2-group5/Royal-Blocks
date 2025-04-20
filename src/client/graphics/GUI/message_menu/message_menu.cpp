@@ -4,7 +4,7 @@
 #include "message_menu.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../main_gui.hpp"
+#include "../tetris_window.hpp"
 
 #include <QBoxLayout>
 #include <QMessageBox>
@@ -24,9 +24,10 @@ namespace GUI {
     constexpr char TYPE_MESSAGE_TEXT[] = "Type your message here...";
     constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
 
-    MessageMenu::MessageMenu(Controller &controller, MainGui &mainGui,
+    MessageMenu::MessageMenu(Controller &controller, TetrisWindow &tetrisWindow,
                              QWidget *parent)
-        : QWidget(parent), controller_(controller), mainGui_(mainGui) {
+        : QWidget(parent), controller_(controller),
+          tetrisWindow_(tetrisWindow) {
         setupUI();
     }
 
@@ -80,9 +81,9 @@ namespace GUI {
         connect(sendButton, &QPushButton::clicked, this,
                 &MessageMenu::onSendMessage);
         connect(backButton, &QPushButton::clicked, this, &MessageMenu::onBack);
-        connect(&mainGui_, &MainGui::updateConversations, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateConversations, this,
                 &MessageMenu::updateChat);
-        connect(&mainGui_, &MainGui::updateFriendsList, this,
+        connect(&tetrisWindow_, &TetrisWindow::updateFriendsList, this,
                 &MessageMenu::updateAll);
         connect(&messageInput_, &QLineEdit::returnPressed, this,
                 &MessageMenu::onEnterKeyPressedInInput);
