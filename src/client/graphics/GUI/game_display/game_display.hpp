@@ -4,7 +4,7 @@
 #include "../../../../common/types/types.hpp"
 #include "../../common/abstract_game_display.hpp"
 #include "effect_info.hpp"
-#include "graphics/GUI/game_display/effects_selector.hpp"
+#include "effects_selector.hpp"
 #include "opponents_grid.hpp"
 
 #include <QColor>

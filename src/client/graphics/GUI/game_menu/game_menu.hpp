@@ -5,7 +5,7 @@
 
 #include "../../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../../../common/types/types.hpp"
-#include "graphics/GUI/game_display/game_display.hpp"
+#include "../game_display/game_display.hpp"
 
 #include <memory>
 

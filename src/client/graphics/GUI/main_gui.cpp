@@ -10,10 +10,13 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 #include <QTableWidget>
+#include <print>
+#include <qapplication.h>
 
 namespace GUI {
 
-    MainGui::MainGui(QWidget *parent) : QMainWindow(parent) {
+    MainGui::MainGui(QApplication &app, QWidget *parent)
+        : QMainWindow(parent), app_{app} {
 
         QSettings settings("Royal Tetris", "Royal Tetris");
         if (settings.value("theme/darkMode", true).toBool()) {
@@ -32,11 +35,14 @@ namespace GUI {
     void MainGui::run(Controller &controller) {
         login_ = new Login(controller);
         login_->run();
+        std::println("returning from login->run");
 
         mainMenu_ = new MainMenu(controller, *this);
 
         this->setCentralWidget(login_);
         connect(login_, &Login::loginSuccessful, this, &MainGui::showMainMenu);
+
+        app_.exec();
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {

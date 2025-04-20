@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QStackedWidget>
+#include <qapplication.h>
 
 class Controller;
 
@@ -20,6 +21,8 @@ namespace GUI {
         Q_OBJECT
 
       private:
+        QApplication &app_;
+
         Login *login_;
 
         MainMenu *mainMenu_;
@@ -30,7 +33,7 @@ namespace GUI {
         void setLightMode();
 
       public:
-        MainGui(QWidget *parent = nullptr);
+        MainGui(QApplication &app, QWidget *parent = nullptr);
 
         ~MainGui() = default;
 

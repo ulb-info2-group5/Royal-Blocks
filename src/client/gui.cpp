@@ -12,10 +12,8 @@ int main(int argc, char *argv[]) {
         app.setApplicationName("Royal Tetris");
         app.setApplicationDisplayName("Royal Tetris");
 
-        Controller controller(std::make_unique<GUI::MainGui>());
+        Controller controller(std::make_unique<GUI::MainGui>(app));
         controller.run();
-
-        return app.exec();
 
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
