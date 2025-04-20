@@ -132,10 +132,12 @@ namespace GUI {
                 i, opponentBoardMap,
                 QString::fromStdString(getOpponentUsername(i)));
 
-            // TODO: improve this
-            bool isSelected = getSelectedTarget() == getNthOpponentUserID(i);
-            if (isSelected) {
-                opponentsGrid_.setSelectedTarget(i);
+            if (!isSpectating()) {
+                bool isSelected =
+                    getSelectedTarget() == getNthOpponentUserID(i);
+                if (isSelected) {
+                    opponentsGrid_.setSelectedTarget(i);
+                }
             }
         }
     }
@@ -197,7 +199,9 @@ namespace GUI {
     }
 
     void GameDisplay::on_TargetSelected(size_t targetIdx) {
-        selectTarget(targetIdx);
+        if (!isSpectating()) {
+            selectTarget(targetIdx);
+        }
     }
 
     void GameDisplay::on_EffectBought(EffectType effect) {
@@ -341,10 +345,12 @@ namespace GUI {
                 finishLayout->addWidget(createCenterBoldTitle("Game Over"));
             }
 
-            finishLayout->addWidget(
-                new QLabel("Your score was : "
-                           + QString::number(getSelfScore())),
-                0, Qt::AlignCenter);
+            if (!isSpectating()) {
+                finishLayout->addWidget(
+                    new QLabel("Your score was : "
+                               + QString::number(getSelfScore())),
+                    0, Qt::AlignCenter);
+            }
             finishLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
             finishLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
@@ -355,16 +361,28 @@ namespace GUI {
             return;
         }
 
-        selfBoard();
-        scoreLCD();
-        holdTetromino();
-        tetrominoQueue();
+        if (isSpectating()) {
+            selfBoard_.hide();
+            scoreLCD_.hide();
+            holdTetromino_.hide();
+            tetrominoQueue_.hide();
+        } else {
+            selfBoard();
+            scoreLCD();
+            holdTetromino();
+            tetrominoQueue();
 
-        if (getGameMode() != GameMode::Endless) {
+            selfBoard_.show();
+            scoreLCD_.show();
+            holdTetromino_.show();
+            tetrominoQueue_.show();
+        }
+
+        if (getGameMode() != GameMode::Endless || isSpectating()) {
             oppBoards();
         }
 
-        if (getGameMode() == GameMode::RoyalCompetition) {
+        if (getGameMode() == GameMode::RoyalCompetition && !isSpectating()) {
             energyLCD();
             effectsInfo();
             effectSelector();
