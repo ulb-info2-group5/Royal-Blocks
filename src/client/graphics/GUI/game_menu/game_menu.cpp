@@ -52,6 +52,8 @@ namespace GUI {
         joinRandomButton->setAutoDefault(true);
         QPushButton *joinFriendButton = new QPushButton(this);
         joinFriendButton->setAutoDefault(true);
+        QPushButton *spectateFriendButton = new QPushButton(this);
+        spectateFriendButton->setAutoDefault(true);
 
         // Configure buttons
         endlessButton->setText("Endless Mode");
@@ -81,6 +83,8 @@ namespace GUI {
         joinRandomButton->setFixedWidth(500);
         joinFriendButton->setText("Join Friend's Game");
         joinFriendButton->setFixedWidth(500);
+        spectateFriendButton->setText("Spectate Friend's Game");
+        spectateFriendButton->setFixedWidth(500);
 
         // Connect signals for game mode buttons
         connect(endlessButton, &QPushButton::clicked, this,
@@ -110,6 +114,8 @@ namespace GUI {
                 &GameMenu::onJoinRandomButtonClicked);
         connect(joinFriendButton, &QPushButton::clicked, this,
                 &GameMenu::onJoinFriendButtonClicked);
+        connect(spectateFriendButton, &QPushButton::clicked, this,
+                &GameMenu::onSpectateFriendButtonClicked);
 
         // Setup select mode screen
         QVBoxLayout *selectModeLayout = new QVBoxLayout(&selectModeWidget_);
@@ -153,6 +159,7 @@ namespace GUI {
         joinTypeLayout->addWidget(createCenterBoldTitle("Join Game"));
         joinTypeLayout->addWidget(joinRandomButton, 0, Qt::AlignCenter);
         joinTypeLayout->addWidget(joinFriendButton, 0, Qt::AlignCenter);
+        joinTypeLayout->addWidget(spectateFriendButton, 0, Qt::AlignCenter);
         joinTypeLayout->addWidget(joinTypeBackButton, 0, Qt::AlignCenter);
         joinTypeLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                 QSizePolicy::Expanding));
@@ -334,7 +341,15 @@ namespace GUI {
         showWaitingScreen();
     }
 
-    void GameMenu::onJoinFriendButtonClicked() { showFriendsListScreen(); }
+    void GameMenu::onJoinFriendButtonClicked() {
+        joinFriendType_ = JoinFriendType::JoinFriend;
+        showFriendsListScreen();
+    }
+
+    void GameMenu::onSpectateFriendButtonClicked() {
+        joinFriendType_ = JoinFriendType::SpectateFriend;
+        showFriendsListScreen();
+    }
 
     void GameMenu::onPlayerCountChanged(int value) {
         playerCount_ = value;
@@ -344,7 +359,16 @@ namespace GUI {
     void GameMenu::onFriendSelected(QListWidgetItem *item) {
         if (item && item->flags() & Qt::ItemIsEnabled) {
             UserID friendId = item->data(Qt::UserRole).toULongLong();
-            controller_.joinGame(selectedGameMode_, friendId);
+
+            switch (joinFriendType_) {
+            case JoinFriendType::JoinFriend:
+                controller_.joinGame(selectedGameMode_, friendId);
+                break;
+            case JoinFriendType::SpectateFriend:
+                controller_.joinGameAsViewer(friendId);
+                break;
+            }
+
             showWaitingScreen();
         }
     }

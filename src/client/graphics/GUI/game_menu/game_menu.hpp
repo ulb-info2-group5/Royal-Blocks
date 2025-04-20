@@ -23,6 +23,11 @@ namespace GUI {
 
     class TetrisWindow;
 
+    enum class JoinFriendType {
+        JoinFriend,
+        SpectateFriend,
+    };
+
     class GameMenu : public QWidget {
         Q_OBJECT
 
@@ -46,6 +51,7 @@ namespace GUI {
         GameMode selectedGameMode_;
         int playerCount_;
         bool isCreateGame_;
+        JoinFriendType joinFriendType_;
 
         static constexpr size_t MAX_NUM_PLAYERS_CLASSIC_ROYAL = 9;
         static constexpr size_t MIN_NUM_PLAYERS_CLASSIC_ROYAL = 3;
@@ -68,6 +74,7 @@ namespace GUI {
         void onConfirmButtonClicked();
         void onJoinRandomButtonClicked();
         void onJoinFriendButtonClicked();
+        void onSpectateFriendButtonClicked();
         void onPlayerCountChanged(int value);
         void onFriendSelected(QListWidgetItem *item);
 
