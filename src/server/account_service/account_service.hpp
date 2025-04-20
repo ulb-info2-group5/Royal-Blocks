@@ -33,11 +33,14 @@ class AccountService {
         bindings::AuthenticationResponse authenticationAttempt(bindings::Authentication authentication, IsThisUserAlready isThisUserAlready );
         bindings::ChangeUsernameResponse attemptChangeUsername(UserID userID, bindings::ChangeUsername changeUsername, UpdateUsers updateUsers ); 
         void changePassword(UserID userID , bindings::ChangePassword changePassword);
-        
-        
-        
-        
 
+        void updateScore(UserID userID , int score );
+
+        std::shared_ptr<AccountManager>& getAccountManager();
+        std::string getUsername(UserID userID);
+        UserID getUserID(std::string username);
+        std::vector<std::pair<std::string, size_t>> getRanking() const;
+        
         
 
 

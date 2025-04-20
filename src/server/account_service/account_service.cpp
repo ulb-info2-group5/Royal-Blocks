@@ -56,3 +56,22 @@ bindings::ChangeUsernameResponse AccountService::attemptChangeUsername(UserID us
         return bindings::ChangeUsernameResponse{false};
     }
 }
+
+
+void AccountService::updateScore(UserID userID , int score){
+    accountManager_->updateScore(userID, score);
+}
+
+std::shared_ptr<AccountManager>& AccountService::getAccountManager(){
+    return accountManager_;
+}
+
+std::string AccountService::getUsername(UserID userID){
+    return accountManager_->getUsername(userID);
+}
+UserID AccountService::getUserID(std::string username){
+    return accountManager_->getUserId(username);
+}
+std::vector<std::pair<std::string, size_t>> AccountService::getRanking() const{
+    return accountManager_->getRanking();
+}
