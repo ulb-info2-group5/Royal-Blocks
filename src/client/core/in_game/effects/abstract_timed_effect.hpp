@@ -5,6 +5,9 @@
 
 namespace client {
 
+    /**
+     * @brief Abtract class for all timed-effects.
+     */
     struct AbstractTimedEffect {
         double elapsedTime;
 

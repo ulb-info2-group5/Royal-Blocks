@@ -8,6 +8,9 @@
 
 namespace client {
 
+    /**
+     * @brief Timed penalty class.
+     */
     struct TimedPenalty final : public client::AbstractTimedEffect {
         PenaltyType penaltyType;
 

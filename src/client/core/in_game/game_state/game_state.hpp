@@ -6,6 +6,9 @@
 
 namespace client {
 
+    /**
+     * @brief Client GameState (player).
+     */
     struct GameState : public AbstractGameState {
         PlayerTetrisSelf self;
 

@@ -8,6 +8,10 @@
 
 namespace client {
 
+    /**
+     * @brief External player state. "External" means that some data is hidden
+     * because only that player can see it.
+     */
     struct PlayerStateExternal final : public AbstractPlayerState {
         void deserialize(const nlohmann::json &j) override;
     };

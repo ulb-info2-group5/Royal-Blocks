@@ -39,7 +39,7 @@ class PlayerState final : public TetrisObserver {
 
     std::optional<Energy> energy_;
 
-    // Penalties/Bonuses that the player has received/granted himself and will
+    // Penalties/Bonuses that the player has received/granted themself and will
     // be applied as soon as the current Penalty/Bonus is finished.
     std::queue<PenaltyType> receivedPenaltiesQueue_;
     std::queue<BonusType> grantedBonusesQueue_;
@@ -133,8 +133,8 @@ class PlayerState final : public TetrisObserver {
     void receivePenalty(PenaltyType penalty);
 
     /**
-     * @brief Fetches the next bonus that the player has granted himself (stored
-     * in the queue).
+     * @brief Fetches the next bonus that the player has granted themself
+     * (stored in the queue).
      */
     std::optional<BonusType> fetchGrantedBonus();
 
@@ -227,13 +227,13 @@ class PlayerState final : public TetrisObserver {
 
     /**
      * @brief Serializes the PlayerState to json for someone that is not the
-     * player himself. This hides information about the player that only the
-     * player himself should see.
+     * player themself. This hides information about the player that only the
+     * player themself should see.
      */
     nlohmann::json serializeExternal() const;
 
     /**
-     * @brief Serializes the PlayerState to json for the player himself (not
+     * @brief Serializes the PlayerState to json for the player themself (not
      * hiding information).
      */
     nlohmann::json serializeSelf() const;

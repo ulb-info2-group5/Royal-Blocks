@@ -7,6 +7,11 @@
 
 namespace client {
 
+    /**
+     * @brief Self tetriss. "Self" means that this packet contains all the
+     * information about that player, it is supposed to be sent only to the
+     * player themself.
+     */
     struct TetrisSelf final : public AbstractTetris {
         std::optional<Tetromino> activeTetromino;
         std::optional<Tetromino> previewTetromino;

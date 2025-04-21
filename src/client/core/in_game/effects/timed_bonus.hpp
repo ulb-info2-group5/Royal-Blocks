@@ -10,6 +10,9 @@
 
 namespace client {
 
+    /**
+     * @brief Timed bonus class.
+     */
     struct TimedBonus final : public client::AbstractTimedEffect {
         BonusType bonusType;
 

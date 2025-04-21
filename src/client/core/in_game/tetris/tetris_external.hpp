@@ -5,6 +5,10 @@
 
 namespace client {
 
+    /**
+     * @brief External tetris. "External" means that some data is hidden
+     * because only that player can see it.
+     */
     struct TetrisExternal final : public AbstractTetris {
         void deserialize(const nlohmann::json &j) override;
     };

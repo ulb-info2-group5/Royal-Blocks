@@ -5,9 +5,15 @@
 
 namespace client {
 
+    /**
+     * @brief Abstract Player Tetris.
+     */
     struct AbstractPlayerTetris {
         virtual ~AbstractPlayerTetris() = default;
 
+        /**
+         * @brief Deserializes the AbstractPlayerTetris.
+         */
         virtual void deserialize(const nlohmann::json &j) = 0;
     };
 

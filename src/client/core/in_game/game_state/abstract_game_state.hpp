@@ -8,6 +8,9 @@
 
 namespace client {
 
+    /**
+     * @brief Abtract class for client::GameState  and client::GameStateViewer.
+     */
     struct AbstractGameState {
         bool isFinished = true; // default to not in a game
         GameMode gameMode;

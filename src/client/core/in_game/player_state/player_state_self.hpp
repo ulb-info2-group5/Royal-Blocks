@@ -13,6 +13,11 @@
 
 namespace client {
 
+    /**
+     * @brief Self player state. "Self" means that this packet contains all the
+     * information about that player, it is supposed to be sent only to the
+     * player themself.
+     */
     struct PlayerStateSelf final : public AbstractPlayerState {
         std::optional<UserID> penaltyTarget;
 

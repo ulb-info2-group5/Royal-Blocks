@@ -7,6 +7,10 @@
 
 namespace client {
 
+    /**
+     * @brief External player tetris. "External" means that some data is hidden
+     * because only that player can see it.
+     */
     struct PlayerTetrisExternal final : public AbstractPlayerTetris {
         PlayerStateExternal playerState;
         TetrisExternal tetris;

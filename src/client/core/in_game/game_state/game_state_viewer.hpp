@@ -5,6 +5,9 @@
 
 namespace client {
 
+    /**
+     * @brief Client GameState (viewer).
+     */
     struct GameStateViewer : public client::AbstractGameState {
         void deserialize(const nlohmann::json &j) override;
     };

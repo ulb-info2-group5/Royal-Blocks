@@ -7,6 +7,9 @@
 
 namespace client {
 
+    /**
+     * @brief Abtract class for player-states.
+     */
     struct AbstractPlayerState {
         UserID userID;
         Score score;

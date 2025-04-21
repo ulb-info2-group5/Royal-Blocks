@@ -7,11 +7,17 @@
 
 namespace client {
 
+    /**
+     * @brief Tetromino struct.
+     */
     struct Tetromino {
         Vec2 anchorPoint;
         std::vector<Vec2> body;
         unsigned colorId;
 
+        /**
+         * @brief Deserializes the tetromino.
+         */
         void deserialize(const nlohmann::json &j);
     };
 

@@ -7,9 +7,15 @@
 
 namespace client {
 
+    /**
+     * @brief Tetromino-queue.
+     */
     struct TetrominoQueue {
         std::deque<client::Tetromino> queue;
 
+        /**
+         * @brief Deserializes Tetromino-queue.
+         */
         void deserialize(const nlohmann::json &j);
     };
 

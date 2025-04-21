@@ -5,11 +5,17 @@
 
 namespace client {
 
+    /**
+     * @brief Abtract class for Tetris.
+     */
     struct AbstractTetris {
         Board board;
 
         virtual ~AbstractTetris() = default;
 
+        /**
+         * @brief Deserializes the Tetris.
+         */
         virtual void deserialize(const nlohmann::json &j) = 0;
     };
 
