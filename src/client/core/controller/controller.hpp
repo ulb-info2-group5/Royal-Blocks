@@ -257,7 +257,7 @@ class Controller {
     /**
      * @brief Holds the active tetromino.
      */
-    void holdNextTetromino();
+    void holdActiveTetromino();
 
     /**
      * @brief Buys the given effect (stashes if stashForLater).

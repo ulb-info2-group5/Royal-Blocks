@@ -139,7 +139,7 @@ class Tetris {
      * If there was no hold tetromino, move the tetromino to hold.
      * If there was a hold tetromino, swap it with the tetromino to hold.
      */
-    void eventHoldNextTetromino();
+    void eventHoldActiveTetromino();
 
     /**
      * @brief Adds penalty rows, sets isAlive flag to false if it made the

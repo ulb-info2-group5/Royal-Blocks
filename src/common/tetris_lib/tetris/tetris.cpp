@@ -166,7 +166,7 @@ void Tetris::eventTryRotateActive(bool rotateClockwise) {
     updatePreviewTetromino();
 }
 
-void Tetris::eventHoldNextTetromino() {
+void Tetris::eventHoldActiveTetromino() {
     if (!canHold_) {
         return;
     }

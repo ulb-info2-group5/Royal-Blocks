@@ -18,7 +18,7 @@
 #include "../../../common/bindings/in_game/buy_penalty.hpp"
 #include "../../../common/bindings/in_game/empty_penalty_stash.hpp"
 #include "../../../common/bindings/in_game/game_state_client.hpp"
-#include "../../../common/bindings/in_game/hold_next_tetromino.hpp"
+#include "../../../common/bindings/in_game/hold_active_tetromino.hpp"
 #include "../../../common/bindings/in_game/move_active.hpp"
 #include "../../../common/bindings/in_game/quit_game.hpp"
 #include "../../../common/bindings/in_game/rotate_active.hpp"
@@ -260,8 +260,8 @@ void Controller::emptyPenaltyStash() {
     networkManager_.send(bindings::EmptyPenaltyStash{}.to_json().dump());
 }
 
-void Controller::holdNextTetromino() {
-    networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
+void Controller::holdActiveTetromino() {
+    networkManager_.send(bindings::HoldActiveTetromino{}.to_json().dump());
 }
 
 void Controller::selectTarget(UserID userId) {
@@ -316,7 +316,7 @@ void Controller::handleKeyPress(const std::string &pressedKey) {
     } else if (pressedKey == "f") {
         networkManager_.send(bindings::RotateActive{false}.to_json().dump());
     } else if (pressedKey == "h") {
-        networkManager_.send(bindings::HoldNextTetromino{}.to_json().dump());
+        networkManager_.send(bindings::HoldActiveTetromino{}.to_json().dump());
     } else if (pressedKey == "g") {
         networkManager_.send(bindings::RotateActive{true}.to_json().dump());
     } else if (pressedKey == "e") {

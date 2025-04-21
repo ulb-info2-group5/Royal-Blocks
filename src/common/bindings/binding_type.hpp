@@ -34,7 +34,7 @@ namespace bindings {
         BuyBonus,
         BuyPenalty,
         EmptyPenaltyStash,
-        HoldNextTetromino,
+        HoldActiveTetromino,
         MoveActive,
         RotateActive,
         SelectTarget,

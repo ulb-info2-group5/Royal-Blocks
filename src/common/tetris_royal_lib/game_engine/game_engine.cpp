@@ -399,7 +399,7 @@ void GameEngine::bigDrop(UserID userID) {
     onTetrominoPlaced(*pPlayerState, numClearedRows);
 }
 
-void GameEngine::holdNextTetromino(UserID userID) {
+void GameEngine::holdActiveTetromino(UserID userID) {
     PlayerStatePtr pPlayerState = pGameState_->getPlayerState(userID);
     if (!checkAlive(pPlayerState)) {
         return;
@@ -414,7 +414,7 @@ void GameEngine::holdNextTetromino(UserID userID) {
         return;
     }
 
-    pTetris->eventHoldNextTetromino();
+    pTetris->eventHoldActiveTetromino();
 }
 
 void GameEngine::tryRotateActive(UserID userID, bool rotateClockwise) {

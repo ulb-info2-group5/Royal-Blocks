@@ -238,9 +238,9 @@ class GameEngine {
     void bigDrop(UserID userID);
 
     /**
-     * @brief Moves the next Tetromino from the queue to hold.
+     * @brief Holds the active tetromino.
      */
-    void holdNextTetromino(UserID userID);
+    void holdActiveTetromino(UserID userID);
 
     /**
      * @brief Rotates the player's active Tetromino in the given direction
