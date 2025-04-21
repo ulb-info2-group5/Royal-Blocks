@@ -6,8 +6,15 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Bindings sent by the client to change their username.
+     */
     struct ChangeUsername {
         std::string username;
 

@@ -8,8 +8,16 @@
 
 #include "../types/types.hpp"
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Bindings that contains the ranking (each player and their
+     * associated score).
+     */
     struct Ranking {
         using PlayerScore = std::pair<std::string, Score>;
 

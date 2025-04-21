@@ -11,8 +11,21 @@
 
 #include <variant>
 
+/**
+ * This file contains everything related to deserialization of GameState (used
+ * by the client).
+ */
+
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Namespace for all the serialization/deserialization of GameState
+     * binding.
+     */
     namespace GameStateMessage {
 
         /**
@@ -30,6 +43,10 @@ namespace bindings {
             return gameStateBinding;
         };
 
+        /**
+         * @brief Deserializes the given GameState binding into a
+         * client::GameStateViewer.
+         */
         client::GameStateViewer deserializeForViewer(const nlohmann::json &j) {
             if (j.at("type") != BindingType::GameStateViewer) {
                 throw std::runtime_error("Invalid type field in JSON");

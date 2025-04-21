@@ -5,8 +5,16 @@
 #include "user.hpp"
 #include <vector>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the server, contains all the pending friends
+     * request.
+     */
     struct PendingFriendRequests {
         std::vector<bindings::User> requests;
 

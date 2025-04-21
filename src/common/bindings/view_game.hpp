@@ -8,10 +8,17 @@
 #include <nlohmann/json.hpp>
 #include <optional>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
-    struct ViewGame{
-        UserID targetUser;
+    /**
+     * @brief Binding sent by the player to spectate/view another user's game.
+     */
+    struct ViewGame {
+        UserID targetUser; // the user to spectate
         nlohmann::json to_json() const {
             return nlohmann::json{{"type", BindingType::ViewGame},
                                   {"data",
@@ -30,9 +37,7 @@ namespace bindings {
                 data.at("targetUser").get<UserID>(),
             };
         }
-    
     };
-        
 
 } // namespace bindings
 

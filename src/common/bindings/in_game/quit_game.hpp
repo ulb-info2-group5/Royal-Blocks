@@ -5,8 +5,15 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the client to quit the current game.
+     */
     struct QuitGame {
         nlohmann::json to_json() const {
             return nlohmann::json{

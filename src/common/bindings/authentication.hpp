@@ -6,8 +6,16 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent to the server when a client attempts to
+     * authentify.
+     */
     struct Authentication {
         std::string nickname;
         std::string password;

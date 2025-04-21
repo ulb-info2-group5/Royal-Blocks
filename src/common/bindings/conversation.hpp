@@ -7,8 +7,15 @@
 
 using SenderMessage = std::pair<UserID, std::string>;
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding representing a single conversation between two players.
+     */
     struct Conversation {
         std::vector<SenderMessage> senderMessages;
 

@@ -8,8 +8,15 @@
 
 #include <vector>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding containing a user's friendslist.
+     */
     struct FriendsList {
         std::vector<User> friendsList;
 

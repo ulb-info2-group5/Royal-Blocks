@@ -6,8 +6,15 @@
 
 #include <unordered_map>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Represents multiple conversations associated with a specific user.
+     */
     struct Conversations {
         using NameConversation = std::pair<std::string, Conversation>;
 

@@ -5,8 +5,17 @@
 
 #include <nlohmann/json.hpp>
 #include <string>
+
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent to the server when a client attempts to
+     * register.
+     */
     struct Registration {
         std::string nickname;
         std::string password;

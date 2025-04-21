@@ -6,8 +6,17 @@
 #include "../types/types.hpp"
 
 #include <nlohmann/json.hpp>
+
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the client to remove a friend from the
+     * friendslist.
+     */
     struct RemoveFriend {
         UserID userID;
 

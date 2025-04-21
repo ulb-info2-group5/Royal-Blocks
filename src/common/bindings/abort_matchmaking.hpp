@@ -5,8 +5,16 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the client when the player wants to abort the
+     * matchmaking process.
+     */
     struct AbortMatchMaking {
         nlohmann::json to_json() const {
             return nlohmann::json{

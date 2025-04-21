@@ -12,7 +12,15 @@
 
 using PlayerID = size_t;
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
+
+    /**
+     * @brief Binding representing a user's state.
+     */
     enum class State {
         Offline,
         Menu,
@@ -20,6 +28,7 @@ namespace bindings {
         InGame,
         Viewer,
     };
-};
+
+}; // namespace bindings
 
 #endif

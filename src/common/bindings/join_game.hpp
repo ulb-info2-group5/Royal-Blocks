@@ -8,8 +8,15 @@
 #include <nlohmann/json.hpp>
 #include <optional>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @biref Binding sent by the client to join a game.
+     */
     struct JoinGame {
         // friendId = nullopt means "join any game in this GameMode"
         GameMode gameMode;

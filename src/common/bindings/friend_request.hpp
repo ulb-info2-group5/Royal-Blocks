@@ -5,8 +5,15 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by a client to send a friend request to another user.
+     */
     struct FriendRequest {
         std::string targetName;
 

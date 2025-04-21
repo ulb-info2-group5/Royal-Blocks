@@ -6,15 +6,20 @@
 #include "binding_type.hpp"
 #include "user_state.hpp"
 
+#include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
-#include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Represents a user.
+     */
     struct User {
-        
-
         UserID userID;
         std::string username;
         State state;

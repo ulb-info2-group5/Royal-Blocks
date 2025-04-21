@@ -8,8 +8,15 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding representing a message.
+     */
     struct Message {
         UserID recipientId;
         std::string content;

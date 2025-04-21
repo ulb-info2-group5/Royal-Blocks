@@ -5,8 +5,18 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Represents the response to a registration request.
+     *
+     * This binding is used to indicate whether a registration attempt was
+     * successful.
+     */
     struct RegistrationResponse {
         bool success;
 

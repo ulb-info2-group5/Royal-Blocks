@@ -7,6 +7,10 @@
 
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the server to a client as a response to a password
+     * change. Indicates succes or fail.
+     */
     struct ChangeUsernameResponse {
         bool success;
 

@@ -5,8 +5,18 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Represents the response to an authentication request.
+     *
+     * This binding is used to indicate whether an authentication attempt was
+     * successful.
+     */
     struct AuthenticationResponse {
         bool success;
 

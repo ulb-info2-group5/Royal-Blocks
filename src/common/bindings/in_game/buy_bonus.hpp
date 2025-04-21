@@ -7,8 +7,15 @@
 
 #include <nlohmann/json.hpp>
 
+/**
+ * For an overview of the bindings system and the list of available binding, see
+ * bindings_type.hpp.
+ */
 namespace bindings {
 
+    /**
+     * @brief Binding sent by the client to buy a bonus.
+     */
     struct BuyBonus {
         BonusType bonusType;
 
