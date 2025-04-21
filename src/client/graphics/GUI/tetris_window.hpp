@@ -15,6 +15,9 @@ enum class UpdateType;
 
 namespace GUI {
 
+    /**
+     * @brief MainWindow of the GUI tetris client.
+     */
     class TetrisWindow : public QMainWindow {
         Q_OBJECT
 

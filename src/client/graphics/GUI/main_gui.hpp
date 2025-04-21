@@ -10,6 +10,11 @@ class Controller;
 
 namespace GUI {
 
+    /**
+     * @brief Manages the gui component of the program.
+     * Owns and manages the QApplication and the Mainwindow of the GUI tetris
+     * client.
+     */
     class MainGui : public AbstractDisplay {
       private:
         QApplication app_;
