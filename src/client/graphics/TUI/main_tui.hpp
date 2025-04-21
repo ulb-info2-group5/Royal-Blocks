@@ -10,26 +10,29 @@
 
 namespace TUI {
 
+    /**
+     * @brief TUI component of the program.
+     */
     class MainTui : public AbstractDisplay {
       private:
         ftxui::ScreenInteractive screen_;
 
-        /*
+        /**
          * @brief The current window to show to the user
          */
         ftxui::Component currentWindow_;
 
-        /*
+        /**
          * @brief Draw the start screen of the game with the title of the game
          */
         void drawStartScreen();
 
-        /*
+        /**
          * @brief Draw the end screen of the game with a goodbye message
          */
         void drawEndScreen();
 
-        /*
+        /**
          * @brief Handle the Ctrl+C and Ctrl+Z event to prevent the application
          * from closing
          *
@@ -40,7 +43,7 @@ namespace TUI {
         ftxui::Component handleCtrl(ftxui::Component &component);
 
       public:
-        /*
+        /**
          * @brief Construct a new Main Tui object
          *
          * @param controller The controller to use to interact with the game
@@ -49,23 +52,30 @@ namespace TUI {
 
         ~MainTui() = default;
 
-        /*
+        /**
          * @brief Render the component in the screen
          *
          * @param component The component to render
          */
         void render(ftxui::Component &component);
 
-        /*
+        /**
          * @brief Stop the rendering of the screen
          */
         void stopRender();
 
+        /**
+         * @biref Runs the TUI.
+         */
         virtual void run(Controller &controller) override;
 
+        /**
+         * @brief Forces the screen to refresh the things related to the given
+         * updateType.
+         */
         virtual void forceRefresh(UpdateType updateType) override;
 
-        /*
+        /**
          * @brief Simulate the tab key press
          */
         void simulateTab();

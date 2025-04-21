@@ -11,7 +11,7 @@ class Controller;
 namespace GUI {
 
     /**
-     * @brief Manages the gui component of the program.
+     * @brief Manages the GUI component of the program.
      * Owns and manages the QApplication and the Mainwindow of the GUI tetris
      * client.
      */
