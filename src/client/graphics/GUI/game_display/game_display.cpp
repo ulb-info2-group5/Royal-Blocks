@@ -431,6 +431,8 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
+        updateGameState();
+
         QVBoxLayout *leftPane = new QVBoxLayout();
         leftPane->setAlignment(Qt::AlignCenter);
         QVBoxLayout *middlePane = new QVBoxLayout();
