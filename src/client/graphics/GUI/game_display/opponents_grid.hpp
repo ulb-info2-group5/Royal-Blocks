@@ -11,7 +11,7 @@ namespace GUI {
         Q_OBJECT
 
       private:
-        QGridLayout layout_;
+        QHBoxLayout layout_;
 
       public:
         OpponentsGrid(QWidget *parent = nullptr);

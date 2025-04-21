@@ -330,7 +330,6 @@ namespace GUI {
             QPushButton *returnToMainMenuButton =
                 new QPushButton("Return to Main Menu");
             returnToMainMenuButton->setFixedWidth(500);
-            returnToMainMenuButton->setAutoDefault(true);
             connect(returnToMainMenuButton, &QPushButton::clicked, this,
                     &GameDisplay::on_ReturnToMainMenuButtonClicked);
 
