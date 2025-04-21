@@ -6,6 +6,7 @@
 #include "../../core/in_game/game_state/game_state_viewer.hpp"
 
 #include <optional>
+#include <string_view>
 
 class Controller;
 
@@ -21,6 +22,9 @@ class Controller;
  * userId.
  */
 class AbstractGameDisplay {
+  public:
+    constexpr static std::string_view QUIT_KEY = "q";
+
   private:
     std::variant<client::GameState, client::GameStateViewer> gameState_;
 

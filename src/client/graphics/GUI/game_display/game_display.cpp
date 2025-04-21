@@ -321,6 +321,10 @@ namespace GUI {
         }
 
         handleKeyPress(keyPressed);
+
+        if (keyPressed == QUIT_KEY) {
+            emit backToMainMenu();
+        }
     }
 
     void GameDisplay::updateGameState() {
