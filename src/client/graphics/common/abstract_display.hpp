@@ -5,8 +5,9 @@
 
 class Controller;
 
-// TODO: doc
-
+/**
+ * @brief Absstract class for displays such as TUI and GUI.
+ */
 class AbstractDisplay {
   public:
     AbstractDisplay() = default;
@@ -15,8 +16,15 @@ class AbstractDisplay {
     AbstractDisplay &operator=(const AbstractDisplay &) = default;
     AbstractDisplay &operator=(AbstractDisplay &&) = default;
 
+    /**
+     * @brief Forces the screen to refresh the things related to the given
+     * updateType.
+     */
     virtual void forceRefresh(UpdateType updateType) = 0;
 
+    /**
+     * @brief Runs the display.
+     */
     virtual void run(Controller &controller) = 0;
 
     virtual ~AbstractDisplay() = default;
