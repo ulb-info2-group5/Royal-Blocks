@@ -49,8 +49,8 @@ bool DatabaseManager::executeSqlChangeData(
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
+        if (std::holds_alternative<UserID>(params[i])) {
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<UserID>(params[i]));
         } else {
             sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
@@ -82,8 +82,8 @@ bool DatabaseManager::executeSqlRecoveryInt(
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
+        if (std::holds_alternative<UserID>(params[i])) {
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<UserID>(params[i]));
         } else {
             sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
@@ -118,8 +118,8 @@ bool DatabaseManager::executeSqlRecoveryString(
 
     // Bind the parameters
     for (size_t i = 0; i < params.size(); ++i) {
-        if (std::holds_alternative<int>(params[i])) {
-            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<int>(params[i]));
+        if (std::holds_alternative<UserID>(params[i])) {
+            sqlite3_bind_int(stmt, static_cast<int>(i + 1), std::get<UserID>(params[i]));
         } else {
             sqlite3_bind_text(stmt, static_cast<int>(i + 1),
                               std::get<std::string>(params[i]).c_str(), -1,
@@ -169,7 +169,7 @@ std::vector<std::pair<std::string, size_t>> DatabaseManager::getRanking() const 
 }
 
 bool DatabaseManager::findUserInDatabase(const std::string &table,
-                                         const int userId) {
+                                         const UserID & userID) {
     // Prepare the SQL statement
     std::string sql =
         "SELECT COUNT(*) FROM " + table + " WHERE user1 = ? OR user2 = ?";
@@ -178,8 +178,8 @@ bool DatabaseManager::findUserInDatabase(const std::string &table,
 
     // Execute the SQL statement
     if (sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_int(stmt, 1, userId);
-        sqlite3_bind_int(stmt, 2, userId);
+        sqlite3_bind_int(stmt, 1, userID);
+        sqlite3_bind_int(stmt, 2, userID);
 
         // Get the data from the statement
         if (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -192,8 +192,7 @@ bool DatabaseManager::findUserInDatabase(const std::string &table,
     return exists;
 }
 
-std::vector<int> DatabaseManager::getVectorInfo(const std::string &sql,
-                                                int id) const {
+std::vector<int> DatabaseManager::getVectorInfo(const std::string &sql, const UserID &userID) const {
     std::vector<int> result;
     sqlite3_stmt *stmt;
 
@@ -206,15 +205,15 @@ std::vector<int> DatabaseManager::getVectorInfo(const std::string &sql,
     }
 
     // Bind the parameters
-    sqlite3_bind_int(stmt, 1, id);
-    sqlite3_bind_int(stmt, 2, id);
+    sqlite3_bind_int(stmt, 1, userID);
+    sqlite3_bind_int(stmt, 2, userID);
 
     // Execute the SQL statement
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-        int colUser1 = sqlite3_column_int(stmt, 0);
-        int colUser2 = sqlite3_column_int(stmt, 1);
+        UserID colUser1 = sqlite3_column_int(stmt, 0);
+        UserID colUser2 = sqlite3_column_int(stmt, 1);
 
-        int friendId = (colUser1 == id) ? colUser2 : colUser1;
+        UserID friendId = (colUser1 == userID) ? colUser2 : colUser1;
         result.push_back(friendId);
     }
 

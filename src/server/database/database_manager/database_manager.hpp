@@ -5,10 +5,12 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include "../../common/types/types.hpp"
+
 
 class DatabaseManager {
   private:
-    using MultiType = std::variant<int, std::string>;
+    using MultiType = std::variant<UserID, std::string>;
 
     sqlite3 *db_;
 
@@ -62,10 +64,10 @@ class DatabaseManager {
      * @brief Execute a SQL query that returns data from the database
      *
      * @param sql SQL query to execute
-     * @param id Id to bind to the query
+     * @param UserID Id to bind to the query
      * @return The result of the query (vector of int)
      */
-    std::vector<int> getVectorInfo(const std::string &sql, const int id) const;
+    std::vector<int> getVectorInfo(const std::string &sql, const UserID& userID) const;
 
     /*
      * @brief Execute a SQL query that changes data of the database
@@ -95,11 +97,11 @@ class DatabaseManager {
      * @brief Find the user in the table of database
      *
      * @param string table The table where to find the user
-     * @param int userId The user id to find
+     * @param int userID The user id to find
      * @ return bool True if the user is in the table of database, false
      * otherwise
      */
-    bool findUserInDatabase(const std::string &table, const int userId);
+    bool findUserInDatabase(const std::string &table, const UserID& userID);
 };
 
 #endif // DATABASE_MANAGER_HPP

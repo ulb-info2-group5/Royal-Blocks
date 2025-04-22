@@ -23,133 +23,133 @@ FriendsManager::FriendsManager(std::shared_ptr<DatabaseManager> &db)
 }
 
 // ### Private methods ###
-bool FriendsManager::checkFriendshipExists(const int idUser1,
-                                        const int idUser2) const {
+bool FriendsManager::checkFriendshipExists(const UserID& user1ID,
+                                        const UserID& user2ID) const {
     std::string checkSQL = "SELECT COUNT(*) FROM friends WHERE (user1 = ? AND "
                         "user2 = ?) OR (user1 = ? AND user2 = ?)";
     int count = 0;
     return dbManager_->executeSqlRecoveryInt(
-            checkSQL, {idUser1, idUser2, idUser2, idUser1}, count)
+            checkSQL, {user1ID, user2ID, user2ID, user1ID}, count)
         && count > 0;
 }
 
-bool FriendsManager::checkUserExists(const int userId) const {
+bool FriendsManager::checkUserExists(const UserID& userID) const {
     std::string query = "SELECT COUNT(*) FROM users WHERE id = ?";
     int count = 0;
-    return dbManager_->executeSqlRecoveryInt(query, {userId}, count)
+    return dbManager_->executeSqlRecoveryInt(query, {userID}, count)
         && count > 0;
 }
 
 // ### Public methods ###
-bool FriendsManager::addFriend(const int userId, const int friendUserId) {
-    if (userId == friendUserId) {
+bool FriendsManager::addFriend(const UserID& userID, const UserID& friendID) {
+    if (userID == friendID) {
         std::cerr << "Error: Cannot add yourself as a friend" << std::endl;
         return false;
     }
 
-    if (!checkUserExists(friendUserId)) {
-        std::cerr << "Error: User with id '" << friendUserId
+    if (!checkUserExists(friendID)) {
+        std::cerr << "Error: User with id '" << friendID
                 << "' does not exist." << std::endl;
         return false;
     }
 
-    if (checkFriendshipExists(userId, friendUserId)) {
-        std::cerr << "Error: Friendship between '" << userId << "' and '"
-                << friendUserId << "' already exists." << std::endl;
+    if (checkFriendshipExists(userID, friendID)) {
+        std::cerr << "Error: Friendship between '" << userID << "' and '"
+                << friendID << "' already exists." << std::endl;
         return false;
     }
 
     // Add the friends each other
     return dbManager_->executeSqlChangeData(
         "INSERT INTO friends (user1, user2) VALUES (?, ?)",
-        {userId, friendUserId});
+        {userID, friendID});
 }
 
-bool FriendsManager::removeFriend(const int userId, const int friendUserId) {
-    if (userId == friendUserId) {
+bool FriendsManager::removeFriend(const UserID& userID, const UserID& friendID) {
+    if (userID == friendID) {
         std::cerr << "Error: Cannot remove yourself as a friend" << std::endl;
         return false;
     }
 
-    if (!checkFriendshipExists(userId, friendUserId)) {
-        std::cerr << "Error: Friendship between '" << userId << "' and '"
-                << friendUserId << "' does not exist." << std::endl;
+    if (!checkFriendshipExists(userID, friendID)) {
+        std::cerr << "Error: Friendship between '" << userID << "' and '"
+                << friendID << "' does not exist." << std::endl;
         return false;
     }
 
     // Remove the friendship each other
     return dbManager_->executeSqlChangeData(
             "DELETE FROM friends WHERE user1 = ? AND user2 = ?",
-            {userId, friendUserId})
+            {userID, friendID})
         && dbManager_->executeSqlChangeData(
             "DELETE FROM friends WHERE user1 = ? AND user2 = ?",
-            {friendUserId, userId});
+            {friendID, userID});
 }
 
 // == pending friend == 
 
 
-std::vector<int> FriendsManager::getPendingFriendRequest(const int userId){
+std::vector<int> FriendsManager::getPendingFriendRequest(const UserID& userID){
     std::string sql =
     "SELECT user1, user2 FROM pendingFriendRequests WHERE user1 = ? OR user2 = ?";
-    return dbManager_->getVectorInfo(sql, userId);
+    return dbManager_->getVectorInfo(sql, userID);
 }
 
 
-bool FriendsManager::isPendingFriendRequestExist(const int user1Id, const int user2Id){
+bool FriendsManager::isPendingFriendRequestExist(const UserID& user1ID, const UserID&  user2ID){
     std::string checkSQL = "SELECT COUNT(*) FROM pendingFriendRequests WHERE (user1 = ? AND "
     "user2 = ?) OR (user1 = ? AND user2 = ?)";
     int count = 0;
     return dbManager_->executeSqlRecoveryInt(
-    checkSQL, {user1Id, user2Id, user2Id, user1Id}, count)
+    checkSQL, {user1ID, user2ID, user2ID, user1ID}, count)
     && count > 0;
 
 }
 
 
 
-bool FriendsManager::addPendingFriendRequest(const int user1Id, const int user2Id){
-    if (user1Id == user2Id ){
+bool FriendsManager::addPendingFriendRequest(const UserID& user1ID, const UserID& user2ID){
+    if (user1ID == user2ID ){
         std::cerr << "Error: user1 = user2 " << std::endl;
         return false;
     }
-    if (isPendingFriendRequestExist(user1Id, user2Id)){
+    if (isPendingFriendRequestExist(user1ID, user2ID)){
         std::cerr << "error pendingFriendRequest already exists" << std::endl;
         return false;
     }
-    if (checkFriendshipExists(user1Id, user2Id)){
+    if (checkFriendshipExists(user1ID, user2ID)){
     std::cerr << "error friendship exist " << std::endl;
     return false;
     }
 
     return dbManager_->executeSqlChangeData(
         "INSERT INTO pendingFriendRequests (user1, user2) VALUES (?, ?)",
-        {user1Id, user2Id});
+        {user1ID, user2ID});
 }
 
 
-bool FriendsManager::removePendingFriendRequest(const int user1Id, const int user2Id){
-    if (!isPendingFriendRequestExist(user1Id, user2Id)) {
-        std::cerr << "Error: PendingFriendRequest between '" << user1Id << "' and '"
-                << user2Id << "' does not exist." << std::endl;
+bool FriendsManager::removePendingFriendRequest(const UserID& user1ID, const UserID& user2ID){
+    if (!isPendingFriendRequestExist(user1ID, user2ID)) {
+        std::cerr << "Error: PendingFriendRequest between '" << user1ID << "' and '"
+                << user2ID << "' does not exist." << std::endl;
         return false;
     }
 
     // Remove the friendship each other
     return dbManager_->executeSqlChangeData(
             "DELETE FROM pendingFriendRequests WHERE user1 = ? AND user2 = ?",
-            {user1Id, user2Id})
+            {user1ID, user2ID})
         && dbManager_->executeSqlChangeData(
             "DELETE FROM pendingFriendRequests WHERE user1 = ? AND user2 = ?",
-            {user2Id, user1Id});
+            {user2ID, user1ID});
 }
 
 
 // ### Getters ###
 
-std::vector<int> FriendsManager::getFriends(const int userId) const {
+std::vector<int> FriendsManager::getFriends(const UserID& userID) const {
     // Prepare the SQL statement
     std::string sql =
         "SELECT user1, user2 FROM friends WHERE user1 = ? OR user2 = ?";
-    return dbManager_->getVectorInfo(sql, userId);
+    return dbManager_->getVectorInfo(sql, userID);
 }

@@ -17,7 +17,7 @@ class FriendsManager {
     * @param idUser2 Id of the second user
     * @return true if the friendship exists
     */
-    bool checkFriendshipExists(const int idUser1, const int idUser2) const;
+    bool checkFriendshipExists(const UserID& user1ID, const UserID& user2ID) const;
 
     /*
     * @brief Check if a user exists in the database
@@ -25,7 +25,7 @@ class FriendsManager {
     * @param userId Id of the user
     * @return true if the user exists
     */
-    bool checkUserExists(const int userId) const;
+    bool checkUserExists(const UserID& userID) const;
 
   public:
     /*
@@ -47,23 +47,23 @@ class FriendsManager {
     * @param friendUser Username of the friend to add
     * @return true if the friend was added successfully
     */
-    bool addFriend(const int userId, const int friendUserId);
+    bool addFriend(const UserID& userID, const UserID& friendID);
 
 
-    bool addPendingFriendRequest(const int user1Id, const int user2Id);
-    bool isPendingFriendRequestExist(const int user1Id, const int user2Id);
+    bool addPendingFriendRequest(const UserID& user1ID, const UserID& user2ID);
+    bool isPendingFriendRequestExist(const UserID& user1ID, const UserID& user2ID);
 
-    bool removePendingFriendRequest(const int user1Id, const int user2Id);
-    std::vector<int> getPendingFriendRequest(const int userId);
+    bool removePendingFriendRequest(const UserID& user1ID, const UserID&  user2ID);
+    std::vector<int> getPendingFriendRequest(const UserID& userID);
 
     /*
     * @brief Remove a friend from the database
     *
-    * @param user Username of the user that wants to remove a friend
-    * @param friendUser Username of the friend to remove
+    * @param userID ID of the user that wants to remove a friend
+    * @param friendID ID of the friend to remove
     * @return true if the friend was removed successfully
     */
-    bool removeFriend(const int userId, const int friendUserId);
+    bool removeFriend(const UserID& userID, const UserID& friendID);
 
     /*
     * @brief Get all the list of friends of a user
@@ -71,7 +71,7 @@ class FriendsManager {
     * @param userId Id of the user
     * @return vector<int> List of friends
     */
-    std::vector<int> getFriends(const int userId) const;
+    std::vector<int> getFriends(const UserID& userID) const;
 
 
 

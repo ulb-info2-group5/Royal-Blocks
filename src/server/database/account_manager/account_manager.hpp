@@ -60,7 +60,7 @@ class AccountManager {
      * @param userId ID of the account
      * @return true if the account was deleted successfully
      */
-    bool deleteAccount(const int userId);
+    bool deleteAccount(const UserID& userID);
 
     /*
      * @brief Check if the user already exists
@@ -92,14 +92,14 @@ class AccountManager {
     /*
      * @brief Update the score of a user
      *
-     * @param userId ID of the user
+     * @param userID ID of the user
      * @param newScore New score of the user
      */
-    void updateScore(const int userId, const int newScore);
+    void updateScore(const UserID& userID, const int newScore);
 
-    bool updateUsername(const int userID , std::string &newUsername);
+    bool updateUsername(const UserID& userID , std::string &newUsername);
 
-    void updatePassword(const int userID , std::string &newPassword);
+    void updatePassword(const UserID& userID , std::string &newPassword);
 
     /*
      * @brief Get the user ID from the username
@@ -112,10 +112,10 @@ class AccountManager {
     /*
      * @brief Get the username from the user ID
      *
-     * @param userId ID of the user
+     * @param userID ID of the user
      * @return Username of the user
      */
-    std::string getUsername(const int userId) const;
+    std::string getUsername(const UserID& userID) const;
 
     /*
      * @brief Get the ranking of the users for the endless mode

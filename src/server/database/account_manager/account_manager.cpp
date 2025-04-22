@@ -34,6 +34,7 @@ CreateAccountStatus AccountManager::createAccount(const std::string &username,
 
 
     for (const char c : username) {
+        
         if (invalidChars.find(c) != std::string::npos || isspace(c)) {
             std::cerr << "AccountManager error: Username contains an invalid character" << std::endl;
             return CreateAccountStatus::FAILED;
@@ -59,20 +60,20 @@ CreateAccountStatus AccountManager::createAccount(const std::string &username,
     return res;
 }
 
-bool AccountManager::deleteAccount(const int userId) {
-    if (dbManager_->findUserInDatabase("friends", userId)) {
+bool AccountManager::deleteAccount(const UserID& userID) {
+    if (dbManager_->findUserInDatabase("friends", userID)) {
         // Delete all the friendships of the user
         if (!dbManager_->executeSqlChangeData(
                 "DELETE FROM friends WHERE user1 = ? OR user2 = ?",
-                {userId, userId})) {
-            std::cerr << "Error: Failed to delete friends of user '" << userId
+                {userID, userID})) {
+            std::cerr << "Error: Failed to delete friends of user '" << userID
                       << "'." << std::endl;
             return false;
         }
     }
 
     return dbManager_->executeSqlChangeData("DELETE FROM users WHERE id = ?",
-                                            {userId});
+                                            {userID});
 }
 
 bool AccountManager::checkUserPassword(const std::string &username,
@@ -96,13 +97,13 @@ bool AccountManager::login(const std::string &username,
     return checkUserPassword(username, password);
 }
 
-void AccountManager::updateScore(const int userId, const int newScore) {
+void AccountManager::updateScore(const UserID& userID, const int newScore) {
     dbManager_->executeSqlChangeData(
         "UPDATE users SET score = MAX(score, ?) WHERE id = ?",
-        {newScore, userId});
+        {newScore, userID});
 }
 
-bool AccountManager::updateUsername(const int userID , std::string &newUsername){
+bool AccountManager::updateUsername(const UserID& userID , std::string &newUsername){
     if (checkUsernameExists(newUsername)){
         std::cout << "a user already has this nickname" << std::endl;
         return false;
@@ -113,7 +114,7 @@ bool AccountManager::updateUsername(const int userID , std::string &newUsername)
     }
 }
 
-void AccountManager::updatePassword(const int userID , std::string &newPassword){
+void AccountManager::updatePassword(const UserID& userID , std::string &newPassword){
     dbManager_->executeSqlChangeData(
         "UPDATE users SET password = ? WHERE id = ? ", {newPassword, userID});
 }
@@ -121,19 +122,19 @@ void AccountManager::updatePassword(const int userID , std::string &newPassword)
 
 int AccountManager::getUserId(const std::string &username) const {
     std::string sql = "SELECT id FROM users WHERE username = ?";
-    int userId = -1;
-    dbManager_->executeSqlRecoveryInt(sql, {username}, userId);
-    if (userId == -1) {
+    int userID = -1;
+    dbManager_->executeSqlRecoveryInt(sql, {username}, userID);
+    if (userID == -1) {
         std::cerr << "Error: User '" << username << "' does not exist."
                   << std::endl;
     }
-    return userId;
+    return userID;
 }
 
-std::string AccountManager::getUsername(const int userId) const {
+std::string AccountManager::getUsername(const UserID& userID) const {
     std::string sql = "SELECT username FROM users WHERE id = ?";
     std::string username;
-    dbManager_->executeSqlRecoveryString(sql, {userId}, username);
+    dbManager_->executeSqlRecoveryString(sql, {userID}, username);
     return username;
 }
 
