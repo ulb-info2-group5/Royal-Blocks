@@ -30,10 +30,11 @@ class ClientManager {
     // map => { key : client id , value : the client session }
     std::unordered_map<UserID, std::shared_ptr<ClientLink>> connectedClients_;
     std::mutex mutex_;
+    AccountService accountService_;
     GamesManager gamesManager_;
     Matchmaking matchmaking_;
     SocialService socialService_;
-    AccountService accountService_;
+    
     
 
 

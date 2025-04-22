@@ -10,7 +10,7 @@
 
 class DatabaseManager {
   private:
-    using MultiType = std::variant<UserID, std::string>;
+    using MultiType = std::variant<size_t, std::string>;
 
     sqlite3 *db_;
 

@@ -97,7 +97,7 @@ bool AccountManager::login(const std::string &username,
     return checkUserPassword(username, password);
 }
 
-void AccountManager::updateScore(const UserID& userID, const int newScore) {
+void AccountManager::updateScore(const UserID& userID, const Score& newScore) {
     dbManager_->executeSqlChangeData(
         "UPDATE users SET score = MAX(score, ?) WHERE id = ?",
         {newScore, userID});

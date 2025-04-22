@@ -14,7 +14,7 @@ struct Message {
     UserID senderID;
     std::string content;
     nlohmann::json to_json() const {
-        return nlohmann::json{{"senderId", senderID}, {"content", content}};
+        return nlohmann::json{{"senderID", senderID}, {"content", content}};
     }
     static Message from_json(const nlohmann::json &j) {
         return Message{(j.at("senderID").get<UserID>()),
