@@ -199,17 +199,17 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &us
         [this](UserID userID){updateThisUserWithAllhisFriends(userID);}).to_json());        
         break;
     case bindings::BindingType::AbortMatchMaking:
-        matchmaking_.abortMatchmaking(connectedClients_[clientId]);
-        updateThisUserWithAllhisFriends(clientId);
+        matchmaking_.abortMatchmaking(connectedClients_[userID]);
+        updateThisUserWithAllhisFriends(userID);
         break;
 
     case bindings::BindingType::ViewGame:
-        gamesManager_.joinGameAsViewer(connectedClients_[clientId],
+        gamesManager_.joinGameAsViewer(connectedClients_[userID],
             connectedClients_[jPack.at("data").at("targetUser").get<UserID>()]
             );
         break;
     case bindings::BindingType::QuitGame:
-        gamesManager_.quiGameAsViewer(connectedClients_[clientId]);
+        gamesManager_.quiGameAsViewer(connectedClients_[userID]);
         break;
     default:
         
