@@ -1,12 +1,14 @@
 #ifndef GUI_LOGIN_HPP
 #define GUI_LOGIN_HPP
 
+#include <qlayout.h>
 #include <string>
 
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QWidget>
+#include <QLabel>
 
 class Controller;
 
@@ -26,6 +28,8 @@ namespace GUI {
         QLineEdit passwordInputLogin_;
         QLineEdit ipInput_;
         QLineEdit portInput_;
+
+        QLabel connectionToServerLabel_;
 
         QPushButton sendButtonRegister_;
         QPushButton sendButtonLogin_;
@@ -54,6 +58,13 @@ namespace GUI {
          * @brief Setup the Login Gui
          */
         void setup();
+
+        QString getConnectedMessage() const;
+
+        /*
+        * @brief Update the connected message draw on the main page
+        */
+        void updateConnectedMessage();
 
       private slots:
         /*

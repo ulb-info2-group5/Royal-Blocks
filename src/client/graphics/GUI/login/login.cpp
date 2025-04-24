@@ -8,12 +8,17 @@
 #include <QCheckBox>
 #include <QMessageBox>
 #include <QVBoxLayout>
-#include <qwidget.h>
 
 namespace GUI {
 
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
+    constexpr char NO_CONNECTED_CHAR[]    = "<span style='font-size: 13px; color: red; font-weight: "
+                                            "bold;'>You are not connected to the server.</span> "
+                                            "Please choose an IP and a port in the <span "
+                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu.";
+    constexpr char CONNECTED_CHAR[] = "<span style='font-size: 13px; color: green; font-weight: "
+                                            "bold;'>You are connected to the server</span> with IP address : <span style='color: #007acc;'><b>";
 
     Login::Login(Controller &controller, QWidget *parent)
         : QWidget(parent), controller_(controller) {}
@@ -38,6 +43,7 @@ namespace GUI {
 
     void Login::on_BackButton_clicked() {
         clearInputs();
+        updateConnectedMessage();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
 
@@ -246,9 +252,17 @@ namespace GUI {
         serverInfo.port = portInt;
         controller_.setServerInfo(serverInfo);
 
+        if (controller_.isConnected()) {
+            connectionToServerLabel_.setText(getConnectedMessage());
+        } else {
+            connectionToServerLabel_.setText(NO_CONNECTED_CHAR);
+            QMessageBox::warning(this, "Connection failed", NO_CONNECTED_CHAR);
+        }
+
         QMessageBox::information(this, "Connection successful",
                                  "You are now connected to the Royal Tetris Server with the IP : " + ip + " and the Port : " + port + ".");
 
+        updateConnectedMessage();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
 
@@ -302,7 +316,7 @@ namespace GUI {
         backButtonIpPortMenu->setFixedWidth(INPUT_BUTTON_WIDTH);
         connectButton->setText("Connect to server");
         connectButton->setFixedWidth(INPUT_BUTTON_WIDTH);
-        chooseIpPortButton->setText("Choose IP and port");
+        chooseIpPortButton->setText("Choose IP and Port");
         chooseIpPortButton->setFixedWidth(INPUT_BUTTON_WIDTH);
 
         ipInput_.setAlignment(Qt::AlignCenter);
@@ -370,7 +384,7 @@ namespace GUI {
         passwordInputRegister_.setPlaceholderText("Enter a password");
         usernameInputLogin_.setPlaceholderText("Enter your username");
         passwordInputLogin_.setPlaceholderText("Enter your password");
-
+        
         showPasswordLogin->setText("Show password");
         showPasswordRegister->setText("Show password");
         connect(showPasswordLogin, &QCheckBox::stateChanged, [&](int state) {
@@ -395,6 +409,7 @@ namespace GUI {
                                             QSizePolicy::Expanding));
         mainLayout->addWidget(
             createCenterBoldTitle("Welcome to Royal Tetris !"));
+        mainLayout->addWidget(&connectionToServerLabel_, 0, Qt::AlignCenter);
         mainLayout->addWidget(registerButton, 0, Qt::AlignCenter);
         mainLayout->addWidget(loginButton, 0, Qt::AlignCenter);
         mainLayout->addWidget(chooseIpPortButton, 0, Qt::AlignCenter);
@@ -439,6 +454,22 @@ namespace GUI {
         stackedWidget_.addWidget(registerPage); // 1
         stackedWidget_.addWidget(loginPage);    // 2
         stackedWidget_.addWidget(chooseIpPortPage); // 3
+
+        updateConnectedMessage();
+    }
+
+    QString Login::getConnectedMessage() const {
+        QString message = CONNECTED_CHAR  + QString::fromStdString(std::string(controller_.getServerIp()))
+            + "</b></span> and Port : <span style='color: #007acc;'><b>" + QString::number(controller_.getServerPort()) + "</b></span>";
+        return message;
+    }
+
+    void Login::updateConnectedMessage() {
+        if (controller_.isConnected()) {
+            connectionToServerLabel_.setText(getConnectedMessage());
+        } else {
+            connectionToServerLabel_.setText(NO_CONNECTED_CHAR);
+        }
     }
 
 } // namespace GUI
