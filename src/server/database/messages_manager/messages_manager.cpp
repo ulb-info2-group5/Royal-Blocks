@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <optional>
 
 #define CHAT_PATH "data/chat/user"
 
@@ -73,13 +74,24 @@ std::string MessagesManager::getPathDiscussion(const UserID &user1ID,
 
 void MessagesManager::writeMessage(const std::string &pathfile,
                                    const Message &message) {
-    
     std::ifstream infile(pathfile);
-     
+    if (!infile.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
 
-    nlohmann::json jsondiscu = nlohmann::json::parse(infile);
+    nlohmann::json jsondiscu;
+    try {
+        jsondiscu = nlohmann::json::parse(infile);
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
+        return;
+    }
+
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
     discussion.senderMessages.push_back(SenderMessage{message.senderID, message.content});
+
     std::ofstream outfile(pathfile);
     outfile << discussion.to_json().dump();
 }
@@ -124,11 +136,23 @@ std::vector<int> MessagesManager::getAllUser(const UserID& userID){
     return dbManager_->getVectorInfo(sql, userID); 
 }
 
-bindings::Conversation MessagesManager::getDiscussion(const UserID& user1ID , const UserID& user2ID){
+std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserID& user1ID , const UserID& user2ID){
     std::cout << "get path discussion (debug) => "<< getPathDiscussion(user1ID, user2ID) << std::endl;
     std::ifstream infile(getPathDiscussion(user1ID, user2ID));
+    if (!infile.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return std::nullopt;
+    }
 
-    nlohmann::json jsondiscu = nlohmann::json::parse(infile);
+    nlohmann::json jsondiscu;
+    try {
+        jsondiscu = nlohmann::json::parse(infile);
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
+        return std::nullopt;
+    }
+
     std::cout << "get conversation == " << jsondiscu.dump() << std::endl;
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
     return discussion;
@@ -137,7 +161,10 @@ bindings::Conversation MessagesManager::getDiscussion(const UserID& user1ID , co
 std::vector<bindings::Conversation> MessagesManager::getAllDiscusions(const UserID& userID){
     std::vector<bindings::Conversation> allDiscussions;
     for (auto id : getAllUser(userID)){
-        allDiscussions.push_back(getDiscussion(userID, id));
+        std::optional<bindings::Conversation> optConversation = getDiscussion(userID, id);
+        if (optConversation.has_value()) {
+            allDiscussions.push_back(optConversation.value());
+        }
     }
     return allDiscussions;
 }

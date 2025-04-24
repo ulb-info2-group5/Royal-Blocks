@@ -63,77 +63,81 @@ void Controller::updateFriendState(const bindings::User &updatedFriend) {
 }
 
 void Controller::handlePacket(const std::string_view pack) {
-    nlohmann::json j = nlohmann::json::parse(pack);
+    try {
+        nlohmann::json j = nlohmann::json::parse(pack);
 
-    std::lock_guard<std::mutex> guard(mutex_);
+        std::lock_guard<std::mutex> guard(mutex_);
 
-    UpdateType updateType = UpdateType::OTHER;
+        UpdateType updateType = UpdateType::OTHER;
 
-    switch (static_cast<bindings::BindingType>(j.at("type"))) {
-    case bindings::BindingType::AuthenticationResponse: {
-        bool success = bindings::AuthenticationResponse::from_json(j).success;
-        authState_ = success ? Controller::AuthState::Authenticated
-                             : Controller::AuthState::Unauthenticated;
-        break;
+        switch (static_cast<bindings::BindingType>(j.at("type"))) {
+        case bindings::BindingType::AuthenticationResponse: {
+            bool success = bindings::AuthenticationResponse::from_json(j).success;
+            authState_ = success ? Controller::AuthState::Authenticated
+                                 : Controller::AuthState::Unauthenticated;
+            break;
+        }
+
+        case bindings::BindingType::RegistrationResponse: {
+            bool success = bindings::RegistrationResponse::from_json(j).success;
+            registrationState_ = success
+                                     ? Controller::RegistrationState::Registered
+                                     : Controller::RegistrationState::Unregistered;
+            break;
+        }
+
+        case bindings::BindingType::FriendsList: {
+            friendsList_ = bindings::FriendsList::from_json(j).friendsList;
+            updateType = UpdateType::FRIENDS_LIST;
+            break;
+        }
+
+        case bindings::BindingType::Conversations: {
+            conversationsById_ =
+                bindings::Conversations::from_json(j).conversationsById;
+            updateType = UpdateType::CONVERSATIONS;
+            break;
+        }
+
+        case bindings::BindingType::User: {
+            bindings::User updatedFriend = bindings::User::from_json(j);
+            updateFriendState(updatedFriend);
+            break;
+        }
+
+        case bindings::BindingType::PendingFriendRequests: {
+            pendingFriendRequests_ =
+                bindings::PendingFriendRequests::from_json(j).requests;
+            updateType = UpdateType::FRIEND_REQUESTS;
+            break;
+        }
+
+        case bindings::BindingType::GameState: {
+            gameState_ = bindings::GameStateMessage::deserializeForPlayer(j);
+            updateType = UpdateType::GAME_STATE;
+            break;
+        }
+
+        case bindings::BindingType::GameStateViewer: {
+            gameState_ = bindings::GameStateMessage::deserializeForViewer(j);
+            updateType = UpdateType::GAME_STATE;
+            break;
+        }
+
+        case bindings::BindingType::Ranking: {
+            ranking_ = bindings::Ranking::from_json(j).ranking;
+            updateType = UpdateType::RANKING;
+            break;
+        }
+
+        default:
+            std::cerr << "unknown bindingType " << j.at("type") << std::endl;
+        }
+
+        pAbstractDisplay_->forceRefresh(updateType);
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what() << std::endl;
     }
-
-    case bindings::BindingType::RegistrationResponse: {
-        bool success = bindings::RegistrationResponse::from_json(j).success;
-        registrationState_ = success
-                                 ? Controller::RegistrationState::Registered
-                                 : Controller::RegistrationState::Unregistered;
-        break;
-    }
-
-    case bindings::BindingType::FriendsList: {
-        friendsList_ = bindings::FriendsList::from_json(j).friendsList;
-        updateType = UpdateType::FRIENDS_LIST;
-        break;
-    }
-
-    case bindings::BindingType::Conversations: {
-        conversationsById_ =
-            bindings::Conversations::from_json(j).conversationsById;
-        updateType = UpdateType::CONVERSATIONS;
-        break;
-    }
-
-    case bindings::BindingType::User: {
-        bindings::User updatedFriend = bindings::User::from_json(j);
-        updateFriendState(updatedFriend);
-        break;
-    }
-
-    case bindings::BindingType::PendingFriendRequests: {
-        pendingFriendRequests_ =
-            bindings::PendingFriendRequests::from_json(j).requests;
-        updateType = UpdateType::FRIEND_REQUESTS;
-        break;
-    }
-
-    case bindings::BindingType::GameState: {
-        gameState_ = bindings::GameStateMessage::deserializeForPlayer(j);
-        updateType = UpdateType::GAME_STATE;
-        break;
-    }
-
-    case bindings::BindingType::GameStateViewer: {
-        gameState_ = bindings::GameStateMessage::deserializeForViewer(j);
-        updateType = UpdateType::GAME_STATE;
-        break;
-    }
-
-    case bindings::BindingType::Ranking: {
-        ranking_ = bindings::Ranking::from_json(j).ranking;
-        updateType = UpdateType::RANKING;
-        break;
-    }
-
-    default:
-        std::cerr << "unknown bindingType " << j.at("type") << std::endl;
-    }
-
-    pAbstractDisplay_->forceRefresh(updateType);
 }
 
 // ### Public methods ###

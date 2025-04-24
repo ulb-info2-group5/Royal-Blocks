@@ -139,9 +139,9 @@ class MessagesManager {
      * @param  user1ID  Id of the first user
      * @param user2ID Id of the second user
      *
-     * @return vector of all messages between user1 and user2
+     * @return an optional conversation binding.
      */
-    bindings::Conversation getDiscussion(const UserID& user1ID, const UserID& user2ID);
+    std::optional<bindings::Conversation> getDiscussion(const UserID& user1ID, const UserID& user2ID);
 
     /*
      * @brief finds all users who have a discussion with the user : idUser

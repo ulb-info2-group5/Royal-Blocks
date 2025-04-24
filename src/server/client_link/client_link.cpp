@@ -40,7 +40,14 @@ void ClientLink::handleErrorReading() {
 }
 
 void ClientLink::handleAuthentication(std::string &packet) {
-    nlohmann::json jsonPacket = nlohmann::json::parse(packet);
+    nlohmann::json jsonPacket;
+    try {
+        jsonPacket = nlohmann::json::parse(packet);
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
+        return;
+    }
     nlohmann::json response = authPacketHandler_(jsonPacket);
     sendPackage(response);
     std::cout << response.dump() << std::endl;

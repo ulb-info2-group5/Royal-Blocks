@@ -60,8 +60,11 @@ bindings::FriendsList SocialService::getFriendsList(UserID userID){
 bindings::Conversations SocialService::getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager ){
     bindings::Conversations conversations;
     for (auto id : messagesManager_->getAllUser(userID)){
-        if (messagesManager_->isThereDiscussion(userID, id)){
-            conversations.conversationsById.insert({id, {accountManager->getUsername(id), messagesManager_->getDiscussion(userID, id) }});
+        if (messagesManager_->isThereDiscussion(userID, id)){ // TODO: Is this still necessary bc we now use option ?
+            std::optional<bindings::Conversation> optDiscussion = messagesManager_->getDiscussion(userID, id);
+            if (optDiscussion.has_value()) {
+                conversations.conversationsById.insert({id, {accountManager->getUsername(id), optDiscussion.value()}});
+            }
         }
     }
     return conversations;

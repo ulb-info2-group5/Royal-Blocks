@@ -83,93 +83,99 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
       callBackFinishGame_{callBackFinishGame} {}
 
 void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
-    // Translate bindingStr to nlohmann::json
-    nlohmann::json j = nlohmann::json::parse(bindingStr);
+    try {
+        nlohmann::json j = nlohmann::json::parse(bindingStr);
 
-    bindings::BindingType bindingType = j.at("type");
+        bindings::BindingType bindingType = j.at("type");
 
-    switch (bindingType) {
+        switch (bindingType) {
 
-    case bindings::BindingType::BigDrop:
-        boost::asio::post(context_, [this, userId]() {
-            engine.bigDrop(userId);
-            sendGameStates();
-        });
-        break;
-
-    case bindings::BindingType::BuyBonus: {
-        boost::asio::post(
-            context_,
-            [this, userId, buyBonus = bindings::BuyBonus::from_json(j)]() {
-                engine.tryBuyEffect(userId, buyBonus.bonusType);
+        case bindings::BindingType::BigDrop:
+            boost::asio::post(context_, [this, userId]() {
+                engine.bigDrop(userId);
                 sendGameStates();
             });
-        break;
-    }
+            break;
 
-    case bindings::BindingType::BuyPenalty: {
-        boost::asio::post(
-            context_,
-            [this, userId, buyPenalty = bindings::BuyPenalty::from_json(j)]() {
-                engine.tryBuyEffect(userId, buyPenalty.penaltyType,
-                                    buyPenalty.stashForLater);
+        case bindings::BindingType::BuyBonus: {
+            boost::asio::post(
+                context_,
+                [this, userId, buyBonus = bindings::BuyBonus::from_json(j)]() {
+                    engine.tryBuyEffect(userId, buyBonus.bonusType);
+                    sendGameStates();
+                });
+            break;
+        }
+
+        case bindings::BindingType::BuyPenalty: {
+            boost::asio::post(
+                context_, [this, userId,
+                           buyPenalty = bindings::BuyPenalty::from_json(j)]() {
+                    engine.tryBuyEffect(userId, buyPenalty.penaltyType,
+                                        buyPenalty.stashForLater);
+                    sendGameStates();
+                });
+            break;
+        }
+
+        case bindings::BindingType::EmptyPenaltyStash:
+            boost::asio::post(context_, [this, userId]() {
+                engine.emptyPenaltyStash(userId);
                 sendGameStates();
             });
-        break;
-    }
+            break;
 
-    case bindings::BindingType::EmptyPenaltyStash:
-        boost::asio::post(context_, [this, userId]() {
-            engine.emptyPenaltyStash(userId);
-            sendGameStates();
-        });
-        break;
-
-    case bindings::BindingType::HoldActiveTetromino:
-        boost::asio::post(context_, [this, userId]() {
-            engine.holdActiveTetromino(userId);
-            sendGameStates();
-        });
-        break;
-
-    case bindings::BindingType::MoveActive: {
-        boost::asio::post(
-            context_,
-            [this, userId, moveActive = bindings::MoveActive::from_json(j)]() {
-                engine.tryMoveActive(userId, moveActive.tetrominoMove);
+        case bindings::BindingType::HoldActiveTetromino:
+            boost::asio::post(context_, [this, userId]() {
+                engine.holdActiveTetromino(userId);
                 sendGameStates();
             });
-        break;
-    }
+            break;
 
-    case bindings::BindingType::RotateActive: {
-        boost::asio::post(
-            context_, [this, userId,
-                       rotateActive = bindings::RotateActive::from_json(j)]() {
-                engine.tryRotateActive(userId, rotateActive.rotateClockwise);
-                sendGameStates();
-            });
-        break;
-    }
+        case bindings::BindingType::MoveActive: {
+            boost::asio::post(
+                context_, [this, userId,
+                           moveActive = bindings::MoveActive::from_json(j)]() {
+                    engine.tryMoveActive(userId, moveActive.tetrominoMove);
+                    sendGameStates();
+                });
+            break;
+        }
 
-    case bindings::BindingType::SelectTarget: {
-        boost::asio::post(
-            context_, [this, userId,
-                       selectTarget = bindings::SelectTarget::from_json(j)]() {
-                engine.selectTarget(userId, selectTarget.targetId);
-                sendGameStates();
-            });
-        break;
-    }
+        case bindings::BindingType::RotateActive: {
+            boost::asio::post(
+                context_,
+                [this, userId,
+                 rotateActive = bindings::RotateActive::from_json(j)]() {
+                    engine.tryRotateActive(userId,
+                                           rotateActive.rotateClockwise);
+                    sendGameStates();
+                });
+            break;
+        }
 
-    case bindings::BindingType::QuitGame:
-        erasmePlayer(userId);
-        engine.quitGame(userId);
-        break;
+        case bindings::BindingType::SelectTarget: {
+            boost::asio::post(
+                context_,
+                [this, userId,
+                 selectTarget = bindings::SelectTarget::from_json(j)]() {
+                    engine.selectTarget(userId, selectTarget.targetId);
+                    sendGameStates();
+                });
+            break;
+        }
 
-    default:
-        std::cerr << "unkown binding" << std::endl;
-        break;
+        case bindings::BindingType::QuitGame:
+            erasmePlayer(userId);
+            engine.quitGame(userId);
+            break;
+
+        default:
+            std::cerr << "unkown binding" << std::endl;
+            break;
+        }
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what() << std::endl;
     }
 }
 
