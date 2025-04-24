@@ -258,7 +258,7 @@ namespace GUI {
         controller_.setServerInfo(serverInfo);
 
         std::thread waitThread([&]() {
-            const int maxWaitTimeMs = 3000;
+            const int maxWaitTimeMs = 2000;
             const int checkIntervalMs = 100;
             int waited = 0;
             while (!controller_.isConnected() && waited < maxWaitTimeMs) {
