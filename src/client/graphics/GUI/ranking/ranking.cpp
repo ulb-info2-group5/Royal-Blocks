@@ -99,8 +99,10 @@ namespace GUI {
         for (size_t i = 0; i < RankingGuiData.size(); ++i) {
             QTableWidgetItem *playerItem = new QTableWidgetItem(
                 QString::fromStdString(RankingGuiData[i].first));
+            playerItem->setTextAlignment(Qt::AlignCenter);
             QTableWidgetItem *scoreItem =
                 new QTableWidgetItem(QString::number(RankingGuiData[i].second));
+            scoreItem->setTextAlignment(Qt::AlignCenter);
 
             rankingTable_.setItem(i, 0, playerItem);
             rankingTable_.setItem(i, 1, scoreItem);
