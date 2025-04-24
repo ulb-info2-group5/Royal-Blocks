@@ -3,6 +3,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/io_context.hpp>
+#include <cstdint>
 
 class NetworkManager {
   private:
@@ -50,7 +51,7 @@ class NetworkManager {
      *
      * @return true if the connection was successful and false otherwise
      */
-    bool connect();
+    bool connect(const std::string_view ip, uint16_t port);
 
     /**
      * @brief Disconnect from the server

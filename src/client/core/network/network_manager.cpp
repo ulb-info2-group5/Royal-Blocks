@@ -4,11 +4,11 @@
 
 #include <boost/asio/ip/basic_resolver.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
-
-constexpr std::string_view PORT = "1234";
-constexpr std::string_view IP = "127.0.0.1";
+#include <string>
+#include <string_view>
 
 // ### Public methods ###
 
@@ -17,11 +17,11 @@ NetworkManager::NetworkManager(
     std::function<void(const std::string_view)> packetHandler)
     : context_{context}, socket_(context), packetHandler_{packetHandler} {}
 
-bool NetworkManager::connect() {
+bool NetworkManager::connect(const std::string_view ip, uint16_t port) {
     try {
         boost::asio::ip::tcp::resolver resolver(context_);
         boost::asio::ip::tcp::resolver::results_type endpoints =
-            resolver.resolve(IP, PORT);
+            resolver.resolve(ip, std::to_string(port));
         boost::asio::connect(socket_, endpoints);
 
         receive(); // Start listening for messages

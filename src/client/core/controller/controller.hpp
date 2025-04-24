@@ -74,6 +74,8 @@ class Controller {
     std::vector<std::pair<std::string, Score>> ranking_;
     std::vector<bindings::User> pendingFriendRequests_;
 
+    config::ServerInfo serverInfo_;
+
     /**
      * @brief The network manager to manage the connection with the server
      */
@@ -113,7 +115,7 @@ class Controller {
     void run();
 
     /**
-     * @brief Sets the server's info.
+     * @brief Sets the server's info (ip, port).
      */
     void setServerInfo(const config::ServerInfo &serverInfo);
 

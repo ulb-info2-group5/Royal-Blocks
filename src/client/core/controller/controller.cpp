@@ -158,7 +158,9 @@ Controller::AuthState Controller::getAuthState() const {
 }
 
 void Controller::run() {
-    if (!networkManager_.connect()) {
+    // TODO: load initial serverInfo
+
+    if (!networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
         std::cerr << "Failed to connect to server" << std::endl;
         // TODO: throw ?
         return;
@@ -175,7 +177,7 @@ void Controller::run() {
 }
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
-    // TODO make networkManager_ reconnect with new serverInfo
+    serverInfo_ = serverInfo;
     config::saveServerInfo(serverInfo);
 }
 
