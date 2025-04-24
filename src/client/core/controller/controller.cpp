@@ -158,7 +158,8 @@ Controller::AuthState Controller::getAuthState() const {
 }
 
 void Controller::run() {
-    // TODO: load initial serverInfo
+    // load initial serverInfo
+    serverInfo_ = config::loadServerInfo();
 
     if (!networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
         std::cerr << "Failed to connect to server" << std::endl;
