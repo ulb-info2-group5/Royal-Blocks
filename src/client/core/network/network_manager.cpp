@@ -80,10 +80,6 @@ void NetworkManager::receive() {
                 receive(); // Continue listening for messages
             } else {
                 std::cerr << "Receive error: " << error.message() << std::endl;
-                // do not call disconnect here because we are already in the
-                // io_thread so it will wait on the thread itself
-                //
-                // disconnect();
             }
         });
 }

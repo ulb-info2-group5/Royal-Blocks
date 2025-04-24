@@ -45,7 +45,6 @@
 #include <mutex>
 #include <optional>
 #include <ostream>
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <thread>
@@ -164,24 +163,36 @@ Controller::AuthState Controller::getAuthState() const {
 void Controller::run() {
     // load initial serverInfo
     serverInfo_ = config::loadServerInfo();
-
     isConnected_ = false;
+
+    std::mutex mtx;
+    std::condition_variable cv;
 
     std::atomic<bool> running = true;
 
-    std::thread connectionThread([&running, this]() {
+    std::thread connectionThread([&]() {
+        std::unique_lock<std::mutex> lock(mtx);
         while (running) {
             context_.restart();
             if (isConnected_ =
                     networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
+                lock.unlock();
                 context_.run();
+                lock.lock();
                 isConnected_ = false;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            cv.wait_for(lock, std::chrono::seconds(1),
+                        [&]() { return !running.load(); });
         }
     });
 
     pAbstractDisplay_->run(*this);
+
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        running = false;
+    }
+    cv.notify_all();
 
     context_.stop();
     running = false;
@@ -204,7 +215,8 @@ bool Controller::isConnected() const { return isConnected_; }
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
 
-    // NOTE: restart the context so that the connectionThread attempts a new connection with new serverInfo_ 
+    // NOTE: restart the context so that the connectionThread attempts a new
+    // connection with new serverInfo_
     context_.stop();
 
     config::saveServerInfo(serverInfo);
