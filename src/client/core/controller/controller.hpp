@@ -57,7 +57,6 @@ class Controller {
 
   private:
     boost::asio::io_context context_;
-    std::thread ioThread_;
 
     RegistrationState registrationState_;
     AuthState authState_;

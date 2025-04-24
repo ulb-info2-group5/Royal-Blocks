@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 
@@ -19,6 +20,19 @@ NetworkManager::NetworkManager(
 
 bool NetworkManager::connect(const std::string_view ip, uint16_t port) {
     try {
+        if (socket_.is_open()) {
+            boost::system::error_code ec;
+            ec = socket_.close(ec);
+            if (ec) {
+                std::cerr << "Error while closing socket: " << ec.message()
+                          << " [code: " << ec.value() << "]" << std::endl;
+            } else {
+                std::cout << "Socket closed successfully." << std::endl;
+            }
+        }
+
+        socket_ = boost::asio::ip::tcp::socket(context_);
+
         boost::asio::ip::tcp::resolver resolver(context_);
         boost::asio::ip::tcp::resolver::results_type endpoints =
             resolver.resolve(ip, std::to_string(port));
@@ -28,7 +42,8 @@ bool NetworkManager::connect(const std::string_view ip, uint16_t port) {
         return true;
     }
 
-    catch (...) {
+    catch (const std::runtime_error &e) {
+        std::cerr << "Connection error: " << e.what() << std::endl;
         return false;
     }
 }

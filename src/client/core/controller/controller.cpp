@@ -38,6 +38,7 @@
 #include "core/server_info/server_info.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <iterator>
 #include <memory>
@@ -145,7 +146,7 @@ void Controller::handlePacket(const std::string_view pack) {
 Controller::Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay)
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
-      pAbstractDisplay_(std::move(pAbstractDisplay)),
+      pAbstractDisplay_(std::move(pAbstractDisplay)), isConnected_(false),
       networkManager_{context_, [this](const std::string_view packet) {
                           handlePacket(packet);
                       }} {};
@@ -164,20 +165,31 @@ void Controller::run() {
     // load initial serverInfo
     serverInfo_ = config::loadServerInfo();
 
-    if (!networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
-        isConnected_ = false;
-        throw std::runtime_error{"Failed to connect to server"};
-    } else {
-        isConnected_ = true;
-    };
+    isConnected_ = false;
 
-    ioThread_ = std::thread([this]() { context_.run(); });
+    std::atomic<bool> running = true;
+
+    std::thread connectionThread([&running, this]() {
+        while (running) {
+            context_.restart();
+            if (isConnected_ =
+                    networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
+                context_.run();
+                isConnected_ = false;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
+    });
 
     pAbstractDisplay_->run(*this);
 
     context_.stop();
-    if (ioThread_.joinable()) {
-        ioThread_.join();
+    running = false;
+
+    networkManager_.disconnect();
+
+    if (connectionThread.joinable()) {
+        connectionThread.join();
     }
 }
 
@@ -191,14 +203,14 @@ bool Controller::isConnected() const { return isConnected_; }
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
+
+    // TODO: restart network (by stopping io_context, will be restarted in the
+    // run() function)
+
     config::saveServerInfo(serverInfo);
 }
 
-config::ServerInfo Controller::getServerInfo() const {
-    // TODO: Lucas ? Load the file or return port and ip info from
-    // NetWorkManager
-    return config::loadServerInfo();
-}
+config::ServerInfo Controller::getServerInfo() const { return serverInfo_; }
 
 void Controller::tryRegister(const std::string &username,
                              const std::string &password) {
