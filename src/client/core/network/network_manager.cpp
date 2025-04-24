@@ -1,4 +1,7 @@
 #include "network_manager.hpp"
+
+#include "../../../common/bindings/constants.hpp"
+
 #include <boost/asio/ip/basic_resolver.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
@@ -38,7 +41,8 @@ void NetworkManager::disconnect() {
 
 void NetworkManager::send(const std::string &message) {
     boost::asio::async_write(
-        socket_, boost::asio::buffer(message + "\n"),
+        socket_,
+        boost::asio::buffer(message + std::string(bindings::PACKET_DELIMITER)),
         [](boost::system::error_code ec, std::size_t /*length*/) {
             if (ec) {
                 std::cerr << "error while sending packet: " << ec << std::endl;
@@ -50,7 +54,8 @@ void NetworkManager::send(const std::string &message) {
 
 void NetworkManager::receive() {
     boost::asio::async_read_until(
-        socket_, boost::asio::dynamic_buffer(readBuf), '\n',
+        socket_, boost::asio::dynamic_buffer(readBuf),
+        bindings::PACKET_DELIMITER,
         [this](boost::system::error_code error, std::size_t length) {
             if (!error) {
 

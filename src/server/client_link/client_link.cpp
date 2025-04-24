@@ -1,5 +1,7 @@
 #include "client_link.hpp"
 
+#include "../../common/bindings/constants.hpp"
+
 #include <iostream>
 
 // ====== tcp connection class ======
@@ -8,7 +10,7 @@
 
 void ClientLink::read() {
     boost::asio::async_read_until(
-        socket_, streamBuffer_, '\n',
+        socket_, streamBuffer_, bindings::PACKET_DELIMITER,
         [this](boost::system::error_code ec, std::size_t) {
             if (!ec) {
                 handleReading();
@@ -35,13 +37,11 @@ void ClientLink::handleErrorReading() {
     std::cout << "erreor reading " << std::endl;
     mustBeDeletedFromTheWaitingForAuthList_ = true;
     removeClientCallback_(clientId);
-
 }
 
 void ClientLink::handleAuthentication(std::string &packet) {
     nlohmann::json jsonPacket = nlohmann::json::parse(packet);
-    nlohmann::json response =
-        authPacketHandler_(jsonPacket);
+    nlohmann::json response = authPacketHandler_(jsonPacket);
     sendPackage(response);
     std::cout << response.dump() << std::endl;
     if (response.at("type").get<bindings::BindingType>()
@@ -67,11 +67,12 @@ void ClientLink::writeSocket(std::string &content) {
 // --- public ---
 ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
                        AuthPacketHandler authPacketHandler,
-                       AuthSuccessCallback authSuccessCallback, RemoveClientCallback removeClientCallback)
+                       AuthSuccessCallback authSuccessCallback,
+                       RemoveClientCallback removeClientCallback)
     : socket_(std::move(socket)), userState(bindings::State::Offline),
-      clientId(std::nullopt),gameMode_(std::nullopt), packetHandler_(packetHandler),
-      authPacketHandler_(authPacketHandler),
-      authSuccessCallback_(authSuccessCallback), 
+      clientId(std::nullopt), gameMode_(std::nullopt),
+      packetHandler_(packetHandler), authPacketHandler_(authPacketHandler),
+      authSuccessCallback_(authSuccessCallback),
       removeClientCallback_(removeClientCallback) {
     start();
 }
@@ -81,31 +82,27 @@ void ClientLink::start() {
     read();
 }
 
-void ClientLink::jointGame(const std::weak_ptr<GameServer>& gameServer){
+void ClientLink::jointGame(const std::weak_ptr<GameServer> &gameServer) {
     pGame_ = gameServer;
 }
 
-void ClientLink::exitGame(){
+void ClientLink::exitGame() {
     setUserState(bindings::State::Menu);
     setGameMode(std::nullopt);
     resetGame();
 }
 
-void ClientLink::resetGame(){
-    pGame_.reset();
-}
-
-
+void ClientLink::resetGame() { pGame_.reset(); }
 
 bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
 }
 
 void ClientLink::sendPackage(nlohmann::json gameState) {
-    buffer_ = gameState.dump() + "\n";
+    buffer_ = gameState.dump().append(bindings::PACKET_DELIMITER);
 
     std::cout << static_cast<int>(userState) << "\n" << std::endl;
-    std::cout << gameState<< std::endl;
+    std::cout << gameState << std::endl;
 
     writeSocket(buffer_);
 }
@@ -115,21 +112,14 @@ void ClientLink::setClientId(const int id) { clientId = id; }
 void ClientLink::setUserState(bindings::State newState) {
     userState = newState;
 }
-void ClientLink::setGameMode(std::optional<GameMode> newGameMode){
+void ClientLink::setGameMode(std::optional<GameMode> newGameMode) {
     gameMode_ = newGameMode;
 }
 
-std::optional<GameMode> ClientLink::getGameMode(){
-    return gameMode_;
-}
+std::optional<GameMode> ClientLink::getGameMode() { return gameMode_; }
 
 bindings::State ClientLink::getUserState() { return userState; }
 
-UserID ClientLink::getUserID(){
-    return clientId.value();
-}
+UserID ClientLink::getUserID() { return clientId.value(); }
 
-
-std::weak_ptr<GameServer> ClientLink::getGameServer(){
-    return pGame_;
-}
+std::weak_ptr<GameServer> ClientLink::getGameServer() { return pGame_; }
