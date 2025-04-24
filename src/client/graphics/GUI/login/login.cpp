@@ -43,7 +43,6 @@ namespace GUI {
 
     void Login::on_BackButton_clicked() {
         clearInputs();
-        updateConnectedMessage();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
 
