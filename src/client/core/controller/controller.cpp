@@ -182,6 +182,11 @@ void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     config::saveServerInfo(serverInfo);
 }
 
+config::ServerInfo Controller::getServerInfo() const {
+    // TODO: Lucas ? Load the file or return port and ip info from NetWorkManager
+    return config::loadServerInfo();
+}
+
 void Controller::tryRegister(const std::string &username,
                              const std::string &password) {
     networkManager_.send(

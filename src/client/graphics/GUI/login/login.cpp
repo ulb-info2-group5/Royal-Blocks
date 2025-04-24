@@ -2,11 +2,13 @@
 
 #include "../../../core/controller/controller.hpp"
 #include "../qt_config/qt_config.hpp"
+#include "../../../core/server_info/server_info.hpp"
 
 #include <QApplication>
 #include <QCheckBox>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <qwidget.h>
 
 namespace GUI {
 
@@ -216,10 +218,47 @@ namespace GUI {
         return true;
     }
 
+    void Login::on_ChooseIpPortButton_clicked() {
+        config::ServerInfo serverInfo = controller_.getServerInfo();
+        ipInput_.setText(QString::fromStdString(serverInfo.ip));
+        portInput_.setText(QString::number(serverInfo.port));
+        stackedWidget_.setCurrentIndex(3); // Choose IP and port page
+    }
+
+    void Login::on_ConnectButton_clicked() {
+        QString ip = ipInput_.text();
+        QString port = portInput_.text();
+
+        if (ip.isEmpty() || port.isEmpty()) {
+            QMessageBox::warning(this, "Connection failed",
+                                 "Please enter a valid IP and Port.");
+            return;
+        }
+
+        bool ok;
+        int portInt = port.toInt(&ok);
+        if (!ok || portInt < 1 || portInt > std::numeric_limits<uint16_t>::max()) {
+            QMessageBox::warning(this, "Connection failed",
+                                 "Please enter a valid port (1 - 65535).");
+            return;
+        }
+
+        config::ServerInfo serverInfo;
+        serverInfo.ip = ip.toStdString();
+        serverInfo.port = portInt;
+        controller_.setServerInfo(serverInfo);
+
+        QMessageBox::information(this, "Connection successful",
+                                 "You are now connected to the Royal Tetris Server with the IP : " + ip + " and the Port : " + port + ".");
+
+        stackedWidget_.setCurrentIndex(0); // Main page
+    }
+
     void Login::setup() {
         QWidget *mainPage = new QWidget();
         QWidget *loginPage = new QWidget();
         QWidget *registerPage = new QWidget();
+        QWidget *chooseIpPortPage = new QWidget();
 
         QPushButton *exitButton = new QPushButton();
         exitButton->setAutoDefault(true);
@@ -235,8 +274,8 @@ namespace GUI {
         chooseIpPortButton->setAutoDefault(true);
         QPushButton *backButtonIpPortMenu = new QPushButton();
         backButtonIpPortMenu->setAutoDefault(true);
-        QPushButton *connectToServerButton = new QPushButton();
-        connectToServerButton->setAutoDefault(true);
+        QPushButton *connectButton = new QPushButton();
+        connectButton->setAutoDefault(true);
 
         sendButtonRegister_.setAutoDefault(true);
         sendButtonLogin_.setAutoDefault(true);
@@ -263,11 +302,35 @@ namespace GUI {
         /*------------------------CHOOSE IP AND PORT MENU--------------------------*/
         backButtonIpPortMenu->setText("Back");
         backButtonIpPortMenu->setFixedWidth(INPUT_BUTTON_WIDTH);
-        connectToServerButton->setText("Connect to server");
-        connectToServerButton->setFixedWidth(INPUT_BUTTON_WIDTH);
+        connectButton->setText("Connect to server");
+        connectButton->setFixedWidth(INPUT_BUTTON_WIDTH);
+        chooseIpPortButton->setText("Choose IP and port");
+        chooseIpPortButton->setFixedWidth(INPUT_BUTTON_WIDTH);
+
+        ipInput_.setAlignment(Qt::AlignCenter);
+        ipInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
+        portInput_.setAlignment(Qt::AlignCenter);
+        portInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
         connect(backButtonIpPortMenu, &QPushButton::clicked, this,
                 &Login::on_BackButton_clicked);
+        connect(connectButton, &QPushButton::clicked, this, 
+                &Login::on_ConnectButton_clicked);
+        connect(chooseIpPortButton, &QPushButton::clicked, this,
+                &Login::on_ChooseIpPortButton_clicked);
+
+        chooseIpPortPage = new QWidget();
+        QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout();
+        chooseIpPortPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        chooseIpPortPageLayout->addWidget(createCenterBoldTitle("Choose IP and Port of the server"));
+        chooseIpPortPageLayout->addWidget(new QLabel("IP : "), 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(&ipInput_, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(new QLabel("Port : "), 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(&portInput_, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(connectButton, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(backButtonIpPortMenu, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        chooseIpPortPage->setLayout(chooseIpPortPageLayout);
         
         /*-------------------------------------------------------------------------*/
 
@@ -336,6 +399,7 @@ namespace GUI {
             createCenterBoldTitle("Welcome to Royal Tetris !"));
         mainLayout->addWidget(registerButton, 0, Qt::AlignCenter);
         mainLayout->addWidget(loginButton, 0, Qt::AlignCenter);
+        mainLayout->addWidget(chooseIpPortButton, 0, Qt::AlignCenter);
         mainLayout->addWidget(exitButton, 0, Qt::AlignCenter);
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
@@ -376,6 +440,7 @@ namespace GUI {
         stackedWidget_.addWidget(mainPage);     // O
         stackedWidget_.addWidget(registerPage); // 1
         stackedWidget_.addWidget(loginPage);    // 2
+        stackedWidget_.addWidget(chooseIpPortPage); // 3
     }
 
 } // namespace GUI

@@ -1,6 +1,7 @@
 #ifndef SERVER_INFO_HPP
 #define SERVER_INFO_HPP
 
+#include <cstdint>
 #include <string>
 
 #define DEFAULT_IP "127.0.0.1"
@@ -13,7 +14,7 @@ namespace config {
 
     struct ServerInfo {
         std::string ip;
-        int port;
+        uint16_t port;
     };
 
     void saveServerInfo(const ServerInfo &serverInfo);
@@ -21,10 +22,13 @@ namespace config {
     ServerInfo loadServerInfo();
 
     /*
-    * @brief Create the directory data if it doesn't exist
+    * @brief Create the directory data and the config.json file if they don't exist
     */
-    void createDirAndConfigFile();
+    static void createDirAndConfigFile();
 
+    static std::string getEnvIP();
+
+    static uint16_t getEnvPort();
 }
 
 #endif // SERVER_INFO_HPP

@@ -1,4 +1,5 @@
 #include "account_manager.hpp"
+#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -100,7 +101,7 @@ bool AccountManager::login(const std::string &username,
 void AccountManager::updateScore(const UserID& userID, const Score& newScore) {
     dbManager_->executeSqlChangeData(
         "UPDATE users SET score = MAX(score, ?) WHERE id = ?",
-        {newScore, userID});
+        {static_cast<size_t>(newScore), userID});
 }
 
 bool AccountManager::updateUsername(const UserID& userID , std::string &newUsername){

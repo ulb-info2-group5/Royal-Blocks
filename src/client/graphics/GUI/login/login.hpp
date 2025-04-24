@@ -112,6 +112,16 @@ namespace GUI {
          */
         void on_PasswordInputLogin_EnterPressed();
 
+        /*
+         * @brief Action to perform when the user click on the choose ip and port button
+         */
+        void on_ChooseIpPortButton_clicked();
+
+        /*
+         * @brief Action to perform when the user click on the connect button
+         */
+        void on_ConnectButton_clicked();
+
       public:
         Login(Controller &controller, QWidget *parent = nullptr);
 

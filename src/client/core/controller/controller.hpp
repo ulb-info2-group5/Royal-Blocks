@@ -120,6 +120,11 @@ class Controller {
     void setServerInfo(const config::ServerInfo &serverInfo);
 
     /**
+     * @brief Returns the server's info.
+     */
+    config::ServerInfo getServerInfo() const;
+
+    /**
      * @brief Makes a registration request to the server.
      *
      * @param username The username of the user
