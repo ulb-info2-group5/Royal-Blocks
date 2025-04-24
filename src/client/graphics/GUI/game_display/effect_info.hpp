@@ -10,6 +10,10 @@
 namespace GUI {
 
     class EffectInfo : public QFrame {
+      /**
+      * @brief It show widget progress bar for "energy" to use to do effect; malus and bonus.
+      * It show to the name of current effect
+      */
         Q_OBJECT
 
       private:
