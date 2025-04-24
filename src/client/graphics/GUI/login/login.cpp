@@ -36,12 +36,7 @@ namespace GUI {
         stackedWidget_.setCurrentIndex(1); // Register page
     }
 
-    void Login::on_BackButtonLogin_clicked() {
-        clearInputs();
-        stackedWidget_.setCurrentIndex(0); // Main page
-    }
-
-    void Login::on_BackButtonRegister_clicked() {
+    void Login::on_BackButton_clicked() {
         clearInputs();
         stackedWidget_.setCurrentIndex(0); // Main page
     }
@@ -236,6 +231,12 @@ namespace GUI {
         backButtonLogin->setAutoDefault(true);
         QPushButton *backButtonRegister = new QPushButton();
         backButtonRegister->setAutoDefault(true);
+        QPushButton *chooseIpPortButton = new QPushButton();
+        chooseIpPortButton->setAutoDefault(true);
+        QPushButton *backButtonIpPortMenu = new QPushButton();
+        backButtonIpPortMenu->setAutoDefault(true);
+        QPushButton *connectToServerButton = new QPushButton();
+        connectToServerButton->setAutoDefault(true);
 
         sendButtonRegister_.setAutoDefault(true);
         sendButtonLogin_.setAutoDefault(true);
@@ -258,6 +259,18 @@ namespace GUI {
         sendButtonLogin_.setText("Send");
         sendButtonLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
+
+        /*------------------------CHOOSE IP AND PORT MENU--------------------------*/
+        backButtonIpPortMenu->setText("Back");
+        backButtonIpPortMenu->setFixedWidth(INPUT_BUTTON_WIDTH);
+        connectToServerButton->setText("Connect to server");
+        connectToServerButton->setFixedWidth(INPUT_BUTTON_WIDTH);
+
+        connect(backButtonIpPortMenu, &QPushButton::clicked, this,
+                &Login::on_BackButton_clicked);
+        
+        /*-------------------------------------------------------------------------*/
+
         connect(exitButton, &QPushButton::clicked, this,
                 &Login::on_ExitButton_clicked);
         connect(loginButton, &QPushButton::clicked, this,
@@ -265,9 +278,9 @@ namespace GUI {
         connect(registerButton, &QPushButton::clicked, this,
                 &Login::on_RegisterButton_clicked);
         connect(backButtonLogin, &QPushButton::clicked, this,
-                &Login::on_BackButtonLogin_clicked);
+                &Login::on_BackButton_clicked);
         connect(backButtonRegister, &QPushButton::clicked, this,
-                &Login::on_BackButtonRegister_clicked);
+                &Login::on_BackButton_clicked);
         connect(&sendButtonRegister_, &QPushButton::clicked, this,
                 &Login::on_SendButtonRegister_clicked);
         connect(&sendButtonLogin_, &QPushButton::clicked, this,

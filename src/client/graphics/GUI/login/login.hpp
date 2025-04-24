@@ -24,6 +24,8 @@ namespace GUI {
         QLineEdit passwordInputRegister_;
         QLineEdit usernameInputLogin_;
         QLineEdit passwordInputLogin_;
+        QLineEdit ipInput_;
+        QLineEdit portInput_;
 
         QPushButton sendButtonRegister_;
         QPushButton sendButtonLogin_;
@@ -70,16 +72,9 @@ namespace GUI {
         void on_RegisterButton_clicked();
 
         /*
-         * @brief Action to perform when the user click on the back button in
-         * the login page
+         * @brief Action to perform when the user click on the back button
          */
-        void on_BackButtonLogin_clicked();
-
-        /*
-         * @brief Action to perform when the user click on the back button in
-         * the register page
-         */
-        void on_BackButtonRegister_clicked();
+        void on_BackButton_clicked();
 
         /*
          * @brief Action to perform when the user click on the send button in
