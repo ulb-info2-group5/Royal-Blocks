@@ -4,6 +4,7 @@
 #include "binding_type.hpp"
 
 #include "../../common/types/types.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -22,7 +23,7 @@ namespace bindings {
         std::string content;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::Message},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Message},
                                   {"data",
                                    {
                                        {"recipientId", recipientId},
@@ -31,7 +32,7 @@ namespace bindings {
         }
 
         static Message from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Message) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Message) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

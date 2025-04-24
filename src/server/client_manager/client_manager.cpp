@@ -121,7 +121,7 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
 nlohmann::json ClientManager::authPacketHandler(nlohmann::json binding) {
     nlohmann::json response;
     
-    bindings::BindingType type =  binding.at("type").get<bindings::BindingType>(); 
+    bindings::BindingType type =  binding.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>(); 
     switch (type) {
     case bindings::BindingType::Authentication:
         response = accountService_.authenticationAttempt(bindings::Authentication::from_json(binding),
@@ -152,7 +152,7 @@ void ClientManager::handlePacketMenu(const std::string &packet, const UserID &us
     nlohmann::json jPack = nlohmann::json::parse(packet);
     std::cout << "-- handle Packet call -- " << std::endl;
     
-    bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
+    bindings::BindingType type = jPack.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>();
     switch (type) {
     case bindings::BindingType::JoinGame:
         connectedClients_[userID]->setUserState(bindings::State::Matchmaking);

@@ -2,6 +2,7 @@
 #define BINDINGS_EMPTY_PENALTY_STASH_HPP
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -17,12 +18,12 @@ namespace bindings {
     struct EmptyPenaltyStash {
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", BindingType::EmptyPenaltyStash},
+                {PACKET_TYPE_FIELD, BindingType::EmptyPenaltyStash},
             };
         }
 
         static EmptyPenaltyStash from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::EmptyPenaltyStash) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::EmptyPenaltyStash) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

@@ -44,7 +44,7 @@ void ClientLink::handleAuthentication(std::string &packet) {
     nlohmann::json response = authPacketHandler_(jsonPacket);
     sendPackage(response);
     std::cout << response.dump() << std::endl;
-    if (response.at("type").get<bindings::BindingType>()
+    if (response.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>()
             == bindings::BindingType::AuthenticationResponse
         && response.at("data").at("success").get<bool>()) {
         authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));

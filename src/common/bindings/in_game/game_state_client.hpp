@@ -6,10 +6,9 @@
 #include "../../../client/core/in_game/game_state/game_state_viewer.hpp"
 
 #include "../binding_type.hpp"
+#include "../bindings/constants.hpp"
 
 #include <nlohmann/json.hpp>
-
-#include <variant>
 
 /**
  * This file contains everything related to deserialization of GameState (used
@@ -33,7 +32,7 @@ namespace bindings {
          * client::GameState.
          */
         client::GameState deserializeForPlayer(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::GameState) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::GameState) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
@@ -48,7 +47,7 @@ namespace bindings {
          * client::GameStateViewer.
          */
         client::GameStateViewer deserializeForViewer(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::GameStateViewer) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::GameStateViewer) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

@@ -2,6 +2,7 @@
 #define BINDINGS_BIG_DROP_HPP
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -17,12 +18,12 @@ namespace bindings {
     struct BigDrop {
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", BindingType::BigDrop},
+                {PACKET_TYPE_FIELD, BindingType::BigDrop},
             };
         }
 
         static BigDrop from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::BigDrop) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::BigDrop) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

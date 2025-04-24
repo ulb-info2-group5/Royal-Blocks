@@ -86,7 +86,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     // Translate bindingStr to nlohmann::json
     nlohmann::json j = nlohmann::json::parse(bindingStr);
 
-    bindings::BindingType bindingType = j.at("type");
+    bindings::BindingType bindingType = j.at(bindings::PACKET_TYPE_FIELD);
 
     switch (bindingType) {
 

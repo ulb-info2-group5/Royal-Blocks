@@ -73,7 +73,7 @@ void Controller::handlePacket(const std::string_view pack) {
 
     UpdateType updateType = UpdateType::OTHER;
 
-    switch (static_cast<bindings::BindingType>(j.at("type"))) {
+    switch (static_cast<bindings::BindingType>(j.at(bindings::PACKET_TYPE_FIELD))) {
     case bindings::BindingType::AuthenticationResponse: {
         bool success = bindings::AuthenticationResponse::from_json(j).success;
         authState_ = success ? Controller::AuthState::Authenticated
@@ -134,7 +134,7 @@ void Controller::handlePacket(const std::string_view pack) {
     }
 
     default:
-        std::cerr << "unknown bindingType " << j.at("type") << std::endl;
+        std::cerr << "unknown bindingType " << j.at(bindings::PACKET_TYPE_FIELD) << std::endl;
     }
 
     pAbstractDisplay_->forceRefresh(updateType);

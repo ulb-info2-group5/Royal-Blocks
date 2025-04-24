@@ -2,6 +2,7 @@
 #define BINDINGS_REMOVE_FRIEND_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include "../types/types.hpp"
 
@@ -21,7 +22,7 @@ namespace bindings {
         UserID userID;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::RemoveFriend},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::RemoveFriend},
                                   {"data",
                                    {
                                        {"playerId", userID},
@@ -29,7 +30,7 @@ namespace bindings {
         }
 
         static RemoveFriend from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::RemoveFriend) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::RemoveFriend) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

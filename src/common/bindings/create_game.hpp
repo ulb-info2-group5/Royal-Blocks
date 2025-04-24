@@ -3,6 +3,7 @@
 
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -20,7 +21,7 @@ namespace bindings {
         size_t targetNumPlayers;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::CreateGame},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::CreateGame},
                                   {"data",
                                    {
                                        {"gameMode", gameMode},
@@ -29,7 +30,7 @@ namespace bindings {
         }
 
         static CreateGame from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::CreateGame) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::CreateGame) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

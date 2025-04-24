@@ -2,6 +2,7 @@
 #define BINDINGS_CONVERSATION_HPP
 
 #include "user.hpp"
+#include "constants.hpp"
 
 #include <vector>
 
@@ -26,7 +27,7 @@ namespace bindings {
                 j_senderMessages.push_back(senderMessage);
             }
 
-            return nlohmann::json{{"type", BindingType::Conversation},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Conversation},
                                   {"data",
                                    {
                                        {"senderMessages", j_senderMessages},
@@ -34,7 +35,7 @@ namespace bindings {
         }
 
         static Conversation from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Conversation) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Conversation) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

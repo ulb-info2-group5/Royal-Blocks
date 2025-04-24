@@ -4,6 +4,8 @@
 #include "binding_type.hpp"
 #include "user.hpp"
 
+#include "constants.hpp"
+
 #include <nlohmann/json.hpp>
 
 #include <vector>
@@ -27,7 +29,7 @@ namespace bindings {
                 j_friendsList.push_back(user.to_json());
             }
 
-            return nlohmann::json{{"type", BindingType::FriendsList},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::FriendsList},
                                   {"data",
                                    {
                                        {"friendsList", j_friendsList},
@@ -35,7 +37,7 @@ namespace bindings {
         }
 
         static FriendsList from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::FriendsList) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::FriendsList) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

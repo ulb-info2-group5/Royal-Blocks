@@ -1,6 +1,7 @@
 #ifndef BINDINGS_PENDING_FRIEND_REQUESTS_HPP
 #define BINDINGS_PENDING_FRIEND_REQUESTS_HPP
 
+#include "constants.hpp"
 #include "nlohmann/json_fwd.hpp"
 #include "user.hpp"
 #include <vector>
@@ -24,7 +25,7 @@ namespace bindings {
                 j_requests.push_back(requester.to_json());
             }
 
-            return nlohmann::json{{"type", BindingType::PendingFriendRequests},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::PendingFriendRequests},
                                   {"data",
                                    {
                                        {"requests", j_requests},
@@ -32,7 +33,7 @@ namespace bindings {
         }
 
         static PendingFriendRequests from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::PendingFriendRequests) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::PendingFriendRequests) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

@@ -2,6 +2,7 @@
 #define BINDINGS_FRIEND_REQUEST_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -18,7 +19,7 @@ namespace bindings {
         std::string targetName;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::FriendRequest},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::FriendRequest},
                                   {"data",
                                    {
                                        {"targetName", targetName},
@@ -26,7 +27,7 @@ namespace bindings {
         }
 
         static FriendRequest from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::FriendRequest) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::FriendRequest) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

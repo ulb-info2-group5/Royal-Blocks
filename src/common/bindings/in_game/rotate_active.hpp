@@ -2,6 +2,7 @@
 #define BINDINGS_ROTATE_ACTIVE_HPP
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -19,7 +20,7 @@ namespace bindings {
         bool rotateClockwise;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::RotateActive},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::RotateActive},
                                   {"data",
                                    {
                                        {"rotateClockwise", rotateClockwise},
@@ -27,7 +28,7 @@ namespace bindings {
         }
 
         static RotateActive from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::RotateActive) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::RotateActive) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
