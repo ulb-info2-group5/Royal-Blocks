@@ -8,7 +8,7 @@
 namespace TUI {
 
     // Constants for the TUI
-    constexpr std::string_view
+    inline constexpr std::string_view
         STR_BACK_TO_MAIN_MENU = "Back to main menu",
         STR_ADD = "Add", STR_ADD_A_FRIEND = "Add a friend",
         STR_REMOVE_A_FRIEND = "Remove a friend", STR_BACK = "Back",
@@ -64,7 +64,7 @@ namespace TUI {
         LOGIN_MESSAGE =
             "Your account has been created successfully! You can now login.";
 
-    const ftxui::Element WELCOME_TITLE = ftxui::vbox({
+    inline const ftxui::Element WELCOME_TITLE = ftxui::vbox({
         ftxui::text(
             R"(__          __  _                            _          _____                   _   _______   _        _       _ )"),
         ftxui::text(
@@ -83,7 +83,7 @@ namespace TUI {
             R"(                                                                    |___/                                        )"),
     });
 
-    const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
+    inline const ftxui::Element GOODBYE_TITLE = ftxui::vbox({
         ftxui::text(R"(  ______                 _ _                    _ )"),
         ftxui::text(R"( / _____)               | | |                  | |)"),
         ftxui::text(R"(| /  ___  ___   ___   _ | | | _  _   _  ____   | |)"),
@@ -93,7 +93,7 @@ namespace TUI {
         ftxui::text(R"(                                (____/            )"),
     });
 
-    const ftxui::Element GAME_OVER_TITLE = ftxui::vbox({
+    inline const ftxui::Element GAME_OVER_TITLE = ftxui::vbox({
         ftxui::text(
             R"(  _____                         ____                  )"),
         ftxui::text(
@@ -108,7 +108,7 @@ namespace TUI {
             R"( \_____|\__,_|_| |_| |_|\___|  \____/   \_/ \___|_|   )"),
     });
 
-    const ftxui::Element YOU_WIN_TITLE = ftxui::vbox({
+    inline const ftxui::Element YOU_WIN_TITLE = ftxui::vbox({
         ftxui::text(R"(__     __          __          ___         _ )"),
         ftxui::text(R"(\ \   / /          \ \        / (_)       | |)"),
         ftxui::text(R"( \ \_/ /__  _   _   \ \  /\  / / _ _ __   | |)"),
@@ -117,14 +117,14 @@ namespace TUI {
         ftxui::text(R"(   |_|\___/ \____|     \/  \/   |_|_| |_| (_))"),
     });
 
-    /*
+    /**
      * @brief Global style for the buttons
      *
      * @return ftxui::ButtonOption The global style for the buttons
      */
     ftxui::ButtonOption GlobalButtonStyle();
 
-    /*
+    /**
      * @brief Input option for a password input
      *
      * @return ftxui::InputOption The input option for a password input
