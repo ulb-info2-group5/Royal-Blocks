@@ -13,12 +13,18 @@ namespace GUI {
 
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
-    constexpr char NO_CONNECTED_CHAR[]    = "<span style='font-size: 13px; color: red; font-weight: "
-                                            "bold;'>You are not connected to the server.</span> "
-                                            "Please choose an IP and a port in the <span "
-                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu.";
-    constexpr char CONNECTED_CHAR[] = "<span style='font-size: 13px; color: green; font-weight: "
-                                            "bold;'>You are connected to the server</span> with IP address : <span style='color: #007acc;'><b>";
+    constexpr char NO_CONNECTED_CHAR_NORMAL[]    = "<span style='color: red; font-weight: "
+                                            "bold;'>Connection to the server failed.</span><br>"
+                                            "Please enter a valid IP address and port in the <span "
+                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu "
+                                            "or make sure that the server is currently online.";
+    constexpr char NO_CONNECTED_CHAR_MAINPAGE[]    = "<span style='color: red; font-weight: "
+                                            "bold;'>Connection to the server failed.</span><br>"
+                                            "Please enter a valid IP address and port in the <span "
+                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu<br>"
+                                            "or make sure that the server is currently online";
+    constexpr char CONNECTED_CHAR[] = "<span style='color: green; font-weight: bold;'>Connection made to the server</span> "
+                                      "with IP address : <span style='color: #007acc;'><b>";
 
     Login::Login(Controller &controller, QWidget *parent)
         : QWidget(parent), controller_(controller) {}
@@ -254,12 +260,13 @@ namespace GUI {
         if (controller_.isConnected()) {
             connectionToServerLabel_.setText(getConnectedMessage());
         } else {
-            connectionToServerLabel_.setText(NO_CONNECTED_CHAR);
-            QMessageBox::warning(this, "Connection failed", NO_CONNECTED_CHAR);
+            connectionToServerLabel_.setText(NO_CONNECTED_CHAR_MAINPAGE);
+            QMessageBox::warning(this, "Connection failed", NO_CONNECTED_CHAR_NORMAL);
+            return;
         }
 
         QMessageBox::information(this, "Connection successful",
-                                 "You are now connected to the Royal Tetris Server with the IP : " + ip + " and the Port : " + port + ".");
+                                 "<span style='color: green; font-weight: bold;'>Connection successful !</span><br>\nYou are now connected to the Royal Tetris Server with the IP : " + ip + " and the Port : " + port + ".");
 
         updateConnectedMessage();
         stackedWidget_.setCurrentIndex(0); // Main page
@@ -402,6 +409,8 @@ namespace GUI {
         });
 
         // Create the main page
+        connectionToServerLabel_.setAlignment(Qt::AlignHCenter);
+
         mainPage = new QWidget();
         QVBoxLayout *mainLayout = new QVBoxLayout();
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -467,7 +476,7 @@ namespace GUI {
         if (controller_.isConnected()) {
             connectionToServerLabel_.setText(getConnectedMessage());
         } else {
-            connectionToServerLabel_.setText(NO_CONNECTED_CHAR);
+            connectionToServerLabel_.setText(NO_CONNECTED_CHAR_MAINPAGE);
         }
     }
 
