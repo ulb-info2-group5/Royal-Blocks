@@ -9,6 +9,7 @@
 #include "../in_game/game_state/game_state_viewer.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
+#include "../server_info/server_info.hpp"
 
 #include <memory>
 #include <mutex>
@@ -110,6 +111,11 @@ class Controller {
      * @brief Run the controller to manage the game
      */
     void run();
+
+    /**
+     * @brief Sets the server's info.
+     */
+    void setServerInfo(const config::ServerInfo &serverInfo);
 
     /**
      * @brief Makes a registration request to the server.

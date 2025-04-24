@@ -35,6 +35,7 @@
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../core/in_game/game_state/game_state.hpp"
 #include "../../graphics/common/abstract_display.hpp"
+#include "core/server_info/server_info.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -171,6 +172,11 @@ void Controller::run() {
     if (ioThread_.joinable()) {
         ioThread_.join();
     }
+}
+
+void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
+    // TODO make networkManager_ reconnect with new serverInfo
+    config::saveServerInfo(serverInfo);
 }
 
 void Controller::tryRegister(const std::string &username,
