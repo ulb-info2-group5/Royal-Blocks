@@ -83,7 +83,7 @@ namespace config {
             try {
                 return std::stoi(port_env);
             } catch (...) {
-                std::cerr << "Invalid SERVER_PORT environment variable, using default." << std::endl;
+                std::cerr << "No SERVER_PORT environment variable set. Using default." << std::endl;
             }
         }
         return DEFAULT_PORT;

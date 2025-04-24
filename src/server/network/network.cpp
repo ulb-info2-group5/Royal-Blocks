@@ -36,8 +36,8 @@ void Network::accept() {
 }
 
 // --- public ---
-Network::Network(boost::asio::io_context &io, ClientManager &clientManager)
-    : io_(io), acceptor_(io, tcp::endpoint(tcp::v4(), 1234)),
+Network::Network(boost::asio::io_context &io, ClientManager &clientManager, uint16_t port)
+    : io_(io), acceptor_(io, tcp::endpoint(tcp::v4(), port)),
       clientManager_(clientManager) {
     this->accept();
 }

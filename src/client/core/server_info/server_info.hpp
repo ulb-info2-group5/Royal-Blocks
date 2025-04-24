@@ -26,8 +26,18 @@ namespace config {
     */
     static void createDirAndConfigFile();
 
+    /*
+    * @brief Get the IP from the environment variable or use the default
+    *
+    * @return std::string The IP
+    */
     static std::string getEnvIP();
 
+    /*
+    * @brief Get the port from the environment variable or use the default
+    *
+    * @return uint16_t The port
+    */
     static uint16_t getEnvPort();
 }
 
