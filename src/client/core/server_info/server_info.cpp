@@ -26,7 +26,7 @@ namespace {
         }
 
         std::cerr << config::ENV_VAR_IP
-                  << " environment variable not set.Using default."
+                  << " environment variable not set. Using default."
                   << std::endl;
 
         return config::DEFAULT_IP;
@@ -119,12 +119,12 @@ namespace config {
         createDirAndConfigFile();
 
         ServerInfo serverInfo;
-        serverInfo.ip = getEnvIP();
-        serverInfo.port = getEnvPort();
 
         try {
             std::ifstream file(CONFIG_PATH.data());
             if (!file) {
+                serverInfo.ip = getEnvIP();
+                serverInfo.port = getEnvPort();
                 return serverInfo;
             }
 
