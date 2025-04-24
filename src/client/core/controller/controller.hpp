@@ -11,6 +11,7 @@
 #include "../network/network_manager.hpp"
 #include "../server_info/server_info.hpp"
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -76,6 +77,9 @@ class Controller {
 
     config::ServerInfo serverInfo_;
 
+    // NOTE: atomic becaues we will attempt to connect every x seconds.
+    std::atomic<bool> isConnected_;
+
     /**
      * @brief The network manager to manage the connection with the server
      */
@@ -98,6 +102,21 @@ class Controller {
      * @brief Destroy the Controller object
      */
     ~Controller() = default;
+
+    /**
+     * @brief Get the configured server ip.
+     */
+    const std::string_view getServerIp() const;
+
+    /**
+     * @brief Get the configured server port.
+     */
+    uint16_t getServerPort() const;
+
+    /**
+     * @brief Return true if the client is connected to a server.
+     */
+    bool isConnected() const;
 
     /**
      * @brief Returns the registration-state.

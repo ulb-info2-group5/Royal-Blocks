@@ -38,12 +38,15 @@
 #include "core/server_info/server_info.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
+#include <stdexcept>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <variant>
 #include <vector>
@@ -162,9 +165,10 @@ void Controller::run() {
     serverInfo_ = config::loadServerInfo();
 
     if (!networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
-        std::cerr << "Failed to connect to server" << std::endl;
-        // TODO: throw ?
-        return;
+        isConnected_ = false;
+        throw std::runtime_error{"Failed to connect to server"};
+    } else {
+        isConnected_ = true;
     };
 
     ioThread_ = std::thread([this]() { context_.run(); });
@@ -176,6 +180,14 @@ void Controller::run() {
         ioThread_.join();
     }
 }
+
+const std::string_view Controller::getServerIp() const {
+    return serverInfo_.ip;
+}
+
+uint16_t Controller::getServerPort() const { return serverInfo_.port; }
+
+bool Controller::isConnected() const { return isConnected_; }
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
