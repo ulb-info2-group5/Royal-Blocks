@@ -204,8 +204,8 @@ bool Controller::isConnected() const { return isConnected_; }
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
 
-    // TODO: restart network (by stopping io_context, will be restarted in the
-    // run() function)
+    // NOTE: restart the context so that the connectionThread attempts a new connection with new serverInfo_ 
+    context_.stop();
 
     config::saveServerInfo(serverInfo);
 }
