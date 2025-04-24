@@ -18,6 +18,13 @@
 
 namespace GUI {
 
+    /**
+    * @brief
+    * Display the opponent board.
+    * Display the name of the opponent.
+    * Allows the widget to be selected.
+    */
+
     class OpponentWidget : public QFrame {
         Q_OBJECT
 
