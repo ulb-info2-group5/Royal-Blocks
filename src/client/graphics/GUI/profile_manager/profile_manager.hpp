@@ -15,6 +15,11 @@ class Controller;
 
 namespace GUI {
 
+    /**
+    * @brief manage main window of ProfileManager.
+    * It allows modify the name, password of actual account.
+    */
+
     class TetrisWindow;
 
     class ProfileManager : public QWidget {
