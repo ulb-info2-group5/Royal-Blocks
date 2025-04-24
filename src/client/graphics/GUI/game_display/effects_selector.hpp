@@ -16,6 +16,11 @@
 namespace GUI {
 
     class EffectSelector : public QFrame {
+      /**
+      * @brief It allows to see the selected effect chosed and buy that effect.
+      * The selected effect will be in blue.
+      * The type and the price of the selected effect will be display.
+      */
         Q_OBJECT
 
       private:
