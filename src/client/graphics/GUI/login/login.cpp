@@ -257,6 +257,16 @@ namespace GUI {
         serverInfo.port = portInt;
         controller_.setServerInfo(serverInfo);
 
+        std::thread waitThread([&]() {
+            const int maxWaitTimeMs = 3000;
+            const int checkIntervalMs = 100;
+            int waited = 0;
+            while (!controller_.isConnected() && waited < maxWaitTimeMs) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(checkIntervalMs));
+                waited += checkIntervalMs;
+            }
+        });
+        waitThread.join();
         if (controller_.isConnected()) {
             connectionToServerLabel_.setText(getConnectedMessage());
         } else {
@@ -481,3 +491,4 @@ namespace GUI {
     }
 
 } // namespace GUI
+
