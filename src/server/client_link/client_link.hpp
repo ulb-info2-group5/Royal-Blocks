@@ -69,6 +69,11 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
      */
     void writeSocket(std::string &content);
 
+    /*
+    *@brief : just check if the package has a type and if it is a Json
+    */
+    bool checkPackage(std::string& package);
+
   public:
     explicit ClientLink(tcp::socket socket, PacketHandler packetHandler,
                         AuthPacketHandler authPacketHandler,
@@ -76,9 +81,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void start();
 
     void sendPackage(nlohmann::json gameState);
-
+    
     void resetGame();
-
+    
     void exitGame();
     /*
      *@brief : return true if the client is authenticated
@@ -93,6 +98,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
 
 
     void jointGame(const std::weak_ptr<GameServer>& gameServer);
+
 
     bindings::User createUserFromThis();
     bindings::State getUserState();

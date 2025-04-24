@@ -160,81 +160,72 @@ void ClientManager::handlePacket(const std::string &packet,const UserID &clientI
 
 void ClientManager::handlePacketMenu(const std::string &packet, const UserID &clientId) {
     std::cout << "-- handle Packet call -- " << std::endl;
-
-    nlohmann::json jPack;
-    try {
-        jPack = nlohmann::json::parse(packet);
+    nlohmann::json jPack = nlohmann::json::parse(packet);
+    bindings::BindingType type;
+    type = jPack.at("type").get<bindings::BindingType>();
+    
+    switch (type) {
+    case bindings::BindingType::JoinGame:
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        connectedClients_[clientId]->setGameMode(bindings::JoinGame::from_json(jPack).gameMode);
+        updateThisUserWithAllhisFriends(clientId);
+        matchmaking_.addPlayer(RequestJoinGame{
+            Player{clientId,database_.accountManager->getUsername(clientId),},
+            bindings::JoinGame::from_json(jPack)});
+        break;
+    case bindings::BindingType::CreateGame:
+        connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
+        connectedClients_[clientId]->setGameMode(bindings::CreateGame::from_json(jPack).gameMode);
+        updateThisUserWithAllhisFriends(clientId);
+        matchmaking_.createAGame(RequestCreateGame{
+            Player{clientId, database_.accountManager->getUsername(clientId)},
+            bindings::CreateGame::from_json(jPack)});
+        break;
+    case bindings::BindingType::FriendRequest:
+        socialService_.handleFriendRequest(clientId, bindings::FriendRequest::from_json(jPack),database_.accountManager);
+        updateMenu(clientId);
+        updateMenu(database_.accountManager->getUserId(jPack.at("data").at("targetName").get<std::string>()));
+        break;
+    case bindings::BindingType::Message:
+        socialService_.handleMessages(clientId, bindings::Message::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("recipientId").get<UserID>());
+        break;
+    case bindings::BindingType::HandleFriendRequest:
         
-        bindings::BindingType type = jPack.at("type").get<bindings::BindingType>();
-        switch (type) {
-        case bindings::BindingType::JoinGame:
-            connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
-            connectedClients_[clientId]->setGameMode(bindings::JoinGame::from_json(jPack).gameMode);
-            updateThisUserWithAllhisFriends(clientId);
-            matchmaking_.addPlayer(RequestJoinGame{
-                Player{clientId,database_.accountManager->getUsername(clientId),},
-                bindings::JoinGame::from_json(jPack)});
-            break;
-        case bindings::BindingType::CreateGame:
-            connectedClients_[clientId]->setUserState(bindings::State::Matchmaking);
-            connectedClients_[clientId]->setGameMode(bindings::CreateGame::from_json(jPack).gameMode);
-            updateThisUserWithAllhisFriends(clientId);
-            matchmaking_.createAGame(RequestCreateGame{
-                Player{clientId, database_.accountManager->getUsername(clientId)},
-                bindings::CreateGame::from_json(jPack)});
-            break;
-        case bindings::BindingType::FriendRequest:
-            socialService_.handleFriendRequest(clientId, bindings::FriendRequest::from_json(jPack),database_.accountManager);
-            updateMenu(clientId);
-            updateMenu(database_.accountManager->getUserId(jPack.at("data").at("targetName").get<std::string>()));
-            break;
-        case bindings::BindingType::Message:
-            socialService_.handleMessages(clientId, bindings::Message::from_json(jPack));
-            updateMenu(clientId);
-            updateMenu(jPack.at("data").at("recipientId").get<UserID>());
-            break;
-        case bindings::BindingType::HandleFriendRequest:
-            
-            socialService_.handleHandleFriendRequest(clientId, bindings::HandleFriendRequest::from_json(jPack));
-            updateMenu(clientId);
-            updateMenu(jPack.at("data").at("user").get<UserID>());
-            break;
-        case bindings::BindingType::RemoveFriend:
-            socialService_.handleRemoveFriend(clientId, bindings::RemoveFriend::from_json(jPack));
-            updateMenu(clientId);
-            updateMenu(jPack.at("data").at("playerId").get<UserID>());
-            break;
-        case bindings::BindingType::ChangePassword:
-            accountService_.changePassword(clientId, bindings::ChangePassword::from_json(jPack));
-            break;
-        case bindings::BindingType::ChangeUsername:
-            connectedClients_[clientId]->sendPackage(accountService_.attemptChangeUsername(clientId, bindings::ChangeUsername::from_json(jPack), 
-            [this](UserID userID){updateThisUserWithAllhisFriends(userID);}).to_json());        
-            break;
-        case bindings::BindingType::AbortMatchMaking:
-            matchmaking_.abortMatchmaking(connectedClients_[clientId]);
-            updateThisUserWithAllhisFriends(clientId);
-            break;
+        socialService_.handleHandleFriendRequest(clientId, bindings::HandleFriendRequest::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("user").get<UserID>());
+        break;
+    case bindings::BindingType::RemoveFriend:
+        socialService_.handleRemoveFriend(clientId, bindings::RemoveFriend::from_json(jPack));
+        updateMenu(clientId);
+        updateMenu(jPack.at("data").at("playerId").get<UserID>());
+        break;
+    case bindings::BindingType::ChangePassword:
+        accountService_.changePassword(clientId, bindings::ChangePassword::from_json(jPack));
+        break;
+    case bindings::BindingType::ChangeUsername:
+        connectedClients_[clientId]->sendPackage(accountService_.attemptChangeUsername(clientId, bindings::ChangeUsername::from_json(jPack), 
+        [this](UserID userID){updateThisUserWithAllhisFriends(userID);}).to_json());        
+        break;
+    case bindings::BindingType::AbortMatchMaking:
+        matchmaking_.abortMatchmaking(connectedClients_[clientId]);
+        updateThisUserWithAllhisFriends(clientId);
+        break;
 
-        case bindings::BindingType::ViewGame:
-            gamesManager_.joinGameAsViewer(connectedClients_[clientId],
-                connectedClients_[jPack.at("data").at("targetUser").get<UserID>()]
-                );
-            break;
-        case bindings::BindingType::QuitGame:
-            gamesManager_.quiGameAsViewer(connectedClients_[clientId]);
-            break;
-        default:
-            
-            break;
-        }
-
-    } catch (const std::runtime_error &e) {
-        std::cerr << "Received packet is not valid JSON: " << e.what()
-                  << std::endl;
-        return;
+    case bindings::BindingType::ViewGame:
+        gamesManager_.joinGameAsViewer(connectedClients_[clientId],
+            connectedClients_[jPack.at("data").at("targetUser").get<UserID>()]
+            );
+        break;
+    case bindings::BindingType::QuitGame:
+        gamesManager_.quiGameAsViewer(connectedClients_[clientId]);
+        break;
+    default:
+        
+        break;
     }
-
 }
 
 void ClientManager::addClientInWaitingForAuth(

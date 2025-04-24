@@ -13,6 +13,7 @@ void ClientLink::read() {
         socket_, streamBuffer_, bindings::PACKET_DELIMITER,
         [this](boost::system::error_code ec, std::size_t) {
             if (!ec) {
+                
                 handleReading();
             } else if (ec == boost::asio::error::eof) {
                 handleErrorReading();
@@ -20,10 +21,34 @@ void ClientLink::read() {
         });
 }
 
+bool ClientLink::checkPackage(std::string& package){
+
+    nlohmann::json checkJson;
+    try{
+        checkJson =  nlohmann::json::parse(package);
+    }catch(nlohmann::json::parse_error& e){
+        std::cerr << "Received packet is not valid JSON: " << e.what()<< std::endl;
+        return false ;
+    }
+
+    try {
+        checkJson.at("type").get<bindings::BindingType>();
+    }catch(nlohmann::json::exception& e){
+        std::cerr <<"Received packet has no type  : " << e.what() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 void ClientLink::handleReading() {
     std::istream is(&streamBuffer_);
     std::string packet;
     std::getline(is, packet);
+    //check if the package has the correct format
+    if (!checkPackage(packet)) {
+        return;
+    }
     std::cout << "packet : " << packet << std::endl;
     if (getUserState() == bindings::State::Offline) {
         handleAuthentication(packet);
@@ -40,14 +65,8 @@ void ClientLink::handleErrorReading() {
 }
 
 void ClientLink::handleAuthentication(std::string &packet) {
-    nlohmann::json jsonPacket;
-    try {
-        jsonPacket = nlohmann::json::parse(packet);
-    } catch (const std::runtime_error &e) {
-        std::cerr << "Received packet is not valid JSON: " << e.what()
-                  << std::endl;
-        return;
-    }
+
+    nlohmann::json jsonPacket  = nlohmann::json::parse(packet);
     nlohmann::json response = authPacketHandler_(jsonPacket);
     sendPackage(response);
     std::cout << response.dump() << std::endl;
