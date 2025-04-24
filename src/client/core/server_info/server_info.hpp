@@ -3,14 +3,15 @@
 
 #include <cstdint>
 #include <string>
-
-#define DEFAULT_IP "127.0.0.1"
-#define DEFAULT_PORT 1234
-#define CONFIG_PATH "data/config.json"
-#define ENV_VAR_IP "SERVER_IP"
-#define ENV_VAR_PORT "SERVER_PORT"
+#include <string_view>
 
 namespace config {
+
+    inline constexpr uint16_t DEFAULT_PORT = 1234;
+    inline const std::string_view DEFAULT_IP = "127.0.0.1";
+    inline const std::string_view ENV_VAR_IP = "SERVER_IP";
+    inline const std::string_view ENV_VAR_PORT = "SERVER_PORT";
+    inline const std::string_view CONFIG_PATH = "data/config.json";
 
     struct ServerInfo {
         std::string ip;
@@ -19,26 +20,11 @@ namespace config {
 
     void saveServerInfo(const ServerInfo &serverInfo);
 
+    /**
+     * @brief Returns the server info.
+     */
     ServerInfo loadServerInfo();
 
-    /*
-    * @brief Create the directory data and the config.json file if they don't exist
-    */
-    static void createDirAndConfigFile();
-
-    /*
-    * @brief Get the IP from the environment variable or use the default
-    *
-    * @return std::string The IP
-    */
-    static std::string getEnvIP();
-
-    /*
-    * @brief Get the port from the environment variable or use the default
-    *
-    * @return uint16_t The port
-    */
-    static uint16_t getEnvPort();
-}
+} // namespace config
 
 #endif // SERVER_INFO_HPP

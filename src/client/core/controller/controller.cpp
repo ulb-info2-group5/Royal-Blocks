@@ -44,6 +44,7 @@
 #include <mutex>
 #include <optional>
 #include <ostream>
+#include <print>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -195,7 +196,8 @@ void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
 }
 
 config::ServerInfo Controller::getServerInfo() const {
-    // TODO: Lucas ? Load the file or return port and ip info from NetWorkManager
+    // TODO: Lucas ? Load the file or return port and ip info from
+    // NetWorkManager
     return config::loadServerInfo();
 }
 
