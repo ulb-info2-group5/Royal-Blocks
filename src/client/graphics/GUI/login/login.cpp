@@ -1,30 +1,35 @@
 #include "login.hpp"
 
 #include "../../../core/controller/controller.hpp"
-#include "../qt_config/qt_config.hpp"
 #include "../../../core/server_info/server_info.hpp"
+#include "../qt_config/qt_config.hpp"
 
 #include <QApplication>
 #include <QCheckBox>
 #include <QMessageBox>
+#include <QTimer>
 #include <QVBoxLayout>
 
 namespace GUI {
 
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
     constexpr int INPUT_BUTTON_WIDTH = 500;
-    constexpr char NO_CONNECTED_CHAR_NORMAL[]    = "<span style='color: red; font-weight: "
-                                            "bold;'>Connection to the server failed.</span><br>"
-                                            "Please enter a valid IP address and port in the <span "
-                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu "
-                                            "or make sure that the server is currently online.";
-    constexpr char NO_CONNECTED_CHAR_MAINPAGE[]    = "<span style='color: red; font-weight: "
-                                            "bold;'>Connection to the server failed.</span><br>"
-                                            "Please enter a valid IP address and port in the <span "
-                                            "style='color: #007acc;'><b>Choose IP and Port</b></span> menu<br>"
-                                            "or make sure that the server is currently online";
-    constexpr char CONNECTED_CHAR[] = "<span style='color: green; font-weight: bold;'>Connection made to the server</span> "
-                                      "with IP address : <span style='color: #007acc;'><b>";
+    constexpr char NO_CONNECTED_CHAR_NORMAL[] =
+        "<span style='color: red; font-weight: "
+        "bold;'>Connection to the server failed.</span><br>"
+        "Please enter a valid IP address and port in the <span "
+        "style='color: #007acc;'><b>Choose IP and Port</b></span> menu "
+        "or make sure that the server is currently online.";
+    constexpr char NO_CONNECTED_CHAR_MAINPAGE[] =
+        "<span style='color: red; font-weight: "
+        "bold;'>Connection to the server failed.</span><br>"
+        "Please enter a valid IP address and port in the <span "
+        "style='color: #007acc;'><b>Choose IP and Port</b></span> menu<br>"
+        "or make sure that the server is currently online";
+    constexpr char CONNECTED_CHAR[] =
+        "<span style='color: green; font-weight: bold;'>Connection made to the "
+        "server</span> "
+        "with IP address : <span style='color: #007acc;'><b>";
 
     Login::Login(Controller &controller, QWidget *parent)
         : QWidget(parent), controller_(controller), loginSuccess_(false) {}
@@ -38,19 +43,16 @@ namespace GUI {
 
         show();
 
-        // Thread to check if the connection is successful every 2 seconds
-        // and update the label.
-        // NOTE: This thread is detached to avoid blocking the main thread and finish
-        // when loginSuccess_ is true.
-        std::thread checkConnectionThread([&]() {
-            while (!loginSuccess_) {
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this, timer]() {
+            if (loginSuccess_) {
+                timer->stop();
+                timer->deleteLater();
+            } else {
                 updateConnectedMessage();
-                std::this_thread::sleep_for(std::chrono::milliseconds(3000));
             }
         });
-        if (checkConnectionThread.joinable()) {
-            checkConnectionThread.detach();
-        }
+        timer->start(3000); // 3000 ms
     }
 
     void Login::on_ExitButton_clicked() { actionOnExit(); }
@@ -260,7 +262,8 @@ namespace GUI {
 
         bool ok;
         int portInt = port.toInt(&ok);
-        if (!ok || portInt < 1 || portInt > std::numeric_limits<uint16_t>::max()) {
+        if (!ok || portInt < 1
+            || portInt > std::numeric_limits<uint16_t>::max()) {
             QMessageBox::warning(this, "Connection failed",
                                  "Please enter a valid port (1 - 65535).");
             return;
@@ -276,7 +279,8 @@ namespace GUI {
             const int checkIntervalMs = 100;
             int waited = 0;
             while (!controller_.isConnected() && waited < maxWaitTimeMs) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(checkIntervalMs));
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(checkIntervalMs));
                 waited += checkIntervalMs;
             }
         });
@@ -285,12 +289,17 @@ namespace GUI {
             connectionToServerLabel_.setText(getConnectedMessage());
         } else {
             connectionToServerLabel_.setText(NO_CONNECTED_CHAR_MAINPAGE);
-            QMessageBox::warning(this, "Connection failed", NO_CONNECTED_CHAR_NORMAL);
+            QMessageBox::warning(this, "Connection failed",
+                                 NO_CONNECTED_CHAR_NORMAL);
             return;
         }
 
-        QMessageBox::information(this, "Connection successful",
-                                 "<span style='color: green; font-weight: bold;'>Connection successful !</span><br>\nYou are now connected to the Royal Tetris Server with the IP : " + ip + " and the Port : " + port + ".");
+        QMessageBox::information(
+            this, "Connection successful",
+            "<span style='color: green; font-weight: bold;'>Connection "
+            "successful !</span><br>\nYou are now connected to the Royal "
+            "Tetris Server with the IP : "
+                + ip + " and the Port : " + port + ".");
 
         updateConnectedMessage();
         stackedWidget_.setCurrentIndex(0); // Main page
@@ -340,8 +349,8 @@ namespace GUI {
         sendButtonLogin_.setText("Send");
         sendButtonLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
-
-        /*------------------------CHOOSE IP AND PORT MENU--------------------------*/
+        /*------------------------CHOOSE IP AND PORT
+         * MENU--------------------------*/
         backButtonIpPortMenu->setText("Back");
         backButtonIpPortMenu->setFixedWidth(INPUT_BUTTON_WIDTH);
         connectButton->setText("Connect to server");
@@ -356,24 +365,30 @@ namespace GUI {
 
         connect(backButtonIpPortMenu, &QPushButton::clicked, this,
                 &Login::on_BackButton_clicked);
-        connect(connectButton, &QPushButton::clicked, this, 
+        connect(connectButton, &QPushButton::clicked, this,
                 &Login::on_ConnectButton_clicked);
         connect(chooseIpPortButton, &QPushButton::clicked, this,
                 &Login::on_ChooseIpPortButton_clicked);
 
         chooseIpPortPage = new QWidget();
         QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout();
-        chooseIpPortPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        chooseIpPortPageLayout->addWidget(createCenterBoldTitle("Choose IP and Port of the server"));
-        chooseIpPortPageLayout->addWidget(new QLabel("IP : "), 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addItem(new QSpacerItem(
+            20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        chooseIpPortPageLayout->addWidget(
+            createCenterBoldTitle("Choose IP and Port of the server"));
+        chooseIpPortPageLayout->addWidget(new QLabel("IP : "), 0,
+                                          Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(&ipInput_, 0, Qt::AlignCenter);
-        chooseIpPortPageLayout->addWidget(new QLabel("Port : "), 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(new QLabel("Port : "), 0,
+                                          Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(&portInput_, 0, Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(connectButton, 0, Qt::AlignCenter);
-        chooseIpPortPageLayout->addWidget(backButtonIpPortMenu, 0, Qt::AlignCenter);
-        chooseIpPortPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        chooseIpPortPageLayout->addWidget(backButtonIpPortMenu, 0,
+                                          Qt::AlignCenter);
+        chooseIpPortPageLayout->addItem(new QSpacerItem(
+            20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         chooseIpPortPage->setLayout(chooseIpPortPageLayout);
-        
+
         /*-------------------------------------------------------------------------*/
 
         connect(exitButton, &QPushButton::clicked, this,
@@ -414,7 +429,7 @@ namespace GUI {
         passwordInputRegister_.setPlaceholderText("Enter a password");
         usernameInputLogin_.setPlaceholderText("Enter your username");
         passwordInputLogin_.setPlaceholderText("Enter your password");
-        
+
         showPasswordLogin->setText("Show password");
         showPasswordRegister->setText("Show password");
         connect(showPasswordLogin, &QCheckBox::stateChanged, [&](int state) {
@@ -482,17 +497,20 @@ namespace GUI {
                                                  QSizePolicy::Expanding));
         loginPage->setLayout(loginPageLayout);
 
-        stackedWidget_.addWidget(mainPage);     // O
-        stackedWidget_.addWidget(registerPage); // 1
-        stackedWidget_.addWidget(loginPage);    // 2
+        stackedWidget_.addWidget(mainPage);         // O
+        stackedWidget_.addWidget(registerPage);     // 1
+        stackedWidget_.addWidget(loginPage);        // 2
         stackedWidget_.addWidget(chooseIpPortPage); // 3
 
         updateConnectedMessage();
     }
 
     QString Login::getConnectedMessage() const {
-        QString message = CONNECTED_CHAR  + QString::fromStdString(std::string(controller_.getServerIp()))
-            + "</b></span> and Port : <span style='color: #007acc;'><b>" + QString::number(controller_.getServerPort()) + "</b></span>";
+        QString message =
+            CONNECTED_CHAR
+            + QString::fromStdString(std::string(controller_.getServerIp()))
+            + "</b></span> and Port : <span style='color: #007acc;'><b>"
+            + QString::number(controller_.getServerPort()) + "</b></span>";
         return message;
     }
 
