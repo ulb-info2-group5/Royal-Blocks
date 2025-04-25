@@ -54,6 +54,7 @@ namespace TUI {
         std::string port_;
         std::string errorConnectionMessage_;
         std::string connectionMessage_;
+        std::string errorPortMessage_;
 
         ftxui::Component buttonRegister_;
         ftxui::Component buttonLogin_;
@@ -94,6 +95,14 @@ namespace TUI {
          * successful or not
          */
         void updateConnectedMessage();
+
+        /*
+         * @brief Create the colored connection message to show to the user
+         *
+         * @return ftxui::Element The element to render
+         */
+        ftxui::Element coloredConnectionMessage() const;
+
 
       public:
         /*

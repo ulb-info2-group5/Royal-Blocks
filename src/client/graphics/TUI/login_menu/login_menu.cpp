@@ -30,7 +30,7 @@ namespace TUI {
         if (controller_.isConnected()) {
             connectionMessage_ = STR_CONNECTION_SUCCESS;
         } else {
-            connectionMessage_ = STR_CONNECTION_FAILED;
+            connectionMessage_ = STR_NO_CONNECTED;
         }
 
         createButtonsInputs();
@@ -86,8 +86,26 @@ namespace TUI {
             }, GlobalButtonStyle());
 
         ipInput_ = ftxui::Input(&ip_, std::string(STR_IP));
+        ipInput_ = ftxui::CatchEvent(ipInput_, [&](const ftxui::Event& event) {
+            if (event == ftxui::Event::Return) {
+                if (!ip_.empty() && !port_.empty()) {
+                    checkConnection();
+                }
+                return true;
+            }
+            return false;
+        });
         
         portInput_ = ftxui::Input(&port_, std::string(STR_PORT));
+        portInput_ = ftxui::CatchEvent(portInput_, [&](const ftxui::Event& event) {
+            if (event == ftxui::Event::Return) {
+                if (!ip_.empty() && !port_.empty()) {
+                    checkConnection();
+                }
+                return true;
+            }
+            return false;
+        });
     }
 
     void LoginMenu::displayWindow() {
@@ -123,7 +141,7 @@ namespace TUI {
                                    | ftxui::center
                                    | ftxui::bgcolor(ftxui::Color::Black),
                                 ftxui::separator(),
-                                ftxui::text(connectionMessage_)
+                                coloredConnectionMessage()
                                       | ftxui::center
                                       | ftxui::bgcolor(ftxui::Color::Black),
                                 ftxui::separator(),
@@ -152,12 +170,22 @@ namespace TUI {
                 };
                 
                 if (!errorConnectionMessage_.empty()) {
+                    elements.push_back(ftxui::separator());
                     elements.push_back(
-                        ftxui::text(errorConnectionMessage_) 
-                        | ftxui::center | ftxui::bgcolor(ftxui::Color::Black)
+                        ftxui::paragraph(errorConnectionMessage_) 
+                        | ftxui::color(ftxui::Color::Red)
+                    );
+                }
+
+                if (!errorPortMessage_.empty()) {
+                    elements.push_back(ftxui::separator());
+                    elements.push_back(
+                        ftxui::paragraph(errorPortMessage_) 
+                        | ftxui::color(ftxui::Color::Red)
                     );
                 }
                 
+                elements.push_back(ftxui::separator());
                 elements.push_back(buttonConnect_->Render() | ftxui::bgcolor(ftxui::Color::Black));
                 elements.push_back(buttonBack_->Render() | ftxui::bgcolor(ftxui::Color::Black));
                 
@@ -166,10 +194,32 @@ namespace TUI {
             });
     }
 
+    ftxui::Element LoginMenu::coloredConnectionMessage() const {
+        if (connectionMessage_ == STR_CONNECTION_SUCCESS) {
+            return ftxui::text(connectionMessage_ + " with IP address : " +
+                   std::string(controller_.getServerIp()) + " and Port : " +
+                   std::to_string(controller_.getServerPort()))
+                   | ftxui::center
+                   | ftxui::color(ftxui::Color::Green)
+                   | ftxui::bold;
+        }
+    
+        
+        return ftxui::paragraph(connectionMessage_ + "\nCurrent IP address : " +
+                   std::string(controller_.getServerIp()) + " and Port : " +
+                   std::to_string(controller_.getServerPort()) + " are being used.")
+                | ftxui::color(ftxui::Color::Red)
+                | ftxui::bold;
+    }
+    
+
     void LoginMenu::checkConnection() {
         if (ip_.empty() || port_.empty()) {
             errorConnectionMessage_ = STR_CONNECTION_FAILED;
             connectionMessage_ = STR_NO_CONNECTED;
+            errorPortMessage_ = std::string(STR_PORT_INVALID) + "\nCurrent IP address : " +
+                   std::string(controller_.getServerIp()) + " and Port : " +
+                   std::to_string(controller_.getServerPort()) + " are being used.";
             return;
         }
 
@@ -179,13 +229,21 @@ namespace TUI {
         } catch (...) {
             errorConnectionMessage_ = STR_CONNECTION_FAILED;
             connectionMessage_ = STR_NO_CONNECTED;
+            errorPortMessage_ = std::string(STR_PORT_INVALID) + "\nCurrent IP address : " +
+                   std::string(controller_.getServerIp()) + " and Port : " +
+                   std::to_string(controller_.getServerPort()) + " are being used.";
             return;
         }
         if (portInt < 1 || portInt > std::numeric_limits<uint16_t>::max()) {
             errorConnectionMessage_ = STR_CONNECTION_FAILED;
             connectionMessage_ = STR_NO_CONNECTED;
+            errorPortMessage_ = std::string(STR_PORT_INVALID) + "\nCurrent IP address : " +
+                   std::string(controller_.getServerIp()) + " and Port : " +
+                   std::to_string(controller_.getServerPort()) + " are being used.";
             return;
         }
+
+        errorPortMessage_.clear();
 
         config::ServerInfo serverInfo;
         serverInfo.ip = ip_;
