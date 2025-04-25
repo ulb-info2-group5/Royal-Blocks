@@ -20,6 +20,9 @@ namespace GUI {
       private:
         Controller &controller_;
 
+        bool loginSuccess_;
+
+
         QStackedWidget stackedWidget_;
 
         QLineEdit usernameInputRegister_;

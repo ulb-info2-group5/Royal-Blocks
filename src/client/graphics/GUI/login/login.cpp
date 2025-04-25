@@ -27,7 +27,7 @@ namespace GUI {
                                       "with IP address : <span style='color: #007acc;'><b>";
 
     Login::Login(Controller &controller, QWidget *parent)
-        : QWidget(parent), controller_(controller) {}
+        : QWidget(parent), controller_(controller), loginSuccess_(false) {}
 
     void Login::run() {
         setup();
@@ -35,6 +35,22 @@ namespace GUI {
         QVBoxLayout *layout = new QVBoxLayout();
         layout->addWidget(&stackedWidget_);
         setLayout(layout);
+
+        show();
+
+        // Thread to check if the connection is successful every 2 seconds
+        // and update the label.
+        // NOTE: This thread is detached to avoid blocking the main thread and finish
+        // when loginSuccess_ is true.
+        std::thread checkConnectionThread([&]() {
+            while (!loginSuccess_) {
+                updateConnectedMessage();
+                std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            }
+        });
+        if (checkConnectionThread.joinable()) {
+            checkConnectionThread.detach();
+        }
     }
 
     void Login::on_ExitButton_clicked() { actionOnExit(); }
@@ -105,15 +121,13 @@ namespace GUI {
 
         controller_.tryLogin(username.toStdString(), password.toStdString());
 
-        bool loginSuccess = false;
-
         // Thread to check if registration is successful
         std::thread loginThread = std::thread([&]() {
             for (int i = 0; i < 20; ++i) { // 2 seconds limit (20 * 100ms)
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 if (controller_.getAuthState()
                     == Controller::AuthState::Authenticated) {
-                    loginSuccess = true;
+                    loginSuccess_ = true;
                     return;
                 }
             }
@@ -125,7 +139,7 @@ namespace GUI {
 
         clearInputs();
 
-        if (loginSuccess) {
+        if (loginSuccess_) {
             emit loginSuccessful();
         }
 
@@ -491,4 +505,3 @@ namespace GUI {
     }
 
 } // namespace GUI
-
