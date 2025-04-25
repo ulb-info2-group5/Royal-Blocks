@@ -184,10 +184,7 @@ const std::string_view Controller::getServerIp() const {
 
 uint16_t Controller::getServerPort() const { return serverInfo_.port; }
 
-bool Controller::isConnected() const {
-    // TODO: Change this to the actual value
-    return true;
-}
+bool Controller::isConnected() const { return networkManager_.isConnected(); }
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;

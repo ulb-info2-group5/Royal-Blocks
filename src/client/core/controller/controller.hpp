@@ -86,6 +86,11 @@ class Controller {
      */
     void handlePacket(const std::string_view pack);
 
+    /**
+     * @brief Udpates the given friend's state (in the friendslist).
+     * This allows us to just transfer one bindings::User when a friends goes
+     * online/offline instead of transfering the entire friendslist.
+     */
     void updateFriendState(const bindings::User &updatedFriend);
 
   public:
