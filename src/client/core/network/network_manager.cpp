@@ -23,12 +23,6 @@ bool NetworkManager::connect(const std::string_view ip, uint16_t port) {
         if (socket_.is_open()) {
             boost::system::error_code ec;
             ec = socket_.close(ec);
-            if (ec) {
-                std::cerr << "Error while closing socket: " << ec.message()
-                          << " [code: " << ec.value() << "]" << std::endl;
-            } else {
-                std::cout << "Socket closed successfully." << std::endl;
-            }
         }
 
         socket_ = boost::asio::ip::tcp::socket(context_);
@@ -43,7 +37,6 @@ bool NetworkManager::connect(const std::string_view ip, uint16_t port) {
     }
 
     catch (const std::runtime_error &e) {
-        std::cerr << "Connection error: " << e.what() << std::endl;
         return false;
     }
 }
@@ -78,8 +71,6 @@ void NetworkManager::receive() {
                 packetHandler_(packetView);
                 readBuf.erase(0, length);
                 receive(); // Continue listening for messages
-            } else {
-                std::cerr << "Receive error: " << error.message() << std::endl;
             }
         });
 }

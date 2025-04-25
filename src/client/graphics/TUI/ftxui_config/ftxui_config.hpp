@@ -62,7 +62,17 @@ namespace TUI {
         REGISTER_INSTRUCTIONS =
             "Please enter a username and a password to create an account.",
         LOGIN_MESSAGE =
-            "Your account has been created successfully! You can now login.";
+            "Your account has been created successfully! You can now login.",
+        STR_NO_CONNECTED = "Connection to the server failed.\nPlease enter a valid IP "
+                           "address and port in the 'Choose IP and Port' menu "
+                           "or make sure that the server is currently online",
+        STR_CONNECTION_FAILED = "Connection failed.\nPlease enter a valid IP "
+                                "address and portor make sure that the server is currently online",
+        STR_CONNECTION_SUCCESS = "Connection made to the server",
+        STR_CHOOSE_IP_PORT = "Choose IP and Port",
+        STR_IP = "IP address",
+        STR_PORT = "Port",
+        STR_CONNECT_TO_SERVER = "Connect to server";
 
     inline const ftxui::Element WELCOME_TITLE = ftxui::vbox({
         ftxui::text(
