@@ -6,6 +6,10 @@
 
 namespace GUI {
 
+    /**
+    * @brief Allows to switch between light theme and dark theme.
+    */
+
     class ThemeManager : public QWidget {
       Q_OBJECT
       
