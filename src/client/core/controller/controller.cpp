@@ -38,13 +38,13 @@
 #include "core/server_info/server_info.hpp"
 
 #include <algorithm>
-#include <chrono>
 #include <cstdint>
 #include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
+#include <print>
 #include <string>
 #include <string_view>
 #include <thread>
@@ -145,7 +145,7 @@ void Controller::handlePacket(const std::string_view pack) {
 Controller::Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay)
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
-      pAbstractDisplay_(std::move(pAbstractDisplay)), isConnected_(false),
+      pAbstractDisplay_(std::move(pAbstractDisplay)),
       networkManager_{context_, [this](const std::string_view packet) {
                           handlePacket(packet);
                       }} {};
@@ -163,44 +163,18 @@ Controller::AuthState Controller::getAuthState() const {
 void Controller::run() {
     // load initial serverInfo
     serverInfo_ = config::loadServerInfo();
-    isConnected_ = false;
+    networkManager_.start(serverInfo_);
 
-    std::mutex mtx;
-    std::condition_variable cv;
-
-    std::atomic<bool> running = true;
-
-    std::thread connectionThread([&]() {
-        std::unique_lock<std::mutex> lock(mtx);
-        while (running) {
-            context_.restart();
-            if (isConnected_ =
-                    networkManager_.connect(serverInfo_.ip, serverInfo_.port)) {
-                lock.unlock();
-                context_.run();
-                lock.lock();
-                isConnected_ = false;
-            }
-            cv.wait_for(lock, std::chrono::seconds(1),
-                        [&]() { return !running.load(); });
-        }
-    });
+    std::thread ioThread([&]() { context_.run(); });
 
     pAbstractDisplay_->run(*this);
 
-    {
-        std::lock_guard<std::mutex> lock(mtx);
-        running = false;
-    }
-    cv.notify_all();
-
-    context_.stop();
-    running = false;
-
     networkManager_.disconnect();
 
-    if (connectionThread.joinable()) {
-        connectionThread.join();
+    context_.stop();
+
+    if (ioThread.joinable()) {
+        ioThread.join();
     }
 }
 
@@ -210,15 +184,14 @@ const std::string_view Controller::getServerIp() const {
 
 uint16_t Controller::getServerPort() const { return serverInfo_.port; }
 
-bool Controller::isConnected() const { return isConnected_; }
+bool Controller::isConnected() const {
+    // TODO: Change this to the actual value
+    return true;
+}
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
-
-    // NOTE: restart the context so that the connectionThread attempts a new
-    // connection with new serverInfo_
-    context_.stop();
-
+    networkManager_.setServerInfo(serverInfo_);
     config::saveServerInfo(serverInfo);
 }
 

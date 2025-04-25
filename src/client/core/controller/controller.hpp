@@ -76,9 +76,6 @@ class Controller {
 
     config::ServerInfo serverInfo_;
 
-    // NOTE: atomic becaues we will attempt to connect every x seconds.
-    std::atomic<bool> isConnected_;
-
     /**
      * @brief The network manager to manage the connection with the server
      */

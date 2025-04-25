@@ -1,13 +1,16 @@
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 
+#include <atomic>
 #include <boost/asio.hpp>
 #include <boost/asio/io_context.hpp>
 #include <cstdint>
 
+#include "core/server_info/server_info.hpp"
+
 class NetworkManager {
   private:
-    std::string readBuf;
+    std::atomic<bool> isConnected_;
 
     /**
      * @brief The io context used for asynchronous operations
@@ -19,10 +22,24 @@ class NetworkManager {
      */
     boost::asio::ip::tcp::socket socket_;
 
+    std::string serverIp_;
+    uint16_t serverPort_;
+
+    std::string readBuf_;
+
+    boost::asio::steady_timer retryTimer_;
+
     /**
      * @brief Handles the packets received by the client
      */
     std::function<void(const std::string_view)> packetHandler_;
+
+    /**
+     * @brief Connect to the server and start listening for messages
+     *
+     * @return true if the connection was successful and false otherwise
+     */
+    bool connect();
 
     /**
      * @brief Function to write and send messages to the server
@@ -33,6 +50,11 @@ class NetworkManager {
      * @brief Function to listen and receive messages from the server
      */
     void receive();
+
+    /**
+     * @brief Attempt to connect again.
+     */
+    void retry();
 
   public:
     /**
@@ -47,11 +69,15 @@ class NetworkManager {
     ~NetworkManager() = default;
 
     /**
-     * @brief Connect to the server and start listening for messages
-     *
-     * @return true if the connection was successful and false otherwise
+     * @brief Sets the server info, will reattempt a new connection
+     * automatically.
      */
-    bool connect(const std::string_view ip, uint16_t port);
+    void setServerInfo(const config::ServerInfo &serverInfo);
+
+    /**
+     * @brief Connects and starts listening for packets.
+     */
+    void start(const config::ServerInfo &serverInfo);
 
     /**
      * @brief Disconnect from the server
@@ -64,6 +90,11 @@ class NetworkManager {
      * @param string message The message to send
      */
     void send(const std::string &message);
+
+    /**
+     * @brief Returns whether the client is connected to the configured server.
+     */
+    bool isConnected() const;
 };
 
 #endif // NETWORK_MANAGER_HPP
