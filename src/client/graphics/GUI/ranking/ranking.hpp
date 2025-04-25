@@ -11,9 +11,8 @@ namespace GUI {
     class TetrisWindow;
 
     /**
-    * @brief Display the ranking of the players 
-    */
-
+     * @brief Displays the ranking of all players.
+     */
     class Ranking : public QWidget {
         Q_OBJECT
 

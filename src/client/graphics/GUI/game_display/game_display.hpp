@@ -33,21 +33,16 @@ namespace GUI {
     };
 
     /**
-    * @brief It allows full display ot a game window.
-    * Diffrents widgets displayed:
-    * - Board of game.
-    * - LCD with the score.
-    * - LCD with the energy.
-    * - The tetraminos queue.
-    * - Info about penalty and effects.
-    * Diffrents fonctions:
-    * - Quite bouton.
-    * - Back to main menu.
-    * - Select a target.
-    * - Buying a effect.
-    * - Updating game statistics.
-    */
-
+     * @brief Widget that displays the "in game" window.
+     * Contains multiple subwidgets such as:
+     * - Player's board
+     * - LCD with the score
+     * - LCD with the energy
+     * - The tetraminoes queue
+     * - Info about penalty and effects
+     * - available-effects
+     * - Quit bouton.
+     */
     class GameDisplay final : public QWidget, public AbstractGameDisplay {
 
         Q_OBJECT

@@ -29,9 +29,8 @@ namespace GUI {
     };
 
     /**
-    * @brief Display all options in the main game menu
-    */
-
+     * @brief Displays all options in the (main) Game Menu.
+     */
     class GameMenu : public QWidget {
         Q_OBJECT
 

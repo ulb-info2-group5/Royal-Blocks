@@ -9,11 +9,15 @@
 
 namespace GUI {
 
+    /**
+     * @brief A widget that displays information about an effect applied to
+     * the player.
+     *
+     * This widget shows the effect's name and a progress bar indicating how
+     * much time has elapsed relative to the effect's total duration.
+     */
     class EffectInfo : public QFrame {
-      /**
-      * @brief It show widget progress bar for "energy" to use to do effect; malus and bonus.
-      * It show to the name of current effect.
-      */
+
         Q_OBJECT
 
       private:
