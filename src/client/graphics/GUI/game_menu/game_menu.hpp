@@ -28,6 +28,10 @@ namespace GUI {
         SpectateFriend,
     };
 
+    /**
+    * @brief Display all options in the main game menu
+    */
+
     class GameMenu : public QWidget {
         Q_OBJECT
 

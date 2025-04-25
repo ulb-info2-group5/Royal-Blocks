@@ -7,6 +7,12 @@
 
 namespace GUI {
 
+    /**
+    * @brief 
+    * Display during the game the opponents grids.
+    * Allows to select an opponent like target.
+    */
+
     class OpponentsGrid : public QFrame {
         Q_OBJECT
 
