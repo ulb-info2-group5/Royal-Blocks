@@ -26,6 +26,14 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
   `sudo apt install cmake`
 - **CppUnit**  
   `sudo apt install libcppunit-dev`
+- **SQLite3**
+  `sudo apt install libsqlite3-dev`
+- **Qt5**
+  `sudo apt install qtbase5-dev`
+- **Boost**
+  `sudo apt install libboost-all-dev`
+
+D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
 
 ### Compilation
 
@@ -47,11 +55,19 @@ votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
 
 ### Lancer le programme
 
-Pour lancer Tetris, exécutez :
+Pour lancer Tetris, vous avez le choix entre deux interfaces :
 
-```sh
-./tetris_royal_client
-```
+- Interface graphique :
+
+  ```sh
+  ./tetris_gui
+  ```
+
+- Interface en terminal :
+
+  ```sh
+  ./tetris_tui
+  ```
 
 Pour lancer le serveur, exécutez :
 
@@ -63,15 +79,15 @@ Pour lancer le serveur, exécutez :
 
 Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
 
-### Les différentes commandes de déplacement
+### Les différentes commandes de Tetris Royale
 
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
 Tetris :
 
-- **Rotation sens horlogique**  
+- **Rotation dans le sens horaire**  
   `g`
 
-- **Rotation sens anti-horlogique**  
+- **Rotation dans le sens antihoraire**  
   `f`
 
 - **Déplacement vers la gauche**  
@@ -80,8 +96,14 @@ Tetris :
 - **Déplacement vers la droite**  
   `→`
 
-- **Descendre plus rapidement**  
+- **Descente rapide**  
   `↓`
 
-- **Placer le tetromino en bas**  
+- **Placer le tetromino immédiatement en bas**  
   `↑`
+
+- **Mettre en attente (hold) un tétrimino**
+  `h`
+
+- **Quitter la partie en cours**
+ `q`

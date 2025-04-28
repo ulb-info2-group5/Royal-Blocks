@@ -8,7 +8,7 @@ endif
 BUILD_DIR = ./build
 OUTPUT_DIR = .
 
-all: debug
+all: release
 
 debug:
 	@cmake -S . -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=Debug -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(abspath $(OUTPUT_DIR))
