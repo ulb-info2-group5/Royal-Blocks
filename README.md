@@ -20,19 +20,19 @@
 Le projet nécessite l'installation des programmes et bibliothèques suivants
 (les commandes fonctionnent pour Debian) :
 
-- **Make**  
+- **Make**\
   `sudo apt install make`
-- **CMake**  
+- **CMake**\
   `sudo apt install cmake`
-- **Git**
+- **Git**\
   `sudo apt install git`
-- **CppUnit**  
+- **CppUnit**\
   `sudo apt install libcppunit-dev`
-- **SQLite3**
+- **SQLite3**\
   `sudo apt install libsqlite3-dev`
-- **Qt5**
+- **Qt5**\
   `sudo apt install qtbase5-dev`
-- **Boost**
+- **Boost**\
   `sudo apt install libboost-all-dev`
 
 D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
@@ -89,26 +89,45 @@ Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez déz
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
 Tetris :
 
-- **Rotation dans le sens horaire**  
-  `g`
-
-- **Rotation dans le sens antihoraire**  
-  `f`
-
-- **Déplacement vers la gauche**  
+- **Déplacement vers la gauche**\
   `←`
 
-- **Déplacement vers la droite**  
+- **Déplacement vers la droite**\
   `→`
 
-- **Descente rapide**  
+- **Descente rapide**\
   `↓`
 
-- **Placer le tetromino immédiatement en bas**  
-  `↑`
+- **Placer le tetromino immédiatement en bas**\
+  `ESPACE`
 
-- **Mettre en attente (hold) un tétrimino**
+- **Rotation dans le sens horaire**\
+  `g`
+
+- **Rotation dans le sens antihoraire**\
+  `f`
+
+- **Mettre en attente (hold) un tétrimino**\
   `h`
 
-- **Quitter la partie en cours**
- `q`
+- **Sélectionner l'effet précédent**\
+  `e`
+
+- **Sélectionner l'effet suivant**\
+  `r`
+
+- **Vider les malus mis de côté**\
+  `t`
+
+- **Acheter l'effet sélectionné et l'envoyer directemment**
+  - `y`
+  - `clic gauche sur l'effet`
+
+- **Acheter et mettre de côté l'effet sélectionné**\
+  `u`
+
+- **Sélectionner la cible des malus**\
+  `clic gauche sur le nom de l'adversaire`
+
+- **Quitter la partie en cours**\
+  `q`
