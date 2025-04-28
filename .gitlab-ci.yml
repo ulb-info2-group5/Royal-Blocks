@@ -9,6 +9,7 @@ build:
     key: "$CI_COMMIT_REF_SLUG"
     paths:
       - build/
+      - /var/cache/apt/archives/ # Faster with caching the dependency downloads
 
   before_script:
     - apt-get update
@@ -16,4 +17,3 @@ build:
 
   script:
     - make
-    
