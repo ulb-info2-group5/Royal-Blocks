@@ -64,9 +64,9 @@ Téléchargez-le directement depuis [qt.io](https://www.qt.io/download) et insta
 
 ---
 
-D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
-
 #### Remarque
+
+D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
 
 **Le projet nécessite également :**
 
