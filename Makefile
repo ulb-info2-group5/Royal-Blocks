@@ -1,12 +1,20 @@
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	CORES := $(shell nproc)
+BUILD_DIR = ./build
+
+ifeq ($(OS),Windows_NT)
+$(info Windows detected)
+	CORES := $(NUMBER_OF_PROCESSORS)
+	CLEAN_CMD := powershell -Command "if (Test-Path '$(BUILD_DIR)') { Remove-Item '$(BUILD_DIR)' -Recurse -Force }"
+	GENERATOR := "Ninja"
+	OUTPUT_DIR = ./bin
 else
-	CORES := 1
+$(info Linux/macOS detected)
+	UNAME_S := $(shell uname -s)
+	CORES := $(shell nproc)
+	CLEAN_CMD := rm -rf $(BUILD_DIR)
+	GENERATOR := "Unix Makefiles"
+	OUTPUT_DIR = .
 endif
 
-BUILD_DIR = ./build
-OUTPUT_DIR = .
 
 all: release
 
@@ -19,7 +27,8 @@ release:
 	@cmake --build $(BUILD_DIR) -- -j$(CORES)
 
 clean:
-	@rm -rf $(BUILD_DIR)
+	@echo $(CLEAN_CMD)
+	@$(CLEAN_CMD)
 
 re_debug: clean debug
 

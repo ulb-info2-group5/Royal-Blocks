@@ -4,9 +4,11 @@
 accounts.db
 auth
 build/
+bin/
 tetris_gui
 tetris_tui
 tetris_royal_server
 tetris_royal_tests
 tetris_tests
 data/config.json
+cmake_install.cmake

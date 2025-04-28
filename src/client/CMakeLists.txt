@@ -29,12 +29,18 @@ file (GLOB_RECURSE SOURCES_CLIENT_TUI
 include(../../third_party/ftxui.cmake)
 
 add_executable(tetris_tui ${SOURCES_CLIENT_TUI})
+
 target_link_libraries(tetris_tui
     client_core_lib
     ftxui::screen
     ftxui::dom
     ftxui::component
 )
+
+if(WIN32)
+    target_link_libraries(tetris_tui ws2_32)
+endif()
+
 
 # ---------------------------
 #            GUI
@@ -51,6 +57,10 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
 add_executable(tetris_gui ${SOURCES_CLIENT_GUI})
 
+if (WIN32)
+    target_link_options(tetris_gui PRIVATE -mwindows)
+endif()
+
 # AUTOMOC only needed for Qt5 for the GUI
 set_target_properties(tetris_gui PROPERTIES AUTOMOC ON )
 
@@ -60,3 +70,8 @@ target_link_libraries(tetris_gui
     Qt5::Gui
     client_core_lib
 )
+
+if(WIN32)
+    target_link_libraries(tetris_gui ws2_32)
+endif()
+

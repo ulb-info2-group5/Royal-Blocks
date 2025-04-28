@@ -1,8 +1,6 @@
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-
-
 file(GLOB_RECURSE SERVER_SOURCES
     client_link/*.cpp
     client_manager/*.cpp
@@ -28,7 +26,12 @@ target_link_libraries(server_lib PUBLIC
     database_lib
 )
 
+if(WIN32)
+    target_link_libraries(server_lib PUBLIC ws2_32 mswsock)
+endif()
+
 
 set(SOURCE_SERVER_MAIN main.cpp)
 add_executable(${PROJECT_NAME}_server ${SOURCE_SERVER_MAIN})
+
 target_link_libraries(${PROJECT_NAME}_server server_lib)

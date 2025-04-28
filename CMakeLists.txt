@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.15)
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
+if(WIN32)
+    add_compile_definitions(_WIN32_WINNT=0x0600)
+endif()
+
 # Compile & linking options
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug build.")
