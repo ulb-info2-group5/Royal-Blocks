@@ -24,6 +24,8 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
   `sudo apt install make`
 - **CMake**  
   `sudo apt install cmake`
+- **Git**
+  `sudo apt install git`
 - **CppUnit**  
   `sudo apt install libcppunit-dev`
 - **SQLite3**
