@@ -67,16 +67,19 @@ void ClientLink::handleErrorReading() {
 void ClientLink::handleAuthentication(std::string &packet) {
 
     nlohmann::json jsonPacket  = nlohmann::json::parse(packet);
-    nlohmann::json response = authPacketHandler_(jsonPacket);
-    sendPackage(response);
-    std::cout << response.dump() << std::endl;
-    if (response.at("type").get<bindings::BindingType>()
-            == bindings::BindingType::AuthenticationResponse
-        && response.at("data").at("success").get<bool>()) {
-        authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
-        userState = bindings::State::Menu;
-        mustBeDeletedFromTheWaitingForAuthList_ = true;
+    std::optional<nlohmann::json> response = authPacketHandler_(jsonPacket);
+    if (response&& !(response->is_null())){
+        sendPackage(response.value());
+        std::cout << response.value().dump() << std::endl;
+
+        if (response.value().at("type").get<bindings::BindingType>()== bindings::BindingType::AuthenticationResponse
+            && response.value().at("data").at("success").get<bool>()) {
+            authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
+            userState = bindings::State::Menu;
+            mustBeDeletedFromTheWaitingForAuthList_ = true;
+        }
     }
+    
 }
 
 void ClientLink::writeSocket(std::string &content) {

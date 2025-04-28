@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
+#include <optional>
 
 #include "../social_service/social_service.hpp"
 #include "../account_service/account_service.hpp"
@@ -88,7 +89,7 @@ class ClientManager {
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
      */
-    nlohmann::json authPacketHandler(nlohmann::json binding );
+    std::optional<nlohmann::json> authPacketHandler(nlohmann::json binding );
 
     void handleMessage(nlohmann::json message);
 

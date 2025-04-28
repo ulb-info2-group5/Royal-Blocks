@@ -128,21 +128,30 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
     
 }
 
-nlohmann::json ClientManager::authPacketHandler(nlohmann::json binding) {
-    nlohmann::json response;
-    
-    bindings::BindingType type =  binding.at("type").get<bindings::BindingType>(); 
-    switch (type) {
-    case bindings::BindingType::Authentication:
-        response = accountService_.authenticationAttempt(bindings::Authentication::from_json(binding),
-        [this](UserID userID)->bool { return isClientConnected(userID) ; }).to_json();
-        break;
-    case bindings::BindingType::Registration:
-        response = accountService_.attemptCreateAccount(bindings::Registration::from_json(binding)).to_json();
-        break;
-    default:
-        break;
+std::optional<nlohmann::json> ClientManager::authPacketHandler(nlohmann::json binding) {
+    std::optional<nlohmann::json> response = std::nullopt;
+    if (response.has_value()){
+        std::cout << "cacajc " << std::endl;
     }
+    try {
+        bindings::BindingType type =  binding.at("type").get<bindings::BindingType>(); 
+        switch(type) {
+            case bindings::BindingType::Authentication:
+                response = accountService_.authenticationAttempt(bindings::Authentication::from_json(binding),
+                [this](UserID userID)->bool { return isClientConnected(userID) ; }).to_json();
+                break;
+            case bindings::BindingType::Registration:
+                response = accountService_.attemptCreateAccount(bindings::Registration::from_json(binding)).to_json();
+                break;
+            default:
+                break;
+        }
+    }catch(nlohmann::json::exception& e){
+        std::cerr <<"Received (auth )packet has no type  : " << e.what() << std::endl;
+        response = std::nullopt;
+    }
+    
+    
     return response;
 }
 

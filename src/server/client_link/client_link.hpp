@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <optional>
 
 #include "../../common/bindings/user_state.hpp"
 #include "../../common/bindings/user.hpp"
