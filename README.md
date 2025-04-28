@@ -35,6 +35,35 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
 - **Boost (uniquement la partie réseau est nécessaire)**\
   `sudo apt install libboost-system-dev`
 
+---
+
+#### Installation des dépendances sur Windows
+Pour installer toutes les dépendances nécessaires facilement sous Windows, nous vous recommendons d'utiliser `vcpkg`.
+
+##### 1. Installer vcpkg
+```sh
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+.\bootstrap-vcpkg.bat
+```
+
+Ajoutez vcpkg à votre `PATH` pour l'utiliser facilement dans tous vos projets.
+
+##### 2. Installer les dépendances du projet
+
+```bash
+vcpkg install boost-system boost-thread sqlite3
+```
+
+##### 4. Installer Qt5 pour Windows
+
+Qt5 n'est pas disponible via vcpkg.  
+Téléchargez-le directement depuis [qt.io](https://www.qt.io/download) et installez le module :
+
+- Qt 5.x (choisir MinGW ou MSVC selon votre compilateur utilisé).
+
+---
+
 D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
 
 #### Remarque
