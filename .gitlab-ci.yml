@@ -15,6 +15,5 @@ build:
     - apt-get install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev libboost-thread-dev
 
   script:
-    - mkdir -p build
     - make
     
