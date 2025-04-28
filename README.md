@@ -44,7 +44,7 @@ Pour installer toutes les dépendances nécessaires facilement sous Windows, nou
 ```sh
 git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg
-.\bootstrap-vcpkg.bat
+bootstrap-vcpkg.bat
 ```
 
 Ajoutez vcpkg à votre `PATH` pour l'utiliser facilement dans tous vos projets.
