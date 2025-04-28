@@ -1,0 +1,20 @@
+stages:
+  - build
+
+build:
+  stage: build
+  image: ubuntu:latest
+
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - build/
+
+  before_script:
+    - apt-get update
+    - apt-get install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev libboost-thread-dev
+
+  script:
+    - mkdir -p build
+    - make
+    
