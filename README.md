@@ -35,6 +35,12 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
 
 D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
 
+### Remarque :
+**Le projet nécessite également :**
+
+- **GCC 14** ou supérieur
+- ainsi que **C++23**
+
 ### Compilation
 
 Le projet peut être compilé en mode **Release** ou **Debug** :
