@@ -44,7 +44,6 @@
 #include <mutex>
 #include <optional>
 #include <ostream>
-#include <print>
 #include <stdexcept>
 #include <string>
 #include <string_view>

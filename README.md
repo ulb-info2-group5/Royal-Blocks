@@ -41,7 +41,7 @@ D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires p
 
 **Le projet nécessite également :**
 
-- **GCC 14** ou supérieur
+- **GCC 13** ou supérieur
 - ainsi que **C++23**
 
 ### Compilation
@@ -57,10 +57,6 @@ make debug
 ```
 
 ## Exécution du jeu
-
-**Pour afficher correctement le jeu Tetris avec la bibliothèque Ncurses dans
-votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
-à `xterm-256color`**.
 
 ### Lancer le programme
 
