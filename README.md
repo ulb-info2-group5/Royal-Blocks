@@ -40,6 +40,11 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
 #### Installation des dépendances sur Windows
 Pour installer toutes les dépendances nécessaires facilement sous Windows, nous vous recommendons d'utiliser `vcpkg`.
 
+**Visual Studio** sera nécéssaire pour utiliser **vcpkg**.
+
+Nous vous conseillons également d'installer **MinGW** pour disposer du compilateur **g++**.
+N'oubliez pas d'installer également **make** et **cmake** avec **MinGW** pour pouvoir build le projet.
+
 ##### 1. Installer vcpkg
 ```sh
 git clone https://github.com/microsoft/vcpkg.git
