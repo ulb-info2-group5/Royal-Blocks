@@ -33,8 +33,6 @@ namespace GUI {
         setMinimumSize(600, 500);
         showMaximized();
         setWindowTitle("Tetris Royal");
-
-        show();
     }
 
     void TetrisWindow::forceRefresh(UpdateType updateType) {

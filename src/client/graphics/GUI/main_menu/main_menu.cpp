@@ -30,9 +30,7 @@ namespace GUI {
 
         QVBoxLayout *layout = new QVBoxLayout();
         layout->addWidget(&stackedWidget_);
-        this->setLayout(layout);
-
-        this->show();
+        setLayout(layout);
     }
 
     void MainMenu::on_QuitGameButton_clicked() { emit quitGame(); }

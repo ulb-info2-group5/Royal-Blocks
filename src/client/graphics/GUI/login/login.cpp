@@ -24,8 +24,6 @@ namespace GUI {
         QVBoxLayout *layout = new QVBoxLayout();
         layout->addWidget(&stackedWidget_);
         setLayout(layout);
-
-        show();
     }
 
     void Login::on_ExitButton_clicked() { actionOnExit(); }
