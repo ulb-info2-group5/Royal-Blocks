@@ -80,6 +80,31 @@ Pour lancer le serveur, exécutez :
 ./tetris_royal_server
 ```
 
+### Choix de l'IP et du port
+
+Pour établir la communication entre le client et le serveur :
+
+#### Serveur
+
+Vous pouvez passer un port de votre choix en argument lors du lancement :
+
+```sh
+./tetris_royal_server <port>
+```
+
+Sinon, le serveur lira la variable d'environnement **SERVER_PORT**.
+Si aucune variable n'est définie, le port **1234** sera utilisé par défaut.
+
+#### Client
+
+Dans les interfaces graphique et terminal, il est possible de modifier l'IP et le port du serveur directement.
+Ces informations seront sauvegardées dans le fichier `data/config.json`.
+
+Si aucun fichier de configuration n'existe, un fichier par défaut sera automatiquement créé, en utilisant :
+
+- l'IP définie par la variable d'environnement **SERVER_IP** (ou **127.0.0.1** par défaut),
+- et le port défini par **SERVER_PORT** (ou **1234** par défaut).
+
 ### Information importante concernant l'affichage du jeu dans le terminal
 
 Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
