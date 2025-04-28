@@ -63,6 +63,9 @@ uint16_t handleArguments(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+   
+
+
     try {
         uint16_t port = handleArguments(argc, argv);
 
