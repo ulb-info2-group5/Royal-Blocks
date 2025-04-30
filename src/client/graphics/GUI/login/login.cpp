@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QValidator>
 
 namespace GUI {
 
@@ -23,7 +24,7 @@ namespace GUI {
     constexpr char NO_CONNECTED_CHAR_MAINPAGE[] =
         "<span style='color: red; font-weight: "
         "bold;'>Connection to the server failed.</span><br>"
-        "Please enter a valid IP address and port in the <span "
+        "Please enter a valid <strong>IP address</strong> and <strong>port</strong> in the <span "
         "style='color: #007acc;'><b>Choose IP and Port</b></span> menu<br>"
         "or make sure that the server is currently online";
     constexpr char CONNECTED_CHAR[] =
@@ -40,8 +41,6 @@ namespace GUI {
         QVBoxLayout *layout = new QVBoxLayout();
         layout->addWidget(&stackedWidget_);
         setLayout(layout);
-
-        show();
 
         QTimer *timer = new QTimer(this);
         connect(timer, &QTimer::timeout, this, [this, timer]() {
@@ -278,10 +277,13 @@ namespace GUI {
             const int maxWaitTimeMs = 2000;
             const int checkIntervalMs = 100;
             int waited = 0;
-            while (!controller_.isConnected() && waited < maxWaitTimeMs) {
+            while (waited < maxWaitTimeMs) {
                 std::this_thread::sleep_for(
                     std::chrono::milliseconds(checkIntervalMs));
                 waited += checkIntervalMs;
+                if (controller_.isConnected()) {
+                    break;
+                }
             }
         });
         waitThread.join();
@@ -362,6 +364,9 @@ namespace GUI {
         ipInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
         portInput_.setAlignment(Qt::AlignCenter);
         portInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
+        QValidator *validator =
+            new QIntValidator(1, std::numeric_limits<uint16_t>::max(), this);
+        portInput_.setValidator(validator);
 
         connect(backButtonIpPortMenu, &QPushButton::clicked, this,
                 &Login::on_BackButton_clicked);
@@ -523,3 +528,4 @@ namespace GUI {
     }
 
 } // namespace GUI
+

@@ -187,8 +187,8 @@ bool Controller::isConnected() const { return networkManager_.isConnected(); }
 
 void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
     serverInfo_ = serverInfo;
-    networkManager_.setServerInfo(serverInfo_);
     config::saveServerInfo(serverInfo);
+    networkManager_.setServerInfo(serverInfo_);
 }
 
 config::ServerInfo Controller::getServerInfo() const { return serverInfo_; }

@@ -15,7 +15,7 @@
 NetworkManager::NetworkManager(
     boost::asio::io_context &context,
     std::function<void(const std::string_view)> packetHandler)
-    : isConnected_(false), context_{context}, socket_(context),
+    : isConnected_(false), socket_(context),
       retryTimer_(context), packetHandler_{packetHandler} {}
 
 bool NetworkManager::connect() {
@@ -24,16 +24,21 @@ bool NetworkManager::connect() {
     // ensure closed
     disconnect();
 
-    boost::system::error_code ec;
-    socket_.connect({boost::asio::ip::make_address(serverIp_), serverPort_},
-                    ec);
-    if (!ec) {
-        isConnected_ = true;
-        std::cout << "Connected successfully!\n";
-        receive(); // start listening
-    } else {
-        retry();
+    boost::system::error_code addressError;
+    boost::asio::ip::address address = boost::asio::ip::make_address(serverIp_, addressError);
+    if (addressError) {
+        return false;
     }
+    boost::asio::ip::tcp::endpoint endpoint(address, serverPort_);
+    boost::system::error_code ec;
+    socket_.async_connect(endpoint, [this](boost::system::error_code ec) {
+        if (!ec) {
+            isConnected_ = true;
+            receive(); // Start reading once connected
+        } else {
+            retry(); // Retry if connection fails
+        }
+    });
 
     return isConnected_;
 }
@@ -69,7 +74,6 @@ void NetworkManager::receive() {
                 receive(); // Continue listening for messages
             } else {
                 isConnected_ = false;
-                std::cerr << "Connection lost: " << ec.message() << "\n";
                 if (socket_.is_open()) {
                     socket_.close();
                 }

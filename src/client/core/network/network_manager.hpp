@@ -1,21 +1,14 @@
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 
-#include <atomic>
 #include <boost/asio.hpp>
 #include <boost/asio/io_context.hpp>
-#include <cstdint>
 
 #include "core/server_info/server_info.hpp"
 
 class NetworkManager {
   private:
-    std::atomic<bool> isConnected_;
-
-    /**
-     * @brief The io context used for asynchronous operations
-     */
-    boost::asio::io_context &context_;
+    bool isConnected_;
 
     /**
      * @brief The socket used to communicate with the server

@@ -25,10 +25,6 @@ namespace {
             return ipEnv;
         }
 
-        std::cerr << config::ENV_VAR_IP
-                  << " environment variable not set. Using default."
-                  << std::endl;
-
         return config::DEFAULT_IP;
     }
 
@@ -40,9 +36,6 @@ namespace {
     static uint16_t getEnvPort() {
         const char *portEnv = std::getenv(config::ENV_VAR_PORT.data());
         if (!portEnv) {
-            std::cerr << config::ENV_VAR_PORT
-                      << " environment variable not set. Using default."
-                      << std::endl;
             return config::DEFAULT_PORT;
         }
 
@@ -51,15 +44,9 @@ namespace {
             if (port >= std::numeric_limits<uint16_t>::min()
                 && port <= std::numeric_limits<uint16_t>::max()) {
                 return static_cast<uint16_t>(port);
-            } else {
-                std::cerr << config::ENV_VAR_PORT
-                          << " out of valid range [0, 65535]. Using "
-                             "default."
-                          << std::endl;
             }
         } catch (...) {
-            std::cerr << "Invalid " << config::ENV_VAR_PORT
-                      << " value. Using default." << std::endl;
+
         }
 
         return config::DEFAULT_PORT;
@@ -73,8 +60,16 @@ namespace {
         std::filesystem::path path(config::CONFIG_PATH);
         std::filesystem::create_directories(path.parent_path());
 
-        // Write default config file if it doesn't exist
+        bool writeDefault = false;
+
         if (!std::filesystem::exists(path)) {
+            writeDefault = true;
+        } else if (std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) == 0) {
+            writeDefault = true;
+        }
+
+        // Write default config file if it doesn't exist
+        if (writeDefault) {
             json j;
             j["server"]["ip"] = getEnvIP();
             j["server"]["port"] = getEnvPort();
@@ -101,18 +96,26 @@ namespace config {
         createDirAndConfigFile();
 
         json j;
+
+        std::ifstream readFile(CONFIG_PATH.data());
+        if (readFile) {
+            try {
+                readFile >> j;
+            } catch (...) {
+
+            }
+        }
+
         j["server"]["ip"] = serverInfo.ip;
         j["server"]["port"] = serverInfo.port;
 
-        std::ofstream file(CONFIG_PATH.data());
-        if (!file) {
-            std::cerr << "Error when trying to open the 'config' file."
-                      << std::endl;
+        std::ofstream writeFile(CONFIG_PATH.data());
+        if (!writeFile) {
             return;
         }
 
-        file << j.dump(4);
-        file.close();
+        writeFile << j.dump(4);
+        writeFile.close();
     }
 
     ServerInfo loadServerInfo() {
@@ -135,8 +138,9 @@ namespace config {
             serverInfo.ip = j["server"]["ip"].get<std::string>();
             serverInfo.port = j["server"]["port"].get<uint16_t>();
 
-        } catch (const std::exception &e) {
-            std::cerr << "Error reading config file: " << e.what() << std::endl;
+        } catch (...) {
+            serverInfo.ip = getEnvIP();
+            serverInfo.port = getEnvPort();
         }
 
         return serverInfo;
