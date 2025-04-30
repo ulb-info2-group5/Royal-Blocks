@@ -51,7 +51,7 @@ namespace GUI {
                 updateConnectedMessage();
             }
         });
-        timer->start(3000); // 3000 ms
+        timer->start(1000); // 3000 ms
     }
 
     void Login::on_ExitButton_clicked() { actionOnExit(); }

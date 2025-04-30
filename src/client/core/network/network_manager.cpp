@@ -5,12 +5,12 @@
 
 #include <boost/asio/ip/basic_resolver.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <cstdlib>
 #include <iostream>
-#include <ostream>
 #include <string>
 #include <string_view>
-#include <sys/socket.h>
+#include <chrono>
+
+constexpr std::chrono::milliseconds TIME_BTWN_RETRIES(100);
 
 NetworkManager::NetworkManager(
     boost::asio::io_context &context,
@@ -84,7 +84,7 @@ void NetworkManager::receive() {
 }
 
 void NetworkManager::retry() {
-    retryTimer_.expires_after(std::chrono::seconds(2));
+    retryTimer_.expires_after(TIME_BTWN_RETRIES);
     retryTimer_.async_wait([this](const boost::system::error_code &ec) {
         if (!ec) {
             connect();
