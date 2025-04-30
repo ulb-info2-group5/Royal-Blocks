@@ -46,20 +46,24 @@ bool NetworkManager::connect() {
 void NetworkManager::disconnect() {
     if (socket_.is_open()) {
         boost::system::error_code ec;
-        socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-        socket_.close(ec);
+        boost::system::error_code socketShutdown = socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+        boost::system::error_code socketClose = socket_.close(ec);
     }
 
     isConnected_ = false;
 }
 
 void NetworkManager::setServerInfo(const config::ServerInfo &serverInfo) {
+    if (serverInfo.ip == serverIp_ && serverInfo.port == serverPort_) {
+        return;
+    }
+
     serverPort_ = serverInfo.port;
     serverIp_ = serverInfo.ip;
 
     // Cancel any ongoing operations and close the socket
     boost::system::error_code ec;
-    socket_.cancel(ec);
+    boost::system::error_code socketCancel = socket_.cancel(ec);
 }
 
 void NetworkManager::receive() {
