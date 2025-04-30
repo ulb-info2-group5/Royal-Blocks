@@ -67,6 +67,10 @@ void NetworkManager::setServerInfo(const config::ServerInfo &serverInfo) {
 }
 
 void NetworkManager::receive() {
+    if (!socket_.is_open()) {
+        return;
+    }
+
     boost::asio::async_read_until(
         socket_, boost::asio::dynamic_buffer(readBuf_),
         bindings::PACKET_DELIMITER,
