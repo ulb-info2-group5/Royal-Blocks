@@ -55,10 +55,6 @@ void NetworkManager::setServerInfo(const config::ServerInfo &serverInfo) {
     // Cancel any ongoing operations and close the socket
     boost::system::error_code ec;
     socket_.cancel(ec);
-    socket_.close(ec);
-
-    // Reconnect
-    connect();
 }
 
 void NetworkManager::receive() {
@@ -74,7 +70,9 @@ void NetworkManager::receive() {
             } else {
                 isConnected_ = false;
                 std::cerr << "Connection lost: " << ec.message() << "\n";
-                socket_.close();
+                if (socket_.is_open()) {
+                    socket_.close();
+                }
                 retry();
             }
         });
