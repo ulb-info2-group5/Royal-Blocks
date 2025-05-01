@@ -47,15 +47,19 @@ namespace TUI {
             | ftxui::center;
 
         // Use a thread to exit this display after 2 seconds
-        std::thread([&] {
+        std::thread startScreenThread([&] {
             std::this_thread::sleep_for(std::chrono::seconds(3));
             exit = true;
             forceRefresh(UpdateType::OTHER); // Refresh the screen to exit
                                              // the display after 3 seconds
             stopRender();
-        }).detach();
+        });
 
         render(title);
+
+        if (startScreenThread.joinable()) {
+            startScreenThread.join();
+        }
     }
 
     void MainTui::drawEndScreen() {
@@ -66,15 +70,19 @@ namespace TUI {
                 [&] { return exit ? ftxui::text("") : GOODBYE_TITLE; })
             | ftxui::center;
 
-        std::thread([&] {
+        std::thread endScreenThread([&] {
             std::this_thread::sleep_for(std::chrono::seconds(2));
             exit = true;
             forceRefresh(UpdateType::OTHER); // Refresh the screen to exit
                                              // the display after 2 seconds
             stopRender();
-        }).detach();
+        });
 
         render(title);
+
+        if (endScreenThread.joinable()) {
+            endScreenThread.join();
+        }
     }
 
     ftxui::Component MainTui::handleCtrl(ftxui::Component &component) {
