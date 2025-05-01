@@ -41,18 +41,23 @@ uint16_t TetrisMainServer::handleArguments(int argc, char *argv[]) {
     }
 }
 
-TetrisMainServer::TetrisMainServer(int argc, char* argv[]) : 
+TetrisMainServer::TetrisMainServer(int argc , char* argv[]) : 
     dbManager(std::make_shared<DatabaseManager>()),
     database{
         std::make_shared<AccountManager>(dbManager),
         std::make_shared<FriendsManager>(dbManager),
         std::make_shared<MessagesManager>(dbManager)},
-    clientManager(database)
+    clientManager(database), 
+    serverPort(handleArguments(argc, argv))
     {
+    
+}
+
+void TetrisMainServer::run(){
     try {
-        uint16_t port = handleArguments(argc, argv);
-        Network network(io_context, clientManager, port);
-        std::cout << "Server started on port " << port << std::endl;
+        
+        Network network(io_context, clientManager, serverPort);
+        std::cout << "Server started on port " << serverPort << std::endl;
         io_context.run();
     } catch (std::exception &e) {
         std::cerr << "Exception : " << e.what() << std::endl;

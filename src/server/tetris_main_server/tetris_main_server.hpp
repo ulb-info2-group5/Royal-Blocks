@@ -14,32 +14,30 @@ constexpr char help[] = "Tetris Royal Server : Help\n\nUsage: ./tetris_royal_ser
 
 class TetrisMainServer{
     private:
-        /*std::shared_ptr<DatabaseManager> dbManager = std::make_shared<DatabaseManager>();
-        DataBase database{std::make_shared<AccountManager>(dbManager),
-                    std::make_shared<FriendsManager>(dbManager),
-                    std::make_shared<MessagesManager>(dbManager)};
-
-        ClientManager clientManager(database);
-
-        boost::asio::io_context io_context;*/
-
         std::shared_ptr<DatabaseManager> dbManager;
         DataBase database;
         ClientManager clientManager;
         boost::asio::io_context io_context;
+        uint16_t serverPort ;
 
     public:
         /*
         * @brief Construct a new Tetris Main Server object
         */
-        TetrisMainServer(int argc, char* argv[]);
+        TetrisMainServer(int argc , char * argv[]);
 
         /*
          * @brief Destroy the Tetris Main Server object
          */
         ~TetrisMainServer() = default;
 
+        
+        /*
+        * @brief run server
+        */
         void run();
+
+        
 
         /*
          * @brief Get the port from the environment variable or use the default

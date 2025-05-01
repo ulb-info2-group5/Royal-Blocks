@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[]) {
     TetrisMainServer tetrisMainServer(argc, argv);
-    //tetrisMainServer.run();
+
+    tetrisMainServer.run();
     return 0;
 }
