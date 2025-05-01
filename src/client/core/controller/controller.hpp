@@ -11,7 +11,6 @@
 #include "../network/network_manager.hpp"
 #include "../server_info/server_info.hpp"
 
-#include <atomic>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -97,7 +96,7 @@ class Controller {
     /**
      * @brief Construct a new Controller object
      */
-    Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
+    Controller();
 
     /**
      * @brief Destroy the Controller object
@@ -131,8 +130,10 @@ class Controller {
 
     /**
      * @brief Run the controller to manage the game
+     *
+      * @param pAbstractDisplay The display to use (GUI or TUI)
      */
-    void run();
+    void run(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
 
     /**
      * @brief Sets the server's info (ip, port).

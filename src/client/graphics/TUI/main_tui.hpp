@@ -13,14 +13,21 @@ namespace TUI {
     /**
      * @brief TUI component of the program.
      */
-    class MainTui : public AbstractDisplay {
+    class MainTui final : public AbstractDisplay {
       private:
+        LoginMenu loginMenu_;
+        MainMenu mainMenu_;
+
         ftxui::ScreenInteractive screen_;
 
         /**
          * @brief The current window to show to the user
          */
         ftxui::Component currentWindow_;
+
+        bool shouldStop_;
+
+        bool restartRequested_;
 
         /**
          * @brief Draw the start screen of the game with the title of the game
@@ -48,7 +55,7 @@ namespace TUI {
          *
          * @param controller The controller to use to interact with the game
          */
-        MainTui();
+        MainTui(Controller &controller);
 
         ~MainTui() = default;
 
@@ -67,18 +74,20 @@ namespace TUI {
         /**
          * @biref Runs the TUI.
          */
-        virtual void run(Controller &controller) override;
+        void run() override;
 
         /**
          * @brief Forces the screen to refresh the things related to the given
          * updateType.
          */
-        virtual void forceRefresh(UpdateType updateType) override;
+        void forceRefresh(UpdateType updateType) override;
 
         /**
          * @brief Simulate the tab key press
          */
         void simulateTab();
+
+        void onDisconnected() override;
     };
 
 } // namespace TUI

@@ -141,13 +141,26 @@ void Controller::handlePacket(const std::string_view pack) {
 
 // ### Public methods ###
 
-Controller::Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay)
+Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
-      pAbstractDisplay_(std::move(pAbstractDisplay)),
       networkManager_{context_, [this](const std::string_view packet) {
-                          handlePacket(packet);
-                      }} {};
+                          handlePacket(packet);}} 
+    {
+    networkManager_.setDisconnectHandler([this]() {
+        std::lock_guard<std::mutex> guard(mutex_);
+        registrationState_ = Controller::RegistrationState::Unregistered;
+        authState_ = Controller::AuthState::Unauthenticated;
+        gameState_ = {};
+        friendsList_.clear();
+        conversationsById_.clear();
+        ranking_.clear();
+        pendingFriendRequests_.clear();
+        if (pAbstractDisplay_) {
+            pAbstractDisplay_->onDisconnected();
+        }
+    });
+}
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
@@ -159,14 +172,15 @@ Controller::AuthState Controller::getAuthState() const {
     return authState_;
 }
 
-void Controller::run() {
+void Controller::run(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay) {
     // load initial serverInfo
     serverInfo_ = config::loadServerInfo();
     networkManager_.start(serverInfo_);
 
     std::thread ioThread([&]() { context_.run(); });
 
-    pAbstractDisplay_->run(*this);
+    pAbstractDisplay_ = std::move(pAbstractDisplay);
+    pAbstractDisplay_->run();
 
     networkManager_.disconnect();
 

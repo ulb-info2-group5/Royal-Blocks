@@ -19,8 +19,6 @@ NetworkManager::NetworkManager(
       retryTimer_(context), packetHandler_{packetHandler} {}
 
 bool NetworkManager::connect() {
-    isConnected_ = false;
-
     // ensure closed
     disconnect();
 
@@ -30,7 +28,6 @@ bool NetworkManager::connect() {
         return false;
     }
     boost::asio::ip::tcp::endpoint endpoint(address, serverPort_);
-    boost::system::error_code ec;
     socket_.async_connect(endpoint, [this](boost::system::error_code ec) {
         if (!ec) {
             isConnected_ = true;
@@ -44,10 +41,16 @@ bool NetworkManager::connect() {
 }
 
 void NetworkManager::disconnect() {
-    if (socket_.is_open()) {
+    if (socket_.is_open() && isConnected_) {
         boost::system::error_code ec;
         boost::system::error_code socketShutdown = socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+        if (socketShutdown) {
+            std::cerr << "Error shutting down socket: " << socketShutdown.message() << std::endl;
+        }
         boost::system::error_code socketClose = socket_.close(ec);
+        if (socketClose) {
+            std::cerr << "Error closing socket: " << socketClose.message() << std::endl;
+        }
     }
 
     isConnected_ = false;
@@ -64,6 +67,9 @@ void NetworkManager::setServerInfo(const config::ServerInfo &serverInfo) {
     // Cancel any ongoing operations and close the socket
     boost::system::error_code ec;
     boost::system::error_code socketCancel = socket_.cancel(ec);
+    if (socketCancel) {
+        std::cerr << "Error cancelling socket: " << socketCancel.message() << std::endl;
+    }
 }
 
 void NetworkManager::receive() {
@@ -78,6 +84,9 @@ void NetworkManager::receive() {
                 receive(); // Continue listening for messages
             } else {
                 disconnect();
+                if (disconnectHandler_) {
+                    disconnectHandler_();
+                }
                 retry();
             }
         });
@@ -111,3 +120,7 @@ void NetworkManager::send(const std::string &message) {
 }
 
 bool NetworkManager::isConnected() const { return isConnected_; }
+
+void NetworkManager::setDisconnectHandler(const std::function<void()> handler) {
+    disconnectHandler_ = handler;
+}

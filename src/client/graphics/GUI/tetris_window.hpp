@@ -11,9 +11,12 @@
 #include <QStackedWidget>
 #include <QStyleFactory>
 
-enum class UpdateType;
+enum class UpdateType; // Forward declaration
+ 
+class Controller; // Forward declaration
 
 namespace GUI {
+    class MainGui; // Forward declaration
 
     /**
      * @brief MainWindow of the GUI tetris client.
@@ -22,9 +25,11 @@ namespace GUI {
         Q_OBJECT
 
       private:
-        Login *login_;
+        Controller &controller_;
 
-        MainMenu *mainMenu_;
+        std::unique_ptr<Login> login_;
+
+        std::unique_ptr<MainMenu> mainMenu_;
 
         QSettings settings_;
 
@@ -38,11 +43,22 @@ namespace GUI {
          */
         void setLightMode();
 
+        /**
+         * @brief Create Login and MainMenu widgets and run Login.
+         */
+        void start();
+
+      private slots:
+        /**
+         * @brief Action to perform when we receive the clientDisconnected signal from MainGui
+         */
+        void backToLoginMenu();
+
       public:
         /**
          * @brief Constructor.
          */
-        TetrisWindow(QWidget *parent = nullptr);
+        TetrisWindow(Controller &Controller, MainGui &mainGui, QWidget *parent = nullptr);
 
         /**
          * @brief Forces the screen to refresh the things related to the given
@@ -58,7 +74,7 @@ namespace GUI {
         /**
          * @brief Runs the GUI.
          */
-        void run(Controller &controller);
+        void run();
 
         /**
          * @brief Action to perform when exiting the gui

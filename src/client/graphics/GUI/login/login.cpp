@@ -124,7 +124,7 @@ namespace GUI {
 
         // Thread to check if registration is successful
         std::thread loginThread = std::thread([&]() {
-            for (int i = 0; i < 20; ++i) { // 2 seconds limit (20 * 100ms)
+            for (int i = 0; i < 10; ++i) { // 1 seconds limit (20 * 100ms)
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 if (controller_.getAuthState()
                     == Controller::AuthState::Authenticated) {
@@ -308,33 +308,33 @@ namespace GUI {
     }
 
     void Login::setup() {
-        QWidget *mainPage = new QWidget();
-        QWidget *loginPage = new QWidget();
-        QWidget *registerPage = new QWidget();
-        QWidget *chooseIpPortPage = new QWidget();
+        QWidget *mainPage = new QWidget(&stackedWidget_);
+        QWidget *loginPage = new QWidget(&stackedWidget_);
+        QWidget *registerPage = new QWidget(&stackedWidget_);
+        QWidget *chooseIpPortPage = new QWidget(&stackedWidget_);
 
-        QPushButton *exitButton = new QPushButton();
+        QPushButton *exitButton = new QPushButton(mainPage);
         exitButton->setAutoDefault(true);
-        QPushButton *loginButton = new QPushButton();
+        QPushButton *loginButton = new QPushButton(mainPage);
         loginButton->setAutoDefault(true);
-        QPushButton *registerButton = new QPushButton();
+        QPushButton *registerButton = new QPushButton(mainPage);
         registerButton->setAutoDefault(true);
-        QPushButton *backButtonLogin = new QPushButton();
+        QPushButton *backButtonLogin = new QPushButton(loginPage);
         backButtonLogin->setAutoDefault(true);
-        QPushButton *backButtonRegister = new QPushButton();
+        QPushButton *backButtonRegister = new QPushButton(registerPage);
         backButtonRegister->setAutoDefault(true);
-        QPushButton *chooseIpPortButton = new QPushButton();
+        QPushButton *chooseIpPortButton = new QPushButton(mainPage);
         chooseIpPortButton->setAutoDefault(true);
-        QPushButton *backButtonIpPortMenu = new QPushButton();
+        QPushButton *backButtonIpPortMenu = new QPushButton(chooseIpPortPage);
         backButtonIpPortMenu->setAutoDefault(true);
-        QPushButton *connectButton = new QPushButton();
+        QPushButton *connectButton = new QPushButton(chooseIpPortPage);
         connectButton->setAutoDefault(true);
 
         sendButtonRegister_.setAutoDefault(true);
         sendButtonLogin_.setAutoDefault(true);
 
-        QCheckBox *showPasswordLogin = new QCheckBox();
-        QCheckBox *showPasswordRegister = new QCheckBox();
+        QCheckBox *showPasswordLogin = new QCheckBox(loginPage);
+        QCheckBox *showPasswordRegister = new QCheckBox(registerPage);
 
         exitButton->setText("Exit");
         exitButton->setFixedWidth(INPUT_BUTTON_WIDTH);
@@ -375,7 +375,6 @@ namespace GUI {
         connect(chooseIpPortButton, &QPushButton::clicked, this,
                 &Login::on_ChooseIpPortButton_clicked);
 
-        chooseIpPortPage = new QWidget();
         QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout();
         chooseIpPortPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -455,7 +454,6 @@ namespace GUI {
         // Create the main page
         connectionToServerLabel_.setAlignment(Qt::AlignHCenter);
 
-        mainPage = new QWidget();
         QVBoxLayout *mainLayout = new QVBoxLayout();
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
@@ -471,7 +469,6 @@ namespace GUI {
         mainPage->setLayout(mainLayout);
 
         // Create the register page
-        registerPage = new QWidget();
         QVBoxLayout *registerPageLayout = new QVBoxLayout();
         registerPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -488,7 +485,6 @@ namespace GUI {
         registerPage->setLayout(registerPageLayout);
 
         // Create the login page
-        loginPage = new QWidget();
         QVBoxLayout *loginPageLayout = new QVBoxLayout();
         loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                  QSizePolicy::Expanding));

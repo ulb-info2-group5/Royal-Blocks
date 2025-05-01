@@ -1,9 +1,7 @@
 #include "main_gui.hpp"
 
-#include "../../core/controller/controller.hpp"
 #include "graphics/GUI/tetris_window.hpp"
-#include "login/login.hpp"
-#include "main_menu/main_menu.hpp"
+#include "graphics/common/abstract_display.hpp"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -11,22 +9,27 @@
 #include <QStyleFactory>
 #include <QTableWidget>
 #include <qapplication.h>
+#include <qobjectdefs.h>
 
 namespace GUI {
 
-    MainGui::MainGui(int argc, char *argv[])
-        : app_(argc, argv), tetrisWindow_() {
+    MainGui::MainGui(Controller &controller, int argc, char *argv[])
+        : AbstractDisplay(controller), app_(argc, argv), tetrisWindow_(controller, *this) {
         app_.setApplicationName("Royal Tetris");
         app_.setApplicationDisplayName("Royal Tetris");
     }
 
-    void MainGui::run(Controller &controller) {
-        tetrisWindow_.run(controller);
+    void MainGui::run() {
+        tetrisWindow_.run();
         app_.exec();
     }
 
     void MainGui::forceRefresh(UpdateType updateType) {
         tetrisWindow_.forceRefresh(updateType);
+    }
+
+    void MainGui::onDisconnected() {
+        emit clientDisconnected();
     }
 
 } // namespace GUI

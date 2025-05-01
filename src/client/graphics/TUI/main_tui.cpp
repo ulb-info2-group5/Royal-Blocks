@@ -3,23 +3,22 @@
 #include "../../core/controller/controller.hpp"
 #include "ftxui_config/ftxui_config.hpp"
 #include "graphics/TUI/login_menu/login_menu.hpp"
+#include "graphics/TUI/main_menu/main_menu.hpp"
+#include "graphics/common/abstract_display.hpp"
 
 namespace TUI {
 
-    MainTui::MainTui() : screen_(ftxui::ScreenInteractive::Fullscreen()) {
+    MainTui::MainTui(Controller &controller) : AbstractDisplay(controller), screen_(ftxui::ScreenInteractive::Fullscreen()), loginMenu_(*this, controller_), mainMenu_(*this, controller_) {
         screen_.ForceHandleCtrlC(false);
         screen_.ForceHandleCtrlZ(false);
     }
 
-    void MainTui::run(Controller &controller) {
-        LoginMenu loginMenu(*this, controller);
-        MainMenu mainMenu(*this, controller);
-
+    void MainTui::run() {
         drawStartScreen();
 
         // Handle the login menu
-        if (loginMenu.render() == LoginResult::SUCCESS) {
-            mainMenu.render();
+        if (loginMenu_.render() == LoginResult::SUCCESS) {
+            mainMenu_.render();
         }
         drawEndScreen();
     }
@@ -91,4 +90,7 @@ namespace TUI {
         });
     }
 
+    void MainTui::onDisconnected() {
+        // DO NOTHING ?
+    }
 } // namespace TUI

@@ -5,6 +5,7 @@
 #include "tetris_window.hpp"
 
 #include <QApplication>
+#include <qobjectdefs.h>
 
 class Controller;
 
@@ -15,20 +16,30 @@ namespace GUI {
      * Owns and manages the QApplication and the Mainwindow of the GUI tetris
      * client.
      */
-    class MainGui : public AbstractDisplay {
+    class MainGui final : public QObject, public AbstractDisplay {
+        Q_OBJECT
+
       private:
         QApplication app_;
 
         TetrisWindow tetrisWindow_;
 
       public:
-        MainGui(int argc, char *argv[]);
+        MainGui(Controller &controller, int argc, char *argv[]);
 
         ~MainGui() = default;
 
-        virtual void run(Controller &controller) override;
+        void run() override;
 
-        virtual void forceRefresh(UpdateType updateType) override;
+        void forceRefresh(UpdateType updateType) override;
+
+        void onDisconnected() override;
+
+      signals:
+        /**
+         * @brief Signal emitted when the client is disconnected from the server.
+         */
+        void clientDisconnected();
     };
 
 } // namespace GUI

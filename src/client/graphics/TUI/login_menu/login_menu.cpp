@@ -24,9 +24,6 @@ namespace TUI {
 
         loginState_ = Login::NONE;
 
-        ip_ = std::string(controller_.getServerIp());
-        port_ = std::to_string(controller_.getServerPort());
-
         if (controller_.isConnected()) {
             connectionMessage_ = STR_CONNECTION_SUCCESS;
         } else {
@@ -283,6 +280,9 @@ namespace TUI {
 
     // ### public methods ###
     LoginResult LoginMenu::render() {
+        ip_ = std::string(controller_.getServerIp());
+        port_ = std::to_string(controller_.getServerPort());
+        
         std::thread checkConnectionThread([&]() {
             while (loginState_!= Login::LOGGED) {
                 updateConnectedMessage();

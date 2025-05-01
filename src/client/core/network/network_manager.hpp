@@ -23,6 +23,11 @@ class NetworkManager {
     boost::asio::steady_timer retryTimer_;
 
     /**
+     * @brief function to be called when the client is disconnected from the server
+     */
+    std::function<void()> disconnectHandler_;
+
+    /**
      * @brief Handles the packets received by the client
      */
     std::function<void(const std::string_view)> packetHandler_;
@@ -88,6 +93,13 @@ class NetworkManager {
      * @brief Returns whether the client is connected to the configured server.
      */
     bool isConnected() const;
+
+    /**
+     * @brief Sets the function to be called when the client is disconnected
+     *
+     * @param handler The function to be called
+     */
+    void setDisconnectHandler(const std::function<void()> handler);
 };
 
 #endif // NETWORK_MANAGER_HPP

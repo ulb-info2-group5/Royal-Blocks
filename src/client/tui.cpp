@@ -6,8 +6,8 @@
 
 int main(void) {
     try {
-        Controller controller(std::make_unique<TUI::MainTui>());
-        controller.run();
+        Controller controller;
+        controller.run(std::make_unique<TUI::MainTui>(controller));
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
