@@ -283,22 +283,26 @@ namespace TUI {
         ip_ = std::string(controller_.getServerIp());
         port_ = std::to_string(controller_.getServerPort());
         
+        loginState_ = Login::NONE;
+
         std::thread checkConnectionThread([&]() {
-            while (loginState_!= Login::LOGGED) {
+            while (loginState_ == Login::NONE) {
                 updateConnectedMessage();
                 mainTui_.forceRefresh(UpdateType::OTHER);
-                std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
             }
         });
-        if (checkConnectionThread.joinable()) {
-            checkConnectionThread.detach();
-        }
 
         displayWindow();
 
         while (loginState_ == Login::NONE) {
             mainTui_.render(displayWindow_);
         }
+
+        if (checkConnectionThread.joinable()) {
+            checkConnectionThread.join();
+        }
+
         if (loginState_ == Login::EXIT) {
             return LoginResult::EXIT;
         }
