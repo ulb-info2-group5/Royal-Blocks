@@ -1,17 +1,16 @@
 #include "games_manager.hpp"
 
 // ======== private methode ========
-void GamesManager::deleteGame(GameID gameId) {
-    if (gamethreads_[gameId].joinable()) {
-        if (std::this_thread::get_id() == gamethreads_[gameId].get_id()) {
-            gamethreads_[gameId].detach();
-        } else {
-            gamethreads_[gameId].join();
-        }
+
+
+void GamesManager::clearFinishedGames(){
+    for (auto gameID : finishedGames_){
+        gameSessions_.erase(gameID);
+        gamethreads_.erase(gameID);
     }
-    gameSessions_.erase(gameId);
-    gamethreads_.erase(gameId);
+    finishedGames_.clear();
 }
+
 
 // ======== public methode ========
 
@@ -28,8 +27,11 @@ std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
     std::shared_ptr<GameServer> gameServer = std::make_shared<GameServer>(
         gameMode, std::move(players), nextGameId,
         [this](GameID gameId) { callBackFinishGame(gameId); });
+
     gameSessions_[nextGameId] = gameServer;
-    gamethreads_[nextGameId] = std::thread([gameServer]() { gameServer->run(); });
+    gamethreads_[nextGameId] = std::jthread([gameServer](){
+        gameServer->run();
+    });
     nextGameId += 1;
     return gameServer;
 }
@@ -58,13 +60,14 @@ void GamesManager::callBackFinishGame(GameID gameId) {
             updateRankingCallback_();
         }
     }
-    deleteGame(gameId);
+    finishedGames_.push_back(gameId);
 }
 
 void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer){
     gameServer->addClientLink(clientLink);
     clientLink->setUserState(bindings::State::InGame);
     clientLink->jointGame(gameServer);
+    clearFinishedGames();
     
     
 }

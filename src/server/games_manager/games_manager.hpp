@@ -17,13 +17,16 @@ class GamesManager {
 
   private:
     std::unordered_map<GameID, std::shared_ptr<GameServer>> gameSessions_;
-    std::unordered_map<GameID, std::thread> gamethreads_;
+    std::unordered_map<GameID, std::jthread> gamethreads_;
+
+    std::vector<GameID> finishedGames_;
 
     SaveScoreCallback saveScoreCallback_;
     UpdateRankingCallback updateRankingCallback_;
     GameID nextGameId = 1;
 
-    void deleteGame(GameID gameId);
+    
+    void clearFinishedGames();
 
   public:
   GamesManager( SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);
