@@ -313,28 +313,37 @@ namespace GUI {
         QWidget *registerPage = new QWidget(&stackedWidget_);
         QWidget *chooseIpPortPage = new QWidget(&stackedWidget_);
 
-        QPushButton *exitButton = new QPushButton(mainPage);
-        exitButton->setAutoDefault(true);
-        QPushButton *loginButton = new QPushButton(mainPage);
-        loginButton->setAutoDefault(true);
         QPushButton *registerButton = new QPushButton(mainPage);
         registerButton->setAutoDefault(true);
-        QPushButton *backButtonLogin = new QPushButton(loginPage);
-        backButtonLogin->setAutoDefault(true);
-        QPushButton *backButtonRegister = new QPushButton(registerPage);
-        backButtonRegister->setAutoDefault(true);
+        QPushButton *loginButton = new QPushButton(mainPage);
+        loginButton->setAutoDefault(true);
         QPushButton *chooseIpPortButton = new QPushButton(mainPage);
         chooseIpPortButton->setAutoDefault(true);
-        QPushButton *backButtonIpPortMenu = new QPushButton(chooseIpPortPage);
-        backButtonIpPortMenu->setAutoDefault(true);
+        QPushButton *exitButton = new QPushButton(mainPage);
+        exitButton->setAutoDefault(true);
+
+        usernameInputLogin_.setParent(loginPage);
+        passwordInputLogin_.setParent(loginPage);
+        QCheckBox *showPasswordLogin = new QCheckBox(loginPage);
+        sendButtonLogin_.setParent(loginPage);
+        sendButtonLogin_.setAutoDefault(true);
+        QPushButton *backButtonLogin = new QPushButton(loginPage);
+        backButtonLogin->setAutoDefault(true);
+
+        usernameInputRegister_.setParent(registerPage);
+        passwordInputRegister_.setParent(registerPage);
+        QCheckBox *showPasswordRegister = new QCheckBox(registerPage);
+        sendButtonRegister_.setParent(registerPage);
+        sendButtonRegister_.setAutoDefault(true);
+        QPushButton *backButtonRegister = new QPushButton(registerPage);
+        backButtonRegister->setAutoDefault(true);
+
+        ipInput_.setParent(chooseIpPortPage);
+        portInput_.setParent(chooseIpPortPage);
         QPushButton *connectButton = new QPushButton(chooseIpPortPage);
         connectButton->setAutoDefault(true);
-
-        sendButtonRegister_.setAutoDefault(true);
-        sendButtonLogin_.setAutoDefault(true);
-
-        QCheckBox *showPasswordLogin = new QCheckBox(loginPage);
-        QCheckBox *showPasswordRegister = new QCheckBox(registerPage);
+        QPushButton *backButtonIpPortMenu = new QPushButton(chooseIpPortPage);
+        backButtonIpPortMenu->setAutoDefault(true);
 
         exitButton->setText("Exit");
         exitButton->setFixedWidth(INPUT_BUTTON_WIDTH);
@@ -351,8 +360,7 @@ namespace GUI {
         sendButtonLogin_.setText("Send");
         sendButtonLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
 
-        /*------------------------CHOOSE IP AND PORT
-         * MENU--------------------------*/
+        /*---------CHOOSE IP AND PORT MENU---------*/
         backButtonIpPortMenu->setText("Back");
         backButtonIpPortMenu->setFixedWidth(INPUT_BUTTON_WIDTH);
         connectButton->setText("Connect to server");

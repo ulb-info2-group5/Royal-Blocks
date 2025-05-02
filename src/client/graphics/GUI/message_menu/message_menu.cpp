@@ -101,6 +101,12 @@ namespace GUI {
     }
 
     void MessageMenu::loadFriends() {
+        int currentRow = friendsList_.currentRow();  // Current friend index
+        QVariant currentUserId;
+        if (currentRow >= 0) {
+            QListWidgetItem *currentItem = friendsList_.item(currentRow);
+            currentUserId = currentItem->data(Qt::UserRole);
+        }
         friendsList_.clear();
         std::vector<bindings::User> friends = controller_.getFriendsList();
 
@@ -110,6 +116,19 @@ namespace GUI {
             item->setData(Qt::UserRole, QVariant::fromValue(friendUser.userID));
             friendsList_.addItem(item);
         }
+
+        // Restore the previous selection if it is still valid
+        if (currentUserId.isValid()) {
+            for (int i = 0; i < friendsList_.count(); ++i) {
+                QListWidgetItem *item = friendsList_.item(i);
+                if (item->data(Qt::UserRole) == currentUserId) {
+                    friendsList_.setCurrentRow(i);
+                    return;
+                }
+            }
+        }
+
+        // If no valid selection, select the first friend
         if (friendsList_.count() > 0) {
             friendsList_.setCurrentRow(0);
         }
