@@ -46,7 +46,13 @@ GamesManager::GamesManager(SaveScoreCallback saveScoreCallback,
       }
 
 
-
+GamesManager::~GamesManager(){
+    running = false;
+    cv.notify_all();
+    if (joinerThread_.joinable()){
+        joinerThread_.join();
+    }
+}
 
 
 std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
@@ -57,9 +63,7 @@ std::shared_ptr<GameServer> GamesManager::startGameServeur(GameMode gameMode,
         [this](GameID gameId) { callBackFinishGame(gameId); });
 
     gameSessions_[nextGameId] = gameServer;
-    gamethreads_[nextGameId] = std::jthread([gameServer](){
-        gameServer->run();
-    });
+    gamethreads_[nextGameId] = std::thread([gameServer]() { gameServer->run(); });
     nextGameId += 1;
     return gameServer;
 }

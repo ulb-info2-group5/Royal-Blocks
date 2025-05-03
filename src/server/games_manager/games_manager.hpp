@@ -19,7 +19,7 @@ class GamesManager {
 
   private:
     std::unordered_map<GameID, std::shared_ptr<GameServer>> gameSessions_;
-    std::unordered_map<GameID, std::jthread> gamethreads_;
+    std::unordered_map<GameID, std::thread> gamethreads_;
     std::mutex mutex;
     std::condition_variable cv;
 
@@ -39,8 +39,8 @@ class GamesManager {
     void notifyGameFinished(int gameID);
 
   public:
-  GamesManager( SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);
-
+    GamesManager( SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);
+    ~GamesManager();
     
     
     void makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer);
