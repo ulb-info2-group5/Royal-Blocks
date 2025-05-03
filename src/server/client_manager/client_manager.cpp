@@ -80,7 +80,9 @@ ClientManager::ClientManager(DataBase database)
     socialService_(database.friendsManager, database.messagesManager, 
         [this](UserID userID)->bindings::User { return getUser(userID) ; })
     
-     {}
+     {
+        
+     }
 
 
 

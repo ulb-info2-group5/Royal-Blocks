@@ -4,11 +4,34 @@
 
 
 void GamesManager::clearFinishedGames(){
-    for (auto gameID : finishedGames_){
-        gameSessions_.erase(gameID);
-        gamethreads_.erase(gameID);
+    // for (auto gameID : finishedGames_){
+    //     gameSessions_.erase(gameID);
+    //     gamethreads_.erase(gameID);
+    // }
+    // finishedGames_.clear();
+}
+
+void GamesManager::joinerThreadFunc(){
+    while (running){
+        std::unique_lock<std::mutex> lock(mutex);
+        cv.wait(lock, [this]() { return !finishedGames_.empty() || !running; });
+        while (!finishedGames_.empty()){
+            int gameID = finishedGames_.front();
+            finishedGames_.pop();
+            lock.unlock();
+            if (gamethreads_[gameID].joinable()){
+                gamethreads_[gameID].join();
+                std::cout << "joined game : " << gameID << std::endl;
+            }
+            lock.lock();
+        }
     }
-    finishedGames_.clear();
+}
+
+void GamesManager::notifyGameFinished(int gameID){
+    std::lock_guard<std::mutex> lock(mutex);
+    finishedGames_.push(gameID);
+    cv.notify_one();
 }
 
 
@@ -17,7 +40,12 @@ void GamesManager::clearFinishedGames(){
 GamesManager::GamesManager(SaveScoreCallback saveScoreCallback,
                            UpdateRankingCallback updateRankingCallback)
     : saveScoreCallback_(saveScoreCallback),
-      updateRankingCallback_(updateRankingCallback) {}
+      updateRankingCallback_(updateRankingCallback) {
+        joinerThread_ = std::thread(&GamesManager::joinerThreadFunc, this);
+        
+      }
+
+
 
 
 
@@ -60,7 +88,7 @@ void GamesManager::callBackFinishGame(GameID gameId) {
             updateRankingCallback_();
         }
     }
-    finishedGames_.push_back(gameId);
+    notifyGameFinished(gameId);
 }
 
 void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer){
