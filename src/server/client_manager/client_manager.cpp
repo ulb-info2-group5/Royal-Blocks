@@ -120,9 +120,6 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
 
 std::optional<nlohmann::json> ClientManager::authPacketHandler(nlohmann::json binding) {
     std::optional<nlohmann::json> response = std::nullopt;
-    if (response.has_value()){
-        std::cout << "cacajc " << std::endl;
-    }
     try {
         bindings::BindingType type =  binding.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>(); 
         switch(type) {
@@ -137,11 +134,9 @@ std::optional<nlohmann::json> ClientManager::authPacketHandler(nlohmann::json bi
                 break;
         }
     }catch(nlohmann::json::exception& e){
-        std::cerr <<"Received (auth )packet has no type  : " << e.what() << std::endl;
+        std::cerr <<"Received (auth) packet has wrong format : " << e.what() << std::endl;
         response = std::nullopt;
     }
-    
-    
     return response;
 }
 
@@ -158,12 +153,9 @@ void ClientManager::handlePacket(const std::string &packet,const UserID &userID)
 
 
 void ClientManager::handlePacketMenu(const std::string &packet, const UserID &userID) {
-    nlohmann::json jPack = nlohmann::json::parse(packet);
+    
     std::cout << "-- handle Packet call -- " << std::endl;
     nlohmann::json jPack = nlohmann::json::parse(packet);
-    bindings::BindingType type;
-    type = jPack.at("type").get<bindings::BindingType>();
-    
     bindings::BindingType type = jPack.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>();
     switch (type) {
     case bindings::BindingType::JoinGame:
