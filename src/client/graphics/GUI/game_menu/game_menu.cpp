@@ -26,7 +26,7 @@ namespace GUI {
     }
 
     void GameMenu::setup() {
-        stack_ = new QStackedWidget();
+        stack_.setParent(this);
 
         QPushButton *endlessButton = new QPushButton(this);
         endlessButton->setAutoDefault(true);
@@ -132,13 +132,14 @@ namespace GUI {
 
         // Setup player count screen
         QVBoxLayout *playerCountLayout = new QVBoxLayout(&playerCountWidget_);
-        playerCountSlider_ = new QSlider(Qt::Horizontal);
-        playerCountSlider_->setMinimum(MIN_NUM_PLAYERS_CLASSIC_ROYAL);
-        playerCountSlider_->setMaximum(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
-        playerCountSlider_->setValue(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
-        playerCountSlider_->setFixedWidth(500);
+        playerCountSlider_.setParent(this);
+        playerCountSlider_.setOrientation(Qt::Orientation::Horizontal);
+        playerCountSlider_.setMinimum(MIN_NUM_PLAYERS_CLASSIC_ROYAL);
+        playerCountSlider_.setMaximum(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
+        playerCountSlider_.setValue(MAX_NUM_PLAYERS_CLASSIC_ROYAL);
+        playerCountSlider_.setFixedWidth(500);
         playerCountLabel_.setAlignment(Qt::AlignCenter);
-        connect(playerCountSlider_, &QSlider::valueChanged, this,
+        connect(&playerCountSlider_, &QSlider::valueChanged, this,
                 &GameMenu::onPlayerCountChanged);
 
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -146,7 +147,7 @@ namespace GUI {
         playerCountLayout->addWidget(
             createCenterBoldTitle("Select Player Count"));
         playerCountLayout->addWidget(&playerCountLabel_, 0, Qt::AlignCenter);
-        playerCountLayout->addWidget(playerCountSlider_, 0, Qt::AlignCenter);
+        playerCountLayout->addWidget(&playerCountSlider_, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(confirmButton, 0, Qt::AlignCenter);
         playerCountLayout->addWidget(playerCountBackButton, 0, Qt::AlignCenter);
         playerCountLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
@@ -191,38 +192,38 @@ namespace GUI {
                                                QSizePolicy::Expanding));
 
         // Add widgets to stack
-        stack_->addWidget(&selectModeWidget_);
-        stack_->addWidget(&playerCountWidget_);
-        stack_->addWidget(&joinTypeWidget_);
-        stack_->addWidget(&friendsListWidget_);
-        stack_->addWidget(&waitingWidget_);
+        stack_.addWidget(&selectModeWidget_);
+        stack_.addWidget(&playerCountWidget_);
+        stack_.addWidget(&joinTypeWidget_);
+        stack_.addWidget(&friendsListWidget_);
+        stack_.addWidget(&waitingWidget_);
 
         // Set main layout
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
-        mainLayout->addWidget(stack_);
+        mainLayout->addWidget(&stack_);
         setLayout(mainLayout);
     }
 
     // Screen display methods
     void GameMenu::showSelectModeScreen() {
-        stack_->setCurrentWidget(&selectModeWidget_);
+        stack_.setCurrentWidget(&selectModeWidget_);
     }
 
     void GameMenu::showPlayerCountScreen() {
-        stack_->setCurrentWidget(&playerCountWidget_);
+        stack_.setCurrentWidget(&playerCountWidget_);
     }
 
     void GameMenu::showJoinTypeScreen() {
-        stack_->setCurrentWidget(&joinTypeWidget_);
+        stack_.setCurrentWidget(&joinTypeWidget_);
     }
 
     void GameMenu::showFriendsListScreen() {
         updateFriendsList();
-        stack_->setCurrentWidget(&friendsListWidget_);
+        stack_.setCurrentWidget(&friendsListWidget_);
     }
 
     void GameMenu::showWaitingScreen() {
-        stack_->setCurrentWidget(&waitingWidget_);
+        stack_.setCurrentWidget(&waitingWidget_);
 
         // Check periodically if we've joined a game
         QTimer *gameCheckTimer = new QTimer(this);
@@ -267,12 +268,12 @@ namespace GUI {
         gameDisplay_ =
             std::make_unique<GameDisplay>(controller_, tetrisWindow_, this);
         connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
-            stack_->removeWidget(gameDisplay_.get());
+            stack_.removeWidget(gameDisplay_.get());
             gameDisplay_.reset();
             emit backToMainMenu();
         });
-        stack_->addWidget(gameDisplay_.get());
-        stack_->setCurrentWidget(gameDisplay_.get());
+        stack_.addWidget(gameDisplay_.get());
+        stack_.setCurrentWidget(gameDisplay_.get());
     }
 
     // Slot implementations
@@ -317,15 +318,15 @@ namespace GUI {
     }
 
     void GameMenu::onBackButtonClicked() {
-        if (stack_->currentWidget() == &selectModeWidget_) {
+        if (stack_.currentWidget() == &selectModeWidget_) {
             emit backToMainMenu();
-        } else if (stack_->currentWidget() == &playerCountWidget_) {
+        } else if (stack_.currentWidget() == &playerCountWidget_) {
             showSelectModeScreen();
-        } else if (stack_->currentWidget() == &joinTypeWidget_) {
+        } else if (stack_.currentWidget() == &joinTypeWidget_) {
             showSelectModeScreen();
-        } else if (stack_->currentWidget() == &friendsListWidget_) {
+        } else if (stack_.currentWidget() == &friendsListWidget_) {
             showJoinTypeScreen();
-        } else if (stack_->currentWidget() == &waitingWidget_) {
+        } else if (stack_.currentWidget() == &waitingWidget_) {
             controller_.abortMatchmaking();
             showSelectModeScreen();
         }

@@ -80,7 +80,9 @@ ClientManager::ClientManager(DataBase database)
     socialService_(database.friendsManager, database.messagesManager, 
         [this](UserID userID)->bindings::User { return getUser(userID) ; })
     
-     {}
+     {
+        
+     }
 
 
 
@@ -244,6 +246,9 @@ void ClientManager::updateMenu(UserID userID){
     
 }
 
+void ClientManager::shutdown(){
+    gamesManager_.shutdown();
+}
 
 
 bool ClientManager::isClientConnected(UserID userID) {

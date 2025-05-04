@@ -92,51 +92,7 @@ namespace GUI {
 
         void effectSelector();
 
-        // QGridLayout opLayout_;
-        // QLabel playerInfo_;
-        // QProgressBar penalty_;
-        // QImage holdTetromino_;
-
-        // std::vector<QPushButton> effectsButtons_;
-        // QVBoxLayout effectsLayout_;
-        // QProgressBar energy_;
-        // QProgressBar bonus_;
-
-        // QImage selfBoard_;
-        // QLabel mode_;
-        // QImage tetrominoQueue_;
-
-        // std::vector<QImage> opBoards_;
-        // std::vector<QPushButton> targetButtons_;
-        // std::vector<QVBoxLayout> opSingularDisplay_;
-
-        // void playerInfo();
-        // void penaltyInfo();
-        // void bonusInfo();
-        // void energy();
-        // void availableEffects();
-        // void holdTetromino();
-        // void leftPane();
-
-        // void drawBoard(CellSize size = CellSize::Big);
-        // void tetrominoQueue();
-        // void middlePane();
-
-        // void createOpBoardDisplay(size_t index, CellSize size);
-        // void opponentsBoard();
-        // void rightPane();
-
-        // void drawMainLayout();
-
-        // void handleKeys();
-
-        // void updateScreen();
-
         void setup();
-
-        // void actionOnExit();
-
-        // void changeTarget();
 
       private slots:
 
@@ -149,14 +105,6 @@ namespace GUI {
         void on_ReturnToMainMenuButtonClicked();
 
         void updateGameState();
-
-        // add the functions for the buttons
-
-        // void on_changeTarget_Clicked(size_t index);
-
-        // void refreshScreen();
-
-        // void on_QuitGameButton_clicked();
 
       protected:
         void keyPressEvent(QKeyEvent *event);

@@ -73,6 +73,8 @@ class ClientManager {
 
     void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
 
+    void shutdown();
+
     void removeClient(std::optional<UserID> userID);
     /*
      * @brief : manage of the packet received by the clientLink

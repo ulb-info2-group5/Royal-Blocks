@@ -39,7 +39,7 @@ namespace GUI {
         TetrisWindow &tetrisWindow_;
         std::unique_ptr<GameDisplay> gameDisplay_;
 
-        QStackedWidget *stack_;
+        QStackedWidget stack_;
         QWidget selectModeWidget_;
         QWidget playerCountWidget_;
         QWidget joinTypeWidget_;
@@ -49,7 +49,7 @@ namespace GUI {
         QLabel playerCountLabel_;
         QListWidget friendsList_;
 
-        QSlider *playerCountSlider_;
+        QSlider playerCountSlider_;
 
         GameMode selectedGameMode_;
         int playerCount_;

@@ -42,7 +42,7 @@ namespace GUI {
         connect(backButton, &QPushButton::clicked, this,
                 &Ranking::on_BackButtonClicked);
 
-        QWidget *scrollWidget = new QWidget();
+        QWidget *scrollWidget = new QWidget(this);
         QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
         scrollLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                               QSizePolicy::Expanding));
@@ -52,13 +52,13 @@ namespace GUI {
                                               QSizePolicy::Expanding));
         scrollWidget->setLayout(scrollLayout);
 
-        QScrollArea *scrollArea = new QScrollArea();
+        QScrollArea *scrollArea = new QScrollArea(this);
         scrollArea->setWidgetResizable(true);
         scrollArea->setWidget(scrollWidget);
         scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-        QVBoxLayout *layout = new QVBoxLayout();
+        QVBoxLayout *layout = new QVBoxLayout(this);
         layout->addWidget(scrollArea, 1);
         layout->setAlignment(Qt::AlignCenter);
 

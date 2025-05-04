@@ -15,10 +15,11 @@ namespace TUI {
      */
     class MainTui final : public AbstractDisplay {
       private:
-        LoginMenu loginMenu_;
-        MainMenu mainMenu_;
-
         ftxui::ScreenInteractive screen_;
+
+        LoginMenu loginMenu_;
+        
+        MainMenu mainMenu_;
 
         /**
          * @brief The current window to show to the user

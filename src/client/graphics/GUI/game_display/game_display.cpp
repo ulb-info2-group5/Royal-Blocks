@@ -332,13 +332,14 @@ namespace GUI {
 
         if (gameIsFinished()) {
             QPushButton *returnToMainMenuButton =
-                new QPushButton("Return to Main Menu");
+                new QPushButton("Return to Main Menu", this);
             returnToMainMenuButton->setFixedWidth(500);
+            returnToMainMenuButton->setAutoDefault(true);
             connect(returnToMainMenuButton, &QPushButton::clicked, this,
                     &GameDisplay::on_ReturnToMainMenuButtonClicked);
 
-            QWidget *finishWidget = new QWidget();
-            QVBoxLayout *finishLayout = new QVBoxLayout();
+            QWidget *finishWidget = new QWidget(this);
+            QVBoxLayout *finishLayout = new QVBoxLayout(finishWidget);
             finishLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
 
@@ -351,14 +352,13 @@ namespace GUI {
             if (!isSpectating()) {
                 finishLayout->addWidget(
                     new QLabel("Your score was : "
-                               + QString::number(getSelfScore())),
+                               + QString::number(getSelfScore()), this),
                     0, Qt::AlignCenter);
             }
             finishLayout->addWidget(returnToMainMenuButton, 0, Qt::AlignCenter);
             finishLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                   QSizePolicy::Expanding));
 
-            finishWidget->setLayout(finishLayout);
             stackedWidget_.addWidget(finishWidget);
             stackedWidget_.setCurrentWidget(finishWidget);
             return;
@@ -455,7 +455,7 @@ namespace GUI {
 
         // ------------LEFT_PANE----------------
 
-        QPushButton *quitButton = new QPushButton(tr("&Quit"));
+        QPushButton *quitButton = new QPushButton(tr("&Quit"), this);
         quitButton->setFocusPolicy(Qt::NoFocus);
         quitButton->setFixedWidth(100);
 

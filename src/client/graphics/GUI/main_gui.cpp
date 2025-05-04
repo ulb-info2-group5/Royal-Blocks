@@ -3,13 +3,6 @@
 #include "graphics/GUI/tetris_window.hpp"
 #include "graphics/common/abstract_display.hpp"
 
-#include <QApplication>
-#include <QHeaderView>
-#include <QMessageBox>
-#include <QStyleFactory>
-#include <QTableWidget>
-#include <qapplication.h>
-#include <qobjectdefs.h>
 
 namespace GUI {
 

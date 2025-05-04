@@ -52,7 +52,8 @@ namespace GUI {
                     }
                 }
             } else { // not enough buttons in the layout yet.
-                QPushButton *pButton = new QPushButton(buttonText);
+                QPushButton *pButton = new QPushButton(buttonText, this);
+                pButton->setFocusPolicy(Qt::NoFocus);
 
                 connect(pButton, &QPushButton::clicked, this,
                         [this, effectType]() { emit buyEffect(effectType); });
