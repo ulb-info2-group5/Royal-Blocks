@@ -38,7 +38,7 @@ namespace GUI {
     void Login::run() {
         setup();
 
-        QVBoxLayout *layout = new QVBoxLayout();
+        QVBoxLayout *layout = new QVBoxLayout(this);
         layout->addWidget(&stackedWidget_);
         setLayout(layout);
 
@@ -383,15 +383,15 @@ namespace GUI {
         connect(chooseIpPortButton, &QPushButton::clicked, this,
                 &Login::on_ChooseIpPortButton_clicked);
 
-        QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout();
+        QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout(this);
         chooseIpPortPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         chooseIpPortPageLayout->addWidget(
             createCenterBoldTitle("Choose IP and Port of the server"));
-        chooseIpPortPageLayout->addWidget(new QLabel("IP : "), 0,
+        chooseIpPortPageLayout->addWidget(new QLabel("IP : ", this), 0,
                                           Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(&ipInput_, 0, Qt::AlignCenter);
-        chooseIpPortPageLayout->addWidget(new QLabel("Port : "), 0,
+        chooseIpPortPageLayout->addWidget(new QLabel("Port : ", this), 0,
                                           Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(&portInput_, 0, Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(connectButton, 0, Qt::AlignCenter);
@@ -462,7 +462,7 @@ namespace GUI {
         // Create the main page
         connectionToServerLabel_.setAlignment(Qt::AlignHCenter);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout();
+        QVBoxLayout *mainLayout = new QVBoxLayout(this);
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
         mainLayout->addWidget(
@@ -477,7 +477,7 @@ namespace GUI {
         mainPage->setLayout(mainLayout);
 
         // Create the register page
-        QVBoxLayout *registerPageLayout = new QVBoxLayout();
+        QVBoxLayout *registerPageLayout = new QVBoxLayout(this);
         registerPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         registerPageLayout->addWidget(createCenterBoldTitle("Register"));
@@ -493,7 +493,7 @@ namespace GUI {
         registerPage->setLayout(registerPageLayout);
 
         // Create the login page
-        QVBoxLayout *loginPageLayout = new QVBoxLayout();
+        QVBoxLayout *loginPageLayout = new QVBoxLayout(this);
         loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                  QSizePolicy::Expanding));
         loginPageLayout->addWidget(createCenterBoldTitle("Login"));

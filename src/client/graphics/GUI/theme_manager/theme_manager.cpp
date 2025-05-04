@@ -14,13 +14,13 @@ namespace GUI {
     }
 
     void ThemeManager::setup() {
-        QPushButton *darkThemeButton = new QPushButton("Dark Theme");
+        QPushButton *darkThemeButton = new QPushButton("Dark Theme", this);
         darkThemeButton->setFixedWidth(500);
         darkThemeButton->setAutoDefault(true);
-        QPushButton *lightThemeButton = new QPushButton("Light Theme");
+        QPushButton *lightThemeButton = new QPushButton("Light Theme", this);
         lightThemeButton->setFixedWidth(500);
         lightThemeButton->setAutoDefault(true);
-        QPushButton *backButton = new QPushButton("Back");
+        QPushButton *backButton = new QPushButton("Back", this);
         backButton->setFixedWidth(500);
         backButton->setAutoDefault(true);
 

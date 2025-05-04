@@ -20,7 +20,7 @@ namespace GUI {
     }
 
     void ProfileManager::basicSetup() {// Create a checkbox to show/hide the password
-        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password");
+        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
 
         newUserName_.setParent(this);
         newPassWord_.setParent(this);

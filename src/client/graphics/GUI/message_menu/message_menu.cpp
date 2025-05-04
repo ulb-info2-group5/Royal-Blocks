@@ -32,16 +32,16 @@ namespace GUI {
     }
 
     void MessageMenu::setupUI() {
-        QVBoxLayout *chatWriteLayout = new QVBoxLayout;
-        QVBoxLayout *friendsListLayout = new QVBoxLayout;
-        QHBoxLayout *mainLayout = new QHBoxLayout;
-        QPushButton *sendButton = new QPushButton;
+        QVBoxLayout *chatWriteLayout = new QVBoxLayout();
+        QVBoxLayout *friendsListLayout = new QVBoxLayout();
+        QHBoxLayout *mainLayout = new QHBoxLayout();
+        QPushButton *sendButton = new QPushButton(this);
         sendButton->setAutoDefault(true);
-        QPushButton *backButton = new QPushButton;
+        QPushButton *backButton = new QPushButton(this);
         backButton->setAutoDefault(true);
-        QLabel *friendsListLabel = new QLabel;
-        QLabel *chatDisplayLabel = new QLabel;
-        QLabel *messageInputLabel = new QLabel;
+        QLabel *friendsListLabel = new QLabel(this);
+        QLabel *chatDisplayLabel = new QLabel(this);
+        QLabel *messageInputLabel = new QLabel(this);
 
         friendsList_.setFixedWidth(FRIENDSLIST_WIDTH);
         messageInput_.setFixedHeight(MESSAGE_INPUT_HEIGHT);

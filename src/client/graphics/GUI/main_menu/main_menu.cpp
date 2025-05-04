@@ -28,7 +28,7 @@ namespace GUI {
     void MainMenu::run() {
         setup();
 
-        QVBoxLayout *layout = new QVBoxLayout();
+        QVBoxLayout *layout = new QVBoxLayout(this);
         layout->addWidget(&stackedWidget_);
         setLayout(layout);
     }
@@ -126,7 +126,7 @@ namespace GUI {
         connect(quitGameButton, &QPushButton::clicked, this,
                 &MainMenu::on_QuitGameButton_clicked);
 
-        QVBoxLayout *menu = new QVBoxLayout();
+        QVBoxLayout *menu = new QVBoxLayout(this);
         menu->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                       QSizePolicy::Expanding));
         menu->addWidget(createCenterBoldTitle(
