@@ -30,19 +30,17 @@ class GamesManager {
     std::atomic<bool> running = true;
     std::thread joinerThread_;
     GameID nextGameId = 1;
-
-    
-    void clearFinishedGames();
-
     
     void joinerThreadFunc();
+
     void notifyGameFinished(int gameID);
+    static void signalHandler(int signal);
 
   public:
     GamesManager( SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);
     ~GamesManager();
     
-    
+    void shutdown();
     void makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer);
 
     void enqueueGameBinding(const std::shared_ptr<ClientLink>& clientLink, const std::string &strBindings);

@@ -3,13 +3,6 @@
 // ======== private methode ========
 
 
-void GamesManager::clearFinishedGames(){
-    // for (auto gameID : finishedGames_){
-    //     gameSessions_.erase(gameID);
-    //     gamethreads_.erase(gameID);
-    // }
-    // finishedGames_.clear();
-}
 
 void GamesManager::joinerThreadFunc(){
     while (running){
@@ -42,11 +35,17 @@ GamesManager::GamesManager(SaveScoreCallback saveScoreCallback,
     : saveScoreCallback_(saveScoreCallback),
       updateRankingCallback_(updateRankingCallback) {
         joinerThread_ = std::thread(&GamesManager::joinerThreadFunc, this);
+        //signal(SIGINT, &GamesManager::signalHandler);
         
       }
 
 
 GamesManager::~GamesManager(){
+    shutdown();
+}
+
+
+void GamesManager::shutdown(){
     running = false;
     cv.notify_all();
     if (joinerThread_.joinable()){
@@ -99,7 +98,7 @@ void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, st
     gameServer->addClientLink(clientLink);
     clientLink->setUserState(bindings::State::InGame);
     clientLink->jointGame(gameServer);
-    clearFinishedGames();
+    
     
     
 }
