@@ -58,6 +58,8 @@ namespace GUI {
     }
 
     void TetrisWindow::showMainMenu() {
+        mainMenu_ = std::make_unique<MainMenu>(controller_, *this, this);
+
         connect(mainMenu_.get(), &MainMenu::quitGame, this, &TetrisWindow::quitGui);
 
         connect(mainMenu_.get(), &MainMenu::applyDarkTheme, this,
@@ -72,16 +74,11 @@ namespace GUI {
 
     void TetrisWindow::run() {
         login_ = std::make_unique<Login>(controller_, this);
-        mainMenu_ = std::make_unique<MainMenu>(controller_, *this, this);
         
         connect(login_.get(), &Login::loginSuccessful, this,
                 &TetrisWindow::showMainMenu);
         login_->run();
         setCentralWidget(login_.get());
-    }
-
-    void start() {
-
     }
 
     void TetrisWindow::quitGui() {
