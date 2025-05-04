@@ -31,12 +31,12 @@ class TetrisMainServer{
          */
         ~TetrisMainServer() = default;
 
-        
+        static TetrisMainServer* instance_;
         /*
         * @brief run server
         */
         void run();
-
+        static void handler(const boost::system::error_code& error,int signal_number);
         
 
         /*
@@ -54,5 +54,8 @@ class TetrisMainServer{
          * @return uint16_t The port choice for the server
          */
         uint16_t handleArguments(int argc, char *argv[]);
+
+
+        ClientManager& getClientManager();
 
 };

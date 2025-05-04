@@ -46,6 +46,7 @@ GamesManager::~GamesManager(){
 
 
 void GamesManager::shutdown(){
+    std::cout << "shutdwon " << std::endl;
     running = false;
     cv.notify_all();
     if (joinerThread_.joinable()){

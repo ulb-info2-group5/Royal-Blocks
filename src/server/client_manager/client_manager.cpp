@@ -242,6 +242,9 @@ void ClientManager::updateMenu(UserID userID){
     
 }
 
+void ClientManager::shutdown(){
+    gamesManager_.shutdown();
+}
 
 
 bool ClientManager::isClientConnected(UserID userID) {
