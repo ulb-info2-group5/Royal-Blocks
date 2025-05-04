@@ -2,6 +2,7 @@
 #define ABORT_MATCHMAKING_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -18,12 +19,12 @@ namespace bindings {
     struct AbortMatchMaking {
         nlohmann::json to_json() const {
             return nlohmann::json{
-                {"type", BindingType::AbortMatchMaking},
+                {PACKET_TYPE_FIELD, BindingType::AbortMatchMaking},
             };
         }
 
         static AbortMatchMaking from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::AbortMatchMaking) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::AbortMatchMaking) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

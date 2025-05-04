@@ -28,6 +28,9 @@ namespace GUI {
         SpectateFriend,
     };
 
+    /**
+     * @brief Displays all options in the (main) Game Menu.
+     */
     class GameMenu : public QWidget {
         Q_OBJECT
 

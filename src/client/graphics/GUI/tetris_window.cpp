@@ -1,6 +1,11 @@
-#include "graphics/GUI/tetris_window.hpp"
+#include "tetris_window.hpp"
 
+#include "graphics/GUI/login/login.hpp"
+#include "main_gui.hpp"
 #include "qt_config/qt_config.hpp"
+
+#include <memory>
+#include <qmessagebox.h>
 
 namespace GUI {
 
@@ -22,7 +27,10 @@ namespace GUI {
         settings.setValue("theme/darkMode", false);
     }
 
-    TetrisWindow::TetrisWindow(QWidget *parent) : QMainWindow(parent) {
+    TetrisWindow::TetrisWindow(Controller &controller, MainGui &mainGui, QWidget *parent) : QMainWindow(parent), controller_(controller) {
+        connect(&mainGui, &MainGui::clientDisconnected, this,
+                &TetrisWindow::backToLoginMenu);
+
         QSettings settings("Royal Tetris", "Royal Tetris");
         if (settings.value("theme/darkMode", true).toBool()) {
             setDarkMode();
@@ -33,8 +41,6 @@ namespace GUI {
         setMinimumSize(600, 500);
         showMaximized();
         setWindowTitle("Tetris Royal");
-
-        show();
     }
 
     void TetrisWindow::forceRefresh(UpdateType updateType) {
@@ -53,28 +59,32 @@ namespace GUI {
 
     void TetrisWindow::showMainMenu() {
         if (login_) {
-            login_->deleteLater(); // Delete login because we don't need it
-                                   // anymore
+            login_->setParent(nullptr);
+            login_.release()->deleteLater();
         }
-        mainMenu_->run();
-        this->setCentralWidget(mainMenu_);
-        connect(mainMenu_, &MainMenu::quitGame, this, &TetrisWindow::quitGui);
 
-        connect(mainMenu_, &MainMenu::applyDarkTheme, this,
+        connect(mainMenu_.get(), &MainMenu::quitGame, this, &TetrisWindow::quitGui);
+
+        connect(mainMenu_.get(), &MainMenu::applyDarkTheme, this,
                 &TetrisWindow::setDarkMode);
-        connect(mainMenu_, &MainMenu::applyLightTheme, this,
+        connect(mainMenu_.get(), &MainMenu::applyLightTheme, this,
                 &TetrisWindow::setLightMode);
+        mainMenu_->run();
+        setCentralWidget(mainMenu_.get());
     }
 
-    void TetrisWindow::run(Controller &controller) {
-        login_ = new Login(controller);
-        login_->run();
-
-        mainMenu_ = new MainMenu(controller, *this);
-
-        this->setCentralWidget(login_);
-        connect(login_, &Login::loginSuccessful, this,
+    void TetrisWindow::run() {
+        login_ = std::make_unique<Login>(controller_, this);
+        mainMenu_ = std::make_unique<MainMenu>(controller_, *this);
+        
+        connect(login_.get(), &Login::loginSuccessful, this,
                 &TetrisWindow::showMainMenu);
+        login_->run();
+        setCentralWidget(login_.get());
+    }
+
+    void start() {
+
     }
 
     void TetrisWindow::quitGui() {
@@ -86,5 +96,26 @@ namespace GUI {
             QApplication::quit();
         }
     }
+
+    void TetrisWindow::backToLoginMenu() {
+        if (login_ && login_->isVisible()) {
+                return;
+        }
+        
+        if (mainMenu_) {
+            mainMenu_->setParent(nullptr);
+            mainMenu_.release()->deleteLater();
+        }
+        
+        if (login_) {
+            login_->setParent(nullptr);
+            login_.release()->deleteLater();
+        }
+        
+        run();
+
+        QMessageBox::critical(this, "Disconnected", "You have been disconnected from the server. Please login again or make sure that the server is online.");
+    }
+    
 
 } // namespace GUI

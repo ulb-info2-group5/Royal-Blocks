@@ -15,6 +15,13 @@ namespace GUI {
 
     class TetrisWindow;
 
+    /**
+     * @brief Allows to:
+     * - show the friendslist
+     * - add/remove friends from the friendslist
+     * - accept/decline friend requests
+     * - send a friend request
+     */
     class FriendsMenu : public QWidget {
         Q_OBJECT
 

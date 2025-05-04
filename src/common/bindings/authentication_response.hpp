@@ -2,6 +2,7 @@
 #define BINDINGS_AUTHENTICATION_RESPONSE_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -21,7 +22,7 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::AuthenticationResponse},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::AuthenticationResponse},
                                   {"data",
                                    {
                                        {"success", success},
@@ -29,7 +30,7 @@ namespace bindings {
         }
 
         static AuthenticationResponse from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::AuthenticationResponse) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::AuthenticationResponse) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

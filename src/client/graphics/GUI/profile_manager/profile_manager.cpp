@@ -19,7 +19,12 @@ namespace GUI {
         basicSetup();
     }
 
-    void ProfileManager::basicSetup() {
+    void ProfileManager::basicSetup() {// Create a checkbox to show/hide the password
+        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password");
+
+        newUserName_.setParent(this);
+        newPassWord_.setParent(this);
+        showPasswordCheckBox->setParent(this);
         QPushButton *submit = new QPushButton(this);
         submit->setAutoDefault(true);
         QPushButton *back = new QPushButton(this);
@@ -52,9 +57,6 @@ namespace GUI {
                 submit->click();
             }
         });
-
-        // Create a checkbox to show/hide the password
-        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
 
         // Connect the checkbox to the password field
         connect(showPasswordCheckBox, &QCheckBox::toggled, this,

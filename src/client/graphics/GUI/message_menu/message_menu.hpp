@@ -21,6 +21,9 @@ namespace GUI {
 
     class TetrisWindow;
 
+    /**
+     * @brief Message service display, allows to send and receive messages.
+     */
     class MessageMenu : public QWidget {
         Q_OBJECT
 
@@ -40,7 +43,16 @@ namespace GUI {
         void updateChat();
         void onSendMessage();
         void onBack();
+
+        /**
+         * @brief Update the friends list and update the chat
+         */
         void updateAll();
+
+        /**
+         * @brief Grab the message by the palyer and send it when the key
+         * "enter" is pressed
+         */
         void onEnterKeyPressedInInput();
 
       public:

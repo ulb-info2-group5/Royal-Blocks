@@ -3,6 +3,7 @@
 
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../tetris_royal_lib/player_state/player_state.hpp"
+#include "constants.hpp"
 #include "in_game/select_target.hpp"
 
 #include <nlohmann/json.hpp>
@@ -33,12 +34,12 @@ namespace bindings {
                 j_data["friendId"] = nullptr;
             }
 
-            return nlohmann::json{{"type", BindingType::JoinGame},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::JoinGame},
                                   {"data", j_data}};
         }
 
         static JoinGame from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::JoinGame) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::JoinGame) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

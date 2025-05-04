@@ -9,6 +9,7 @@
 #include "../in_game/game_state/game_state_viewer.hpp"
 #include "../in_game/player_state/player_state_external.hpp"
 #include "../network/network_manager.hpp"
+#include "../server_info/server_info.hpp"
 
 #include <memory>
 #include <mutex>
@@ -55,7 +56,6 @@ class Controller {
 
   private:
     boost::asio::io_context context_;
-    std::thread ioThread_;
 
     RegistrationState registrationState_;
     AuthState authState_;
@@ -73,6 +73,8 @@ class Controller {
     std::vector<std::pair<std::string, Score>> ranking_;
     std::vector<bindings::User> pendingFriendRequests_;
 
+    config::ServerInfo serverInfo_;
+
     /**
      * @brief The network manager to manage the connection with the server
      */
@@ -83,18 +85,38 @@ class Controller {
      */
     void handlePacket(const std::string_view pack);
 
+    /**
+     * @brief Udpates the given friend's state (in the friendslist).
+     * This allows us to just transfer one bindings::User when a friends goes
+     * online/offline instead of transfering the entire friendslist.
+     */
     void updateFriendState(const bindings::User &updatedFriend);
 
   public:
     /**
      * @brief Construct a new Controller object
      */
-    Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
+    Controller();
 
     /**
      * @brief Destroy the Controller object
      */
     ~Controller() = default;
+
+    /**
+     * @brief Get the configured server ip.
+     */
+    const std::string_view getServerIp() const;
+
+    /**
+     * @brief Get the configured server port.
+     */
+    uint16_t getServerPort() const;
+
+    /**
+     * @brief Return true if the client is connected to a server.
+     */
+    bool isConnected() const;
 
     /**
      * @brief Returns the registration-state.
@@ -108,8 +130,20 @@ class Controller {
 
     /**
      * @brief Run the controller to manage the game
+     *
+      * @param pAbstractDisplay The display to use (GUI or TUI)
      */
-    void run();
+    void run(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
+
+    /**
+     * @brief Sets the server's info (ip, port).
+     */
+    void setServerInfo(const config::ServerInfo &serverInfo);
+
+    /**
+     * @brief Returns the server's info.
+     */
+    config::ServerInfo getServerInfo() const;
 
     /**
      * @brief Makes a registration request to the server.

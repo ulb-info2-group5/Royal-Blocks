@@ -2,6 +2,7 @@
 #define TUI_LOGIN_MENU_HPP
 
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
 
 #include "../login_input/login_input.hpp"
 
@@ -47,21 +48,61 @@ namespace TUI {
 
         LoginState userState_;
 
+        bool showIpPortMenu_;
+
+        std::string ip_;
+        std::string port_;
+        std::string errorConnectionMessage_;
+        std::string connectionMessage_;
+        std::string errorPortMessage_;
+
         ftxui::Component buttonRegister_;
         ftxui::Component buttonLogin_;
         ftxui::Component buttonExit_;
+        ftxui::Component buttonChooseIpPort_;
+        ftxui::Component buttonBack_;
+        ftxui::Component buttonConnect_;
+
+        ftxui::Component ipInput_;
+        ftxui::Component portInput_;
 
         ftxui::Component displayWindow_;
 
+        ftxui::Component mainMenu_;
+        ftxui::Component ipPortMenu_;
+        ftxui::Component tabContainer_;
+        int selectedMenuIndex_ = 0;
+
+
         /*
-         * @brief Create the buttons needed for the login menu
+         * @brief Create the buttons and inputs needed for the login menu
          */
-        void createButtons();
+        void createButtonsInputs();
 
         /*
          * @brief Display the window of the login menu with all the components
          */
         void displayWindow();
+
+        /*
+         * @brief Get connection info from input and send it to the controller to 
+         * try to connect to the server
+         */
+        void checkConnection();
+
+        /*
+         * @brief Update the connection message to show if the connection is
+         * successful or not
+         */
+        void updateConnectedMessage();
+
+        /*
+         * @brief Create the colored connection message to show to the user
+         *
+         * @return ftxui::Element The element to render
+         */
+        ftxui::Element coloredConnectionMessage() const;
+
 
       public:
         /*

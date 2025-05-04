@@ -17,7 +17,7 @@ class Network {
     void accept();
 
   public:
-    Network(boost::asio::io_context &io, ClientManager &clientManager);
+    Network(boost::asio::io_context &io, ClientManager &clientManager, uint16_t port);
 };
 
 #endif

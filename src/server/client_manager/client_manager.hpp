@@ -31,12 +31,11 @@ class ClientManager {
     // map => { key : client id , value : the client session }
     std::unordered_map<UserID, std::shared_ptr<ClientLink>> connectedClients_;
     std::mutex mutex_;
-    DataBase database_;
-
+    AccountService accountService_;
     GamesManager gamesManager_;
     Matchmaking matchmaking_;
     SocialService socialService_;
-    AccountService accountService_;
+    
     
 
 
@@ -47,11 +46,7 @@ class ClientManager {
      * socket from the vector waitingForAuthClient
      */
     void removeClientsFromTheWaintingList();
-    /*
-     * @brief : try to create a account
-     * @return : true if success else false
-     */
-    bool attemptCreateAccount(nlohmann::json data);
+    
 
     void disconnectClient(const UserID &userID);
 
@@ -82,9 +77,9 @@ class ClientManager {
     /*
      * @brief : manage of the packet received by the clientLink
      */
-    void handlePacket(const std::string &packet, const UserID &clientId);
+    void handlePacket(const std::string &packet, const UserID &userID);
 
-    void handlePacketMenu(const std::string &packet, const UserID &clientId);
+    void handlePacketMenu(const std::string &packet, const UserID &userID);
     /*
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
@@ -101,16 +96,16 @@ class ClientManager {
      * @brief : add client in the unordered_map
      */
     void addConnection(std::shared_ptr<ClientLink> clientSession,
-                       const std::string &pseudo);
+                       const std::string &username);
 
-    bool checkCredentials(nlohmann::json data);
+    
 
 
-    bool isClientConnected(UserID userId);
+    bool isClientConnected(UserID userID);
 
-    void updateMenu(UserID userId );
+    void updateMenu(UserID userID );
 
-    void updateThisUserWithAllhisFriends(UserID userId); 
+    void updateThisUserWithAllhisFriends(UserID userID); 
     
     bindings::State getUserState(UserID userID);
 

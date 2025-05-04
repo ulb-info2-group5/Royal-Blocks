@@ -2,6 +2,7 @@
 #define BINDINGS_AUTHENTICATION_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -21,7 +22,7 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::Authentication},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Authentication},
                                   {"data",
                                    {
                                        {"nickname", nickname},
@@ -30,7 +31,7 @@ namespace bindings {
         }
 
         static Authentication from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Authentication) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Authentication) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

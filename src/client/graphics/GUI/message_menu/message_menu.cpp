@@ -14,15 +14,15 @@
 
 namespace GUI {
 
-    constexpr int FRIENDSLIST_WIDTH = 150;
-    constexpr int MESSAGE_INPUT_HEIGHT = 30;
-    constexpr char SEND_TEXT[] = "Send";
-    constexpr char BACK_TEXT[] = "Back";
-    constexpr char FRIENDSLIST_LABEL[] = "Friends List";
-    constexpr char CHAT_DISPLAY_LABEL[] = "Chat Display";
-    constexpr char MESSAGE_INPUT_LABEL[] = "Message Input";
-    constexpr char TYPE_MESSAGE_TEXT[] = "Type your message here...";
-    constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
+    inline constexpr int FRIENDSLIST_WIDTH = 150;
+    inline constexpr int MESSAGE_INPUT_HEIGHT = 30;
+    inline constexpr char SEND_TEXT[] = "Send";
+    inline constexpr char BACK_TEXT[] = "Back";
+    inline constexpr char FRIENDSLIST_LABEL[] = "Friends List";
+    inline constexpr char CHAT_DISPLAY_LABEL[] = "Chat Display";
+    inline constexpr char MESSAGE_INPUT_LABEL[] = "Message Input";
+    inline constexpr char TYPE_MESSAGE_TEXT[] = "Type your message here...";
+    inline constexpr char NO_MESSAGES_TEXT[] = "No messages yet";
 
     MessageMenu::MessageMenu(Controller &controller, TetrisWindow &tetrisWindow,
                              QWidget *parent)
@@ -101,6 +101,12 @@ namespace GUI {
     }
 
     void MessageMenu::loadFriends() {
+        int currentRow = friendsList_.currentRow();  // Current friend index
+        QVariant currentUserId;
+        if (currentRow >= 0) {
+            QListWidgetItem *currentItem = friendsList_.item(currentRow);
+            currentUserId = currentItem->data(Qt::UserRole);
+        }
         friendsList_.clear();
         std::vector<bindings::User> friends = controller_.getFriendsList();
 
@@ -110,6 +116,19 @@ namespace GUI {
             item->setData(Qt::UserRole, QVariant::fromValue(friendUser.userID));
             friendsList_.addItem(item);
         }
+
+        // Restore the previous selection if it is still valid
+        if (currentUserId.isValid()) {
+            for (int i = 0; i < friendsList_.count(); ++i) {
+                QListWidgetItem *item = friendsList_.item(i);
+                if (item->data(Qt::UserRole) == currentUserId) {
+                    friendsList_.setCurrentRow(i);
+                    return;
+                }
+            }
+        }
+
+        // If no valid selection, select the first friend
         if (friendsList_.count() > 0) {
             friendsList_.setCurrentRow(0);
         }

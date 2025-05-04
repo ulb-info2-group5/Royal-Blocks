@@ -95,7 +95,7 @@ class AccountManager {
      * @param userID ID of the user
      * @param newScore New score of the user
      */
-    void updateScore(const UserID& userID, const int newScore);
+    void updateScore(const UserID& userID, const Score& newScore);
 
     bool updateUsername(const UserID& userID , std::string &newUsername);
 

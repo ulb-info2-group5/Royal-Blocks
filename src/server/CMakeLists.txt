@@ -13,6 +13,7 @@ file(GLOB_RECURSE SERVER_SOURCES
     game_server/*.cpp
     matchmaking/*.cpp
     account_service/*.cpp
+    tetris_main_server/*.cpp
 )
 
 add_library(server_lib STATIC ${SERVER_SOURCES})

@@ -3,6 +3,7 @@
 
 #include "conversation.hpp"
 #include "user.hpp"
+#include "constants.hpp"
 
 #include <unordered_map>
 
@@ -29,7 +30,7 @@ namespace bindings {
                 j_userConv.push_back({userID, name, conversation.to_json()});
             }
 
-            return nlohmann::json{{"type", BindingType::Conversations},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Conversations},
                                   {"data",
                                    {
                                        {"userConv", j_userConv},
@@ -37,7 +38,7 @@ namespace bindings {
         }
 
         static Conversations from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Conversations) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Conversations) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

@@ -2,6 +2,7 @@
 #define BINDINGS_SELECT_TARGET_HPP
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 
 #include "../../types/types.hpp"
 
@@ -20,7 +21,7 @@ namespace bindings {
         UserID targetId;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::SelectTarget},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::SelectTarget},
                                   {"data",
                                    {
                                        {"targetId", targetId},
@@ -28,7 +29,7 @@ namespace bindings {
         }
 
         static SelectTarget from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::SelectTarget) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::SelectTarget) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

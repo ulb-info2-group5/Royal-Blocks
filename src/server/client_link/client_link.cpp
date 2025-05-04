@@ -72,7 +72,7 @@ void ClientLink::handleAuthentication(std::string &packet) {
         sendPackage(response.value());
         std::cout << response.value().dump() << std::endl;
 
-        if (response.value().at("type").get<bindings::BindingType>()== bindings::BindingType::AuthenticationResponse
+        if (response.value().at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>()== bindings::BindingType::AuthenticationResponse
             && response.value().at("data").at("success").get<bool>()) {
             authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
             userState = bindings::State::Menu;

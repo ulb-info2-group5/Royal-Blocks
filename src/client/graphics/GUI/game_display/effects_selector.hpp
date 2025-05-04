@@ -15,6 +15,11 @@
 
 namespace GUI {
 
+    /**
+     * @brief It allows to see the available effects and which one is selected.
+     * The effects an effect is clicked, a signal will be sent (in order to make
+     * the user buy the effect).
+     */
     class EffectSelector : public QFrame {
         Q_OBJECT
 

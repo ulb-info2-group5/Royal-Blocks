@@ -1,6 +1,7 @@
 #ifndef BINDINGS_HANDLE_FRIEND_REQUEST_HPP
 #define BINDINGS_HANDLE_FRIEND_REQUEST_HPP
 
+#include "constants.hpp"
 #include "user.hpp"
 
 #include <nlohmann/json.hpp>
@@ -22,7 +23,7 @@ namespace bindings {
         Action action;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::HandleFriendRequest},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::HandleFriendRequest},
                                   {"data",
                                    {
                                        {"user", userId},
@@ -31,7 +32,7 @@ namespace bindings {
         }
 
         static HandleFriendRequest from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::HandleFriendRequest) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::HandleFriendRequest) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

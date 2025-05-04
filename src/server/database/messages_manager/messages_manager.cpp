@@ -138,6 +138,7 @@ std::vector<int> MessagesManager::getAllUser(const UserID& userID){
 
 std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserID& user1ID , const UserID& user2ID){
     std::cout << "get path discussion (debug) => "<< getPathDiscussion(user1ID, user2ID) << std::endl;
+
     std::ifstream infile(getPathDiscussion(user1ID, user2ID));
     if (!infile.is_open()) {
         std::cerr << "Error opening file" << std::endl;
@@ -155,7 +156,7 @@ std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserI
 
     std::cout << "get conversation == " << jsondiscu.dump() << std::endl;
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
-    return discussion;
+    return discussion;   
 }
 
 std::vector<bindings::Conversation> MessagesManager::getAllDiscusions(const UserID& userID){

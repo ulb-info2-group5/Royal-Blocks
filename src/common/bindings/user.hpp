@@ -4,6 +4,7 @@
 #include "../tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../types/types.hpp"
 #include "binding_type.hpp"
+#include "constants.hpp"
 #include "user_state.hpp"
 
 #include <nlohmann/json.hpp>
@@ -44,12 +45,12 @@ namespace bindings {
                 j_data["gameMode"] = nullptr;
             }
 
-            return nlohmann::json{{"type", BindingType::User},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::User},
                                   {"data", j_data}};
         }
 
         static User from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::User) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::User) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

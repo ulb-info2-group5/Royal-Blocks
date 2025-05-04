@@ -7,6 +7,7 @@
 #include <string>
 
 #include "../types/types.hpp"
+#include "constants.hpp"
 
 /**
  * For an overview of the bindings system and the list of available binding, see
@@ -24,7 +25,7 @@ namespace bindings {
         std::vector<PlayerScore> ranking;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::Ranking},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Ranking},
                                   {"data",
                                    {
                                        {"ranking", ranking},
@@ -32,7 +33,7 @@ namespace bindings {
         }
 
         static Ranking from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Ranking) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Ranking) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

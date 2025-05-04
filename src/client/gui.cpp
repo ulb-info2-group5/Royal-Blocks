@@ -6,8 +6,8 @@
 
 int main(int argc, char *argv[]) {
     try {
-        Controller controller(std::make_unique<GUI::MainGui>(argc, argv));
-        controller.run();
+        Controller controller;
+        controller.run(std::make_unique<GUI::MainGui>(controller, argc, argv));
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;

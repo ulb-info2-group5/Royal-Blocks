@@ -2,6 +2,7 @@
 #define BINDINGS_CHANGE_PASSWORD_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -19,7 +20,7 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::ChangePassword},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::ChangePassword},
                                   {"data",
                                    {
                                        {"password", password},
@@ -27,7 +28,7 @@ namespace bindings {
         }
 
         static ChangePassword from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::ChangePassword) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::ChangePassword) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

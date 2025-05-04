@@ -4,6 +4,7 @@
 #include "../../tetris_lib/tetromino/abstract_tetromino.hpp"
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -21,7 +22,7 @@ namespace bindings {
         TetrominoMove tetrominoMove;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::MoveActive},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::MoveActive},
                                   {"data",
                                    {
                                        {"tetrominoMove", tetrominoMove},
@@ -29,7 +30,7 @@ namespace bindings {
         }
 
         static MoveActive from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::MoveActive) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::MoveActive) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

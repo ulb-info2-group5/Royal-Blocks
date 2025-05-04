@@ -20,12 +20,29 @@
 Le projet nécessite l'installation des programmes et bibliothèques suivants
 (les commandes fonctionnent pour Debian) :
 
-- **Make**  
+- **Make**\
   `sudo apt install make`
-- **CMake**  
+- **CMake**\
   `sudo apt install cmake`
-- **CppUnit**  
+- **Git**\
+  `sudo apt install git`
+- **CppUnit**\
   `sudo apt install libcppunit-dev`
+- **SQLite3**\
+  `sudo apt install libsqlite3-dev`
+- **Qt5**\
+  `sudo apt install qtbase5-dev`
+- **Boost (uniquement la partie réseau est nécessaire)**\
+  `sudo apt install libboost-system-dev libboost-thread-dev`
+
+D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
+
+#### Remarque
+
+**Le projet nécessite également :**
+
+- **GCC 13** ou supérieur
+- ainsi que **C++23**
 
 ### Compilation
 
@@ -41,17 +58,21 @@ make debug
 
 ## Exécution du jeu
 
-**Pour afficher correctement le jeu Tetris avec la bibliothèque Ncurses dans
-votre terminal, il faut que la variable d'environnement `TERM` soit bien mise
-à `xterm-256color`**.
-
 ### Lancer le programme
 
-Pour lancer Tetris, exécutez :
+Pour lancer Tetris, vous avez le choix entre deux interfaces :
 
-```sh
-./tetris_royal_client
-```
+- Interface graphique :
+
+  ```sh
+  ./tetris_gui
+  ```
+
+- Interface en terminal :
+
+  ```sh
+  ./tetris_tui
+  ```
 
 Pour lancer le serveur, exécutez :
 
@@ -59,29 +80,79 @@ Pour lancer le serveur, exécutez :
 ./tetris_royal_server
 ```
 
+### Choix de l'IP et du port
+
+Pour établir la communication entre le client et le serveur :
+
+#### Serveur
+
+Vous pouvez passer un port de votre choix en argument lors du lancement :
+
+```sh
+./tetris_royal_server <port>
+```
+
+Sinon, le serveur lira la variable d'environnement **SERVER_PORT**.
+Si aucune variable n'est définie, le port **1234** sera utilisé par défaut.
+
+#### Client
+
+Dans les interfaces graphique et terminal, il est possible de modifier l'IP et le port du serveur directement.
+Ces informations seront sauvegardées dans le fichier `data/config.json`.
+
+Si aucun fichier de configuration n'existe, un fichier par défaut sera automatiquement créé, en utilisant :
+
+- l'IP définie par la variable d'environnement **SERVER_IP** (ou **127.0.0.1** par défaut),
+- et le port défini par **SERVER_PORT** (ou **1234** par défaut).
+
 ### Information importante concernant l'affichage du jeu dans le terminal
 
 Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
 
-### Les différentes commandes de déplacement
+### Les différentes commandes de Tetris Royale
 
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
 Tetris :
 
-- **Rotation sens horlogique**  
-  `g`
-
-- **Rotation sens anti-horlogique**  
-  `f`
-
-- **Déplacement vers la gauche**  
+- **Déplacement vers la gauche**\
   `←`
 
-- **Déplacement vers la droite**  
+- **Déplacement vers la droite**\
   `→`
 
-- **Descendre plus rapidement**  
+- **Descente rapide**\
   `↓`
 
-- **Placer le tetromino en bas**  
-  `↑`
+- **Placer le tetromino immédiatement en bas**\
+  `ESPACE`
+
+- **Rotation dans le sens horaire**\
+  `g`
+
+- **Rotation dans le sens antihoraire**\
+  `f`
+
+- **Mettre en attente (hold) un tétrimino**\
+  `h`
+
+- **Sélectionner l'effet précédent**\
+  `e`
+
+- **Sélectionner l'effet suivant**\
+  `r`
+
+- **Vider les malus mis de côté**\
+  `t`
+
+- **Acheter l'effet sélectionné et l'envoyer directemment**
+  - `y`
+  - `clic gauche sur l'effet`
+
+- **Acheter et mettre de côté l'effet sélectionné**\
+  `u`
+
+- **Sélectionner la cible des malus**\
+  `clic gauche sur le nom de l'adversaire`
+
+- **Quitter la partie en cours**\
+  `q`

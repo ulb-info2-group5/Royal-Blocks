@@ -2,6 +2,7 @@
 #define BINDINGS_CHANGE_USERNAME_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 #include <string>
 
 #include <nlohmann/json.hpp>
@@ -19,7 +20,7 @@ namespace bindings {
         std::string username;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::ChangeUsername},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::ChangeUsername},
                                   {"data",
                                    {
                                        {"username", username},
@@ -27,7 +28,7 @@ namespace bindings {
         }
 
         static ChangeUsername from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::ChangeUsername) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::ChangeUsername) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

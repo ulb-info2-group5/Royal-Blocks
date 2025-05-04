@@ -5,6 +5,8 @@
 
 #include "../binding_type.hpp"
 
+#include "../constants.hpp"
+
 #include <nlohmann/json.hpp>
 
 /**
@@ -21,7 +23,7 @@ namespace bindings {
         bool stashForLater;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::BuyPenalty},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::BuyPenalty},
                                   {"data",
                                    {
                                        {"penaltyType", penaltyType},
@@ -30,7 +32,7 @@ namespace bindings {
         }
 
         static BuyPenalty from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::BuyPenalty) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::BuyPenalty) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

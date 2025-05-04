@@ -9,12 +9,16 @@ class Controller;
  * @brief Absstract class for displays such as TUI and GUI.
  */
 class AbstractDisplay {
+  protected:
+    Controller &controller_;
+
   public:
-    AbstractDisplay() = default;
+    AbstractDisplay() = delete;
     AbstractDisplay(const AbstractDisplay &) = default;
     AbstractDisplay(AbstractDisplay &&) = default;
-    AbstractDisplay &operator=(const AbstractDisplay &) = default;
-    AbstractDisplay &operator=(AbstractDisplay &&) = default;
+    explicit AbstractDisplay(Controller& controller);
+    AbstractDisplay &operator=(const AbstractDisplay &) = delete;
+    AbstractDisplay &operator=(AbstractDisplay &&) = delete;
 
     /**
      * @brief Forces the screen to refresh the things related to the given
@@ -25,9 +29,14 @@ class AbstractDisplay {
     /**
      * @brief Runs the display.
      */
-    virtual void run(Controller &controller) = 0;
+    virtual void run() = 0;
 
     virtual ~AbstractDisplay() = default;
+
+    /**
+     * @brief Called when the client is disconnected from the server.
+     */
+    virtual void onDisconnected() = 0;
 };
 
 #endif // ABSTRACT_DISPLAY_HPP

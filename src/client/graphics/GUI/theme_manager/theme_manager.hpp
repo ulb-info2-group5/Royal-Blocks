@@ -3,17 +3,19 @@
 
 #include <QWidget>
 
-
 namespace GUI {
 
+    /**
+     * @brief Allows to switch between light theme and dark theme.
+     */
     class ThemeManager : public QWidget {
-      Q_OBJECT
-      
+        Q_OBJECT
+
       private:
         /*
          * @brief Setup the Theme Manager Gui
          */
-        void setup();       
+        void setup();
 
       public:
         ThemeManager(QWidget *parent = nullptr);
@@ -36,6 +38,6 @@ namespace GUI {
          */
         void applyLightTheme();
     };
-}
+} // namespace GUI
 
 #endif // THEME_MANAGER_HPP

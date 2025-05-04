@@ -35,14 +35,17 @@
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
 #include "../../core/in_game/game_state/game_state.hpp"
 #include "../../graphics/common/abstract_display.hpp"
+#include "core/server_info/server_info.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <variant>
 #include <vector>
@@ -70,13 +73,13 @@ void Controller::handlePacket(const std::string_view pack) {
 
         UpdateType updateType = UpdateType::OTHER;
 
-        switch (static_cast<bindings::BindingType>(j.at("type"))) {
-        case bindings::BindingType::AuthenticationResponse: {
-            bool success = bindings::AuthenticationResponse::from_json(j).success;
-            authState_ = success ? Controller::AuthState::Authenticated
-                                 : Controller::AuthState::Unauthenticated;
-            break;
-        }
+    switch (static_cast<bindings::BindingType>(j.at(bindings::PACKET_TYPE_FIELD))) {
+    case bindings::BindingType::AuthenticationResponse: {
+        bool success = bindings::AuthenticationResponse::from_json(j).success;
+        authState_ = success ? Controller::AuthState::Authenticated
+                             : Controller::AuthState::Unauthenticated;
+        break;
+    }
 
         case bindings::BindingType::RegistrationResponse: {
             bool success = bindings::RegistrationResponse::from_json(j).success;
@@ -130,9 +133,9 @@ void Controller::handlePacket(const std::string_view pack) {
             break;
         }
 
-        default:
-            std::cerr << "unknown bindingType " << j.at("type") << std::endl;
-        }
+    default:
+        std::cerr << "unknown bindingType " << j.at(bindings::PACKET_TYPE_FIELD) << std::endl;
+    }
 
         pAbstractDisplay_->forceRefresh(updateType);
     } catch (const std::runtime_error &e) {
@@ -142,13 +145,26 @@ void Controller::handlePacket(const std::string_view pack) {
 
 // ### Public methods ###
 
-Controller::Controller(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay)
+Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
-      pAbstractDisplay_(std::move(pAbstractDisplay)),
       networkManager_{context_, [this](const std::string_view packet) {
-                          handlePacket(packet);
-                      }} {};
+                          handlePacket(packet);}} 
+    {
+    networkManager_.setDisconnectHandler([this]() {
+        std::lock_guard<std::mutex> guard(mutex_);
+        registrationState_ = Controller::RegistrationState::Unregistered;
+        authState_ = Controller::AuthState::Unauthenticated;
+        gameState_ = {};
+        friendsList_.clear();
+        conversationsById_.clear();
+        ranking_.clear();
+        pendingFriendRequests_.clear();
+        if (pAbstractDisplay_) {
+            pAbstractDisplay_->onDisconnected();
+        }
+    });
+}
 
 Controller::RegistrationState Controller::getRegistrationState() const {
     std::lock_guard<std::mutex> guard(mutex_);
@@ -160,22 +176,40 @@ Controller::AuthState Controller::getAuthState() const {
     return authState_;
 }
 
-void Controller::run() {
-    if (!networkManager_.connect()) {
-        std::cerr << "Failed to connect to server" << std::endl;
-        // TODO: throw ?
-        return;
-    };
+void Controller::run(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay) {
+    // load initial serverInfo
+    serverInfo_ = config::loadServerInfo();
+    networkManager_.start(serverInfo_);
 
-    ioThread_ = std::thread([this]() { context_.run(); });
+    std::thread ioThread([&]() { context_.run(); });
 
-    pAbstractDisplay_->run(*this);
+    pAbstractDisplay_ = std::move(pAbstractDisplay);
+    pAbstractDisplay_->run();
+
+    networkManager_.disconnect();
 
     context_.stop();
-    if (ioThread_.joinable()) {
-        ioThread_.join();
+
+    if (ioThread.joinable()) {
+        ioThread.join();
     }
 }
+
+const std::string_view Controller::getServerIp() const {
+    return serverInfo_.ip;
+}
+
+uint16_t Controller::getServerPort() const { return serverInfo_.port; }
+
+bool Controller::isConnected() const { return networkManager_.isConnected(); }
+
+void Controller::setServerInfo(const config::ServerInfo &serverInfo) {
+    serverInfo_ = serverInfo;
+    config::saveServerInfo(serverInfo);
+    networkManager_.setServerInfo(serverInfo_);
+}
+
+config::ServerInfo Controller::getServerInfo() const { return serverInfo_; }
 
 void Controller::tryRegister(const std::string &username,
                              const std::string &password) {

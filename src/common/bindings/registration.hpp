@@ -2,6 +2,7 @@
 #define BINDINGS_REGISTRATION_HPP
 
 #include "binding_type.hpp"
+#include "constants.hpp"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -21,7 +22,7 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{"type", BindingType::Registration},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Registration},
                                   {"data",
                                    {
                                        {"nickname", nickname},
@@ -30,7 +31,7 @@ namespace bindings {
         }
 
         static Registration from_json(const nlohmann::json &j) {
-            if (j.at("type") != BindingType::Registration) {
+            if (j.at(PACKET_TYPE_FIELD) != BindingType::Registration) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 

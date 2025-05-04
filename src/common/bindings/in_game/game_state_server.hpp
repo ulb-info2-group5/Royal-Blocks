@@ -4,6 +4,7 @@
 #include "../../tetris_royal_lib/game_state/game_state.hpp"
 
 #include "../binding_type.hpp"
+#include "../constants.hpp"
 #include "player_state/player_state.hpp"
 
 #include <nlohmann/json.hpp>
@@ -31,7 +32,7 @@ namespace bindings {
          */
         nlohmann::json serializeForPlayer(const GameState &gameState,
                                           UserID userID) {
-            return nlohmann::json{{"type", BindingType::GameState},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::GameState},
                                   {"data",
                                    {{
                                        "gameState",
@@ -44,7 +45,7 @@ namespace bindings {
          * format.
          */
         nlohmann::json serializeForViewer(const GameState &gameState) {
-            return nlohmann::json{{"type", BindingType::GameStateViewer},
+            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::GameStateViewer},
                                   {"data",
                                    {{
                                        "gameState",

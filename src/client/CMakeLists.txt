@@ -1,8 +1,6 @@
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 # ---------------------------
 #         Client Core
@@ -16,10 +14,6 @@ file(GLOB_RECURSE SOURCES_CLIENT_CORE_LIB
 add_library(client_core_lib STATIC ${SOURCES_CLIENT_CORE_LIB})
 target_link_libraries(client_core_lib PUBLIC tetris_royal_lib)
 target_include_directories(client_core_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-
-# TODO: NOT SURE THIS IS REQUIRED
-find_package(Boost CONFIG)
 
 
 # ---------------------------
@@ -54,7 +48,12 @@ file (GLOB_RECURSE SOURCES_CLIENT_GUI
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
+
 add_executable(tetris_gui ${SOURCES_CLIENT_GUI})
+
+# AUTOMOC only needed for Qt5 for the GUI
+set_target_properties(tetris_gui PROPERTIES AUTOMOC ON )
+
 target_link_libraries(tetris_gui
     Qt5::Widgets
     Qt5::Core

@@ -1,12 +1,14 @@
 #ifndef GUI_LOGIN_HPP
 #define GUI_LOGIN_HPP
 
+#include <qlayout.h>
 #include <string>
 
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QWidget>
+#include <QLabel>
 
 class Controller;
 
@@ -18,12 +20,19 @@ namespace GUI {
       private:
         Controller &controller_;
 
+        bool loginSuccess_;
+
+
         QStackedWidget stackedWidget_;
 
         QLineEdit usernameInputRegister_;
         QLineEdit passwordInputRegister_;
         QLineEdit usernameInputLogin_;
         QLineEdit passwordInputLogin_;
+        QLineEdit ipInput_;
+        QLineEdit portInput_;
+
+        QLabel connectionToServerLabel_;
 
         QPushButton sendButtonRegister_;
         QPushButton sendButtonLogin_;
@@ -53,6 +62,13 @@ namespace GUI {
          */
         void setup();
 
+        QString getConnectedMessage() const;
+
+        /*
+        * @brief Update the connected message draw on the main page
+        */
+        void updateConnectedMessage();
+
       private slots:
         /*
          * @brief Action to perform when exiting the application
@@ -70,16 +86,9 @@ namespace GUI {
         void on_RegisterButton_clicked();
 
         /*
-         * @brief Action to perform when the user click on the back button in
-         * the login page
+         * @brief Action to perform when the user click on the back button
          */
-        void on_BackButtonLogin_clicked();
-
-        /*
-         * @brief Action to perform when the user click on the back button in
-         * the register page
-         */
-        void on_BackButtonRegister_clicked();
+        void on_BackButton_clicked();
 
         /*
          * @brief Action to perform when the user click on the send button in
@@ -116,6 +125,16 @@ namespace GUI {
          * password input
          */
         void on_PasswordInputLogin_EnterPressed();
+
+        /*
+         * @brief Action to perform when the user click on the choose ip and port button
+         */
+        void on_ChooseIpPortButton_clicked();
+
+        /*
+         * @brief Action to perform when the user click on the connect button
+         */
+        void on_ConnectButton_clicked();
 
       public:
         Login(Controller &controller, QWidget *parent = nullptr);

@@ -32,6 +32,17 @@ namespace GUI {
         Big = 40,
     };
 
+    /**
+     * @brief Widget that displays the "in game" window.
+     * Contains multiple subwidgets such as:
+     * - Player's board
+     * - LCD with the score
+     * - LCD with the energy
+     * - The tetraminoes queue
+     * - Info about penalty and effects
+     * - available-effects
+     * - Quit bouton.
+     */
     class GameDisplay final : public QWidget, public AbstractGameDisplay {
 
         Q_OBJECT
