@@ -9,12 +9,10 @@
 bool AccountService::checkCredentials(bindings::Authentication authentication){
 
     if (!accountManager_->checkUsernameExists(authentication.nickname)) {
-        std::cout << "Invalid username" << std::endl;
         return false;
     }
     std::string storedPasswordHash = accountManager_->getUserPasswordHash(authentication.nickname);
     if (!bcrypt::validatePassword(authentication.password, storedPasswordHash)) {
-        std::cout << "Invalid password" << std::endl;
         return false;
     }
 

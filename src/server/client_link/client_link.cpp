@@ -49,7 +49,6 @@ void ClientLink::handleReading() {
     if (!checkPackage(packet)) {
         return;
     }
-    std::cout << "packet : " << packet << std::endl;
     if (getUserState() == bindings::State::Offline) {
         handleAuthentication(packet);
     } else {
@@ -59,7 +58,6 @@ void ClientLink::handleReading() {
 }
 
 void ClientLink::handleErrorReading() {
-    std::cout << "erreor reading " << std::endl;
     mustBeDeletedFromTheWaitingForAuthList_ = true;
     removeClientCallback_(clientId);
 }
@@ -70,7 +68,6 @@ void ClientLink::handleAuthentication(std::string &packet) {
     std::optional<nlohmann::json> response = authPacketHandler_(jsonPacket);
     if (response&& !(response->is_null())){
         sendPackage(response.value());
-        std::cout << response.value().dump() << std::endl;
 
         if (response.value().at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>()== bindings::BindingType::AuthenticationResponse
             && response.value().at("data").at("success").get<bool>()) {
@@ -87,7 +84,6 @@ void ClientLink::writeSocket(std::string &content) {
         socket_, boost::asio::buffer(content),
         [this](boost::system::error_code ec, std::size_t length) {
             if (!ec) {
-                std::cout << "message send from the server " << std::endl;
                 buffer_.erase(0, length);
             }
         });
@@ -107,7 +103,6 @@ ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
 }
 
 void ClientLink::start() {
-    std::cout << "start client link" << std::endl;
     read();
 }
 
@@ -129,10 +124,6 @@ bool ClientLink::shouldItBeDeletedFromTheList() {
 
 void ClientLink::sendPackage(nlohmann::json gameState) {
     buffer_ = gameState.dump().append(bindings::PACKET_DELIMITER);
-
-    std::cout << static_cast<int>(userState) << "\n" << std::endl;
-    std::cout << gameState << std::endl;
-
     writeSocket(buffer_);
 }
 

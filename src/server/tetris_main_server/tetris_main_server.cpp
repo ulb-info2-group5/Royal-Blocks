@@ -55,7 +55,6 @@ TetrisMainServer::TetrisMainServer(int argc , char* argv[]) :
 void TetrisMainServer::handler(const boost::system::error_code& error , int signal_number){
     
     if (!error){
-        std::cout << "a signal occurred" << std::endl;    
         instance_->getClientManager().shutdown();
         exit(1);
     }

@@ -41,7 +41,7 @@ bool MessagesManager::createDiscussionFile(const std::string &filePath) {
         return false;
     }
     nlohmann::json discuJson = bindings::Conversation{}.to_json();
-    std::cout << "Discussion -> tojson : " << discuJson.dump() << std::endl;
+    
     file << discuJson;
     return true;
 }
@@ -55,8 +55,6 @@ bool MessagesManager::addDiscussion(const UserID& user1ID, const UserID& user2ID
     if (!dbManager_->executeSqlChangeData(sqlRe, {user1ID, user2ID, filePath}))
         return false;
 
-    std::cout << "a conversation has been created between " << user1ID
-              << " and " << user2ID << std::endl;
     return true;
 }
 
@@ -137,8 +135,6 @@ std::vector<int> MessagesManager::getAllUser(const UserID& userID){
 }
 
 std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserID& user1ID , const UserID& user2ID){
-    std::cout << "get path discussion (debug) => "<< getPathDiscussion(user1ID, user2ID) << std::endl;
-
     std::ifstream infile(getPathDiscussion(user1ID, user2ID));
     if (!infile.is_open()) {
         std::cerr << "Error opening file" << std::endl;
@@ -154,7 +150,6 @@ std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserI
         return std::nullopt;
     }
 
-    std::cout << "get conversation == " << jsondiscu.dump() << std::endl;
     bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
     return discussion;   
 }

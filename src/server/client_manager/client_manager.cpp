@@ -98,7 +98,6 @@ void ClientManager::authSuccessCall(std::shared_ptr<ClientLink> clientLink,
 
 }
 void ClientManager::gameFindCallback(std::vector<Player> &players,GameMode gameMode) {
-    std::cout << "== game find callback succcess ===" << std::endl;
     std::shared_ptr<GameServer> gameServer = gamesManager_.startGameServeur(gameMode, players);
     for (auto player : players) {
         gamesManager_.makeClientJoinGame(connectedClients_[player.userID], gameServer);
@@ -111,7 +110,6 @@ void ClientManager::addConnection(std::shared_ptr<ClientLink> clientSession,
                                   const std::string &username) {
     std::lock_guard<std::mutex> lock(mutex_);
     const UserID id = accountService_.getUserID(username);
-    std::cout << "new client id :" << id << std::endl;
     clientSession->setClientId(id);
     connectedClients_[id] = clientSession;
     removeClientsFromTheWaintingList();
@@ -156,7 +154,6 @@ void ClientManager::handlePacket(const std::string &packet,const UserID &userID)
 
 void ClientManager::handlePacketMenu(const std::string &packet, const UserID &userID) {
     
-    std::cout << "-- handle Packet call -- " << std::endl;
     nlohmann::json jPack = nlohmann::json::parse(packet);
     bindings::BindingType type = jPack.at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>();
     switch (type) {

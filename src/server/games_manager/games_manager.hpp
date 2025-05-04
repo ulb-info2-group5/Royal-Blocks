@@ -34,7 +34,7 @@ class GamesManager {
     void joinerThreadFunc();
 
     void notifyGameFinished(int gameID);
-    static void signalHandler(int signal);
+    
 
   public:
     GamesManager( SaveScoreCallback saveScoreCallback, UpdateRankingCallback updateRankingCallback);

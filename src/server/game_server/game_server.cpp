@@ -196,17 +196,14 @@ void GameServer::run() {
 }
 
 void GameServer::sendGameStates() {
-    // std::lock_guard<std::mutex> lock(gameMutex_);
     size_t i = 0;
     while (i < pClientLinks_.size()) {
         if (std::shared_ptr<ClientLink> pClientLink = pClientLinks_[i].lock()) {
-            std::cout << pClientLink->getUserID() << std::endl;
             if (pClientLink->getUserState() == bindings::State::InGame) {
                 pClientLink->sendPackage(
                     bindings::GameStateMessage::serializeForPlayer(
                         *pGameState_, pClientLink->getUserID()));
             } else {
-                std::cout << "send viewer gameState " << std::endl;
                 pClientLink->sendPackage(
                     bindings::GameStateMessage::serializeForViewer(
                         *pGameState_));
@@ -217,8 +214,6 @@ void GameServer::sendGameStates() {
 }
 
 void GameServer::addClientLink(std::weak_ptr<ClientLink> clientLink) {
-    // std::lock_guard<std::mutex> lock(gameMutex_);
-    std::cout << "client     " << std::endl;
     pClientLinks_.push_back(clientLink);
 }
 

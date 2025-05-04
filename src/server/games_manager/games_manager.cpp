@@ -14,7 +14,6 @@ void GamesManager::joinerThreadFunc(){
             lock.unlock();
             if (gamethreads_[gameID].joinable()){
                 gamethreads_[gameID].join();
-                std::cout << "joined game : " << gameID << std::endl;
             }
             lock.lock();
         }
@@ -35,7 +34,6 @@ GamesManager::GamesManager(SaveScoreCallback saveScoreCallback,
     : saveScoreCallback_(saveScoreCallback),
       updateRankingCallback_(updateRankingCallback) {
         joinerThread_ = std::thread(&GamesManager::joinerThreadFunc, this);
-        //signal(SIGINT, &GamesManager::signalHandler);
         
       }
 
@@ -106,7 +104,6 @@ void GamesManager::makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, st
 
 
 void GamesManager::joinGameAsViewer(const std::shared_ptr<ClientLink> viewerLink, const std::shared_ptr<ClientLink> friendLink){
-    std::cout  << "join game as viewer call" << std::endl;
     if (friendLink->getUserState() == bindings::State::InGame){
         viewerLink->setUserState(bindings::State::Viewer);
         if (std::shared_ptr<GameServer> gameServer = friendLink->getGameServer().lock()){
