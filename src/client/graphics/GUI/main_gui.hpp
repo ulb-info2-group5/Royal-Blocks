@@ -5,7 +5,6 @@
 #include "tetris_window.hpp"
 
 #include <QApplication>
-#include <qobjectdefs.h>
 
 class Controller;
 
