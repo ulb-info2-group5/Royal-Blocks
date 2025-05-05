@@ -63,7 +63,7 @@ bindings::Conversations SocialService::getConversations(UserID userID, std::shar
         if (messagesManager_->isThereDiscussion(userID, id)){ // TODO: Is this still necessary bc we now use option ?
             std::optional<bindings::Conversation> optDiscussion = messagesManager_->getDiscussion(userID, id);
             if (optDiscussion.has_value()) {
-                conversations.conversationsById.insert({id, {accountManager->getUsername(id), optDiscussion.value()}});
+                conversations.conversationsById.insert({static_cast<unsigned long>(id), {accountManager->getUsername(id), optDiscussion.value()}});
             }
         }
     }
