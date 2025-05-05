@@ -1,10 +1,11 @@
 #ifndef TIMED_PENALTY_HPP
 #define TIMED_PENALTY_HPP
 
-#include "../../../../common/tetris_royal_lib/effect/penalty/penalty_type.hpp"
 #include "abstract_timed_effect.hpp"
 
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+enum class PenaltyType;
+
 
 namespace client {
 

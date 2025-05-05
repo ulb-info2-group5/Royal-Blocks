@@ -1,7 +1,5 @@
 #include "client_link.hpp"
 
-#include "../../common/bindings/constants.hpp"
-
 #include <iostream>
 
 // ====== tcp connection class ======

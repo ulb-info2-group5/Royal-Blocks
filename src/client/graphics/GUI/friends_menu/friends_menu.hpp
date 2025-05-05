@@ -4,9 +4,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QPushButton>
 #include <QStackedWidget>
-#include <QVBoxLayout>
 #include <QWidget>
 
 class Controller;

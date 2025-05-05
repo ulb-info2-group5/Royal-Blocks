@@ -9,10 +9,8 @@
 #include "game_state/game_state.hpp"
 #include "player_state/player_state.hpp"
 
-#include <algorithm>
 #include <iostream>
 #include <memory>
-#include <ostream>
 #include <vector>
 
 // ----------------------------------------------------------------------------

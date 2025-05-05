@@ -1,5 +1,7 @@
 #include "player_state_external.hpp"
 
+#include <nlohmann/json.hpp>
+
 void client::PlayerStateExternal::deserialize(const nlohmann::json &j) {
     j.at("playerID").get_to(userID);
     j.at("score").get_to(score);

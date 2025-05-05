@@ -5,6 +5,9 @@
 #include "../tetromino_queue/tetromino_queue.hpp"
 #include "abstract_tetris.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+#include <optional>
+
 namespace client {
 
     /**

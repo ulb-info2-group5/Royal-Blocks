@@ -1,13 +1,22 @@
 #include "controller.hpp"
 
-#include "../in_game/player_state/player_state_external.hpp"
-#include "../network/network_manager.hpp"
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+#include <stdexcept>
+#include <thread>
+#include <type_traits>
 
 #include "../../../common/bindings/abort_matchmaking.hpp"
 #include "../../../common/bindings/authentication.hpp"
 #include "../../../common/bindings/authentication_response.hpp"
+#include "../../../common/bindings/binding_type.hpp"
 #include "../../../common/bindings/change_password.hpp"
 #include "../../../common/bindings/change_username.hpp"
+#include "../../../common/bindings/constants.hpp"
 #include "../../../common/bindings/conversations.hpp"
 #include "../../../common/bindings/create_game.hpp"
 #include "../../../common/bindings/friend_request.hpp"
@@ -22,22 +31,28 @@
 #include "../../../common/bindings/in_game/move_active.hpp"
 #include "../../../common/bindings/in_game/quit_game.hpp"
 #include "../../../common/bindings/in_game/rotate_active.hpp"
+#include "../../../common/bindings/in_game/select_target.hpp"
 #include "../../../common/bindings/join_game.hpp"
 #include "../../../common/bindings/message.hpp"
 #include "../../../common/bindings/pending_friend_requests.hpp"
+#include "../../../common/bindings/ranking.hpp"
 #include "../../../common/bindings/registration.hpp"
 #include "../../../common/bindings/registration_response.hpp"
 #include "../../../common/bindings/remove_friend.hpp"
+#include "../../../common/bindings/user.hpp"
 #include "../../../common/bindings/view_game.hpp"
-#include "../../../common/tetris_lib/tetromino/abstract_tetromino.hpp"
-#include "../../../common/tetris_royal_lib/effect_price/effect_price.hpp"
-#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
+#include "../../../common/types/types.hpp"
+#include "../network/network_manager.hpp"
+#include "core/controller/update_type.hpp"
+#include "core/in_game/game_state/game_state.hpp"
+#include "core/in_game/game_state/game_state_viewer.hpp"
 #include "core/server_info/server_info.hpp"
+#include "game_mode/game_mode.hpp"
+#include "graphics/common/abstract_display.hpp"
+#include "tetromino/abstract_tetromino.hpp"
 
-#include <string_view>
-#include <thread>
-#include <variant>
+enum class BonusType;
+enum class PenaltyType;
 
 // ### Private methods ###
 

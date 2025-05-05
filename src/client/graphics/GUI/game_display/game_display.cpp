@@ -3,33 +3,10 @@
 #include "../../../core/controller/controller.hpp"
 #include "../main_gui.hpp"
 #include "../qt_config/qt_config.hpp"
-#include "effect/effect_type.hpp"
-#include "effect_info.hpp"
-#include "game_mode/game_mode.hpp"
-#include "graphics/GUI/game_display/opponents_grid.hpp"
-#include "graphics/common/abstract_game_display.hpp"
-#include "vec2/vec2.hpp"
 
-#include <optional>
-#include <string>
-
-#include <QBoxLayout>
-#include <QChar>
-#include <QColor>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QImage>
-#include <QKeyEvent>
-#include <QKeySequence>
-#include <QLabel>
 #include <QPainter>
-#include <QPixmap>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QWidget>
 #include <QTimer>
-#include <QDebug>
+#include <QKeyEvent>
 
 namespace GUI {
 

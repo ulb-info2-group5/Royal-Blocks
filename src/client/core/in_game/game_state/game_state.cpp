@@ -1,5 +1,16 @@
 #include "game_state.hpp"
-#include "effect/bonus/bonus_type.hpp"
+
+#include <map>
+#include <nlohmann/detail/iterators/iter_impl.hpp>
+#include <nlohmann/json.hpp>
+#include <utility>
+#include <vector>
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+#include "core/in_game/player_tetris/player_tetris_external.hpp"
+#include "core/in_game/player_tetris/player_tetris_self.hpp"
+
+enum class BonusType;
+enum class PenaltyType;
 
 void client::GameState::deserialize(const nlohmann::json &j) {
     self.deserialize(j.at("self"));

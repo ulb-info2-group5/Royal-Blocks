@@ -4,6 +4,7 @@
 #include "../tetromino/tetromino.hpp"
 
 #include <deque>
+#include <nlohmann/json_fwd.hpp>
 
 namespace client {
 

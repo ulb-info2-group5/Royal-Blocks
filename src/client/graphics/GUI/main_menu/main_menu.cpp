@@ -1,13 +1,6 @@
 #include "main_menu.hpp"
 
-#include "../friends_menu/friends_menu.hpp"
-#include "../game_menu/game_menu.hpp"
-#include "../main_gui.hpp"
-#include "../message_menu/message_menu.hpp"
-#include "../profile_manager/profile_manager.hpp"
 #include "../qt_config/qt_config.hpp"
-#include "../theme_manager/theme_manager.hpp"
-#include "graphics/GUI/game_display/game_display.hpp"
 
 #include <QMessageBox>
 #include <QPushButton>

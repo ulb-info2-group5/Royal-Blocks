@@ -5,6 +5,8 @@
 #include "../tetris/tetris_external.hpp"
 #include "abstract_player_tetris.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+
 namespace client {
 
     /**

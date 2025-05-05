@@ -5,8 +5,6 @@
 #include "../tetromino/abstract_tetromino.hpp"
 #include "vec2/vec2.hpp"
 
-#include <cstdint>
-#include <cstdlib>
 #include <memory>
 
 /*--------------------------------------------------

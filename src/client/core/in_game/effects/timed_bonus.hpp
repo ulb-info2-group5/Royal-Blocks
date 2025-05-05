@@ -1,12 +1,10 @@
 #ifndef TIMED_BONUS_HPP
 #define TIMED_BONUS_HPP
 
-#include "../../../../common/tetris_royal_lib/effect/bonus/bonus_type.hpp"
 #include "abstract_timed_effect.hpp"
-
 #include "nlohmann/json_fwd.hpp"
 
-#include <nlohmann/json.hpp>
+enum class BonusType;
 
 namespace client {
 

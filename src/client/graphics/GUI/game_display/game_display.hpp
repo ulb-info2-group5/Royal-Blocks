@@ -1,25 +1,16 @@
 #ifndef GUI_GAME_DISPLAY_HPP
 #define GUI_GAME_DISPLAY_HPP
 
-#include "../../../../common/types/types.hpp"
 #include "../../common/abstract_game_display.hpp"
 #include "effect_info.hpp"
 #include "effects_selector.hpp"
 #include "opponents_grid.hpp"
 
-#include <QColor>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QImage>
 #include <QLCDNumber>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPixmap>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QStackedWidget>
-#include <QVBoxLayout>
 #include <QWidget>
+#include <QStackedWidget>
+#include <QLabel>
+
 
 class Controller;
 

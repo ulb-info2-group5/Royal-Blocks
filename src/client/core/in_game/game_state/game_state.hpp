@@ -4,6 +4,8 @@
 #include "../player_tetris/player_tetris_self.hpp"
 #include "abstract_game_state.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+
 namespace client {
 
     /**

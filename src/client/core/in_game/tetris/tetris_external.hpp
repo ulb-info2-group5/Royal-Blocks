@@ -3,6 +3,8 @@
 
 #include "abstract_tetris.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+
 namespace client {
 
     /**

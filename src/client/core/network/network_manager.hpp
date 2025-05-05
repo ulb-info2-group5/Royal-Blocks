@@ -1,10 +1,20 @@
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 
-#include <boost/asio.hpp>
-#include <boost/asio/io_context.hpp>
+#include <stdint.h>
+#include <boost/asio/ip/tcp.hpp>                // pour tcp
+#include <boost/asio/steady_timer.hpp>
+#include <boost/asio/detail/impl/epoll_reactor.hpp>
+#include <boost/asio/detail/impl/reactive_socket_service_base.ipp>
+#include <boost/asio/impl/any_io_executor.ipp>
+#include <chrono>
+#include <functional>
+#include <string>
+#include <string_view>
 
-#include "core/server_info/server_info.hpp"
+namespace boost { namespace asio { class io_context; } }
+namespace config { struct ServerInfo; }
+
 
 class NetworkManager {
   private:

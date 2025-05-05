@@ -1,26 +1,35 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../../../common/bindings/conversation.hpp"
-#include "../../../common/bindings/ranking.hpp"
-#include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
-#include "../../graphics/common/abstract_display.hpp"
-#include "../in_game/game_state/game_state.hpp"
-#include "../in_game/game_state/game_state_viewer.hpp"
-#include "../in_game/player_state/player_state_external.hpp"
-#include "../network/network_manager.hpp"
-#include "../server_info/server_info.hpp"
+#include <stddef.h>                                     
+#include <stdint.h>                                     
+#include <boost/asio/impl/io_context.ipp>               
+#include <boost/asio/io_context.hpp>                    
+#include <memory>                                       
+#include <mutex>                                        
+#include <optional>                                     
+#include <string>                                       
+#include <string_view>                                  
+#include <unordered_map>                                
+#include <utility>                                      
+#include <variant>                                      
+#include <vector>                                       
+#include "../../../common/bindings/conversation.hpp"    
+#include "../../../common/bindings/user.hpp"            
+#include "../../../common/types/types.hpp"              
+#include "../in_game/game_state/game_state.hpp"         
+#include "../in_game/game_state/game_state_viewer.hpp"  
+#include "../network/network_manager.hpp"               
+#include "core/server_info/server_info.hpp"             
+#include "effect/effect_type.hpp"                       
 
-#include <memory>
-#include <mutex>
-#include <optional>
-#include <string>
-#include <utility>
-#include <vector>
+
+class AbstractDisplay;
+enum class GameMode;
+enum class TetrominoMove;
+
 
 using NameConversation = std::pair<std::string, bindings::Conversation>;
-
-struct Message;
 
 enum class UiChoice {
     GUI,

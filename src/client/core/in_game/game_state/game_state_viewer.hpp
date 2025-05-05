@@ -3,6 +3,8 @@
 
 #include "abstract_game_state.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+
 namespace client {
 
     /**

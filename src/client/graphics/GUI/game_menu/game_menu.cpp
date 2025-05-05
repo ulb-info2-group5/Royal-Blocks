@@ -7,8 +7,6 @@
 #include "../qt_config/qt_config.hpp"
 #include "graphics/GUI/game_display/game_display.hpp"
 
-#include <QMessageBox>
-#include <QSlider>
 #include <QTimer>
 
 namespace GUI {

@@ -1,9 +1,8 @@
 #ifndef CLIENT_PLAYER_STATE_EXTERNAL_HPP
 #define CLIENT_PLAYER_STATE_EXTERNAL_HPP
 
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
-#include "../../../../common/types/types.hpp"
 #include "abstract_player_state.hpp"
 
 namespace client {
