@@ -80,7 +80,7 @@ namespace GUI {
 
         void tetrominoQueue();
 
-        QPixmap *createOppBoardMap(size_t index, CellSize size);
+        QPixmap createOppBoardMap(size_t index, CellSize size);
 
         void oppBoards();
 

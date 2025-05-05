@@ -81,16 +81,16 @@ namespace GUI {
         return returnValue;
     }
 
-    QPixmap *GameDisplay::createOppBoardMap(size_t index, CellSize size) {
+    QPixmap GameDisplay::createOppBoardMap(size_t index, CellSize size) {
         size_t cellSize = static_cast<size_t>(size);
         size_t height = getBoardHeight();
         size_t width = getBoardWidth();
 
-        QPixmap *oppBoardMap = new QPixmap(cellSize * width, cellSize * height);
+        QPixmap oppBoardMap = QPixmap(cellSize * width, cellSize * height);
 
-        QPainter painter(oppBoardMap);
+        QPainter painter(&oppBoardMap);
         painter.setRenderHint(QPainter::Antialiasing, true);
-        oppBoardMap->fill(Qt::black);
+        oppBoardMap.fill(Qt::black);
 
         for (uint32_t y = 0; y < height; ++y) {
             for (uint32_t x = 0; x < width; ++x) {
@@ -127,10 +127,10 @@ namespace GUI {
                                     ? CellSize::Big
                                     : CellSize::Small;
 
-            QPixmap *opponentBoardMap = createOppBoardMap(i, cellSize);
+            QPixmap opponentBoardMap = createOppBoardMap(i, cellSize);
 
             opponentsGrid_.setNthOpponent(
-                i, opponentBoardMap,
+                i, &opponentBoardMap,
                 QString::fromStdString(getOpponentUsername(i)));
 
             if (!isSpectating()) {
