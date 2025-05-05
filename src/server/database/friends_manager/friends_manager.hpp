@@ -2,9 +2,11 @@
 #define FRIENDS_MANAGER_HPP
 
 #include <memory>
-#include <sqlite3.h>
+#include <vector>    
 
-#include "../database_manager/database_manager.hpp"
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+
+class DatabaseManager;
 
 class FriendsManager {
   private:

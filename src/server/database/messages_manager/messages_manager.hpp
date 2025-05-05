@@ -1,14 +1,23 @@
 #ifndef MESSAGE_MANAGER_HPP
 #define MESSAGE_MANAGER_HPP
 
-#include "../../common/bindings/conversation.hpp"
+                                               
+#include <memory>                                             
+#include <nlohmann/detail/iterators/iter_impl.hpp>            
+#include <nlohmann/detail/json_ref.hpp>                       
+#include <nlohmann/json.hpp>                                  
+#include <nlohmann/json_fwd.hpp>                              
+#include <optional>                                           
+#include <string>                                             
+#include <vector>                                             
 
-#include "../database_manager/database_manager.hpp"
-#include <memory>
-#include <nlohmann/json.hpp>
-#include <sqlite3.h>
+#include "../../../common/bindings/conversation.hpp"             
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+
+class DatabaseManager;
 
 class MessagesManagerTest;
+
 
 struct Message {
     UserID senderID;

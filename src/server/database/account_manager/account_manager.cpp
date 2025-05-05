@@ -1,8 +1,11 @@
 #include "account_manager.hpp"
-#include <cstddef>
-#include <iostream>
-#include <memory>
-#include <string>
+
+#include <ctype.h>                              
+#include <iostream>                             
+#include <memory>                               
+#include <string>                               
+
+#include "../database_manager/database_manager.hpp"
 
 const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
 

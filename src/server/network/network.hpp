@@ -1,10 +1,14 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include <boost/asio.hpp>
-#include <nlohmann/json.hpp>
+#include <stdint.h>
+#include <boost/asio/detail/impl/reactive_socket_service_base.ipp>
+#include <boost/asio/impl/any_io_executor.ipp>
+#include <boost/asio/ip/tcp.hpp>
 
-#include "../client_manager/client_manager.hpp"
+class ClientManager;
+
+namespace boost { namespace asio { class io_context; } }
 
 using boost::asio::ip::tcp;
 

@@ -1,10 +1,14 @@
 #include "messages_manager.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <ostream>
-#include <string>
 #include <optional>
+#include <stdexcept>
+#include <string>
+
+#include "/home/ethan/code/group-5/src/common/bindings/conversation.hpp"
+#include "database_manager/database_manager.hpp"
 
 #define CHAT_PATH "data/chat/user"
 

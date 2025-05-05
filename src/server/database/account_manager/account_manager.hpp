@@ -1,11 +1,14 @@
 #ifndef ACCOUNT_MANAGER_HPP
 #define ACCOUNT_MANAGER_HPP
 
-#include <memory>
-#include <sqlite3.h>
-#include <string>
+#include <stddef.h>                                           
+#include <memory>                                             
+#include <string>                                             
+#include <utility>                                            
+#include <vector>                                             
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
 
-#include "../database_manager/database_manager.hpp"
+class DatabaseManager;
 
 /**
  * @brief Status of the account creation (success, failure, etc.)

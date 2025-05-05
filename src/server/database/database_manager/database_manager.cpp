@@ -1,10 +1,12 @@
 #include "database_manager.hpp"
 
-#include <iostream>
-#include <sqlite3.h>
-#include <string>
-#include <vector>
-#include <filesystem>
+#include <sqlite3.h>                                          
+#include <filesystem>                                         
+#include <iostream>                                           
+#include <string>                                             
+#include <vector>                  
+
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
 
 #define DATABASE_PATH "data/users.db"
 

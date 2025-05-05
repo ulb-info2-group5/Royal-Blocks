@@ -1,12 +1,14 @@
 #ifndef DATABASE_MANAGER_HPP
 #define DATABASE_MANAGER_HPP
 
-#include <sqlite3.h>
-#include <string>
-#include <variant>
-#include <vector>
-#include "../../common/types/types.hpp"
+#include <sqlite3.h>                   
+#include <stddef.h>                    
+#include <string>                      
+#include <utility>                     
+#include <variant>                     
+#include <vector>       
 
+#include "../../../common/types/types.hpp"
 
 class DatabaseManager {
   private:

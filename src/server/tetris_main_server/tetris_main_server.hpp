@@ -1,7 +1,15 @@
-#include "database/database_manager/database_manager.hpp"
-#include "network/network.hpp"
-#include <cstdint>
-#include <memory>
+#ifndef TETRIS_MAIN_SERVER_HPP
+#define TETRIS_MAIN_SERVER_HPP
+
+#include <boost/asio/impl/io_context.ipp>    
+#include <boost/asio/io_context.hpp>         
+#include <boost/system/detail/error_code.hpp>
+#include <cstdint>                           
+#include <memory>                            
+
+#include "../client_manager/client_manager.hpp" 
+
+class DatabaseManager;
 
 constexpr uint16_t DEFAULT_PORT = 1234;
 constexpr char ENV_VAR_PORT[] = "SERVER_PORT";
@@ -59,3 +67,5 @@ class TetrisMainServer{
         ClientManager& getClientManager();
 
 };
+
+#endif // TETRIS_MAIN_SERVER_HPP

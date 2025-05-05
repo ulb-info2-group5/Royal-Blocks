@@ -1,5 +1,27 @@
-
 #include "network.hpp"
+
+#include <boost/asio/associated_cancellation_slot.hpp>        
+#include <boost/asio/async_result.hpp>                        
+#include <boost/asio/detail/handler_cont_helpers.hpp>         
+#include <boost/asio/detail/impl/scheduler.ipp>               
+#include <boost/asio/detail/impl/service_registry.hpp>        
+#include <boost/asio/execution/context_as.hpp>                
+#include <boost/asio/execution/prefer_only.hpp>               
+#include <boost/asio/impl/execution_context.hpp>              
+#include <boost/asio/impl/io_context.hpp>                     
+#include <boost/asio/io_context.hpp>                          
+#include <boost/asio/ip/detail/impl/endpoint.ipp>             
+#include <boost/system/detail/error_code.hpp>                 
+#include <memory>                                             
+#include <nlohmann/json.hpp>                                  
+#include <nlohmann/json_fwd.hpp>                              
+#include <optional>                                           
+#include <string>                                             
+#include <utility>                                            
+
+#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+#include "../client_link/client_link.hpp"                        
+#include "../client_manager/client_manager.hpp"                  
 
 using json = nlohmann::json;
 

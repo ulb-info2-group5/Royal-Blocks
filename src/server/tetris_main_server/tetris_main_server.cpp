@@ -1,5 +1,8 @@
 #include "tetris_main_server.hpp"
 
+#include "network/network.hpp"
+#include "../database/database_manager/database_manager.hpp"
+
 /*Publics methods*/
 
 uint16_t TetrisMainServer::getEnvPort() {
@@ -52,8 +55,7 @@ TetrisMainServer::TetrisMainServer(int argc , char* argv[]) :
     {
     instance_ = this;
 }
-void TetrisMainServer::handler(const boost::system::error_code& error , int signal_number){
-    
+void TetrisMainServer::handler(const boost::system::error_code& error , int /*signal_number*/){
     if (!error){
         instance_->getClientManager().shutdown();
         exit(1);

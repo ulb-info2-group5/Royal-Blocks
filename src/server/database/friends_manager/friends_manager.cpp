@@ -1,7 +1,9 @@
 #include "friends_manager.hpp"
-#include <iostream>
-#include <ostream>
-#include <string>
+
+#include <iostream>                             
+#include <string>                               
+
+#include "../database_manager/database_manager.hpp"
 
 // ### Constructor ###
 FriendsManager::FriendsManager(std::shared_ptr<DatabaseManager> &db)
