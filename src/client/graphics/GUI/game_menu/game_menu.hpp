@@ -7,8 +7,6 @@
 #include "../../../../common/types/types.hpp"
 #include "../game_display/game_display.hpp"
 
-#include <memory>
-
 #include <QLabel>
 #include <QListWidget>
 #include <QPushButton>
@@ -16,6 +14,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
+#include<QPointer>
 
 class Controller;
 
@@ -37,7 +36,7 @@ namespace GUI {
       private:
         Controller &controller_;
         TetrisWindow &tetrisWindow_;
-        std::unique_ptr<GameDisplay> gameDisplay_;
+        QPointer<GameDisplay> gameDisplay_;
 
         QStackedWidget stack_;
         QWidget selectModeWidget_;

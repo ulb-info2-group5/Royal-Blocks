@@ -6,10 +6,9 @@
 #include "main_menu/main_menu.hpp"
 
 #include <QMainWindow>
-#include <QMessageBox>
 #include <QSettings>
-#include <QStackedWidget>
-#include <QStyleFactory>
+#include <QPointer>
+
 
 enum class UpdateType; // Forward declaration
  
@@ -27,9 +26,9 @@ namespace GUI {
       private:
         Controller &controller_;
 
-        std::unique_ptr<Login> login_;
+        QPointer<Login> login_;
 
-        std::unique_ptr<MainMenu> mainMenu_;
+        QPointer<MainMenu> mainMenu_;
 
         QSettings settings_;
 

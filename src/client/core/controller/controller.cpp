@@ -33,22 +33,11 @@
 #include "../../../common/tetris_royal_lib/effect_price/effect_price.hpp"
 #include "../../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 #include "../../../common/tetris_royal_lib/player_state/player_state.hpp"
-#include "../../core/in_game/game_state/game_state.hpp"
-#include "../../graphics/common/abstract_display.hpp"
 #include "core/server_info/server_info.hpp"
 
-#include <algorithm>
-#include <cstdint>
-#include <iterator>
-#include <memory>
-#include <mutex>
-#include <optional>
-#include <ostream>
-#include <string>
 #include <string_view>
 #include <thread>
 #include <variant>
-#include <vector>
 
 // ### Private methods ###
 

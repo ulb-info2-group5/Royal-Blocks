@@ -234,7 +234,7 @@ namespace GUI {
                 createAndShowGameDisplay();
             }
         });
-        gameCheckTimer->start(500); // Check every 500ms
+        gameCheckTimer->start(100); // Check every 100ms
     }
 
     void GameMenu::updateFriendsList() {
@@ -265,17 +265,18 @@ namespace GUI {
     }
 
     void GameMenu::createAndShowGameDisplay() {
-        gameDisplay_ =
-            std::make_unique<GameDisplay>(controller_, tetrisWindow_, this);
-        connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
-            stack_.removeWidget(gameDisplay_.get());
-            gameDisplay_.reset();
+        gameDisplay_ = new GameDisplay(controller_, tetrisWindow_, this);
+        connect(gameDisplay_, &GameDisplay::backToMainMenu, this, [this] {
+            stack_.removeWidget(gameDisplay_);
+            gameDisplay_->deleteLater();
+            gameDisplay_.clear(); 
             QTimer::singleShot(0, this, [this]() {
                 emit backToMainMenu();
             });
         });
-        stack_.addWidget(gameDisplay_.get());
-        stack_.setCurrentWidget(gameDisplay_.get());
+        stack_.addWidget(gameDisplay_);
+        stack_.setCurrentWidget(gameDisplay_);
+        gameDisplay_->setFocus(Qt::ActiveWindowFocusReason);
     }
 
     // Slot implementations
@@ -331,8 +332,8 @@ namespace GUI {
         } else if (stack_.currentWidget() == &friendsListWidget_) {
             showJoinTypeScreen();
         } else if (stack_.currentWidget() == &waitingWidget_) {
-            controller_.abortMatchmaking();
-            showSelectModeScreen();
+            controller_.abortMatchmaking(); 
+            showPlayerCountScreen();
         }
     }
 

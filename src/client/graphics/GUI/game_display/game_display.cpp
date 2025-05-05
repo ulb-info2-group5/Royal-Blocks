@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QTimer>
+#include <QDebug>
 
 namespace GUI {
 
@@ -521,6 +522,10 @@ namespace GUI {
         mainLayout->setAlignment(Qt::AlignCenter);
 
         setLayout(mainLayout);
+
+        setFocusPolicy(Qt::StrongFocus);
+        setFocus(Qt::OtherFocusReason);
+
 
         // --------------------------------------
 

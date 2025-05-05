@@ -5,6 +5,8 @@
 #include "qt_config/qt_config.hpp"
 
 #include <QTimer>
+#include <QMessageBox>
+#include <QStyleFactory>
 
 namespace GUI {
 
@@ -67,30 +69,31 @@ namespace GUI {
     }
 
     void TetrisWindow::showMainMenu() {
-        mainMenu_ = std::make_unique<MainMenu>(controller_, *this, this);
+        mainMenu_ = new MainMenu(controller_, *this, this);
         mainMenu_->run();
-        setCentralWidget(mainMenu_.get());
+        setCentralWidget(mainMenu_);
 
-        connect(mainMenu_.get(), &MainMenu::quitGame, this, &TetrisWindow::quitGui);
+        connect(mainMenu_, &MainMenu::quitGame, this, &TetrisWindow::quitGui);
 
-        connect(mainMenu_.get(), &MainMenu::applyDarkTheme, this,
+        connect(mainMenu_, &MainMenu::applyDarkTheme, this,
                 &TetrisWindow::setDarkMode);
-        connect(mainMenu_.get(), &MainMenu::applyLightTheme, this,
+        connect(mainMenu_, &MainMenu::applyLightTheme, this,
                 &TetrisWindow::setLightMode);
 
-        login_.reset();
+        login_->deleteLater();
+        login_.clear();
     }
 
     void TetrisWindow::run() {
-        login_ = std::make_unique<Login>(controller_, this);
+        login_ = new Login(controller_, this);
         
-        connect(login_.get(), &Login::loginSuccessful, this,
+        connect(login_, &Login::loginSuccessful, this,
                 &TetrisWindow::showMainMenu);
 
-        connect(login_.get(), &Login::quitGame, this, &TetrisWindow::quitGui);
+        connect(login_, &Login::quitGame, this, &TetrisWindow::quitGui);
         
         login_->run();
-        setCentralWidget(login_.get());
+        setCentralWidget(login_);
     }
 
     void TetrisWindow::quitGui() {
@@ -109,8 +112,10 @@ namespace GUI {
         }
         
         setCentralWidget(nullptr);
-        mainMenu_.reset();
-        login_.reset();
+        mainMenu_->deleteLater();
+        mainMenu_.clear();
+        login_->deleteLater();
+        login_.clear();
         run();
         QMessageBox::critical(this, "Disconnected", "You have been disconnected from the server. Please login again or make sure that the server is online.");
     }

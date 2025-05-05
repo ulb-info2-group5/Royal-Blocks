@@ -8,6 +8,7 @@
 
 #include <QPushButton>
 #include <QTimer>
+#include <QMessageBox>
 
 namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
