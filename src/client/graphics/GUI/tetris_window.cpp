@@ -108,14 +108,21 @@ namespace GUI {
 
     void TetrisWindow::backToLoginMenu() {
         if (login_ && login_->isVisible()) {
-                return;
+            return;
         }
         
         setCentralWidget(nullptr);
-        mainMenu_->deleteLater();
-        mainMenu_.clear();
-        login_->deleteLater();
-        login_.clear();
+
+        if (mainMenu_) {
+            mainMenu_->deleteLater();
+            mainMenu_ = nullptr;
+        }
+        
+        if (login_) {
+            login_->deleteLater();
+            login_ = nullptr;
+        }
+        
         run();
         QMessageBox::critical(this, "Disconnected", "You have been disconnected from the server. Please login again or make sure that the server is online.");
     }

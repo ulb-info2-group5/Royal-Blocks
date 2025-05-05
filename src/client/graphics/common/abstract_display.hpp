@@ -1,9 +1,9 @@
 #ifndef ABSTRACT_DISPLAY_HPP
 #define ABSTRACT_DISPLAY_HPP
 
-#include "../../core/controller/update_type.hpp"
-
 class Controller;
+
+enum class UpdateType;
 
 /**
  * @brief Absstract class for displays such as TUI and GUI.

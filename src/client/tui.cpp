@@ -1,8 +1,11 @@
-#include "core/controller/controller.hpp"
-#include "graphics/TUI/main_tui.hpp"
-
-#include <iostream>
-#include <memory>
+#include <stdlib.h>                           
+#include <exception>                          
+#include <iostream>                           
+#include <memory>               
+              
+#include "core/controller/controller.hpp"     
+#include "graphics/TUI/main_tui.hpp"          
+#include "graphics/common/abstract_display.hpp"
 
 int main(void) {
     try {

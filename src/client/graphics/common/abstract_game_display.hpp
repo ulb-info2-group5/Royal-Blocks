@@ -1,14 +1,21 @@
 #ifndef ABSTRACT_GAME_DISPLAY_HPP
 #define ABSTRACT_GAME_DISPLAY_HPP
 
-#include "../../../common/types/types.hpp"
-#include "../../core/in_game/game_state/game_state.hpp"
-#include "../../core/in_game/game_state/game_state_viewer.hpp"
-
-#include <optional>
-#include <string_view>
+#include <stddef.h>                        
+#include <optional>                        
+#include <string>                          
+#include <string_view>                     
+#include <utility>                         
+#include <variant>                         
+#include "../../../common/types/types.hpp" 
+#include "effect/effect_type.hpp"          
+#include "game_mode/game_mode.hpp"         
+#include "core/in_game/game_state/game_state.hpp"
+#include "core/in_game/game_state/game_state_viewer.hpp"
 
 class Controller;
+
+namespace client { struct Tetromino; }
 
 /**
  * @brief Abstract base class for GameDisplay implementations (TUI & GUI).
