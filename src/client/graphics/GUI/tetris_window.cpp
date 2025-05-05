@@ -99,8 +99,6 @@ namespace GUI {
             this, "Quit", "Are you sure you want to quit the game ?",
             QMessageBox::Yes | QMessageBox::No);
         if (confirmExit == QMessageBox::Yes) {
-            login_.reset();
-            mainMenu_.reset();
             QApplication::quit();
         }
     }

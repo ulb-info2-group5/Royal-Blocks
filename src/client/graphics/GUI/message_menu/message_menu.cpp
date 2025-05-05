@@ -9,7 +9,6 @@
 #include <QBoxLayout>
 #include <QMessageBox>
 #include <QScrollBar>
-#include <QThread>
 #include <QTimer>
 
 namespace GUI {

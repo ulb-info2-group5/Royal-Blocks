@@ -76,24 +76,27 @@ namespace GUI {
 
         controller_.tryRegister(username.toStdString(), password.toStdString());
 
-        int numberOfAttempts = 0;
-        while (numberOfAttempts < 10) {
+        int attempts = 0;
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this, timer, attempts]() mutable {
             if (controller_.getRegistrationState() == Controller::RegistrationState::Registered) {
-                QMessageBox::information(this, "Register successful",
-                    "You have successfully registered.");
+                timer->stop();
+                timer->deleteLater();
+                QMessageBox::information(this, "Register successful", "You have successfully registered.");
                 stackedWidget_.setCurrentIndex(2); // Login page
                 clearInputs();
                 usernameInputLogin_->setFocus();
-                return;
+            } else if (++attempts >= 10) {
+                timer->stop();
+                timer->deleteLater();
+                QMessageBox::warning(this, "Register failed",
+                    "This username is already taken.");
+                usernameInputRegister_->setFocus();
+                clearInputs();
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            numberOfAttempts++;
-        }
+        });
 
-        QMessageBox::warning(this, "Register failed",
-            "This username is already taken.");
-        usernameInputRegister_->setFocus();
-        clearInputs();
+        timer->start(100);
     }
 
     void Login::on_SendButtonLogin_clicked() {
@@ -102,21 +105,25 @@ namespace GUI {
 
         controller_.tryLogin(username.toStdString(), password.toStdString());
 
-        int numberOfAttempts = 0;
-        while (numberOfAttempts < 10) {
+        int attempts = 0;
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this, timer, attempts]() mutable {
             if (controller_.getAuthState() == Controller::AuthState::Authenticated) {
+                timer->stop();
+                timer->deleteLater();
                 QTimer::singleShot(0, this, [this]() {
                     emit loginSuccessful();
-                });                
-                return;
-            }
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            numberOfAttempts++;
-        }
-
-        QMessageBox::warning(this, "Login failed", "Your username or password is incorrect.");
+                });
+            } else if (++attempts >= 10) {
+                timer->stop();
+                timer->deleteLater();
+                QMessageBox::warning(this, "Login failed", "Your username or password is incorrect.");
                 clearInputs();
-        usernameInputLogin_->setFocus();
+                usernameInputLogin_->setFocus();
+            }
+        });
+
+        timer->start(100);
     }
 
     void Login::on_UsernameInputRegister_EnterPressed() {
@@ -237,38 +244,37 @@ namespace GUI {
         serverInfo.port = portInt;
         controller_.setServerInfo(serverInfo);
 
-        std::thread waitThread([&]() {
-            const int maxWaitTimeMs = 2000;
-            const int checkIntervalMs = 100;
-            int waited = 0;
-            while (waited < maxWaitTimeMs) {
-                std::this_thread::sleep_for(
-                    std::chrono::milliseconds(checkIntervalMs));
-                waited += checkIntervalMs;
-                if (controller_.isConnected()) {
-                    break;
-                }
+        connectionToServerLabel_.setText("Connecting to server...");
+
+        int attempts = 0;
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this, timer, ip, port, attempts]() mutable {
+            if (controller_.isConnected()) {
+                timer->stop();
+                timer->deleteLater();
+
+                QMessageBox::information(
+                    this, "Connection successful",
+                    "<span style='color: green; font-weight: bold;'>Connection "
+                    "successful !</span><br>\nYou are now connected to the Royal "
+                    "Tetris Server with the IP : "
+                        + ip + " and the Port : " + port + ".");
+        
+                updateConnectedMessage();
+                stackedWidget_.setCurrentIndex(0); // Main page
+            } 
+            
+            else if (++attempts >= 20) {
+                timer->stop();
+                timer->deleteLater();
+
+                connectionToServerLabel_.setText(NO_CONNECTED_CHAR_MAINPAGE);
+                QMessageBox::warning(this, "Connection failed",
+                                 NO_CONNECTED_CHAR_NORMAL);
             }
         });
-        waitThread.join();
-        if (controller_.isConnected()) {
-            connectionToServerLabel_.setText(getConnectedMessage());
-        } else {
-            connectionToServerLabel_.setText(NO_CONNECTED_CHAR_MAINPAGE);
-            QMessageBox::warning(this, "Connection failed",
-                                 NO_CONNECTED_CHAR_NORMAL);
-            return;
-        }
 
-        QMessageBox::information(
-            this, "Connection successful",
-            "<span style='color: green; font-weight: bold;'>Connection "
-            "successful !</span><br>\nYou are now connected to the Royal "
-            "Tetris Server with the IP : "
-                + ip + " and the Port : " + port + ".");
-
-        updateConnectedMessage();
-        stackedWidget_.setCurrentIndex(0); // Main page
+        timer->start(100);
     }
 
     void Login::setup() {
