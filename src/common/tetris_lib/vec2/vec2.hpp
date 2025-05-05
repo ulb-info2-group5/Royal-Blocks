@@ -176,7 +176,7 @@ class Vec2 {
         } else if constexpr (N == 1) {
             return y_;
         }
-    };
+    }
 
     /* ------------------------------------------------
      *          Serialization
