@@ -4,9 +4,6 @@
 #include "main_gui.hpp"
 #include "qt_config/qt_config.hpp"
 
-#include <memory>
-#include <qmessagebox.h>
-
 namespace GUI {
 
     void TetrisWindow::setDarkMode() {
@@ -59,6 +56,8 @@ namespace GUI {
 
     void TetrisWindow::showMainMenu() {
         mainMenu_ = std::make_unique<MainMenu>(controller_, *this, this);
+        mainMenu_->run();
+        setCentralWidget(mainMenu_.get());
 
         connect(mainMenu_.get(), &MainMenu::quitGame, this, &TetrisWindow::quitGui);
 
@@ -66,8 +65,6 @@ namespace GUI {
                 &TetrisWindow::setDarkMode);
         connect(mainMenu_.get(), &MainMenu::applyLightTheme, this,
                 &TetrisWindow::setLightMode);
-        mainMenu_->run();
-        setCentralWidget(mainMenu_.get());
 
         login_.reset();
     }
@@ -96,11 +93,10 @@ namespace GUI {
                 return;
         }
         
+        setCentralWidget(nullptr);
         mainMenu_.reset();
         login_.reset();
-        
         run();
-
         QMessageBox::critical(this, "Disconnected", "You have been disconnected from the server. Please login again or make sure that the server is online.");
     }
     

@@ -33,7 +33,7 @@ namespace GUI {
         "with IP address : <span style='color: #007acc;'><b>";
 
     Login::Login(Controller &controller, QWidget *parent)
-        : QWidget(parent), controller_(controller), loginSuccess_(false) {}
+        : QWidget(parent), controller_(controller) {}
 
     void Login::run() {
         setup();
@@ -44,14 +44,9 @@ namespace GUI {
 
         QTimer *timer = new QTimer(this);
         connect(timer, &QTimer::timeout, this, [this, timer]() {
-            if (loginSuccess_) {
-                timer->stop();
-                timer->deleteLater();
-            } else {
-                updateConnectedMessage();
-            }
+            updateConnectedMessage();
         });
-        timer->start(1000); // 3000 ms
+        timer->start(1000);
     }
 
     void Login::on_ExitButton_clicked() { actionOnExit(); }
@@ -70,8 +65,8 @@ namespace GUI {
     }
 
     void Login::on_SendButtonRegister_clicked() {
-        QString username = usernameInputRegister_.text();
-        QString password = passwordInputRegister_.text();
+        QString username = usernameInputRegister_->text();
+        QString password = passwordInputRegister_->text();
 
         if (!isValidRegister()) {
             clearInputs();
@@ -82,101 +77,73 @@ namespace GUI {
 
         controller_.tryRegister(username.toStdString(), password.toStdString());
 
-        bool registerSuccess = false;
-
-        // Thread to check if registration is successful
-        std::thread loginThread = std::thread([&]() {
-            for (int i = 0; i < 20; ++i) { // 2 seconds limit (20 * 100ms)
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                if (controller_.getRegistrationState()
-                    == Controller::RegistrationState::Registered) {
-                    registerSuccess = true;
-                    return;
-                }
+        int numberOfAttempts = 0;
+        while (numberOfAttempts < 10) {
+            if (controller_.getRegistrationState() == Controller::RegistrationState::Registered) {
+                QMessageBox::information(this, "Register successful",
+                    "You have successfully registered.");
+                stackedWidget_.setCurrentIndex(2); // Login page
+                return;
             }
-        });
-
-        if (loginThread.joinable()) {
-            loginThread.join();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            numberOfAttempts++;
         }
 
+        QMessageBox::warning(this, "Register failed",
+            "This username is already taken.");
+        usernameInputRegister_->setFocus();
         clearInputs();
-
-        if (registerSuccess) {
-            QMessageBox::information(this, "Register successful",
-                                     "You have successfully registered.");
-            stackedWidget_.setCurrentIndex(2); // Login page
-
-        }
-
-        else {
-            QMessageBox::warning(this, "Register failed",
-                                 "This username is already taken.");
-            usernameInputRegister_.setFocus();
-        }
     }
 
     void Login::on_SendButtonLogin_clicked() {
-        QString username = usernameInputLogin_.text();
-        QString password = passwordInputLogin_.text();
+        QString username = usernameInputLogin_->text();
+        QString password = passwordInputLogin_->text();
 
         controller_.tryLogin(username.toStdString(), password.toStdString());
 
-        // Thread to check if registration is successful
-        std::thread loginThread = std::thread([&]() {
-            for (int i = 0; i < 10; ++i) { // 1 seconds limit (20 * 100ms)
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                if (controller_.getAuthState()
-                    == Controller::AuthState::Authenticated) {
-                    loginSuccess_ = true;
-                    return;
-                }
+        int numberOfAttempts = 0;
+        while (numberOfAttempts < 10) {
+            if (controller_.getAuthState() == Controller::AuthState::Authenticated) {
+                QTimer::singleShot(0, this, [this]() {
+                    emit loginSuccessful();
+                });                
+                return;
             }
-        });
-
-        if (loginThread.joinable()) {
-            loginThread.join();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            numberOfAttempts++;
         }
 
-        clearInputs();
-
-        if (loginSuccess_) {
-            emit loginSuccessful();
-        }
-
-        else {
-            QMessageBox::warning(this, "Login failed",
-                                 "Your username or password is incorrect.");
-            usernameInputLogin_.setFocus();
-        }
+        QMessageBox::warning(this, "Login failed", "Your username or password is incorrect.");
+                clearInputs();
+        usernameInputLogin_->setFocus();
     }
 
     void Login::on_UsernameInputRegister_EnterPressed() {
-        if (usernameInputRegister_.hasFocus()) {
-            passwordInputRegister_.setFocus();
+        if (usernameInputRegister_->hasFocus()) {
+            passwordInputRegister_->setFocus();
         }
     }
 
     void Login::on_UsernameInputLogin_EnterPressed() {
-        if (usernameInputLogin_.hasFocus()) {
-            passwordInputLogin_.setFocus();
+        if (usernameInputLogin_->hasFocus()) {
+            passwordInputLogin_->setFocus();
         }
     }
 
     void Login::on_PasswordInputRegister_EnterPressed() {
-        if (passwordInputRegister_.hasFocus()) {
-            if (!passwordInputRegister_.text().isEmpty()
-                && !usernameInputRegister_.text().isEmpty()) {
-                sendButtonRegister_.click();
+        if (passwordInputRegister_->hasFocus()) {
+            if (!passwordInputRegister_->text().isEmpty()
+                && !usernameInputRegister_->text().isEmpty()) {
+                sendButtonRegister_->click();
             }
         }
     }
 
     void Login::on_PasswordInputLogin_EnterPressed() {
-        if (passwordInputLogin_.hasFocus()) {
-            if (!passwordInputLogin_.text().isEmpty()
-                && !usernameInputLogin_.text().isEmpty()) {
-                sendButtonLogin_.click();
+        if (passwordInputLogin_->hasFocus()) {
+            if (!passwordInputLogin_->text().isEmpty()
+                && !usernameInputLogin_->text().isEmpty()) {
+                sendButtonLogin_->click();
             }
         }
     }
@@ -186,11 +153,11 @@ namespace GUI {
     -------------------------------------------------------*/
 
     void Login::clearInputs() {
-        usernameInputRegister_.clear();
-        passwordInputRegister_.clear();
+        usernameInputRegister_->clear();
+        passwordInputRegister_->clear();
 
-        usernameInputLogin_.clear();
-        passwordInputLogin_.clear();
+        usernameInputLogin_->clear();
+        passwordInputLogin_->clear();
     }
 
     void Login::actionOnExit() {
@@ -206,18 +173,18 @@ namespace GUI {
     bool Login::isValidRegister() {
         errorMessage_.clear();
 
-        if (usernameInputRegister_.text().length() < 4) {
+        if (usernameInputRegister_->text().length() < 4) {
             errorMessage_ = "The lenght of your username is too short ! The "
                             "username must have at least 4 characters";
             return false;
         }
 
-        if (usernameInputRegister_.text().length() > 20) {
+        if (usernameInputRegister_->text().length() > 20) {
             errorMessage_ = "The lenght of your username is too long ! It must "
                             "have less than 20 characters";
         }
 
-        for (const char c : usernameInputRegister_.text().toStdString()) {
+        for (const char c : usernameInputRegister_->text().toStdString()) {
             if (invalidChars.find(c) != std::string::npos || isspace(c)) {
                 if (isprint(c)) {
                     errorMessage_ =
@@ -233,7 +200,7 @@ namespace GUI {
             }
         }
 
-        if (passwordInputRegister_.text().isEmpty()) {
+        if (passwordInputRegister_->text().isEmpty()) {
             errorMessage_ =
                 "Your password is empty ! You must enter a valid password";
             return false;
@@ -244,14 +211,14 @@ namespace GUI {
 
     void Login::on_ChooseIpPortButton_clicked() {
         config::ServerInfo serverInfo = controller_.getServerInfo();
-        ipInput_.setText(QString::fromStdString(serverInfo.ip));
-        portInput_.setText(QString::number(serverInfo.port));
+        ipInput_->setText(QString::fromStdString(serverInfo.ip));
+        portInput_->setText(QString::number(serverInfo.port));
         stackedWidget_.setCurrentIndex(3); // Choose IP and port page
     }
 
     void Login::on_ConnectButton_clicked() {
-        QString ip = ipInput_.text();
-        QString port = portInput_.text();
+        QString ip = ipInput_->text();
+        QString port = portInput_->text();
 
         if (ip.isEmpty() || port.isEmpty()) {
             QMessageBox::warning(this, "Connection failed",
@@ -322,24 +289,24 @@ namespace GUI {
         QPushButton *exitButton = new QPushButton(mainPage);
         exitButton->setAutoDefault(true);
 
-        usernameInputLogin_.setParent(loginPage);
-        passwordInputLogin_.setParent(loginPage);
+        usernameInputLogin_ = new QLineEdit(loginPage);
+        passwordInputLogin_ = new QLineEdit(loginPage);
         QCheckBox *showPasswordLogin = new QCheckBox(loginPage);
-        sendButtonLogin_.setParent(loginPage);
-        sendButtonLogin_.setAutoDefault(true);
+        sendButtonLogin_ = new QPushButton(loginPage);
+        sendButtonLogin_->setAutoDefault(true);
         QPushButton *backButtonLogin = new QPushButton(loginPage);
         backButtonLogin->setAutoDefault(true);
 
-        usernameInputRegister_.setParent(registerPage);
-        passwordInputRegister_.setParent(registerPage);
+        usernameInputRegister_ = new QLineEdit(registerPage);
+        passwordInputRegister_ = new QLineEdit(registerPage);
         QCheckBox *showPasswordRegister = new QCheckBox(registerPage);
-        sendButtonRegister_.setParent(registerPage);
-        sendButtonRegister_.setAutoDefault(true);
+        sendButtonRegister_ = new QPushButton(registerPage);
+        sendButtonRegister_->setAutoDefault(true);
         QPushButton *backButtonRegister = new QPushButton(registerPage);
         backButtonRegister->setAutoDefault(true);
 
-        ipInput_.setParent(chooseIpPortPage);
-        portInput_.setParent(chooseIpPortPage);
+        ipInput_ = new QLineEdit(chooseIpPortPage);
+        portInput_ = new QLineEdit(chooseIpPortPage);
         QPushButton *connectButton = new QPushButton(chooseIpPortPage);
         connectButton->setAutoDefault(true);
         QPushButton *backButtonIpPortMenu = new QPushButton(chooseIpPortPage);
@@ -355,10 +322,10 @@ namespace GUI {
         backButtonLogin->setFixedWidth(INPUT_BUTTON_WIDTH);
         backButtonRegister->setText("Back");
         backButtonRegister->setFixedWidth(INPUT_BUTTON_WIDTH);
-        sendButtonRegister_.setText("Send");
-        sendButtonRegister_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        sendButtonLogin_.setText("Send");
-        sendButtonLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
+        sendButtonRegister_->setText("Send");
+        sendButtonRegister_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        sendButtonLogin_->setText("Send");
+        sendButtonLogin_->setFixedWidth(INPUT_BUTTON_WIDTH);
 
         /*---------CHOOSE IP AND PORT MENU---------*/
         backButtonIpPortMenu->setText("Back");
@@ -368,13 +335,13 @@ namespace GUI {
         chooseIpPortButton->setText("Choose IP and Port");
         chooseIpPortButton->setFixedWidth(INPUT_BUTTON_WIDTH);
 
-        ipInput_.setAlignment(Qt::AlignCenter);
-        ipInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        portInput_.setAlignment(Qt::AlignCenter);
-        portInput_.setFixedWidth(INPUT_BUTTON_WIDTH);
+        ipInput_->setAlignment(Qt::AlignCenter);
+        ipInput_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        portInput_->setAlignment(Qt::AlignCenter);
+        portInput_->setFixedWidth(INPUT_BUTTON_WIDTH);
         QValidator *validator =
             new QIntValidator(1, std::numeric_limits<uint16_t>::max(), this);
-        portInput_.setValidator(validator);
+        portInput_->setValidator(validator);
 
         connect(backButtonIpPortMenu, &QPushButton::clicked, this,
                 &Login::on_BackButton_clicked);
@@ -383,17 +350,17 @@ namespace GUI {
         connect(chooseIpPortButton, &QPushButton::clicked, this,
                 &Login::on_ChooseIpPortButton_clicked);
 
-        QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout(this);
+        QVBoxLayout *chooseIpPortPageLayout = new QVBoxLayout(chooseIpPortPage);
         chooseIpPortPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         chooseIpPortPageLayout->addWidget(
             createCenterBoldTitle("Choose IP and Port of the server"));
         chooseIpPortPageLayout->addWidget(new QLabel("IP : ", this), 0,
                                           Qt::AlignCenter);
-        chooseIpPortPageLayout->addWidget(&ipInput_, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(ipInput_, 0, Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(new QLabel("Port : ", this), 0,
                                           Qt::AlignCenter);
-        chooseIpPortPageLayout->addWidget(&portInput_, 0, Qt::AlignCenter);
+        chooseIpPortPageLayout->addWidget(portInput_, 0, Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(connectButton, 0, Qt::AlignCenter);
         chooseIpPortPageLayout->addWidget(backButtonIpPortMenu, 0,
                                           Qt::AlignCenter);
@@ -413,56 +380,56 @@ namespace GUI {
                 &Login::on_BackButton_clicked);
         connect(backButtonRegister, &QPushButton::clicked, this,
                 &Login::on_BackButton_clicked);
-        connect(&sendButtonRegister_, &QPushButton::clicked, this,
+        connect(sendButtonRegister_, &QPushButton::clicked, this,
                 &Login::on_SendButtonRegister_clicked);
-        connect(&sendButtonLogin_, &QPushButton::clicked, this,
+        connect(sendButtonLogin_, &QPushButton::clicked, this,
                 &Login::on_SendButtonLogin_clicked);
-        connect(&usernameInputRegister_, &QLineEdit::returnPressed, this,
+        connect(usernameInputRegister_, &QLineEdit::returnPressed, this,
                 &Login::on_UsernameInputRegister_EnterPressed);
-        connect(&usernameInputLogin_, &QLineEdit::returnPressed, this,
+        connect(usernameInputLogin_, &QLineEdit::returnPressed, this,
                 &Login::on_UsernameInputLogin_EnterPressed);
-        connect(&passwordInputRegister_, &QLineEdit::returnPressed, this,
+        connect(passwordInputRegister_, &QLineEdit::returnPressed, this,
                 &Login::on_PasswordInputRegister_EnterPressed);
-        connect(&passwordInputLogin_, &QLineEdit::returnPressed, this,
+        connect(passwordInputLogin_, &QLineEdit::returnPressed, this,
                 &Login::on_PasswordInputLogin_EnterPressed);
 
-        usernameInputRegister_.setAlignment(Qt::AlignCenter);
-        usernameInputRegister_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        passwordInputRegister_.setAlignment(Qt::AlignCenter);
-        passwordInputRegister_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        passwordInputRegister_.setEchoMode(QLineEdit::Password);
-        usernameInputLogin_.setAlignment(Qt::AlignCenter);
-        usernameInputLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        passwordInputLogin_.setAlignment(Qt::AlignCenter);
-        passwordInputLogin_.setFixedWidth(INPUT_BUTTON_WIDTH);
-        passwordInputLogin_.setEchoMode(QLineEdit::Password);
+        usernameInputRegister_->setAlignment(Qt::AlignCenter);
+        usernameInputRegister_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        passwordInputRegister_->setAlignment(Qt::AlignCenter);
+        passwordInputRegister_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        passwordInputRegister_->setEchoMode(QLineEdit::Password);
+        usernameInputLogin_->setAlignment(Qt::AlignCenter);
+        usernameInputLogin_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        passwordInputLogin_->setAlignment(Qt::AlignCenter);
+        passwordInputLogin_->setFixedWidth(INPUT_BUTTON_WIDTH);
+        passwordInputLogin_->setEchoMode(QLineEdit::Password);
 
-        usernameInputRegister_.setPlaceholderText("Enter a username");
-        passwordInputRegister_.setPlaceholderText("Enter a password");
-        usernameInputLogin_.setPlaceholderText("Enter your username");
-        passwordInputLogin_.setPlaceholderText("Enter your password");
+        usernameInputRegister_->setPlaceholderText("Enter a username");
+        passwordInputRegister_->setPlaceholderText("Enter a password");
+        usernameInputLogin_->setPlaceholderText("Enter your username");
+        passwordInputLogin_->setPlaceholderText("Enter your password");
 
         showPasswordLogin->setText("Show password");
         showPasswordRegister->setText("Show password");
         connect(showPasswordLogin, &QCheckBox::stateChanged, [&](int state) {
             if (state == Qt::Checked) {
-                passwordInputLogin_.setEchoMode(QLineEdit::Normal);
+                passwordInputLogin_->setEchoMode(QLineEdit::Normal);
             } else {
-                passwordInputLogin_.setEchoMode(QLineEdit::Password);
+                passwordInputLogin_->setEchoMode(QLineEdit::Password);
             }
         });
         connect(showPasswordRegister, &QCheckBox::stateChanged, [&](int state) {
             if (state == Qt::Checked) {
-                passwordInputRegister_.setEchoMode(QLineEdit::Normal);
+                passwordInputRegister_->setEchoMode(QLineEdit::Normal);
             } else {
-                passwordInputRegister_.setEchoMode(QLineEdit::Password);
+                passwordInputRegister_->setEchoMode(QLineEdit::Password);
             }
         });
 
         // Create the main page
         connectionToServerLabel_.setAlignment(Qt::AlignHCenter);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout(this);
+        QVBoxLayout *mainLayout = new QVBoxLayout(mainPage);
         mainLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                             QSizePolicy::Expanding));
         mainLayout->addWidget(
@@ -477,30 +444,30 @@ namespace GUI {
         mainPage->setLayout(mainLayout);
 
         // Create the register page
-        QVBoxLayout *registerPageLayout = new QVBoxLayout(this);
+        QVBoxLayout *registerPageLayout = new QVBoxLayout(registerPage);
         registerPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         registerPageLayout->addWidget(createCenterBoldTitle("Register"));
-        registerPageLayout->addWidget(&usernameInputRegister_, 0,
+        registerPageLayout->addWidget(usernameInputRegister_, 0,
                                       Qt::AlignCenter);
-        registerPageLayout->addWidget(&passwordInputRegister_, 0,
+        registerPageLayout->addWidget(passwordInputRegister_, 0,
                                       Qt::AlignCenter);
         registerPageLayout->addWidget(showPasswordRegister, 0, Qt::AlignCenter);
-        registerPageLayout->addWidget(&sendButtonRegister_, 0, Qt::AlignCenter);
+        registerPageLayout->addWidget(sendButtonRegister_, 0, Qt::AlignCenter);
         registerPageLayout->addWidget(backButtonRegister, 0, Qt::AlignCenter);
         registerPageLayout->addItem(new QSpacerItem(
             20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
         registerPage->setLayout(registerPageLayout);
 
         // Create the login page
-        QVBoxLayout *loginPageLayout = new QVBoxLayout(this);
+        QVBoxLayout *loginPageLayout = new QVBoxLayout(loginPage);
         loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                  QSizePolicy::Expanding));
         loginPageLayout->addWidget(createCenterBoldTitle("Login"));
-        loginPageLayout->addWidget(&usernameInputLogin_, 0, Qt::AlignCenter);
-        loginPageLayout->addWidget(&passwordInputLogin_, 0, Qt::AlignCenter);
+        loginPageLayout->addWidget(usernameInputLogin_, 0, Qt::AlignCenter);
+        loginPageLayout->addWidget(passwordInputLogin_, 0, Qt::AlignCenter);
         loginPageLayout->addWidget(showPasswordLogin, 0, Qt::AlignCenter);
-        loginPageLayout->addWidget(&sendButtonLogin_, 0, Qt::AlignCenter);
+        loginPageLayout->addWidget(sendButtonLogin_, 0, Qt::AlignCenter);
         loginPageLayout->addWidget(backButtonLogin, 0, Qt::AlignCenter);
         loginPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                  QSizePolicy::Expanding));

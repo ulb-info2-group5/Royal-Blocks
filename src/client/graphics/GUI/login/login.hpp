@@ -1,7 +1,6 @@
 #ifndef GUI_LOGIN_HPP
 #define GUI_LOGIN_HPP
 
-#include <qlayout.h>
 #include <string>
 
 #include <QLineEdit>
@@ -20,22 +19,19 @@ namespace GUI {
       private:
         Controller &controller_;
 
-        bool loginSuccess_;
-
-
         QStackedWidget stackedWidget_;
 
-        QLineEdit usernameInputRegister_;
-        QLineEdit passwordInputRegister_;
-        QLineEdit usernameInputLogin_;
-        QLineEdit passwordInputLogin_;
-        QLineEdit ipInput_;
-        QLineEdit portInput_;
+        QLineEdit *usernameInputRegister_;
+        QLineEdit *passwordInputRegister_;
+        QLineEdit *usernameInputLogin_;
+        QLineEdit *passwordInputLogin_;
+        QLineEdit *ipInput_;
+        QLineEdit *portInput_;
 
         QLabel connectionToServerLabel_;
 
-        QPushButton sendButtonRegister_;
-        QPushButton sendButtonLogin_;
+        QPushButton *sendButtonRegister_;
+        QPushButton *sendButtonLogin_;
 
         std::string errorMessage_;
 
