@@ -4,6 +4,8 @@
 #include "main_gui.hpp"
 #include "qt_config/qt_config.hpp"
 
+#include <QTimer>
+
 namespace GUI {
 
     void TetrisWindow::setDarkMode() {
@@ -42,15 +44,25 @@ namespace GUI {
 
     void TetrisWindow::forceRefresh(UpdateType updateType) {
         if (updateType == UpdateType::FRIENDS_LIST) {
-            emit updateFriendsList();
+            QTimer::singleShot(0, this, [this]() {
+                emit updateFriendsList();
+            });  
         } else if (updateType == UpdateType::FRIEND_REQUESTS) {
-            emit updateFriendRequestsList();
+            QTimer::singleShot(0, this, [this]() {
+                emit updateFriendRequestsList();
+            });  
         } else if (updateType == UpdateType::RANKING) {
-            emit updateRanking();
+            QTimer::singleShot(0, this, [this]() {
+                emit updateRanking();
+            });  
         } else if (updateType == UpdateType::CONVERSATIONS) {
-            emit updateConversations();
+            QTimer::singleShot(0, this, [this]() {
+                emit updateConversations();
+            });  
         } else if (updateType == UpdateType::GAME_STATE) {
-            emit updateGameState();
+            QTimer::singleShot(0, this, [this]() {
+                emit updateGameState();
+            });  
         }
     }
 
@@ -74,6 +86,9 @@ namespace GUI {
         
         connect(login_.get(), &Login::loginSuccessful, this,
                 &TetrisWindow::showMainMenu);
+
+        connect(login_.get(), &Login::quitGame, this, &TetrisWindow::quitGui);
+        
         login_->run();
         setCentralWidget(login_.get());
     }
@@ -84,6 +99,8 @@ namespace GUI {
             this, "Quit", "Are you sure you want to quit the game ?",
             QMessageBox::Yes | QMessageBox::No);
         if (confirmExit == QMessageBox::Yes) {
+            login_.reset();
+            mainMenu_.reset();
             QApplication::quit();
         }
     }

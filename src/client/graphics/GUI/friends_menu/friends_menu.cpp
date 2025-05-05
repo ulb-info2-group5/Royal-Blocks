@@ -33,6 +33,7 @@ namespace GUI {
         friendNameInput_.clear();
         addFriendMsgLabel_.clear();
         stack_.setCurrentIndex(1);
+        friendNameInput_.setFocus();
     }
 
     void FriendsMenu::showFriendRequestsScreen() { stack_.setCurrentIndex(2); }

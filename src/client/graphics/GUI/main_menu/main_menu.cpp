@@ -9,10 +9,9 @@
 #include "../theme_manager/theme_manager.hpp"
 #include "graphics/GUI/game_display/game_display.hpp"
 
-#include <QApplication>
 #include <QMessageBox>
 #include <QPushButton>
-#include <qobjectdefs.h>
+#include <QTimer>
 
 namespace GUI {
 
@@ -33,7 +32,11 @@ namespace GUI {
         setLayout(layout);
     }
 
-    void MainMenu::on_QuitGameButton_clicked() { emit quitGame(); }
+    void MainMenu::on_QuitGameButton_clicked() { 
+        QTimer::singleShot(0, this, [this]() {
+                emit quitGame();
+        }); 
+    }
 
     void MainMenu::on_RankingButton_clicked() {
         stackedWidget_.setCurrentWidget(&ranking_);
@@ -170,9 +173,17 @@ namespace GUI {
                 &MainMenu::showMainMenu);
 
         connect(&themeManager_, &ThemeManager::applyLightTheme, this,
-                [this] { emit applyLightTheme(); });
+                [this] { 
+                        QTimer::singleShot(0, this, [this]() {
+                                emit applyLightTheme();
+                        });     
+                    });
         connect(&themeManager_, &ThemeManager::applyDarkTheme, this,
-                [this] { emit applyDarkTheme(); });
+                [this] { 
+                        QTimer::singleShot(0, this, [this]() {
+                                emit applyDarkTheme();
+                        });     
+                    });
     }
 
 } // namespace GUI

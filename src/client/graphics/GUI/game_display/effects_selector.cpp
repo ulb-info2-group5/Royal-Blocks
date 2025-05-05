@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QPushButton>
 #include <QStyle>
+#include <QTimer>
 
 namespace GUI {
 
@@ -47,7 +48,9 @@ namespace GUI {
                         disconnect(pButton, nullptr, nullptr, nullptr);
                         connect(pButton, &QPushButton::clicked, this,
                                 [this, effectType]() {
-                                    emit buyEffect(effectType);
+                                    QTimer::singleShot(0, this, [this, effectType]() {
+                                        emit buyEffect(effectType);
+                                    });
                                 });
                     }
                 }

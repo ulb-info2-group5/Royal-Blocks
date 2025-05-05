@@ -28,6 +28,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTimer>
 
 namespace GUI {
 
@@ -211,7 +212,9 @@ namespace GUI {
 
     void GameDisplay::on_QuitButtonClicked() {
         quitGame();
-        emit backToMainMenu();
+        QTimer::singleShot(0, this, [this]() {
+            emit backToMainMenu();
+        });
     }
 
     void GameDisplay::scoreLCD() {
@@ -323,7 +326,9 @@ namespace GUI {
         handleKeyPress(keyPressed);
 
         if (keyPressed == QUIT_KEY) {
-            emit backToMainMenu();
+            QTimer::singleShot(0, this, [this]() {
+                emit backToMainMenu();
+            });
         }
     }
 
@@ -533,7 +538,9 @@ namespace GUI {
     }
 
     void GameDisplay::on_ReturnToMainMenuButtonClicked() {
-        emit backToMainMenu();
+        QTimer::singleShot(0, this, [this]() {
+            emit backToMainMenu();
+        });
     }
 
 } // namespace GUI

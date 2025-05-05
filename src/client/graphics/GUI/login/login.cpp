@@ -4,7 +4,6 @@
 #include "../../../core/server_info/server_info.hpp"
 #include "../qt_config/qt_config.hpp"
 
-#include <QApplication>
 #include <QCheckBox>
 #include <QMessageBox>
 #include <QTimer>
@@ -43,7 +42,7 @@ namespace GUI {
         setLayout(layout);
 
         QTimer *timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, [this, timer]() {
+        connect(timer, &QTimer::timeout, this, [this]() {
             updateConnectedMessage();
         });
         timer->start(1000);
@@ -83,6 +82,8 @@ namespace GUI {
                 QMessageBox::information(this, "Register successful",
                     "You have successfully registered.");
                 stackedWidget_.setCurrentIndex(2); // Login page
+                clearInputs();
+                usernameInputLogin_->setFocus();
                 return;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -161,13 +162,9 @@ namespace GUI {
     }
 
     void Login::actionOnExit() {
-        QMessageBox::StandardButton confirmExit;
-        confirmExit = QMessageBox::question(
-            this, "Quit", "Are you sure you want to qut the game ?",
-            QMessageBox::Yes | QMessageBox::No);
-        if (confirmExit == QMessageBox::Yes) {
-            QApplication::quit();
-        }
+        QTimer::singleShot(0, this, [this]() {
+            emit quitGame();
+        });
     }
 
     bool Login::isValidRegister() {

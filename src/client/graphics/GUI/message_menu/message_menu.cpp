@@ -191,6 +191,10 @@ namespace GUI {
         loadMessages(friendIndex);
     }
 
-    void MessageMenu::onBack() { emit backToMainMenu(); }
+    void MessageMenu::onBack() { 
+        QTimer::singleShot(0, this, [this]() {
+            emit backToMainMenu();
+        }); 
+    }
 
 } // namespace GUI

@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include "../../../core/controller/controller.hpp"
 
@@ -19,7 +20,11 @@ namespace GUI {
         setupUI();
     }
 
-    void Ranking::on_BackButtonClicked() { emit backToMainMenu(); }
+    void Ranking::on_BackButtonClicked() { 
+        QTimer::singleShot(0, this, [this]() {
+            emit backToMainMenu();
+        }); 
+    }
 
     /*--------------------------------------------------------
                         Private Methods

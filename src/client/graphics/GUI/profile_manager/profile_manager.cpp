@@ -7,6 +7,7 @@
 #include "../qt_config/qt_config.hpp"
 
 #include <QPushButton>
+#include <QTimer>
 
 namespace GUI {
     const std::string invalidChars = "!@#$%^&*()+=[]{}|\\\"'<>?/°;,~:²³§_£";
@@ -19,12 +20,10 @@ namespace GUI {
         basicSetup();
     }
 
-    void ProfileManager::basicSetup() {// Create a checkbox to show/hide the password
-        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
-
+    void ProfileManager::basicSetup() {
         newUserName_.setParent(this);
         newPassWord_.setParent(this);
-        showPasswordCheckBox->setParent(this);
+        QCheckBox *showPasswordCheckBox = new QCheckBox("Show Password", this);
         QPushButton *submit = new QPushButton(this);
         submit->setAutoDefault(true);
         QPushButton *back = new QPushButton(this);
@@ -86,7 +85,11 @@ namespace GUI {
         setLayout(layout);
     }
 
-    void ProfileManager::onBack() { emit backToMainMenu(); }
+    void ProfileManager::onBack() { 
+        QTimer::singleShot(0, this, [this]() {
+            emit backToMainMenu();
+        }); 
+    }
 
     void ProfileManager::changePasswordUsername() {
         if (!isValidUsernamePassword()) {

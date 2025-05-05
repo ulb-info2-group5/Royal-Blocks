@@ -147,6 +147,11 @@ namespace GUI {
          * @brief Signal emitted when the login is successful
          */
         void loginSuccessful();
+
+        /*
+         * @brief Signal emitted when the user click on the quit game button
+         */
+        void quitGame();
     };
 
 } // namespace GUI

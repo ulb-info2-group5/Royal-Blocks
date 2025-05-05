@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QWidget>
+#include <QTimer>
 
 namespace GUI {
 
@@ -27,14 +28,22 @@ namespace GUI {
 
                     disconnect(pOppWidget, nullptr, nullptr, nullptr);
                     connect(pOppWidget, &OpponentWidget::clicked, this,
-                            [index, this] { emit selectTarget(index); });
+                            [index, this] { 
+                                QTimer::singleShot(0, this, [this, index]() {
+                                    emit selectTarget(index);
+                                }); 
+                            });
                 }
             }
         } else { // not enough widgets in the layout yet.
             OpponentWidget *pOppWidget = new OpponentWidget{*boardMap, name};
 
             connect(pOppWidget, &OpponentWidget::clicked, this,
-                    [index, this] { emit selectTarget(index); });
+                    [index, this] { 
+                        QTimer::singleShot(0, this, [this, index]() {
+                            emit selectTarget(index);
+                        });
+                    });
 
             layout_.addWidget(pOppWidget);
         }

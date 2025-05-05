@@ -270,7 +270,9 @@ namespace GUI {
         connect(gameDisplay_.get(), &GameDisplay::backToMainMenu, this, [this] {
             stack_.removeWidget(gameDisplay_.get());
             gameDisplay_.reset();
-            emit backToMainMenu();
+            QTimer::singleShot(0, this, [this]() {
+                emit backToMainMenu();
+            });
         });
         stack_.addWidget(gameDisplay_.get());
         stack_.setCurrentWidget(gameDisplay_.get());
@@ -319,7 +321,9 @@ namespace GUI {
 
     void GameMenu::onBackButtonClicked() {
         if (stack_.currentWidget() == &selectModeWidget_) {
-            emit backToMainMenu();
+            QTimer::singleShot(0, this, [this]() {
+                emit backToMainMenu();
+            });
         } else if (stack_.currentWidget() == &playerCountWidget_) {
             showSelectModeScreen();
         } else if (stack_.currentWidget() == &joinTypeWidget_) {

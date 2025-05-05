@@ -1,5 +1,7 @@
 #include "opponent_widget.hpp"
 
+#include <QTimer>
+
 namespace GUI {
 
     OpponentWidget::OpponentWidget(const QPixmap &pixmap,
@@ -18,7 +20,9 @@ namespace GUI {
     }
 
     void OpponentWidget::mousePressEvent(QMouseEvent *event) {
-        emit clicked();
+        QTimer::singleShot(0, this, [this]() {
+            emit clicked();
+        });
         QWidget::mousePressEvent(event);
     }
 

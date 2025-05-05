@@ -3,6 +3,7 @@
 #include "graphics/GUI/tetris_window.hpp"
 #include "graphics/common/abstract_display.hpp"
 
+#include <QTimer>
 
 namespace GUI {
 
@@ -22,7 +23,9 @@ namespace GUI {
     }
 
     void MainGui::onDisconnected() {
-        emit clientDisconnected();
+        QTimer::singleShot(0, this, [this]() {
+            emit clientDisconnected();
+        });  
     }
 
 } // namespace GUI

@@ -5,7 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qpushbutton.h>
+#include <QTimer>
 
 namespace GUI { 
     ThemeManager::ThemeManager(QWidget *parent)
@@ -14,12 +14,12 @@ namespace GUI {
     }
 
     void ThemeManager::setup() {
-        QPushButton *darkThemeButton = new QPushButton("Dark Theme", this);
-        darkThemeButton->setFixedWidth(500);
-        darkThemeButton->setAutoDefault(true);
         QPushButton *lightThemeButton = new QPushButton("Light Theme", this);
         lightThemeButton->setFixedWidth(500);
         lightThemeButton->setAutoDefault(true);
+        QPushButton *darkThemeButton = new QPushButton("Dark Theme", this);
+        darkThemeButton->setFixedWidth(500);
+        darkThemeButton->setAutoDefault(true);
         QPushButton *backButton = new QPushButton("Back", this);
         backButton->setFixedWidth(500);
         backButton->setAutoDefault(true);
@@ -38,11 +38,15 @@ namespace GUI {
 
         connect(darkThemeButton, &QPushButton::clicked, this,
             [this]() {
-                emit applyDarkTheme();
+                QTimer::singleShot(0, this, [this]() {
+                    emit applyDarkTheme();
+            }); 
             });
         connect(lightThemeButton, &QPushButton::clicked, this,
             [this]() {
-                emit applyLightTheme();
+                QTimer::singleShot(0, this, [this]() {
+                    emit applyLightTheme();
+            }); 
             });
         connect(backButton, &QPushButton::clicked, this,
             &ThemeManager::backToMainMenu);
