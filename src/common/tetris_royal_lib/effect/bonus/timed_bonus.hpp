@@ -1,12 +1,11 @@
 #ifndef BONUS_HPP
 #define BONUS_HPP
 
+#include <memory>                     
+#include <nlohmann/json_fwd.hpp>      
+
 #include "../abstract_timed_effect.hpp"
-#include "bonus_type.hpp"
-
-#include <memory>
-
-#include <nlohmann/json.hpp>
+#include "bonus_type.hpp"             
 
 class BonusTest;
 

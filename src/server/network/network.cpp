@@ -19,7 +19,7 @@
 #include <string>                                             
 #include <utility>                                            
 
-#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+#include "../../common/types/types.hpp"
 #include "../client_link/client_link.hpp"                        
 #include "../client_manager/client_manager.hpp"                  
 

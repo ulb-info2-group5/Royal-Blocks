@@ -1,20 +1,29 @@
 #include "game_engine.hpp"
-#include "../effect/bonus/slow_down.hpp"
-#include "../game_mode/game_mode.hpp"
-#include "effect/bonus/bonus_type.hpp"
-#include "effect/penalty/penalty_type.hpp"
-#include "effect/penalty/timed_penalty.hpp"
-#include "effect_price/effect_price.hpp"
-#include "player_state/player_state.hpp"
-#include "player_tetris/player_tetris.hpp"
-#include "tetris/tetris.hpp"
-#include "tetromino/abstract_tetromino.hpp"
-#include "tetromino/tetromino_shapes.hpp"
 
-#include <cassert>
-#include <optional>
-#include <stdexcept>
-#include <variant>
+#include <cassert>                         
+#include <deque>                           
+#include <map>                             
+#include <memory>                          
+#include <optional>                        
+#include <ranges>                          
+#include <stdexcept>                       
+#include <type_traits>                     
+#include <utility>                         
+#include <variant>          
+
+#include "../effect/bonus/slow_down.hpp"   
+#include "../game_mode/game_mode.hpp"      
+#include "effect/bonus/bonus_type.hpp"     
+#include "effect/bonus/timed_bonus.hpp"    
+#include "effect/penalty/penalty_type.hpp" 
+#include "effect/penalty/timed_penalty.hpp"
+#include "effect_price/effect_price.hpp"   
+#include "game_state/game_state.hpp"       
+#include "player_state/player_state.hpp"   
+#include "player_tetris/player_tetris.hpp" 
+#include "tetris/tetris.hpp"               
+#include "tetromino/abstract_tetromino.hpp"
+#include "tetromino/tetromino_shapes.hpp"  
 
 /* ------------------------------------------------
  *          Private Methods

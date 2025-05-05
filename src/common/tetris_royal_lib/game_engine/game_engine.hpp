@@ -1,20 +1,24 @@
 #ifndef GAME_ENGINE_HPP
 #define GAME_ENGINE_HPP
 
-#include "../game_state/game_state.hpp"
+#include <stddef.h>                                           
+#include <array>                                              
+#include <bitset>                                             
+#include <initializer_list>                                   
+#include <optional>                
 
-#include "../effect_price/effect_price.hpp"
-#include "../game_mode/game_mode.hpp"
-#include "effect/penalty/penalty_type.hpp"
-#include "effect_price/effect_price.hpp"
-#include "player_state/player_state.hpp"
-#include "player_tetris/player_tetris.hpp"
-#include "tetris/tetris.hpp"
+#include "../game_mode/game_mode.hpp"                         
+#include "../game_state/game_state.hpp"                       
+#include "../../types/types.hpp"
+#include "effect/effect_type.hpp"                             
+#include "player_state/player_state.hpp"                      
 #include "tetromino/abstract_tetromino.hpp"
 
-#include <array>
-#include <bitset>
-#include <optional>
+class Tetris;
+
+enum class PenaltyType;
+
+struct PlayerTetris;
 
 class GameEngine {
   public:

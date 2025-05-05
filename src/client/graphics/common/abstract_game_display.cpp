@@ -9,7 +9,7 @@
 #include "../../core/controller/controller.hpp"                
 #include "../../core/in_game/effects/timed_penalty.hpp"        
 #include "../../core/in_game/game_state/game_state.hpp"        
-#include "/home/ethan/code/group-5/src/common/types/types.hpp" 
+#include "../../../common/types/types.hpp" 
 #include "board/board.hpp"                                     
 #include "board/grid_cell.hpp"                                 
 #include "core/in_game/effects/timed_bonus.hpp"                

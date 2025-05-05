@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "/home/ethan/code/group-5/src/common/bindings/conversation.hpp"
+#include "../../../common/bindings/conversation.hpp"
 #include "database_manager/database_manager.hpp"
 
 #define CHAT_PATH "data/chat/user"

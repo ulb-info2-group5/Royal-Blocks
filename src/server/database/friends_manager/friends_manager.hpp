@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>    
 
-#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+#include "../../../common/types/types.hpp"
 
 class DatabaseManager;
 

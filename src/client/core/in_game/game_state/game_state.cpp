@@ -1,11 +1,10 @@
 #include "game_state.hpp"
 
-#include <map>
 #include <nlohmann/detail/iterators/iter_impl.hpp>
 #include <nlohmann/json.hpp>
 #include <utility>
 #include <vector>
-#include "/home/ethan/code/group-5/src/common/types/types.hpp"
+#include "../../../../common/types/types.hpp"
 #include "core/in_game/player_tetris/player_tetris_external.hpp"
 #include "core/in_game/player_tetris/player_tetris_self.hpp"
 
