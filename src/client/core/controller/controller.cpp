@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <thread>
 #include <type_traits>
+#include <variant>
 
 #include "../../../common/bindings/abort_matchmaking.hpp"
 #include "../../../common/bindings/authentication.hpp"
@@ -361,17 +362,26 @@ void Controller::handleKeyPress(const std::string &pressedKey) {
         networkManager_.send(bindings::HoldActiveTetromino{}.to_json().dump());
     } else if (pressedKey == "g") {
         networkManager_.send(bindings::RotateActive{true}.to_json().dump());
-    } else if (pressedKey == "e") {
-        selectPrevEffect();
-    } else if (pressedKey == "r") {
-        selectNextEffect();
-    } else if (pressedKey == "t") {
-        emptyPenaltyStash();
-    } else if (pressedKey == "y") {
-        buyEffect(getSelectedEffectType());
-    } else if (pressedKey == "u") {
-        buyEffect(getSelectedEffectType(), true);
-    }
+    } 
+    
+    bool isRoyalCompetition =
+        std::visit([](const auto &gameState) {
+            return gameState.gameMode == GameMode::RoyalCompetition;
+        }, gameState_);
+
+    if (isRoyalCompetition) {
+        if (pressedKey == "e") {
+            selectPrevEffect();
+        } else if (pressedKey == "r") {
+            selectNextEffect();
+        } else if (pressedKey == "t") {
+            emptyPenaltyStash();
+        } else if (pressedKey == "y") {
+            buyEffect(getSelectedEffectType());
+        } else if (pressedKey == "u") {
+            buyEffect(getSelectedEffectType(), true);
+        }
+    }   
 }
 
 size_t Controller::getNumEffects() const {
