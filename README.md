@@ -33,7 +33,7 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
 - **Qt5**\
   `sudo apt install qtbase5-dev`
 - **Boost (uniquement la partie réseau est nécessaire)**\
-  `sudo apt install libboost-system-dev libboost-thread-dev`
+  `sudo apt install libboost-system-dev`
 
 D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
 
