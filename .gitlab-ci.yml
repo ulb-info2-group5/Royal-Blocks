@@ -12,7 +12,6 @@ build:
       - /var/cache/apt/archives/ # Faster with caching the dependency downloads
 
   before_script:
-    - dpkg -s libboost-system-dev
     - export DEBIAN_FRONTEND=noninteractive
     - apt update && apt install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev
 
