@@ -27,7 +27,6 @@ release:
 	@cmake --build $(BUILD_DIR) -- -j$(CORES)
 
 clean:
-	@echo $(CLEAN_CMD)
 	@$(CLEAN_CMD)
 
 re_debug: clean debug
