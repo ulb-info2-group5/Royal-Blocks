@@ -1,42 +1,49 @@
 @startuml (id=Tetris)
 
 class Tetris {
-    - tetrisObservers_ : vector<shared_ptr<TetrisObserver>>
+	-board_ : Board
+	-holdTetromino_ : shared_ptr<ATetromino>
+	-previewTetromino_ : shared_ptr<ATetromino>
+	-tetrominoQueue_ : TetrominoQueue
+	-activeTetromino_ : shared_ptr<ATetromino>
+	-canHold_ : bool
+	-tetrisObservers_ : std::vector<shared_ptr<TetrisObserver>>
 
-    - activeTetromino_ : shared_ptr<ATetromino>
-    - previewTetromino_ : shared_ptr<ATetromino>
-    - board_ : Board
+	-lockDelayTicksNum_ : uint32_t
+	-ticksSinceLockStart_ : uint32_t
 
-    - holdTetromino : shared_ptr<ATetromino>
-    - tetrominoesQueue_ : queue<shared_ptr>ATetromino>> 
+	-checkCanDrop(const ATetromino& tetromino) : bool {query}
+	-checkEmptyCell(size_t xCol, size_t yRow) : bool {query}
 
-    - lockDelayTicksNum_ : uint32_t 
-    - ticksSinceLockStart_ : uint32_t
+	-resetLockDelay() : void
+	-placeActive() : void
+	-updatePreviewTetromino() : void
+	
+	+Tetris()
+	+Tetris(Tetris& &)
+	+~Tetris()
 
-    - updatePreviewTetromino() : void
-    - resetLockDelay() : void
+	+operator=(Tetris& &) : Tetris&
 
-    - checkCanDrop() : const bool 
-    - checkEmptyCell( rowIdx : size_t, colIdx : size_t) : const bool
+	+{static} createTetromino(TetrominoShape tetrominoShape) : shared_ptr<ATetromino>
+	+{static} getTetrominoInitialAnchorPoint(TetrominoShape tetrominoShape) : Vec2
+	+getTetrominoesQueueSize() : size_t {query}
 
-    + addObserver(pTetrisObserver : shared_ptr<TetrisObserver>) : void
-    + removeObserver(pTetrisObserver : shared_ptr<TetrisObserver>) : void
+	+destroy2By2Occupied() : void
+	+insertNextTetromino(shared_ptr<ATetromino>&& pTetromino) : void
 
-    + eventClockTick() : size_t
-    + eventBigDrop() : size_t
+	+eventBigDrop() : size_t
+	+eventClockTick() : size_t
+	+eventHoldNextTetromino() : void
+	+eventTryMoveActive(TetrominoMove tetrominoMove) : size_t
+	+eventTryRotateActive(bool rotateClockwise) : void
+	+eventReceivePenaltyRows(int numPenalties) : void
+	
+	+addObserver(shared_ptr<TetrisObserver> pTetrisObserver) : void
+	+removeObserver(shared_ptr<TetrisObserver> pTetrisObserver) : void
 
-    + eventTyMoveActive(tetrominoMove : TetrominoMove) : void
-    + eventTryRotateActive(rotateClockWise : bool) : void
-    + eventHoldNextTetromino() : void
-    + eventReceivePenaltyLines(numPenalties : int) : void
-    
-    + getTetrominoesQueueSize() : const size_t
-    + inserNextTetromino(&&pTetromino : shared_ptr<ATetromino>) : void
-    + {static} createTetromino(tetrominoShape : TetrominoShape) : shared_ptr<ATetromino>
-    
-    + destroy2By2Occupied() : void
-
-    + serializeSelf(emptyBoard : bool = false) : const nlohmann::json
-    + serializeExternal() : const nlohmann::json
+	+serializeExternal() : nlohmann::json {query}
+	+serializeSelf(bool emptyBoard) : nlohmann::json {query}
 }
+
 @enduml

@@ -1,4 +1,4 @@
-@startuml MenuRequestServerSequence
+@startuml SendRequestSequence
 
 skinparam style strictuml
 

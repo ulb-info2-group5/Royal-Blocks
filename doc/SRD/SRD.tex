@@ -8,6 +8,7 @@
 \usepackage[french]{babel}
 \usepackage{geometry}  
 \usepackage{array}
+\usepackage{hyperref}
 \renewcommand{\arraystretch}{1.5} % Augmente l'espacement entre les lignes
 \usepackage{multirow} % Pour aligner correctement les colonnes si besoin
 
@@ -44,7 +45,7 @@
 
 \subsection{But du projet}
 
-\quad Ce projet a pour objectif de concevoir une application de jeu intégrant diverses fonctionnalités multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale du jeu \textit{Tetris}. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetriminos}, des formes géométriques qui peuvent être tournées et déplacées avant leur place finale. Les pièces tombent depuis le haut de la grille et plus la partie avance, plus elles tombent rapidement. Une ligne remplie de  \textit{tetriminos} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille car il y a des \textit{tetriminos} sur toute la hauteur de la grille. Son score dépendra du temps de la partie et des lignes supprimées.  
+\quad Ce projet a pour objectif de concevoir une application de jeu intégrant diverses fonctionnalités multijoueur. Les règles des parties reprendront celles existantes dans \textit{Tetris Royal}, une extension de la version normale du jeu \textit{Tetris}. Chaque joueur possède une grille vide qu'il doit essayer de remplir en laissant le moins d'espace possible avec des \textit{tetrominoes}, des formes géométriques qui peuvent être tournées et déplacées avant leur place finale. Les pièces tombent depuis le haut de la grille et plus la partie avance, plus elles tombent rapidement. Une ligne remplie de  \textit{tetrominoes} se supprime et fait gagner des points au joueur. La partie se termine quand le joueur ne sait plus placer de formes géométriques sur la grille car il y a des \textit{tetrominoes} sur toute la hauteur de la grille. Son score dépendra du temps de la partie et des lignes supprimées.  
 
 \paragraph*{}
 
@@ -52,15 +53,15 @@ Dans cette application, quatre modes sont proposés au joueur. Il existe la vers
  
 \paragraph*{}
 
-Puis nous implémentons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de penalty}". Un joueur peut envoyer un penalty à un adversaire. Le receveur du penalty retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimées par les combinaisons.  
+Puis nous implémenterons les modes multijoueurs. Une nouvelle notion doit être introduite : "\textit{une ligne de penalty}". Un joueur peut envoyer un penalty à un adversaire. Le receveur du penalty retrouvera toutes ses lignes poussées vers le haut pour laisser la place à une ou plusieurs rangées avec un bloc manquant en dessous, qui ne peuvent pas être supprimées par les combinaisons.  
 
 \paragraph*{}
 
-La version \textit{Classic} et la version \textit{Duel} comprennent respectivement des parties de trois à neuf, et de deux joueurs. Chaque participant a sa propre grille avec ses \textit{tetriminos} qui tombent; celui qui complète une ou plusieurs lignes en même temps peut envoyer des lignes de penalty selon sa combinaison à un adversaire de son choix. 
+La version \textit{Classic} et la version \textit{Duel} comprennent respectivement des parties de trois à neuf, et de deux joueurs. Chaque participant a sa propre grille avec ses \textit{tetrominoes} qui tombent; celui qui complète une ou plusieurs lignes en même temps peut envoyer des lignes de penalty selon sa combinaison à un adversaire de son choix. 
 
 \paragraph*{}
 
-Le dernier mode, \textit{ Royal Competition}, comprend des penalty multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplit selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière complétée, le joueur peut envoyer des penalty à un adversaire ou s'octroyer un bonus qui lui facilite, qui le protège durant un moment. Dans la liste étendue de penalty et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetriminos} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
+Le dernier mode, \textit{ Royal Competition}, comprend des penalties multiples et des bonus. Ce sont des parties de trois à neuf joueurs. Chaque individu aura sa propre barre d'énergie initialement nulle. Au fil de la partie, la barre se remplit selon les combinaisons de lignes supprimées du joueur. Une fois cette dernière atteignant une valeur, le joueur peut acheter des penalties pour les envoyer à un adversaire ou s'octroyer un bonus qui lui facilite la partie pendant une période donnée. Dans la liste étendue de penalties et de bonus, nous retrouvons un ralentissement de la chute des \textit{tetrominoes} pour soi-même, augmenter cette vitesse pour un adversaire ou encore inverser les commandes d'action d'un adversaire.
 
 \paragraph*{}
 
@@ -73,31 +74,31 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \begin{itemize}
 
+    \item \textbf{Blackout} : Pénalité qui "éteint la lumière" chez un adversaire ( le joueur ne voit plus son tableau pendant un court moment)
+    
 	\item \textbf{Bonus} : Avantage obtenu par le joueur lorsque celui-ci dépense son énergie. Un bonus peut prendre plusieurs formes:
 
-    \item \textbf{Slow Down} : Avantage qui réduit la vitesse de chute des tetrominoes sur ton plateau.
-
-    \item \textbf{Mini Tetrominoes} : Avantage qui fait que les 2 prochains tetrominoes se transforment en bloc de 1 x 1.
-    
-	 \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
-
-	\item \textbf{Penalty} : Pénalité infligée à un joueur par un de ses adversaires. Le penalty se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite. Cette ligne de pénalité peut être supprimé de la grille si le joueur arrive à compléter avec ses tetrominoes. 
-
-    \item \textbf{Blackout} : Pénalité qui "éteint la lumière" chez un adversaire ( le joueur ne voit plus son tableau pendant un court moment)
+    \item \textbf{Effect} : terme regroupant les pénalités et les bonus utilisés dans le mode royal
 
     \item \textbf{InputLock} : Pénalité qui bloque les commandes d'un adversaire pour le prochain tetromino.
 
     \item \textbf{Lightning} : Pénalité qui envoie un eclair qui supprime des blocs dans une zone de 2 x 2 chez un adversaire.
 
-    \item \textbf{Reverse Controls} : Pénalité qui inverse les commandes d'un adversaire pour les trois prochaines tetrominoes.
+    \item \textbf{Matchmaking} : Système qui permet de connecter plusieurs joueurs ensemble pour pouvoir créer et lancer une partie en ligne.
+    
+    \item \textbf{Mini Tetrominoes} : Avantage qui fait que les 2 prochains tetrominoes se transforment en bloc de 1 x 1.
+    
+	\item \textbf{Penalty} : Pénalité infligée à un joueur par un de ses adversaires. Le penalty se manifeste par l'ajout d'une ou de plusieurs lignes supplémentaires en bas de la grille du receveur, poussant les blocs existants vers le haut et rapprochant le joueur de la défaite. Cette ligne de pénalité peut être supprimé de la grille si le joueur arrive à compléter avec ses tetrominoes. 
+    
+    \item \textbf{Slow Down} : Avantage qui réduit la vitesse de chute des tetrominoes sur ton plateau.
 
     \item \textbf{Speed Up} : Pénalité qui augmente la vitesse de chute des tetrominoes sur le plateau d'un adversaire.
-    
-	 \item \textbf{Username} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
-	
-	\item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
-	
-	\item \textbf{Effect} : terme regroupant les pénalités et les bonus utilisés dans le mode royal
+
+    \item \textbf{Reverse Controls} : Pénalité qui inverse les commandes d'un adversaire pour les trois prochaines tetrominoes.
+
+    \item \textbf{Tetromino} : Pièce de jeu composée de quatre blocs carré connectés entre eux de manière à former différentes formes géométriques, respectivement (Z, L, O, S, I, J, T). 
+
+    \item \textbf{Username} : Nom utilisé par un utilisateur et qui peut ne pas être son nom officiel.
 
 \end{itemize}
 
@@ -125,7 +126,8 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
         1.7 & Juliette Cornu & avancement des diagrammes de séquence & 12/03/2025 \\ \hline 
         1.8 & Juliette Cornu & rajout des descriptions pour les diagrammes de séquence et de classes & 13/03/2025 \\ \hline
         2.0 & Juliette Cornu & finir les diagrammes de séquence et relecture & 14/03/2025 \\ \hline
-        
+        2.5 & Juliette Cornu & corrections des diagrammes de classe et de use case & 04/05/2025 \\ \hline
+        3.0 &  & version finale & 09/05/2025 \\ \hline
         
         
     \end{tabular}
@@ -140,7 +142,7 @@ En dehors des parties de jeux, le joueur peut se connecter ou créer un compte p
 
 \begin{figure}[!h]
     \centering
-    	\includegraphics[width=0.9\textwidth]{../res/uml/usecase/ConnexionUseCase.png}
+    	\includegraphics[width=0.9\textwidth]{../../res/uml/usecase/ConnexionUseCase.png}
     	\caption{Diagramme Use Case du Menu de Connexion}
     	\label{fig:main-menu}
 \end{figure}
@@ -183,7 +185,7 @@ Le premier écran auquel l'utilisateur accède est un moyen de se connecter à l
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/usecase/MenuPrincipalUseCase.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/usecase/MenuPrincipalUseCase.png}
     \caption{Diagramme Use Case du Menu Principal}
     \label{fig:main-menu}
 \end{figure}
@@ -260,10 +262,10 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Cas exceptionnels}: Ami déconnecté ou problème de réseau.
 \end{itemize}
 
-\subsubsection*{Modifier son mot-de-passe}
+\subsubsection*{Modifier son mot de passe}
 \begin{itemize}
     \item \textbf{Acteur}: Utilisateur
-    \item \textbf{Use case}: Modifier son mot-de-passe
+    \item \textbf{Use case}: Modifier son mot de passe
     \item \textbf{Description}: Permet à l'utilisateur de changer son mot de passe.
     \item \textbf{Précondition}: L'utilisateur est authentifié.
     \item \textbf{Postcondition}: Le mot de passe est modifié avec succès.
@@ -338,7 +340,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/usecase/EndlessUseCase.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/usecase/EndlessUseCase.png}
     \caption{Diagramme Use Case en mode Endless}
     \label{fig:Classique}
 \end{figure}
@@ -363,25 +365,25 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Cas exceptionnels}: La rotation amène le Tetromino en dehors des limites.
 \end{itemize}
 
-\subsubsection*{Menu pause}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Menu pause
-    \item \textbf{Description}: Permet au joueur d'ouvrir le menu de pause.
-    \item \textbf{Précondition}: La partie est en cours.
-    \item \textbf{Postcondition}: La partie est en pause.
-    \item \textbf{Cas exceptionnels}: Aucun.
-\end{itemize}
+% \subsubsection*{Menu pause}
+% \begin{itemize}
+%     \item \textbf{Acteur}: Joueur
+%     \item \textbf{Use case}: Menu pause
+%     \item \textbf{Description}: Permet au joueur d'ouvrir le menu de pause.
+%     \item \textbf{Précondition}: La partie est en cours.
+%     \item \textbf{Postcondition}: La partie est en pause.
+%     \item \textbf{Cas exceptionnels}: Aucun.
+% \end{itemize}
 
-\subsubsection*{Reprendre la partie}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Reprendre la partie
-    \item \textbf{Description}: Permet de reprendre la partie après une pause.
-    \item \textbf{Précondition}: La partie est en pause.
-    \item \textbf{Postcondition}: La partie reprend là où elle s'était arrêtée.
-    \item \textbf{Cas exceptionnels}: Aucun.
-\end{itemize}
+% \subsubsection*{Reprendre la partie}
+% \begin{itemize}
+%     \item \textbf{Acteur}: Joueur
+%     \item \textbf{Use case}: Reprendre la partie
+%     \item \textbf{Description}: Permet de reprendre la partie après une pause.
+%     \item \textbf{Précondition}: La partie est en pause.
+%     \item \textbf{Postcondition}: La partie reprend là où elle s'était arrêtée.
+%     \item \textbf{Cas exceptionnels}: Aucun.
+% \end{itemize}
 
 \subsubsection*{Quitter la partie}
 \begin{itemize}
@@ -397,7 +399,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/usecase/DualUseCase.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/usecase/DualUseCase.png}
     \caption{Diagramme Use Case en mode Duel}
     \label{fig:Duel}
 \end{figure}
@@ -416,25 +418,25 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
     \item \textbf{Cas exceptionnels}: Échec de l’envoi du penalty, conditions du penalty non remplies.
 \end{itemize}
 
-\subsubsection*{Menu pause}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Menu pause
-    \item \textbf{Description}: Permet au joueur d'ouvrir le menu de pause.
-    \item \textbf{Précondition}: La partie est en cours.
-    \item \textbf{Postcondition}: La partie est en pause.
-    \item \textbf{Cas exceptionnels}: Aucun.
-\end{itemize}
+% \subsubsection*{Menu pause}
+% \begin{itemize}
+%     \item \textbf{Acteur}: Joueur
+%     \item \textbf{Use case}: Menu pause
+%     \item \textbf{Description}: Permet au joueur d'ouvrir le menu de pause.
+%     \item \textbf{Précondition}: La partie est en cours.
+%     \item \textbf{Postcondition}: La partie est en pause.
+%     \item \textbf{Cas exceptionnels}: Aucun.
+% \end{itemize}
 
-\subsubsection*{Reprendre la partie}
-\begin{itemize}
-    \item \textbf{Acteur}: Joueur
-    \item \textbf{Use case}: Reprendre la partie
-    \item \textbf{Description}: Permet de reprendre la partie après une pause.
-    \item \textbf{Précondition}: La partie est en pause.
-    \item \textbf{Postcondition}: La partie reprend là où elle s'était arrêtée.
-    \item \textbf{Cas exceptionnels}: Aucun.
-\end{itemize}
+% \subsubsection*{Reprendre la partie}
+% \begin{itemize}
+%     \item \textbf{Acteur}: Joueur
+%     \item \textbf{Use case}: Reprendre la partie
+%     \item \textbf{Description}: Permet de reprendre la partie après une pause.
+%     \item \textbf{Précondition}: La partie est en pause.
+%     \item \textbf{Postcondition}: La partie reprend là où elle s'était arrêtée.
+%     \item \textbf{Cas exceptionnels}: Aucun.
+% \end{itemize}
 
 \subsubsection*{Quitter la partie}
 \begin{itemize}
@@ -450,7 +452,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/usecase/ClassicUseCase.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/usecase/ClassicUseCase.png}
     \caption{Diagramme Use Case en mode Classique}
     \label{fig:Endless}
 \end{figure}
@@ -482,15 +484,15 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 
 \subsubsection*{Envoyer n penalties} (identique au mode Duel)
 
-\subsubsection*{Menu pause} (identique au mode Duel)
-\subsubsection*{Reprendre la partie} (identique au mode Duel)
+% \subsubsection*{Menu pause} (identique au mode Duel)
+% \subsubsection*{Reprendre la partie} (identique au mode Duel)
 \subsubsection*{Quitter la partie} (identique au mode Duel)
 
 \subsubsection{En mode Royal Competition}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/usecase/RoyalUseCase.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/usecase/RoyalUseCase.png}
     \caption{Diagramme Use Case en mode Royal Competition}
     \label{fig:Royal-Competition}
 \end{figure}
@@ -504,7 +506,7 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 \begin{itemize}
     \item \textbf{Acteur}: Joueur
     \item \textbf{Use case}: Consommer sa barre d'énergie
-    \item \textbf{Description}: Le joueur a accumulé assez d'énergie dans sa barre avec des lignes complétées dans sa grille;
+    \item \textbf{Description}: Le joueur a accumulé assez d'énergie dans sa barre avec des lignes complétées dans sa grille et consomme une partie de son énergie.
     \item \textbf{Précondition}: La partie est en cours et le joueur a accumulé assez de lignes complétées.
     \item \textbf{Postcondition}: Le joueur consomme sa barre d'énergie parmis les différents actions proposées.
     \item \textbf{Cas exceptionnels}: Il n'y a plus d'autres joueurs dans la partie.
@@ -541,8 +543,8 @@ Une fois l'authentification validée, l'écran du menu principal est accessible.
 \end{itemize}
 
 \subsubsection*{Choisir la cible du penalties} (identique au mode Classique)
-\subsubsection*{Menu pause} (identique au mode Duel)
-\subsubsection*{Reprendre la partie} (identique au mode Duel)
+% \subsubsection*{Menu pause} (identique au mode Duel)
+% \subsubsection*{Reprendre la partie} (identique au mode Duel)
 \subsubsection*{Quitter la partie} (identique au mode Duel)
 
 \newpage
@@ -567,7 +569,7 @@ L'option de suppression du compte doit être possible sur le système. Quand l'u
 
 \subsection{Consulter le classement}
 
-Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut consulter le classement général des joueurs de la plateforme pour le mode de jeu \textit{Endless}. Le serveur l'actualise à chaque fin de partie et l'envoie à chaque requête d'utilisateur concernant le classement.
+Quand l'utilisateur est connecté et en dehors d'une partie de jeu, il peut consulter le classement général des joueurs de la plateforme pour le mode de jeu \textit{Endless}. Le serveur l'actualise à chaque fin de partie et l'envoie sous forme de requête à chaque utilisateur concernant le classement.
 
 \subsection{Gestion de la partie}
 
@@ -585,11 +587,11 @@ L'utilisateur peut utiliser la messagerie interne de l'application quand il poss
 
 \subsubsection{Fin de la partie \textit{Endless}}
 
-Lorsque le joueur ne peut plus placer un \textit{tetromino} sur sa grille, la partie se termine. Le programme client envoie une requête avec le score de l'utilisateur au serveur. La partie est enregistrée dans la base de données et est mise dans le classement des joueurs de l'application. 
+Lorsque le joueur ne peut plus placer un \textit{tetromino} sur sa grille ou demande volontairement d'arrêter de jouer, la partie se termine. Le serveur modifie le meilleur score associé au compte de l'utilisateur s'il a battu son propre record. Le classement des joueurs de l'application est mis à jour s'il y a eu modifications. 
 
 \subsubsection{Fin de la partie \textit{Multijoueurs}}
 
-Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qui peut toujours placer des \textit{tetriminos} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour en déposer un.
+Dans une partie de \textit{Tetris} à plusieurs joueurs, le gagnant est celui qui peut toujours placer des \textit{tetrominoes} sur sa grille tandis que les autres joueurs n'ont plus d'espace pour en déposer un.
 
 \section{Besoins système : Non fonctionnels}
 
@@ -615,7 +617,7 @@ Le client doit être connecté à internet pour accéder au serveur. Son utilisa
 
 Afin de minimiser le nombre de requêtes du client au serveur, des conditions seront vérifiées par le client avant d'envoyer ces dernières au serveur. \\
 
-\textit{Exemple} : l'utilisateur a bien fait au minimum deux combinaisons de lignes avant de pouvoir envoyer un ou plusieurs penalty à un de ses adversaires.
+\textit{Exemple} : l'utilisateur a bien fait au minimum deux combinaisons de lignes avant de pouvoir envoyer un ou plusieurs penalties à un de ses adversaires.
 
 \subsubsection{Capacité}
 
@@ -644,19 +646,17 @@ L'application doit proposer une interface graphique intuitive à utiliser pour l
 
 \subsection{Architecture du jeu}
 
-\subsubsection{Partie monojoueur}
+\subsubsection{Classes du jeu}
 
 Au lancement d'une partie sur l'application, chaque joueur possède un objet de la classe Tetris. Dans la Board et la \textit{queue-list} de tetrominoes, attributs de Tetris, le joueur placera les formes sur la Board. En reprenant l'algorithme pré-existant dans d'autres implémentations du jeu \textit{Tetris}, le tetromino effectue une rotation similaire au fonctionnement de \textit{Super Rotation System}. À chaque action du joueur envoyé pour changer la position du tetromino, Tetris calcule la nouvelle position selon celle renvoyée par le tetromino et puis vérifie la validité de cette position dans la Board. 
 
-\subsubsection{Partie multijoueur}
-
-Au lancement d'une partie avec plusieurs joueurs, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState réunis dans un PlayerTetris. Pour l'ensemble de la partie, nous aurons un objet GameState qui contient toutes les informations nécessaires pour connaitre la situation de la partie en cours. Puis l'objet GameEngine permettra de valider ou non les actions demandées par les joueurs (\textit{ex. changer le tetromino de rotation}).
+Au lancement d'une partie avec plusieurs joueurs ou non, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState réunis dans un PlayerTetris. Pour l'ensemble de la partie, nous aurons un objet GameState qui contient toutes les informations nécessaires pour connaitre la situation de la partie en cours. Puis l'objet GameEngine permettra de valider ou non les actions demandées par les joueurs (\textit{ex. changer le tetromino de rotation}).
 
 \newpage
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.2, angle=90]{../res/uml/class/GameClass.png}
+	 \includegraphics[scale=0.2, angle=90]{../../res/uml/class/GameClass.png}
 	 \caption{Diagramme de classes de Game}
 	 \label{fig:GameClassDiagram}
 \end{figure}
@@ -668,7 +668,7 @@ Le PlayerState permet d'associer le joueur, ses informations sur son avancemment
 
 \begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.6]{../res/uml/class/PlayerStateClass.png}
+	 \includegraphics[scale=0.6]{../../res/uml/class/PlayerStateClass.png}
 	 \caption{Diagramme de classe de PlayerState}
 	 \label{fig:PlayerStateDiagram}
 \end{figure}
@@ -679,7 +679,7 @@ Le PlayerTetris permet d'associer un PlayerState et un Tetris.
 
 \begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.6]{../res/uml/class/PlayerTetrisClass.png}
+	 \includegraphics[scale=0.6]{../../res/uml/class/PlayerTetrisClass.png}
 	 \caption{Diagramme de classe de PlayerTetris}
 	 \label{fig:PlayerTetrisDiagram}
 \end{figure}
@@ -690,7 +690,7 @@ Le GameState permet d'associer à une partie multijoueur ou non, un vecteur de P
 
 \begin{figure}[!h]
 	\centering
-	 \includegraphics[scale=0.6]{../res/uml/class/GameStateClass.png}
+	 \includegraphics[scale=0.6]{../../res/uml/class/GameStateClass.png}
 	 \caption{Diagramme de classe de GameState}
 	 \label{fig:GameStateDiagram}
 \end{figure}
@@ -702,24 +702,23 @@ Le GameEngine permet de changer l'état de GameState selon les méthodes appél�
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.5]{../res/uml/class/GameEngineClass.png}
+	 \includegraphics[scale=0.5]{../../res/uml/class/GameEngineClass.png}
 	 \caption{Diagramme de classe de GameEngine}
 	 \label{fig:GameEngine}
 \end{figure}
 
 \subsubsection{Partie multijoueur en mode royal}
 
-Au lancement d'une partie mulitjoueur dans le mode royal, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Contrairement aux autres modes, le PlayerState contient des informations supplémentaires tel que le niveau de la barre d'énergie et une queue de penalités à venir sur le joueur en question. Pour l'ensemble de la partie, GameEngine permettra de valider les actions demandées par les joueurs comprenant également les conditions pour acheter un effect spécifique selon le niveau de la barre d'énergie du joueur. 
-
+Au lancement d'une partie mulitjoueur dans le mode royal, pour chaque joueur, nous avons la création d'un objet Tetris et PlayerState. Contrairement aux autres modes, le PlayerState contient des informations supplémentaires tel que le niveau de la barre d'énergie et une queue de penalités à venir sur le joueur en question. Pour l'ensemble de la partie, GameEngine permettra de valider les actions demandées par les joueurs comprenant également les conditions pour acheter un effect spécifique.
 \subsubsection*{Les effects}
 
-Pour l'implémentation des effects, nous avons distingué deux grandes familles, les effects qui s'écoulent sur une période de temps et les effects qui s'écoulent au bout d'un nombre de mouvements du joueur.
+Pour l'implémentation des effects, nous avons distingué trois grandes familles, les effects qui s'écoulent sur une période de temps, les effects qui s'écoulent au bout d'un nombre de mouvements du joueur et les effects qui vont uniquement changer la grille d'un joueur une seule fois.
 
-Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps écoulé et le nombre de mouvements du joueur. Ces méthodes sont concrétisées dans l'implémentation de deux classes héritantes, une pour les nombres d'actions restantes avant que l'effet se termine et une autre pour la durée restante. Puis les effects sont séparées en deux catégories, des bonus ou des penalités regroupées dans leur enumération de type respective. 
+Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps écoulé et le nombre de mouvements du joueur. Ces méthodes sont concrétisées dans l'implémentation de deux classes héritantes, une pour les nombres d'actions restantes avant que l'effet se termine et une autre pour la durée restante. Puis les effects sont séparés en deux catégories, des bonus ou des penalités regroupées dans leur enumération de type respective. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3, angle=90]{../res/uml/class/EffectClass.png}
+    \includegraphics[scale=0.3, angle=90]{../../res/uml/class/EffectClass.png}
     \caption{Diagramme de classes des effects}
     \label{fig:EffectDiagramm}
 \end{figure}
@@ -728,7 +727,7 @@ Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps �
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3, angle=90]{../res/uml/class/GameStructureClass.png}
+    \includegraphics[scale=0.3, angle=90]{../../res/uml/class/GameStructureClass.png}
     \caption{Diagramme de classes simplifiées du jeu}
     \label{fig:WholeGameDiagramm}
 \end{figure}
@@ -738,7 +737,7 @@ Nous avons une classe abstraite qui déclare des méthodes pour avoir le temps �
 
 \subsection{Architecture du serveur}
 
-Le serveur est composé de quatre parties différentes. Chacune a un but précis pour permettre d'utiliser l'application entre différents utilisateurs.
+Le serveur est composé de quatre parties différentes. Chacune a un but précis pour permettre la communication entre différents utilisateurs.
 
 \subsubsection{La base de données}
 
@@ -752,7 +751,7 @@ La base de données permet de stocker des informations sur les différents utili
 
 \begin{figure}[!ht]
 	\centering
-	 \includegraphics[scale=0.2]{../res/uml/class/DatabaseClass.png}
+	 \includegraphics[scale=0.2]{../../res/uml/class/DatabaseClass.png}
 	 \caption{Diagramme de classes de la base de données}
 	 \label{fig:DatabaseDiagram}
 \end{figure}
@@ -761,11 +760,11 @@ La base de données permet de stocker des informations sur les différents utili
 
 \subsubsection*{Les bindings}
 
-Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'avoir un standard sur les paquets que le serveur peut recevoir.
+Nous avons implémenté un espace de nommage \textit{bindings}. Cela permet d'avoir un standard sur les paquets que le serveur peut recevoir et envoyer.
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.1, angle=90]{../res/uml/class/BindingClass.png}
+	 \includegraphics[scale=0.1, angle=90]{../../res/uml/class/BindingClass.png}
 	 \caption{L'espace de nommage de \textit{bindings}}
 	 \label{fig:BindingDiagram}
 \end{figure}
@@ -778,41 +777,59 @@ Nous pouvons voir le ClientLink comme une classe pour transmettre les paquets re
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.2]{../res/uml/class/NetworkClass.png}
+	 \includegraphics[scale=0.2]{../../res/uml/class/NetworkClass.png}
 	 \caption{Diagramme de classes de Network}
 	 \label{fig:NetworkDiagram}
 \end{figure}
 
-\subsubsection{Le Matchmaking}
+\subsubsection*{AccountService}
 
-La classe Matchmaking est une classe que possède le ClientManager. Elle est appelée quand le ClientManager reçoit des paquets concernant une demande de création ou pour rejoindre une partie de jeu. Quand une demande de création de partie est dans le paquet, Matchmaking insère une nouvelle instance de GameCandidate dans un de ses attributs de gamesCandidate\textit{Mode de jeu}. Pour GameCandidate, cela représente une partie en attente selon un mode de jeu sélectionné par le premier utilisateur, un nombre maximum d'utilisateurs, le nombre d'utilisateurs en train d'attendre. Quand un nouveau utilisateur veut se rejoindre une possible partie en attente créée par un de ses amis ou aléatoirement, Matchmaking va chercher possiblement la partie en question et essayer de l'ajouter dans GameCandidate de cette dernière. Si le GameCandidate a atteint le quota de nombres dans la partie en attente, Matchmaking appelle GamesManager dans une méthode privée pour lancer la partie en attente. 
+La classe AccountService permet de récuperer des informations dans la partie de la base de données qui s'occupe des comptes de l'application. En recevant des bindings précis, elle peut changer des champs dans la base de données ou vérifier les entrées données pour s'authentifier ou se connecter à un compte. 
+
+\subsubsection*{SocialService}
+
+La classe SocialService permet de récupérer des informations dans la partie de la base de données concernant les amis d'un compte donnée ou les messages existants entre deux comptes différents. Nous pouvons également faire des opérations dans la base de données avec des méthodes de la classe. \textit{ex. enlever un ami de sa liste d'amis}
+
+\subsubsection{Le Matchmaking}
+La classe Matchmaking est une classe que possède ClientManager. Elle est appelée quand ClientManager reçoit des paquets concernant une demande de création ou pour rejoindre une partie de jeu. Quand une demande de création de partie est dans le paquet, Matchmaking insère une nouvelle instance de GameCandidate dans un de ses attributs de gamesCandidate\textit{Mode de jeu}.\\
+Pour GameCandidate, cela représente une partie en attente selon un mode de jeu sélectionné par le premier utilisateur, un nombre maximum d'utilisateurs, le nombre d'utilisateurs en train d'attendre. \\
+Quand un nouveau utilisateur veut se rejoindre une possible partie en attente créée par un de ses amis ou aléatoirement, Matchmaking va chercher possiblement la partie en question et essayer de l'ajouter dans GameCandidate de cette dernière. Si le GameCandidate a atteint le quota de joueurs dans la partie en attente, Matchmaking appelle GamesManager dans une méthode privée pour lancer la partie en attente. 
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.4]{../res/uml/class/MatchMakingClass.png}
+	 \includegraphics[scale=0.4]{../../res/uml/class/MatchMakingClass.png}
 	 \caption{Diagramme de classes de Matchmaking}
 	 \label{fig:MatchmakingDiagram}
 \end{figure}
 
 \subsubsection{GameServer}
 
-la classe GamesManager contient plusieurs maps pour permettre de trouver le gameID et le gameServer correspondant, de même pour le gameID et le thread, et le PlayerID et le gameID. GamesManager crée des instances de GameServer quand Matchmaking l'appelle selon un mode de jeu et une liste de PlayerID de la partie créée. Quand ClientManager reçoit un paquet pour le jeu avec un playerID, le paquet est envoyé à GamesManager et puis à GameServer avec enqueueBinding. GameServer le traite à sont tick interne correspondant pour que le gameEngine puisse prendre en compte le paquet reçu du serveur. Quand toutes les demandes en attente durant la période de temps accordée sont traitées, le GameServer envoie le GameState changé à ClientManager. 
+la classe GamesManager contient plusieurs maps pour permettre de trouver le gameID et le gameServer correspondant, de même pour le gameID et le thread, et le PlayerID et le gameID. GamesManager crée des instances de GameServer quand Matchmaking l'appelle selon un mode de jeu et une liste de PlayerID de la partie créée. \\
+Quand ClientManager reçoit un paquet pour le jeu avec un playerID, le paquet est envoyé à GamesManager et puis à GameServer avec enqueueBinding. GameServer le traite à son tick interne correspondant pour que le gameEngine puisse prendre en compte le paquet reçu du serveur. Quand toutes les demandes en attente durant la période de temps accordée sont traitées, le GameServer envoie le GameState changé à ClientManager. 
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.4]{../res/uml/class/GameServerClass.png}
+	 \includegraphics[scale=0.4]{../../res/uml/class/GameServerClass.png}
 	 \caption{Diagramme de classes de GameServer}
 	 \label{fig:GameServerDiagram}
 \end{figure}
 
 \subsubsection{MainServer}
 
+La classe TetrisMainServer permet de lancer les instances tels que ClientManager, la base de données et DatabaseManager lorsqu'on lance le serveur avecou non le choix d'un port spécifique. 
+
+\begin{figure}[H]
+	\centering
+	 \includegraphics[scale=0.3]{../../res/uml/class/MainServerClass.png}
+	 \caption{Diagramme de classe de TetrisMainServer}
+	 \label{fig:GameServerDiagram}
+\end{figure}
 
 \subsubsection{Diagramme complet du serveur}
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.2]{../res/uml/class/ServerStructureClass.png}
+	 \includegraphics[scale=0.2]{../../res/uml/class/ServerStructureClass.png}
 	 \caption{Diagramme de classes  simplifiées du Serveur}
 	 \label{fig:WholeServerDiagram}
 \end{figure}
@@ -823,37 +840,33 @@ L'architecture du client possède plusieurs parties qui permettent de communique
 
 \subsubsection{le Graphisme}
 
-La disposition sur l'écran des informations reçues du serveur est séparée par les interfaces et une classe ScreenManager.
+La disposition sur l'écran des informations reçues du serveur est séparée par les classes pour le graphisme et une classe MainTui ou MainGui selon le choix de l'utilisateur lors du lancement de l'application.
 
-\subsubsection*{les interfaces}
+%\subsubsection*{les interfaces}
 
-Les interfaces permettent de donner une direction de comment afficher sur l'écran en ne faisant pas de différences entre GUI et TUI.
+Pour le GUI et le TUI, nous avons suivi une architecture similaire pour chaque avec en commun l'utilisation de la classe abstraite AbstractGameDisplay. Cette dernière permet d'avoir une implémentation existante pour certaines fonctions qui extraient les informations du GameState. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{../res/uml/class/InterfaceClass.png}
-    \caption{Diagramme de classes des interfaces}
+    \includegraphics[scale=0.2]{../../res/uml/class/AbstractGameDisplayClass.png}
+    \caption{Diagramme de classe de AbstractGameDisplay}
     \label{fig:InterfaceDiagram}
 \end{figure}
 
-\subsubsection*{le ScreenManager}
-
-Le ScreenManager permet de séquencer l'ordre d'affichage des menus sur l'écran de l'utilisateur.
-
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{../res/uml/class/ScreenManagerClass.png}
-    \caption{Diagramme de classe de ScreenManager}
-    \label{fig:ScreenManagerDiagram}
+    \includegraphics[width=1\textwidth]{../../res/uml/class/GraphismeStructureClass.png}
+    \caption{Diagramme de classes des classes utilisées pour la partie graphique}
+    \label{fig:GraphismeDiagram}
 \end{figure}
 
 \subsubsection{le NetworkManager}
 
-La partie réseau du client est faite par la classe NetworkManager. Elle établit et met fin correctement la connexion avec le serveur. De plus, elle reçoit du serveur tous types de paquets et peut envoyer des paquets au serveur. Le traitement de ces paquets est fait dans une autre instance de classe.
+La partie réseau du client est faite par la classe NetworkManager. Elle établit et met fin correctement la connexion avec le serveur. De plus, elle reçoit du serveur tous types de paquets et peut envoyer des paquets au serveur. Le traitement de ces paquets est fait dans une autre classe du client.
 
 \begin{figure}[!ht]
 	\centering
-	 \includegraphics[scale=0.5]{../res/uml/class/NetworkManagerClass.png}
+	 \includegraphics[scale=0.5]{../../res/uml/class/NetworkManagerClass.png}
 	 \caption{Diagramme de classe de NetworkManager}
 	 \label{fig:NetworkManagerDiagram}
 \end{figure}
@@ -866,7 +879,7 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.3]{../res/uml/class/ControllerClass.png}
+	 \includegraphics[scale=0.3]{../../res/uml/class/ControllerClass.png}
 	 \caption{Diagramme de classe de Network}
 	 \label{fig:ControllerDiagram}
 \end{figure}
@@ -875,7 +888,7 @@ Le Controller permet également de traiter les paquets reçus de NetworkManager 
 
 \begin{figure}[H]
 	\centering
-	 \includegraphics[scale=0.3]{../res/uml/class/ClientStructureClass.png}
+	 \includegraphics[scale=0.3]{../../res/uml/class/ClientStructureClass.png}
 	 \caption{Diagramme de classes du client}
 	 \label{fig:WholeClientDiagram}
 \end{figure}
@@ -890,7 +903,7 @@ Lors du lancement de l'application, si l'utilisateur n'a pas de compte, il comme
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/InscriptionSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/InscriptionSequence.png}
     \caption{Diagramme de séquence d'inscription}
     \label{fig:InscriptionDiagram}
 \end{figure}
@@ -903,12 +916,14 @@ Si l'authentification est un succès, le ClientManager va rajouter le ClientLink
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/ConnexionSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/ConnexionSequence.png}
     \caption{Diagramme de séquence de connexion}
     \label{fig:ConnexionSeqDiagram}
 \end{figure}
 
-\subsection{Actions à partir du menu du jeu}
+%\subsection{Menu du jeu côté serveur}
+%
+%\subsection{Menu du jeu côté client}
 
 \subsection{Matchmaking côté serveur}
 
@@ -920,7 +935,7 @@ Puis quand le nombre de joueurs maximum dans la partie sera atteint, Matchmaking
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingServerSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/MatchMakingServerSequence.png}
     \caption{Diagramme de séquence de Matchmaking côté serveur}
     \label{fig:MatchmakingServerDiagram}
 \end{figure}
@@ -935,7 +950,7 @@ L'utilisateur peut également choisir de rejoindre une partie existante avec le 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/MatchMakingClientSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/MatchMakingClientSequence.png}
     \caption{Diagramme de séquence de Matchmaking côté client}
     \label{fig:MatchmakingClientDiagram}
 \end{figure}
@@ -946,7 +961,7 @@ Au début d'une partie, GamesManager commencera une instance de GameServer avec 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/GameServerSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/GameServerSequence.png}
     \caption{Diagramme de séquence du jeu côté serveur}
     \label{fig:GameServerSeqDiagram}
 \end{figure}
@@ -957,7 +972,7 @@ Au début d'une partie, l'objet GameDisplay est activé. Durant la partie, le jo
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{../res/uml/sequence/GameClientSequence.png}
+    \includegraphics[width=1\textwidth]{../../res/uml/sequence/GameClientSequence.png}
     \caption{Diagramme de séquence du jeu côté client}
     \label{fig:GameClientSeqDiagram}
 \end{figure}
@@ -969,5 +984,11 @@ Au début d'une partie, l'objet GameDisplay est activé. Durant la partie, le jo
 %\subsection{Lancement d'une partie}
 
 %\subsection{Rejoindre un Lobby}
+
+\section{Annexes}
+
+\subsection{Liens}
+
+\href{Super Rotation System}{https://tetris.fandom.com/wiki/SRS}
 
 \end{document}

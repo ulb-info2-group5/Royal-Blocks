@@ -24,12 +24,12 @@ activate GameMenu
 alt User is creating a Game
     GameMenu -> GameMenu : renderOnlineGames()
     User -> GameMenu : selectGameMode
-    alt GameMode != Dual && GameMode != Endless
+    opt GameMode != Dual && GameMode != Endless
         GameMenu -> GameMenu : selectPlayerCountScreen()
         User -> GameMenu : selectNumberOfPlayers()
     end 
     GameMenu -> Controller : createGame(GameMode, numberOfPlayers)
-    GameMenu -> GameMenu : matchmakingScreen()
+    GameMenu -> GameMenu : createGameScreen()
     Controller -> NetworkManager : send(bindingsCreateGame{GameMode, numberOfPlayers})
     NetworkManager -> Network : send(bindingsCreateGame{GameMode, numberOfPlayers})
 else User is joining a Game
@@ -37,9 +37,9 @@ else User is joining a Game
     User -> GameMenu : selectGameMode
     GameMenu -> GameMenu : joinFriendOrRandomScreen()
     User -> GameMenu : makeAChoice
+    GameMenu -> GameMenu : handleChoice() 
         alt User choose to join a friend
-            GameMenu -> GameMenu : handleChoice() 
-
+            GameMenu -> GameMenu : joinFriendScreen()
             Controller -> GameMenu : getFriendsList() 
             GameMenu -> GameMenu : joinFriendScreen() 
             User -> GameMenu : selectFriend
@@ -48,11 +48,20 @@ else User is joining a Game
             Controller -> NetworkManager : send(bindingJoinGame{GameMode, friendID})
             NetworkManager -> Network : send(bindingJoinGame{GameMode, friendID})
         else User choose to join random screen
+            GameMenu -> GameMenu : joinRandomScreen()
             GameMenu -> Controller : joinGame(GameMode, Null)
             Controller -> NetworkManager : send(bindingsJoinGame{GameMode, Null})
             NetworkManager -> Network : send(bindingsJoinGame{GameMode, Null})
         end 
 end 
+loop [ quitMenu_ != true ] 
+    alt joinType_ == JoinType::Friend : 
+        GameMenu -> GameMenu : joinFriendScreen()
+    else joinType_ == JoinType::Random  
+        GameMenu -> GameMenu : joinRandomScreen()
+    end
+end
+
 Network -> NetworkManager : send(gameState)
 NetworkManager -> Controller : handlerPacket(gameState)
 Controller -> Controller : gameState_  = gameState

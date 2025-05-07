@@ -1,47 +1,51 @@
 /' authors Ernest Jonas Rafaou '/
 @startuml (id=Board)
-
 class Board {
-    - {static} width_ : constexpr size_t = 10
-    - {static} height_ : constexpr size_t = 20
-    - grid_ : array<array<GridCell, width_>, height_>
+	-{static} height_ : static constexpr size_t
+	-{static} width_ : static constexpr size_t
+	-grid_ : std::array<std::array<GridCell, width_>, height_>
 
-    - at(xCol : int, yRow : int) : GridCell&
-    - getRow(yRow : int) : array<GridCell, width_>&
-    - getRow(yRow : int) : const array<GridCell, width_>&
-    - dropRowsAbove(yRow : int) : void
-    - liftRowsFrom(yRow : int) : void
-    - setPenaltyLine(row : array<GridCell, width_>&) : void
-    - setRow(row : const array<GridCell, width_>&, yRow : size_t) : void
-    - checkEmptyRow(yRow : int) : const bool
-    - checkFullRow(yRow : int) : const bool
-    - checkFullCol(xCol : int) : const bool
-    - emptyRow(yRow : int) : void
-    - emptyCol(xCol : int) : void
-    ' - gravity() : void
-    - check2By2Occupied(x : int, y : int) : bool
-    - empty2By2Square(x : int, y : int) : void
+	-at(int xCol, int yRow) : GridCell&
+	-getRow(int yRow) : std::array<GridCell , width_>&
+	-getRow(int yRow) : std::array<GridCell , width_>& {query}
 
-    + Board() = default
-    + Board(const Board&) = default
-    + Board(Board&&) = default
-    + ~Board() = default
+	-check2By2Occupied(int x, int y) : bool
+	-checkEmptyRow(int yRow) : bool {query}
+	-checkFullCol(int xCol) : bool {query}
+	-checkFullRow(int yRow) : bool {query}
     
-    + operator=(const Board&) = default
-    + operator=(Board&&) = default
-    
-    + get(xCol : int, yRow : int) : const GridCell&
-    + {static} getWidth() : constexpr size_t
-    + {static} getHeight() : constexpr size_t
-    + placeTetromino(tetromino : TetrominoPtr) : void
-    + checkInGrid(tetromino : ATetromino&) : bool
-    + check2By2Occupied(x : int, y : int) : bool
-    + empty2By2Square(x : int, y : int) : void
-    + destroy2By2Occupied() : void
-    + receivePenaltyLines(numPenalty : size_t = 1) : bool
-    + update() : BoardUpdate
-    + serialize() : nlohmann::json
-    + deserialize(j : const nlohmann::json&) : void
+	-setPenaltyRow(std::array<GridCell, width_>& row) : void
+	-setRow(const std::array<GridCell, width_>& row, size_t yRow) : void
+	-liftRowsFrom(int yRow, size_t numRows) : void
+	-dropRowsAbove(int yRow) : void
+
+	-empty2By2Square(int x, int y) : void
+	-emptyCol(int xCol) : void
+	-emptyRow(int yRow) : void
+	-gravity() : void
+
+	+Board()
+	+Board(const Board &)
+	+Board(Board& &)
+	+~Board()
+
+	+operator=(const Board &) : Board&
+	+operator=(Board& &) : Board&
+
+	+{static} getHeight() : size_t
+	+{static} getWidth() : size_t
+	+get(int xCol, int yRow) : GridCell& {query}
+
+	+checkInGrid(const Vec2& vec) : bool {query}
+	+checkInGrid(const ATetromino& tetromino) : bool {query}
+
+	+placeTetromino(shared_ptr<ATetromino> tetromino) : void
+	+receivePenaltyRows(size_t numPenalty) : bool
+	+destroy2By2Occupied() : void
+
+	+update() : BoardUpdate
+	+serialize() : nlohmann::json {query}
+	+deserialize(const nlohmann::json& j) : void
 }
 
 @enduml

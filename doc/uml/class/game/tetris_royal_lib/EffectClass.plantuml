@@ -6,30 +6,10 @@ skinparam class {
 }
 
 /' Objects '/
-class EffectSelector {
-	+EffectSelector()
-	+EffectSelector(const EffectSelector &)
-	+EffectSelector(EffectSelector& &)
-	+~EffectSelector()
-	+operator=(const EffectSelector &) : EffectSelector&
-	+operator=(EffectSelector& &) : EffectSelector&
-	+getSelectedEffect() : EffectType {query}
-	+serialize() : nlohmann::json {query}
-	+getNumEffects() : size_t {query}
-	+getSelectedIdx() : size_t {query}
-	-selectionIdx_ : size_t
-	->(BonusType::NumBonusType) : std::array<BonusType , static_cast<size_t
-	->(PenaltyType::NumPenaltyType) : std::array<PenaltyType , static_cast<size_t
-	+deserialize(const nlohmann::json& j) : void
-	+next() : void
-	+prev() : void
-	+select(variant<BonusType, PenaltyType> effectType) : void
-}
 
-
-abstract class AbstractTimedEffect {
-	#AbstractTimedEffect()
-	+~AbstractTimedEffect()
+abstract class ATimedEffect {
+	#ATimedEffect()
+	+~ATimedEffect()
 	+{abstract} isFinished() : bool {query}
 	+{abstract} getElapsedTime() : double {query}
 	+{abstract} serialize() : nlohmann::json {query}
@@ -39,90 +19,101 @@ abstract class AbstractTimedEffect {
 
 
 class Blackout {
+	-{static} TICKS_NUM : static constexpr size_t
 	+Blackout()
 	+~Blackout()
-	-{static} TICKS_NUM : static constexpr size_t
 }
 
 
 class InputLock {
+	-{static} PIECES_NUM : static constexpr size_t
 	+InputLock()
 	+~InputLock()
-	-{static} PIECES_NUM : static constexpr size_t
 }
 
 
 class PlacementTimedEffect {
+	-numPlacements_ : size_t
+	-remainingPlacements_ : size_t
+
 	#PlacementTimedEffect(size_t placementsNum)
 	#PlacementTimedEffect(const PlacementTimedEffect &)
 	+~PlacementTimedEffect()
-	+isFinished() : bool {query}
+
 	+operator==(const PlacementTimedEffect& other) : bool {query}
-	+getElapsedTime() : double {query}
-	-numPlacements_ : size_t
-	-remainingPlacements_ : size_t
 	+operator<<(std::ostream& os, const PlacementTimedEffect& placementTimedEffect) : std :: ostream&
+
+	+getElapsedTime() : double {query}
+	+isFinished() : bool {query}
 	+tetrominoPlaced() : void
 }
 
 
 class ReverseControls {
+	-{static} PIECES_NUM : static constexpr size_t
 	+ReverseControls()
 	+~ReverseControls()
-	-{static} PIECES_NUM : static constexpr size_t
 }
 
 
 class SlowDown {
+	-{static} SLOW_DOWN_FACTOR : static constexpr size_t
+	-{static} TICKS_NUM : static constexpr size_t
+
 	+SlowDown()
 	+~SlowDown()
 	+shouldIgnoreTick() : bool
-	-{static} SLOW_DOWN_FACTOR : static constexpr size_t
-	-{static} TICKS_NUM : static constexpr size_t
 }
 
 
 class SpeedUp {
+	-{static} TICKS_NUM : static constexpr size_t
+
 	+SpeedUp()
 	+~SpeedUp()
+
 	+{static} SpeedUpFactor : static constexpr size_t
-	-{static} TICKS_NUM : static constexpr size_t
 }
 
 
 class TickTimedEffect {
+	-numTicks_ : size_t
+	-remainingTicks_ : size_t
+
 	#TickTimedEffect(size_t ticksNum)
 	#TickTimedEffect(const TickTimedEffect &)
 	+~TickTimedEffect()
-	+isFinished() : bool {query}
+
 	+operator==(const TickTimedEffect& other) : bool {query}
-	+getElapsedTime() : double {query}
-	-numTicks_ : size_t
-	-remainingTicks_ : size_t
 	+operator<<(std::ostream& os, const TickTimedEffect& tickTimedEffect) : std :: ostream&
+
+	+getElapsedTime() : double {query}
+	+isFinished() : bool {query}
 	+tick() : void
 }
 
 
 class TimedBonus {
+	-bonusType_ : BonusType
+
 	#TimedBonus(BonusType bonusType)
 	#TimedBonus(const TimedBonus &)
 	#TimedBonus(TimedBonus& &)
 	+~TimedBonus()
-	-bonusType_ : BonusType
+
 	+getBonusType() : BonusType {query}
-	+{static} makeBonus(BonusType bonusType) : TimedBonusPtr
+	+{static} makeBonus(BonusType bonusType) : shared_ptr<TimedBonus>
+
 	+serialize() : nlohmann::json {query}
-	+operator<<(std::ostream& os, const TimedBonus& bonus) : std :: ostream&
 }
 
 
 class TimedPenalty {
+	-penaltyType_ : PenaltyType
 	#TimedPenalty(PenaltyType penaltyType)
 	+~TimedPenalty()
 	+getPenaltyType() : PenaltyType {query}
-	-penaltyType_ : PenaltyType
-	+{static} makePenalty(PenaltyType bonusType) : TimedPenaltyPtr
+	+{static} makePenalty(PenaltyType bonusType) : shared_ptr<TimedPenalty>
 	+serialize() : nlohmann::json {query}
 }
 
@@ -149,16 +140,16 @@ enum PenaltyType {
 
 /' Inheritance relationships '/
 
-AbstractTimedEffect <|-- PlacementTimedEffect
+ATimedEffect <|-- PlacementTimedEffect
 
 
-AbstractTimedEffect <|-- TickTimedEffect
+ATimedEffect <|-- TickTimedEffect
 
 
-AbstractTimedEffect <|-- TimedBonus
+ATimedEffect <|-- TimedBonus
 
 
-AbstractTimedEffect <|-- TimedPenalty
+ATimedEffect <|-- TimedPenalty
 
 
 PlacementTimedEffect <|-- InputLock

@@ -7,58 +7,131 @@ skinparam linetype ortho
 /' Objects '/
 
 class ClientLink {
-	+ClientLink(tcp::socket socket, function<void ( const std::string&, const int clientId )> packetHandler, function<nlohmann::json ( bindings::BindingType, nlohmann::json )> authPacketHandler, function<void ( std::shared_ptr<ClientLink>, nlohmann::json )> authSuccessCallback)
-	-identify_ : bool
-	+isIdentify() : bool
+	-userState : bindings::State
+	-clientId : std::optional<UserID>
 	-mustBeDeletedFromTheWaitingForAuthList_ : bool
-	+shouldItBeDeletedFromTheList() : bool
-	-streamBuffer_ : boost::asio::streambuf
-	-authPacketHandler_ : function<nlohmann::json ( bindings::BindingType, nlohmann::json )>
-	-packetHandler_ : function<void ( const std::string&, const int clientId )>
-	-authSuccessCallback_ : function<void ( std::shared_ptr<ClientLink>, nlohmann::json )>
-	-clientId : std::optional<PlayerID>
-	-buffer_ : std::string
+	
 	-socket_ : tcp::socket
-	-handleAuthentication(std::string& packet) : void
+	-streamBuffer_ : boost::asio::streambuf
+	-buffer_ : std::string
+
+	-pGame_ : std::weak_ptr<GameServer>
+	-gameMode_ : std::optional<GameMode>
+
 	-handleErrorReading() : void
 	-handleReading() : void
 	-read() : void
-	+sendPackage(nlohmann::json gameState) : void
-	+setClientId(const int id) : void
-	+setIdentifyFalse() : void
-	+start() : void
+	-checkPackage(std::string& package) : bool
 	-writeSocket(std::string& content) : void
+	
+	-authPacketHandler_ : function<nlohmann::json ( nlohmann::json )>
+	-authSuccessCallback_ : function<void ( std::shared_ptr<ClientLink>, nlohmann::json )>
+	-handleAuthentication(std::string& packet) : void
+	-packetHandler_ : function<void ( const std::string&, const int clientId )>
+	-removeClientCallback_ : function<void ( std::optional<UserID>)>
+	
+	+ClientLink(tcp::socket socket, function<void ( const std::string&, const int clientId )> packetHandler, function<nlohmann::json ( nlohmann::json )> authPacketHandler, function<void ( std::shared_ptr<ClientLink>, nlohmann::json )> authSuccessCallback, function<void ( std::optional<UserID>)> removeClientCallback)
+
+	+start() : void
+	+createUserFromThis() : bindings::User
+
+	+getUserID() : UserID
+	+getUserState() : bindings::State
+	+shouldItBeDeletedFromTheList() : bool
+	+getGameMode() : std::optional<GameMode>
+	+getGameServer() : std::weak_ptr<GameServer>
+
+	+jointGame(const std::weak_ptr<GameServer>& gameServer) : void
+	+resetGame() : void
+	+exitGame() : void
+
+	+setClientId(const int id) : void
+	+sendPackage(nlohmann::json gameState) : void
+	+setGameMode(std::optional<GameMode> newGameMode) : void
+	+setUserState(bindings::State newState) : void
 }
 
 
 class ClientManager {
-	+ClientManager(DataBase database)
-	+~ClientManager()
-	-database_ : DataBase
+	-accountService_ : AccountService
 	-gamesManager_ : GamesManager
 	-matchmaking_ : Matchmaking
-	-attemptCreateAccount(nlohmann::json data) : bool
-	+checkCredentials(nlohmann::json data) : bool
-	+isClientConnected(PlayerID playerId) : bool
-	+authPacketHandler(bindings::BindingType type, nlohmann::json data) : nlohmann::json
-	-mutex_ : std::mutex
-	-connectedClients_ : std::unordered_map<PlayerID, std::shared_ptr<ClientLink>>
+	-socialService_ : SocialService
+
 	-waitingForAuthClient : std::vector<std::shared_ptr<ClientLink>>
-	+addClientInWaitingForAuth(std::shared_ptr<ClientLink>&& clientLink) : void
-	+addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo) : void
-	+authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData) : void
-	-disconnectClient(const PlayerID& playerID) : void
-	+handleMessage(nlohmann::json message) : void
-	+handlePacket(const std::string& packet, const PlayerID& clientId) : void
-	+handlePacketMenu(const std::string& packet, const PlayerID& clientId) : void
+	-connectedClients_ : std::unordered_map<UserID, std::shared_ptr<ClientLink>>
+	
+	-mutex_ : std::mutex
+
+	-sendUpdatedRankingToClients() : void {query}
+	-disconnectClient(const UserID& userID) : void
 	-removeClientsFromTheWaintingList() : void
-	-removeConnection(const PlayerID& playerID) : void
-	+updateGameStates(PlayerID playerIds, nlohmann::json gameState) : void
+
+	+ClientManager(DataBase database)
+	+~ClientManager()
+
+	+getUser(UserID userID) : bindings::User
+	+getUserState(UserID userID) : bindings::State
+	+isClientConnected(UserID userId) : bool
+
+	+addClientInWaitingForAuth(std::shared_ptr<ClientLink>&& clientLink) : void
+	+authPacketHandler(nlohmann::json binding) : nlohmann::json
+	+authSuccessCall(std::shared_ptr<ClientLink> clientLink, nlohmann::json clientData) : void
+	+addConnection(std::shared_ptr<ClientLink> clientSession, const std::string& pseudo) : void
+	+removeClient(std::optional<UserID> userID) : void
+
+	+gameFindCallback(std::vector<Player>& players, GameMode gameMode) : void
+	+handleMessage(nlohmann::json message) : void
+	+handlePacket(const std::string& packet, const UserID& clientId) : void
+	+handlePacketMenu(const std::string& packet, const UserID& clientId) : void
+	+updateMenu(UserID userId) : void
+	+updateThisUserWithAllhisFriends(UserID userId) : void
+
+	+shutdown() : void
 }
 
+class SocialService {
+	-getUser_ : function<bindings::User ( UserID )>
+	-friendsManager_ : std::shared_ptr<FriendsManager>
+	-messagesManager_ : std::shared_ptr<MessagesManager>
+
+	+SocialService(std::shared_ptr<FriendsManager>& friendsManager, std::shared_ptr<MessagesManager>& messagesManager, function<bindings::User ( UserID )> getUser)
+	+~SocialService()
+
+	+getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager) : bindings::Conversations
+	+getFriendsList(UserID userID) : bindings::FriendsList
+	+getPendignsFriendRequests(UserID userID) : bindings::PendingFriendRequests
+	+getFriendIdsList(UserID userID) : std::vector<int>
+
+	+handleFriendRequest(UserID senderID, bindings::FriendRequest friendRequest, std::shared_ptr<AccountManager>& AccountManager) : void
+	+handleHandleFriendRequest(UserID senderID, bindings::HandleFriendRequest handleFrienddRequest) : void
+	+handleMessages(UserID senderID, bindings::Message message) : void
+	+handleRemoveFriend(UserID senderID, bindings::RemoveFriend removeFriend) : void
+}
+
+class AccountService {
+	-accountManager_ : std::shared_ptr<AccountManager>
+
+	-checkCredentials(bindings::Authentication authentication) : bool
+
+	+AccountService(std::shared_ptr<AccountManager>& accountManager)
+	+~AccountService()
+
+	+getUserID(std::string username) : UserID
+	+getAccountManager() : std::shared_ptr<AccountManager>&
+	+getUsername(UserID userID) : std::string
+	+getRanking() : std::vector<std::pair<std::string , size_t>> {query}
+
+	+authenticationAttempt(bindings::Authentication authentication, function<bool ( UserID )> isThisUserAlready) : bindings::AuthenticationResponse
+	+attemptCreateAccount(bindings::Registration registration) : bindings::RegistrationResponse
+
+	+updateScore(UserID userID, int score) : void
+	+attemptChangeUsername(UserID userID, bindings::ChangeUsername changeUsername, function<void ( UserID )> updateUsers) : bindings::ChangeUsernameResponse
+	+changePassword(UserID userID, bindings::ChangePassword changePassword) : void
+}
 
 class Network {
-	+Network(boost::asio::io_context& io, ClientManager& clientManager)
+	+Network(boost::asio::io_context& io, ClientManager& clientManager, uint16_t port)
 	-clientManager_ : ClientManager&
 	-io_ : boost::asio::io_context&
 	-acceptor_ : tcp::acceptor
@@ -95,9 +168,11 @@ class RequestJoinGame {
 
 ClientManager o-- "0..n" ClientLink
 
-
 ClientManager *-- "1" DataBase
 
+ClientManager *-- SocialService
+
+ClientManager *-- AccountService
 
 Network *-- "1" ClientManager
 

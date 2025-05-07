@@ -23,7 +23,7 @@ rectangle "Partie Classique" as game {
 
     'TODO: penalty might be a bad name
     'TODO: throw n lines penalty can be activated only if f(n) lines have been completed
-    usecase "envoyer un penalty" as throw_penalty
+    usecase "Envoyer un penalty" as throw_penalty
 
     '### move piece subcases NOTE: is "extends" the right keyword for this
     usecase "Déplacer latéralement" as lateral_movement
@@ -32,15 +32,13 @@ rectangle "Partie Classique" as game {
     usecase "Déplacer vers la gauche" as move_left
 
     '### Pause menu
-    usecase "Menu pause" as pause_menu
-    usecase "Reprendre la partie" as resume_game
     usecase "Quitter la partie" as quit_game
 }
 
 player -- move_piece
-player -- pause_menu
 player -- throw_penalty
 player -- change_malus_target
+player -- quit_game
 
 (move_piece) <-. (lateral_movement): <<extend>>
 (move_piece) <-. (increase_descent): <<extend>>
@@ -48,9 +46,6 @@ player -- change_malus_target
 (lateral_movement) <-. (move_right): <<extend>>
 (lateral_movement) <-. (move_left): <<extend>>
 
-
-(pause_menu) <-. (resume_game): <<extend>>
-(pause_menu) <-. (quit_game): <<extend>>
 
 (change_malus_target) .-> (choose_malus_target): <<include>>
 

@@ -1,0 +1,103 @@
+@startuml AbstractGameDisplayClass
+
+skinparam linetype ortho
+
+
+/' Objects '/
+
+class AbstractGameDisplay {
+	-gameState_ : std::variant<client::GameState, client::GameStateViewer>
+	-controller_ : Controller&
+
+	#AbstractGameDisplay(Controller& controller)
+	#AbstractGameDisplay(const AbstractGameDisplay &)
+	#AbstractGameDisplay(AbstractGameDisplay& &)
+
+	#{static} colorIdToColor(unsigned colorID) : int
+
+	#getSelfScore() : Energy {query}
+	#getGameMode() : GameMode {query}
+	#getSelfUsername() : std::string& {query}
+	#gameIsFinished() : bool {query}
+	#isSpectating() : bool {query}
+	#isWinner() : bool {query}
+
+	#handleKeyPress(const std::string& key) : void
+	#updateGameState() : void
+
+	#getNumOpponents() : size_t {query}
+	#getOpponentUsername(size_t opponentIdx) : std::string& {query}
+	#getNthOpponentUserID(size_t n) : UserID {query}
+	#checkOpponentAlive(size_t opponentIdx) : bool {query}
+	#selectTarget(size_t targetIndex) : void
+	#getSelectedTarget() : std::optional<UserID> {query}
+	#opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) : std::optional<unsigned> {query}
+
+	#getTetrominoQueueNth(size_t tetrominoIdx) : client::Tetromino& {query}
+	#getBoardHeight() : size_t {query}
+	#getBoardWidth() : size_t {query}
+	#getTetrominoQueuesSize() : size_t {query}
+	#getHoldTetromino() : client::Tetromino* {query}
+	#getPenaltyInfo() : std::optional<std::pair<std::string , double>> {query}
+	#selfCellInfoAt(int x, int y) : std::optional<std::pair<unsigned , SelfCellType>> {query}
+
+	#getSelectedEffectType() : EffectType {query}
+	#getSelfEnergy() : Score {query}
+	#getBonusInfo() : std::optional<std::pair<std::string , double>> {query}
+	#getEffectPrices() : std::vector<std::pair<EffectType , Energy>>& {query}
+	#buyEffect(EffectType effectType) : void
+	#setSelectedEffectType(EffectType effectType) : void
+
+	#quitGame() : void
+
+	+{static} QUIT_KEY : constexpr static std::string_view
+}
+
+
+enum AbstractGameDisplay::Color {
+	Black
+	DarkBlue
+	Green
+	Grey
+	LightBlue
+	Orange
+	Pink
+	Purple
+	Red
+	White
+	Yellow
+}
+
+
+enum AbstractGameDisplay::SelfCellType {
+	Active
+	Placed
+	Preview
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+
+
+
+
+/' Nested objects '/
+
+AbstractGameDisplay +-- AbstractGameDisplay::Color
+
+
+AbstractGameDisplay +-- AbstractGameDisplay::SelfCellType
+
+
+
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml GraphismeStructureClass
+
+skinparam linetype ortho
+
+' !include AbstractGameDisplayClass.plantuml!0
+
+
+class MainTui{}
+class Controller {}
+
+class MainMenu {}
+class Messaging{}
+class FriendsMenu{}
+class GameMenu{}
+class GameDisplay{}
+class AbstractGameDisplayClass{}
+
+class LoginMenu{}
+class LoginInput{}
+
+abstract class AbstractDisplay{}
+
+enum LoginInput::LoginType {
+    LOGIN 
+    REGISTER
+    NONE
+}
+
+enum LoginInput::LoginState {
+    SUBMIT
+    BACK
+    NONE
+}
+
+enum MainMenu::MainMenuState {
+    CREATE_GAME
+    JOIN_GAME
+    SEND_MESSAGES_TO_FRIENDS
+    LOOK_RANKING
+    MANAGE_PROFILE
+    MANAGE_FRIENDS_LIST
+    EXIT
+    BACK
+    NONE
+}
+
+LoginMenu *- "1" MainTui
+LoginMenu *- "2" LoginInput
+
+MainMenu *- "1" MainTui
+MainMenu *- "1" FriendsMenu
+MainMenu *- "1" Messaging
+MainMenu *- "1" GameMenu
+
+GameMenu *- "1" GameDisplay
+
+AbstractGameDisplay <|- GameDisplay
+AbstractDisplay <|- MainTui
+
+
+MainMenu +-- MainMenu::MainMenuState
+LoginInput +-- LoginInput::LoginState
+LoginInput +-- LoginInput::LoginType
+@enduml

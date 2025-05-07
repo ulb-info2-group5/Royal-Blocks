@@ -58,6 +58,17 @@ class MatchMaking{}
 
 class Network{}
 
+class AccountService{}
+
+class SocialService{}
+
+class TetrisMainServer{}
+
+class Player {
+	+userID : UserID
+	+username : std::string
+}
+
 class RequestCreateGame {
 	+playerId : PlayerID
 	+bindCreateGame : bindings::CreateGame
@@ -76,23 +87,51 @@ class DataBase {
 }
 
 
-ClientManager o-- "0..n" ClientLink
+ClientLink o-- "1" GameServer
 
+ClientManager "1" *-- "1" GamesManager
+
+ClientManager "1" *-- "1" Matchmaking
+
+GameCandidate *-- Player
+
+GameServer o-- ClientLink
+
+
+AccountManager o-- DatabaseManager
+
+Discution *-- Message
+
+FriendsManager o-- DatabaseManager
+
+MessagesManager o-- DatabaseManager
+
+
+GamesManager o--"0..n" GameServer
+
+
+Matchmaking *-- "0..n" GameCandidate
+
+Matchmaking *-- Player
+
+RequestCreateGame *-- Player
+
+RequestJoinGame *-- Player
+
+
+ClientManager o-- "0..n" ClientLink
 
 ClientManager *-- "1" DataBase
 
+ClientManager *-- SocialService
 
-ClientManager *-- "1" GamesManager
-
-
-ClientManager *-- "1" Matchmaking
+ClientManager *-- AccountService
 
 Network *-- "1" ClientManager
 
-DataBase o-- "1" AccountManager
-DataBase o-- "1" FriendsManager
-DataBase o-- "1" MessagesManager
+TetrisMainServer *-- ClientManager
 
-GamesManager *-- "0..n" GameServer
+TetrisMainServer *-- Database
 
+TetrisMainServer o-- TetrisMainServer
 @enduml

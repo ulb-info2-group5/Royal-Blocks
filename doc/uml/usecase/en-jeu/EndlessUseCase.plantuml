@@ -19,13 +19,14 @@ rectangle "Partie Endless" as game {
     usecase "Déplacer vers la droite" as move_right
     usecase "Déplacer vers la gauche" as move_left
 
-    usecase "Menu pause" as pause_menu
-    usecase "Reprendre la partie" as resume_game
+    ' usecase "Menu pause" as pause_menu
+    ' usecase "Reprendre la partie" as resume_game
     usecase "Quitter la partie" as quit_game
 }
 
 player -- move_piece
-player -- pause_menu
+' player -- pause_menu
+player -- quit_game
 
 (move_piece) <-. (lateral_movement): <<extend>>
 (move_piece) <-. (increase_descent): <<extend>>
@@ -33,8 +34,8 @@ player -- pause_menu
 (lateral_movement) <-. (move_right): <<extend>>
 (lateral_movement) <-. (move_left): <<extend>>
 
-(pause_menu) <-. (resume_game): <<extend>>
-(pause_menu) <-. (quit_game): <<extend>>
+' (pause_menu) <-. (resume_game): <<extend>>
+' (pause_menu) <-. (quit_game): <<extend>>
 
 
 @enduml

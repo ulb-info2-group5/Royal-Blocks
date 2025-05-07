@@ -6,52 +6,64 @@
 
 /' Objects '/
 
+
 class PlayerState {
-	+PlayerState(size_t playerID, size_t score)
+	-userID_ : UserID
+	-username : std::string
+	-isAlive_ : bool
+
+	-score_ : Score
+	-penaltyTarget_ : std::optional<UserID>
+	-receivedPenaltiesQueue_ : std::queue<PenaltyType>
+	-stashedPenalties_ : std::deque<PenaltyType>
+	-engineTicksSinceLastTick_ : std::optional<size_t>
+
+	-pActiveBonus_ : shared_ptr<TimedBonus>
+	-pActivePenalty_ : shared_ptr<TimedPenalty>
+	-grantedBonusesQueue_ : std::queue<BonusType>
+	-energy_ : std::optional<Energy>
+
+	+PlayerState(UserID userID, std::string username, Score score)
 	+PlayerState(const PlayerState &)
 	+PlayerState(PlayerState& &)
 	+~PlayerState()
-	+getPlayerID() : PlayerID {query}
+
 	+operator=(const PlayerState &) : PlayerState&
 	+operator=(PlayerState& &) : PlayerState&
+
+	+getUserID() : UserID {query}
 	+getScore() : Score {query}
-	-pActiveBonus_ : TimedBonusPtr
-	+getActiveBonus() : TimedBonusPtr&
-	-pActivePenalty_ : TimedPenaltyPtr
-	+getActivePenalty() : TimedPenaltyPtr&
 	+isAlive() : bool {query}
-	-isAlive_ : bool
-	+isGameTick() : bool
-	+serializeExternal() : nlohmann::json {query}
-	+serializeSelf() : nlohmann::json {query}
-	-playerID_ : size_t
-	-score_ : size_t
+	+getPenaltyTarget() : std::optional<UserID> {query}
 	+getStashedPenalties() : std::deque<PenaltyType>
-	+fetchGrantedBonus() : std::optional<BonusType>
-	-energy_ : std::optional<Energy>
 	+getEnergy() : std::optional<Energy> {query}
+	+getActiveBonus() : shared_ptr<TimedBonus>&
+	+getActiveBonus() : shared_ptr<TimedBonus>& {query}
+	+getActivePenalty() : shared_ptr<TimedPenalty>&
+	+getActivePenalty() : shared_ptr<TimedPenalty>& {query}
+	
+	+increaseScore(Score val) : void
+	+setAlive(bool isAlive) : void
+	+setPenaltyTarget(UserID userID) : void
+	+increaseEnergy(Energy amount) : void
+	+decreaseEnergy(Energy amount) : void
+	+setActiveBonus(const shared_ptr<TimedBonus>& pTimedBonus) : void
+	+setActivePenalty(const shared_ptr<TimedPenalty>& pTimedPenalty) : void
+
+	+receivePenalty(PenaltyType penalty) : void
+	+stashPenalty(PenaltyType penalty) : void
+	+toggleEffects(bool activated) : void
+	+fetchGrantedBonus() : std::optional<BonusType>
 	+fetchReceivedPenalty() : std::optional<PenaltyType>
-	+getPenaltyTarget() : std::optional<PlayerID> {query}
-	-penaltyTarget_ : std::optional<PlayerID>
-	-engineTicksSinceLastTick_ : std::optional<size_t>
-	-stashedPenalties_ : std::optional<std::deque<PenaltyType>>
-	-grantedBonusesQueue_ : std::optional<std::queue<BonusType>>
-	-receivedPenaltiesQueue_ : std::optional<std::queue<PenaltyType>>
-	-effectsPrice : std::vector<EffectPrice>
-	+decreaseEnergy(size_t amount) : void
 	+grantBonus(BonusType bonus) : void
-	+increaseEnergy(size_t amount) : void
-	+increaseScore(size_t val) : void
+
+	+isGameTick() : bool
 	+notifyActiveTetrominoPlaced() : void
 	+notifyEngineTick() : void
 	+notifyLost() : void
-	+receivePenalty(PenaltyType penalty) : void
-	+setActiveBonus(const TimedBonusPtr& pTimedBonus) : void
-	+setActivePenalty(const TimedPenaltyPtr& pTimedPenalty) : void
-	+setAlive(bool isAlive) : void
-	+setPenaltyTarget(size_t playerID) : void
-	+stashPenalty(PenaltyType penalty) : void
-	+toggleEffects(bool activated) : void
+
+	+serializeExternal() : nlohmann::json {query}
+	+serializeSelf() : nlohmann::json {query}
 }
 
 

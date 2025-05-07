@@ -1,0 +1,22 @@
+@startuml CyclicIndex
+
+class CyclicIndex {
+	-cycleSize_ : size_t
+	-index_ : size_t
+
+	+CyclicIndex(size_t cycleSize, size_t startIdx)
+	+CyclicIndex(const CyclicIndex &)
+	+CyclicIndex(CyclicIndex& &)
+	+~CyclicIndex()
+
+	+operatorsize_t() {query}
+	
+	+operator++() : CyclicIndex&
+	+operator+=(size_t rotationToAdd) : CyclicIndex&
+	+operator--() : CyclicIndex&
+	+operator-=(size_t rotationToAdd) : CyclicIndex&
+	+operator=(const CyclicIndex &) : CyclicIndex&
+	+operator=(CyclicIndex& &) : CyclicIndex&
+}
+
+@enduml

@@ -7,18 +7,25 @@
 /' Objects '/
 
 class GameState {
+	-gameMode_ : const GameMode
+	-isFinished_ : bool
+	-userToPlayerTetris_ : std::map<UserID, PlayerTetris>
+
 	+GameState(GameMode gameMode, std::vector<PlayerState>&& playerStates)
 	+GameState(const GameState &)
 	+GameState(GameState& &)
 	+~GameState()
+
 	+getGameMode() : GameMode {query}
-	+getPlayerState(PlayerID playerID) : PlayerStatePtr
-	+getTetris(PlayerID playerID) : TetrisPtr
-	-gameMode_ : const GameMode
-	+serializeFor(PlayerID playerID) : nlohmann::json {query}
-	+getWinner() : std::optional<PlayerID> {query}
-	-playerToTetris_ : std::vector<PlayerTetris>
-	+getPlayerToTetris() : std::vector<PlayerTetris>&
+	+getPlayerState(UserID userID) : shared_ptr<PlayerState>
+	+getTetris(UserID userID) : TetrisPtr
+	+getUserToPlayerTetris() : std::map<UserID , PlayerTetris>&
+	+getWinner() : std::optional<UserID> {query}
+
+	+setIsFinished(bool isFinished) : void
+
+	+serializeForPlayer(UserID userID) : nlohmann::json {query}
+	+serializeForViewer() : nlohmann::json {query}
 }
 
 

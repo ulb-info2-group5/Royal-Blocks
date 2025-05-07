@@ -4,9 +4,9 @@ skinparam linetype ortho
 
 !include ControllerClass.plantuml!0
 !include NetworkManagerClass.plantuml!0
-!include ScreenManagerClass.plantuml!0
+' !include ScreenManagerClass.plantuml!0
 
 Controller *-- "1" NetworkManager
-Controller *-- "1" ScreenManager
+' Controller *-- "1" ScreenManager
 
 @enduml

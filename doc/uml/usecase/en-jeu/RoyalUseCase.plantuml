@@ -33,13 +33,11 @@ rectangle "Partie Compétition Royale" as game {
     usecase "Déplacer vers la droite" as move_right
     usecase "Déplacer vers la gauche" as move_left
 
-    usecase "Menu pause" as pause_menu
-    usecase "Reprendre la partie" as resume_game
     usecase "Quitter la partie" as quit_game
 }
 
 player -- move_piece
-player -- pause_menu
+player -- quit_game
 player -- use_energy
  
 (move_piece) <-. (lateral_movement): <<extend>>
@@ -48,8 +46,6 @@ player -- use_energy
 (lateral_movement) <-. (move_right): <<extend>>
 (lateral_movement) <-. (move_left): <<extend>>
 
-(pause_menu) <-. (resume_game): <<extend>>
-(pause_menu) <-. (quit_game): <<extend>>
 
 (use_energy) <-. (throw_penalty): <<extend>>
 (throw_penalty) <-. (choose_penalty): <<extend>> 

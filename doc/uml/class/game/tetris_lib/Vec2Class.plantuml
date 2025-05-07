@@ -1,36 +1,37 @@
 /' authors Ernest Jonas Rafaou '/
 @startuml (id=Vec2)
 class Vec2 {
-    - x_ : int
-    - y_ : int
-   
-    + Vec2(x : int = 0, y : int = 0)
+	-x_ : int
+	-y_ : int
 
-    + Vec2(const Vec2 &) = default
-    + Vec2(Vec2 &&) = default
-    + operator=(const Vec2 &) : Vec2& = default
-    + operator=(Vec2 &&) : Vec2& = default
-    + ~Vec2() = default
+	+Vec2(int x, int y)
+	+Vec2(const Vec2 &)
+	+Vec2(Vec2& &)
+	+~Vec2()
 
-    + getX() : int const noexcept
-    + getY() : int const noexcept
+	+decltype(auto ) get () {query}
+	+getX() : int {query}
+	+getY() : int {query}
 
-    + setX(x : int) : void
-    + setY(y : int) : void
-    + moveX(x : int) : void
-    + moveY(y : int) : void
+	+moveX(int x) : void
+	+moveY(int y) : void
+	+setX(int x) : void
+	+setY(int y) : void
 
-    + operator==(other : const Vec2&) : bool const
-    + operator!=(other : const Vec2&) : bool const
-    + operator+(other : const Vec2&) : Vec2 const
-    + operator+=(other : const Vec2&) : Vec2&
-    + operator-(other : const Vec2&) : Vec2 const
-    + operator-=(other : const Vec2&) : Vec2&
-    + operator-() : Vec2 const
+	+operator+(const Vec2& other) : Vec2 {query}
+	+operator-(const Vec2& other) : Vec2 {query}
+	+operator-() : Vec2 {query}
+	+operator+=(const Vec2& other) : Vec2&
+	+operator-=(const Vec2& other) : Vec2&
+	+operator=(const Vec2 &) : Vec2&
+	+operator=(Vec2& &) : Vec2&
+	+operator!=(const Vec2& other) : bool {query}
+	+operator==(const Vec2& other) : bool {query}
+	+operator<<(std::ostream& os, const Vec2& vec2) : std :: ostream&
 
-    + rotateAround(rotationCenter : const Vec2&, rotateClockwise : bool) : const Vec2&
-    
-    + serialize() : nlohmann::json const
-    + deserialize(j : const nlohmann::json&) : void
+	+rotateAround(const Vec2& rotationCenter, bool rotateClockwise) : Vec2&
+	
+	+serialize() : nlohmann::json {query}
+	+deserialize(const nlohmann::json& j) : void
 }
 @enduml

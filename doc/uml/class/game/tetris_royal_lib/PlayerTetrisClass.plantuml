@@ -7,9 +7,10 @@
 /' Objects '/
 
 class PlayerTetris {
-	+PlayerTetris(PlayerStatePtr&& pPlayerState)
-	+pPlayerState : shared_ptr<PlayerState>
 	+pTetris : shared_ptr<Tetris>
+	+pPlayerState : shared_ptr<PlayerState>
+
+	+PlayerTetris(PlayerStatePtr&& pPlayerState)
 	+serializeExternal() : nlohmann::json {query}
 	+serializeSelf() : nlohmann::json {query}
 }

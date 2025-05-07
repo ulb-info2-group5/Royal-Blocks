@@ -11,11 +11,9 @@ skinparam class {
 
 !include Vec2Class.plantuml!0
 
-!include EventClass.plantuml!0
-
 !include GridCellClass.plantuml!0
 
-!include RotationIndexClass.plantuml!0
+!include CyclicIndexClass.plantuml!0
 
 !include TetrisClass.plantuml!0
 
@@ -27,11 +25,20 @@ enum TetrominoMove {
     Down,
 }
 
+namespace std {
+	class tuple_elementN,Vec2 <template<std::size_t N>> {
+	}
+
+	class tuple_sizeVec2 <template<>> {
+	}
+}
+
+
 TetrominoShape"1"- ATetromino
  
-ATetromino  - "2" RotationIndex : have  >
+ATetromino  - "2" CyclicIndex : have  >
 ATetromino *--"4" Vec2 : have > 
-ATetromino - "1" RotationIndex
+ATetromino - "1" CyclicIndex
 
 
 Board *--"width_* height_" GridCell

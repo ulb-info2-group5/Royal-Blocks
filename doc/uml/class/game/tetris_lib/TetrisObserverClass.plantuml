@@ -1,14 +1,15 @@
 /' authors Ernest Jonas Rafaou '/
 @startuml (id = TetrisObserver)
-interface TetrisObserver {
-    + TetrisObserver() = default
-    + TetrisObserver(const TetrisObserver &) = default
-    + TetrisObserver(TetrisObserver &&) = default
-    + operator=(const TetrisObserver &) : TetrisObserver& = default
-    + operator=(TetrisObserver &&) : TetrisObserver& = default
-    + ~TetrisObserver() = default
-    
-    + notifyLost() = 0
-    + notifyActiveTetrominoPlaced() = 0
+abstract class TetrisObserver {
+	+TetrisObserver()
+	+TetrisObserver(const TetrisObserver &)
+	+TetrisObserver(TetrisObserver& &)
+	+~TetrisObserver()
+
+	+operator=(const TetrisObserver &) : TetrisObserver&
+	+operator=(TetrisObserver& &) : TetrisObserver&
+	
+	+{abstract} notifyActiveTetrominoPlaced() : void
+	+{abstract} notifyLost() : void
 }
 @enduml

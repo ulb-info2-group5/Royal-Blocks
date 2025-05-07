@@ -1,4 +1,5 @@
 @startuml DatabaseClass
+skinparam linetype ortho
 
 
 
@@ -6,64 +7,87 @@
 /' Objects '/
 
 class AccountManager {
+	-checkFriendshipExists(const std::string& user, const std::string& friendUser) : bool {query}
+	-dbManager_ : std::shared_ptr<DatabaseManager>
+
 	+AccountManager(std::shared_ptr<DatabaseManager>& db)
 	+~AccountManager()
-	-checkFriendshipExists(const std::string& user, const std::string& friendUser) : bool {query}
+
+	+getUserId(const std::string& username) : int {query}
+	+getUserPasswordHash(const std::string& nickname) : std::string {query}
+	+getUsername(const int userId) : std::string {query}
+	+getRanking() : std::vector<std::pair<std::string , size_t>> {query}
+
 	+checkUserPassword(const std::string& username, const std::string& password) : bool {query}
 	+checkUsernameExists(const std::string& username) : bool {query}
-	+deleteAccount(const int userId) : bool
-	+login(const std::string& username, const std::string& password) : bool {query}
+
 	+createAccount(const std::string& username, const std::string& password) : int
-	+getUserId(const std::string& username) : int {query}
-	-dbManager_ : std::shared_ptr<DatabaseManager>
-	+getUsername(const int userId) : std::string {query}
-	+launch() : void
+	+login(const std::string& username, const std::string& password) : bool {query}
+	+deleteAccount(const int userId) : bool
+	+updateUsername(const int userID, std::string& newUsername) : bool
+	+updatePassword(const int userID, std::string& newPassword) : void
 	+updateScore(const int userId, const int newScore) : void
 }
 
 
 class DatabaseManager {
+	-db_ : sqlite3*
+
 	+DatabaseManager()
 	+DatabaseManager(const std::string& path)
 	+~DatabaseManager()
+	
 	+createTables(const std::string& sql) : bool
 	+executeSqlChangeData(const std::string& sql, const std::vector<MultiType>& params) : bool
 	+executeSqlRecoveryInt(const std::string& sql, const std::vector<MultiType>& params, int& result) : bool {query}
 	+executeSqlRecoveryString(const std::string& sql, const std::vector<MultiType>& params, std::string& result) : bool {query}
-	+findUserInDatabase(const std::string& table, const int userId) : bool
-	-db_ : sqlite3*
+
 	+getDatabase() : sqlite3* {query}
+	+findUserInDatabase(const std::string& table, const int userId) : bool
 	+getVectorInfo(const std::string& sql, const int id) : std::vector<int> {query}
-	+getRanking() : std::vector<std::pair<std::string , int>> {query}
+	+getRanking() : std::vector<std::pair<std::string , size_t>> {query}
 }
 
 
 class FriendsManager {
-	+FriendsManager(std::shared_ptr<DatabaseManager>& db)
-	+~FriendsManager()
-	+addFriend(const int userId, const int friendUserId) : bool
+	-dbManager_ : std::shared_ptr<DatabaseManager>
 	-checkFriendshipExists(const int idUser1, const int idUser2) : bool {query}
 	-checkUserExists(const int userId) : bool {query}
-	+removeFriend(const int userId, const int friendUserId) : bool
-	-dbManager_ : std::shared_ptr<DatabaseManager>
+
+	+FriendsManager(std::shared_ptr<DatabaseManager>& db)
+	+~FriendsManager()
+
 	+getFriends(const int userId) : std::vector<int> {query}
+	+getPendingFriendRequest(const int userId) : std::vector<int>
+
+	+isPendingFriendRequestExist(const int user1Id, const int user2Id) : bool
+	+addFriend(const int userId, const int friendUserId) : bool
+	+addPendingFriendRequest(const int user1Id, const int user2Id) : bool
+	+removeFriend(const int userId, const int friendUserId) : bool
+	+removePendingFriendRequest(const int user1Id, const int user2Id) : bool
 }
 
 
 class MessagesManager {
-	+MessagesManager(std::shared_ptr<DatabaseManager>& db)
-	+~MessagesManager()
-	+getDiscussion(const int& idUser1, const int& idUser2) : Discution
-	-addDiscussion(const int& idUser1, const int& idUser2) : bool
-	-createDiscussionFile(const std::string& filePath, Discution discussion) : bool
-	-isThereDiscussion(const int& idUser1, const int& idUser2) : bool
 	-dbManager_ : std::shared_ptr<DatabaseManager>
+
+	-addDiscussion(const int& idUser1, const int& idUser2) : bool
+	-createDiscussionFile(const std::string& filePath) : bool
 	-generateFileName(const int& idUser1, const int& idUser2) : std::string
 	-getPathDiscussion(const int& idUser1, const int& idUser2) : std::string
+
+	+MessagesManager(std::shared_ptr<DatabaseManager>& db)
+	+~MessagesManager()
+
+	+getAllDiscusions(const int& idUser) : std::vector<bindings::Conversation>
 	+getAllUser(const int& idUser) : std::vector<int>
-	+readDiscussion(const std::string& pathfile) : void
-	+sendMessage(const int& senderId, const int& recieverId, const std::string& content) : void
+	+getDiscussion(const int& idUser1, const int& idUser2) : bindings::Conversation
+
+	+isThereDiscussion(const int& idUser1, const int& idUser2) : bool
 	+showAllMessages(const int& idUser1, const int& idUser2) : void
+
+	+addMessage(const int& senderId, const int& recieverId, const std::string& content) : void
+	+readDiscussion(const std::string& pathfile) : void
 	+writeMessage(const std::string& pathfile, const Message& message) : void
 }
 
@@ -75,8 +99,8 @@ enum CreateAccountStatus {
 }
 
 
-class Discution {
-	+{static} from_json(const nlohmann::json& j) : Discution
+class Discussion {
+	+{static} from_json(const nlohmann::json& j) : Discussion
 	+idUser1 : int
 	+idUser2 : int
 	+to_json() : nlohmann::json {query}

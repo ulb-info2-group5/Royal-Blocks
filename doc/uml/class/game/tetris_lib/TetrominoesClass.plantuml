@@ -6,127 +6,128 @@
 
 
 abstract class ATetromino {
-    - width_ : size_t = 0
-    - height_ : size_t = 0
-    - shape_ : TetrominoShape
-    - anchorPoint_ : Vec2
-    - body_ : vector<Vec2>
-    '----SRS----'
-    -rotationIdx_ : RotationIdex
-    -prevRotationIdx_ : RotationIndex
-    -*offsetData_ : const vector<vector<Vec2>>
+	-body_ : std::vector<Vec2>
+	-anchorPoint_ : Vec2
+	-height_ : size_t
+	-width_ : size_t
 
-    '----kick data----'
-    # {static} O_OFFSET_DATA : const vector<vector<Vecc2>>
-    # {static} I_OFFSET_DATA : const vector<vector<Vec2>>
-    # {static} ZLSJT_OFFSET_DATA : const vector<vector<Vec2>>
+	-prevRotationIdx_ : CyclicIndex
+	-rotationIdx_ : CyclicIndex
+	-shape_ : TetrominoShape
+	-offsetData_ : const std::vector<std::vector<Vec2>>*
 
+	+{static} NUM_ROTATIONS : static constexpr uint8_t
+	+{static} MAX_DIMENSION : constexpr static size_t
 
-    # ATetromino(anchorPoint : &&Vec2, body : &&vector<Vec2>, offsetData : * const vector<vector<Vec2>>, shape : TetrominoShape)
-    # {static} make_clone(tetromino : const &ATetromino) : shared_ptr<ATetromino>
+	#{static} I_OFFSET_DATA : static const std::vector<std::vector<Vec2>>
+	#{static} O_OFFSET_DATA : static const std::vector<std::vector<Vec2>>
+	#{static} ZLSJT_OFFSET_DATA : static const std::vector<std::vector<Vec2>>
 
-    + ATetromino() = delete
-    + ATetromino(other : ATetromino&&) = default
-    + ATetromino(other : const ATetromino&) = default
+	#{static} make_clone(const ATetromino& tetromino) : requires std::derived_from<Derived , ATetromino>shared_ptr<ATetromino>
+	#ATetromino(Vec2&& anchorPoint, std::vector<Vec2>&& body, const std::vector<std::vector<Vec2>>* offsetData, TetrominoShape shape)
 
-    '----Destructor----'
-    + <<virtual>> ~ATetromino() = default
+	+ATetromino(const ATetromino& other)
+	+ATetromino(ATetromino& &)
+	+~ATetromino()
+	+{static} makeTetromino(TetrominoShape shape, Vec2&& anchorPoint) : shared_ptr<ATetromino>
+	+{abstract} clone() : shared_ptr<ATetromino> {query}
 
-    '----Factory----'
-    + {static} makeTetromino(shape : TetrominoShape, anchorPoint : &&Vec2) : shared_ptr<ATetromino>
+	+operator=(const ATetromino &) : ATetromino&
+	+operator=(ATetromino& &) : ATetromino&
+	+operator!=(const ATetromino& other) : bool {query}
+	+operator==(const ATetromino& other) : bool {query}
+	+operator<<(std::ostream& os, const ATetromino& tetromino) : std :: ostream&
+	
+	+getShape() : char* {query}
+	+getHeight() : size_t {query}
+	+getWidth() : size_t {query}
+	+getBody() : std::vector<Vec2>& {query}
+	+getPrevRotationIndex() : CyclicIndex& {query}
+	+getColorId() : unsigned {query}
+	+getRotationIndex() : CyclicIndex& {query}
+	+getAnchorPoint() : Vec2& {query}
+	+getNthOffsetTest(uint8_t offsetIndex) : shared_ptr<ATetromino> {query}
+	+getNumOffsetTests() : uint8_t {query}
 
-    '----Getters----'
-    + getWidth() : const size_t
-    + getHeight() : const size_t
-    + getShape() : const TetrominoShape
-    + getAnchorPoint() : const &Vec2   
-    + getBody() : const &vector<Vec2>
-    + getRotationIndex() : const &RotationIndex
-    + getPrevRotationIndex() : const &RotationIndex
+	+setAnchorPoint(const Vec2& anchorPoint) : void
+	+move(TetrominoMove tetrominoMove, bool reverse) : void
+	+rotate(bool rotateClockwise) : void
 
-    + getNumOfTests() : const uint8_t
-    + getNthOffset(kickIndex : uint8_t) : const unique_ptr<ATetromino>
-
-    '----Setters----'
-    + setAnchorPoint(anchorPoint : const &Vec2) : void
-    + move(tetrominoMove : TetrominoMove, reverse : bool = false) : void
-    + rotate(rotateClockwise : bool) : void
-
-    '----Action----'
-
-    '----Comparisons----'
-    + operator==(other : const ATetromino&) : bool
-
-    + <<virtual>> clone() : const shared_ptr<Tetromino> = 0
-
-    + serialize() : const nlohmann::json
-    
+	+serialize() : nlohmann::json {query}
 }
 
 
 enum TetrominoShape {
-    Z
-    L
-    O
-    S
-    I
-    J
-    T
-    NUM_TETROMINOSHAPE
+	I
+	J
+	L
+	O
+	S
+	T
+	Z
+	MiniTetromino
+	NumBasicTetrominoShape
+	NumTetrominoShape
+}
+
+enum TetrominoMove {
+	Down
+	Left
+	Right
 }
 
 class TetrominoI extends ATetromino {
 
     +TetrominoI(anchorPoint : &&Vec2 )
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 class TetrominoO extends ATetromino {
 
     +TetrominoO(anchorPoint : &&Vec2 )
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 
 }
 class TetrominoT extends ATetromino {
 
     +TetrominoT(anchorPoint : &&Vec2)
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 class TetrominoS extends ATetromino {
 
     +TetrominoS(anchorPoint : &&Vec2 )
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 class TetrominoZ extends ATetromino {
 
     +TetrominoZ(anchorPoint : &&Vec2)
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 class TetrominoL extends ATetromino {
 
     +TetrominoL(anchorPoint : &&Vec2)
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 class TetrominoJ extends ATetromino {
 
     +TetrominoZ(anchorPoint : &&Vec2)
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 class MiniTetromino extends ATetromino {
     + MiniTetromino(anchorPoint : &&Vec2)
 
-    + clone() : const shared_ptr<ATetromino>
+    + clone() : shared_ptr<ATetromino> {query}
 }
 
 @enduml

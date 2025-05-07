@@ -13,7 +13,7 @@ class Board{}
 class BoardUpdate{}
 enum EventType{}
 class GridCell{}
-class RotationIndex{}
+class CyclicIndex{}
 class Tetris{}
 class TetrisObserverClass{}
 class TetrominoQueue{}
@@ -42,7 +42,7 @@ class TetrominoJ extends ATetromino{}
 class MiniTetromino extends ATetromino{}
 
 
-abstract class AbstractTimedEffect {}
+abstract class ATimedEffect {}
 
 
 class Blackout {}
@@ -106,16 +106,16 @@ class PlayerTetris{}
 
 /' Inheritance relationships '/
 
-AbstractTimedEffect <|-- PlacementTimedEffect
+ATimedEffect <|-- PlacementTimedEffect
 
 
-AbstractTimedEffect <|-- TickTimedEffect
+ATimedEffect <|-- TickTimedEffect
 
 
-AbstractTimedEffect <|-- TimedBonus
+ATimedEffect <|-- TimedBonus
 
 
-AbstractTimedEffect <|-- TimedPenalty
+ATimedEffect <|-- TimedPenalty
 
 
 PlacementTimedEffect <|-- InputLock
@@ -161,9 +161,9 @@ enum TetrominoMove {
 
 TetrominoShape"1"- ATetromino
  
-ATetromino  - "2" RotationIndex : have  >
+ATetromino  - "2" CyclicIndex : have  >
 ATetromino *--"4" Vec2 : have > 
-ATetromino - "1" RotationIndex
+ATetromino - "1" CyclicIndex
 
 
 Board *--"width_* height_" GridCell

@@ -3,61 +3,76 @@
 skinparam linetype ortho
 
 class GameEngine {
-	+GameEngine(shared_ptr<GameState> pGameState)
-	+GameEngine(const GameEngine &)
-	+GameEngine(GameEngine& &)
-	-for(GameEngine::GameModeFeature features: enabledFeatures)
-	-}()
-	+~GameEngine()
-	-calculateEnergyClearedRows(size_t numClearedRows) : Energy {query}
-	+operator=(const GameEngine &) : GameEngine&
-	+operator=(GameEngine& &) : GameEngine&
-	-calculatePointsClearedRows(size_t numClearedRows) : Score {query}
-	-invertTetrominoMove(TetrominoMove tetrominoMove) : TetrominoMove {query}
-	-checkAlive(const PlayerStatePtr& pPlayerState) : bool {query}
-	+checkAlive(PlayerID playerID) : bool {query}
-	-checkCanBuyEffect(const PlayerState& playerState, EffectType effectType) : bool {query}
-	-checkFeatureEnabled(GameModeFeature gameModeFeature) : bool {query}
-	+{static} checkFeatureEnabled(GameMode gameMode, GameModeFeature gameModeFeature) : bool
-	+gameIsFinished() : bool {query}
-	-shouldIgnoreTick(PlayerState& playerState) : bool
-	-shouldLockInput(PlayerState& playerState) : bool
-	-shouldReverseControls(PlayerState& playerState) : bool
-	-{static} featuresBitsets : constexpr static FeaturesMap
-	-at(static_cast<size_t>( GameMode::Endless ) )) : featuresPerGameMode .
-	-at(static_cast<size_t>( GameMode::Dual ) )) : featuresPerGameMode .
-	-at(static_cast<size_t>( GameMode::Classic ) )) : featuresPerGameMode .
-	-at(static_cast<size_t>( GameMode::RoyalCompetition ) )) : featuresPerGameMode .
+	-pGameState_ : GameStatePtr
 	-bitset : return
 	-featuresPerGameMode : return
-	-pGameState_ : shared_ptr<GameState>
+	-{static} featuresBitsets : array<FeaturesBitset, numGameMode>
 	-{static} genFeaturesBitset : static constexpr auto
-	+{static} numFeatures : static constexpr size_t
-	+{static} numGameMode : static constexpr size_t
-	+getWinner() : std::optional<PlayerID> {query}
-	+bigDrop(PlayerID playerID) : void
-	+emptyPenaltyStash(PlayerID playerID) : void
+	-at(static_cast<size_t>( GameMode::Endless ) )) : featuresPerGameMode
+	-at(static_cast<size_t>( GameMode::Dual ) )) : featuresPerGameMode
+	-at(static_cast<size_t>( GameMode::Classic ) )) : featuresPerGameMode
+	-at(static_cast<size_t>( GameMode::RoyalCompetition ) )) : featuresPerGameMode
+
+	-checkAlive(const PlayerStatePtr& pPlayerState) : bool {query}
+	-checkCanBuyEffect(const PlayerState& playerState, EffectType effectType) : bool {query}
+	-checkFeatureEnabled(GameModeFeature gameModeFeature) : bool {query}
+	-shouldIgnoreTick(const PlayerState& playerState) : bool {query}
+	-shouldLockInput(const PlayerState& playerState) : bool {query}
+	-shouldReverseControls(const PlayerState& playerState) : bool {query}
+	-calculateEnergyClearedRows(size_t numClearedRows) : Energy {query}
+	-calculatePointsClearedRows(size_t numClearedRows) : Score {query}
 	-handleLightning(Tetris& tetris) : void
 	-handleMiniTetrominoes(Tetris& tetris) : void
+	-handlePlayerTimedBonus(PlayerTetris& playerTetris) : void
 	-handlePlayerTimedEffect(PlayerTetris& playerTetris) : void
-	+holdNextTetromino(PlayerID playerID) : void
-	+selectTarget(PlayerID playerID, PlayerID target) : void
+	-handlePlayerTimedPenalty(PlayerTetris& playerTetris) : void
 	-sendPenaltyEffect(const PlayerState& playerStateSender, PenaltyType penaltyType) : void
 	-sendPenaltyRows(const PlayerState& playerStateSender, size_t numRows) : void
+	-onTetrominoPlaced(PlayerState& playerState, size_t numClearedRows) : void
+	-invertTetrominoMove(TetrominoMove tetrominoMove) : TetrominoMove {query}
 	-tick(PlayerTetris& playerTetris) : void
+
+	+{static} numFeatures : static constexpr size_t
+	+{static} numGameMode : static constexpr size_t
+
+	+GameEngine(const GameStatePtr& pGameState)
+	+GameEngine(const GameEngine &)
+	+GameEngine(GameEngine& &)
+	+~GameEngine()
+
+	+operator=(const GameEngine &) : GameEngine&
+	+operator=(GameEngine& &) : GameEngine&
+
+	+{static} checkFeatureEnabled(GameMode gameMode, GameModeFeature gameModeFeature) : bool
+	+checkAlive(UserID userID) : bool {query}
+	+gameIsFinished() : bool {query}
+	+getWinner() : std::optional<UserID> {query}
+	+bigDrop(UserID userID) : void
+	+emptyPenaltyStash(UserID userID) : void
+	+holdNextTetromino(UserID userID) : void
+	+tryBuyEffect(UserID userID, EffectType effectType, bool stashForLater) : void
+	+tryMoveActive(UserID userID, TetrominoMove tetrominoMove) : void
+	+tryRotateActive(UserID userID, bool rotateClockwise) : void
+	+quitGame(const UserID userID) : void
+	+selectTarget(UserID userID, UserID target) : void
 	+tick() : void
-	+tryBuyEffect(PlayerID playerID, EffectType effectType, bool stashForLater) : void
-	+tryMoveActive(PlayerID playerID, TetrominoMove tetrominoMove) : void
-	+tryRotateActive(PlayerID playerID, bool rotateClockwise) : void
-	- : }
 }
 
-enum GameModeFeature{
-	PenaltyRows,
-    Effects,
-    SelectPenaltyTarget,
-    NumGameModeFeature,
+
+enum GameEngine::GameModeFeature {
+	Effects
+	NumGameModeFeature
+	PenaltyRows
+	SelectPenaltyTarget
 }
 
+
+enum GameMode {
+	Classic
+	Dual
+	Endless
+	NumGameMode
+	RoyalCompetition
+}
 
 @enduml

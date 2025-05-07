@@ -1,0 +1,24 @@
+@startuml MainServerClass
+
+class TetrisMainServer {
+	-clientManager : ClientManager
+	-database : DataBase
+	-dbManager : std::shared_ptr<DatabaseManager>
+    
+	-serverPort : uint16_t
+	-io_context : boost::asio::io_context
+
+	+TetrisMainServer(int argc, char* argv)
+	+~TetrisMainServer()
+
+	+{static} instance_ : static TetrisMainServer*
+	+{static} handler(const boost::system::error_code& error, int signal_number) : void
+
+	+run() : void
+    
+	+getEnvPort() : uint16_t
+	+getClientManager() : ClientManager&
+	+handleArguments(int argc, char* argv) : uint16_t
+}
+
+@enduml

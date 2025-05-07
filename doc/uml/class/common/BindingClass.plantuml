@@ -1,10 +1,14 @@
-@startuml BindingClass
-skinparam linetype ortho
+@startuml
+
+
+
+
 
 /' Objects '/
 
 namespace bindings {
 	enum BindingType {
+		AbortMatchMaking
 		Authentication
 		AuthenticationResponse
 		BigDrop
@@ -12,6 +16,7 @@ namespace bindings {
 		BuyPenalty
 		ChangePassword
 		ChangeUsername
+		ChangeUsernameResponse
 		Conversation
 		Conversations
 		CreateGame
@@ -19,8 +24,9 @@ namespace bindings {
 		FriendRequest
 		FriendsList
 		GameState
+		GameStateViewer
 		HandleFriendRequest
-		HoldNextTetromino
+		HoldActiveTetromino
 		JoinGame
 		Message
 		MoveActive
@@ -34,6 +40,7 @@ namespace bindings {
 		RotateActive
 		SelectTarget
 		User
+		ViewGame
 	}
 
 	enum HandleFriendRequest::Action {
@@ -41,11 +48,17 @@ namespace bindings {
 		Decline
 	}
 
-	enum User::State {
+	enum State {
 		InGame
 		Matchmaking
 		Menu
 		Offline
+		Viewer
+	}
+
+	class AbortMatchMaking {
+		+{static} from_json(const nlohmann::json& j) : AbortMatchMaking
+		+to_json() : nlohmann::json {query}
 	}
 
 	class Authentication {
@@ -91,6 +104,12 @@ namespace bindings {
 		+username : std::string
 	}
 
+	class ChangeUsernameResponse {
+		+{static} from_json(const nlohmann::json& j) : ChangeUsernameResponse
+		+success : bool
+		+to_json() : nlohmann::json {query}
+	}
+
 	class Conversation {
 		+{static} from_json(const nlohmann::json& j) : Conversation
 		+to_json() : nlohmann::json {query}
@@ -100,7 +119,7 @@ namespace bindings {
 	class Conversations {
 		+{static} from_json(const nlohmann::json& j) : Conversations
 		+to_json() : nlohmann::json {query}
-		+conversationsById : std::unordered_map<PlayerID, NameConversation>
+		+conversationsById : std::unordered_map<UserID, NameConversation>
 	}
 
 	class CreateGame {
@@ -127,10 +146,15 @@ namespace bindings {
 		+friendsList : std::vector<User>
 	}
 
+	class GameOver {
+		+{static} from_json(const nlohmann::json& j) : GameOver
+		+to_json() : nlohmann::json {query}
+	}
+
 	class HandleFriendRequest {
 		+action : Action
 		+{static} from_json(const nlohmann::json& j) : HandleFriendRequest
-		+user : User
+		+userId : UserID
 		+to_json() : nlohmann::json {query}
 	}
 
@@ -143,13 +167,13 @@ namespace bindings {
 		+gameMode : GameMode
 		+{static} from_json(const nlohmann::json& j) : JoinGame
 		+to_json() : nlohmann::json {query}
-		+friendId : std::optional<PlayerID>
+		+friendId : std::optional<UserID>
 	}
 
 	class Message {
 		+{static} from_json(const nlohmann::json& j) : Message
+		+recipientId : UserID
 		+to_json() : nlohmann::json {query}
-		+recipientId : size_t
 		+content : std::string
 	}
 
@@ -191,8 +215,8 @@ namespace bindings {
 
 	class RemoveFriend {
 		+{static} from_json(const nlohmann::json& j) : RemoveFriend
+		+userID : UserID
 		+to_json() : nlohmann::json {query}
-		+playerId : size_t
 	}
 
 	class RotateActive {
@@ -203,18 +227,26 @@ namespace bindings {
 
 	class SelectTarget {
 		+{static} from_json(const nlohmann::json& j) : SelectTarget
+		+targetId : UserID
 		+to_json() : nlohmann::json {query}
-		+targetId : size_t
 	}
 
 	class User {
+		+User()
+		+User(UserID USERID, std::string USERNAME, State STATE, std::optional<GameMode> GAMEMODE)
 		+state : State
 		+{static} from_json(const nlohmann::json& j) : User
+		+userID : UserID
 		+isJoinable() : bool {query}
 		+to_json() : nlohmann::json {query}
-		+playerId : size_t
 		+gameMode : std::optional<GameMode>
 		+username : std::string
+	}
+
+	class ViewGame {
+		+targetUser : UserID
+		+{static} from_json(const nlohmann::json& j) : ViewGame
+		+to_json() : nlohmann::json {query}
 	}
 }
 
@@ -232,10 +264,10 @@ namespace bindings {
 bindings.FriendsList *-- bindings.User
 
 
-bindings.HandleFriendRequest *-- bindings.User
-
-
 bindings.PendingFriendRequests *-- bindings.User
+
+
+bindings.User *-- bindings.State
 
 
 
@@ -245,9 +277,6 @@ bindings.PendingFriendRequests *-- bindings.User
 /' Nested objects '/
 
 bindings.HandleFriendRequest +-- bindings.HandleFriendRequest.Action
-
-
-bindings.User +-- bindings.User.State
 
 
 

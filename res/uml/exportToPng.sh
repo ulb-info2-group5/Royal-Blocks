@@ -12,16 +12,19 @@ classUMLDiag=("game/tetris_lib/GameClass"
               "game/tetris_royal_lib/PlayerStateClass"
               "game/GameStructureClass"
               "client/ControllerClass"
-              "client/InterfaceClass"
-              "client/ScreenManagerClass"
+#              "client/InterfaceClass"
+              # "client/ScreenManagerClass"
+              "client/GraphismeStructureClass"
+              "client/AbstractGameDisplayClass"
               "client/NetworkManagerClass"
               "client/ClientStructureClass"
               "common/BindingClass"
-              "common/coreInGameClass"
+#              "common/coreInGameClass"
               "server/DatabaseClass"
               "server/GameServerClass"
               "server/MatchMakingClass"
-              "server/ServerBindingClass"
+              "server/MainServerClass"
+#              "server/ServerBindingClass"
               "server/ServerStructureClass"
               "server/NetworkClass")
             
@@ -71,14 +74,14 @@ function exportFileUseCase()
 for dir in */; do 
   if [ "$dir" = "class/" ]; then
     for (( i = 0; i<${#classUMLDiag[@]}; i++ )); do
-      exportFileClass ${classUMLDiag[$i]}
+    exportFileClass ${classUMLDiag[$i]}
 	  #echo "hello1"
     done
 
   elif [ "$dir" = "sequence/" ]; then
     for (( i = 0; i<${#SeqUMLDiag[@]}; i++ )); do
-      exportFileSeq ${SeqUMLDiag[$i]}
-     # echo "hello"
+      #exportFileSeq ${SeqUMLDiag[$i]}
+      echo "hello"
     done
 
   elif [ "$dir" = "usecase/" ]; then

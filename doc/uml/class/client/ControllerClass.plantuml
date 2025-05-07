@@ -1,54 +1,80 @@
 @startuml ControllerClass
-
-
 skinparam linetype ortho
-
 
 /' Objects '/
 
 class Controller {
-	+Controller()
-	+~Controller()
-	-authState_ : AuthState
-	+getGameMode() : GameMode {query}
-	+getConversationWith(PlayerID playerID) : NameConversation&
 	-networkManager_ : NetworkManager
 	-registrationState_ : RegistrationState
-	+getSelfEnergy() : Score {query}
-	+getSelfScore() : Score {query}
-	-screenManager_ : ScreenManager
-	+gameHasStarted() : bool {query}
+	'-screenManager_ : std::unique_ptr<ScreenManager>
+    -pAbstractDisplay_ : std::shared_ptr<AbstractDisplay>
+
+	-uiChoice_ : UiChoice
+	-authState_ : AuthState
 	-context_ : boost::asio::io_context
+	-mutex_ : mutable std::mutex
+	-args_ : std::pair<int, char**>
+	-ioThread_ : std::thread
+	- serverInfo_ : config::ServerInfo
+	
+	-ranking_ : std::vector<std::pair<std::string, Score>>
+	-friendsList_ : std::vector<bindings::User>
+	-pendingFriendRequests_ : std::vector<bindings::User>
+	-conversationsById_ : std::unordered_map<UserID, NameConversation>
+	-gameState_ : std::variant<client::GameState, client::GameStateViewer>
+	-currentEffectIdx_ : size_t
+
+	-updateFriendState(const bindings::User& updatedFriend) : void
+	-handlePacket(const std::string_view pack) : void
+
+	+Controller()
+	+~Controller()
+
+	+getSelectedEffectType() : EffectType {query}
+	+getConversationWith(UserID userID) : NameConversation
+	+inGame() : bool {query}
 	+getAuthState() : int {query}
 	+getRegistrationState() : int {query}
-	-mutex_ : mutable std::mutex
-	+getNumOpponents() : size_t {query}
-	-gameState_ : std::optional<client::GameState>
-	+opponentsBoardGetColorIdAt(size_t opponentIdx, int x, int y) : std::optional<unsigned> {query}
-	+selfBoardGetColorIdAt(int x, int y) : std::optional<unsigned> {query}
-	-ioThread_ : std::thread
-	-conversationsById_ : std::unordered_map<PlayerID, NameConversation>
-	-friendsList_ : std::vector<bindings::User>
-	+getFriendsList() : std::vector<bindings::User>& {query}
-	+getRanking() : std::vector<std::pair<std::string , Score>>& {query}
-	-ranking_ : std::vector<std::pair<std::string, Score>>
-	+bigDrop() : void
-	+changeProfile(const std::string& username, const std::string& password) : void
-	+createGame(GameMode gameMode, size_t targetNumPlayers) : void
-	+emptyPenaltyStash() : void
-	+handleKeypress(const std::string& pressedKey) : void
-	-handlePacket(const std::string& pack) : void
-	+holdNextTetromino() : void
-	+joinGame(GameMode gameMode, std::optional<PlayerID> friendID) : void
-	+moveActive(TetrominoMove tetrominoMove) : void
-	+quitGame() : void
-	+removeFriend(PlayerID playerID) : void
-	+rotateActive(bool clockwise) : void
-	+run() : void
-	+sendFriendRequest(const std::string& username) : void
-	+sendMessage(PlayerID recipientId, const std::string& message) : void
+	+getCurrEffectIdx() : size_t {query}
+	+getFriendsList() : std::vector<bindings::User> {query}
+	+getNumEffects() : size_t {query}
+	+getGameState() : std::variant<client::GameState , client::GameStateViewer>
+	+getPendingFriendRequests() : std::vector<bindings::User> {query}
+	+getRanking() : std::vector<std::pair<std::string , Score>> {query}
+
+	+run(std::unique_ptr<AbstractDisplay>&& pAbstractDisplay) : void
+	+abortMatchmaking() : void
+	+isConnected() : bool {query}
+	+setServerInfo(const config::ServerInfo& serverInfo) : void
+	+getServerInfo() : config::ServerInfo {query}
+	+getServerIp() : std::string_view {query}
+	+getServerPort() : uint16_t {query}
+
+
 	+tryLogin(const std::string& username, const std::string& password) : void
 	+tryRegister(const std::string& username, const std::string& password) : void
+	+changeProfile(const std::string& username, const std::string& password) : void
+	+sendFriendRequest(const std::string& username) : void
+	+acceptFriendRequest(UserID userId) : void
+	+declineFriendRequest(UserID userId) : void
+	+removeFriend(UserID userID) : void
+	+sendMessage(UserID recipientId, const std::string& message) : void
+	+createGame(GameMode gameMode, size_t targetNumPlayers) : void
+	+joinGame(GameMode gameMode, std::optional<UserID> friendID) : void
+	+joinGameAsViewer(UserID targetId) : void
+
+	+handleKeyPress(const std::string& pressedKey) : void
+	+bigDrop() : void
+	+holdActiveTetromino() : void
+	+moveActive(TetrominoMove tetrominoMove) : void
+	+rotateActive(bool clockwise) : void
+	+selectTarget(UserID userId) : void
+	+emptyPenaltyStash() : void
+	+buyEffect(EffectType effectType, bool stashForLater) : void
+	+selectNextEffect() : void
+	+selectPrevEffect() : void
+	+setSelectedEffectType(EffectType effectType) : void
+	+quitGame() : void
 }
 
 
@@ -66,6 +92,23 @@ enum Controller::RegistrationState {
 }
 
 
+enum UiChoice {
+	GUI
+	NONE
+	TUI
+}
+
+
+enum UpdateType {
+	CONVERSATIONS
+	FRIENDS_LIST
+	FRIEND_REQUESTS
+	GAME_STATE
+	OTHER
+	RANKING
+}
+
+
 
 
 
@@ -75,6 +118,9 @@ enum Controller::RegistrationState {
 
 
 /' Aggregation relationships '/
+
+Controller *-- UiChoice
+
 
 
 

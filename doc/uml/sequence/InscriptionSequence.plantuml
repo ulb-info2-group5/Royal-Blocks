@@ -7,7 +7,7 @@ participant Controller
 participant ClientLink
 participant ClientManager
 participant Network
-participant AccountManager
+database AccountManager
 
 activate AccountManager
 activate Network

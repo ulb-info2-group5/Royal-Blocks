@@ -3,45 +3,71 @@
 skinparam linetype ortho
 
 class Matchmaking {
-	+Matchmaking()
-	+~Matchmaking()
 	-gamesCanditatesClassic_ : std::vector<GameCandidate>
 	-gamesCanditatesDuel_ : std::vector<GameCandidate>
 	-gamesCanditatesRoyalCompetition_ : std::vector<GameCandidate>
+
 	-getGame(GameMode gameMode) : std::vector<GameCandidate>&
-	+addPlayer(RequestJoinGame joinGame, GamesManager& gamesManager) : void
-	+createAGame(RequestCreateGame createGame) : void
+
 	-createNewGameCandidate(std::vector<GameCandidate>& games, RequestJoinGame joinGame) : void
-	+findaGame(std::vector<GameCandidate>& games, RequestJoinGame joinGame, GamesManager& gamesManager) : void
-	-startGame(GameCandidate&& gameCandidate, GamesManager& gamesManager) : void
+	-startGame(GameCandidate&& gameCandidate) : void
+	-gameFindCallback_ : function<void ( std::vector<Player>, GameMode )>
+
+	+Matchmaking(function<void ( std::vector<Player>, GameMode )> gameFindCallback)
+	+~Matchmaking()
+
+	+createAGame(RequestCreateGame createGame) : void
+	+findaGame(std::vector<GameCandidate>& games, RequestJoinGame joinGame) : void
+	+addPlayer(RequestJoinGame joinGame) : void
+	+removePlayer(UserID playerID, GameMode gameMode) : void
+	+abortMatchmaking(const std::shared_ptr<ClientLink>& clientLink) : void
 }
 
+
 class GameCandidate {
+	-gameMode : GameMode
+	-numberOfPlayerTotale_ : size_t
+	-numberOfPlayersMax_ : size_t
+	-players_ : std::vector<Player>
+
 	+GameCandidate(RequestJoinGame joinGame)
 	+GameCandidate(RequestCreateGame createGame)
 	+~GameCandidate()
-	-gameMode : GameMode
+	
 	+getGameMode() : GameMode
+	+getPlayers() : std::vector<Player>&
+	+getPlayerIDs() : std::vector<UserID>
+	+isthisPlayerInThisGame(UserID userId) : bool
+	+isEmpty() : bool
 	+isThereRoomInThisGame() : bool
 	+isThisPartyReady() : bool
-	+isthisPlayerInThisGame(PlayerID playerId) : bool
+
 	+tryToAddPlayer(RequestJoinGame joinGame) : bool
-	-numberOfPlayerTotale_ : size_t
-	-numberOfPlayersMax_ : size_t
-	-players_ : std::vector<PlayerID>
-	+getPlayers() : std::vector<PlayerID>&
+	+removePlayer(UserID playerID) : void
+}
+
+class Player {
+	+userID : UserID
+	+username : std::string
 }
 
 class RequestCreateGame {
-	+playerId : PlayerID
+	+player : Player
 	+bindCreateGame : bindings::CreateGame
 }
 
 
 class RequestJoinGame {
-	+playerId : PlayerID
+	+player : Player
 	+bindGame : bindings::JoinGame
 }
 
 Matchmaking *-- "0..n" GameCandidate
+
+Matchmaking *-- Player
+
+RequestCreateGame *-- Player
+
+RequestJoinGame *-- Player
+
 @enduml

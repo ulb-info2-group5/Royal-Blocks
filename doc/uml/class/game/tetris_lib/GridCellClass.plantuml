@@ -1,15 +1,23 @@
 @startuml (id = GridCell )
 
 class GridCell {
-    - colorId_ : optional<unsigned>
+	-colorId_ : std::optional<unsigned>
 
-    + isEmpty() : const bool
-    + getColorId() : const unsigned
-    + setColorId( colorId : unsigned ) : void
-    + setEmpty() : void 
+	+GridCell()
+	+GridCell(const GridCell &)
+	+GridCell(GridCell& &)
+	+~GridCell()
 
-    + serialize() : const nlohmann::json
-    + deserialize( &j : const nlohmann::json) : void 
-    
+	+operator=(const GridCell &) : GridCell&
+	+operator=(GridCell& &) : GridCell&
+
+	+isEmpty() : bool {query}
+	+getColorId() : std::optional<unsigned> {query}
+	
+	+setColorId(unsigned colorId) : void
+	+setEmpty() : void
+
+	+serialize() : nlohmann::json {query}
+	+deserialize(const nlohmann::json& j) : void
 }
 @enduml

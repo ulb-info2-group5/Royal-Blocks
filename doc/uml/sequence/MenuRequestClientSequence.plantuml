@@ -1,0 +1,21 @@
+@startuml MenuRequestClientSequence
+skinparam style strictuml
+
+actor User
+participant MainMenu
+participant Controller
+participant NetworkManager
+
+activate NetworkManager
+activate Controller
+activate MainMenu
+activate User 
+
+loop [ state_ != EXIT ]
+    MainMenu -> MainMenu : displayMainMenu()
+    User -> MainMenu : makeAChoice
+    MainMenu -> MainMenu : handleChoice()
+    alt 
+end
+
+@enduml

@@ -1,5 +1,5 @@
 @startuml NetworkManagerClass
-
+skinparam linetype ortho
 
 
 
@@ -7,18 +7,36 @@
 /' Objects '/
 
 class NetworkManager {
-	+NetworkManager(boost::asio::io_context& context, std::function<void ( const std::string& )> packetHandler)
-	-function<void(const std::string &)
-	+~NetworkManager()
-	-context_ : boost::asio::io_context&
+	' -context_ : boost::asio::io_context&
 	-socket_ : boost::asio::ip::tcp::socket
-	-readBuf : std::string
-	+connect() : void
-	+disconnect() : void
+	-retryTimer_ : boost::asio::steady_timer
+	-readBuf_ : std::string
+	-isConnected_ : bool
+
+	-serverIp_ : std::string
+	-serverPort_ : uint16_t
+	
+	-function<void(const std::string_view)
+	-connect() : bool
 	-receive() : void
-	+send(const std::string& message) : void
 	-write() : void
+	-retry() : void
+
+	+NetworkManager(boost::asio::io_context& context, std::function<void ( const std::string_view )> packetHandler)
+	+~NetworkManager()
+
+	+send(const std::string& message) : void
+	+disconnect() : void
+	+isConnected() : bool {query}
+
+	+setDisconnectHandler(const std::function<void ( )> handler) : void
+	+setServerInfo(const config::ServerInfo& serverInfo) : void
+	+start(const config::ServerInfo& serverInfo) : void
 }
+
+
+
+
 
 /' Inheritance relationships '/
 
