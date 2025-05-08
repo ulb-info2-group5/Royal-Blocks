@@ -26,6 +26,11 @@ struct DataBase {
 };
 
 
+/**
+ * @class
+ *
+ * @brief
+ */
 class ClientManager {
   private:
     // map => { key : client id , value : the client session }
@@ -41,18 +46,26 @@ class ClientManager {
 
     // contains client who are not yet authenticated
     std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
-    /*
-     * @brief : remove authenticated clients and clients who have closed their
+
+    /**
+     * @brief remove authenticated clients and clients who have closed their
      * socket from the vector waitingForAuthClient
      */
     void removeClientsFromTheWaintingList();
     
-
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void disconnectClient(const UserID &userID);
 
     
 
-    /*
+    /**
     * @brief : send the ranking to all the connected clients
     */
     void sendUpdatedRankingToClients() const;
@@ -62,7 +75,7 @@ class ClientManager {
     ClientManager(DataBase database);
     ~ClientManager() = default;
 
-    /*
+    /**
      * @brief : call by ClientLink when the client is logged in
      * @param clientLink : shared_ptr of the clientLink
      * @param clientData : client data
@@ -71,46 +84,116 @@ class ClientManager {
                          nlohmann::json clientData);
 
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void shutdown();
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void removeClient(std::optional<UserID> userID);
-    /*
+
+    /**
      * @brief : manage of the packet received by the clientLink
      */
     void handlePacket(const std::string &packet, const UserID &userID);
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void handlePacketMenu(const std::string &packet, const UserID &userID);
-    /*
+
+    /**
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
      */
     std::optional<nlohmann::json> authPacketHandler(nlohmann::json binding );
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void handleMessage(nlohmann::json message);
 
-    /*
+    /**
      * @brief:  add client to the waitingForAuthCLient list
      */
     void addClientInWaitingForAuth(std::shared_ptr<ClientLink> &&clientLink);
-    /*
+
+    /**
      * @brief : add client in the unordered_map
      */
     void addConnection(std::shared_ptr<ClientLink> clientSession,
                        const std::string &username);
 
-    
-
-
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */   
     bool isClientConnected(UserID userID);
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void updateMenu(UserID userID );
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void updateThisUserWithAllhisFriends(UserID userID); 
     
+    /**
+    * @brief 
+    */
     bindings::State getUserState(UserID userID);
 
+    /**
+    * @brief 
+    */
     bindings::User getUser(UserID userID);
 
 

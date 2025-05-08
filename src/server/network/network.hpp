@@ -12,12 +12,25 @@ namespace boost { namespace asio { class io_context; } }
 
 using boost::asio::ip::tcp;
 
+/**
+ * @class
+ *
+ * @brief
+ */
 class Network {
   private:
     boost::asio::io_context &io_;
     tcp::acceptor acceptor_;
     ClientManager &clientManager_;
 
+    /**
+    * @brief 
+    *
+    * @param 
+    * @param 
+    *
+    * @return
+    */
     void accept();
 
   public:
