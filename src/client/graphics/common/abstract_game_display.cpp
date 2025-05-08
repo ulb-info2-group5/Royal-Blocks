@@ -1,34 +1,33 @@
 #include "abstract_game_display.hpp"
 
-#include <deque>                                               
-#include <stdexcept>                                           
-#include <type_traits>                                         
-#include <variant>                                             
-#include <vector>                                              
+#include <deque>
+#include <stdexcept>
+#include <type_traits>
+#include <variant>
+#include <vector>
 
-#include "../../core/controller/controller.hpp"                
-#include "../../core/in_game/effects/timed_penalty.hpp"        
-#include "../../core/in_game/game_state/game_state.hpp"        
-#include "../../../common/types/types.hpp" 
-#include "board/board.hpp"                                     
-#include "board/grid_cell.hpp"                                 
-#include "core/in_game/effects/timed_bonus.hpp"                
-#include "core/in_game/game_state/game_state_viewer.hpp"       
-#include "core/in_game/player_state/player_state_self.hpp"     
-#include "core/in_game/player_tetris/player_tetris_self.hpp"   
-#include "core/in_game/tetris/tetris_self.hpp"                 
-#include "core/in_game/tetromino/tetromino.hpp"                
-#include "core/in_game/tetromino_queue/tetromino_queue.hpp"    
-#include "effect/bonus/bonus_type.hpp"                         
-#include "effect/penalty/penalty_type.hpp"                     
-#include "vec2/vec2.hpp"                                       
+#include "../../../common/types/types.hpp"
+#include "../../core/controller/controller.hpp"
+#include "../../core/in_game/effects/timed_penalty.hpp"
+#include "../../core/in_game/game_state/game_state.hpp"
+#include "board/board.hpp"
+#include "board/grid_cell.hpp"
+#include "core/in_game/effects/timed_bonus.hpp"
+#include "core/in_game/game_state/game_state_viewer.hpp"
+#include "core/in_game/player_state/player_state_self.hpp"
+#include "core/in_game/player_tetris/player_tetris_self.hpp"
+#include "core/in_game/tetris/tetris_self.hpp"
+#include "core/in_game/tetromino/tetromino.hpp"
+#include "core/in_game/tetromino_queue/tetromino_queue.hpp"
+#include "effect/bonus/bonus_type.hpp"
+#include "effect/penalty/penalty_type.hpp"
+#include "vec2/vec2.hpp"
 
 AbstractGameDisplay::AbstractGameDisplay(Controller &controller)
     : controller_{controller} {}
 
 AbstractGameDisplay::Color
 AbstractGameDisplay::colorIdToColor(unsigned colorID) {
-    // TODO: remove those magic number
     switch (colorID) {
     case 0:
         return AbstractGameDisplay::Color::Red;
@@ -44,13 +43,13 @@ AbstractGameDisplay::colorIdToColor(unsigned colorID) {
         return AbstractGameDisplay::Color::DarkBlue;
     case 6:
         return AbstractGameDisplay::Color::Purple;
-    case 8: // MINI_TETROMINO
+    case 8:
         return AbstractGameDisplay::Color::Pink;
     case PENALTY_BLOCKS_COLOR_ID:
         return AbstractGameDisplay::Color::Grey;
 
     default:
-        throw std::runtime_error{"unknown color"};
+        throw std::runtime_error{"unknown colorId"};
     };
 }
 

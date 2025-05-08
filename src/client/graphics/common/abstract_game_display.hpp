@@ -1,21 +1,23 @@
 #ifndef ABSTRACT_GAME_DISPLAY_HPP
 #define ABSTRACT_GAME_DISPLAY_HPP
 
-#include <stddef.h>                        
-#include <optional>                        
-#include <string>                          
-#include <string_view>                     
-#include <utility>                         
-#include <variant>                         
-#include "../../../common/types/types.hpp" 
-#include "effect/effect_type.hpp"          
-#include "game_mode/game_mode.hpp"         
+#include "../../../common/types/types.hpp"
 #include "core/in_game/game_state/game_state.hpp"
 #include "core/in_game/game_state/game_state_viewer.hpp"
+#include "effect/effect_type.hpp"
+#include "game_mode/game_mode.hpp"
+#include <optional>
+#include <stddef.h>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <variant>
 
 class Controller;
 
-namespace client { struct Tetromino; }
+namespace client {
+    struct Tetromino;
+}
 
 /**
  * @brief Abstract base class for GameDisplay implementations (TUI & GUI).
@@ -73,7 +75,9 @@ class AbstractGameDisplay {
     AbstractGameDisplay &operator=(AbstractGameDisplay &&) = delete;
 
     /**
-     * @brief Returns the color corresponding to the given colorID.
+     * @brief Maps each color ID to a corresponding display color. This
+     * indirection allows easy support for theming in the future: a color scheme
+     * can simply redefine the mapping from IDs to actual colors.
      */
     static Color colorIdToColor(unsigned colorID);
 

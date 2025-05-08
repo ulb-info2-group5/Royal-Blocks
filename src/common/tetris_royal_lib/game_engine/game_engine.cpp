@@ -1,29 +1,29 @@
 #include "game_engine.hpp"
 
-#include <cassert>                         
-#include <deque>                           
-#include <map>                             
-#include <memory>                          
-#include <optional>                        
-#include <ranges>                          
-#include <stdexcept>                       
-#include <type_traits>                     
-#include <utility>                         
-#include <variant>          
+#include <cassert>
+#include <deque>
+#include <map>
+#include <memory>
+#include <optional>
+#include <ranges>
+#include <stdexcept>
+#include <type_traits>
+#include <utility>
+#include <variant>
 
-#include "../effect/bonus/slow_down.hpp"   
-#include "../game_mode/game_mode.hpp"      
-#include "effect/bonus/bonus_type.hpp"     
-#include "effect/bonus/timed_bonus.hpp"    
-#include "effect/penalty/penalty_type.hpp" 
+#include "../effect/bonus/slow_down.hpp"
+#include "../game_mode/game_mode.hpp"
+#include "effect/bonus/bonus_type.hpp"
+#include "effect/bonus/timed_bonus.hpp"
+#include "effect/penalty/penalty_type.hpp"
 #include "effect/penalty/timed_penalty.hpp"
-#include "effect_price/effect_price.hpp"   
-#include "game_state/game_state.hpp"       
-#include "player_state/player_state.hpp"   
-#include "player_tetris/player_tetris.hpp" 
-#include "tetris/tetris.hpp"               
+#include "effect_price/effect_price.hpp"
+#include "game_state/game_state.hpp"
+#include "player_state/player_state.hpp"
+#include "player_tetris/player_tetris.hpp"
+#include "tetris/tetris.hpp"
 #include "tetromino/abstract_tetromino.hpp"
-#include "tetromino/tetromino_shapes.hpp"  
+#include "tetromino/tetromino_shapes.hpp"
 
 /* ------------------------------------------------
  *          Private Methods
@@ -35,12 +35,11 @@ bool GameEngine::checkFeatureEnabled(GameModeFeature gameModeFeature) const {
 }
 
 Score GameEngine::calculatePointsClearedRows(size_t numClearedRows) const {
-    // TODO: Adapt this to what the assistant asked
-    return numClearedRows * 100;
+    static constexpr size_t pointsPerRow = 100;
+    return numClearedRows * pointsPerRow;
 }
 
 Energy GameEngine::calculateEnergyClearedRows(size_t numClearedRows) const {
-    // TODO: Adapt this to what the assistant asked
     return numClearedRows;
 }
 
