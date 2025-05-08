@@ -62,22 +62,15 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void handleAuthentication(std::string &packet);
 
     /**
-    * @brief 
+    * @brief verify if the client is connected and authentificated before starting to read
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void handleReading();
 
     /**
-    * @brief 
+    * @brief handler in case of an error reading : suppress the client link 
+    * with the function RemoveClientCallback
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void handleErrorReading();
 
@@ -102,22 +95,22 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
                         AuthSuccessCallback authSuccessCallback, RemoveClientCallback removeClientCallback);
     
     /**
-    * @brief 
+    * @brief trigger the read on the pipeline
     */
     void start();
 
     /**
-    * @brief 
+    * @brief write the gameState package on the socket
     */
     void sendPackage(nlohmann::json gameState);
     
     /**
-    * @brief 
+    * @brief reset the weak pointer of the GameServer
     */
     void resetGame();
     
     /**
-    * @brief 
+    * @brief call the routine methods to correctly quit a game
     */
     void exitGame();
 
@@ -127,23 +120,23 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     bool shouldItBeDeletedFromTheList();
 
     /**
-    * @brief 
+    * @brief set the client id 
     */
     void setClientId(const int id);
 
     /**
-    * @brief 
+    * @brief set the userState to the binding::state passed in parameter
     */
     void setUserState(bindings::State newState);
 
     /**
-    * @brief 
+    * @brief set the user's gameMode to the game mode opton passed in parameter
     */
     void setGameMode(std::optional<GameMode> newGameMode);
 
 
     /**
-    * @brief 
+    * @brief set the instance's attribute to the one passed in parameter for the gameServer
     */
     void jointGame(const std::weak_ptr<GameServer>& gameServer);
 
@@ -154,22 +147,22 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     bindings::User createUserFromThis();
 
     /**
-    * @brief 
+    * @brief returns its bindings::State
     */
     bindings::State getUserState();
 
     /**
-    * @brief 
+    * @brief returns its GameMode
     */
     std::optional<GameMode> getGameMode();
 
     /**
-    * @brief 
+    * @brief  returns the userID
     */
     UserID getUserID();
 
     /**
-    * @brief 
+    * @brief returns the GameServer's weak pointer
     */
     std::weak_ptr<GameServer> getGameServer();
 
