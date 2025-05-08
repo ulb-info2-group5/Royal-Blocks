@@ -16,10 +16,11 @@ using SaveScoreCallback = std::function<void(UserID, int)>;
 using UpdateRankingCallback = std::function<void()>;
 
 /**
- * @class
+ *@class GameServer 
  *
- * @brief
- */
+ *@brief manages all current games 
+ *
+ **/
 class GamesManager {
 
   private:
@@ -33,26 +34,17 @@ class GamesManager {
     SaveScoreCallback saveScoreCallback_;
     UpdateRankingCallback updateRankingCallback_;
     std::atomic<bool> running = true;
+    // thread that will join a game thread when the game is finished
     std::thread joinerThread_;
     GameID nextGameId = 1;
     
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief launched by joinerThread will wait for join finished game  
     */
     void joinerThreadFunc();
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief notify the joinerThread that the game is finish
     */
     void notifyGameFinished(int gameID);
     
@@ -62,73 +54,39 @@ class GamesManager {
     ~GamesManager();
     
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief shutdown the gamesManager join all game Threads and join the joinerThread 
     */
     void shutdown();
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief update the user State and give a gameServer weak_ptr to the client  
     */
     void makeClientJoinGame(std::shared_ptr<ClientLink> clientLink, std::shared_ptr<GameServer> gameServer);
 
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief enqueue gameBinding
     */
     void enqueueGameBinding(const std::shared_ptr<ClientLink>& clientLink, const std::string &strBindings);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief start game : create a new thread that will run the game 
     */
     std::shared_ptr<GameServer> startGameServeur(GameMode gameMode, std::vector<Player> players);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief callback to notify that the game is finish send by the gameServer
     */
     void callBackFinishGame(GameID gameId);
 
     /**
-    * @brief 
+    * @brief joins client to a game as viewer   
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void joinGameAsViewer(const std::shared_ptr<ClientLink> viewerLink, const std::shared_ptr<ClientLink> friendLink);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief quit game as viewer 
     */
     void quiGameAsViewer(const std::shared_ptr<ClientLink>& viewerLink);
 };

@@ -226,12 +226,6 @@ void ClientManager::addClientInWaitingForAuth(
     waitingForAuthClient.push_back(clientLink);
 }
 
-void ClientManager::handleMessage(nlohmann::json message) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    connectedClients_[message.at("data").at("recipientId").get<int>()]
-        ->sendPackage(message);
-}
-
 
 
 void ClientManager::updateMenu(UserID userID){

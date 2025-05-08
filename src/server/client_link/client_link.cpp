@@ -120,8 +120,8 @@ bool ClientLink::shouldItBeDeletedFromTheList() {
     return mustBeDeletedFromTheWaitingForAuthList_;
 }
 
-void ClientLink::sendPackage(nlohmann::json gameState) {
-    buffer_ = gameState.dump().append(bindings::PACKET_DELIMITER);
+void ClientLink::sendPackage(nlohmann::json package) {
+    buffer_ = package.dump().append(bindings::PACKET_DELIMITER);
     writeSocket(buffer_);
 }
 

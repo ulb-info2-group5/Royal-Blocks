@@ -29,9 +29,9 @@ struct RequestCreateGame {
 };
 
 /**
- * @class
+ * @class GameCandidate
  *
- * @brief
+ * @brief represent a game that does not yet contain the targeted number of players
  */
 class GameCandidate {
   private:
@@ -45,88 +45,53 @@ class GameCandidate {
     GameCandidate(RequestCreateGame createGame);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief remove player from this gameCandidate
     */
     void removePlayer(UserID playerID);
 
     ~GameCandidate() = default;
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief check if the gameCandidate contain the targeted number of players
+    * @return true if contain the targeted number of players
     */
     bool isThisPartyReady();
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief check if a player is present in the gameCandidate
+    *@return true if contain the player 
     */
     bool isthisPlayerInThisGame(UserID userId);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief add player if there is room in this gameGanditate 
+    * @return true if the player has been added false else
     */
     bool tryToAddPlayer(RequestJoinGame joinGame);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief check is there is room in this gameCandidate
     */
     bool isThereRoomInThisGame();
 
     /**
-    * @brief 
+    * @brief return true if there is no player in the gameCandidate 
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     bool isEmpty();
 
-    /**
-    * @brief 
-    */
     std::vector<Player> &getPlayers();
 
-    /**
-    * @brief 
-    */
     std::vector<UserID> getPlayerIDs();
 
-    /**
-    * @brief 
-    */
     GameMode getGameMode();
 };
 
 
 /**
- * @class
+ * @class Matchmaking 
  *
- * @brief
+ * @brief manage the search of game for all clients
  */
 class Matchmaking {
   private:
@@ -138,23 +103,15 @@ class Matchmaking {
     GameFindCallback gameFindCallback_;
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief add a new gameCandidate  
     */
     void createNewGameCandidate(std::vector<GameCandidate> &games,
                                 RequestJoinGame joinGame);
                             
     /**
-    * @brief 
+    * @brief start game covert the gamecandite to a game
     *
     * @param 
-    * @param 
-    *
-    * @return
     */               
     void startGame(GameCandidate &&gameCandidate);
     std::vector<GameCandidate> &getGame(GameMode gameMode);
@@ -164,53 +121,33 @@ class Matchmaking {
     ~Matchmaking() = default;
 
     /**
-    * @brief 
+    * @brief add Player in the queue 
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void addPlayer(RequestJoinGame joinGame);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief remove player from the queue
     */
     void removePlayer(UserID playerID, GameMode gameMode);
 
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief looking for a gameCandidate that a client could join
+    *if no gameCandidate found a new one with the client is create
+    * 
     */
     void findaGame(std::vector<GameCandidate> &games, RequestJoinGame joinGame);
 
     /**
-    * @brief 
+    * @brief create a new gameCandidate according to the requestCreateGame
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void createAGame(RequestCreateGame createGame);
 
     /**
-    * @brief 
+    * @brief make a client abort the matchmaking  
     *
-    * @param 
-    * @param 
-    *
-    * @return
     */
     void abortMatchmaking( const std::shared_ptr<ClientLink>& clientLink ); 
 };

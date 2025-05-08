@@ -27,9 +27,10 @@ struct DataBase {
 
 
 /**
- * @class
+ * @class ClientManager
  *
- * @brief
+ * @brief handles all clients and package management
+ * delegates to other services according to the package
  */
 class ClientManager {
   private:
@@ -49,17 +50,12 @@ class ClientManager {
 
     /**
      * @brief remove authenticated clients and clients who have closed their
-     * socket from the vector waitingForAuthClient
+     * socket from the vector waitingForAuthClient 
      */
     void removeClientsFromTheWaintingList();
     
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief  disconnects the client 
     */
     void disconnectClient(const UserID &userID);
 
@@ -85,32 +81,19 @@ class ClientManager {
 
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief callback use by Matchmaking to notify that a party has been created
+    * update the userState of all players present in the party  
+    * @param players : players who are present in the new game
     */
     void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief shutdown the gamesManager
     */
     void shutdown();
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief delete a user from the server 
     */
     void removeClient(std::optional<UserID> userID);
 
@@ -120,12 +103,9 @@ class ClientManager {
     void handlePacket(const std::string &packet, const UserID &userID);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief manages all packets sent from the menu 
+    * @param packet : the packet 
+    * @param userID : the sender
     */
     void handlePacketMenu(const std::string &packet, const UserID &userID);
 
@@ -134,16 +114,6 @@ class ClientManager {
      * @return : the response of the package
      */
     std::optional<nlohmann::json> authPacketHandler(nlohmann::json binding );
-
-    /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
-    */
-    void handleMessage(nlohmann::json message);
 
     /**
      * @brief:  add client to the waitingForAuthCLient list
@@ -157,42 +127,30 @@ class ClientManager {
                        const std::string &username);
 
     /**
-    * @brief 
+    * @brief check if  client is connected 
     *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @return true if client is connected
     */   
     bool isClientConnected(UserID userID);
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief Update all menu data for a User
+    * @param userID : user who will receive data
     */
     void updateMenu(UserID userID );
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief update the user state to all his friends 
     */
     void updateThisUserWithAllhisFriends(UserID userID); 
     
     /**
-    * @brief 
+    * @brief return the userState of a user
     */
     bindings::State getUserState(UserID userID);
 
     /**
-    * @brief 
+    * @brief create and return a bindings::User which represents the user given    
     */
     bindings::User getUser(UserID userID);
 

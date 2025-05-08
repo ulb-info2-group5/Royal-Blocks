@@ -37,7 +37,6 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     tcp::socket socket_;
     std::string buffer_;
     boost::asio::streambuf streamBuffer_;
-    
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
     bindings::State userState;
     std::optional<UserID> clientId;
@@ -52,6 +51,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     // callback to notify clientManager that the client is authenticated
     AuthSuccessCallback authSuccessCallback_;
 
+    // callback to notify clientManger that the client is disconnected 
     RemoveClientCallback removeClientCallback_;
 
     /**
@@ -62,7 +62,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void handleAuthentication(std::string &packet);
 
     /**
-    * @brief verify if the client is connected and authentificated before starting to read
+    * @brief check the packet 
+    * and gives the packet to handleAuthentication or handlePacket (clientManager) depending on the User state 
+    * 
     *
     */
     void handleReading();
@@ -100,9 +102,9 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void start();
 
     /**
-    * @brief write the gameState package on the socket
+    * @brief write the package on the socket
     */
-    void sendPackage(nlohmann::json gameState);
+    void sendPackage(nlohmann::json package);
     
     /**
     * @brief reset the weak pointer of the GameServer
@@ -141,10 +143,6 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
     void jointGame(const std::weak_ptr<GameServer>& gameServer);
 
 
-    /**
-    * @brief 
-    */
-    bindings::User createUserFromThis();
 
     /**
     * @brief returns its bindings::State
