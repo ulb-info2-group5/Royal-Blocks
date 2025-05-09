@@ -13,9 +13,9 @@ namespace boost { namespace asio { class io_context; } }
 using boost::asio::ip::tcp;
 
 /**
- * @class
+ * @class Network 
  *
- * @brief
+ * @brief manages new connections
  */
 class Network {
   private:
@@ -24,12 +24,8 @@ class Network {
     ClientManager &clientManager_;
 
     /**
-    * @brief 
-    *
-    * @param 
-    * @param 
-    *
-    * @return
+    * @brief accept new connection create a clientLink  whit the socket 
+    * and give the clientLink to CLientManager 
     */
     void accept();
 

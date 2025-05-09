@@ -20,7 +20,11 @@ struct Player {
     std::string username;
 };
 
-
+/**
+ * @class GameServer 
+ * @brief handle the progress of a game, manage game packages and send gameState
+ * 
+ */
 
 class GameServer {
   private:
@@ -37,13 +41,16 @@ class GameServer {
     GameID gameId_;
 
     CallBackFinishGame callBackFinishGame_;
+    // contains the weap_ptr of clients who playing or watching the   
     std::vector<std::weak_ptr<ClientLink>> pClientLinks_;
     /**
      * @brief Signals the engine that an engine tick occured. Resets the timer
      * for the next tick.
      */
     void onTimerTick();
-
+    /**
+     * @brief delete a user from players 
+     */
     void erasmePlayer(UserID userID);
 
     
@@ -76,6 +83,9 @@ class GameServer {
      */
     void run();
 
+    /**
+     * @brief add clientLink in the clients lists
+     */
     void addClientLink(std::weak_ptr<ClientLink> clientLink);
 
     void quitGameAsViewer(UserID userID);

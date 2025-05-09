@@ -21,9 +21,8 @@ constexpr char invalidPortType[] = "Port must be a number between 1 and 65535.";
 constexpr char help[] = "Tetris Royal Server : Help\n\nUsage: ./tetris_royal_server [port]\nport: The port to listen on (default: 1234)";
 
 /**
- * @class
- *
- * @brief
+ * @class TetrisMainServer
+ * @brief represent the entire server
  */
 class TetrisMainServer{
     private:
@@ -50,6 +49,9 @@ class TetrisMainServer{
         * @brief run server
         */
         void run();
+        /**
+         * @brief handle signal 
+         */
         static void handler(const boost::system::error_code& error,int signal_number);
         
 
