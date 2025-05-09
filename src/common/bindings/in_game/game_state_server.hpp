@@ -45,12 +45,13 @@ namespace bindings {
          * format.
          */
         nlohmann::json serializeForViewer(const GameState &gameState) {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::GameStateViewer},
-                                  {"data",
-                                   {{
-                                       "gameState",
-                                       gameState.serializeForViewer(),
-                                   }}}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::GameStateViewer},
+                {"data",
+                 {{
+                     "gameState",
+                     gameState.serializeForViewer(),
+                 }}}};
         };
 
     } // namespace GameStateMessage

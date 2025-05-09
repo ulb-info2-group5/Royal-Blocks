@@ -1,19 +1,23 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include <stdint.h>
 #include <boost/asio/detail/impl/reactive_socket_service_base.ipp>
 #include <boost/asio/impl/any_io_executor.ipp>
 #include <boost/asio/ip/tcp.hpp>
+#include <stdint.h>
 
 class ClientManager;
 
-namespace boost { namespace asio { class io_context; } }
+namespace boost {
+    namespace asio {
+        class io_context;
+    }
+} // namespace boost
 
 using boost::asio::ip::tcp;
 
 /**
- * @class Network 
+ * @class Network
  *
  * @brief manages new connections
  */
@@ -24,13 +28,14 @@ class Network {
     ClientManager &clientManager_;
 
     /**
-    * @brief accept new connection create a clientLink  whit the socket 
-    * and give the clientLink to CLientManager 
-    */
+     * @brief accept new connection create a clientLink  whit the socket
+     * and give the clientLink to CLientManager
+     */
     void accept();
 
   public:
-    Network(boost::asio::io_context &io, ClientManager &clientManager, uint16_t port);
+    Network(boost::asio::io_context &io, ClientManager &clientManager,
+            uint16_t port);
 };
 
 #endif

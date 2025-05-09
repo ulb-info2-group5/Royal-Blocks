@@ -1,12 +1,12 @@
 #include "game_state.hpp"
 
+#include "../../../../common/types/types.hpp"
+#include "core/in_game/player_tetris/player_tetris_external.hpp"
+#include "core/in_game/player_tetris/player_tetris_self.hpp"
 #include <nlohmann/detail/iterators/iter_impl.hpp>
 #include <nlohmann/json.hpp>
 #include <utility>
 #include <vector>
-#include "../../../../common/types/types.hpp"
-#include "core/in_game/player_tetris/player_tetris_external.hpp"
-#include "core/in_game/player_tetris/player_tetris_self.hpp"
 
 enum class BonusType;
 enum class PenaltyType;

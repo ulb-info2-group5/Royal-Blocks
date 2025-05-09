@@ -25,11 +25,12 @@ namespace bindings {
                 j_requests.push_back(requester.to_json());
             }
 
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::PendingFriendRequests},
-                                  {"data",
-                                   {
-                                       {"requests", j_requests},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::PendingFriendRequests},
+                {"data",
+                 {
+                     {"requests", j_requests},
+                 }}};
         }
 
         static PendingFriendRequests from_json(const nlohmann::json &j) {

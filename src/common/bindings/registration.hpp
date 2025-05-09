@@ -22,12 +22,13 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Registration},
-                                  {"data",
-                                   {
-                                       {"nickname", nickname},
-                                       {"password", password},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::Registration},
+                {"data",
+                 {
+                     {"nickname", nickname},
+                     {"password", password},
+                 }}};
         }
 
         static Registration from_json(const nlohmann::json &j) {

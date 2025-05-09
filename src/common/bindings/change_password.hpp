@@ -20,11 +20,12 @@ namespace bindings {
         std::string password;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::ChangePassword},
-                                  {"data",
-                                   {
-                                       {"password", password},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::ChangePassword},
+                {"data",
+                 {
+                     {"password", password},
+                 }}};
         }
 
         static ChangePassword from_json(const nlohmann::json &j) {

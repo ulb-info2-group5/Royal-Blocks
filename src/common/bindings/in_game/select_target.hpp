@@ -21,11 +21,12 @@ namespace bindings {
         UserID targetId;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::SelectTarget},
-                                  {"data",
-                                   {
-                                       {"targetId", targetId},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::SelectTarget},
+                {"data",
+                 {
+                     {"targetId", targetId},
+                 }}};
         }
 
         static SelectTarget from_json(const nlohmann::json &j) {

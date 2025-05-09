@@ -2,10 +2,10 @@
 #define VEC2_HPP
 
 #include <cstddef>
+#include <iostream>
 #include <nlohmann/json_fwd.hpp>
 #include <type_traits>
-#include <utility> 
-#include <iostream>
+#include <utility>
 
 class Vec2Test;
 

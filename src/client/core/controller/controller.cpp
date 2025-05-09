@@ -78,19 +78,21 @@ void Controller::handlePacket(const std::string_view pack) {
 
         UpdateType updateType = UpdateType::OTHER;
 
-    switch (static_cast<bindings::BindingType>(j.at(bindings::PACKET_TYPE_FIELD))) {
-    case bindings::BindingType::AuthenticationResponse: {
-        bool success = bindings::AuthenticationResponse::from_json(j).success;
-        authState_ = success ? Controller::AuthState::Authenticated
-                             : Controller::AuthState::Unauthenticated;
-        break;
-    }
+        switch (static_cast<bindings::BindingType>(
+            j.at(bindings::PACKET_TYPE_FIELD))) {
+        case bindings::BindingType::AuthenticationResponse: {
+            bool success =
+                bindings::AuthenticationResponse::from_json(j).success;
+            authState_ = success ? Controller::AuthState::Authenticated
+                                 : Controller::AuthState::Unauthenticated;
+            break;
+        }
 
         case bindings::BindingType::RegistrationResponse: {
             bool success = bindings::RegistrationResponse::from_json(j).success;
-            registrationState_ = success
-                                     ? Controller::RegistrationState::Registered
-                                     : Controller::RegistrationState::Unregistered;
+            registrationState_ =
+                success ? Controller::RegistrationState::Registered
+                        : Controller::RegistrationState::Unregistered;
             break;
         }
 
@@ -138,13 +140,15 @@ void Controller::handlePacket(const std::string_view pack) {
             break;
         }
 
-    default:
-        std::cerr << "unknown bindingType " << j.at(bindings::PACKET_TYPE_FIELD) << std::endl;
-    }
+        default:
+            std::cerr << "unknown bindingType "
+                      << j.at(bindings::PACKET_TYPE_FIELD) << std::endl;
+        }
 
         pAbstractDisplay_->forceRefresh(updateType);
     } catch (const std::runtime_error &e) {
-        std::cerr << "Received packet is not valid JSON: " << e.what() << std::endl;
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
     }
 }
 
@@ -154,8 +158,8 @@ Controller::Controller()
     : registrationState_{Controller::RegistrationState::Unregistered},
       authState_{Controller::AuthState::Unauthenticated}, gameState_{},
       networkManager_{context_, [this](const std::string_view packet) {
-                          handlePacket(packet);}} 
-    {
+                          handlePacket(packet);
+                      }} {
     networkManager_.setDisconnectHandler([this]() {
         std::lock_guard<std::mutex> guard(mutex_);
         registrationState_ = Controller::RegistrationState::Unregistered;
@@ -362,12 +366,13 @@ void Controller::handleKeyPress(const std::string &pressedKey) {
         networkManager_.send(bindings::HoldActiveTetromino{}.to_json().dump());
     } else if (pressedKey == "g") {
         networkManager_.send(bindings::RotateActive{true}.to_json().dump());
-    } 
-    
-    bool isRoyalCompetition =
-        std::visit([](const auto &gameState) {
+    }
+
+    bool isRoyalCompetition = std::visit(
+        [](const auto &gameState) {
             return gameState.gameMode == GameMode::RoyalCompetition;
-        }, gameState_);
+        },
+        gameState_);
 
     if (isRoyalCompetition) {
         if (pressedKey == "e") {
@@ -381,7 +386,7 @@ void Controller::handleKeyPress(const std::string &pressedKey) {
         } else if (pressedKey == "u") {
             buyEffect(getSelectedEffectType(), true);
         }
-    }   
+    }
 }
 
 size_t Controller::getNumEffects() const {

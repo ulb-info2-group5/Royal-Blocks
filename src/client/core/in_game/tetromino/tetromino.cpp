@@ -1,11 +1,10 @@
 #include "tetromino.hpp"
 
-#include <nlohmann/json.hpp>
 #include <map>
 #include <nlohmann/detail/iterators/iter_impl.hpp>
+#include <nlohmann/json.hpp>
 
 #include "vec2/vec2.hpp"
-
 
 void client::Tetromino::deserialize(const nlohmann::json &j) {
     anchorPoint.deserialize(j.at("anchorPoint"));

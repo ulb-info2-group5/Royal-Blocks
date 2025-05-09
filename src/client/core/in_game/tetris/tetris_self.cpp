@@ -1,15 +1,14 @@
 #include "tetris_self.hpp"
 
-#include <optional>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <vector>
 
 #include "board/board.hpp"
 #include "core/in_game/tetromino/tetromino.hpp"
 #include "core/in_game/tetromino_queue/tetromino_queue.hpp"
 #include "vec2/vec2.hpp"
-
 
 void client::TetrisSelf::deserialize(const nlohmann::json &j) {
     if (!j.at("activeTetromino").is_null()) {

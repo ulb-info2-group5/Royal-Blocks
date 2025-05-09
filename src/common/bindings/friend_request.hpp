@@ -19,11 +19,12 @@ namespace bindings {
         std::string targetName;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::FriendRequest},
-                                  {"data",
-                                   {
-                                       {"targetName", targetName},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::FriendRequest},
+                {"data",
+                 {
+                     {"targetName", targetName},
+                 }}};
         }
 
         static FriendRequest from_json(const nlohmann::json &j) {

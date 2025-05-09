@@ -20,11 +20,12 @@ namespace bindings {
         bool rotateClockwise;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::RotateActive},
-                                  {"data",
-                                   {
-                                       {"rotateClockwise", rotateClockwise},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::RotateActive},
+                {"data",
+                 {
+                     {"rotateClockwise", rotateClockwise},
+                 }}};
         }
 
         static RotateActive from_json(const nlohmann::json &j) {

@@ -19,12 +19,12 @@ class ATimedEffect {
     /**
      * @brief Notifies that a clock tick has occurred.
      */
-    virtual void tick(){};
+    virtual void tick() {};
 
     /**
      * @brief Notifies that the active tetromino has been placed.
      */
-    virtual void tetrominoPlaced(){};
+    virtual void tetrominoPlaced() {};
 
     /**
      * @brief Returns true if the effect isn't active anymore; false otherwise.

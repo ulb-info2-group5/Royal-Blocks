@@ -32,8 +32,8 @@ MessagesManager::MessagesManager(std::shared_ptr<DatabaseManager> &db)
 }
 
 // ==== Private ====
-std::string MessagesManager::generateFileName(const UserID& user1ID,
-                                              const UserID& user2ID) {
+std::string MessagesManager::generateFileName(const UserID &user1ID,
+                                              const UserID &user2ID) {
     return CHAT_PATH + std::to_string(user1ID) + "_user"
            + std::to_string(user2ID) + ".json";
 }
@@ -45,12 +45,13 @@ bool MessagesManager::createDiscussionFile(const std::string &filePath) {
         return false;
     }
     nlohmann::json discuJson = bindings::Conversation{}.to_json();
-    
+
     file << discuJson;
     return true;
 }
 
-bool MessagesManager::addDiscussion(const UserID& user1ID, const UserID& user2ID) {
+bool MessagesManager::addDiscussion(const UserID &user1ID,
+                                    const UserID &user2ID) {
     const std::string filePath = generateFileName(user1ID, user2ID);
     if (!this->createDiscussionFile(filePath)) return false;
 
@@ -61,8 +62,6 @@ bool MessagesManager::addDiscussion(const UserID& user1ID, const UserID& user2ID
 
     return true;
 }
-
-
 
 std::string MessagesManager::getPathDiscussion(const UserID &user1ID,
                                                const UserID &user2ID) {
@@ -91,8 +90,10 @@ void MessagesManager::writeMessage(const std::string &pathfile,
         return;
     }
 
-    bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
-    discussion.senderMessages.push_back(SenderMessage{message.senderID, message.content});
+    bindings::Conversation discussion =
+        bindings::Conversation::from_json(jsondiscu);
+    discussion.senderMessages.push_back(
+        SenderMessage{message.senderID, message.content});
 
     std::ofstream outfile(pathfile);
     outfile << discussion.to_json().dump();
@@ -100,45 +101,49 @@ void MessagesManager::writeMessage(const std::string &pathfile,
 
 // ==== Public ====
 
-void MessagesManager::addMessage(const UserID& senderID, const UserID& recieverID,
-                                  const std::string &content) {
-    if (senderID == recieverID ){
-        return ;
+void MessagesManager::addMessage(const UserID &senderID,
+                                 const UserID &recieverID,
+                                 const std::string &content) {
+    if (senderID == recieverID) {
+        return;
     }
 
-    if (!isThereDiscussion(senderID, recieverID)){
+    if (!isThereDiscussion(senderID, recieverID)) {
         addDiscussion(senderID, recieverID);
-    }    
+    }
     writeMessage(getPathDiscussion(senderID, recieverID), {senderID, content});
 }
 
-
-bool MessagesManager::isThereDiscussion(const UserID& user1ID,
-                                        const UserID& user2ID) {
+bool MessagesManager::isThereDiscussion(const UserID &user1ID,
+                                        const UserID &user2ID) {
     std::string sql = "SELECT COUNT(*) FROM userMessages WHERE (user1_id = ? "
                       "AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
     int count = 0;
     // check if the discussion exists on the table
-    
-    if (!(dbManager_->executeSqlRecoveryInt(sql, {user1ID, user2ID, user2ID, user1ID}, count) && count > 0)) {
+
+    if (!(dbManager_->executeSqlRecoveryInt(
+              sql, {user1ID, user2ID, user2ID, user1ID}, count)
+          && count > 0)) {
         return false;
     } else {
         // check if the discussion file exists (json file)
-        return std::filesystem::exists(CHAT_PATH
-                                       + std::to_string(user1ID) + "_user"
-                                       + std::to_string(user2ID) + ".json")
-               || std::filesystem::exists(CHAT_PATH
-                                          + std::to_string(user2ID) + "_user"
-                                          + std::to_string(user1ID) + ".json");
+        return std::filesystem::exists(CHAT_PATH + std::to_string(user1ID)
+                                       + "_user" + std::to_string(user2ID)
+                                       + ".json")
+               || std::filesystem::exists(CHAT_PATH + std::to_string(user2ID)
+                                          + "_user" + std::to_string(user1ID)
+                                          + ".json");
     }
 }
 
-std::vector<int> MessagesManager::getAllUser(const UserID& userID){
-    std::string sql = "SELECT user1_id, user2_id FROM userMessages WHERE user1_id = ? OR user2_id = ?";
-    return dbManager_->getVectorInfo(sql, userID); 
+std::vector<int> MessagesManager::getAllUser(const UserID &userID) {
+    std::string sql = "SELECT user1_id, user2_id FROM userMessages WHERE "
+                      "user1_id = ? OR user2_id = ?";
+    return dbManager_->getVectorInfo(sql, userID);
 }
 
-std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserID& user1ID , const UserID& user2ID){
+std::optional<bindings::Conversation>
+MessagesManager::getDiscussion(const UserID &user1ID, const UserID &user2ID) {
     std::ifstream infile(getPathDiscussion(user1ID, user2ID));
     if (!infile.is_open()) {
         std::cerr << "Error opening file" << std::endl;
@@ -154,14 +159,17 @@ std::optional<bindings::Conversation> MessagesManager::getDiscussion(const UserI
         return std::nullopt;
     }
 
-    bindings::Conversation discussion = bindings::Conversation::from_json(jsondiscu);
-    return discussion;   
+    bindings::Conversation discussion =
+        bindings::Conversation::from_json(jsondiscu);
+    return discussion;
 }
 
-std::vector<bindings::Conversation> MessagesManager::getAllDiscusions(const UserID& userID){
+std::vector<bindings::Conversation>
+MessagesManager::getAllDiscusions(const UserID &userID) {
     std::vector<bindings::Conversation> allDiscussions;
-    for (auto id : getAllUser(userID)){
-        std::optional<bindings::Conversation> optConversation = getDiscussion(userID, id);
+    for (auto id : getAllUser(userID)) {
+        std::optional<bindings::Conversation> optConversation =
+            getDiscussion(userID, id);
         if (optConversation.has_value()) {
             allDiscussions.push_back(optConversation.value());
         }

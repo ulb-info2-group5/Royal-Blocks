@@ -22,11 +22,12 @@ namespace bindings {
         UserID userID;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::RemoveFriend},
-                                  {"data",
-                                   {
-                                       {"playerId", userID},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::RemoveFriend},
+                {"data",
+                 {
+                     {"playerId", userID},
+                 }}};
         }
 
         static RemoveFriend from_json(const nlohmann::json &j) {

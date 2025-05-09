@@ -1,8 +1,8 @@
 #include "vec2.hpp"
 
+#include <map>
 #include <nlohmann/detail/json_ref.hpp>
 #include <nlohmann/json.hpp>
-#include <map>
 
 /*--------------------------------------------------
                     PUBLIC

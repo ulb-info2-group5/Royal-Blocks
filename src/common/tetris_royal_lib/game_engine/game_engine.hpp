@@ -1,17 +1,17 @@
 #ifndef GAME_ENGINE_HPP
 #define GAME_ENGINE_HPP
 
-#include <stddef.h>                                           
-#include <array>                                              
-#include <bitset>                                             
-#include <initializer_list>                                   
-#include <optional>                
+#include <array>
+#include <bitset>
+#include <initializer_list>
+#include <optional>
+#include <stddef.h>
 
-#include "../game_mode/game_mode.hpp"                         
-#include "../game_state/game_state.hpp"                       
 #include "../../types/types.hpp"
-#include "effect/effect_type.hpp"                             
-#include "player_state/player_state.hpp"                      
+#include "../game_mode/game_mode.hpp"
+#include "../game_state/game_state.hpp"
+#include "effect/effect_type.hpp"
+#include "player_state/player_state.hpp"
 #include "tetromino/abstract_tetromino.hpp"
 
 class Tetris;

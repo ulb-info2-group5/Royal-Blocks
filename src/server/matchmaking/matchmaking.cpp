@@ -4,7 +4,6 @@
 
 // ====== GameCandidate class ======
 
-
 GameCandidate::GameCandidate(RequestJoinGame joinGame)
     : numberOfPlayerTotale_{0},
       numberOfPlayersMax_{(joinGame.bindGame.gameMode == GameMode::Dual)
@@ -17,7 +16,8 @@ GameCandidate::GameCandidate(RequestJoinGame joinGame)
 }
 
 GameCandidate::GameCandidate(RequestCreateGame createGame)
-    : numberOfPlayerTotale_{0}, numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers},
+    : numberOfPlayerTotale_{0},
+      numberOfPlayersMax_{createGame.bindCreateGame.targetNumPlayers},
       gameMode{createGame.bindCreateGame.gameMode} {
     std::cout << "gameCandidate create (RequestCreateGame)" << std::endl;
     numberOfPlayerTotale_++;
@@ -34,22 +34,20 @@ bool GameCandidate::tryToAddPlayer(RequestJoinGame joinGame) {
     return false;
 }
 
-void GameCandidate::removePlayer(UserID playerID){
+void GameCandidate::removePlayer(UserID playerID) {
     auto it = players_.begin();
-    while (it  != players_.end()){
-        if (it->userID == playerID){
+    while (it != players_.end()) {
+        if (it->userID == playerID) {
             std::cout << "delete client " << std::endl;
             players_.erase(it);
-            numberOfPlayerTotale_ --;
+            numberOfPlayerTotale_--;
             std::cout << numberOfPlayerTotale_ << std::endl;
             return;
-        }else {
+        } else {
             it++;
         }
-    }   
-    
+    }
 }
-
 
 bool GameCandidate::isThereRoomInThisGame() {
     return numberOfPlayerTotale_ < numberOfPlayersMax_;
@@ -58,9 +56,7 @@ bool GameCandidate::isThereRoomInThisGame() {
 bool GameCandidate::isThisPartyReady() {
     return numberOfPlayersMax_ == numberOfPlayerTotale_;
 }
-bool GameCandidate::isEmpty(){
-    return numberOfPlayerTotale_ == 0;
-}
+bool GameCandidate::isEmpty() { return numberOfPlayerTotale_ == 0; }
 
 bool GameCandidate::isthisPlayerInThisGame(UserID userId) {
     for (auto player : players_) {
@@ -71,19 +67,17 @@ bool GameCandidate::isthisPlayerInThisGame(UserID userId) {
 
 std::vector<Player> &GameCandidate::getPlayers() { return players_; }
 
-std::vector<UserID> GameCandidate::getPlayerIDs(){
+std::vector<UserID> GameCandidate::getPlayerIDs() {
     std::vector<UserID> userIds;
-    for (auto player : players_){
+    for (auto player : players_) {
         userIds.push_back(player.userID);
     }
     return userIds;
 }
 
-
 GameMode GameCandidate::getGameMode() { return gameMode; }
 
 // ======= matchmaking class =======
-
 
 void Matchmaking::addPlayer(RequestJoinGame joinGame) {
     if (joinGame.bindGame.gameMode == GameMode::Endless) {
@@ -109,10 +103,11 @@ std::vector<GameCandidate> &Matchmaking::getGame(GameMode gameMode) {
         return gamesCanditatesRoyalCompetition_;
     }
 
-    throw std::runtime_error("incorect gamesMode"); 
+    throw std::runtime_error("incorect gamesMode");
 }
 
-void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame joinGame) {
+void Matchmaking::findaGame(std::vector<GameCandidate> &games,
+                            RequestJoinGame joinGame) {
     bool joinFriend = joinGame.bindGame.friendId.has_value(), findGame = false;
     auto it = games.begin();
     while (it != games.end() && !findGame) {
@@ -126,7 +121,7 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame jo
         }
         if (it->isThisPartyReady()) {
             std::cout << "game ready" << std::endl;
-            
+
             startGame(std::move(*it));
             it = games.erase(it);
         } else {
@@ -136,10 +131,8 @@ void Matchmaking::findaGame(std::vector<GameCandidate> &games,RequestJoinGame jo
     if (!findGame) createNewGameCandidate(games, joinGame);
 }
 
-Matchmaking::Matchmaking(GameFindCallback gameFindCallback) : gameFindCallback_(gameFindCallback) {
-
-}
-
+Matchmaking::Matchmaking(GameFindCallback gameFindCallback)
+    : gameFindCallback_(gameFindCallback) {}
 
 void Matchmaking::createNewGameCandidate(std::vector<GameCandidate> &games,
                                          RequestJoinGame joinGame) {
@@ -151,20 +144,19 @@ void Matchmaking::createAGame(RequestCreateGame createGame) {
         .push_back(GameCandidate{createGame});
 }
 
-
-void Matchmaking::removePlayer(UserID playerID, GameMode gameMode){
-    auto& gameList = getGame(gameMode);
+void Matchmaking::removePlayer(UserID playerID, GameMode gameMode) {
+    auto &gameList = getGame(gameMode);
     auto it = gameList.begin();
-    while (it != gameList.end()){
-        if (it->isthisPlayerInThisGame(playerID)){
+    while (it != gameList.end()) {
+        if (it->isthisPlayerInThisGame(playerID)) {
             std::cout << "find client " << std::endl;
             it->removePlayer(playerID);
-            if (it->isEmpty()){
+            if (it->isEmpty()) {
                 gameList.erase(it);
             }
-            return ;
-        }else {
-            it ++;
+            return;
+        } else {
+            it++;
         }
     }
 }
@@ -172,14 +164,15 @@ void Matchmaking::removePlayer(UserID playerID, GameMode gameMode){
 void Matchmaking::startGame(GameCandidate &&gameCandidate) {
 
     gameFindCallback_(gameCandidate.getPlayers(), gameCandidate.getGameMode());
-    
 }
 
-void Matchmaking::abortMatchmaking( const std::shared_ptr<ClientLink>& clientLink ) {
-    if (clientLink->getUserState() != bindings::State::Matchmaking){
+void Matchmaking::abortMatchmaking(
+    const std::shared_ptr<ClientLink> &clientLink) {
+    if (clientLink->getUserState() != bindings::State::Matchmaking) {
         std::cerr << "Player not in Matchmaking " << std::endl;
     } else {
-        removePlayer(clientLink->getUserID(), clientLink->getGameMode().value());
+        removePlayer(clientLink->getUserID(),
+                     clientLink->getGameMode().value());
         clientLink->setUserState(bindings::State::Menu);
     }
 }

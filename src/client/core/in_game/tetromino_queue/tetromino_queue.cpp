@@ -1,7 +1,7 @@
 #include "tetromino_queue.hpp"
 
-#include <nlohmann/json.hpp>
 #include <nlohmann/detail/iterators/iter_impl.hpp>
+#include <nlohmann/json.hpp>
 #include <utility>
 
 #include "core/in_game/tetromino/tetromino.hpp"

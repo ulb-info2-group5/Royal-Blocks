@@ -1,33 +1,31 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <stddef.h>                                     
-#include <stdint.h>                                     
-#include <boost/asio/impl/io_context.ipp>               
-#include <boost/asio/io_context.hpp>                    
-#include <memory>                                       
-#include <mutex>                                        
-#include <optional>                                     
-#include <string>                                       
-#include <string_view>                                  
-#include <unordered_map>                                
-#include <utility>                                      
-#include <variant>                                      
-#include <vector>                                       
-#include "../../../common/bindings/conversation.hpp"    
-#include "../../../common/bindings/user.hpp"            
-#include "../../../common/types/types.hpp"              
-#include "../in_game/game_state/game_state.hpp"         
-#include "../in_game/game_state/game_state_viewer.hpp"  
-#include "../network/network_manager.hpp"               
-#include "core/server_info/server_info.hpp"             
-#include "effect/effect_type.hpp"                       
-
+#include "../../../common/bindings/conversation.hpp"
+#include "../../../common/bindings/user.hpp"
+#include "../../../common/types/types.hpp"
+#include "../in_game/game_state/game_state.hpp"
+#include "../in_game/game_state/game_state_viewer.hpp"
+#include "../network/network_manager.hpp"
+#include "core/server_info/server_info.hpp"
+#include "effect/effect_type.hpp"
+#include <boost/asio/impl/io_context.ipp>
+#include <boost/asio/io_context.hpp>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
+#include <variant>
+#include <vector>
 
 class AbstractDisplay;
 enum class GameMode;
 enum class TetrominoMove;
-
 
 using NameConversation = std::pair<std::string, bindings::Conversation>;
 
@@ -140,7 +138,7 @@ class Controller {
     /**
      * @brief Run the controller to manage the game
      *
-      * @param pAbstractDisplay The display to use (GUI or TUI)
+     * @param pAbstractDisplay The display to use (GUI or TUI)
      */
     void run(std::unique_ptr<AbstractDisplay> &&pAbstractDisplay);
 

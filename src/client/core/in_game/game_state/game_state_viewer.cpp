@@ -1,10 +1,10 @@
 #include "game_state_viewer.hpp"
 
+#include "core/in_game/player_tetris/player_tetris_external.hpp"
 #include <map>
 #include <nlohmann/detail/iterators/iter_impl.hpp>
 #include <nlohmann/json.hpp>
 #include <vector>
-#include "core/in_game/player_tetris/player_tetris_external.hpp"
 
 void client::GameStateViewer::deserialize(const nlohmann::json &j) {
     isFinished = j.at("isFinished");

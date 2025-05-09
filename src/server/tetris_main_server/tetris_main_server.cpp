@@ -1,12 +1,12 @@
 #include "tetris_main_server.hpp"
 
-#include "network/network.hpp"
 #include "../database/database_manager/database_manager.hpp"
+#include "network/network.hpp"
 
 /*Publics methods*/
 
 uint16_t TetrisMainServer::getEnvPort() {
-    if (const char* port_env = std::getenv(ENV_VAR_PORT)) {
+    if (const char *port_env = std::getenv(ENV_VAR_PORT)) {
         try {
             return std::stoi(port_env);
         } catch (...) {
@@ -15,7 +15,7 @@ uint16_t TetrisMainServer::getEnvPort() {
     }
     return DEFAULT_PORT;
 }
-TetrisMainServer* TetrisMainServer::instance_ = nullptr;
+TetrisMainServer *TetrisMainServer::instance_ = nullptr;
 
 uint16_t TetrisMainServer::handleArguments(int argc, char *argv[]) {
     if (argc > 2) {
@@ -44,39 +44,33 @@ uint16_t TetrisMainServer::handleArguments(int argc, char *argv[]) {
     }
 }
 
-TetrisMainServer::TetrisMainServer(int argc , char* argv[]) : 
-    dbManager(std::make_shared<DatabaseManager>()),
-    database{
-        std::make_shared<AccountManager>(dbManager),
-        std::make_shared<FriendsManager>(dbManager),
-        std::make_shared<MessagesManager>(dbManager)},
-    clientManager(database), 
-    serverPort(handleArguments(argc, argv))
-    {
+TetrisMainServer::TetrisMainServer(int argc, char *argv[])
+    : dbManager(std::make_shared<DatabaseManager>()),
+      database{std::make_shared<AccountManager>(dbManager),
+               std::make_shared<FriendsManager>(dbManager),
+               std::make_shared<MessagesManager>(dbManager)},
+      clientManager(database), serverPort(handleArguments(argc, argv)) {
     instance_ = this;
 }
-void TetrisMainServer::handler(const boost::system::error_code& error , int /*signal_number*/){
-    if (!error){
+void TetrisMainServer::handler(const boost::system::error_code &error,
+                               int /*signal_number*/) {
+    if (!error) {
         instance_->getClientManager().shutdown();
         exit(1);
     }
 }
 
-
-void TetrisMainServer::run(){
+void TetrisMainServer::run() {
     try {
         boost::asio::signal_set signals(io_context, SIGINT, SIGTERM);
         Network network(io_context, clientManager, serverPort);
         std::cout << "Server started on port " << serverPort << std::endl;
         signals.async_wait(handler);
         io_context.run();
-        
-        
+
     } catch (std::exception &e) {
         std::cerr << "Exception : " << e.what() << std::endl;
     }
 }
 
-ClientManager& TetrisMainServer::getClientManager(){
-    return clientManager;
-}
+ClientManager &TetrisMainServer::getClientManager() { return clientManager; }

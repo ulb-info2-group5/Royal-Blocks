@@ -1,20 +1,15 @@
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 
-#include <stdint.h>
-#include <boost/asio/ip/tcp.hpp>                // pour tcp
-#include <boost/asio/steady_timer.hpp>
-#include <boost/asio/detail/impl/epoll_reactor.hpp>
-#include <boost/asio/detail/impl/reactive_socket_service_base.ipp>
-#include <boost/asio/impl/any_io_executor.ipp>
-#include <chrono>
+#include <boost/asio.hpp>
 #include <functional>
+#include <stdint.h>
 #include <string>
 #include <string_view>
 
-namespace boost { namespace asio { class io_context; } }
-namespace config { struct ServerInfo; }
-
+namespace config {
+    struct ServerInfo;
+}
 
 class NetworkManager {
   private:
@@ -33,7 +28,8 @@ class NetworkManager {
     boost::asio::steady_timer retryTimer_;
 
     /**
-     * @brief function to be called when the client is disconnected from the server
+     * @brief function to be called when the client is disconnected from the
+     * server
      */
     std::function<void()> disconnectHandler_;
 

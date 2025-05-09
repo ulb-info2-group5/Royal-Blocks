@@ -11,7 +11,7 @@ void ClientLink::read() {
         socket_, streamBuffer_, bindings::PACKET_DELIMITER,
         [this](boost::system::error_code ec, std::size_t) {
             if (!ec) {
-                
+
                 handleReading();
             } else if (ec == boost::asio::error::eof) {
                 handleErrorReading();
@@ -19,20 +19,21 @@ void ClientLink::read() {
         });
 }
 
-bool ClientLink::checkPackage(std::string& package){
+bool ClientLink::checkPackage(std::string &package) {
 
     nlohmann::json checkJson;
-    try{
-        checkJson =  nlohmann::json::parse(package);
-    }catch(nlohmann::json::parse_error& e){
-        std::cerr << "Received packet is not valid JSON: " << e.what()<< std::endl;
-        return false ;
+    try {
+        checkJson = nlohmann::json::parse(package);
+    } catch (nlohmann::json::parse_error &e) {
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
+        return false;
     }
 
     try {
         checkJson.at("type").get<bindings::BindingType>();
-    }catch(nlohmann::json::exception& e){
-        std::cerr <<"Received packet has no type  : " << e.what() << std::endl;
+    } catch (nlohmann::json::exception &e) {
+        std::cerr << "Received packet has no type  : " << e.what() << std::endl;
         return false;
     }
 
@@ -43,7 +44,7 @@ void ClientLink::handleReading() {
     std::istream is(&streamBuffer_);
     std::string packet;
     std::getline(is, packet);
-    //check if the package has the correct format
+    // check if the package has the correct format
     if (!checkPackage(packet)) {
         return;
     }
@@ -62,19 +63,21 @@ void ClientLink::handleErrorReading() {
 
 void ClientLink::handleAuthentication(std::string &packet) {
 
-    nlohmann::json jsonPacket  = nlohmann::json::parse(packet);
+    nlohmann::json jsonPacket = nlohmann::json::parse(packet);
     std::optional<nlohmann::json> response = authPacketHandler_(jsonPacket);
-    if (response&& !(response->is_null())){
+    if (response && !(response->is_null())) {
         sendPackage(response.value());
 
-        if (response.value().at(bindings::PACKET_TYPE_FIELD).get<bindings::BindingType>()== bindings::BindingType::AuthenticationResponse
+        if (response.value()
+                    .at(bindings::PACKET_TYPE_FIELD)
+                    .get<bindings::BindingType>()
+                == bindings::BindingType::AuthenticationResponse
             && response.value().at("data").at("success").get<bool>()) {
             authSuccessCallback_(shared_from_this(), jsonPacket.at("data"));
             userState = bindings::State::Menu;
             mustBeDeletedFromTheWaitingForAuthList_ = true;
         }
     }
-    
 }
 
 void ClientLink::writeSocket(std::string &content) {
@@ -100,9 +103,7 @@ ClientLink::ClientLink(tcp::socket socket, PacketHandler packetHandler,
     start();
 }
 
-void ClientLink::start() {
-    read();
-}
+void ClientLink::start() { read(); }
 
 void ClientLink::jointGame(const std::weak_ptr<GameServer> &gameServer) {
     pGame_ = gameServer;

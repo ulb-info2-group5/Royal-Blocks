@@ -23,12 +23,13 @@ namespace bindings {
         Action action;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::HandleFriendRequest},
-                                  {"data",
-                                   {
-                                       {"user", userId},
-                                       {"action", action},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::HandleFriendRequest},
+                {"data",
+                 {
+                     {"user", userId},
+                     {"action", action},
+                 }}};
         }
 
         static HandleFriendRequest from_json(const nlohmann::json &j) {

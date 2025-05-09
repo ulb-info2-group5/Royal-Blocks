@@ -22,11 +22,12 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::RegistrationResponse},
-                                  {"data",
-                                   {
-                                       {"success", success},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::RegistrationResponse},
+                {"data",
+                 {
+                     {"success", success},
+                 }}};
         }
 
         static RegistrationResponse from_json(const nlohmann::json &j) {

@@ -1,8 +1,8 @@
 #ifndef BINDINGS_CONVERSATION_HPP
 #define BINDINGS_CONVERSATION_HPP
 
-#include "user.hpp"
 #include "constants.hpp"
+#include "user.hpp"
 
 #include <vector>
 
@@ -27,11 +27,12 @@ namespace bindings {
                 j_senderMessages.push_back(senderMessage);
             }
 
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Conversation},
-                                  {"data",
-                                   {
-                                       {"senderMessages", j_senderMessages},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::Conversation},
+                {"data",
+                 {
+                     {"senderMessages", j_senderMessages},
+                 }}};
         }
 
         static Conversation from_json(const nlohmann::json &j) {

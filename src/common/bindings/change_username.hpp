@@ -20,11 +20,12 @@ namespace bindings {
         std::string username;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::ChangeUsername},
-                                  {"data",
-                                   {
-                                       {"username", username},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::ChangeUsername},
+                {"data",
+                 {
+                     {"username", username},
+                 }}};
         }
 
         static ChangeUsername from_json(const nlohmann::json &j) {

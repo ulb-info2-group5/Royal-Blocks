@@ -1,12 +1,12 @@
 #ifndef DATABASE_MANAGER_HPP
 #define DATABASE_MANAGER_HPP
 
-#include <sqlite3.h>                   
-#include <stddef.h>                    
-#include <string>                      
-#include <utility>                     
-#include <variant>                     
-#include <vector>       
+#include <sqlite3.h>
+#include <stddef.h>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
 
 #include "../../../common/types/types.hpp"
 
@@ -69,7 +69,8 @@ class DatabaseManager {
      * @param UserID Id to bind to the query
      * @return The result of the query (vector of int)
      */
-    std::vector<int> getVectorInfo(const std::string &sql, const UserID& userID) const;
+    std::vector<int> getVectorInfo(const std::string &sql,
+                                   const UserID &userID) const;
 
     /*
      * @brief Execute a SQL query that changes data of the database
@@ -103,7 +104,7 @@ class DatabaseManager {
      * @ return bool True if the user is in the table of database, false
      * otherwise
      */
-    bool findUserInDatabase(const std::string &table, const UserID& userID);
+    bool findUserInDatabase(const std::string &table, const UserID &userID);
 };
 
 #endif // DATABASE_MANAGER_HPP

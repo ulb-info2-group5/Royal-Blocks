@@ -1,11 +1,11 @@
 #include "server_info.hpp"
 
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <limits>
 #include <nlohmann/json.hpp>
-#include <cstdlib>               
-#include <nlohmann/json_fwd.hpp> 
+#include <nlohmann/json_fwd.hpp>
 
 // ---------------------------------------------------------
 //                      Helper Functions
@@ -46,7 +46,6 @@ namespace {
                 return static_cast<uint16_t>(port);
             }
         } catch (...) {
-
         }
 
         return config::DEFAULT_PORT;
@@ -64,7 +63,8 @@ namespace {
 
         if (!std::filesystem::exists(path)) {
             writeDefault = true;
-        } else if (std::filesystem::is_regular_file(path) && std::filesystem::file_size(path) == 0) {
+        } else if (std::filesystem::is_regular_file(path)
+                   && std::filesystem::file_size(path) == 0) {
             writeDefault = true;
         }
 
@@ -102,7 +102,6 @@ namespace config {
             try {
                 readFile >> j;
             } catch (...) {
-
             }
         }
 

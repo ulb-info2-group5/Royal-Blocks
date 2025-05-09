@@ -1,9 +1,9 @@
 #ifndef BINDINGS_CONVERSATIONS_HPP
 #define BINDINGS_CONVERSATIONS_HPP
 
+#include "constants.hpp"
 #include "conversation.hpp"
 #include "user.hpp"
-#include "constants.hpp"
 
 #include <unordered_map>
 
@@ -30,11 +30,12 @@ namespace bindings {
                 j_userConv.push_back({userID, name, conversation.to_json()});
             }
 
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::Conversations},
-                                  {"data",
-                                   {
-                                       {"userConv", j_userConv},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::Conversations},
+                {"data",
+                 {
+                     {"userConv", j_userConv},
+                 }}};
         }
 
         static Conversations from_json(const nlohmann::json &j) {

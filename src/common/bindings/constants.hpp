@@ -9,6 +9,6 @@ namespace bindings {
 
     inline constexpr std::string_view PACKET_TYPE_FIELD = "type";
 
-}
+} // namespace bindings
 
 #endif // BINDINGS_CONSTANTS_HPP

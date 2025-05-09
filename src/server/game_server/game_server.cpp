@@ -84,7 +84,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
     try {
         nlohmann::json j = nlohmann::json::parse(bindingStr);
 
-    bindings::BindingType bindingType = j.at(bindings::PACKET_TYPE_FIELD);
+        bindings::BindingType bindingType = j.at(bindings::PACKET_TYPE_FIELD);
 
         switch (bindingType) {
 
@@ -173,7 +173,8 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
             break;
         }
     } catch (const std::runtime_error &e) {
-        std::cerr << "Received packet is not valid JSON: " << e.what() << std::endl;
+        std::cerr << "Received packet is not valid JSON: " << e.what()
+                  << std::endl;
     }
 }
 

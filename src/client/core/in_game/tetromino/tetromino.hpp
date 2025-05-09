@@ -3,8 +3,8 @@
 
 #include "../../../../common/tetris_lib/vec2/vec2.hpp"
 
-#include <vector>
 #include <nlohmann/json_fwd.hpp>
+#include <vector>
 
 namespace client {
 

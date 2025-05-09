@@ -1,15 +1,14 @@
 #include "player_state_self.hpp"
 
-#include <optional>
-#include <queue>
 #include <map>
 #include <nlohmann/detail/iterators/iter_impl.hpp>
 #include <nlohmann/json.hpp>
+#include <optional>
+#include <queue>
 
 #include "../../../../common/types/types.hpp"
 #include "core/in_game/effects/timed_bonus.hpp"
 #include "core/in_game/effects/timed_penalty.hpp"
-
 
 void client::PlayerStateSelf::deserialize(const nlohmann::json &j) {
     j.at("playerID").get_to(userID);

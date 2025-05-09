@@ -1,23 +1,21 @@
 #ifndef MESSAGE_MANAGER_HPP
 #define MESSAGE_MANAGER_HPP
 
-                                               
-#include <memory>                                             
-#include <nlohmann/detail/iterators/iter_impl.hpp>            
-#include <nlohmann/detail/json_ref.hpp>                       
-#include <nlohmann/json.hpp>                                  
-#include <nlohmann/json_fwd.hpp>                              
-#include <optional>                                           
-#include <string>                                             
-#include <vector>                                             
+#include <memory>
+#include <nlohmann/detail/iterators/iter_impl.hpp>
+#include <nlohmann/detail/json_ref.hpp>
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+#include <optional>
+#include <string>
+#include <vector>
 
-#include "../../../common/bindings/conversation.hpp"             
+#include "../../../common/bindings/conversation.hpp"
 #include "../../../common/types/types.hpp"
 
 class DatabaseManager;
 
 class MessagesManagerTest;
-
 
 struct Message {
     UserID senderID;
@@ -68,7 +66,7 @@ class MessagesManager {
      *
      * @return a file name
      */
-    std::string generateFileName(const UserID& user1ID, const UserID& user2ID);
+    std::string generateFileName(const UserID &user1ID, const UserID &user2ID);
     /*
      * @brief create a file for a discussion
      *
@@ -86,8 +84,7 @@ class MessagesManager {
      *
      */
 
-    bool addDiscussion(const UserID& user1ID, const UserID& user2ID);
-    
+    bool addDiscussion(const UserID &user1ID, const UserID &user2ID);
 
     /*
      *@brief return the discussion pathfile between user 1 and user 2
@@ -95,7 +92,7 @@ class MessagesManager {
      *it )
      *
      */
-    std::string getPathDiscussion(const UserID& user1ID, const UserID& user2ID);
+    std::string getPathDiscussion(const UserID &user1ID, const UserID &user2ID);
 
   public:
     /*
@@ -121,8 +118,8 @@ class MessagesManager {
      **/
 
     void addMessage(const UserID &senderID, const UserID &recieverID,
-                     const std::string &content);
-    
+                    const std::string &content);
+
     /*
      *
      *@brief check if there is a discussion between two users managing the case
@@ -134,13 +131,13 @@ class MessagesManager {
      * @return true if there is any discussion and false is not
      *
      */
-    bool isThereDiscussion(const UserID& user1ID, const UserID& user2ID);
+    bool isThereDiscussion(const UserID &user1ID, const UserID &user2ID);
 
     void writeMessage(const std::string &pathfile, const Message &message);
 
     void readDiscussion(const std::string &pathfile);
 
-    void showAllMessages(const UserID& user1ID, const UserID& user2ID);
+    void showAllMessages(const UserID &user1ID, const UserID &user2ID);
 
     /**
      * @brief return the discussion between two users
@@ -150,7 +147,8 @@ class MessagesManager {
      *
      * @return an optional conversation binding.
      */
-    std::optional<bindings::Conversation> getDiscussion(const UserID& user1ID, const UserID& user2ID);
+    std::optional<bindings::Conversation> getDiscussion(const UserID &user1ID,
+                                                        const UserID &user2ID);
 
     /*
      * @brief finds all users who have a discussion with the user : idUser
@@ -158,10 +156,9 @@ class MessagesManager {
      *
      * @return vector of all users who have a discussion with idUser
      */
-    std::vector<int> getAllUser(const UserID& userID);
+    std::vector<int> getAllUser(const UserID &userID);
 
-    std::vector<bindings::Conversation> getAllDiscusions(const UserID& userID);
-
+    std::vector<bindings::Conversation> getAllDiscusions(const UserID &userID);
 
     friend MessagesManagerTest;
 };

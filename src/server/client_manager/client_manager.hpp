@@ -4,12 +4,12 @@
 #include <boost/asio.hpp>
 #include <mutex>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <string>
 #include <unordered_map>
-#include <optional>
 
-#include "../social_service/social_service.hpp"
 #include "../account_service/account_service.hpp"
+#include "../social_service/social_service.hpp"
 
 #include "../matchmaking/matchmaking.hpp"
 #include "games_manager/games_manager.hpp"
@@ -24,7 +24,6 @@ struct DataBase {
     std::shared_ptr<FriendsManager> friendsManager;
     std::shared_ptr<MessagesManager> messagesManager;
 };
-
 
 /**
  * @class ClientManager
@@ -41,31 +40,25 @@ class ClientManager {
     GamesManager gamesManager_;
     Matchmaking matchmaking_;
     SocialService socialService_;
-    
-    
-
 
     // contains client who are not yet authenticated
     std::vector<std::shared_ptr<ClientLink>> waitingForAuthClient;
 
     /**
      * @brief remove authenticated clients and clients who have closed their
-     * socket from the vector waitingForAuthClient 
+     * socket from the vector waitingForAuthClient
      */
     void removeClientsFromTheWaintingList();
-    
+
     /**
-    * @brief  disconnects the client 
-    */
+     * @brief  disconnects the client
+     */
     void disconnectClient(const UserID &userID);
 
-    
-
     /**
-    * @brief : send the ranking to all the connected clients
-    */
+     * @brief : send the ranking to all the connected clients
+     */
     void sendUpdatedRankingToClients() const;
-
 
   public:
     ClientManager(DataBase database);
@@ -79,22 +72,21 @@ class ClientManager {
     void authSuccessCall(std::shared_ptr<ClientLink> clientLink,
                          nlohmann::json clientData);
 
+    /**
+     * @brief callback use by Matchmaking to notify that a party has been
+     * created update the userState of all players present in the party
+     * @param players : players who are present in the new game
+     */
+    void gameFindCallback(std::vector<Player> &players, GameMode gameMode);
 
     /**
-    * @brief callback use by Matchmaking to notify that a party has been created
-    * update the userState of all players present in the party  
-    * @param players : players who are present in the new game
-    */
-    void gameFindCallback(std::vector<Player>& players, GameMode gameMode);
-
-    /**
-    * @brief shutdown the gamesManager
-    */
+     * @brief shutdown the gamesManager
+     */
     void shutdown();
 
     /**
-    * @brief delete a user from the server 
-    */
+     * @brief delete a user from the server
+     */
     void removeClient(std::optional<UserID> userID);
 
     /**
@@ -103,17 +95,17 @@ class ClientManager {
     void handlePacket(const std::string &packet, const UserID &userID);
 
     /**
-    * @brief manages all packets sent from the menu 
-    * @param packet : the packet 
-    * @param userID : the sender
-    */
+     * @brief manages all packets sent from the menu
+     * @param packet : the packet
+     * @param userID : the sender
+     */
     void handlePacketMenu(const std::string &packet, const UserID &userID);
 
     /**
      * @brief : manage package when the client is not yet logged in
      * @return : the response of the package
      */
-    std::optional<nlohmann::json> authPacketHandler(nlohmann::json binding );
+    std::optional<nlohmann::json> authPacketHandler(nlohmann::json binding);
 
     /**
      * @brief:  add client to the waitingForAuthCLient list
@@ -127,34 +119,32 @@ class ClientManager {
                        const std::string &username);
 
     /**
-    * @brief check if  client is connected 
-    *
-    * @return true if client is connected
-    */   
+     * @brief check if  client is connected
+     *
+     * @return true if client is connected
+     */
     bool isClientConnected(UserID userID);
 
     /**
-    * @brief Update all menu data for a User
-    * @param userID : user who will receive data
-    */
-    void updateMenu(UserID userID );
+     * @brief Update all menu data for a User
+     * @param userID : user who will receive data
+     */
+    void updateMenu(UserID userID);
 
     /**
-    * @brief update the user state to all his friends 
-    */
-    void updateThisUserWithAllhisFriends(UserID userID); 
-    
+     * @brief update the user state to all his friends
+     */
+    void updateThisUserWithAllhisFriends(UserID userID);
+
     /**
-    * @brief return the userState of a user
-    */
+     * @brief return the userState of a user
+     */
     bindings::State getUserState(UserID userID);
 
     /**
-    * @brief create and return a bindings::User which represents the user given    
-    */
+     * @brief create and return a bindings::User which represents the user given
+     */
     bindings::User getUser(UserID userID);
-
-
 };
 
 #endif // CLIENT_MANAGER_HPP

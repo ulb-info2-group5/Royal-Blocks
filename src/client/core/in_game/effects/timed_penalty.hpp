@@ -6,7 +6,6 @@
 #include <nlohmann/json_fwd.hpp>
 enum class PenaltyType;
 
-
 namespace client {
 
     /**

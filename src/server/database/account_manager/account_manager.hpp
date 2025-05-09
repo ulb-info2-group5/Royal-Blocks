@@ -1,11 +1,11 @@
 #ifndef ACCOUNT_MANAGER_HPP
 #define ACCOUNT_MANAGER_HPP
 
-#include <stddef.h>                                           
-#include <memory>                                             
-#include <string>                                             
-#include <utility>                                            
-#include <vector>                             
+#include <memory>
+#include <stddef.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "../../../common/types/types.hpp"
 
@@ -64,7 +64,7 @@ class AccountManager {
      * @param userId ID of the account
      * @return true if the account was deleted successfully
      */
-    bool deleteAccount(const UserID& userID);
+    bool deleteAccount(const UserID &userID);
 
     /*
      * @brief Check if the user already exists
@@ -99,11 +99,11 @@ class AccountManager {
      * @param userID ID of the user
      * @param newScore New score of the user
      */
-    void updateScore(const UserID& userID, const Score& newScore);
+    void updateScore(const UserID &userID, const Score &newScore);
 
-    bool updateUsername(const UserID& userID , std::string &newUsername);
+    bool updateUsername(const UserID &userID, std::string &newUsername);
 
-    void updatePassword(const UserID& userID , std::string &newPassword);
+    void updatePassword(const UserID &userID, std::string &newPassword);
 
     /*
      * @brief Get the user ID from the username
@@ -119,7 +119,7 @@ class AccountManager {
      * @param userID ID of the user
      * @return Username of the user
      */
-    std::string getUsername(const UserID& userID) const;
+    std::string getUsername(const UserID &userID) const;
 
     /*
      * @brief Get the ranking of the users for the endless mode
@@ -129,11 +129,11 @@ class AccountManager {
     std::vector<std::pair<std::string, size_t>> getRanking() const;
 
     /*
-    * @brief Get the password hash of a user
-    *
-    * @param nickname Username of the user
-    * @return Password hash of the user
-    */
+     * @brief Get the password hash of a user
+     *
+     * @param nickname Username of the user
+     * @return Password hash of the user
+     */
     std::string getUserPasswordHash(const std::string &nickname) const;
 };
 

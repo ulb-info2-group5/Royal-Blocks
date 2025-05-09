@@ -22,15 +22,17 @@ namespace bindings {
         bool success;
 
         nlohmann::json to_json() const {
-            return nlohmann::json{{PACKET_TYPE_FIELD, BindingType::AuthenticationResponse},
-                                  {"data",
-                                   {
-                                       {"success", success},
-                                   }}};
+            return nlohmann::json{
+                {PACKET_TYPE_FIELD, BindingType::AuthenticationResponse},
+                {"data",
+                 {
+                     {"success", success},
+                 }}};
         }
 
         static AuthenticationResponse from_json(const nlohmann::json &j) {
-            if (j.at(PACKET_TYPE_FIELD) != BindingType::AuthenticationResponse) {
+            if (j.at(PACKET_TYPE_FIELD)
+                != BindingType::AuthenticationResponse) {
                 throw std::runtime_error("Invalid type field in JSON");
             }
 
