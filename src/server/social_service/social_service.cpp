@@ -8,10 +8,6 @@ SocialService::SocialService(std::shared_ptr<FriendsManager>& friendsManager, st
 } 
 
 void SocialService::handleMessages(UserID senderID ,bindings::Message message){
-    if (getUser_(message.recipientId).state != bindings::State::Offline){
-        // TODO : depending on the choice of client-side message implementation 
-        // send the message to the recipient or not 
-    }
     messagesManager_->addMessage(senderID, message.recipientId, message.content);
    
 }
@@ -60,7 +56,7 @@ bindings::FriendsList SocialService::getFriendsList(UserID userID){
 bindings::Conversations SocialService::getConversations(UserID userID, std::shared_ptr<AccountManager>& accountManager ){
     bindings::Conversations conversations;
     for (auto id : messagesManager_->getAllUser(userID)){
-        if (messagesManager_->isThereDiscussion(userID, id)){ // TODO: Is this still necessary bc we now use option ?
+        if (messagesManager_->isThereDiscussion(userID, id)){ 
             std::optional<bindings::Conversation> optDiscussion = messagesManager_->getDiscussion(userID, id);
             if (optDiscussion.has_value()) {
                 conversations.conversationsById.insert({static_cast<unsigned long>(id), {accountManager->getUsername(id), optDiscussion.value()}});
