@@ -1,4 +1,4 @@
-name: C++ Tetris Royale Build (with Make + Cache)
+name: C++ Royal Blocks Build (with Make + Cache)
 
 on:
   push:

@@ -1,4 +1,4 @@
-# Tetris Royale
+# Royal Blocks
 
 ## Membres du groupe
 
@@ -94,24 +94,24 @@ make debug
 
 ### Lancer le programme
 
-Pour lancer Tetris, vous avez le choix entre deux interfaces :
+Pour lancer Royal Blocks, vous avez le choix entre deux interfaces :
 
 - Interface graphique :
 
   ```sh
-  ./tetris_gui
+  ./royal-blocks-gui
   ```
 
 - Interface en terminal :
 
   ```sh
-  ./tetris_tui
+  ./royal-blocks-tui
   ```
 
 Pour lancer le serveur, exécutez :
 
 ```sh
-./tetris_royal_server
+./royal-blocks-server
 ```
 
 ### Choix de l'IP et du port
@@ -123,7 +123,7 @@ Pour établir la communication entre le client et le serveur :
 Vous pouvez passer un port de votre choix en argument lors du lancement :
 
 ```sh
-./tetris_royal_server <port>
+./royal-blocks-server <port>
 ```
 
 Sinon, le serveur lira la variable d'environnement **SERVER_PORT**.
@@ -143,10 +143,10 @@ Si aucun fichier de configuration n'existe, un fichier par défaut sera automati
 
 Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
 
-### Les différentes commandes de Tetris Royale
+### Les différentes commandes de Royal Blocks
 
 Voici une liste des différentes touches pour déplacer et tourner les pièces du
-Tetris :
+jeu :
 
 - **Déplacement vers la gauche**\
   `←`
