@@ -5,10 +5,11 @@ accounts.db
 auth
 build/
 bin/
-tetris_gui
-tetris_tui
-tetris_royal_server
-tetris_royal_tests
-tetris_tests
+royal-blocks-tui
+royal-blocks-tui.exe
+royal-blocks-gui
+royal-blocks-gui.exe
+royal-blocks-server
+royal-blocks-server.exe
 data
 cmake_install.cmake

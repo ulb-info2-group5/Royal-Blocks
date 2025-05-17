@@ -21,7 +21,7 @@ endif()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(tetris_royal)
+project(royal-blocks)
 
 # Enable tests for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

@@ -190,3 +190,7 @@ Tetris :
 
 - **Quitter la partie en cours**\
   `q`
+
+## License
+
+This project is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).

@@ -32,6 +32,6 @@ endif()
 
 
 set(SOURCE_SERVER_MAIN main.cpp)
-add_executable(${PROJECT_NAME}_server ${SOURCE_SERVER_MAIN})
+add_executable(${PROJECT_NAME}-server ${SOURCE_SERVER_MAIN})
 
-target_link_libraries(${PROJECT_NAME}_server server_lib)
+target_link_libraries(${PROJECT_NAME}-server server_lib)
