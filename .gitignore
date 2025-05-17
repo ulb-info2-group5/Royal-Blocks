@@ -10,5 +10,5 @@ tetris_tui
 tetris_royal_server
 tetris_royal_tests
 tetris_tests
-data/config.json
+data
 cmake_install.cmake
