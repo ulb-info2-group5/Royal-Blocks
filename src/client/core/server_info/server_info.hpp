@@ -25,10 +25,11 @@
 namespace config {
 
     inline constexpr uint16_t DEFAULT_PORT = 1234;
-    inline const std::string_view DEFAULT_IP = "127.0.0.1";
-    inline const std::string_view ENV_VAR_IP = "SERVER_IP";
-    inline const std::string_view ENV_VAR_PORT = "SERVER_PORT";
-    inline const std::string_view CONFIG_PATH = "data/config.json";
+    inline constexpr std::string_view DEFAULT_IP = "127.0.0.1";
+    inline constexpr std::string_view ENV_VAR_IP = "SERVER_IP";
+    inline constexpr std::string_view ENV_VAR_PORT = "SERVER_PORT";
+
+    std::string getConfigPath();
 
     struct ServerInfo {
         std::string ip;

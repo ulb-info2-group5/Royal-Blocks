@@ -73,7 +73,7 @@ namespace {
      * exist.
      */
     void createDirAndConfigFile() {
-        std::filesystem::path path(config::CONFIG_PATH);
+        std::filesystem::path path(config::getConfigPath());
         std::filesystem::create_directories(path.parent_path());
 
         bool writeDefault = false;
@@ -91,7 +91,7 @@ namespace {
             j["server"]["ip"] = getEnvIP();
             j["server"]["port"] = getEnvPort();
 
-            std::ofstream file(config::CONFIG_PATH.data());
+            std::ofstream file(config::getConfigPath());
             if (file) {
                 file << j.dump(4);
             }
@@ -114,7 +114,7 @@ namespace config {
 
         json j;
 
-        std::ifstream readFile(CONFIG_PATH.data());
+        std::ifstream readFile(getConfigPath());
         if (readFile) {
             try {
                 readFile >> j;
@@ -125,7 +125,7 @@ namespace config {
         j["server"]["ip"] = serverInfo.ip;
         j["server"]["port"] = serverInfo.port;
 
-        std::ofstream writeFile(CONFIG_PATH.data());
+        std::ofstream writeFile(getConfigPath());
         if (!writeFile) {
             return;
         }
@@ -140,7 +140,7 @@ namespace config {
         ServerInfo serverInfo;
 
         try {
-            std::ifstream file(CONFIG_PATH.data());
+            std::ifstream file(getConfigPath());
             if (!file) {
                 serverInfo.ip = getEnvIP();
                 serverInfo.port = getEnvPort();
@@ -160,6 +160,20 @@ namespace config {
         }
 
         return serverInfo;
+    }
+
+    std::string getConfigPath() {
+    #ifdef _WIN32
+        const char* appdata = std::getenv("APPDATA");
+        if (!appdata) throw std::runtime_error("APPDATA not set");
+        return std::string(appdata) + "\\royal-blocks\\data\\config.json";
+    #elif defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+        const char* home = std::getenv("HOME");
+        if (!home) throw std::runtime_error("HOME not set");
+        return std::string(home) + "/.config/royal-blocks/data/config.json";
+    #else
+        throw std::runtime_error("Unsupported OS");
+    #endif
     }
 
 } // namespace config

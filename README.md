@@ -132,7 +132,7 @@ Si aucune variable n'est définie, le port **1234** sera utilisé par défaut.
 #### Client
 
 Dans les interfaces graphique et terminal, il est possible de modifier l'IP et le port du serveur directement.
-Ces informations seront sauvegardées dans le fichier `data/config.json`.
+Ces informations seront sauvegardées dans le fichier `~/.config/royal-blocks/config.json` pour linux, `%APPDATA%\royal-blocks\config.json` pour Windows.
 
 Si aucun fichier de configuration n'existe, un fichier par défaut sera automatiquement créé, en utilisant :
 

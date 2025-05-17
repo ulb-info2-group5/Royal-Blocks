@@ -25,15 +25,13 @@
 #include <string>
 
 #include "../../../common/bindings/conversation.hpp"
-#include "database_manager/database_manager.hpp"
-
-#define CHAT_PATH "data/chat/user"
+#include "../database_manager/database_manager.hpp"
 
 //==== Constructor ====
 MessagesManager::MessagesManager(std::shared_ptr<DatabaseManager> &db)
     : dbManager_(db) {
 
-    std::filesystem::path messagePath(CHAT_PATH);
+    std::filesystem::path messagePath(dbManager_->getDatabasePath("data/chat/user"));
     std::filesystem::path chatPath = messagePath.parent_path();
     if (!std::filesystem::exists(chatPath)) {
         std::filesystem::create_directories(chatPath);
@@ -51,7 +49,7 @@ MessagesManager::MessagesManager(std::shared_ptr<DatabaseManager> &db)
 // ==== Private ====
 std::string MessagesManager::generateFileName(const UserID &user1ID,
                                               const UserID &user2ID) {
-    return CHAT_PATH + std::to_string(user1ID) + "_user"
+    return dbManager_->getDatabasePath("data/chat/user") + std::to_string(user1ID) + "_user"
            + std::to_string(user2ID) + ".json";
 }
 
@@ -144,10 +142,10 @@ bool MessagesManager::isThereDiscussion(const UserID &user1ID,
         return false;
     } else {
         // check if the discussion file exists (json file)
-        return std::filesystem::exists(CHAT_PATH + std::to_string(user1ID)
+        return std::filesystem::exists(dbManager_->getDatabasePath("data/chat/user") + std::to_string(user1ID)
                                        + "_user" + std::to_string(user2ID)
                                        + ".json")
-               || std::filesystem::exists(CHAT_PATH + std::to_string(user2ID)
+               || std::filesystem::exists(dbManager_->getDatabasePath("data/chat/user") + std::to_string(user2ID)
                                           + "_user" + std::to_string(user1ID)
                                           + ".json");
     }

@@ -21,21 +21,37 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "../../../common/types/types.hpp"
 
-#define DATABASE_PATH "data/users.db"
+std::string DatabaseManager::getDatabasePath(std::string_view fileOrDirectoryName) const {
+#ifdef _WIN32
+    const char* appdata = std::getenv("APPDATA");
+    if (!appdata) throw std::runtime_error("APPDATA not set");
+    return std::string(appdata) + "\\royal-blocks\\" + std::string(fileOrDirectoryName);
+#elif defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+    const char* home = std::getenv("HOME");
+    if (!home) throw std::runtime_error("HOME not set");
+    return std::string(home) + "/.config/royal-blocks/" + fileOrDirectoryName.data();
+#else
+    throw std::runtime_error("Unsupported OS");
+#endif
+}
+
 
 // ### Constructor ###
 DatabaseManager::DatabaseManager() {
-    std::filesystem::path dbPath(DATABASE_PATH);
+    std::string_view path = "data/users.db";
+
+    std::filesystem::path dbPath(getDatabasePath(path));
     std::filesystem::path dataPath = dbPath.parent_path();
     if (!std::filesystem::exists(dataPath)) {
         std::filesystem::create_directories(dataPath);
     }
 
-    if (sqlite3_open(DATABASE_PATH, &db_) != SQLITE_OK) {
+    if (sqlite3_open(getDatabasePath(path).data(), &db_) != SQLITE_OK) {
         std::cerr << "Error SQLite: " << sqlite3_errmsg(db_) << std::endl;
     }
 }

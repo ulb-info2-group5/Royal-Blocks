@@ -21,6 +21,7 @@
 #include <sqlite3.h>
 #include <stddef.h>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <variant>
 #include <vector>
@@ -122,6 +123,14 @@ class DatabaseManager {
      * otherwise
      */
     bool findUserInDatabase(const std::string &table, const UserID &userID);
+
+    /*
+     * @brief Get the path of file or directory name
+     *
+     * @param fileOrDirectoryName The name of the file or directory to get the path
+     * @return The path of the database
+     */
+    std::string getDatabasePath(std::string_view fileOrDirectoryName) const;
 };
 
 #endif // DATABASE_MANAGER_HPP
