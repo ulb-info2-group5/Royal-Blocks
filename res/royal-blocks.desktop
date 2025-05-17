@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Royal Blocks
+Comment=A homemade Royal Tetris game
+Exec=royal-blocks
+Icon=royal-blocks
+Terminal=false
+Type=Application
+Categories=Game;

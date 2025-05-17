@@ -9,7 +9,7 @@ license=('GPL3')
 depends=('qt5-base' 'boost')
 makedepends=('gcc' 'make' 'cmake' 'boost' 'qt5-base')
 source=("royal-blocks.tar.gz")
-sha256sums=('9d655902cf3ad2ee6134d146672111e7e2510c28d8c0d10ec02ef5967464ef34')
+sha256sums=('0bb7bd56c058cf89fbb721212aad0bb9f2c12faafb64bc7c93212614a937678a')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -19,5 +19,9 @@ build() {
 package() {
   install -Dm755 "$srcdir/$pkgname-$pkgver/royal-blocks-gui" "$pkgdir/usr/bin/royal-blocks"
   install -Dm755 "$srcdir/$pkgname-$pkgver/royal-blocks-tui" "$pkgdir/usr/bin/royal-blocks-tui"
-  install -Dm644 "$srcdir/$pkgname-$pkgver/royal-blocks-server" "$pkgdir/usr/share/applications/royal-blocks-server"
+  install -Dm644 "$srcdir/$pkgname-$pkgver/royal-blocks-server" "$pkgdir/usr/bin/royal-blocks-server"
+
+  install -Dm644 "$srcdir/royal-blocks.desktop" "$pkgdir/usr/share/applications/royal-blocks.desktop"
+  install -Dm644 "$srcdir/royal-blocks-tui.desktop" "$pkgdir/usr/share/applications/royal-blocks-tui.desktop"
+  install -Dm644 "$srcdir/royal-blocks-server.desktop" "$pkgdir/usr/share/applications/royal-blocks-server.desktop"
 }

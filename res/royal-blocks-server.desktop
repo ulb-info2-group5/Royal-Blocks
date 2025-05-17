@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Royal Blocks Server
+Comment=A homemade Royal Tetris game (Server)
+Exec=royal-blocks-server
+Icon=royal-blocks
+Terminal=true
+Type=Application
+Categories=Game;

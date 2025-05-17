@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Royal Blocks TUI
+Comment=A homemade Royal Tetris game (TUI)
+Exec=royal-blocks-tui
+Icon=royal-blocks
+Terminal=true
+Type=Application
+Categories=Game;
