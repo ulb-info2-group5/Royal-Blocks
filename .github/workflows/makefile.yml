@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev libboost-thread-dev
+        sudo apt-get install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev
     - name: Build with Make
       run: |
         make
