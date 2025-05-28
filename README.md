@@ -15,7 +15,7 @@
 
 ## Build the project
 
-### Dépendances
+### Dependencies
 
 The project requires the installation of the following programs and libraries (the commands are for Debian-based systems):
 
@@ -25,8 +25,6 @@ The project requires the installation of the following programs and libraries (t
   `sudo apt install cmake`
 - **Git**\
   `sudo apt install git`
-- **SQLite3**\
-  `sudo apt install libsqlite3-dev`
 - **Qt5 (for the GUI)**\
   `sudo apt install qtbase5-dev`
 
