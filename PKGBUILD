@@ -6,8 +6,8 @@ pkgdesc="A homemade Royal Tetris in C++"
 arch=('x86_64')
 url="https://github.com/ulb-info2-group5/Tetris-Blocks"
 license=('GPL3')
-depends=('qt5-base' 'boost')
-makedepends=('gcc' 'make' 'cmake' 'boost' 'qt5-base')
+depends=('qt5-base')
+makedepends=('gcc' 'make' 'cmake' 'qt5-base')
 source=("https://github.com/ulb-info2-group5/Tetris-Blocks/releases/download/v1.0.0/royal-blocks-1.0.0-1-x86_64.pkg.tar.zst")
 sha256sums=('852110c506f48e9c7c59d2cd866bb319901a072dd5e952374c727500e0d269e9')
 

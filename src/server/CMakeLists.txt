@@ -12,7 +12,6 @@ add_subdirectory(database)
 
 target_include_directories(server_lib PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 
