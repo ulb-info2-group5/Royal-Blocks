@@ -5,6 +5,8 @@ on:
     branches: [ "**" ]
   pull_request:
     branches: [ "**" ]
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 06:00 UTC
 
 jobs:
   build:
@@ -17,7 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake make git g++ libcppunit-dev libsqlite3-dev qtbase5-dev libboost-system-dev
+        sudo apt-get install -y cmake make git g++ qtbase5-dev
+        
     - name: Build with Make
       run: |
         make

@@ -1,24 +1,23 @@
 # Royal Blocks
 
-## Membres du groupe
+## Group members
 
-| Prénom    | Nom                 | Matricule |
-| --------- | ------------------- | --------- |
-| Tao       | Chau                | 000567638 |
-| Juliette  | Cornu-Besser        | 000581723 |
-| Quentin   | Bernard Bouissières | 000572078 |
-| Jonas     | Schellekens         | 000590985 |
-| Ethan     | Van Ruyskenvelde    | 000589640 |
-| Lucas     | Verbeiren           | 000591223 |
-| Ernest    | Malysz              | 000514682 |
-| Rafaou    | Gajewicz            | 000569354 |
+| First Name | Last Name           | Student ID  |
+| ---------- | ------------------- | ----------- |
+| Tao        | Chau                |  000567638  |
+| Juliette   | Cornu-Besser        |  000581723  |
+| Quentin    | Bernard Bouissières |  000572078  |
+| Jonas      | Schellekens         |  000590985  |
+| Ethan      | Van Ruyskenvelde    |  000589640  |
+| Lucas      | Verbeiren           |  000591223  |
+| Ernest     | Malysz              |  000514682  |
+| Rafaou     | Gajewicz            |  000569354  |
 
-## Build le projet
+## Build the project
 
 ### Dépendances
 
-Le projet nécessite l'installation des programmes et bibliothèques suivants
-(les commandes fonctionnent pour Debian) :
+The project requires the installation of the following programs and libraries (the commands are for Debian-based systems):
 
 - **Make**\
   `sudo apt install make`
@@ -28,21 +27,21 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
   `sudo apt install git`
 - **SQLite3**\
   `sudo apt install libsqlite3-dev`
-- **Qt5 (pour la GUI)**\
+- **Qt5 (for the GUI)**\
   `sudo apt install qtbase5-dev`
 
 ---
 
-#### Installation des dépendances sur Windows
+#### Installing Dependencies on Windows
 
-Pour installer toutes les dépendances nécessaires facilement sous Windows, nous vous recommendons d'utiliser `vcpkg`.
+To easily install all required dependencies on Windows, we recommend using `vcpkg`.
 
-**Visual Studio** sera nécéssaire pour utiliser **vcpkg**.
+**Visual Studio** is required to use **vcpkg**.
 
-Nous vous conseillons également d'installer **MinGW** pour disposer du compilateur **g++**.
-N'oubliez pas d'installer également **make** et **cmake** avec **MinGW** pour pouvoir build le projet.
+We also recommend installing **MinGW** to have access to the **g++** compiler.
+Don't forget to install **make** and **cmake** with **MinGW** in order to build the project.
 
-##### 1. Installer vcpkg
+##### 1. Install vcpkg
 
 ```sh
 git clone https://github.com/microsoft/vcpkg.git
@@ -50,35 +49,35 @@ cd vcpkg
 bootstrap-vcpkg.bat
 ```
 
-Ajoutez vcpkg à votre `PATH` pour l'utiliser facilement dans tous vos projets.
+add **vcpkg** to your `PATH` to use it easily across all your projects.
 
-##### 2. Installer les dépendances du projet
+##### 2. Install the project dependencies
 
 ```bash
 vcpkg install boost-system boost-thread sqlite3
 ```
 
-##### 4. Installer Qt5 pour Windows
+##### 4. Install Qt5 for Windows
 
-Qt5 n'est pas disponible via vcpkg.  
-Téléchargez-le directement depuis [qt.io](https://www.qt.io/download) et installez le module :
+Qt5 is not available via **vcpkg**.
+Download it directly from [qt.io](https://www.qt.io/download) and install the following module:
 
-- Qt 5.x (choisir MinGW ou MSVC selon votre compilateur utilisé).
+- Qt 5.x (Choose **MinGW** or **MSVC** depending on the compiler you are using).
 
 ---
 
 #### Remarque
 
-D'autres bibliothèques, comme ftxui et nlohmann, sont également nécessaires pour la compilation, mais elles sont ajoutées automatiquement grâce à CMake via la fonctionnalité FetchContent.
+Other libraries, such as **ftxui** and **nlohmann**, are also required for compilation, but they are automatically included via CMake using the **FetchContent** feature.
 
-**Le projet nécessite également :**
+**The project also requires:**
 
-- **GCC 13** ou supérieur
-- ainsi que **C++23**
+- **GCC 13** or higher
+- and **C++23** support
 
 ### Compilation
 
-Le projet peut être compilé en mode **Release** ou **Debug** :
+The project can be compiled in **Release** or **Debug** :
 
 ```sh
 make release
@@ -88,107 +87,115 @@ make release
 make debug
 ```
 
-## Exécution du jeu
+## Running the Game
 
-### Lancer le programme
+### Launching the Program
 
-Pour lancer Royal Blocks, vous avez le choix entre deux interfaces :
+To launch **Royal Blocks**, you can choose between two interfaces:
 
-- Interface graphique :
+- Graphical interface:
 
   ```sh
   ./royal-blocks-gui
   ```
 
-- Interface en terminal :
+- Terminal interface:
 
   ```sh
   ./royal-blocks-tui
   ```
 
-Pour lancer le serveur, exécutez :
+To start the server, run:
 
 ```sh
 ./royal-blocks-server
 ```
 
-### Choix de l'IP et du port
+### Choosing the IP and Port
 
-Pour établir la communication entre le client et le serveur :
+To establish communication between the client and the server:
 
-#### Serveur
+#### Server
 
-Vous pouvez passer un port de votre choix en argument lors du lancement :
+You can specify a custom port as an argument when launching the server:
 
 ```sh
 ./royal-blocks-server <port>
 ```
 
-Sinon, le serveur lira la variable d'environnement **SERVER_PORT**.
-Si aucune variable n'est définie, le port **1234** sera utilisé par défaut.
+If no argument is provided, the server will read the **SERVER_PORT** environment variable.
+If the variable is not set, the default port **1234** will be used.
 
 #### Client
 
-Dans les interfaces graphique et terminal, il est possible de modifier l'IP et le port du serveur directement.
-Ces informations seront sauvegardées dans le fichier `~/.config/royal-blocks/config.json` pour linux, `%APPDATA%\royal-blocks\config.json` pour Windows.
+In both the graphical and terminal interfaces, you can modify the server's IP and port directly.
+These settings will be saved in the configuration file:
 
-Si aucun fichier de configuration n'existe, un fichier par défaut sera automatiquement créé, en utilisant :
+- `~/.config/royal-blocks/config.json` on Linux
 
-- l'IP définie par la variable d'environnement **SERVER_IP** (ou **127.0.0.1** par défaut),
-- et le port défini par **SERVER_PORT** (ou **1234** par défaut).
+- `%APPDATA%\royal-blocks\config.json` on Windows
 
-### Information importante concernant l'affichage du jeu dans le terminal
+If no configuration file exists, a default one will be automatically created using:
 
-Si vous ne voyez pas toutes les informations du jeu à l'écran, vous devez dézoomer l'écran de votre terminal.
+- the IP address defined by the **SERVER_IP** environment variable (or **127.0.0.1** by default),
+- and the port defined by **SERVER_PORT** (or **1234** by default).
 
-### Les différentes commandes de Royal Blocks
+### Important Information About Terminal Display
 
-Voici une liste des différentes touches pour déplacer et tourner les pièces du
-jeu :
+If you can't see all game information on the screen, you may need to **zoom out** in your terminal window.
 
-- **Déplacement vers la gauche**\
+### Royal Blocks Controls
+
+Here is a list of the different keys used to move and rotate the pieces in the game:
+
+- **Move left**\
   `←`
 
-- **Déplacement vers la droite**\
+- **Move right**\
   `→`
 
-- **Descente rapide**\
+- **Soft drop**\
   `↓`
 
-- **Placer le tetromino immédiatement en bas**\
+- **Hard drop (instantly place the tetromino at the bottom)**\
   `ESPACE`
 
-- **Rotation dans le sens horaire**\
+- **Rotate clockwise**\
   `g`
 
-- **Rotation dans le sens antihoraire**\
+- **Rotate counterclockwise**\
   `f`
 
-- **Mettre en attente (hold) un tétrimino**\
+- **Hold current tetromino**\
   `h`
 
-- **Sélectionner l'effet précédent**\
+- **Select previous effect**\
   `e`
 
-- **Sélectionner l'effet suivant**\
+- **Select next effect**\
   `r`
 
-- **Vider les malus mis de côté**\
+- **Clear stored maluses**\
   `t`
 
-- **Acheter l'effet sélectionné et l'envoyer directemment**
+- **Buy and immediately send the selected effect**
   - `y`
-  - `clic gauche sur l'effet`
+  - `left-click on the effect`
 
-- **Acheter et mettre de côté l'effet sélectionné**\
+- **Buy and store the selected effect**\
   `u`
 
-- **Sélectionner la cible des malus**\
-  `clic gauche sur le nom de l'adversaire`
+- **Select target for maluses**\
+  `left-click on the opponent's name`
 
-- **Quitter la partie en cours**\
+- **Quit the current game**\
   `q`
 
 ## License
 
 This project is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
+
+## License and Third-Party Software
+
+This project uses several open source components.  
+Please see [LICENSES_THIRD_PARTY.md](./LICENSES_THIRD_PARTY.md) for details.
