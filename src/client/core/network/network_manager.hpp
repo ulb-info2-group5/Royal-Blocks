@@ -18,7 +18,7 @@
 #ifndef NETWORK_MANAGER_HPP
 #define NETWORK_MANAGER_HPP
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <functional>
 #include <stdint.h>
 #include <string>
@@ -35,14 +35,14 @@ class NetworkManager {
     /**
      * @brief The socket used to communicate with the server
      */
-    boost::asio::ip::tcp::socket socket_;
+    asio::ip::tcp::socket socket_;
 
     std::string serverIp_;
     uint16_t serverPort_;
 
     std::string readBuf_;
 
-    boost::asio::steady_timer retryTimer_;
+    asio::steady_timer retryTimer_;
 
     /**
      * @brief function to be called when the client is disconnected from the
@@ -81,7 +81,7 @@ class NetworkManager {
     /**
      * @brief Construct a new Network Manager object
      */
-    NetworkManager(boost::asio::io_context &context,
+    NetworkManager(asio::io_context &context,
                    std::function<void(const std::string_view)> packetHandler);
 
     /**

@@ -18,9 +18,8 @@
 #ifndef TETRIS_MAIN_SERVER_HPP
 #define TETRIS_MAIN_SERVER_HPP
 
-#include <boost/asio/impl/io_context.ipp>
-#include <boost/asio/io_context.hpp>
-#include <boost/system/detail/error_code.hpp>
+#include <asio/impl/io_context.ipp>
+#include <asio/io_context.hpp>
 #include <cstdint>
 #include <memory>
 
@@ -51,7 +50,7 @@ class TetrisMainServer {
     std::shared_ptr<DatabaseManager> dbManager;
     DataBase database;
     ClientManager clientManager;
-    boost::asio::io_context io_context;
+    asio::io_context io_context;
     uint16_t serverPort;
 
   public:
@@ -74,7 +73,7 @@ class TetrisMainServer {
     /**
      * @brief handle signal
      */
-    static void handler(const boost::system::error_code &error,
+    static void handler(const asio::error_code &error,
                         int signal_number);
 
     /**

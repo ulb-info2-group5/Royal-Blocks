@@ -18,7 +18,7 @@
 #ifndef ACCOUNT_SERVICE_HPP
 #define ACCOUNT_SERVICE_HPP
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <nlohmann/json.hpp>
 
 #include "../database/account_manager/account_manager.hpp"

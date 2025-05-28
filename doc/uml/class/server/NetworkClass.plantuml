@@ -12,7 +12,7 @@ class ClientLink {
 	-mustBeDeletedFromTheWaitingForAuthList_ : bool
 	
 	-socket_ : tcp::socket
-	-streamBuffer_ : boost::asio::streambuf
+	-streamBuffer_ : asio::streambuf
 	-buffer_ : std::string
 
 	-pGame_ : std::weak_ptr<GameServer>
@@ -131,9 +131,9 @@ class AccountService {
 }
 
 class Network {
-	+Network(boost::asio::io_context& io, ClientManager& clientManager, uint16_t port)
+	+Network(asio::io_context& io, ClientManager& clientManager, uint16_t port)
 	-clientManager_ : ClientManager&
-	-io_ : boost::asio::io_context&
+	-io_ : asio::io_context&
 	-acceptor_ : tcp::acceptor
 	-accept() : void
 }

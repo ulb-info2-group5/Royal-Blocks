@@ -7,7 +7,7 @@ file(GLOB_RECURSE SOURCES_DATABASE_LIB
 )
 
 # dependencies
-include(../../../third_party/nlohmann.cmake)
+include(${CMAKE_SOURCE_DIR}/third_party/nlohmann.cmake)
 find_package (SQLite3)
 
 # add database_lib as lib

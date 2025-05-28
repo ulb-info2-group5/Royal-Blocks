@@ -26,7 +26,7 @@ file (GLOB_RECURSE SOURCES_CLIENT_TUI
     tui.cpp
 )
 
-include(../../third_party/ftxui.cmake)
+include(${CMAKE_SOURCE_DIR}/third_party/ftxui.cmake)
 
 add_executable(royal-blocks-tui ${SOURCES_CLIENT_TUI})
 

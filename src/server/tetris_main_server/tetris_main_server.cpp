@@ -69,7 +69,7 @@ TetrisMainServer::TetrisMainServer(int argc, char *argv[])
       clientManager(database), serverPort(handleArguments(argc, argv)) {
     instance_ = this;
 }
-void TetrisMainServer::handler(const boost::system::error_code &error,
+void TetrisMainServer::handler(const asio::error_code &error,
                                int /*signal_number*/) {
     if (!error) {
         instance_->getClientManager().shutdown();
@@ -79,7 +79,7 @@ void TetrisMainServer::handler(const boost::system::error_code &error,
 
 void TetrisMainServer::run() {
     try {
-        boost::asio::signal_set signals(io_context, SIGINT, SIGTERM);
+        asio::signal_set signals(io_context, SIGINT, SIGTERM);
         Network network(io_context, clientManager, serverPort);
         std::cout << "Server started on port " << serverPort << std::endl;
         signals.async_wait(handler);

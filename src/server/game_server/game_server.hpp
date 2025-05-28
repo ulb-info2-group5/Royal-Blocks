@@ -24,7 +24,7 @@
 #include "game_engine/game_engine.hpp"
 #include "player_state/player_state.hpp"
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 using GameID = size_t;
 
@@ -51,8 +51,8 @@ class GameServer {
     std::mutex gameMutex_;
     size_t tickDelayMs_;
 
-    boost::asio::io_context context_;
-    boost::asio::steady_timer tickTimer_;
+    asio::io_context context_;
+    asio::steady_timer tickTimer_;
     GameStatePtr pGameState_;
     GameEngine engine;
     GameID gameId_;

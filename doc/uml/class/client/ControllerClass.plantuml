@@ -11,7 +11,7 @@ class Controller {
 
 	-uiChoice_ : UiChoice
 	-authState_ : AuthState
-	-context_ : boost::asio::io_context
+	-context_ : asio::io_context
 	-mutex_ : mutable std::mutex
 	-args_ : std::pair<int, char**>
 	-ioThread_ : std::thread

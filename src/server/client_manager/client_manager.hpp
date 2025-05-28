@@ -18,7 +18,7 @@
 #ifndef CLIENT_MANAGER_HPP
 #define CLIENT_MANAGER_HPP
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <mutex>
 #include <nlohmann/json.hpp>
 #include <optional>
@@ -31,7 +31,7 @@
 #include "../matchmaking/matchmaking.hpp"
 #include "games_manager/games_manager.hpp"
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 class ClientLink;
 

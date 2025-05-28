@@ -2,22 +2,18 @@
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 file(GLOB_RECURSE SERVER_SOURCES
-    client_link/*.cpp
-    client_manager/*.cpp
-    network/*.cpp
-    server_bindings/*.cpp
-    social_service/*.cpp
-    games_manager/*.cpp
-    game_server/*.cpp
-    matchmaking/*.cpp
-    account_service/*.cpp
-    tetris_main_server/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
 )
+
+include(${CMAKE_SOURCE_DIR}/third_party/asio.cmake)
 
 add_library(server_lib STATIC ${SERVER_SOURCES})
 add_subdirectory(database)
 
-target_include_directories(server_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(server_lib PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
+)
 
 
 target_link_libraries(server_lib PUBLIC

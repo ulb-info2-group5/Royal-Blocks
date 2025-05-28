@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 
+# C++ standard
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
@@ -8,18 +13,20 @@ if(WIN32)
 endif()
 
 # Compile & linking options
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug build.")
-    add_compile_options(-std=c++23 -g -pedantic -Wall -Wextra -fsanitize=address,undefined)
+    add_link_options(-fsanitize=address,undefined)
+    add_compile_options(-O0 -g3 -fsanitize=address,undefined -fno-omit-frame-pointer)
     add_link_options(-fsanitize=address,undefined)
 else()
     message("Release build.")
-    add_compile_options(-std=c++23 -O2 -w)
+    add_compile_options(-O3 -march=native -DNDEBUG)
+    add_link_options(-O3 -march=native)
 endif()
-
-# C++ standard
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(royal-blocks)
 

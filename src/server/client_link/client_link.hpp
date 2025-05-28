@@ -18,7 +18,7 @@
 #ifndef CLIENT_LINK_HPP
 #define CLIENT_LINK_HPP
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
@@ -28,7 +28,7 @@
 
 #include "../../common/tetris_royal_lib/game_mode/game_mode.hpp"
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 class GameServer;
 
@@ -52,7 +52,7 @@ class ClientLink : public std::enable_shared_from_this<ClientLink> {
   private:
     tcp::socket socket_;
     std::string buffer_;
-    boost::asio::streambuf streamBuffer_;
+    asio::streambuf streamBuffer_;
     bool mustBeDeletedFromTheWaitingForAuthList_ = false;
     bindings::State userState;
     std::optional<UserID> clientId;

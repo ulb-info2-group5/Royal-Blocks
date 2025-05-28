@@ -18,9 +18,9 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include <boost/asio/detail/impl/reactive_socket_service_base.ipp>
-#include <boost/asio/impl/any_io_executor.ipp>
-#include <boost/asio/ip/tcp.hpp>
+#include <asio/detail/impl/reactive_socket_service_base.ipp>
+#include <asio/impl/any_io_executor.ipp>
+#include <asio/ip/tcp.hpp>
 #include <stdint.h>
 
 class ClientManager;
@@ -31,7 +31,7 @@ namespace boost {
     }
 } // namespace boost
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 /**
  * @class Network
@@ -40,7 +40,7 @@ using boost::asio::ip::tcp;
  */
 class Network {
   private:
-    boost::asio::io_context &io_;
+    asio::io_context &io_;
     tcp::acceptor acceptor_;
     ClientManager &clientManager_;
 
@@ -51,7 +51,7 @@ class Network {
     void accept();
 
   public:
-    Network(boost::asio::io_context &io, ClientManager &clientManager,
+    Network(asio::io_context &io, ClientManager &clientManager,
             uint16_t port);
 };
 

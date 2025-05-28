@@ -41,9 +41,9 @@ class GameServer {
 	-pClientLinks_ : std::vector<std::weak_ptr<ClientLink>>
 
 	-gameId_ : size_t
-	-context_ : boost::asio::io_context
+	-context_ : asio::io_context
 	-gameMutex_ : std::mutex
-	-tickTimer_ : boost::asio::steady_timer
+	-tickTimer_ : asio::steady_timer
 	-tickDelayMs_ : size_t
 
 	-{static} DECREASE_TICK_DELAY_MS : static constexpr size_t

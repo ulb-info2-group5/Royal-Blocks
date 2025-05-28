@@ -17,18 +17,17 @@
 
 #include "network.hpp"
 
-#include <boost/asio/associated_cancellation_slot.hpp>
-#include <boost/asio/async_result.hpp>
-#include <boost/asio/detail/handler_cont_helpers.hpp>
-#include <boost/asio/detail/impl/scheduler.ipp>
-#include <boost/asio/detail/impl/service_registry.hpp>
-#include <boost/asio/execution/context_as.hpp>
-#include <boost/asio/execution/prefer_only.hpp>
-#include <boost/asio/impl/execution_context.hpp>
-#include <boost/asio/impl/io_context.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/ip/detail/impl/endpoint.ipp>
-#include <boost/system/detail/error_code.hpp>
+#include <asio/associated_cancellation_slot.hpp>
+#include <asio/async_result.hpp>
+#include <asio/detail/handler_cont_helpers.hpp>
+#include <asio/detail/impl/scheduler.ipp>
+#include <asio/detail/impl/service_registry.hpp>
+#include <asio/execution/context_as.hpp>
+#include <asio/execution/prefer_only.hpp>
+#include <asio/impl/execution_context.hpp>
+#include <asio/impl/io_context.hpp>
+#include <asio/io_context.hpp>
+#include <asio/ip/detail/impl/endpoint.ipp>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
@@ -42,13 +41,13 @@
 
 using json = nlohmann::json;
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 // ====== Network class ======
 
 //--- private ---
 void Network::accept() {
-    acceptor_.async_accept([this](boost::system::error_code ec,
+    acceptor_.async_accept([this](asio::error_code ec,
                                   tcp::socket socket) {
         if (!ec) {
 
@@ -75,7 +74,7 @@ void Network::accept() {
 }
 
 // --- public ---
-Network::Network(boost::asio::io_context &io, ClientManager &clientManager,
+Network::Network(asio::io_context &io, ClientManager &clientManager,
                  uint16_t port)
     : io_(io), acceptor_(io, tcp::endpoint(tcp::v4(), port)),
       clientManager_(clientManager) {

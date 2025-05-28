@@ -6,13 +6,13 @@ class TetrisMainServer {
 	-dbManager : std::shared_ptr<DatabaseManager>
     
 	-serverPort : uint16_t
-	-io_context : boost::asio::io_context
+	-io_context : asio::io_context
 
 	+TetrisMainServer(int argc, char* argv)
 	+~TetrisMainServer()
 
 	+{static} instance_ : static TetrisMainServer*
-	+{static} handler(const boost::system::error_code& error, int signal_number) : void
+	+{static} handler(const system::error_code& error, int signal_number) : void
 
 	+run() : void
     

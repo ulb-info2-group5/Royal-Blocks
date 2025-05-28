@@ -28,10 +28,8 @@ Le projet nécessite l'installation des programmes et bibliothèques suivants
   `sudo apt install git`
 - **SQLite3**\
   `sudo apt install libsqlite3-dev`
-- **Qt5**\
+- **Qt5 (pour la GUI)**\
   `sudo apt install qtbase5-dev`
-- **Boost (uniquement la partie réseau est nécessaire)**\
-  `sudo apt install libboost-system-dev`
 
 ---
 

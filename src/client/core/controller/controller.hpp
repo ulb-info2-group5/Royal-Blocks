@@ -26,8 +26,8 @@
 #include "../network/network_manager.hpp"
 #include "core/server_info/server_info.hpp"
 #include "effect/effect_type.hpp"
-#include <boost/asio/impl/io_context.ipp>
-#include <boost/asio/io_context.hpp>
+#include <asio/impl/io_context.ipp>
+#include <asio/io_context.hpp>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -79,7 +79,7 @@ class Controller {
     };
 
   private:
-    boost::asio::io_context context_;
+    asio::io_context context_;
 
     RegistrationState registrationState_;
     AuthState authState_;

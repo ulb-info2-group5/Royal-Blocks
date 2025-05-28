@@ -7,9 +7,9 @@ skinparam linetype ortho
 /' Objects '/
 
 class NetworkManager {
-	' -context_ : boost::asio::io_context&
-	-socket_ : boost::asio::ip::tcp::socket
-	-retryTimer_ : boost::asio::steady_timer
+	' -context_ : asio::io_context&
+	-socket_ : asio::ip::tcp::socket
+	-retryTimer_ : asio::steady_timer
 	-readBuf_ : std::string
 	-isConnected_ : bool
 
@@ -22,7 +22,7 @@ class NetworkManager {
 	-write() : void
 	-retry() : void
 
-	+NetworkManager(boost::asio::io_context& context, std::function<void ( const std::string_view )> packetHandler)
+	+NetworkManager(asio::io_context& context, std::function<void ( const std::string_view )> packetHandler)
 	+~NetworkManager()
 
 	+send(const std::string& message) : void

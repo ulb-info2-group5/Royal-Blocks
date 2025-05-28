@@ -6,7 +6,7 @@ file(GLOB_RECURSE SOURCES_TETRIS_LIB
     *.cpp
 )
 
-include(../../../third_party/nlohmann.cmake)
+include(${CMAKE_SOURCE_DIR}/third_party/nlohmann.cmake)
 
 # add tetris_lib as lib
 add_library(tetris_lib STATIC ${SOURCES_TETRIS_LIB})

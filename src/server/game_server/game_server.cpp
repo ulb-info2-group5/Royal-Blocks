@@ -45,13 +45,13 @@ void GameServer::onTimerTick() {
     engine.tick();
     sendGameStates();
 
-    tickTimer_.expires_after(boost::asio::chrono::milliseconds{tickDelayMs_});
+    tickTimer_.expires_after(asio::chrono::milliseconds{tickDelayMs_});
 
     if (tickDelayMs_ > MIN_TICK_DELAY_MS) {
         tickDelayMs_ -= DECREASE_TICK_DELAY_MS;
     }
 
-    tickTimer_.async_wait([this](const boost::system::error_code &ec) {
+    tickTimer_.async_wait([this](const asio::error_code &ec) {
         if (!ec) {
             onTimerTick();
         }
@@ -81,7 +81,7 @@ GameServer::GameServer(GameMode gameMode, std::vector<Player> &&players,
     :
 
       tickDelayMs_{INITIAL_TICK_DELAY_MS}, context_{},
-      tickTimer_{context_, boost::asio::chrono::milliseconds{tickDelayMs_}},
+      tickTimer_{context_, asio::chrono::milliseconds{tickDelayMs_}},
       pGameState_{std::make_shared<GameState>(
           gameMode,
           [&] {
@@ -106,14 +106,14 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         switch (bindingType) {
 
         case bindings::BindingType::BigDrop:
-            boost::asio::post(context_, [this, userId]() {
+            asio::post(context_, [this, userId]() {
                 engine.bigDrop(userId);
                 sendGameStates();
             });
             break;
 
         case bindings::BindingType::BuyBonus: {
-            boost::asio::post(
+            asio::post(
                 context_,
                 [this, userId, buyBonus = bindings::BuyBonus::from_json(j)]() {
                     engine.tryBuyEffect(userId, buyBonus.bonusType);
@@ -123,7 +123,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         }
 
         case bindings::BindingType::BuyPenalty: {
-            boost::asio::post(
+            asio::post(
                 context_, [this, userId,
                            buyPenalty = bindings::BuyPenalty::from_json(j)]() {
                     engine.tryBuyEffect(userId, buyPenalty.penaltyType,
@@ -134,21 +134,21 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         }
 
         case bindings::BindingType::EmptyPenaltyStash:
-            boost::asio::post(context_, [this, userId]() {
+            asio::post(context_, [this, userId]() {
                 engine.emptyPenaltyStash(userId);
                 sendGameStates();
             });
             break;
 
         case bindings::BindingType::HoldActiveTetromino:
-            boost::asio::post(context_, [this, userId]() {
+            asio::post(context_, [this, userId]() {
                 engine.holdActiveTetromino(userId);
                 sendGameStates();
             });
             break;
 
         case bindings::BindingType::MoveActive: {
-            boost::asio::post(
+            asio::post(
                 context_, [this, userId,
                            moveActive = bindings::MoveActive::from_json(j)]() {
                     engine.tryMoveActive(userId, moveActive.tetrominoMove);
@@ -158,7 +158,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         }
 
         case bindings::BindingType::RotateActive: {
-            boost::asio::post(
+            asio::post(
                 context_,
                 [this, userId,
                  rotateActive = bindings::RotateActive::from_json(j)]() {
@@ -170,7 +170,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
         }
 
         case bindings::BindingType::SelectTarget: {
-            boost::asio::post(
+            asio::post(
                 context_,
                 [this, userId,
                  selectTarget = bindings::SelectTarget::from_json(j)]() {
@@ -197,7 +197,7 @@ void GameServer::enqueueBinding(UserID userId, const std::string &bindingStr) {
 
 void GameServer::run() {
     // Setup or async engine-tick-clock
-    tickTimer_.async_wait([this](const boost::system::error_code &ec) {
+    tickTimer_.async_wait([this](const asio::error_code &ec) {
         if (!ec) {
             onTimerTick();
         }

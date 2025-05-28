@@ -24,13 +24,13 @@
 // --- private ---
 
 void ClientLink::read() {
-    boost::asio::async_read_until(
+    asio::async_read_until(
         socket_, streamBuffer_, bindings::PACKET_DELIMITER,
-        [this](boost::system::error_code ec, std::size_t) {
+        [this](asio::error_code ec, std::size_t) {
             if (!ec) {
 
                 handleReading();
-            } else if (ec == boost::asio::error::eof) {
+            } else if (ec == asio::error::eof) {
                 handleErrorReading();
             }
         });
@@ -98,9 +98,9 @@ void ClientLink::handleAuthentication(std::string &packet) {
 }
 
 void ClientLink::writeSocket(std::string &content) {
-    boost::asio::async_write(
-        socket_, boost::asio::buffer(content),
-        [this](boost::system::error_code ec, std::size_t length) {
+    asio::async_write(
+        socket_, asio::buffer(content),
+        [this](asio::error_code ec, std::size_t length) {
             if (!ec) {
                 buffer_.erase(0, length);
             }
