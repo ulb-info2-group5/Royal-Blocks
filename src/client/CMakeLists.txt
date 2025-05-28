@@ -1,10 +1,11 @@
 # Make lsp's aware of libraries
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
-
 # ---------------------------
 #         Client Core
 # ---------------------------
+
+include(${CMAKE_SOURCE_DIR}/third_party/asio.cmake)
 
 # client lib
 file(GLOB_RECURSE SOURCES_CLIENT_CORE_LIB
@@ -12,7 +13,7 @@ file(GLOB_RECURSE SOURCES_CLIENT_CORE_LIB
 )
 
 add_library(client_core_lib STATIC ${SOURCES_CLIENT_CORE_LIB})
-target_link_libraries(client_core_lib PUBLIC tetris_royal_lib)
+target_link_libraries(client_core_lib PUBLIC tetris_royal_lib asio)
 target_include_directories(client_core_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 

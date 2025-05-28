@@ -19,6 +19,7 @@ target_link_libraries(server_lib PUBLIC
     bcrypt
     tetris_royal_lib
     database_lib
+    asio
 )
 
 if(WIN32)

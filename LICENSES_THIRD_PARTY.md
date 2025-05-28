@@ -8,8 +8,8 @@ This file lists licenses of third-party libraries used in this project.
 
 **License**: Boost Software License 1.0  
 **Source**: [asio](https://github.com/boostorg/asio)
-**Usage**: Integrated using CMake FetchContent.
-**Notes**: Only Boost.Asio is used, not full Boost.
+**Usage**: Included directly in `lib/asio/` folder.  
+**Notes**: Only the standalone headers are used. No Boost dependency required.
 
 ---
 
