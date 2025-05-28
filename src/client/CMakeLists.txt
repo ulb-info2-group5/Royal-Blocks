@@ -29,9 +29,9 @@ file (GLOB_RECURSE SOURCES_CLIENT_TUI
 
 include(${CMAKE_SOURCE_DIR}/third_party/ftxui.cmake)
 
-add_executable(royal-blocks-tui ${SOURCES_CLIENT_TUI})
+add_executable(${PROJECT_NAME}-tui ${SOURCES_CLIENT_TUI})
 
-target_link_libraries(royal-blocks-tui
+target_link_libraries(${PROJECT_NAME}-tui
     client_core_lib
     ftxui::screen
     ftxui::dom
@@ -39,7 +39,7 @@ target_link_libraries(royal-blocks-tui
 )
 
 if(WIN32)
-    target_link_libraries(royal-blocks-tui ws2_32)
+    target_link_libraries(${PROJECT_NAME}-tui ws2_32)
 endif()
 
 
@@ -56,16 +56,16 @@ file (GLOB_RECURSE SOURCES_CLIENT_GUI
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
 
-add_executable(royal-blocks-gui ${SOURCES_CLIENT_GUI})
+add_executable(${PROJECT_NAME}-gui ${SOURCES_CLIENT_GUI})
 
 if (WIN32)
-    target_link_options(royal-blocks-gui PRIVATE -mwindows)
+    target_link_options(${PROJECT_NAME}-gui PRIVATE -mwindows)
 endif()
 
 # AUTOMOC only needed for Qt5 for the GUI
-set_target_properties(royal-blocks-gui PROPERTIES AUTOMOC ON )
+set_target_properties(${PROJECT_NAME}-gui PROPERTIES AUTOMOC ON )
 
-target_link_libraries(royal-blocks-gui
+target_link_libraries(${PROJECT_NAME}-gui
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
@@ -73,6 +73,19 @@ target_link_libraries(royal-blocks-gui
 )
 
 if(WIN32)
-    target_link_libraries(royal-blocks-gui ws2_32)
+    target_link_libraries(${PROJECT_NAME}-gui ws2_32)
 endif()
 
+if (WIN32)
+    execute_process(
+        COMMAND ${CMAKE_RC_COMPILER} -i ${CMAKE_SOURCE_DIR}/res/resource.rc -o ${CMAKE_BINARY_DIR}/resource.o
+        RESULT_VARIABLE RC_RESULT
+    )
+    if (RC_RESULT EQUAL 0)
+        set(RESOURCE_OBJ ${CMAKE_BINARY_DIR}/resource.o)
+        target_sources(${PROJECT_NAME}-tui PRIVATE ${RESOURCE_OBJ})
+        target_sources(${PROJECT_NAME}-gui PRIVATE ${RESOURCE_OBJ})
+    else()
+        message(FATAL_ERROR "Failed to compile resource")
+    endif()
+endif()

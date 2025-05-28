@@ -31,3 +31,16 @@ set(SOURCE_SERVER_MAIN main.cpp)
 add_executable(${PROJECT_NAME}-server ${SOURCE_SERVER_MAIN})
 
 target_link_libraries(${PROJECT_NAME}-server server_lib)
+
+if (WIN32)
+    execute_process(
+        COMMAND ${CMAKE_RC_COMPILER} -i ${CMAKE_SOURCE_DIR}/res/resource.rc -o ${CMAKE_BINARY_DIR}/resource.o
+        RESULT_VARIABLE RC_RESULT
+    )
+    if (RC_RESULT EQUAL 0)
+        set(RESOURCE_OBJ ${CMAKE_BINARY_DIR}/resource.o)
+        target_sources(${PROJECT_NAME}-server PRIVATE ${RESOURCE_OBJ})
+    else()
+        message(FATAL_ERROR "Failed to compile resource")
+    endif()
+endif()
