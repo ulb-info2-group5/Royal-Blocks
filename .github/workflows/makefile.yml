@@ -23,5 +23,4 @@ jobs:
         
     - name: Build with Make
       run: |
-        make
-        
+        make re_release
