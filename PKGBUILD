@@ -8,7 +8,7 @@ url="https://github.com/ulb-info2-group5/Tetris-Blocks"
 license=('GPL3')
 depends=('qt5-base')
 makedepends=('gcc' 'make' 'cmake' 'qt5-base')
-source=("royal-blocks-1.1.1-x86_64.pkg.tar.zst")
+source=("https://github.com/ulb-info2-group5/Royal-Blocks/releases/download/v1.1.1/royal-blocks-1.1.1-x86_64.pkg.tar.zst")
 sha256sums=('10421b488df7f508378e28d73ec97a5143c5d9551a44e9c4fc4d96f581042812')
 
 build() {
