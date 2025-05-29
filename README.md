@@ -44,39 +44,12 @@ The project requires the installation of the following programs and libraries (t
 
 #### Installing Dependencies on Windows
 
-To easily install all required dependencies on Windows, we recommend using `vcpkg`.
-
-**Visual Studio** is required to use **vcpkg**.
-
-We also recommend installing **MinGW** to have access to the **g++** compiler.
-Don't forget to install **make** and **cmake** with **MinGW** in order to build the project.
-
-##### 1. Install vcpkg
+To easily install all required dependencies on Windows, we recommend using **MinGW** to have access to the **g++** compiler.
+Don't forget to install **make**, **cmake**, **Git** and **Qt5** with **MinGW** in order to build the project:
 
 ```sh
-git clone https://github.com/microsoft/vcpkg.git
-cd vcpkg
-bootstrap-vcpkg.bat
+pacman -S mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-git mingw-w64-x86_64-qt5
 ```
-
-add **vcpkg** to your `PATH` to use it easily across all your projects.
-
-##### 2. Install the project dependencies
-
-```bash
-vcpkg install boost-system boost-thread sqlite3
-```
-
-##### 4. Install Qt5 for Windows
-
-Qt5 is not available via **vcpkg**.
-Download it directly from [qt.io](https://www.qt.io/download) and install the following module:
-
-- Qt 5.x (Choose **MinGW** or **MSVC** depending on the compiler you are using).
-
----
-
-#### Remarque
 
 Other libraries, such as **ftxui** and **nlohmann**, are also required for compilation, but they are automatically included via CMake using the **FetchContent** feature.
 
