@@ -1,17 +1,29 @@
 # Royal Blocks
 
-## Group members
+## Install the Game
 
-| First Name | Last Name           | Student ID  |
-| ---------- | ------------------- | ----------- |
-| Tao        | Chau                |  000567638  |
-| Juliette   | Cornu-Besser        |  000581723  |
-| Quentin    | Bernard Bouissières |  000572078  |
-| Jonas      | Schellekens         |  000590985  |
-| Ethan      | Van Ruyskenvelde    |  000589640  |
-| Lucas      | Verbeiren           |  000591223  |
-| Ernest     | Malysz              |  000514682  |
-| Rafaou     | Gajewicz            |  000569354  |
+### For Windows
+
+Download the latest Windows installer here:  
+👉 [RoyalBlocks_Installer.exe](https://github.com/ulb-info2-group5/Royal-Blocks/releases/download/v1.1.1/RoyalBlocks_Installer.exe)
+
+This setup installs:
+
+- `royal-blocks-gui.exe` – graphical interface
+- `royal-blocks-tui.exe` – terminal interface
+- `royal-blocks-server.exe` – game server  
+  
+You can choose which components to launch after setup.\
+**Requires Windows 10 or higher**
+
+---
+
+### For Linux/macOS
+
+Download the latest source code here:  
+👉 [Source Code (.zip)](https://github.com/ulb-info2-group5/Royal-Blocks/archive/refs/tags/v1.1.1.zip)
+
+Then follow the instructions below to build and run the project manually.
 
 ## Build the project
 
@@ -189,9 +201,22 @@ Here is a list of the different keys used to move and rotate the pieces in the g
 - **Quit the current game**\
   `q`
 
+## Group members
+
+| First Name | Last Name           | Student ID  |
+| ---------- | ------------------- | ----------- |
+| Tao        | Chau                |  000567638  |
+| Juliette   | Cornu-Besser        |  000581723  |
+| Quentin    | Bernard Bouissières |  000572078  |
+| Jonas      | Schellekens         |  000590985  |
+| Ethan      | Van Ruyskenvelde    |  000589640  |
+| Lucas      | Verbeiren           |  000591223  |
+| Ernest     | Malysz              |  000514682  |
+| Rafaou     | Gajewicz            |  000569354  |
+
 ## License
 
-This project is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
+This project is licensed under the [GNU GPL v3](./LICENSE).
 
 ## License and Third-Party Software
 
