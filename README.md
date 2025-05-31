@@ -21,9 +21,20 @@ You can choose which components to launch after setup.\
 ### For Linux/macOS
 
 Download the latest source code here:  
-👉 [Source Code (.zip)](https://github.com/ulb-info2-group5/Royal-Blocks/archive/refs/tags/v1.1.1.zip)
-
+👉 [Source Code (.zip)](https://github.com/ulb-info2-group5/Royal-Blocks/archive/refs/tags/v1.1.1.zip)\
 Then follow the instructions below to build and run the project manually.
+
+For Arch Linux/Manjaro, you can install the program with **yay** or **paru**:
+
+```sh
+yay -S royal-blocks
+```
+
+or
+
+```sh
+paru -S royal-blocks
+```
 
 ## Build the project
 
