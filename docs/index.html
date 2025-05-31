@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Royal Blocks</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #121212;
@@ -11,136 +12,200 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
       padding: 2rem;
-      max-width: 900px;
-      margin: auto;
+      display: flex;
+      justify-content: center;
     }
-    h1, h2, h3 {
-      color: #ffcc00;
-    }
-    a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    code {
+    .markdown-body {
+      max-width: 980px;
+      padding: 2rem;
       background-color: #1e1e1e;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-family: monospace;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    pre {
-      background-color: #1e1e1e;
-      padding: 1rem;
-      overflow-x: auto;
-      border-radius: 6px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    th, td {
-      border: 1px solid #333;
-      padding: 0.5rem;
-      text-align: left;
-    }
-    th {
-      background-color: #222;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #444;
-      margin: 2rem 0;
-    }
+    a { color: #4ea1ff; }
   </style>
 </head>
 <body>
-<main>
-<article>
-<h1>Royal Blocks</h1>
-<h2>Install the Game</h2>
-<h3>For Windows</h3>
-<p>Download the latest Windows installer here:<br>
-👉 <a href="https://github.com/ulb-info2-group5/Royal-Blocks/releases/download/v1.1.1/RoyalBlocks_Installer.exe">RoyalBlocks_Installer.exe</a></p>
-<p>This setup installs:</p>
-<ul>
-  <li><code>royal-blocks-gui.exe</code> – graphical interface</li>
-  <li><code>royal-blocks-tui.exe</code> – terminal interface</li>
-  <li><code>royal-blocks-server.exe</code> – game server</li>
-</ul>
-<p>You can choose which components to launch after setup.<br>
-<strong>Requires Windows 10 or higher</strong></p>
-<hr>
-<h3>For Linux/macOS</h3>
-<p>Download the latest source code here:<br>
-👉 <a href="https://github.com/ulb-info2-group5/Royal-Blocks/archive/refs/tags/v1.1.1.zip">Source Code (.zip)</a></p>
-<p>Then follow the instructions below to build and run the project manually.</p>
-<p>For Arch Linux/Manjaro, you can install the program with <strong>yay</strong> or <strong>paru</strong>:</p>
-<pre><code>yay -S royal-blocks</code></pre>
-<p>or</p>
-<pre><code>paru -S royal-blocks</code></pre>
-<h2>Build the project</h2>
-<h3>Dependencies</h3>
-<p>The project requires:</p>
-<ul>
-  <li><strong>Make</strong> – <code>sudo apt install make</code></li>
-  <li><strong>CMake</strong> – <code>sudo apt install cmake</code></li>
-  <li><strong>Git</strong> – <code>sudo apt install git</code></li>
-  <li><strong>Qt5</strong> (for the GUI) – <code>sudo apt install qtbase5-dev</code></li>
-</ul>
-<hr>
-<h4>Installing Dependencies on Windows</h4>
-<p>We recommend using <strong>MinGW</strong>. Install:</p>
-<pre><code>pacman -S mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-git mingw-w64-x86_64-qt5</code></pre>
-<p>Also requires:</p>
-<ul>
-  <li><strong>GCC 13+</strong></li>
-  <li><strong>C++23</strong> support</li>
-</ul>
-<h3>Compilation</h3>
-<p>Build in release or debug mode:</p>
-<pre><code>make release</code></pre>
-<pre><code>make debug</code></pre>
-<h2>Running the Game</h2>
-<h3>Launching the Program</h3>
-<p>Choose between two interfaces:</p>
-<ul>
-  <li>Graphical: <code>./royal-blocks-gui</code></li>
-  <li>Terminal: <code>./royal-blocks-tui</code></li>
-</ul>
-<p>To start the server:</p>
-<pre><code>./royal-blocks-server</code></pre>
-<h3>Choosing the IP and Port</h3>
-<p>You can define a port or let it use the environment variable <code>SERVER_PORT</code> (default: <code>1234</code>).</p>
-<p>Clients can modify IP and port in:</p>
-<ul>
-  <li><code>~/.config/royal-blocks/config.json</code> (Linux)</li>
-  <li><code>%APPDATA%\royal-blocks\config.json</code> (Windows)</li>
-</ul>
-<h3>Terminal Display Tips</h3>
-<p>If the UI is cut off, zoom out in the terminal window.</p>
-<h3>Royal Blocks Controls</h3>
-<ul>
-  <li><strong>←</strong>: Move left</li>
-  <li><strong>→</strong>: Move right</li>
-  <li><strong>↓</strong>: Soft drop</li>
-  <li><strong>Space</strong>: Hard drop</li>
-  <li><strong>g</strong>: Rotate clockwise</li>
-  <li><strong>f</strong>: Rotate counterclockwise</li>
-  <li><strong>h</strong>: Hold tetromino</li>
-  <li><strong>e / r</strong>: Cycle effects</li>
-  <li><strong>t</strong>: Clear maluses</li>
-  <li><strong>y</strong>: Buy/send effect</li>
-  <li><strong>u</strong>: Buy/store effect</li>
-  <li><strong>Mouse click</strong>: Target or use</li>
-  <li><strong>q</strong>: Quit</li>
-</ul>
-<h2>License</h2>
-<p>This project is licensed under the <a href="./LICENSE">GNU GPL v3</a>.</p>
-<p>See <a href="./LICENSES_THIRD_PARTY.md">LICENSES_THIRD_PARTY.md</a> for third-party attributions.</p>
-</article>
-</main>
+  <article class="markdown-body">
+    <h1>Royal Blocks</h1>
+
+    <h2>Install the Game</h2>
+
+    <h3>For Windows</h3>
+
+    <p>Download the latest Windows installer here:<br />
+    👉 <a href="https://github.com/ulb-info2-group5/Royal-Blocks/releases/download/v1.1.1/RoyalBlocks_Installer.exe">RoyalBlocks_Installer.exe</a></p>
+
+    <p>This setup installs:</p>
+
+    <ul>
+    <li><code>royal-blocks-gui.exe</code> – graphical interface</li>
+    <li><code>royal-blocks-tui.exe</code> – terminal interface</li>
+    <li><code>royal-blocks-server.exe</code> – game server  </li>
+    </ul>
+
+    <p>You can choose which components to launch after setup.</p>
+    </p><strong>Requires Windows 10 or higher</strong></p>
+
+    <hr />
+
+    <h3>For Linux/macOS</h3>
+
+    <p>Download the latest source code here:<br />
+    👉 <a href="https://github.com/ulb-info2-group5/Royal-Blocks/archive/refs/tags/v1.1.1.zip">Source Code (.zip)</a></p>
+    Then follow the instructions below to build and run the project manually.</p>
+
+    <p>For Arch Linux/Manjaro, you can install the program with <strong>yay</strong> or <strong>paru</strong>:</p>
+
+    <p><code>yay -S royal-blocks</code></p>
+
+    <p>or</p>
+
+    <p><code>paru -S royal-blocks</code></p>
+
+    <h2>Build the project</h2>
+
+    <h3>Dependencies</h3>
+
+    <p>The project requires the installation of the following programs and libraries (the commands are for Debian-based systems):</p>
+
+    <ul>
+    <li><strong>Make</strong>
+    <code>sudo apt install make</code></li>
+    <li><strong>CMake</strong>
+    <code>sudo apt install cmake</code></li>
+    <li><strong>Git</strong>
+    <code>sudo apt install git</code></li>
+    <li><strong>Qt5 (for the GUI)</strong>
+    <code>sudo apt install qtbase5-dev</code></li>
+    </ul>
+
+    <hr />
+
+    <h4>Installing Dependencies on Windows</h4>
+
+    <p>To easily install all required dependencies on Windows, we recommend using <strong>MinGW</strong> to have access to the <strong>g++</strong> compiler.
+    Don't forget to install <strong>make</strong>, <strong>cmake</strong>, <strong>Git</strong> and <strong>Qt5</strong> with <strong>MinGW</strong> in order to build the project:</p>
+
+    <p><code>pacman -S mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-git mingw-w64-x86_64-qt5</code></p>
+
+    <p>Other libraries, such as <strong>ftxui</strong> and <strong>nlohmann</strong>, are also required for compilation, but they are automatically included via CMake using the <strong>FetchContent</strong> feature.</p>
+
+    <p><strong>The project also requires:</strong></p>
+
+    <ul>
+    <li><strong>GCC 13</strong> or higher</li>
+    <li>and <strong>C++23</strong> support</li>
+    </ul>
+
+    <h3>Compilation</h3>
+
+    <p>The project can be compiled in <strong>Release</strong> or <strong>Debug</strong> :</p>
+
+    <p><code>make release</code></p>
+
+    <p><code>make debug</code></p>
+
+    <h2>Running the Game</h2>
+
+    <h3>Launching the Program</h3>
+
+    <p>To launch <strong>Royal Blocks</strong>, you can choose between two interfaces:</p>
+
+    <ul>
+    <li><p>Graphical interface:</p>
+
+    <p><code>./royal-blocks-gui</code></p></li>
+    <li><p>Terminal interface:</p>
+
+    <p><code>./royal-blocks-tui </code></p></li>
+    </ul>
+
+    <p>To start the server, run:</p>
+
+    <p><code>./royal-blocks-server</code></p>
+
+    <h3>Choosing the IP and Port</h3>
+
+    <p>To establish communication between the client and the server:</p>
+
+    <h4>Server</h4>
+
+    <p>You can specify a custom port as an argument when launching the server:</p>
+
+    <p><code>./royal-blocks-server &lt;port&gt;</code></p>
+
+    <p>If no argument is provided, the server will read the <strong>SERVER_PORT</strong> environment variable.
+    If the variable is not set, the default port <strong>1234</strong> will be used.</p>
+
+    <h4>Client</h4>
+
+    <p>In both the graphical and terminal interfaces, you can modify the server's IP and port directly.
+    These settings will be saved in the configuration file:</p>
+
+    <ul>
+    <li><p><code>~/.config/royal-blocks/config.json</code> on Linux</p></li>
+    <li><p><code>%APPDATA%\royal-blocks\config.json</code> on Windows</p></li>
+    </ul>
+
+    <p>If no configuration file exists, a default one will be automatically created using:</p>
+
+    <ul>
+    <li>the IP address defined by the <strong>SERVER_IP</strong> environment variable (or <strong>127.0.0.1</strong> by default),</li>
+    <li>and the port defined by <strong>SERVER_PORT</strong> (or <strong>1234</strong> by default).</li>
+    </ul>
+
+    <h3>Important Information About Terminal Display</h3>
+
+    <p>If you can't see all game information on the screen, you may need to <strong>zoom out</strong> in your terminal window.</p>
+
+    <h3>Royal Blocks Controls</h3>
+
+    <p>Here is a list of the different keys used to move and rotate the pieces in the game:</p>
+
+    <ul>
+    <li><p><strong>Move left</strong>
+    <code>←</code></p></li>
+    <li><p><strong>Move right</strong>
+    <code>→</code></p></li>
+    <li><p><strong>Soft drop</strong>
+    <code>↓</code></p></li>
+    <li><p><strong>Hard drop (instantly place the tetromino at the bottom)</strong>
+    <code>ESPACE</code></p></li>
+    <li><p><strong>Rotate clockwise</strong>
+    <code>g</code></p></li>
+    <li><p><strong>Rotate counterclockwise</strong>
+    <code>f</code></p></li>
+    <li><p><strong>Hold current tetromino</strong>
+    <code>h</code></p></li>
+    <li><p><strong>Select previous effect</strong>
+    <code>e</code></p></li>
+    <li><p><strong>Select next effect</strong>
+    <code>r</code></p></li>
+    <li><p><strong>Clear stored maluses</strong>
+    <code>t</code></p></li>
+    <li><p><strong>Buy and immediately send the selected effect</strong></p>
+
+    <ul>
+    <li><code>y</code></li>
+    <li><code>left-click on the effect</code></li>
+    </ul></li>
+    <li><p><strong>Buy and store the selected effect</strong>
+    <code>u</code></p></li>
+    <li><p><strong>Select target for maluses</strong>
+    <code>left-click on the opponent's name</code></p></li>
+    <li><p><strong>Quit the current game</strong>
+    <code>q</code></p></li>
+    </ul>
+
+    <h2>License</h2>
+
+    <p>This project is licensed under the <a href="https://github.com/ulb-info2-group5/Royal-Blocks/blob/main/LICENSE" target="_blank">GNU GPL v3</a>.</p>
+
+    <h2>License and Third-Party Software</h2>
+
+    <p>This project uses several open source components.<br />
+    Please see <a href="https://github.com/ulb-info2-group5/Royal-Blocks/blob/main/LICENSES_THIRD_PARTY.md" target="_blank">LICENSES<em>THIRD</em>PARTY.md</a> for details.</p>
+  </article>
 </body>
 </html>
