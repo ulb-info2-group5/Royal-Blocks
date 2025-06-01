@@ -23,9 +23,7 @@
 #include <chrono>
 #include <cstddef>
 #include <iostream>
-#include <new>
 #include <string>
-#include <utility>
 
 constexpr std::chrono::milliseconds TIME_BTWN_RETRIES(100);
 
@@ -63,15 +61,7 @@ void NetworkManager::disconnect() {
         asio::error_code ec;
         asio::error_code socketShutdown =
             socket_.shutdown(asio::ip::tcp::socket::shutdown_both, ec);
-        if (socketShutdown) {
-            std::cerr << "Error shutting down socket: "
-                      << socketShutdown.message() << std::endl;
-        }
         asio::error_code socketClose = socket_.close(ec);
-        if (socketClose) {
-            std::cerr << "Error closing socket: " << socketClose.message()
-                      << std::endl;
-        }
     }
 
     isConnected_ = false;

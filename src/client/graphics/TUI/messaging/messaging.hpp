@@ -18,7 +18,7 @@
 #ifndef TUI_MESSAGING_HPP
 #define TUI_MESSAGING_HPP
 
-#include "../../../core/in_game/player_state/player_state_external.hpp"
+#include "../../../../common/bindings/user.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <string>
