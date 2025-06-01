@@ -222,12 +222,12 @@ namespace GUI {
         energyLCD_.setSegmentStyle(QLCDNumber::Filled);
     }
 
-    void GameDisplay::selfBoard(CellSize size) {
-        size_t cellSize = static_cast<size_t>(size);
+    void GameDisplay::selfBoard(int cellSize) {
+        int usedCellSize = (cellSize == -1) ? dynamicCellSize_ : cellSize;
         size_t height = getBoardHeight();
         size_t width = getBoardWidth();
 
-        QPixmap selfBoardMap(cellSize * width, cellSize * height);
+        QPixmap selfBoardMap(usedCellSize * width, usedCellSize * height);
 
         QPainter painter(&selfBoardMap);
         painter.setRenderHint(QPainter::Antialiasing, true);
@@ -255,15 +255,16 @@ namespace GUI {
                     painter.setBrush(color);
                 }
 
-                painter.drawRect(QRect(x * cellSize,
-                                       (height - 1 - y) * cellSize, cellSize,
-                                       cellSize));
+                painter.drawRect(QRect(x * usedCellSize,
+                                       (height - 1 - y) * usedCellSize, usedCellSize,
+                                       usedCellSize));
             }
         }
 
         painter.end();
 
         selfBoard_.setPixmap(selfBoardMap);
+        selfBoard_.setFixedSize(usedCellSize * width, usedCellSize * height);
     }
 
     void GameDisplay::holdTetromino() {
@@ -435,6 +436,7 @@ namespace GUI {
     }
 
     void GameDisplay::setup() {
+        updateDynamicCellSize();
         updateGameState();
 
         QVBoxLayout *leftPane = new QVBoxLayout();
@@ -540,6 +542,29 @@ namespace GUI {
         QTimer::singleShot(0, this, [this]() {
             emit backToMainMenu();
         });
+    }
+
+    void GameDisplay::resizeEvent(QResizeEvent *event) {
+        QWidget::resizeEvent(event);
+        updateDynamicCellSize();
+        updateGameState();
+    }
+
+    void GameDisplay::updateDynamicCellSize() {
+        int margin = 40;
+        int availableWidth = width() / 3 - margin;
+        int availableHeight = height() - margin * 2;
+
+        size_t boardWidth = getBoardWidth();
+        size_t boardHeight = getBoardHeight();
+
+        if (boardWidth == 0 || boardHeight == 0) {
+            dynamicCellSize_ = 40;
+        } else {
+            int cellSizeW = availableWidth / static_cast<int>(boardWidth);
+            int cellSizeH = availableHeight / static_cast<int>(boardHeight);
+            dynamicCellSize_ = std::max(10, std::min(cellSizeW, cellSizeH));
+        }
     }
 
 } // namespace GUI

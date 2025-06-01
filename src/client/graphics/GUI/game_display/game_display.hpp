@@ -57,65 +57,50 @@ namespace GUI {
 
       private:
         TetrisWindow &tetrisWindow_;
-
         QStackedWidget stackedWidget_;
-
         QLCDNumber scoreLCD_;
         QLCDNumber energyLCD_;
         QLabel holdTetromino_;
         EffectInfo bonusInfo_;
         EffectInfo penaltyInfo_;
         EffectSelector effectSelector_;
-
         QLabel selfBoard_;
         QLabel tetrominoQueue_;
         QHBoxLayout middlePaneHBox_;
         QVBoxLayout middlePaneLeftVBox_;
-
         OpponentsGrid opponentsGrid_;
+        int dynamicCellSize_ = 40;
 
         /**
          * @brief Redraws the board pixmap and returns a pointer to the QLable
          * containing the board pixmap.
          */
-        void selfBoard(CellSize size = CellSize::Big);
+        void selfBoard(int cellSize = -1);
 
         void scoreLCD();
-
         void holdTetromino();
-
         void energyLCD();
-
         void tetrominoQueue();
-
         QPixmap createOppBoardMap(size_t index, CellSize size);
-
         void oppBoards();
-
         void bonusInfo();
-
         void penaltyInfo();
-
         void effectsInfo();
-
         void effectSelector();
-
         void setup();
 
+        void updateDynamicCellSize();
+
       private slots:
-
         void on_QuitButtonClicked();
-
         void on_EffectBought(EffectType effect);
-
         void on_TargetSelected(size_t targetIdx);
-
         void on_ReturnToMainMenuButtonClicked();
-
         void updateGameState();
 
       protected:
-        void keyPressEvent(QKeyEvent *event);
+        void keyPressEvent(QKeyEvent *event) override;
+        void resizeEvent(QResizeEvent *event) override;
 
       public:
         GameDisplay(Controller &controller, TetrisWindow &tetrisWindow,
@@ -124,7 +109,6 @@ namespace GUI {
         ~GameDisplay() = default;
 
       signals:
-
         void backToMainMenu();
     };
 
