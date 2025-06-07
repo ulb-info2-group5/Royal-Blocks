@@ -8,7 +8,7 @@ license=('GPL3')
 depends=('qt5-base')  # Qt remains dynamic
 makedepends=('cmake' 'gcc' 'make' 'qt5-base')
 source=("royal-blocks-1.1.1-x86_64.pkg.tar.zst")
-sha256sums=('ef02b970fab07937db64a7884aafdee7b45911958eabd2707e42748661f06460')
+sha256sums=('afef07988aba09264706ba860c968d3f925d3173274b21aae679a47662f2240d')
 options=(!strip)
 
 package() {

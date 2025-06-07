@@ -26,6 +26,7 @@ file (GLOB_RECURSE SOURCES_CLIENT_TUI
     tui.cpp
 )
 
+set(BUILD_SHARED_LIBS OFF)
 include(${CMAKE_SOURCE_DIR}/third_party/ftxui.cmake)
 
 add_executable(${PROJECT_NAME}-tui ${SOURCES_CLIENT_TUI})
