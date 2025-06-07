@@ -11,6 +11,11 @@ include(${CMAKE_SOURCE_DIR}/third_party/nlohmann.cmake)
 # add tetris_lib as lib
 add_library(tetris_lib STATIC ${SOURCES_TETRIS_LIB})
 
+if(BUILD_STATIC)
+    target_compile_options(tetris_lib PRIVATE -static-libstdc++ -static-libgcc)
+    target_link_options(tetris_lib PRIVATE -static-libstdc++ -static-libgcc)
+endif()
+
 target_link_libraries(tetris_lib
   PUBLIC nlohmann_json::nlohmann_json
 )

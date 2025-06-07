@@ -16,7 +16,6 @@ add_library(client_core_lib STATIC ${SOURCES_CLIENT_CORE_LIB})
 target_link_libraries(client_core_lib PUBLIC tetris_royal_lib asio)
 target_include_directories(client_core_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-
 # ---------------------------
 #            TUI
 # ---------------------------
@@ -31,7 +30,12 @@ include(${CMAKE_SOURCE_DIR}/third_party/ftxui.cmake)
 
 add_executable(${PROJECT_NAME}-tui ${SOURCES_CLIENT_TUI})
 
-target_link_libraries(${PROJECT_NAME}-tui
+if(BUILD_STATIC)
+    target_compile_options(${PROJECT_NAME}-tui PRIVATE -static-libstdc++ -static-libgcc)
+    target_link_options(${PROJECT_NAME}-tui PRIVATE -static-libstdc++ -static-libgcc)
+endif()
+
+target_link_libraries(${PROJECT_NAME}-tui PRIVATE
     client_core_lib
     ftxui::screen
     ftxui::dom
@@ -62,10 +66,15 @@ if (WIN32)
     target_link_options(${PROJECT_NAME}-gui PRIVATE -mwindows)
 endif()
 
+if(BUILD_STATIC)
+    target_compile_options(${PROJECT_NAME}-gui PRIVATE -static-libstdc++ -static-libgcc)
+    target_link_options(${PROJECT_NAME}-gui PRIVATE -static-libstdc++ -static-libgcc)
+endif()
+
 # AUTOMOC only needed for Qt5 for the GUI
 set_target_properties(${PROJECT_NAME}-gui PROPERTIES AUTOMOC ON )
 
-target_link_libraries(${PROJECT_NAME}-gui
+target_link_libraries(${PROJECT_NAME}-gui PRIVATE
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui

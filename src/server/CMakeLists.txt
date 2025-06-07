@@ -14,6 +14,21 @@ target_include_directories(server_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+if(WIN32)
+    target_link_libraries(server_lib PUBLIC ws2_32 mswsock)
+endif()
+
+
+set(SOURCE_SERVER_MAIN main.cpp)
+
+add_executable(${PROJECT_NAME}-server ${SOURCE_SERVER_MAIN})
+
+target_link_libraries(${PROJECT_NAME}-server PRIVATE server_lib)
+
+if(BUILD_STATIC)
+    target_compile_options(${PROJECT_NAME}-server PRIVATE -static-libstdc++ -static-libgcc)
+    target_link_options(${PROJECT_NAME}-server PRIVATE -static-libstdc++ -static-libgcc)
+endif()
 
 target_link_libraries(server_lib PUBLIC
     bcrypt
@@ -21,16 +36,6 @@ target_link_libraries(server_lib PUBLIC
     database_lib
     asio
 )
-
-if(WIN32)
-    target_link_libraries(server_lib PUBLIC ws2_32 mswsock)
-endif()
-
-
-set(SOURCE_SERVER_MAIN main.cpp)
-add_executable(${PROJECT_NAME}-server ${SOURCE_SERVER_MAIN})
-
-target_link_libraries(${PROJECT_NAME}-server server_lib)
 
 if (WIN32)
     execute_process(

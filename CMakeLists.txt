@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 
+option(BUILD_STATIC "Link standard libs statically (but keep Qt dynamic)" OFF)
+
+if(BUILD_STATIC)
+    message(STATUS "Static linking of libstdc++/libgcc")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    set(BUILD_SHARED_LIBS ON)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+endif()
+
 # C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
