@@ -1,4 +1,4 @@
-pkgname=royal-blocks
+pkgname=royal-blocks-bin
 pkgver=1.1.1
 pkgrel=2
 pkgdesc="A homemade Royal Tetris in C++"
