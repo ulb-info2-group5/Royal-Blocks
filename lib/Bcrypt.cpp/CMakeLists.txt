@@ -6,7 +6,7 @@ project(bcrypt)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_library(bcrypt src/bcrypt.cpp src/blowfish.cpp)
+add_library(bcrypt STATIC src/bcrypt.cpp src/blowfish.cpp)
 
 if(BUILD_STATIC)
     target_compile_options(bcrypt PRIVATE -static-libstdc++ -static-libgcc)
