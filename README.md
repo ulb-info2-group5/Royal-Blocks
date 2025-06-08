@@ -1,5 +1,7 @@
 # Royal Blocks
 
+Royal Blocks is a multiplayer reinterpretation of the classic Tetris game, featuring both a graphical and a terminal-based client interface, along with a server that handles matches and communication between players.
+
 ## Install the Game
 
 ### For Windows
