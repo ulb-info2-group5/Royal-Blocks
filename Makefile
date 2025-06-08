@@ -1,13 +1,11 @@
 BUILD_DIR = ./build
 
 ifeq ($(OS),Windows_NT)
-$(info Windows detected)
 	CORES := $(NUMBER_OF_PROCESSORS)
 	CLEAN_CMD := powershell -Command "if (Test-Path '$(BUILD_DIR)') { Remove-Item '$(BUILD_DIR)' -Recurse -Force }"
 	GENERATOR := "Ninja"
 	OUTPUT_DIR = ./bin
 else
-$(info Linux/macOS detected)
 	UNAME_S := $(shell uname -s)
 	CORES := $(shell nproc)
 	CLEAN_CMD := rm -rf $(BUILD_DIR)
