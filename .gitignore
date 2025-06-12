@@ -4,6 +4,7 @@
 accounts.db
 auth
 build/
+build-static/
 bin/
 royal-blocks-tui
 royal-blocks-tui.exe
