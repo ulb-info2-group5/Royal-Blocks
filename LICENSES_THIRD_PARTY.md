@@ -54,7 +54,7 @@ This file lists licenses of third-party libraries used in this project.
 **Notes**: Attribution clause #3 applies:  
 This product includes software developed by Niels Provos.
 
-## 6. cpp-make-cmake-template (by [@Evr5](https://github.com/Evr5)
+## 6. cpp-make-cmake-template (by [@Evr5](https://github.com/Evr5))
 
 **License**: MIT License  
 **Source**: [cpp-make-cmake-template](https://github.com/Evr5/cpp-make-cmake-template)\
