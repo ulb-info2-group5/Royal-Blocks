@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(royal-blocks VERSION 1.1.1 LANGUAGES C CXX)
+project(royal-blocks VERSION 1.1.2 LANGUAGES C CXX)
 
 # Options
 option(BUILD_STATIC "Link standard libs statically" OFF)
