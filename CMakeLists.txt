@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 3.15)
 
 project(royal-blocks VERSION 1.1.2 LANGUAGES C CXX)
 
+# Set version information
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/version.h
+  @ONLY
+)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
+
 # Options
 option(BUILD_STATIC "Link standard libs statically" OFF)
 option(BUILD_TESTS "Build unit tests" ON)

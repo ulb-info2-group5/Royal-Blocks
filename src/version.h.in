@@ -1,0 +1,3 @@
+#pragma once
+
+#define ROYAL_BLOCKS_VERSION "@PROJECT_VERSION@"
