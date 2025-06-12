@@ -53,3 +53,9 @@ This file lists licenses of third-party libraries used in this project.
 **Usage**: Included directly in the `lib/` folder of this project.  
 **Notes**: Attribution clause #3 applies:  
 This product includes software developed by Niels Provos.
+
+## 6. cpp-make-cmake-template (by [@Evr5](https://github.com/Evr5)
+
+**License**: MIT License  
+**Source**: [cpp-make-cmake-template](https://github.com/Evr5/cpp-make-cmake-template)\
+**Usage**: Provides a cross-platform CMake + Make integration, a support for static and dynamic linking and a modular structure.
